@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="options-grid-attribute" xsi:type="array">
+                    <item name="class" xsi:type="string">Fedex\Canva\Ui\DataProvider\Product\Form\Modifier\OptionsGridModifier</item>
+                    <item name="sortOrder" xsi:type="number">200</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Cms\Controller\Adminhtml\Page\Save">
+        <plugin name="Fedex_Canva_Plugin_Magento_Cms_Controller_Adminhtml_Page_Save" type="Fedex\Canva\Plugin\EncodeCanvaSizesOnSavePage" sortOrder="10" disabled="false"/>
+    </type>
+
+    <preference for="Magento\Cms\Model\Page\DataProvider" type="Fedex\Canva\Model\Page\DataProvider"/>
+</config>

@@ -1,0 +1,16 @@
+<?php
+$cartHelper = $this->helper(Magento\Checkout\Helper\Cart::class);
+if ($cartHelper->getItemsCount() > 0) { ?>
+    <script>
+        require(
+            [
+            'Magento_Checkout/js/model/quote',
+            'Magento_Checkout/js/model/cart/totals-processor/default'
+          ], function(quote, totalsDefaultProvider) {
+              setTimeout(()=>{
+                totalsDefaultProvider.estimateTotals(quote.shippingAddress());
+              }, 1000);
+            }
+        );
+    </script>
+<?php } ?>

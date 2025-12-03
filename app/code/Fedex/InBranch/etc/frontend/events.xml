@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_checkout_cart_add">
+        <observer name="orange_conditions" instance="Fedex\InBranch\Observer\RestrictAddToCart"/>
+    </event>
+    <event name="controller_action_predispatch_catalogmvp_index_addtocartsingle">
+        <observer name="restrict_add_to_cart_shared_catalog"
+                  instance="Fedex\InBranch\Observer\RestrictAddToCartSingle"/>
+    </event>
+    <event name="controller_action_predispatch_catalogmvp_index_addtocart">
+        <observer name="catalogmvp_restrict_add_to_cart_shared_catalog"
+                  instance="Fedex\InBranch\Observer\CatalogMvpRestrictAddToCart"/>
+    </event>
+</config>

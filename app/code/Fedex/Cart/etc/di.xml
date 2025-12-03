@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <!-- This dependency shoud be removed on toggle removal explores_remove_adobe_commerce_override-->
+    <preference for="Magento\Checkout\Controller\Cart\CouponPost" type="Fedex\Cart\Controller\Cart\CouponPost"/>
+    <preference for="Magento\Directory\Model\PriceCurrency" type="Fedex\Cart\Model\PriceCurrency"/>
+    <!--end-->
+    <type name="Magento\Directory\Model\PriceCurrency">
+        <plugin name="fedex_cart_overridden_price_currency_plugin" type="Fedex\Cart\Plugin\PriceCurrencyPlugin" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Checkout\Controller\Cart\CouponPost">
+        <plugin name="fedex_cart_overridden_coupon_post_plugin" type="Fedex\Cart\Plugin\Controller\CouponPostPlugin" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="checkout_Extrafee_block" xsi:type="object">Fedex\Cart\Model\DiscountConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Checkout\CustomerData\DefaultItem" type="Fedex\Cart\CustomerData\DefaultItem" />
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="Fedex_Cart_Plugin" type="Fedex\Cart\Plugin\CartPlugin" sortOrder="10" disabled="false"  />
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Sidebar">
+        <plugin name="fedex_preview_url_plugin" type="Fedex\Cart\Plugin\Sidebar" sortOrder="11" disabled="false"  />
+    </type>
+    <!-- This dependency shoud be removed on toggle removal explores_remove_adobe_commerce_override-->
+    <preference for="Magento\Checkout\Model\TotalsInformationManagement" type="Fedex\Cart\Model\CartSummary" />
+    <!--end-->
+    <type name="Magento\Checkout\Controller\Sidebar\UpdateItemQty">
+        <plugin name="fedex_cart_overridden_update_itemqty_plugin" type="Fedex\Cart\Plugin\Controller\Sidebar\UpdateItemQtyPlugin" sortOrder="11" disabled="false" />
+    </type>
+    <type name="Magento\Checkout\Model\TotalsInformationManagement">
+        <plugin name="fedex_cart_overridden_totals_info_management_plugin" type="Fedex\Cart\Plugin\Model\TotalsInformationManagementPlugin" sortOrder="11" disabled="false" />
+    </type>
+    <preference for="Magento\Checkout\Controller\Cart\UpdateItemQty" type="Fedex\Cart\Controller\Cart\UpdateItemQty"/>
+    <preference for="Fedex\Cart\Api\Data\CartIntegrationInterface" type="Fedex\Cart\Model\Quote\Integration" />
+    <preference for="Fedex\Cart\Api\CartIntegrationRepositoryInterface" type="Fedex\Cart\Model\Quote\Integration\Repository" />
+    <preference for="Fedex\Cart\Api\Data\CartIntegrationItemInterface" type="Fedex\Cart\Model\Quote\IntegrationItem" />
+    <preference for="Fedex\Cart\Api\CartIntegrationItemRepositoryInterface" type="Fedex\Cart\Model\Quote\IntegrationItem\Repository" />
+    <type name="Fedex\Cart\Plugin\Sidebar">
+        <arguments>
+            <argument name="sidebar" xsi:type="array">
+                <item name="sdeHelper" xsi:type="object">Fedex\SDE\Helper\SdeHelper</item>
+                <item name="checkoutConfig" xsi:type="object">Fedex\Cart\ViewModel\CheckoutConfig</item>
+                <item name="ssoConfiguration" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</item>
+                <item name="deliveryHelper" xsi:type="object">Fedex\Delivery\Helper\Data</item>
+                <item name="orderHistoryHelper" xsi:type="object">Fedex\Orderhistory\Helper\Data</item>
+                <item name="toggleConfig" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</item>
+                <item name="customerSession" xsi:type="object">Magento\Customer\Model\Session</item>
+                <item name="submitOrderModelAPI" xsi:type="object">Fedex\SubmitOrderSidebar\Model\SubmitOrderApi</item>
+                <item name="storeManager" xsi:type="object">Magento\Store\Model\StoreManagerInterface</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Fedex\Cart\Api\Data\CartIntegrationNoteInterface" type="Fedex\Cart\Model\Quote\IntegrationNote" />
+    <preference for="Fedex\Cart\Api\CartIntegrationNoteRepositoryInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Repository" />
+    <preference for="Fedex\Cart\Model\Quote\IntegrationNote\Command\DeleteByIdInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Command\DeleteById" />
+    <preference for="Fedex\Cart\Model\Quote\IntegrationNote\Command\GetListInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Command\GetList" />
+    <preference for="Fedex\Cart\Model\Quote\IntegrationNote\Command\GetInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Command\Get" />
+    <preference for="Fedex\Cart\Model\Quote\IntegrationNote\Command\GetByParentIdInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Command\GetByParentId" />
+    <preference for="Fedex\Cart\Model\Quote\IntegrationNote\Command\SaveInterface" type="Fedex\Cart\Model\Quote\IntegrationNote\Command\Save" />
+    <preference for="Fedex\Cart\Model\Quote\Integration\Command\SaveRetailCustomerIdInterface" type="Fedex\Cart\Model\Quote\Integration\Command\SaveRetailCustomerId" />
+    <type name="Fedex\Cart\ViewModel\UnfinishedProjectNotification">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\SalesRule\Model\ValidateCouponCode">
+        <plugin name="fedex_cart_validate_coupon_code" type="Fedex\Cart\Plugin\Model\ValidateCouponCodePlugin" sortOrder="11" disabled="false" />
+    </type>
+</config>

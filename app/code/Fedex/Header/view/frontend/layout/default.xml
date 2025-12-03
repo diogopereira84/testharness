@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+
+        <referenceBlock name="register-link" remove="true"/>
+        <referenceBlock name="authorization-link" remove="true"/>
+        <!--<referenceBlock name="my-account-link" remove="true" />-->
+        <referenceBlock name="invitation-send-link" remove="true"/>
+        <referenceBlock name="page-footer" remove="true"/>
+        <referenceBlock name="footer.page-footer" remove="true"/>
+        <referenceBlock name="footer_links" remove="true"/>
+        <referenceBlock name="form.subscribe" remove="true"/>
+
+        <referenceBlock name="link.wishlist" remove="true"/>
+        <referenceBlock name="li.link.wishlist" remove="true"/>
+
+        <referenceBlock name="footer.page" remove="true"/>
+        <referenceBlock name="invitation_link_top" remove="true"/>
+
+        <referenceBlock name="multiple-wish-list-link" remove="true"/>
+        <referenceBlock name="store_switcher" remove="true"/>
+        <referenceBlock name="top.links">
+            <block class="Magento\Framework\View\Element\Html\Link" name="erp-homepage-link">
+                <arguments>
+                    <argument name="label" xsi:type="helper" helper="Fedex\Header\Helper\Data::getLabel"></argument>
+                    <argument name="path" xsi:type="helper" helper="Fedex\Header\Helper\Data::getLink"></argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="purchaseorder.list.link" remove="true"/>
+        <referenceBlock name="order.list.link" remove="true"/>
+        <referenceBlock name="quote.list.link" remove="true"/>
+        <referenceBlock name="company.link" remove="true"/>
+        <referenceBlock name="customer_account_dashboard_top" remove="true"/>
+        <!--
+             <referenceBlock name="top.links">
+                 <block class="Magento\Framework\View\Element\Html\Link" name="order-history-link">
+                    <arguments>
+                       <argument name="label" xsi:type="string" translate="true">MY ORDER HISTORY</argument>
+                       <argument name="path" xsi:type="string" translate="true">sales/order/history</argument>
+                    </arguments>
+                 </block>
+             </referenceBlock>
+        -->
+
+        <referenceContainer name="before.body.end">
+            <block name="promo.banner.link" template="Fedex_Header::promo_banner_link.phtml">
+                <arguments>
+                    <argument name="promo-banner-view-model" xsi:type="object">Fedex\Header\ViewModel\PromoBanner
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

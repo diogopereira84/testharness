@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+  <group id="fedex_optimize_quotes_orders_crongroup">
+    <!-- Job to execute every 5 minutes and create queues for processing -->
+    <job name="quoteItemOptionCleanUpdate" instance="Fedex\OptimizeProductinstance\Cron\QuoteIdSaveQueueProcessCron" method="execute">
+        <config_path>fedex/cron_configuration/optimize_quotes_orders_cron</config_path>
+    </job>
+    <!-- Job to execute every 5 minutes and create queues for processing -->
+    <job name="orderItemOptionUpdateInstance" instance="Fedex\OptimizeProductinstance\Cron\OrderIdSaveQueueProcessCron" method="execute">
+        <config_path>fedex/cron_configuration/optimize_orders_items_cron</config_path>
+    </job>
+  </group>
+</config> 

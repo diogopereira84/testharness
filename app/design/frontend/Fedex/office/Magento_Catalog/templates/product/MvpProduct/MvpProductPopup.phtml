@@ -1,0 +1,347 @@
+<?php
+    $subCategories = $block->getCategoryCollection();
+    $printproductcoll = $block->getProductCollectionByCategories();
+    $getproductimage = $block->getProductImage();
+    $getProductUrl = $block->getUrl('catalogmvp/index/getproducts');
+    // Added newproduct in URL to differentiate catalogmvp and print product
+    $getConfiguratorUrl = $block->getUrl('catalogmvp/configurator/index?newproduct=true');
+    $mvpViewModel = $block->getData('mvphelper_mvp_item_popup');
+    $isCloudDriveBoxEnabled = $mvpViewModel->isCloudDriveBoxEnabled();
+    $isCloudDriveDropboxEnabled = $mvpViewModel->isCloudDriveDropboxEnabled();
+    $isCloudDriveGoogleEnabled = $mvpViewModel->isCloudDriveGoogleEnabled();
+    $isCloudDriveMicrosoftEnabled = $mvpViewModel->isCloudDriveMicrosoftEnabled();
+    $companyFedExAccountNumber = $mvpViewModel->getCompanyFedExAccountNumber();
+    $skuOnlyProductNumber = $mvpViewModel->getSkuNumber();
+    $printProductCategoryId = $block->getPrintProductCategory();
+    $customProductCategoryId = $block
+        ->getConfigurationValue('ondemand_setting/category_setting/epro_print_custom_product');
+    $skuProductCategoryId = $block
+        ->getConfigurationValue('ondemand_setting/category_setting/epro_print_skuonly_product');
+
+
+    $isNonStandardCatalogToggle = $block->getConfigurationValue(
+        'environment_toggle_configuration/environment_toggle/explorers_non_standard_catalog'
+    );
+?>
+<?php
+ if ($block->getData('mvphelper_mvp_item_popup')->isSharedCatalogPermissionEnabled() &&
+ (!$block->getData('mvphelper_mvp_item_popup')->checkPrintCategory())) {
+?>
+<div id="add-item-product-view-modal" class="add-item-product-view-modal" style="display:none;" >
+    <div id="add-item-product-view-modal-container">
+        <div id="add-item-product-view-modal-header" class="add-item-product-view-modal-header">
+            <span class="configure-product-heading">
+                <?=$block->escapeHtml(__('Select Product Type'));?>
+            </span>
+        </div>
+        <div class="custom-popup-main-content" data-bind="scope: 'item-action-handler'">
+            <?php
+            if($block->getConfigurationValue('environment_toggle_configuration/environment_toggle/maze_geeks_catalog_mvp_breakpoints_and_ada')) {
+            ?>
+            <div class="custom-pop-up-set-product-type-mobile" style="display:none;" tabindex="0">
+                <?php
+                foreach ($subCategories as $subCategory) {
+                    if (($subCategory->getName() === 'Print Products' || $subCategory->getId() == $printProductCategoryId) && $subCategory->hasChildren() ) {
+                        $allproducts = 'All Products';
+                        $printproid = $subCategory->getId();
+                        ?>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="products-<?=/* @noEscape */$printproid?>"
+                            data="<?=$getProductUrl?>" data-bind="click: getProducts"><?= $allproducts ?><i class="catalogmvp-setproduct-arrow"></i></div>
+                            <div class="accordion-content">
+                                <ol class="products list items product-items">
+                                <?php
+                                foreach ($printproductcoll as $printproductcolls) {
+                                    $productname = $printproductcolls->getName();
+                                    $productsku = $printproductcolls->getSku();
+                                    if ($productsku == $skuOnlyProductNumber){
+                                        continue;
+                                    }
+                                    if (!empty($printproductcolls)) {
+                                        $productimage = $this->productImage
+                                            ->init($printproductcolls, 'new_products_content_widget_grid')
+                                            ->setImageFile($printproductcolls->getSmallImage())
+                                            ->keepFrame(true)
+                                            ->resize(147)
+                                            ->getUrl();
+                                    } else {
+                                        $productimage = $this->productImage->getDefaultPlaceholderUrl('thumbnail');
+                                    }
+                                    if (str_contains($productimage, 'placeholder/.jpg')) {
+                                        $productimage = str_replace(
+                                            'placeholder/.jpg',
+                                            'placeholder/thumbnail.jpg',
+                                            $productimage
+                                        );
+                                    }
+                                    $isCustomerCanvas = (int)$printproductcolls->getIsCustomerCanvas();
+                                    $productUrlAttr = "";
+                                    if($isCustomerCanvas){
+                                        $productUrl = $printproductcolls->getProductUrl();
+                                        $delimiter = (parse_url($productUrl, PHP_URL_QUERY)) ? '&' : '?';
+                                        $productUrlWithParam = $productUrl . $delimiter . 'isDyeSubFromCatalog=1';
+                                        $productUrlAttr =  'data-product-url="' . htmlspecialchars($productUrlWithParam) . '"';
+                                    }
+                                    ?>
+                                    <li class="item product product-item"
+                                    data-index-engineid="<?=$printproductcolls->getProductId()?>"
+                                    data-index-id="<?=$printproductcolls->getSku();?>"
+                                    data-index-name="<?=$printproductcolls->getName();?>"
+                                    data-index-customerCanvas="<?= $isCustomerCanvas;?>"
+                                        <?= $productUrlAttr ?> >
+                                        <div class="product-item-info">
+                                            <div class="product-name-list">
+                                                <p class="product name product-item-name">
+                                                    <?=/* @noEscape */$productname?>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                <?php
+                                }
+                                ?>
+                                </ol>
+                            </div>
+                        </div>
+                        <?php
+                        /* For Sub Categories */
+                        $childCategoryObj = $this->categoryRepository->get($subCategory->getId());
+                        $childSubcategories = $childCategoryObj->getChildrenCategories();
+                        foreach ($childSubcategories as $childSubcategory) {
+                            $childofprintproduct = $childSubcategory->getName();
+                            $catid = $childSubcategory->getId();
+                            if($childSubcategory->getProductCount() <= 0) {
+                                continue;
+                            }
+                            if (!$isNonStandardCatalogToggle &&
+                                !empty($customProductCategoryId) &&
+                                $catid == $customProductCategoryId) {
+                                continue;
+                            }
+                            if (!empty($skuProductCategoryId) &&
+                                $catid == $skuProductCategoryId) {
+                                continue;
+                            }
+                            ?>
+                        <div class="accordion-item">
+                            <div class="accordion-header" id="category-<?=/* @noEscape */$catid?>"
+                            data="<?=$getProductUrl ?>" data-bind="click: getProducts"><?= $childofprintproduct ?><i class="catalogmvp-setproduct-arrow"></i>
+                            </div>
+                            <div class="accordion-content">
+                                <ol class="products list items product-items">
+                                </ol>
+                            </div>
+                        </div>
+                        <?php
+                        }
+                    }
+                }
+                ?>
+            </div>
+            <?php
+            }
+            ?>
+            <div class="custom-pop-up-left-nav sidebar">
+                <div class="custom-popup-category-tree">
+                    <ul>
+                    <?php
+                foreach ($subCategories as $subCategory) {
+                    if (($subCategory->getName() === 'Print Products' || $subCategory->getId() == $printProductCategoryId) && $subCategory->hasChildren() ) {
+                        $allproducts = 'All Products';
+                        $printproid = $subCategory->getId();
+                        ?>
+                        <li class="custom-pop-up-category-link active"
+                        id="products-<?=/* @noEscape */$printproid?>"
+                        data="<?=$getProductUrl?>" data-bind="click: getProducts">
+                            <p>
+                                <a class="custom-pop-up-category-link-tag"  id="<?=/* @noEscape */$printproid?>">
+                                    <?=/* @noEscape */$allproducts?>
+                                </a>
+                            </p>
+                        </li>
+                            <?php
+                                    /* For Sub Categories */
+                                    $childCategoryObj = $this->categoryRepository->get($subCategory->getId());
+                        $childSubcategories = $childCategoryObj->getChildrenCategories();
+                        foreach ($childSubcategories as $childSubcategory) {
+                            $childofprintproduct = $childSubcategory->getName();
+                            $catid = $childSubcategory->getId();
+                            if($childSubcategory->getProductCount() <= 0) {
+                                continue;
+                            }
+                            if (!$isNonStandardCatalogToggle &&
+                                !empty($customProductCategoryId) &&
+                                $catid == $customProductCategoryId) {
+                                continue;
+                            }
+                            if (!empty($skuProductCategoryId) &&
+                                $catid == $skuProductCategoryId) {
+                                continue;
+                            }
+                            ?>
+                        <li class="custom-pop-up-category-link" id="category-<?=/* @noEscape */$catid?>"
+                        data="<?=$getProductUrl ?>" data-bind="click: getProducts">
+                            <p>
+                                <a class="custom-pop-up-category-link-tag" id="<?=/* @noEscape */$catid?>">
+                                    <?=/* @noEscape */$childofprintproduct?>
+                                </a>
+                            </p>
+                        </li>
+                    <?php
+                        }
+                    }
+                }
+    ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="custom-pop-up-category-product">
+                <div class ="custom-pop-up-product-grid">
+                    <ol class="products list items product-items">
+                    <?php
+        foreach ($printproductcoll as $printproductcolls) {
+            $productname = $printproductcolls->getName();
+            $productsku = $printproductcolls->getSku();
+            if ($productsku == $skuOnlyProductNumber){
+                continue;
+            }
+            if (!empty($printproductcolls)) {
+                $productimage = $this->productImage
+                    ->init($printproductcolls, 'new_products_content_widget_grid')
+                    ->setImageFile($printproductcolls->getSmallImage())
+                    ->keepFrame(true)
+                    ->resize(147)
+                    ->getUrl();
+            } else {
+                $productimage = $this->productImage->getDefaultPlaceholderUrl('thumbnail');
+            }
+            if (str_contains($productimage, 'placeholder/.jpg')) {
+                $productimage = str_replace(
+                    'placeholder/.jpg',
+                    'placeholder/thumbnail.jpg',
+                    $productimage
+                );
+            }
+
+            $isCustomerCanvas = (int)$printproductcolls->getIsCustomerCanvas();
+            $productUrlAttr = "";
+            if($isCustomerCanvas){
+                $productUrl = $printproductcolls->getProductUrl();
+                $delimiter = (parse_url($productUrl, PHP_URL_QUERY)) ? '&' : '?';
+                $productUrlWithParam = $productUrl . $delimiter . 'isDyeSubFromCatalog=1';
+                $productUrlAttr =  'data-product-url="' . htmlspecialchars($productUrlWithParam) . '"';
+            }
+
+            ?>
+                            <li class="item product product-item"
+                            data-index-engineid="<?=$printproductcolls->getProductId()?>"
+                            data-index-id="<?=$printproductcolls->getSku();?>"
+                            data-index-name="<?=$printproductcolls->getName();?>"
+                                data-index-customerCanvas="<?= $isCustomerCanvas;?>"
+                                <?= $productUrlAttr ?>>
+                                <div class="product-item-info">
+                                    <span class="catalogmvp-product-image-container">
+                                        <span class="catalogmvp-product-image-wrapper">
+                                            <img class="catalogmvp-product-image-photo"
+                                            src="<?=/* @noEscape */$productimage?>"
+                                            loading="lazy"
+                                            style="width: 173px;height: 146px;" alt="<?=/* @noEscape */$productname?>">
+                                        </span>
+                                    </span>
+                                    <div class="product-name-list">
+                                        <p class="product name product-item-name">
+                                            <?=/* @noEscape */$productname?>
+                                        </p>
+                                    </div>
+                                </div>
+                            </li>
+                    <?php
+        }
+    ?>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="iframe_popup" id="iframe_popup">
+    <div class="container" id="iframe-selector"></div>
+
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+<?php $instanceId = time();?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "item-action-handler": {
+                        "component": "Fedex_CatalogMvp/js/folder-item-handler"
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    require(['jquery'], function($) {
+        $(document).ready(function() {
+            if($('body').hasClass('catalog-mvp-break-points')){
+                $(document).on('click', ".catalogmvp-setproduct-arrow", function(){
+                    var content = $(this).parent().next(".accordion-content");
+                    if (content.is(":visible")) {
+                        content.slideUp();
+                        $(this).css({"transform": "rotate(180deg)", "margin-top": "-6px"});
+                        $(this).parent().removeClass("active");
+                    } else {
+                        $(".accordion-content").slideUp();
+                        $(".catalogmvp-setproduct-arrow").css({"transform": "rotate(180deg)", "margin-top": "-6px"});
+                        $(".accordion-header").removeClass("active");
+                        content.slideDown();
+                        $(this).css({"transform": "rotate(0deg)", "margin-top": "0px"});
+                        $(this).parent().addClass("active");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    require([
+        "jquery",
+        "fedex/storage"
+    ], function($,fxoStorage) {
+        $(document).on('click', ".custom-popup-main-content .item.product.product-item", function() {
+            const $productItem = $(this);
+            if (window.tiger_E_478196_dye_sub_pod_2_updates && $productItem.attr('data-index-customercanvas') === '1') {
+                window.location = $productItem.attr('data-product-url');
+            } else {
+                const podData = {
+                    id: $productItem.attr("data-index-id"),
+                    instanceId: "<?= $instanceId?>",
+                    fromAdmin: true,
+                    fedexAccount: "<?= $companyFedExAccountNumber ?>",
+                    fromCustomerAdmin: true,
+                    isCatalogMvpCloudDriveToggle: "1",
+                    isCloudDriveIntegrationBox: "<?= $isCloudDriveBoxEnabled ?>",
+                    isCloudDriveIntegrationDropbox: "<?= $isCloudDriveDropboxEnabled ?>",
+                    isCloudDriveIntegrationGoogle: "<?= $isCloudDriveGoogleEnabled ?>",
+                    isCloudDriveIntegrationMicrosoft: "<?= $isCloudDriveMicrosoftEnabled ?>"
+                };
+                if (window.e383157Toggle) {
+                    fxoStorage.set('pod-data', podData);
+                } else {
+                    localStorage.setItem('pod-data', JSON.stringify(podData));
+                }
+                window.location = "<?= $getConfiguratorUrl?>";
+            }
+        });
+    });
+</script>
+<?php
+ }
+?>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Author: Pratibha Verma
+ * Fedex Customer Apis.
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+	<route url="/V1/fedex/customer" method="POST">
+        <service class="Fedex\Punchout\Api\CustomerInterface" method="getCustomer"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/fedex/eprocurement" method="POST">
+        <service class="Fedex\Punchout\Api\CustomerInterface" method="doPunchOut"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>    
+</routes>

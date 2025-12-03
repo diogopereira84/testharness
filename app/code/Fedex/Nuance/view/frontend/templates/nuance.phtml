@@ -1,0 +1,17 @@
+<?php if (isset($block)): ?>
+    <?php /** @var $block \Fedex\Nuance\Block\Script */ ?>
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+    <html>
+        <head>
+            <title></title>
+            <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+            <meta http-equiv=Cache-Control content="max-age=3600, private">
+            <?= $block->getGdlScript(); ?>
+        </head>
+        <body>
+            <?= $block->getNuanceScript(); ?>
+        </body>
+    </html>
+<?php else: ?>
+    <?= /* @noEscape */ $layoutContent; ?>
+<?php endif; ?>

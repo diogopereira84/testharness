@@ -1,0 +1,34 @@
+<!-- ko if: showDiscountMessage -->
+<div
+    class="block discount discount-message checkout-discount-message"
+>
+    <div class="message">
+        <div class="icon">
+            <img data-bind="attr: { src: infoUrl }" alt="Information Icon"/>
+        </div>
+        <p class="message-content" data-bind="text: promoCodeMessage()"></p>
+        <div class="close-icon">
+            <button data-bind="click: closePromoCodeMessage">
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+<!-- ko if: showCombinedDiscountMessage -->
+<div
+    class="block discount combined-discount-message checkout-combined-discount-message"
+>
+    <div class="message">
+        <div class="icon">
+            <img data-bind="attr: { src: infoUrl }" alt="Expiring Icon"/>
+        </div>
+        <p class="message-content" data-bind="text: combinedPromoCodeMessage()"></p>
+        <div class="close-icon">
+            <button data-bind="click: closeCombinedPromoCodeMessage">
+                <span></span>
+            </button>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

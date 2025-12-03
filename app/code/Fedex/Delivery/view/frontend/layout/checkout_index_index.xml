@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column">
+    <body>
+        <referenceBlock name="checkout.root">
+            <arguments>
+                <argument name="jsLayout" xsi:type="array">
+                    <item name="components" xsi:type="array">
+                        <item name="checkout" xsi:type="array">
+                            <item name="children" xsi:type="array">
+                                <item name="steps" xsi:type="array">
+                                    <item name="children" xsi:type="array">
+                                        <item name="shipping-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="shippingAddress" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="pickup-search" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Fedex_Delivery/js/view/pickup/pickup-search</item>
+                                                            <item name="displayArea" xsi:type="string">pickup-selector-region</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="template" xsi:type="string">Fedex_Delivery/pickup/pickup-search</item>
+                                                            </item>
+                                                            <item name="sortOrder" xsi:type="number">10</item>
+                                                        </item>
+
+                                                        <item name="pickup-selector" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Fedex_Delivery/js/view/pickup/pickup-selector</item>
+                                                            <item name="displayArea" xsi:type="string">pickup-selector-region</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="template" xsi:type="string">Fedex_Delivery/pickup/pickup-selector</item>
+                                                                <item name="isNewPickupComponentEnabled" xsi:type="boolean">true</item>
+                                                            </item>
+                                                            <item name="sortOrder" xsi:type="number">20</item>
+                                                        </item>
+                                                        <item name="campaign-ad-disclosure-questionnaire" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Fedex_Delivery/js/view/campaign-ad-disclosure/campaign-ad-questionnaire</item>
+                                                            <item name="displayArea" xsi:type="string">campaign-ad-disclosure</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="template" xsi:type="string">Fedex_Delivery/campaign-ad-disclosure/campaign-ad-questionnaire</item>
+                                                            </item>
+                                                            <item name="sortOrder" xsi:type="number">30</item>
+                                                        </item>
+
+                                                        <item name="campaign-ad-disclosure-address-box" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Fedex_Delivery/js/view/campaign-ad-disclosure/campaign-ad-address-box</item>
+                                                            <item name="displayArea" xsi:type="string">campaign-ad-disclosure</item>
+                                                            <item name="config" xsi:type="array">
+                                                                <item name="template" xsi:type="string">Fedex_Delivery/campaign-ad-disclosure/campaign-ad-address-box</item>
+                                                            </item>
+                                                            <item name="sortOrder" xsi:type="number">40</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                                <item name="campaign-ad-disclosure-modal" xsi:type="array">
+                                                    <item name="component" xsi:type="string">Fedex_Delivery/js/view/campaign-ad-disclosure/campaign-ad-disclosure-modal</item>
+                                                    <item name="config" xsi:type="array">
+                                                        <item name="template" xsi:type="string">Fedex_Delivery/campaign-ad-disclosure/campaign-ad-disclosure-modal</item>
+                                                        <item name="deps" xsi:type="string">checkoutProvider</item>
+                                                        <item name="imports" xsi:type="array">
+                                                            <item name="shippingAddress" xsi:type="string">checkoutProvider:shippingAddress</item>
+                                                        </item>
+                                                    </item>
+                                                    <item name="sortOrder" xsi:type="number">900</item>
+                                                </item> 
+                                            </item>
+                                        </item>
+                                        <item name="billing-step" xsi:type="array">
+                                            <item name="children" xsi:type="array">
+                                                <item name="payment" xsi:type="array">
+                                                    <item name="children" xsi:type="array">
+                                                        <item name="campaign-ad-review" xsi:type="array">
+                                                            <item name="component" xsi:type="string">Fedex_Delivery/js/view/campaign-ad-disclosure/campaign-ad-review</item>
+                                                            <item name="displayArea" xsi:type="string">campaign-ad-review</item>
+                                                        </item>
+                                                    </item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

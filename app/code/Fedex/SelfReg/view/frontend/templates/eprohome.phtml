@@ -1,0 +1,287 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+$submittedOrderViewLink = $this->getSubmittedOrderViewLink();
+$quoteCountViewLink = $this->getQuoteViewLink();
+$inProgressOrderViewLink = $this->getInProgressOrderViewLink();
+$completedOrderViewLink = $this->getCompletedOrderViewLink();
+$recentlyAddedCollection = $block->getRecentProductCollection();
+//B-1214005 -  Customizable documents tab should have the customizable documents
+$customDocCollection = $block->getCustomDocCollection();
+$orderCountUrl = $block->getUrl('selfreg/eprocustomer/orderCount');
+$selfregclass = $block->isSelfRegCompany() ? 'self-reg-home-col' : '';
+$loaderimage = 'images/loader-2.gif';
+$productnotfinderror = 'We can\'t find products matching the selection.';
+$helper = $this->helper('Fedex\Delivery\Helper\Data');
+$punchoutHelper = $this->helper('Fedex\Punchout\Helper\Data');
+$siteName = $helper->getCompanySite();
+if ($siteName) {
+    $tazToken = $punchoutHelper->getTazToken();
+} else {
+    $tazToken = null;
+}
+?>
+<div class="home-container-new home-container-new-epro">
+    <div class="home-wrapper-new">
+        <!-- B-1213997 ePro - Home Page renders option for Catalog only -->
+        <div class="new-project-container epro-project-container">
+            <!-- B-1214009 - ePro-Home Page renders only option for Upload only -->
+                <div class="new-project-print">
+                    <div class="project-content">
+                        <div class="title-main">
+                            <span class="new-project-title">
+                                <?= $escaper->escapeHtml(__('Get Started')); ?>
+                            </span>
+                        </div>
+                        <div class="subtitle">
+                            <span class="new-project-subtitle">
+                                <?= $escaper->escapeHtml(__('Select an option below to begin your project.')); ?>
+                            </span>
+                        </div>
+                        <div class="get-started">
+                        <?php if ($block->getCatalogOnlyOption()) : ?>
+                            <button class="upload-project epro-upload-project"
+                                    style = "border-radius: 0px;"
+                                onclick="location.href='<?= $block->getBrowseCatalogUrl(); ?>'">
+                                    <?= $block->escapeHtml(__('BROWSE CATALOG')) ?>
+                            </button>
+                        <?php endif; ?>
+                        <?php if ($block->getUploadOnlyOption()) : ?>
+                            <?php if ($block->getUploadAndPrint()) : ?>
+                                <button  class="print-upload-button max-cart-limit upload-project"
+                                    style = "border-radius: 0px;"
+                                    onclick="openIframe.uploadPrintProduct(event)('<?php echo '1534436209752-2'; ?>',
+                                    '<?php echo $siteName; ?>', '<?php echo $tazToken; ?>')"
+                                    class="upload-product-button"><?= $block->escapeHtml(__('UPLOAD & PRINT')) ?>
+                                </button>
+                            <?php endif; ?>
+                            <button class="upload-project" style = "border-radius: 0px;"
+                                onclick="location.href='<?= $block->getPrintProductUrl(); ?>'">
+                                    <?= $block->escapeHtml(__('BROWSE PRINT PRODUCTS')) ?>
+                            </button>
+                        <?php endif; ?>
+                        </div>
+                        
+                    </div>
+                </div>
+        </div>
+        <h1 class = "page-tittle-my-orders desktop-view">My Orders</h1>
+        <div class="self-reg-order-counts self-reg-order-counts-epro desktop-view">
+            <div class="self-reg-order-count-row self-reg-order-count-row-epro <?= $selfregclass?>">
+                <h2><?= $block->escapeHtml(__('Submitted')) ?></h2>
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                        class="product-loader" alt="loader" />
+                    </div>
+                    <span class="order-count-submitted"></span>
+                </div>
+                <div class="order-view-link submitted-view-link" style="display: none;">
+                    <a aria-label="Submitted View Orders" href="<?= $submittedOrderViewLink; ?>">
+                        <?= __('View Orders') ?>
+                    </a>
+                </div>
+            </div>
+            <?php if (!$block->isSelfRegCompany()) : ?>
+            <div class="self-reg-order-count-row self-reg-order-count-row-epro">
+                <h2><?= $block->escapeHtml(__('Pending Approval')) ?></h2>
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                        class="product-loader" alt="loader" />
+                    </div>
+                    <span class="order-count-quote"></span>
+                </div>
+                <div class="order-view-link quote-view-link" style="display: none;">
+                    <a aria-label="Pending approval View Quotes" href="<?= $quoteCountViewLink; ?>">
+                        <?= __('View Quotes') ?>
+                    </a>
+                </div>
+            </div>
+            <?php endif; ?>
+            <!-- B-1214000 - "View Order" for In-Progress should
+            redirect to Order History with only In-Progress filter -->
+            <div class="self-reg-order-count-row self-reg-order-count-row-epro <?= $selfregclass?>">
+                <h2><?= $block->escapeHtml(__('In Progress')) ?></h2>
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                        class="product-loader" alt="loader"/>
+                    </div>
+                    <span class="order-count-progress"></span>
+                </div>
+                <!-- B-1214024 - RT-ECVS - Validate all new components follow ADA compliance - CATALOG & UPLOAD -->
+                <div class="order-view-link progress-view-link" style="display: none;">
+                    <a aria-label="In Progress View Orders" href="<?= $inProgressOrderViewLink; ?>">
+                        <?= __('View Orders') ?>
+                    </a>
+                </div>
+            </div>
+
+            <!-- B-1213999 - "View Order" for completed should redirect to
+            Order History with only shipped, ready for pickup, or delivered -->
+            <div class="self-reg-order-count-row self-reg-order-count-row-epro <?= $selfregclass?>">
+                <h2><?= $block->escapeHtml(__('Completed')) ?></h2>
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                        class="product-loader" alt="loader" />
+                    </div>
+                    <span class="order-count-completed"></span>
+                </div>
+                <!-- B-1214024 - RT-ECVS - Validate all new components follow ADA compliance - CATALOG & UPLOAD -->
+                <div class="order-view-link completed-view-link" style="display: none;">
+                    <a aria-label="Completed View Orders" href="<?= $completedOrderViewLink; ?>">
+                        <?= __('View Orders') ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- B-1214015: Ability to implement responsiveness for ePro Upload Only screen -->
+        <div class="self-reg-order-mobile-view">
+        <h1 class = "page-tittle-my-orders-mobile-view">My Orders</h1>
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $submittedOrderViewLink; ?>" class="mobile-order-view-link-submitted">
+                        <h2><?= $block->escapeHtml(__('Submitted')) ?></h2>
+                    </a>
+                    <div class="order-count-link">
+                        <div class="order-count-loader">
+                            <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                            class="product-loader" alt="loader" />
+                        </div>
+                            <span class="order-count-submitted"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- B-1214015: Ability to implement responsiveness for ePro Upload Only screen -->
+            <?php if (!$block->isSelfRegCompany()) : ?>
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $quoteCountViewLink; ?>" class="mobile-order-view-link-quote">
+                        <h2><?= $block->escapeHtml(__('Pending Approval')) ?></h2>
+                    </a>
+                    <div class="order-count-link">
+                        <div class="order-count-loader">
+                            <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                            class="product-loader" alt="loader" />
+                        </div>
+                            <span class="order-count-quote"></span>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <!-- B-1214000 - ePro - "View Order" for In-Progress should redirect to
+            Order History with only In-Progress filter -->
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $inProgressOrderViewLink; ?>" class="mobile-order-view-link-progress">
+                        <h2><?= $block->escapeHtml(__('In Progress')) ?></h2>
+                    </a>
+                    <div class="order-count-link">
+                        <div class="order-count-loader">
+                            <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                            class="product-loader" alt="loader" />
+                        </div>
+                            <span class="order-count-progress"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- B-1213999 - "View Order" for completed should redirect to
+            Order History with only shipped, ready for pickup, or delivered -->
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $completedOrderViewLink; ?>" class="mobile-order-view-link-completed">
+                        <h2><?= $block->escapeHtml(__('Completed')) ?></h2>
+                    </a>
+                    <div class="order-count-link">
+                        <div class="order-count-loader">
+                            <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderimage)) ?>"
+                            class="product-loader" alt="loader" />
+                        </div>
+                            <span class="order-count-completed"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<?php if ($block->getCatalogOnlyOption()) : ?>
+    <script>
+        require(['jquery', 'owlcarousel', 'domReady'], function($) {
+
+            // add tab functionality on desktop
+            // B-1214005 -  Customizable documents tab should have the customizable documents
+            jQuery(document).on('click', '.shared-catalog-container .tab-container .tab-title', function() {
+                var content = $(this).attr('data-content');
+                if (!$(this).hasClass('active')) {
+                    // active tab
+                    $('.shared-catalog-container .tab-container .tab-title').removeClass('active');
+                    $(this).addClass('active');
+
+                    // active tab content
+                    $('.shared-catalog-container .tab-content-wrapper .tab-content').removeClass('active');
+                    $('.' + content + '-content').addClass('active');
+                }
+            });
+
+            /* B-1214006 */
+            jQuery(document).on('change', '.shared-catalog-container.mobile-view .shared-catalog-options', function() {
+                var val = $(this).val();
+                $('.dropdown-content').removeClass('active');
+                $('.' + val + '-mobile').addClass('active');
+            });
+            
+            $('.owl-carousel').owlCarousel({
+                loop: false,
+                items: 1,
+                dots: true,
+                autoplay: false,
+                autoplayHoverPause: false,
+                margin: 20,
+                autoWidth: false
+            });
+            $(".shared-catalog-container .owl-nav").remove();
+        });
+    </script>
+<?php endif; ?>
+
+<script type="text/javascript">
+    let openIframe;
+	require([
+        'product',
+		"jquery",
+		"domReady!"
+	], function(product, $) {
+        openIframe = product;
+		var url = '<?= $orderCountUrl ?>';
+		$('.order-view-link').hide();
+		$.ajax({
+			url: url,
+			type: 'POST',
+			dataType: 'json',
+		}).done(function(response) {
+			$('.order-count-loader').hide();
+			if (response) {
+				$.each(response, function(index, value) {
+					if (value !== 'undefined' && value > 0) {
+						$('.order-count-' + index).html(value);
+						$('.' + index + '-view-link').show();
+					} else {
+						$('.order-count-' + index).html('0');
+						$('.mobile-order-view-link-' + index).attr("href", "javascript:void(0)")
+					}
+				});
+
+			}
+		});
+        
+	});
+</script>
+

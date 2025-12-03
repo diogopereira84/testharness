@@ -1,0 +1,12 @@
+<?php /** @var Fedex\Kaltura\Block\Script $block */?>
+<?= $block->getScript(); ?>
+<?php
+$kalturaScript = <<<script
+    window.kaltura = {};
+    window.kaltura.enable = '{$block->isKalturaEnabled()}';
+    window.kaltura.partner_id = '{$block->getPartnerId()}';
+    window.kaltura.uiconfig_id = '{$block->getUiConfigId()}';
+    window.kaltura.playIconUrl = '{$block->getViewFileUrl('images/icon_play.svg')}';
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $kalturaScript, false) ?>

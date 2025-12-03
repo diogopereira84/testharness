@@ -1,0 +1,520 @@
+//  CSS for minicart expired item error mesage for desktop
+.minicart-wrapper {
+    .block-minicart {
+        .items-total {
+            color: @cancel-button-text-color;
+            font-family: @expireditem-error-msg-font-family-regular;
+            font-size: 14px;
+            font-weight: 300;
+            letter-spacing: 0;
+            line-height: 19px;
+            .count {
+                font-weight: 300 !important;
+            }
+        }
+        .subtotal .label {
+            color: @cancel-button-text-color;
+            font-family: @expireditem-error-msg-font-family-regular;
+            font-size: 14px;
+            letter-spacing: 0;
+            line-height: 19px;
+            text-align: right;
+        }
+        .amount .price-wrapper:first-child .price {
+            color: @cancel-button-text-color;
+            font-family: @expireditem-error-msg-font-family-regular;
+            font-size: 18px;
+            font-weight: 300;
+            letter-spacing: 0;
+            line-height: 24px;
+            text-align: right;
+        }
+    }
+    .minicart-items-wrapper {
+        border: none;
+        border-bottom: 1px solid @minicart-border-color !important;
+        height: auto !important;
+    }
+    .minicart-msg-wrapper {
+        border-top: 1px solid @minicart-border-color;
+        margin: 0 -20px;
+        .minicart-expireditem-err-msg-outer-most-info {
+            float: left;
+            margin-bottom: 0;
+            margin-left: 25px;
+            margin-top: 16px;
+            position: relative;
+            width: 327px;
+            .icon-container {
+                height: 100%;
+                position: absolute;
+                width: 34px;
+                .img-info-icon {
+                    height: 44.6px;
+                    margin-left: 2px;
+                    margin-top: -4px;
+                    max-width: 44.6px;
+                }
+            }
+            .message {
+                color: @expired-item-icon-color;
+                float: left;
+                font-family: @minicart-expired-item-message-font-family-italic;
+                font-size: 14px;
+                font-style: italic;
+                letter-spacing: 0;
+                line-height: 19px;
+                margin-left: 51px;
+                margin-top: 1px;
+                position: relative;
+                width: 84%;
+            }
+        }
+    }
+}
+//  CSS for minicart expired item error mesage for mobile
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .minicart-wrapper {
+        .minicart-msg-wrapper {
+            height: auto !important;
+            .minicart-expireditem-err-msg-outer-most-info {
+                float: none !important;
+                margin-bottom: 0;
+                margin-top: 16px;
+                position: relative;
+                width: 219px;
+                .icon-container {
+                    height: 100%;
+                    position: absolute;
+                    width: 34px;
+                    .img-info-icon {
+                        margin-left: 2px;
+                        margin-top: 6px;
+                    }
+                }
+                .message {
+                    float: none !important;
+                    margin-left: 52px;
+                    position: relative;
+                    width: 219px;
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart expired item error mesage for tab
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .minicart-wrapper {
+        .minicart-msg-wrapper {
+            .minicart-expireditem-err-msg-outer-most-info {
+                float: none !important;
+                .message {
+                    float: none;
+                    width: 284px;
+                }
+            }
+        }
+    }
+}
+//  CSS minicart expired message for SDE & EPRO
+.cms-sde-home,
+.epro-store {
+    .minicart-wrapper {
+        .minicart-msg-wrapper {
+            .minicart-expireditem-err-msg-outer-most-info {
+                margin-left: 28px;
+                margin-top: 16px;
+                .message {
+                    width: 284px;
+                }
+            }
+        }
+    }
+}
+//  CSS minicart expired message for SDE & EPRO for tab
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .cms-sde-home,
+    .epro-store {
+        .minicart-wrapper {
+            .minicart-msg-wrapper {
+                .minicart-expireditem-err-msg-outer-most-info {
+                    margin-left: 19px !important;
+                    .message {
+                        width: 270px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart expiry item error mesage for mobile for SDE,EPRO,Sefl-Reg
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .cms-sde-home,
+    .epro-store,
+    .selfreg-store {
+        .minicart-wrapper {
+            .minicart-msg-wrapper {
+                .minicart-expireditem-err-msg-outer-most-info {
+                    margin-left: 16px !important;
+                    .message {
+                        width: 180px !important;
+                    }
+                }
+            }
+        }
+    }
+}
+.cms-sde-home,
+.epro-store,
+.selfreg-store {
+    .minicart-wrapper {
+        .minicart-msg-wrapper {
+            .minicart-expireditem-err-msg-outer-most-info {
+                float: none !important;
+                .message {
+                    float: none !important;
+                }
+            }
+        }
+    }
+}
+
+//  CSS to remove pipe from minicart
+.minicart-items {
+    .product-item {
+        .product-item-details {
+            .product.actions.custom-minicar-edit-delete {
+                .secondary {
+                    .action.delete.remove-pipe {
+                        span {
+                            &:before {
+                                content: "";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and update for Retail and Commercial
+.block-minicart .minicart-items-wrapper {
+    padding: 16px;
+    .minicart-items {
+        .product-item-name {
+            width: 50%;
+        }
+        .update-cart-item {
+            background-clip: padding-box;
+            background-color: @cart-button-color;
+            border: 1px solid @minicart-update-button-color;
+            border-radius: 1px;
+            box-sizing: border-box;
+            color: @minicart-update-button-color;
+            font-family: @font-family-bold;
+            font-size: 14px;
+            font-weight: bold;
+            height: auto;
+            letter-spacing: .75px;
+            line-height: 24px;
+            margin-left: 8px;
+            max-height: 32px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 96px;
+        }
+        .product-item .product-item-details {
+            .product.actions.custom-minicar-edit-delete {
+                .action.edit,
+                .action.delete {
+                    background-color: @cart-button-color;
+                    color: @minicart-edit-delete-icon-color;
+                    font-size: 12px;
+                    letter-spacing: 0;
+                    line-height: 16px;
+                }
+                .action.edit {
+                    &.reorder-disabled {
+                        color: @fx-white-200;
+                    }
+                }
+            }
+        }
+        .item-qty {
+            height: 32px !important;
+            padding-left: 6px !important;
+            width: 70px;
+        }
+        .product-item {
+            padding: 15px 0 !important;
+        }
+        .product-item-details {
+            padding-left: 77px;
+            position: relative;
+        }
+        .product-image-container {
+            height: 61px;
+            margin-left: 12px;
+            width: 46.5px !important;
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 320 breakpoint for Retail
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .is-fcl-global {
+        .minicart-items-wrapper {
+            .product .actions {
+                margin-bottom: 4px !important;
+                margin-top: 16px !important;
+                position: relative !important;
+                right: auto !important;
+                top: auto !important;
+            }
+            .minicart-items {
+                .update-cart-item {
+                    position: absolute;
+                    width: 80px;
+                    span {
+                        margin-left: -6px;
+                    }
+                }
+                .product-item-name {
+                    width: 77%;
+                }
+                .product-image-container {
+                    margin-left: 13px;
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 768 breakpoint for Retail
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .is-fcl-global {
+        .block-minicart {
+            .minicart-items-wrapper {
+                .product .actions {
+                    float: right;
+                    margin-top: -24px;
+                    position: relative;
+                    right: auto;
+                    top: auto;
+                }
+
+                .minicart-items {
+                    .update-cart-item {
+                        position: absolute;
+                    }
+
+                    .product-item-name {
+                        width: 60%;
+                    }
+
+                    .product-item {
+                        padding: 16px;
+                    }
+
+                    .product-image-container {
+                        margin-left: 20px;
+                    }
+
+                    .product-item-details {
+                        padding-left: 93px;
+                    }
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 1200 breakpoint Retail and Commercial
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .minicart-items-wrapper {
+        .product .actions {
+            margin-right: 2px !important;
+            position: absolute !important;
+            right: 0 !important;
+            top: 0 !important;
+        }
+        .minicart-items {
+            .update-cart-item {
+                margin-left: 4px;
+            }
+            .product-item {
+                padding: 8px 0 !important;
+            }
+        }
+    }
+}
+//  CSS for minicart for commercial stores
+.commercial-store-home {
+    .block-minicart {
+        .minicart-items-wrapper {
+            .product .actions {
+                margin-right: 14px;
+                position: relative;
+                right: auto;
+                top: auto;
+            }
+
+            .minicart-items {
+                .product-item-details {
+                    padding-left: 88px;
+
+                    .product-item-name {
+                        margin-top: 0 !important;
+                    }
+                }
+
+                .product-item .product-item-photo {
+                    height: auto !important;
+                    padding-top: 0 !important;
+                    width: auto !important;
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 1200 breakpoint Commercial
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .commercial-store-home {
+        .minicart-items-wrapper {
+            .product .actions {
+                margin-right: -1px;
+                position: relative;
+                right: auto;
+                top: auto;
+            }
+            .minicart-items {
+                .product-image-container {
+                    margin-left: 11px;
+                }
+                .product-item-details {
+                    padding-left: 74px;
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 1200 breakpoint Commercial
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .commercial-store-home {
+        .block-minicart {
+            .minicart-items-wrapper {
+                .minicart-items {
+                    .product-image-container {
+                        margin-left: 11px;
+                    }
+
+                    .product-item-details {
+                        padding-left: 77px;
+                    }
+
+                    .product-item-name {
+                        margin-top: 0;
+                        width: 92%;
+                    }
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart  for commercial stores
+@media only screen and (min-width: 768px) {
+    .commercial-store-home {
+        .minicart-wrapper .block-minicart {
+            width: 430px;
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 320 breakpoint for commercial stores
+@media only screen and (min-width: 320px) and (max-width: 378px) {
+    .commercial-store-home {
+        .minicart-items-wrapper {
+            .product .actions {
+                margin-bottom: -4px !important;
+                margin-left: 4px !important;
+                margin-top: 16px !important;
+                position: relative !important;
+                right: auto !important;
+                top: auto !important;
+            }
+            .minicart-items {
+                .update-cart-item {
+                    float: none !important;
+                    margin-left: 33px;
+                    margin-top: 8px;
+                    width: 80px;
+                    span {
+                        margin-left: -6px;
+                    }
+                    .product-item-name {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 320 breakpoint for commercial stores
+@media only screen and (min-width: 379px) and (max-width: 767px) {
+    .commercial-store-home {
+        .minicart-items-wrapper {
+            .product .actions {
+                margin-bottom: -4px !important;
+                margin-left: 2px;
+                margin-top: 16px !important;
+                position: relative;
+                right: auto;
+                top: auto;
+            }
+            .minicart-items {
+                .update-cart-item {
+                    float: none !important;
+                    margin-left: 4px;
+                    width: 80px;
+                    span {
+                        margin-left: -6px;
+                    }
+                }
+            }
+        }
+        .minicart-msg-wrapper {
+            .minicart-expiryitem-warning-msg-outer-most-info {
+                .message {
+                    width: 219px !important;
+                }
+            }
+        }
+    }
+}
+//  CSS for minicart with edit, delete and upadte for 768 breakpoint for commercial stores
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .commercial-store-home {
+        .minicart-items-wrapper {
+            .product .actions {
+                float: right;
+                margin-right: 2px;
+                margin-top: -24px;
+                position: relative;
+                right: auto;
+                top: auto;
+            }
+            .minicart-items {
+                .update-cart-item {
+                    float: none !important;
+                    margin-left: 4px !important;
+                    position: relative;
+                }
+                .product-item-name {
+                    width: 45%;
+                }
+            }
+        }
+    }
+}
+
+//  Mini cart AXE Dev tool issue found for Express checkout & Proceed to checkout D-121478
+.block-minicart .block-content>.actions>.primary .action.primary {
+    font-size: 20px;
+    font-weight: bold;
+}

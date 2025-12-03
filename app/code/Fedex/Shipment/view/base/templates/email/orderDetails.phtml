@@ -1,0 +1,148 @@
+<?php $data = $this->getData() ?>
+<style>
+    @font-face {
+        font-family: "FedEx Sans";
+        src: url("<?= $this->getViewFileUrl('Fedex_MarketplaceCheckout::fonts/fedex-sans/FedExSans-Regular.woff2'); ?>") format("woff2"), url("<?= $this->getViewFileUrl('Fedex_MarketplaceCheckout::fonts/fedex-sans/FedExSans-Regular.woff'); ?>") format("woff");
+        font-weight: 400;
+        font-style: normal;
+        font-display: swap;
+    }
+
+    @font-face {
+        font-family: "FedEx Sans";
+        src: url("<?= $this->getViewFileUrl('Fedex_MarketplaceCheckout::fonts/fedex-sans/FedExSans-Bold.woff2'); ?>") format("woff2"), url("<?= $this->getViewFileUrl('Fedex_MarketplaceCheckout::fonts/fedex-sans/FedExSans-Bold.woff'); ?>") format("woff");
+        font-weight: 700;
+        font-style: normal;
+        font-display: swap;
+    }
+</style>
+<table class='order-details' style='max-width: 612px; margin: auto' width='612'>
+    <tbody style="vertical-align: baseline">
+    <tr>
+        <?php if ($data["showCustomerInfo"]): ?>
+            <td class='customer-details' style="max-width:200px;padding-right: 15px;vertical-align:text-top">
+                <h3 style="color: #333;font-size: 18px;font-style: normal;font-weight: 400;line-height: 24px;">
+                    <?= __('Customer Information') ?>
+                </h3>
+                <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('Contact') ?>
+                </strong>
+                <p style="color: #333 !important;text-decoration:none !important;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;margin-top: 10px;">
+                    <?= implode(' ', [$data["customer_first_name"], $data["customer_last_name"]]); ?><br>
+                    <?= $data["customer_email"]; ?><br>
+                    <?= $data["customer_phone"]; ?>
+                </p>
+            </td>
+        <?php endif; ?>
+        <?php if ($data["isPickup"]): ?>
+            <td class='shipping-details' style="max-width:200px;padding-right: 15px;vertical-align:text-top">
+                <h3 style="color: #333;font-size: 18px;font-style: normal;font-weight: 400;line-height: 24px;">
+                    <?= __('Pickup Location'); ?>
+                </h3>
+                <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('FedEx Print & Ship'); ?>
+                </strong>
+                <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;margin-top: 10px;margin-bottom: 0px;">
+                    FedEx Office Print & Ship
+                </p>
+                <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;">
+                    <?= $data["pickup_address"]; ?>
+                </p>
+                <?php if (!empty($data["producing_store_phonenumber"])): ?>
+                    <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;">
+                        <?= $data["producing_store_phonenumber"]; ?>
+                    </p>
+                <?php endif; ?>
+                <?php if (!empty($data["order_completion_date"])): ?>
+                    <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;">
+                        <?= __('Estimated pickup time:'); ?><br>
+                        <?= $data["order_completion_date"]; ?>
+                    </p>
+                <?php endif; ?>                
+                <?php if ($data["has_alternate_contact"] && isset($data["alternate_contact"])): ?>
+                    <br>
+                    <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                        <?= __('Alternate Contact Person') ?>
+                    </strong>
+                    <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;">
+                            <?= $data["alternate_contact"]["name"]; ?><br/>
+                            <?php if (isset($data["alternate_contact"]["company"]) && $data["alternate_contact"]["company"]): ?>
+                                <?= $data["alternate_contact"]["company"]; ?><br/>
+                            <?php endif; ?>
+                            <?= $data["alternate_contact"]["address"]; ?>
+                    </p>
+                <?php endif; ?>
+            </td>
+        <?php endif; ?>
+        <?php if ($data["isShipping"]): ?>
+            <td class='shipping-details' style="max-width:200px;padding-right: 15px;vertical-align:text-top">
+                <h3 style="color: #333;font-size: 18px;font-style: normal;font-weight: 400;line-height: 24px;">
+                    <?= __('Shipping Information'); ?>
+                </h3>
+                <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('Address'); ?>
+                </strong>
+                <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;margin-top: 10px;">
+                        <?= $data["shipping_address"]["name"]; ?><br/>
+                        <?php if (isset($data["shipping_address"]["company"]) && $data["shipping_address"]["company"]): ?>
+                            <?= $data["shipping_address"]["company"]; ?><br/>
+                        <?php endif; ?>
+                        <?= $data["shipping_address"]["address"]; ?>
+                </p>
+                <?php if ($data["isPickup"]): ?>
+                    <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                        <?= __('Contact'); ?>
+                    </strong>
+                    <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;margin-top: 10px;">
+                        <?= $data["shipping_address"]["name"]; ?><br/>
+                        <?= $data["shipping_address"]["email"]; ?><br/>
+                        <?= $data["shipping_address"]["phone"]; ?>
+                    </p>
+                <?php endif; ?>
+                <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?php if (!empty($data["shipping_account_number"])): ?>
+                        <?= __('Shipping Account Number'); ?>
+                    <?php endif; ?>
+                </strong>
+                <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;word-wrap: break-word;margin-top: 10px;">
+                    <?php if (!empty($data["shipping_account_number"])): ?>
+                        <?= __('ending in *'); ?><?= $data["shipping_account_number"]; ?>
+                    <?php endif; ?>
+                </p>
+            </td>
+        <?php endif; ?>
+        <td class='payment-details' style="width:33.3333%;vertical-align:text-top">
+            <h3 style="color: #333;font-size: 18px;font-style: normal;font-weight: 400;line-height: 24px;">
+                <?= __('Payment'); ?>
+            </h3>
+            <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('Payment Method'); ?>
+            </strong>
+            <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;margin-top: 10px;">
+                <span class='no-link'><?= __('Payment by: %1', $data["payment_type"]) ?></span> <i>
+                    <?php if (($data["payment_type"] !== 'FedEx Office Print Account' && $data["cc_last_4"]) || $data["account_number"]): ?>
+                    <?= __('ending in *%1', $data["payment_type"] == 'FedEx Office Print Account' ?
+                    $data["account_number"] : $data["cc_last_4"]) ?></i>
+                    <?php endif; ?>
+            </p>
+            <?php if($data["payment_type"] == 'FedEx Office Print Account'):?>
+                <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('Discount Account Number'); ?>
+                </strong>
+                <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;margin-top: 10px;">
+                     <i><?= __('ending in *%1', $data["account_number"]) ?></i>
+                </p>
+            <?php endif; ?>
+            <strong style="color: #333;font-size: 16px;font-style: normal;font-weight: 700;line-height: 24px;">
+                    <?= __('Billing Address'); ?>
+            </strong>
+            <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;margin-bottom: 0px;margin-top: 10px;">
+                <?= $data["billing_name"]; ?>
+            </p>
+            <p style="color: #333;font-size: 16px;font-style: normal;font-weight: 400;line-height: 24px;">
+                <?= $data["billing_address"]; ?>
+            </p>
+        </td>
+    </tr>
+    </tbody>
+</table>

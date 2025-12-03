@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="selfreg_account"/>
+    <head>
+        <script src="Fedex_SelfReg::js/companyuser.js"/>
+    </head>
+    <body>
+        <referenceBlock name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="header.top.success.notification"
+                   template="Fedex_SelfReg::success-notification.phtml" after="page.builder.promo.banner.widget"/>
+            <block class="Magento\Framework\View\Element\Template" name="header.top.reorder.notification" template="Fedex_Orderhistory::order/reorder-notification.phtml" after="page.builder.promo.banner.widget"/>
+        </referenceBlock>
+
+        <move element="page.main.title" destination="columns" before="-" />
+
+        <referenceContainer name="content">
+            <block name="selfreg_user_search" class="Fedex\SelfReg\Block\User\Search" template="Fedex_SelfReg::search.phtml" before="-">
+                <arguments>
+                    <argument name="commercial-reporting-enhancement" xsi:type="object">Fedex\SharedDetails\ViewModel\SharedEnhancement</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+                   name="company.management.dialog.customer.users_actions_popup"
+                   template="Magento_Company::company/management/dialog/customer/users_actions_popup.phtml">
+                <block class="Magento\Company\Block\Company\Management\Add"
+                       name="company.management.dialog.customer.add" as="dialog.customer.add"
+                       template="Fedex_SelfReg::company/management/dialog/customer/add.phtml">
+                    <arguments>
+                        <argument name="viewModel" xsi:type="object">Magento\Company\ViewModel\Customer</argument>
+                        <argument name="view_Model" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                    </arguments>
+                    <block class="Fedex\SelfReg\Block\User\Search"
+                           template="Fedex_SelfReg::company/management/dialog/customer/manage-user-permission.phtml"
+                           name="manage_user_permission" />
+                    <block class="Magento\CustomerCustomAttributes\Block\Form"
+                           template="Magento_CustomerCustomAttributes::form/userattributes.phtml"
+                           name="customer_form_user_attributes_create">
+                        <action method="setFormCode">
+                            <argument name="code" xsi:type="string">customer_account_create</argument>
+                        </action>
+                        <action method="setEntityModelClass">
+                            <argument name="code" xsi:type="string">Magento\Customer\Model\Customer</argument>
+                        </action>
+                        <arguments>
+                            <argument name="view_model" xsi:type="object">CustomerFileAttribute</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\CustomerCustomAttributes\Block\Form"
+                           template="Magento_CustomerCustomAttributes::form/userattributes.phtml"
+                           name="customer_form_user_attributes_edit" cacheable="false">
+                        <action method="setFormCode">
+                            <argument name="code" xsi:type="string">customer_account_edit</argument>
+                        </action>
+                        <action method="setEntityModelClass">
+                            <argument name="code" xsi:type="string">Magento\Customer\Model\Customer</argument>
+                        </action>
+                        <arguments>
+                            <argument name="view_model" xsi:type="object">CustomerFileAttribute</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+            <block name="selfreg_user_selection"
+                   class="Magento\Framework\View\Element\Template"
+                   template="Fedex_SelfReg::selection.phtml" before="company_users_listing">
+                    <arguments>
+                        <argument name="company_user_view_model" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                    </arguments>
+                    <block name="permission.user.bulk.edit" class="Fedex\SelfReg\Block\User\Search" template="Fedex_SelfReg::bulk_edit.phtml">
+                        <arguments>
+                            <argument name="company_user_view_model" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                        </arguments>
+                   </block>
+            </block>
+            <block class="Fedex\SelfReg\Block\UserGroupsList"
+                            template="Fedex_SelfReg::change_user_group_modal.phtml"
+                            name="change_user_group_modal" 
+                            ifconfig="environment_toggle_configuration/environment_toggle/sgc_user_group_and_folder_level_permissions" />
+            <block class="Magento\Framework\View\Element\Template"
+                            template="Fedex_SelfReg::bulk_edit_warning_modal.phtml"
+                            name="bulk_edit_warning_modal" 
+                            ifconfig="environment_toggle_configuration/environment_toggle/sgc_user_group_and_folder_level_permissions"/>        
+        </referenceContainer>
+    </body>
+</page>

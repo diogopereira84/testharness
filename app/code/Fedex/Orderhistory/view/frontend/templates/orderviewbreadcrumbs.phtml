@@ -1,0 +1,115 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+/** @var \Magento\Framework\Escaper $escaper */
+ /* B-1060632 - RT-ECVS- View Order Details
+    Custom Class to add Breadcrumbs on order view page  */
+?>
+
+<?php
+$order = $block->getOrderInfo();
+$declineDate = $block->getDeclineDate();
+$orderReviewModal = $block->getData('order_b2b_view_modal');
+$toastMsgData = $orderReviewModal->getSuccessErrorData();
+$toastMsg = $toastMsgData['msg'] ?? '';
+$erroStyle = "display:none;";
+if (empty($toastMsgData['success']) && !empty($toastMsg)) {
+    $erroStyle = "display:block;";
+}
+$orderReviewModal->unsetSuccessErrorData();
+ if (($block->checkIsReviewActionSet() || $order->getStatus() == 'declined')
+ && $block->isOrderApprovalB2bEnabled()) {?>
+    <div class="breadcrumbs review-order-breadcrumb" role="navigation" aria-label="breadcrumbs">
+        <ul class="items">
+            <?php
+            if ($block->checkIsReviewActionSet()):?>
+                <li class="item myoreder">
+                    <a href="<?=$escaper->escapeUrl($block->getUrl().'orderb2b/revieworder/history/'); ?>"
+                    title="Review Orders">
+                    <?= $escaper->escapeHtml(__('Review Orders')) ?></a>
+                </li>
+                <li class="item orderid">
+                    <strong><?= $escaper->escapeHtml($order->getIncrementId()) ?></strong>
+                </li>
+            <?php else:?>
+                <li class="item myoreder">
+                    <a href="<?=$escaper->escapeUrl($block->getUrl()); ?>"
+                    title="<?=$escaper->escapeHtmlAttr('Home'); ?>">
+                    <?= $escaper->escapeHtml(__('Home')) ?></a>
+                </li>
+                <li class="item orderid">
+                    <strong>order #<?= $escaper->escapeHtml($order->getIncrementId()) ?></strong>
+                </li>
+            <?php endif;?>
+        </ul>
+    </div>
+    <?php if ($order->getStatus() == 'declined') :?>
+        <div class="decline-order-title">
+            <span><?= $escaper->escapeHtml(__("Order declined")) ?></span>
+        </div>
+    <?php endif; ?>
+    <h1 class="review-order-number">
+        <span><?= $escaper->escapeHtml(__('Order number #')) ?></span>
+        <span><?= $escaper->escapeHtml($order->getIncrementId()) ?></span>
+    </h1>
+    <?php if ($order->getStatus() == 'declined') :?>
+        <div class="decline-order-time">
+            <span>
+                <?= $escaper->escapeHtml(__("This order was declined on")) ?>
+                <?= $escaper->escapeHtml($orderReviewModal->getFormattedDate($declineDate)) ?>
+                <?= $escaper->escapeHtml(__(" at ")) ?>
+                <?= $escaper->escapeHtml($orderReviewModal->getFormattedDate($declineDate, 'g:i A')). '.' ?>
+            </span><br>
+            <span class="confirmation-mail">
+                <?= $escaper->escapeHtml(__("Confirmation email has been delivered to "))?>
+                <strong><?= $order->getCustomerEmail() ?></strong>
+            </span>
+        </div>
+    <?php endif; ?>
+    <div class="b2b-order-error-toast-msg decline-toast-msg" style="<?= $escaper->escapeHtmlAttr($erroStyle) ?>" role="region" aria-label="message">
+        <div class="err-msg">
+                <span class="icon-container">
+                    <span>
+                        <img class="img-check-icon" alt="Close Circle Icon"
+                             src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/enhanced-profile/close-circle.png'));?>">
+                    </span>
+                </span>
+            <span class="message">
+                <span class="decline-toast-msg-strong">
+                    <?= $escaper->escapeHtml(__('We were unable to approve this order.')) ;?>
+                </span><br>
+                <span class="b2b-order-error-msg"><?= $escaper->escapeHtml(__($toastMsg)) ?></span>
+            </span>
+            <img id="decline_err_msg_close" class="img-close-msg" alt="close icon"
+                 src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/enhanced-profile/close-button.png'));?>"
+            />
+        </div>
+    </div>
+     <script>
+         require(['revieworders'], function(revieworders) {
+         });
+     </script>
+ <?php
+ } elseif ($order->getStatus() == 'pending_approval' && $block->isOrderApprovalB2bEnabled()) {?>
+    <div class="breadcrumbs mvp-breadcrumb-label" role="navigation" aria-label="breadcrumbs">
+        <ul class="items">
+            <li class="item myoreder">
+                <a href="<?=$escaper->escapeUrl($block->getUrl()); ?>"
+                title="<?=$escaper->escapeHtmlAttr('Home'); ?>">
+                <?= $escaper->escapeHtml(__('Home')) ?></a>
+            </li>
+            <li class="item orderid">
+                <strong>order #<?= $escaper->escapeHtml($order->getIncrementId()) ?></strong>
+            </li>
+        </ul>
+    </div>
+<?php
+ } else {
+    echo $_order = $block->getOrderviewbreadcrumbs();
+ }
+?>

@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_GraphQl
+ * @copyright    Copyright (c) 2023 Fedex
+ * @author       Eduardo Diogo Dias <edias@mcfadyen.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <group id="fedex_expire_fuse_token_crongroup">
+        <job name="expired_fuse_token_cleanup" instance="Fedex\GraphQl\Cron\CleanExpiredFuseToken" method="execute">
+            <config_path>fedex/cron_configuration/expired_fuse_token_cleanup_cron</config_path>
+        </job>
+    </group>
+</config>

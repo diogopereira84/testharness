@@ -1,0 +1,439 @@
+/**
+* Copyright © FedEx, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+//  variables
+@color-white: #fff;
+@footer-background-color: @fx-grey-600;
+@footer-copyright-bgcolor: @fx-purple-500;
+
+& when (@media-common = true) {
+    .page-wrapper {
+        .footer-container {
+            background-color: @footer-background-color;
+            .footer {
+                > [data-content-type='row'] {
+                    > [data-element='inner'] {
+                        padding: 10px 0 !important;
+                    }
+                }
+                .pagebuilder-column {
+                    padding: 10px 6px !important;
+                }
+                .footer-heading {
+                    color: @fx-purple-500;
+                    font-weight: 700;
+                    font-size: 1.4rem;
+                    line-height: 1.1;
+                    margin-top: 2rem;
+                    margin-bottom: 2rem;
+                }
+                .custom-retail-footer {
+                    list-style-type: none;
+                    padding-left: inherit;
+                    li {
+                        a {
+                            font-size: 12px;
+                            color: @fx-grey-1100;
+                            line-height: 24px;
+                            text-decoration: none;
+                        }
+                        span {
+                            font-size: 12px;
+                            color: @fx-grey-1100;
+                            line-height: 24px;
+                        }
+                    }
+                }
+            }
+            .footer_social_media {
+                .custom-retail-footer.social-media {
+                    display: inline-flex;
+                }
+            }
+        }
+        .copyright {
+            [data-element='inner'] {
+                padding-right: 0 !important;
+            }
+            .bottom-footer-links {
+                display: inline-block;
+                float: none !important;
+                margin: 0;
+                list-style-type: none;
+                vertical-align: middle;
+                li {
+                    float: left;
+                    margin: 0;
+                    a {
+                        color: @fx-white-100;
+                        text-decoration: none;
+                    }
+                    span {
+                        padding: 0 15px;
+                    }
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+    .page-wrapper {
+        .copyright {
+            .copyright-content {
+                float: left;
+            }
+            .copyright-links {
+                float: right;
+                margin-top: 10px;
+            }
+        }
+    }
+}
+
+/* Retail footer desktop view */
+@media (min-width: 1160px) {
+    .page-wrapper {
+        .footer-container {
+            .footer {
+                .pagebuilder-column-group {
+                    .pagebuilder-column {
+                        .footer_explore {
+                            .widget.block.block-static-block {
+
+                                .footer-heading {
+                                    color: @fx-purple-500;
+                                }
+
+                                .custom-retail-footer {
+                                    list-style-type: none;
+                                    padding-left   : inherit;
+
+                                    li {
+                                        a {
+                                            font-size      : 12px;
+                                            color          : @fx-grey-1100;
+                                            line-height    : 24px;
+                                            text-decoration: none;
+                                        }
+
+                                        span {
+                                            font-size  : 12px;
+                                            color      : @fx-grey-1100;
+                                            line-height: 24px;
+                                        }
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                        .footer_social_media {
+
+                            .widget.block.block-static-block {
+
+                                .pagebuilder-column-group {
+
+                                    .pagebuilder-column {
+
+                                        .custom-retail-footer.social-media {
+                                            display   : inline-flex;
+                                            margin-top: -2%;
+
+                                            li {
+                                                padding: 4%;
+                                            }
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    }
+}
+
+/* Retail footer mobile view */
+@media (min-width: 320px) and (max-width: 499px) {
+    .page-wrapper {
+        .footer-container {
+            background-color: @footer-background-color;
+            width: fit-content;
+            .footer {
+                .pagebuilder-column-group {
+                    .pagebuilder-column {
+                        .footer-explore {
+                            float: right;
+                            margin-bottom: -9px;
+                            margin-top: 0;
+                        }
+                        .footer-corporate {
+                            display: inline-block;
+                            margin-bottom: -30px;
+                            margin-top: -9%;
+                        }
+                        .footer-social-media {
+                            display: inline-block;
+                            margin-top: -10%;
+                            .widget.block.block-static-block {
+                                margin-bottom: 0;
+                                .pagebuilder-column-group {
+                                    .pagebuilder-column {
+                                        padding: 0 10px !important;
+                                        .social-media {
+                                            margin-bottom: 0;
+                                            li {
+                                                padding: 2%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .explore-content-fix {
+                        width: 50%!important;
+                        float: left;
+                        overflow: hidden;
+                        padding: 0;
+                        flex-basis: revert;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (min-width: 500px) and (max-width: 767px) {
+    .page-wrapper {
+        .footer-container {
+            background-color: @footer-background-color;
+            width: 100%;
+            .footer {
+                .pagebuilder-column-group {
+                    .pagebuilder-column {
+                        max-width: 58% !important;
+                        .footer-customer {
+                            width: 260px;
+                        }
+                        .footer-explore {
+                            float: left;
+                            margin-bottom: -9px;
+                            margin-left: 55%;
+                            margin-top: -261px;
+                            width: 200px;
+                        }
+                        .footer-corporate {
+                            float: left;
+                            margin-bottom: -32px;
+                            margin-left: 108%;
+                            margin-top: -282px;
+                            width: 200px;
+                        }
+                        .footer-social-media {
+                            height: 0;
+                            margin-left: 3px;
+                            margin-top: -10%;
+                            padding-bottom: 16%;
+                            width: 100%;
+                            .widget.block.block-static-block {
+                                .pagebuilder-column-group {
+                                    .pagebuilder-column {
+                                        .social-media {
+                                            margin-top: -16%;
+                                            padding-left: 21%;
+                                            position: absolute;
+                                            li {
+                                                padding: 2%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Retail footer tablet view */
+@media (min-width: 768px) and (max-width: 1150px) {
+    .page-wrapper {
+        .footer-container {
+            width: 100%;
+
+            .footer {
+                .pagebuilder-column-group {
+                    .pagebuilder-column {
+                        .footer_customer {
+                            width: 260px;
+                        }
+
+                        .footer_explore {
+                            width       : 260px;
+                            padding-left: 100%;
+                        }
+
+                        .footer_corporate {
+                            width       : 260px;
+                            padding-left: 240px;
+                        }
+
+                        .footer_social_media {
+                            margin-top    : 80%;
+                            margin-left   : -105%;
+                            padding-bottom: 20%;
+                            height        : 0px;
+                            display       : inline-block;
+
+                            .widget.block.block-static-block {
+                                .pagebuilder-column-group {
+                                    .pagebuilder-column {
+                                        .social-media {
+                                            margin-top: -7px;
+
+                                            li {
+                                                padding: 2%;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+            }
+
+        }
+    }
+}
+
+/* End of the Code */
+/* Epro footer desktop view */
+.cms-epro-home {
+    .page-wrapper {
+        .footer-container {
+            .footer {
+                [data-content-type='row'][data-appearance='contained'] {
+                    max-width: 100%;
+                }
+
+                background-color: @color-white;
+
+                .epro-footer-main {
+                    height: 72px;
+                    display: flex;
+                    align-items: flex-end;
+
+                    .content-footer-divider {
+                        width: 100%;
+                    }
+
+                    .content-footer-divider {
+                        height: 1px;
+
+                        hr {
+                            margin-bottom: 12px !important;
+                            margin-top: 0 !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* Epro footer desktop view */
+@media(min-width: 1440px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .footer-container {
+                .footer {
+                    .epro-footer-main {
+                        figure.epro-footer-img {
+                            margin-left: 1234.9px !important;
+                            margin-right: 48px !important;
+                            margin-bottom: 12px !important;
+                            margin-top: 12px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* Epro footer laptop view */
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .footer-container {
+                .footer {
+                    .epro-footer-main {
+                        figure.epro-footer-img {
+                            margin-right: 48px !important;
+                            margin-bottom: 12px !important;
+                            margin-top: 12px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .footer-container {
+                .footer {
+
+                    .epro-footer-main {
+                        height: 72px;
+
+                        .content-footer-divider {
+                            margin-bottom: 12px !important;
+                        }
+
+                        figure.epro-footer-img {
+                            margin-right: 20px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/* Epro footer mobile view */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .footer-container {
+                width: auto;
+                .footer {
+                    .epro-footer-main {
+                        height: 72px;
+                        figure.epro-footer-img {
+                            margin-right: 20px !important;
+                            margin-bottom: 16px !important;
+                            margin-top: 16px !important;
+                            height: 39.45px;
+                            width: 130.07px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

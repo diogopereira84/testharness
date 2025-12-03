@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var Fedex\Delivery\Block\Footer $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?= /* @escapeNotVerified */
+$block->getLayout()->createBlock(Magento\Framework\View\Element\Template::class)
+    ->setTemplate("Magento_Theme::html/footer.phtml")
+    ->toHtml();
+?>
+<?= /* @escapeNotVerified */
+$block->getMiscellaneousHtml(); ?>
+<?php
+$absoluteFooterScript = <<<script
+    {
+        "*": {
+            "Magento_Theme/js/html/absolute-footer": {}
+        }
+    }
+    script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $absoluteFooterScript, false); ?>
+<div id="pickup-shipup-popup-modal" style="display: none;">
+    <div><h3 class="main-popup-title mt-0 mb-16 lh-32">Choose One</h3></div>
+    <div class="font-class"><p>Choose if you would like to pickup from a FedEx Office location or ship it to an address</p></div>
+    <div class="choose-container">
+        <div class="pickup-holder">
+            <img alt="Store pick up icon" class="pickup-img" src="<?= /* @noEscape */
+            $block->getMediaUrl('wysiwyg/PSmall.png') ?>"/>
+            <button class="anchor-pickup">PICK UP AT STORE</button>
+        </div>
+        <div class="ship-holder">
+            <img alt="Ship to address icon" class="delivery-img" src="<?= /* @noEscape */
+            $block->getMediaUrl('wysiwyg/Dsmall.png') ?>"/>
+            <button class="anchor-ship">SHIP TO ADDRESS</button>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Theme/js/view/gdl-data-analytic": {}
+        }
+    }
+</script>

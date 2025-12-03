@@ -1,0 +1,38 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="pagebuilder-content-type pagebuilder-image type-nested" event="{ mouseover: onMouseOver, mouseout: onMouseOut }, mouseoverBubble: false">
+    <render args="getOptions().template" ></render>
+    <figure attr="data.main.attributes" ko-style="Object.assign({}, data.main.style(), !data.desktop_image.attributes().src ? {} : {borderStyle: 'none'})" css="data.main.css">
+        <img if="data.desktop_image.attributes().src"
+             attr="data.desktop_image.attributes"
+             class="preview-image"
+             css="data.desktop_image.css"
+             ko-style="data.desktop_image.style" alt="" />
+    </figure>
+     <div class="pagebuilder-banner-text-content">
+        <div if="isWysiwygSupported()"
+            class="inline-wysiwyg"
+            ko-style="data.content.style"
+            css="data.content.css"
+            attr="data.content.attributes"
+            afterRender="afterRenderWysiwyg"
+            html="data.content.html">
+        </div>
+        <div if="isWysiwygSupported()" class="placeholder-text" ifnot="data.content.html" translate="'Preview Promo Banner'"></div>
+    </div>
+    <div>
+        <span if="data.coupon_label.html" attr="data.coupon_label.attributes" text="data.coupon_label.html"></span>
+        <span ifnot="data.coupon_label.html" attr="data.coupon_label.attributes">
+        </span>
+    </div>
+    <div>
+       <span if="data.button_text.html" attr="data.button_text.attributes" text="data.button_text.html"></span>
+        <span ifnot="data.button_text.html" attr="data.button_text.attributes">
+        </span>
+    </div>
+</div>

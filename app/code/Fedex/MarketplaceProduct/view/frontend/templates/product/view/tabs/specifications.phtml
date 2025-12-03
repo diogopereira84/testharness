@@ -1,0 +1,23 @@
+<?php
+/** @var \Magento\Catalog\Model\Product $product */
+$product = $block->getProduct();
+$viewModel =  $block->getData('viewModel');
+if($viewModel->isEssendantToggleEnabled() && !empty($viewModel->getProductSpecifications())){
+?>
+<script>
+    window.productSpecifications = <?= json_encode($viewModel->getProductSpecifications());?>
+</script>
+
+<?php if(!$viewModel->isConfigurableProduct()): ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Fedex_MarketplaceProduct/js/tab-specifications": {
+            "simpleProductAutoInit": "true"
+        }
+    }
+}
+</script>
+<?php endif; ?>
+
+<?php } ?>

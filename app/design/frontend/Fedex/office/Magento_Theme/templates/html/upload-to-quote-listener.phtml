@@ -1,0 +1,9 @@
+
+<?php
+$uploadToQueueListenerScript = <<<script
+    require(['uploadToQuoteQueueListener'],
+        function(uploadToQuoteQueueListener){}
+    );
+script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $uploadToQueueListenerScript, false); ?>

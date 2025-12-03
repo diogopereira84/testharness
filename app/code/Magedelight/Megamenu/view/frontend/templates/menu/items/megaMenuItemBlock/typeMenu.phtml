@@ -1,0 +1,35 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $menuItem \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $this->getData('menu_block');
+$menuItems = $this->getData('menu_items');
+$key = $this->getData('items_key');
+$menuManagement = $this->getData('menu_management');
+$menus = $menuManagement->loadMenuById($menuItems[$key]->value)->getData();
+?>
+<li class="megaNormalMenu">
+    <?php if ($menuItems[$key]->showtitle == '1'): ?>
+        <?php if (isset($menus['menu_name']) and ! empty($menus['menu_name'])): ?>
+            <h2><?= __($menus['menu_name']) ?></h2>;
+        <?php endif; ?>
+    <?php endif; ?>
+    <ul>
+        <?php $menuChildItems = $menuManagement->loadMenuItems(0,'ASC',$menuItems[$key]->value); ?>
+        <?php foreach ($menuChildItems as $menuItem): ?>
+            <?php
+                $linkUrl = $menuManagement->generateMenuUrl($menuItem);
+                $linkName = $menuManagement->generateMenuItemName($menuItem);
+                $dataclass = $this->getActiveClass($menuItem).' '.$menuItem->getItemClass();
+            ?>
+            <li class="<?= /* @noEscape */ $dataclass ?>">
+                <a href="<?= /* @noEscape */ $linkUrl ?>">
+                    <span class="megaitemicons"><?= /* @noEscape */ $menuItem->getItemFontIcon() ?></span>
+                    <?= /* @noEscape */ __($linkName) ?>
+                </a>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</li>

@@ -1,0 +1,11 @@
+<?php
+
+/** @var $block \Fedex\UpSellIt\Block\Script */
+/** @var $upsellitViewModel \Fedex\UpSellIt\ViewModel\UpSellit */
+
+$upsellitViewModel = $block->getViewModel();
+
+?>
+<?php if ($upsellitViewModel->getIsRetail()) : ?>
+    <?= $block->getScript(); ?>
+<?php endif; ?>

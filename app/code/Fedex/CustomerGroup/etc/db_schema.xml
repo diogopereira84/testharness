@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="customer_group" resource="default" engine="innodb" comment="Customer Group">
+		<!-- Create column to save customer group code -->
+		<column xsi:type="varchar" name="customer_group_code" nullable="false" length="200" comment="Customer Group Code"/>
+		<!--Create column to save parent group id-->
+		<column xsi:type="int" name="parent_group_id" unsigned="true" nullable="true" identity="false" default="null" disabled="true" comment="Parent Group ID"/>
+		<index referenceId="CUSTOMER_USER_GROUP_NAME" indexType="fulltext">
+			<column name="customer_group_code"/>
+		</index>
+	</table>
+		<table name="parent_customer_group" resource="default" engine="innodb" comment="Parent Customer Group">
+	    <!-- Create column to save entity id -->
+		<column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+		<!-- Create column to save original customer group id -->
+		<column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false" comment="Customer Group ID"/>
+		<!--Create column to save parent group id-->
+		<column xsi:type="int" name="parent_group_id" unsigned="true" nullable="true" identity="false" default="null" comment="Parent Group ID"/>
+		<!--Create column to add category ids -->
+		<column xsi:type="varchar" name="category_ids" nullable="true" default="null" length="255" comment="Category IDs"/>
+		<!-- Create column to add created at time -->
+		<column name="created_at" nullable="true" xsi:type="timestamp" comment="created_at" on_update="false"/>
+
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+		<constraint xsi:type="unique" referenceId="PARENT_CUSTOMER_GROUP_CUSTOMER_GROUP_ID">
+            <column name="customer_group_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="SHARED_CAT_CSTR_GROUP_ID_CSTR_GROUP_CSTR_GROUP_ID" table="shared_catalog"
+                    column="customer_group_id" referenceTable="customer_group" referenceColumn="customer_group_id"
+                    onDelete="CASCADE"/>
+        <index referenceId="PARENT_CUSTOMER_GROUP_CUSTOMER_GROUP_ID_PARENT_GROUP_ID" indexType="btree">
+            <column name="customer_group_id"/>
+            <column name="parent_group_id"/>
+        </index>
+	</table>
+</schema>

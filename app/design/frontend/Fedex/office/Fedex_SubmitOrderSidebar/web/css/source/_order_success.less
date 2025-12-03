@@ -1,0 +1,464 @@
+@summaryTotalColor: @fx-grey-1200;
+@fontFamilyRegular: 'FedEx Sans Regular';
+@popupModelBorderColor: #00001945;
+@fujitsuErrorModelBorderColor: @fx-red-100;
+@fujitsuErrorModelBackgroundColor: @fx-white-100;
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break = (@screen__m - 1)) {
+    .order-summary-step-info {
+        gap: 28px;
+        .step-info-box {
+            max-width: ~"calc(66.66% - 14px)";
+            flex: 0 0 ~"calc(66.66% - 14px)";
+            gap: 28px;
+            .step-data-info {
+                max-width: ~"calc(50% - 14px)";
+                flex: 0 0 ~"calc(50% - 14px)";
+                box-sizing: border-box;
+            }
+        }
+        .step-data-info {
+            max-width: ~"calc(33.33% - 14px)";
+            flex: 0 0 ~"calc(33.33% - 14px)";
+        }
+    }
+    .is-fcl-global.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 172px;
+    }
+    .selfreg-store.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 135px;
+    }
+    .cms-sde-home.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 135px;
+    }
+    .submitorder-index-ordersuccess {
+        .fujitsu-receipt-error {
+            width: 500px;
+            height: 50px;
+            background: @fujitsuErrorModelBackgroundColor;
+            border: 1px solid @fujitsuErrorModelBorderColor;
+            display: -webkit-inline-box;
+            position: absolute;
+            z-index: 999;
+            margin: 0px auto;
+            left: 0;
+            right: 0;
+            box-shadow: 0 2px 6px @popupModelBorderColor;
+            .fujitsu-receipt-error-msg {
+                width: auto;
+                padding: 12px 0px 12px 16px;
+                .fujitsu-receipt-error-notification-msg {
+                    width: 400px;
+                    font-family: @fontFamilyRegular;
+                    font-size: 14px;
+                    line-height: 24px;
+                    letter-spacing: normal;
+                }
+            }
+            .fujitsu-receipt-error-box-inner {
+                background-color: @fujitsuErrorModelBorderColor;
+                width: 55px;
+                img {
+                    transform: translate3d(-50%,-50%,0);
+                    position: relative;
+                    height: 40px;
+                    width: 40px;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 999;
+                }
+            }
+            .fujitsu-receipt-error-close-icon {
+                padding-top: 12px;
+                font-size: 14px;
+                cursor: pointer;
+                z-index: 999;
+            }
+            .fujitsu-receipt-error-close-icon:before {
+                color: @summaryTotalColor;
+                content: "\e616";
+                font-family: "luma-icons";
+            }
+        }
+    }
+}
+
+// Design Order Confirmation Page for 320 breakpoint
+@media only screen and (min-width:320px) and (max-width:767px) {
+    .is-fcl-global.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 110px;
+    }
+    .selfreg-store.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 88px;
+    }
+    .cms-sde-home.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 88px;
+    }
+    .submitorder-index-ordersuccess {
+        .columns {
+            .order_summary_title {
+                color: @order-confirmation-color-black;
+                font-family: @order-confirmation-font-family-light;
+                font-size: 24px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 32px;
+                margin-bottom: 24px !important;
+                margin-top: 24px !important;
+            }
+            .order_outer_container {
+                margin-bottom: 0 !important;
+                h1 {
+                    margin-bottom: 4px !important;
+                    margin-top: 0 !important;
+                }
+                .title {
+                    color: @order-confirmation-color-black;
+                    font-family: @order-confirmation-font-family-light;
+                    font-size: 18px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 24px;
+                }
+                .order_no {
+                    color: @order-confirmation-color-black;
+                    font-family: @order-confirmation-font-family-regular;
+                    font-size: 18px;
+                    letter-spacing: 0;
+                    line-height: 24px;
+                    margin-bottom: 20px !important;
+                    margin-top: 0 !important;
+                }
+                .order_email_desc {
+                    color: @order-confirmation-color-black;
+                    font-family: @order-confirmation-font-family-light;
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 24px;
+                    margin-bottom: 7px !important;
+                    margin-top: 0 !important;
+                    .order_email {
+                        color: @order-confirmation-color-black;
+                        font-family: @order-confirmation-font-family-bold;
+                        font-size: 14px;
+                        font-weight: 300;
+                        letter-spacing: 0;
+                        line-height: 22px;
+                    }
+                }
+                .cart-table-info.including-additional-details .cart-table > tbody > tr.table-row > td:before {
+                    color: @order-confirmation-color-black;
+                    font-family: @order-confirmation-font-family-bold;
+                    font-size: 12px !important;
+                    font-weight: bold;
+                    letter-spacing: .88px;
+                    line-height: 24px;
+                }
+                .cart-table-info.including-additional-details {
+                    .cart-table {
+                        .order-success-qty {
+                            color: @order-sucess-color-black;
+                            font-family: @order-confirmation-font-family-regular;
+                            font-size: 12px !important;
+                            letter-spacing: 0;
+                            line-height: 19px;
+                        }
+                        .order-success-discount {
+                            color: @order-sucess-color-black;
+                            font-family: @order-confirmation-font-family-regular;
+                            font-size: 12px !important;
+                            letter-spacing: 0;
+                            line-height: 19px;
+                        }
+                        .order-success-total {
+                            color: @order-sucess-color-black;
+                            font-family: @order-confirmation-font-family-regular;
+                            font-size: 12px !important;
+                            letter-spacing: 0;
+                            line-height: 19px;
+                        }
+                    }
+                }
+                .cart-table-info.including-additional-details .cart-table > tbody > tr.show-details-button > td .show-details-button-text {
+                    color: @order-success-show-details-button;
+                    font-family: @order-confirmation-font-family-bold;
+                    font-size: 14px;
+                    font-weight: bold;
+                    letter-spacing: .75px !important;
+                    line-height: 24px;
+                }
+                .cart-table-info.including-additional-details .cart-table > tbody > tr.show-details-button > td {
+                    padding-bottom: 0 !important;
+                    padding-top: 12px !important;
+                }
+                .checkout-success.checkout-order-success {
+                    margin-top: 0 !important;
+                }
+                .order-message-container {
+                    margin-bottom: 40px !important;
+                    margin-top: 17px !important;
+                    .order-confirmation-message-text {
+                        font-family: @order-confirmation-font-family-regular;
+                        margin-left: 16px;
+                        padding: 0 !important;
+                    }
+                }
+                .order-summary-step-info {
+                    flex-wrap: wrap;
+                    .step-info-box {
+                        flex-wrap: wrap;
+                    }
+                    .step-data-info {
+                        margin-bottom: 16px !important;
+                        margin-top: 0 !important;
+                        .info-title {
+                            color: @order-confirmation-color-black;
+                            font-family: @order-confirmation-font-family-light;
+                            font-size: 24px;
+                            font-weight: 300;
+                            letter-spacing: 0;
+                            line-height: 32px;
+                        }
+                        .info-sub-title {
+                            color: @order-confirmation-color-black;
+                            font-family: @order-confirmation-font-family-bold;
+                            font-size: 14px;
+                            font-weight: bold;
+                            letter-spacing: .75px;
+                            line-height: 24px;
+                        }
+                        .checkout-info {
+                            color: @order-confirmation-color-black;
+                            font-family: @order-confirmation-font-family-light;
+                            font-size: 16px;
+                            font-weight: 300;
+                            letter-spacing: 0;
+                            line-height: 21px;
+                        }
+                        .payment-title {
+                            color: @order-confirmation-color-black;
+                            font-family: @order-confirmation-font-family-light;
+                            font-size: 16px;
+                            font-weight: 300;
+                            letter-spacing: 0;
+                            line-height: 21px;
+                        }
+                        .credit-card-no {
+                            color: @order-confirmation-color-black;
+                            font-family: @order-confirmation-font-family-light;
+                            font-size: 16px;
+                            font-style: italic;
+                            font-weight: 300;
+                            letter-spacing: 0;
+                            line-height: 21px;
+                        }
+                    }
+                }
+                .order-cart-summary {
+                    margin-bottom: 0 !important;
+                    margin-top: 24px !important;
+                    width: 100%;
+                    .title-summary {
+                        color: @order-confirmation-color-black;
+                        font-family: @order-confirmation-font-family-light;
+                        font-size: 24px;
+                        font-weight: 300;
+                        letter-spacing: 0;
+                    }
+                    .including-additional-details .show-details-button .fa.fa-angle-down {
+                        padding-left: 8px !important;
+                        padding-top: 11px !important;
+                    }
+                }
+                .order-transaction-summary {
+                    margin-bottom: 24px !important;
+                    margin-top: 26px !important;
+                    width: 100% !important;
+                    .total-cart-count {
+                        margin-top: 0 !important;
+                    }
+                    .order-details table.order-table>tbody tr th {
+                        color: @order-confirmation-color-black;
+                        font-family: @order-confirmation-font-family-light;
+                        font-size: 14px;
+                        font-weight: 300;
+                        letter-spacing: 0;
+                        line-height: 19px;
+                    }
+                    .order-details table.order-table>tbody tr td {
+                        color: @order-confirmation-color-black;
+                        font-family: @order-confirmation-font-family-bold;
+                        font-size: 16px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 19px;
+                        text-align: right;
+                    }
+                    .order-details table.order-table > tbody tr.total-disc td {
+                        font-family: @order-confirmation-font-family-bold;
+                        font-size: 16px;
+                        font-weight: bold;
+                        letter-spacing: 0;
+                        line-height: 19px;
+                        text-align: right;
+                    }
+                }
+                .order-query {
+                    margin-top: 0 !important;
+                    width: 100% !important;
+                    .total-cart-count-query {
+                        margin-top: 0 !important;
+                        .query-about-order {
+                            .query-link {
+                                font-family: @order-confirmation-font-family-light;
+                                font-size: 16px;
+                                font-weight: 300;
+                                letter-spacing: 0;
+                                line-height: 19px;
+                            }
+                            .query-question {
+                                color: @order-confirmation-color-black;
+                                font-family: @order-confirmation-font-family-medium;
+                                font-size: 14px;
+                                font-weight: 500;
+                                letter-spacing: 0;
+                                line-height: 19px;
+                                margin-bottom: 8px !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .fujitsu-receipt-error {
+            width: 90%;
+            height: 50px;
+            background: @fujitsuErrorModelBackgroundColor;
+            border: 1px solid @fujitsuErrorModelBorderColor;
+            display: -webkit-inline-box;
+            position: absolute;
+            z-index: 999;
+            margin: 0px auto;
+            left: 0;
+            right: 0;
+            box-shadow: 0 2px 6px @popupModelBorderColor;
+            .fujitsu-receipt-error-box-inner {
+                width: 50px;
+                background-color: @fujitsuErrorModelBorderColor;
+                img {
+                    transform: translate3d(-50%,-50%,0);
+                    position: relative;
+                    height: 38px;
+                    width: 38px;
+                    top: 50%;
+                    left: 50%;
+                    z-index: 999;
+                }
+            }
+            .fujitsu-receipt-error-msg {
+                width: auto;
+                padding: 15px 10px 0px 10px;
+                .fujitsu-receipt-error-notification-msg {
+                    font-family: @fontFamilyRegular;
+                    font-size: 14px;
+                    letter-spacing: normal;
+                }
+            }
+            .fujitsu-receipt-error-close-icon {
+                padding-top: 10px;
+                font-size: 14px;
+                cursor: pointer;
+            }
+            .fujitsu-receipt-error-close-icon:before {
+                color: @summaryTotalColor;
+                content: "\e616";
+                font-family: "luma-icons";
+            }
+        }
+    }
+}
+@media only screen and (min-width:320px) and (max-width:476px) {
+    .submitorder-index-ordersuccess {
+        .columns {
+            .order_outer_container {
+                .order-summary-step-info {
+                    .step-data-info {
+                        margin-left: 0 !important;
+                        width: 100% !important;
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width:476px) and (max-width:767px) {
+    .submitorder-index-ordersuccess {
+        .columns {
+            .order_outer_container {
+                .order-summary-step-info {
+                    .step-data-info {
+                       
+                        margin-left: 10px !important;
+                        width: 45% !important;
+                        .info-title {
+                            padding-right: 24px !important;
+                        }
+                        .info-sub-title {
+                            padding-right: 24px !important;
+                        }
+                        .checkout-info {
+                            padding-right: 24px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//Small laptop Screen
+@media only screen and (min-width: 767px) and (max-width:1024px) {
+    .is-fcl-global.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 125px;
+    }
+    .selfreg-store.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 137px;
+    }
+    .cms-sde-home.submitorder-index-ordersuccess .fujitsu-receipt-error {
+        top: 137px;
+    }
+}
+.order-summary-step-info {
+	.info-title {
+		margin-top: 0;
+		margin-left: 0;
+	}
+	.checkout-info,
+    .info-sub-title {
+		margin-left: 0;
+        word-break: break-word;
+	}
+    .payment-title,
+    .credit-card-no {
+        margin-left: 0;
+    }
+	.step-data-info {
+		padding: 32px;
+        box-sizing: border-box;
+	}
+}
+
+.cms-sde-home {
+    .order-cart-summary {
+        .cart-table {
+            .table-row-th {
+                th {
+                        &:last-child {
+                            text-align: center !important;
+                        }
+                    }
+            }
+        }
+    }
+}

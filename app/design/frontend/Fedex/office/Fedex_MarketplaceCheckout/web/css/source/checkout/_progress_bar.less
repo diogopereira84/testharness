@@ -1,0 +1,163 @@
+@step-color: #4b148a;
+@inactive-step-color: @fx-grey-100;
+@checkout-progress-bar__number-font-size: 1.4rem;
+@progress-bar__font-size: 14px;
+
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+
+            &.commercial-epro-store {
+                .checkout-container {
+                    .opc-progress-bar {
+                        margin-top: unset;
+                    }
+                }
+            }
+
+            // Class added by the module toggle
+            .checkout-container {
+                .opc-progress-bar {
+                    max-width: 555px;
+                    margin-bottom: 24px;
+                    
+                    .opc-progress-bar-item {
+
+                        >span,
+                        >small {
+                            display: inline-block;
+                            padding-top: 45px;
+                            width: 100%;
+                            word-wrap: break-word;
+
+                            .lib-typography(@_color: #e4e4e4,
+                                @_font-family: false,
+                                @_font-size: @progress-bar__font-size,
+                                @_font-style: false,
+                                @_font-weight: @checkout-progress-bar__font-weight,
+                                @_line-height: false);
+
+                            &::before,
+                            &::after {
+                                .lib-css(background, @inactive-step-color);
+                                .lib-css(border-color, @inactive-step-color);
+                                .lib-css(height, @checkout-progress-bar-item-element__height);
+                                .lib-css(margin-left, -(@checkout-progress-bar-item-element__width/2));
+                                .lib-css(width, @checkout-progress-bar-item-element__width);
+                                border-radius: 50%;
+                                content: '';
+                                left: 50%;
+                                position: absolute;
+                                top: 0;
+                            }
+
+                            &::after {
+                                .lib-css(background, @checkout-progress-bar-item-element-inner__background-color);
+                                .lib-css(height, @checkout-progress-bar-item-element-inner__height);
+                                .lib-css(margin-left, -(@checkout-progress-bar-item-element-inner__width/2));
+                                .lib-css(top, @checkout-progress-bar-item-element-outer-radius__width);
+                                .lib-css(width, @checkout-progress-bar-item-element-inner__width);
+                                content: counter(i);
+                                counter-increment: i;
+                                .lib-typography(@_color: @checkout-progress-bar-item-element-inner__color,
+                                    @_font-family: false,
+                                    @_font-size: @checkout-progress-bar__number-font-size,
+                                    @_font-style: false,
+                                    @_font-weight: @font-weight__semibold,
+                                    @_line-height: 28px);
+                            }
+                        }
+
+                        >span {
+                            &::after {
+                                font-family: 'FedEx Sans Bold';
+                            }
+                        }
+
+                        &::before {
+                            background: @inactive-step-color;
+                            border-color: @inactive-step-color;
+                        }
+
+                        &._complete {
+                            cursor: pointer;
+
+                            &::before {
+                                background: @step-color;
+                                border-color: @step-color;
+                            }
+
+                            >span,
+                            >small {
+                                color: @fx-grey-500;
+
+                                &::before {
+                                    background: @step-color;
+                                    border-color: @step-color;
+                                }
+
+                                &::after {
+                                    border-color: @step-color;
+                                    .lib-css(font-family, @icons__font-name);
+                                    .lib-css(content, @checkout-progress-bar-item-element-inner__active__content);
+                                }
+                            }
+                        }
+
+                        &._active {
+
+                            >span,
+                            >small {
+                                color: @fx-grey-500;
+
+                                &::before {
+                                    background-color: @step-color;
+                                    border-color: @step-color;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Mobile, @screen__m: 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+            // Class added by the module toggle
+
+        }
+    }
+}
+
+//  Tablet, @screen__m: 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+            // Class added by the module toggle
+
+        }
+    }
+}
+
+//  Desktop, @screen__l: 1024px (styles-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+            // Class added by the module toggle
+
+        }
+    }
+}

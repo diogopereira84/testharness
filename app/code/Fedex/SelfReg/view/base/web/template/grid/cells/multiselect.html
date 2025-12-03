@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<label class="data-grid-checkbox-cell-inner">
+        <!-- ko if:checkRole($row()['role_name'],$row()[$col.indexField]) -->
+    <input class="admin__control-checkbox custom_row_checkbox" type="checkbox" aria-label="Select Manage Users" data-action="select-row" data-bind="
+            staticChecked: $col.selected,
+            valueUpdate: 'keyup',
+            disable: $col.disabled.indexOf($row()[$col.indexField]) != -1,
+            checkedValue: $row()[$col.indexField],
+            keyboard:{13: function (e) {
+                triggerSelect(index + 'check' + $row()[$col.indexField])
+            }},
+            attr: {
+                id: index + 'check' + $row()[$col.indexField],
+                'data-test-id': 'E-404291-B-2010873-TK-3436949-manage-user-row-checkbox-' + $row()[$col.indexField]
+            }" />
+    <label attr="for: index + 'check' + $row()[$col.indexField]"></label>
+        <!-- /ko -->
+</label>

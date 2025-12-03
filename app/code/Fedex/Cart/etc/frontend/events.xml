@@ -1,0 +1,34 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+
+<!-- Checkout Cart Events -->
+<event name="checkout_cart_update_items_after">
+    <observer name="cart_product_update_rates_after" instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductUpdateAfter" />
+</event>
+
+<event name="checkout_cart_product_add_after">
+    <observer name="cart_product_add_after" instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductAddAfter" />
+</event>
+
+<event name="checkout_cart_add_product_complete">
+    <observer name="cart_add_product_complete" instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductAddComplete" />
+</event>
+
+<event name="controller_action_predispatch_checkout_index_index">
+    <observer name="redirect_after_exceed_cart_limit" instance="Fedex\Cart\Observer\Frontend\Cart\CartLimitValidation" />
+    <observer name="populate_fedex_account_number" instance="Fedex\Cart\Observer\Frontend\Checkout\AddFedexAccountNumber" />
+    <observer name="redirect_on_empty_cart" instance="Fedex\Cart\Observer\Frontend\Checkout\RedirectOnEmptyCart" />
+</event>
+
+<!-- Layout Render Event -->
+<event name="layout_render_before_checkout_cart_index">
+    <observer name="layout_render_before_checkout_cart_index" instance="Fedex\Cart\Observer\Frontend\Catalog\RefereshQuote" />
+</event>
+
+<!-- Sales Quote Events -->
+<event name="sales_quote_remove_item">
+    <observer name="sales_quote_remove_item" instance="Fedex\Cart\Observer\Frontend\Catalog\RemoveQuoteItem" />
+</event>
+
+</config>
+

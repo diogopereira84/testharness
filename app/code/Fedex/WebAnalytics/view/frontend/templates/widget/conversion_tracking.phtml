@@ -1,0 +1,34 @@
+<?php
+/** @var \Fedex\WebAnalytics\Block\Widget\ConversionTracking $block */
+$selectorClass = $block->getSelectorClass();
+$displayType = $block->getDisplayType();
+$trackingParams = $block->getTrackingParams();
+$itemParam = $displayType == $block::FROM_REQUEST ? 'request_param' : 'value';
+if ($trackingParams !== '[]' && $trackingParams !== false):?>
+    <script type="text/javascript">
+        require(['jquery'], function (jquery) {
+            jquery(window).on('load', function() {
+                let buttons = jquery('.<?=$selectorClass?> a[href]');
+                let params = new URLSearchParams(window.location.search);
+                let configParams = <?= $trackingParams ?>;
+                let itemParam = '<?= $itemParam ?>';
+                if (itemParam) {
+                    jquery.each(buttons, function (index, button) {
+                        let url = new URL(button.href);
+                        configParams.forEach(function (item) {
+                            if (itemParam === 'value') {
+                                url.searchParams.append(item['parameter_to_url'], item[itemParam]);
+                            } else {
+                                if (params.has(item[itemParam])) {
+                                    let requestParamValue = params.get(item[itemParam]);
+                                    url.searchParams.append(item['parameter_to_url'], requestParamValue);
+                                }
+                            }
+                        });
+                        button.href = url.href;
+                    });
+                }
+            })
+        });
+    </script>
+<?php endif; ?>

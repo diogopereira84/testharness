@@ -1,0 +1,60 @@
+<?php //phpcs:ignore
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block MetricsBlock */
+
+use Magento\LiveSearchMetrics\Block\Frontend\MetricsBlock;
+
+$liveSearchMetricScript = <<<script
+    const rawRequest = "{$block->escapeJs($block->getSearchRequest())}";
+    const searchRequest = rawRequest ? JSON.parse(rawRequest) : null;
+
+    const rawResponse = "{$block->escapeJs($block->getSearchResponse())}";
+    const searchResponse = rawResponse ? JSON.parse(rawResponse) : null;
+
+    const rawExecutionTime = "{$block->escapeJs($block->getExecutionTime())}";
+    const executionTime = rawExecutionTime ? parseFloat(rawExecutionTime) : null;
+
+    const requestId = "{$block->escapeJs($block->generateUUID())}";
+
+    const rawAttributes = "{$block->escapeJs($block->getAttributes())}";
+    const attributes = rawAttributes ? JSON.parse(rawAttributes) : null;
+
+    const rawPageSize = "{$block->escapeJs($block->getPageSize())}";
+    const pageSize = rawPageSize ? parseInt(rawPageSize) : null;
+
+    const customerGroup = "{$block->escapeJs($block->getCustomerGroupCode())}";
+
+    window.LiveSearchMetrics = {
+        searchRequest,
+        searchResponse,
+        requestId,
+        executionTime,
+        attributes,
+        pageSize,
+        context: {
+            "customerGroup" : customerGroup
+        }
+    };
+
+    require([
+        "{$block->escapeUrl($block->getMetricsUrl())}"
+    ]);
+script;
+
+$magentoStorefronteEventsScript = <<<script
+    require(["magentoStorefrontEvents"], function (magentoStorefrontEvents) {
+        if (!magentoStorefrontEvents) return;
+
+        magentoStorefrontEvents.context.setSearchExtension({
+            version: "{$block->escapeHtmlAttr($block->getModuleVersion())}"
+        });
+    });
+script;
+?>
+<?= $secureRenderer->renderTag('script', [], $liveSearchMetricScript, false); ?>
+
+<?= $secureRenderer->renderTag('script', [], $magentoStorefronteEventsScript, false); ?>

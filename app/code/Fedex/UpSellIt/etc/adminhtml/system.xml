@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="web">
+			<group id="upsellit" sortOrder="911" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>UpSellit</label>
+				<field id="upsellit_active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enable</label>
+                    <comment>When enabled, includes the UpSellit global launch script on all retail storefront pages and the UpSellit tracking code/pixel script on the retail order confirmation/success page</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="upsellit_script" type="textarea" sortOrder="11" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>UpSellit Global Launch Script</label>
+                    <comment>Global launch code script that will be included in all retail storefront pages in the footer tag</comment>
+				</field>
+				<field id="upsellit_order_success_script" type="textarea" sortOrder="12" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>UpSellit Order Confirmation/Success Page Tracking Code/Pixel Script</label>
+                    <comment>Page tracking code/pixel script that will be included in the retail order confirmation/success page</comment>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>

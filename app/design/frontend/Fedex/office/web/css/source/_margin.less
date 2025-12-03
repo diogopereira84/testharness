@@ -1,0 +1,55 @@
+/* LESS generator for margin. */
+@_margin: 0,10;
+@_margin_top: 0,8,10,12,15,16,18,20,24,25,30,45,50,55,70,90;
+@_margin_bottom: 0,8,10,15,16,20,24,25,26,30,32,40,45,50,60,80;
+@_margin_left: 0,4,5,8,10,16,20,24,25,30,40;
+@_margin_right: 0,3,5,8,10,15,16,20,24,40;
+
+.margin-utility(@param, @index) when (@index > 0) {
+    & when(@param = "margin") {
+        @_m_value: extract(@_margin, @index);
+        .m-@{_m_value}   { margin:~"@{_m_value}px"; }
+    }
+  	& when(@param = "margin-top") {
+        @_mt_value: extract(@_margin_top, @index);
+        .mt-@{_mt_value}   { margin-top:~"@{_mt_value}px"; }
+    }
+  	& when(@param = "margin-bottom") {
+        @_mb_value: extract(@_margin_bottom, @index);
+        .mb-@{_mb_value}   { margin-bottom:~"@{_mb_value}px"; }
+    }
+    & when(@param = "margin-left") {
+        @_ml_value: extract(@_margin_left, @index);
+        .ml-@{_ml_value}   { margin-left:~"@{_ml_value}px"; }
+    }
+    & when(@param = "margin-right") {
+        @_mr_value: extract(@_margin_right, @index);
+        .mr-@{_mr_value}   { margin-right:~"@{_mr_value}px"; }
+    }
+    .margin-utility(@param, @index - 1);
+}
+
+.margin-utility("margin", length(@_margin));
+.margin-utility("margin-top", length(@_margin_top));
+.margin-utility("margin-bottom", length(@_margin_bottom));
+.margin-utility("margin-left", length(@_margin_left));
+.margin-utility("margin-right", length(@_margin_right));
+
+
+.m-auto {
+    margin: auto;
+}
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+.mx-0 {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+.ml-auto {
+    margin-left: auto;
+}
+.mr-auto {
+    margin-right: auto;
+}

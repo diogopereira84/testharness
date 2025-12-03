@@ -1,0 +1,91 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+
+    .progress-tracker.improvement {
+        .progress-step .progress-marker {
+            &.first {
+                &::before {
+                    background-image: url('Fedex_TrackOrder::images/Ordered-icon.png');
+                    background-size: cover;
+                }
+
+                &.Processing::after,
+                &.Shipped::after {
+                    background-color: #109a10 !important;
+                }
+
+                &.Cancelled::after {
+                    background-color: #f40f0f !important;
+                }
+
+                &.Delay::after {
+                    background-color: #f9b200 !important;
+                }
+            }
+
+            &.second {
+                &::before {
+                    background-image: url('Fedex_TrackOrder::images/Processing-icon.png');
+                    background-size: cover;
+                }
+
+                &.Shipped,
+                &.Ready\ for\ Pickup,
+                &.Complete {
+                    &::after {
+                        background-color: #109a10 !important;
+                    }
+                }
+
+                &.Ordered::before {
+                    background-image: none;
+                }
+
+                &.Processing,
+                &.Cancelled,
+                &.Delay {
+                    &::before {
+                        width: 38px;
+                        height: 38px;
+                        margin-left: -5px;
+                    }
+
+                    &::after {
+                        top: 44px;
+                        height: 40%;
+                    }
+                }
+
+                &.Processing::before {
+                    background-image: url('Fedex_TrackOrder::images/Processing-icon.png');
+                }
+
+                &.Cancelled::before {
+                    background-image: url('Fedex_TrackOrder::images/Cancelled-icon.png');
+                }
+
+                &.Delay::before {
+                    background-image: url('Fedex_TrackOrder::images/Delay-icon.png');
+                }
+            }
+
+            &.last {
+                background-image: none;
+                background-size: cover;
+
+                &.Shipped,
+                &.Ready\ for\ Pickup,
+                &.Complete {
+                    &::before {
+                        width: 38px;
+                        height: 38px;
+                        margin-left: -5px;
+                        background-image: url('Fedex_TrackOrder::images/Ordered-icon.png');
+                    }
+                }
+            }
+        }
+    }
+}

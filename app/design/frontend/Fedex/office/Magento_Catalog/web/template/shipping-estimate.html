@@ -1,0 +1,61 @@
+<div data-bind="css: { hide: responseLength() >= 1 || displayProgressFlag() }" class="text-center btn-estimate-wrapper">
+    <button id="btn-get-estimate" type="button" class="btn-primary" data-bind="click: getShippingEstimate">
+        GET SHIPPING ESTIMATE
+    </button>
+</div>
+<div data-bind="if: displayProgressFlag()">
+    <div class="shipping-skeleton mt-55 mb-45" aria-label="Shipping estimates loading" role="progressbar" aria-busy="true" aria-valuetext="Please wait">
+        <div class="mb-10">
+            <span class="skeleton-loader w-100"></span>
+        </div>
+        <div class="mb-10">
+            <span class="skeleton-loader w-75"></span>
+        </div>
+        <div class="mb-10">
+            <span class="skeleton-loader w-100"></span>
+        </div>
+        <div class="mb-10">
+            <span class="skeleton-loader w-75"></span>
+        </div>
+        <div class="mb-10">
+            <span class="skeleton-loader w-100"></span>
+        </div>
+    </div>
+</div>
+<div data-bind="css: { hide: responseLength() < 1 || displayProgressFlag() }" class="estimate-rate d-table fs-16 lh-28 mt-50 w-100">
+    <div class="d-table-header fedex-medium">
+        <div class="d-block d-sm-cell pb-10">DELIVERY OPTIONS</div>
+        <div class="d-none d-sm-cell pb-10 text-sm-right">ESTIMATE</div>
+    </div>
+    <!-- ko foreach:shippingEstimates -->
+        <!-- ko if: $index() > 0 && $index() < $parent.responseLength() -->
+            <div class="d-row-group">
+                <div class="d-row">
+                    <div class="d-block d-sm-cell cell-spacer"></div>
+                </div>
+            </div>
+        <!-- /ko -->
+        <div class="d-row-group">
+            <div class="d-row">
+                <div class="d-block d-sm-cell cl-laurel fedex-bold fs-12 ls-0-75 text-uppercase" data-bind="text: label"></div>
+            </div>
+        </div>
+        <!-- ko foreach:methods -->
+            <div class="d-row-group">
+                <div class="d-row">
+                    <div class="d-block d-sm-cell cell-0">
+                        <span>
+                            <!-- ko text: label --><!-- /ko -->&reg;
+                        </span>
+                        <br>
+                        <span class="fedex-bold" data-bind="text: description"></span>
+                    </div>
+                    <div class="d-block d-sm-cell cell-1 text-sm-right">
+                        <span data-bind="text: price.currencySymbol"></span>
+                        <span data-bind="text: price.value"></span>
+                    </div>
+                </div>
+            </div>
+        <!-- /ko -->
+    <!-- /ko -->
+</div>

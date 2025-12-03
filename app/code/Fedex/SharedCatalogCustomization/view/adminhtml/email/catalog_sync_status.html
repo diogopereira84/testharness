@@ -1,0 +1,52 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <body  offset="0" class="body" >
+    <!--@subject {{var subject}} @-->
+    <table>
+        <tr class="email-intro">
+            <td>
+                <p class="greeting">Hello {{var adminName}},</p>
+                <p>
+                    Catalog sync you requested for <b>{{var companyName}}</b> has been processed.
+                </p>
+            </td>
+        </tr>
+        <tr class="email-summary">
+            <td colspan="2">
+                <table>
+            		<tr>
+            		    <td>
+			                <h1 style="font-size:15px;">
+			                    {{trans "Please find below summary of updates:"}}
+			                </h1>
+			            </td>
+			        </tr>
+                </table>
+            </td>
+        </tr>
+        <tr class="email-information">
+            <td>
+                New products added: <strong>{{var newItem}}</strong>
+              
+            </td>
+            <td>
+                Existing items updated: <strong>{{var updateItem}}</strong>
+            </td>       
+        </tr>
+        <tr class="email-information">
+            <td>
+                Failed Items: <strong>{{var failedItem}}</strong>
+            </td> 
+            <td>
+               Deleted Items: <strong>{{var deleteItem}}</strong>
+            </td>        
+        </tr>
+    </table>
+  </body>
+</html>

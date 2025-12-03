@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<!-- B-1279604 - Retail Screen Displays After Session Timeout -->
+	<event name="controller_action_predispatch">
+		<observer name="redirect_page_after_session_timeout_for_company_website" instance="Fedex\SelfReg\Observer\Frontend\Company\SessionTimeOut" />
+		
+		<!-- B-1320022 - WLGN integration for selfReg customer -->
+		<observer name="selfReg_WLGN_integration" instance="Fedex\SelfReg\Observer\Frontend\Company\WlgnIntegration" />
+
+		<!-- B-2274168 - Deactivate cart when user is on other page page except chekout in case fusebid quote -->
+		<observer name="deactivate_cart_observer" instance="Fedex\FuseBiddingQuote\Observer\Frontend\Cart\DeactivateCart"/>
+	</event>
+</config>

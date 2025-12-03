@@ -1,0 +1,244 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Sales\Block\Order\Totals
+ * @see \Magento\Sales\Block\Order\Totals
+ */
+$orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+$isEnhancementEnabled = $orderHistoryHelper->isEnhancementEnabeled();
+
+$_order = $block->getOrder();
+$viewModel = $block->getData('order_enhancement_view_model');
+
+$isDiscountAvailable =  ($_order->getAccountDiscount() > 0 || $_order->getVolumeDiscount() > 0 || $_order->getPromoDiscount() > 0 || $_order->getShippingDiscount() > 0) ? true:false;
+
+$itemCount = $_order->getTotalItemCount();
+
+$isPickUp = ($_order->getShippingMethod() == $viewModel::SHIPPING_TYPE_PICKUP) ? true : false;
+
+$miraklItemCount = $viewModel->getMiraklItemsCount($_order);
+$fedexItemsCount = $_order->getTotalItemCount() - $miraklItemCount;
+
+$discountBreakdownData = [
+    ['label'=>"Account Discount",'price'=>$_order->getAccountDiscount()],
+    ['label'=>"Volume Discount",'price'=>$_order->getVolumeDiscount()],
+    ['label'=>"Promo Discount",'price'=>$_order->getPromoDiscount()],
+    ['label'=>"Shipping Discount",'price'=>$_order->getShippingDiscount()],
+    ['label'=>"Bundle Discount",'price'=>$_order->getBundleDiscount()],
+];
+$sortedDiscounts = $viewModel->getSortedDiscounts($discountBreakdownData);
+$orderViewModel = $block->getData('order_view_model');
+$shippingAccountNumber = $orderViewModel->getShippingAccountNumberFromOrder($_order);
+
+$isCBBToggleEnabled = $viewModel->isCBBToggleEnabled();
+$isEssendantToggleEnabled = $viewModel->isEssendantToggleEnabled();
+
+if($isEnhancementEnabled) {
+    $sortedTotals = $viewModel->getSortedTotals($block->getTotals());?>
+<?php if ($shippingAccountNumber): ?>
+    <table class="customtotal">
+        <tr class="subtotal">
+            <th class="total-discount toggle-discount" scope="row" colspan="4"><?= $block->escapeHtml("Items (".$itemCount.")")?></th>
+            <td class="amount">
+                <?= /* @noEscape */ $_order->formatPrice($_order->getSubTotal()); ?>
+            </td>
+        </tr>
+        <?php if($viewModel->isCustomerShippingAccount3PEnabled() && $miraklItemCount > 0) :?>
+            <?php
+            if ($fedexItemsCount > 0 && $_order->getShippingMethod() != $viewModel::SHIPPING_TYPE_PICKUP) {
+                $shippingTotal = $viewModel->getOrderShippingSubTotal($_order);
+                $shippingTotalFormated = $viewModel->getOrderShippingTotal($_order);
+            } else {
+                $shippingTotal = $viewModel->getMiraklShippingTotal($_order);
+                $shippingTotalFormated = $viewModel->getMiraklShippingAmount($_order);
+            }
+            ?>
+            <tr>
+                <th class="label shipping" scope="row" colspan="4"><?= $block->escapeHtml("Shipping Total") ?></th>
+                <td class="value price-shipping">
+                    <?php if($shippingTotal === 0 && ($isCBBToggleEnabled || $isEssendantToggleEnabled)): ?>
+                        <span class="fedex-bold weight-700 cl-green">FREE</span>
+                    <?php else: ?>
+                        <?= /* @noEscape */ $shippingTotalFormated; ?>
+                    <?php endif; ?>
+                </td>
+            </tr>
+        <?php endif;?>
+        <tr class="totals-tax">
+            <th class="mark" scope="row" colspan="4"><?= $block->escapeHtml("Tax") ?></th>
+            <td class="amount">
+                <?= /* @noEscape */ $_order->formatPrice($_order->getTaxAmount()); ?>
+            </td>
+        </tr>
+        <tr><td></td></tr>
+        <?php if($isDiscountAvailable): ?>
+        <tr class="discount">
+            <th class="total-discount toggle-discount" colspan="4" scope="row">
+                <span id="discdrop" tabindex="0"> Total Discount(s)</span><span id="discbreak" class="drop up arrow-down"></span>
+            </th>
+            <td class="amount d-flex" data-th="Discount">
+                <?= /* @noEscape */ '-'; ?>
+                <?= /* @noEscape */ ($_order->getDiscountAmount()>0)?$_order->formatPrice($_order->getDiscountAmount()):''; ?>
+            </td>
+        </tr>
+        <?php endif; ?>
+        <?php if($isDiscountAvailable): ?>
+        <tr class="discount_breakdown total-disc-dropdown" style="display: none">
+                <td colspan="5">
+                    <table class="discount_breakdown_table">
+                        <tbody>
+                        <?php foreach($sortedDiscounts  as $discount): ?>
+                        <?php if(isset($discount['price']) && $discount['price']!='' && $discount['price']!=0): ?>
+                        <tr class="discount">
+                            <th class="label discount"><?= $block->escapeHtml($discount['label']) ?></th>
+                            <td class="amount d-flex">
+                                    <?= /* @noEscape */ '-'.$_order->formatPrice($discount['price']); ?>
+                            </td>
+                        </tr>
+                        <?php endif; ?>
+                        <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </td>
+        </tr>
+        <?php endif; ?>
+        <tr>
+            <th scope="row" colspan="4" class="label estimated-total"><?= $block->escapeHtml("Total") ?></th>
+            <td class="value price-estimated-total">
+                <?= /* @noEscape */ $_order->formatPrice(
+                    $_order->getGrandTotal()-$_order->getShippingAmount()
+                ); ?>
+            </td>
+        </tr>
+        <?php if ($fedexItemsCount > 0): ?>
+        <tr class="estimated-shipping-total">
+            <th class="label shipping" scope="row" colspan="4">
+                <?= $block->escapeHtml("Estimated Shipping Charges") ?></th>
+            <td class="value price-shipping">
+                <?= /* @noEscape */ $_order->formatPrice($_order->getShippingAmount()); ?>
+            </td>
+        </tr>
+        <?php endif;?>
+    </table>
+<?php else: ?>
+    <table class="customtotal">
+        <?php foreach ($sortedTotals as $_code => $_total) : ?>
+            <?php
+            if ($_total->getLabel() == 'Shipping & Handling' && $isPickUp && $miraklItemCount <= 0) {
+                continue;
+            }
+            ?>
+            <?php if ($_total->getBlockName()) : ?>
+                <?= $block->getChildHtml($_total->getBlockName(), false) ?>
+            <?php else :?>
+                <tr class="<?= $block->escapeHtmlAttr($_code) ?>">
+                    <th <?= /* @noEscape */ ($isDiscountAvailable)?'class="total-discount toggle-discount"':''; ?> <?= /* @noEscape */ $block->getLabelProperties() ?> scope="row">
+                        <?php if ($_total->getStrong()) : ?>
+                            <?php if($_total->getLabel()=='Shipping & Handling'): ?>
+                                <strong><?= $block->escapeHtml('Shipping') ?></strong>
+                            <?php elseif($_total->getLabel()=='Grand Total'): ?>
+                                <strong><?= $block->escapeHtml('Total') ?></strong>
+                            <?php else: ?>
+                                <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+                            <?php endif;?>
+                        <?php else : ?>
+                            <?php if($_total->getLabel() == 'Shipping & Handling'): ?>
+                                <?= $block->escapeHtml('Shipping Total') ?>
+                            <?php elseif($_total->getLabel()=='Subtotal'): ?>
+                                <?= $block->escapeHtml('Items ('.$itemCount.")") ?>
+                            <?php elseif($_total->getLabel()=='Grand Total'): ?>
+                                <?= $block->escapeHtml('Total') ?>
+                            <?php elseif($_total->getLabel()=='Discount'): ?>
+                                <span id="discdrop" tabindex="0"> <?= $block->escapeHtml('Total Discount(s)') ?></span><span id="discbreak" class="drop up arrow-down"></span>
+                            <?php else: ?>
+                                <?= $block->escapeHtml($_total->getLabel()) ?>
+                            <?php endif;?>
+                        <?php endif ?>
+                    </th>
+                    <td <?= /* @noEscape */ $block->getValueProperties() ?>
+                        data-th="<?= $block->escapeHtmlAttr($_total->getLabel()) ?>">
+                        <?php if ($_total->getStrong()) : ?>
+                            <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
+                        <?php else : ?>
+                            <?php if($_code=='discount'): ?>
+                                <?php if($block->formatValue($_total) == '$0.00'): ?>
+                                    <?= /* @noEscape */ '-' ?>
+                                <?php else:?>
+                                    <?= /* @noEscape */ '-'.$block->formatValue($_total) ?>
+                                <?php endif; ?>
+                            <?php elseif($miraklItemCount > 0 && $_code=='shipping'): ?>
+                                <?php
+                                if ($miraklItemCount > 0 && $_order->getShippingMethod() != $viewModel::SHIPPING_TYPE_PICKUP) {
+                                    $shippingTotal = $viewModel->getOrderShippingSubTotal($_order);
+                                    $shippingTotalFormated = $viewModel->getOrderShippingTotal($_order);
+                                } else {
+                                    $shippingTotal = $viewModel->getMiraklShippingTotal($_order);
+                                    $shippingTotalFormated = $viewModel->getMiraklShippingAmount($_order);
+                                }
+                                ?>
+                                <?php if($shippingTotal == 0 && ($isCBBToggleEnabled || $isEssendantToggleEnabled)): ?>
+                                    <span class="fedex-bold weight-700 cl-green">FREE</span>
+                                <?php else: ?>
+                                    <?= /* @noEscape */ $shippingTotalFormated; ?>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <?php if($_code=='shipping' && $_order->getShippingDiscount() > 0): ?>
+                                    <?= /* @noEscape */ $_order->formatPrice($_order->getShippingDiscount()); ?>
+                                <?php else:?>
+                                    <?= /* @noEscape */ $block->formatValue($_total) ?>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        <?php endif?>
+                    </td>
+                </tr>
+                <?php if($_code=='discount' && $isDiscountAvailable): ?>
+                    <tr class="discount_breakdown total-disc-dropdown" style="display:none;">
+                        <td colspan="5">
+                            <table class="discount_breakdown_table">
+                                <tbody>
+                                <?php foreach($sortedDiscounts  as $discount): ?>
+                                    <?php if(isset($discount['price']) && $discount['price']!='' && $discount['price']!=0): ?>
+                                        <tr class="discount">
+                                            <th class="label discount"><?= $block->escapeHtml($discount['label']) ?></th>
+                                            <td class="amount">
+                                                <?= /* @noEscape */ '-'.$_order->formatPrice($discount['price']); ?>
+                                            </td>
+                                        </tr>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endforeach?>
+    </table>
+<?php endif; ?>
+        <script>
+            require([
+                'jquery',
+                'domReady!'
+            ], function($) {
+                if($('body').hasClass('sales-order-print')){
+                    $('.toggle-discount .drop').removeClass("arrow-down");
+                    $('.total-disc-dropdown').show();
+                }
+                $(document).on('click', '.toggle-discount', function() {
+                    $('.toggle-discount .drop').toggleClass("arrow-down");
+                    $('.discount_breakdown').slideToggle(100);
+                });
+                $(document).on("keypress",'#discdrop', function(event) {
+                    if (event.keyCode === 13) {
+                        $('.toggle-discount .drop').toggleClass("arrow-down");
+                        $('.discount_breakdown').slideToggle(100);
+                    }
+                    event.stopImmediatePropagation();
+                });
+            });
+        </script>
+<?php } ?>

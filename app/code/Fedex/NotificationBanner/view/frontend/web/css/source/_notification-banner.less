@@ -1,0 +1,374 @@
+@background-border-image: #007ab6;
+@smallmediascreenwidth: 1023px;
+@positionrelative: relative;
+@fullwidth: 100%;
+@border-1px: 1px solid #f9b200;
+@box-shadow: 0 2px 4px 0 rgba(47,64,71,0.3);
+@backgroundcolor: #f9b200;
+@color: #2f4047;
+@color-blue: #0078b4;
+@color-black: #2f4047;
+@font-family-regular: 'FedEx Sans Regular';
+@font-family-bold: 'FedEx Sans Bold';
+@luma-icons: 'luma-icons';
+@notificationBannerBg: #fff; 
+
+/** Notification Banner Popup Style */
+
+.notification-banner {
+    border: @border-1px;
+    box-shadow: @box-shadow;
+    background: @notificationBannerBg;
+}
+
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    body.with-tiger-d195836fixloadtimeherobanner {
+        div[data-content-type="slider"] {
+            visibility: visible;
+        
+            .hero-banner-pagebuilder-content,
+            .mobile-hero-banner-content {
+                > div {
+                    display: none;
+                }
+                &:first-child {
+                    display: block !important;
+                }
+            }
+        }
+    }
+}
+
+
+div.top-container[role="region"] {
+    box-sizing: border-box;
+    width: 100%;
+}
+.notification-banner.global-notification-banner {
+    width: 100%;
+}
+.configurator-index-index .notification-banner {
+    margin-top: 25px;
+}
+.notification-banner-warning-msg h4 {
+    margin-bottom: 8px;
+    margin-top: 0;
+    font-family: @font-family-bold;
+}
+.notification-banner .notification-banner-box-inner {
+    background-color: @backgroundcolor;
+    width: 48px;
+}
+.notification-banner .notification-banner-box-inner img {
+    height: 25px;
+    left: 50%;
+    position: @positionrelative;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    width: 25px;
+}
+.notification-banner .notification-banner-warning-msg {
+    padding: 15px;
+    padding-right: 15px;
+    width: @fullwidth;
+}
+.notification-banner .notification-banner-warning-msg p {
+    color: @color;
+    font-family: @font-family-regular;
+    font-size: 14px;
+    margin: 0;
+}
+.notification-banner p:empty,
+.notification-banner .notification-banner-warning-msg br {
+    display: none;
+}
+
+.notification-banner .notification-banner-warning-msg a {
+    color: @color-blue;
+    display: block;
+    font-family: @font-family-regular;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: .75px;
+    margin-top: 15px;
+    width: 100%;
+}
+.cms-sde-home .notification-banner .notification-banner-warning-msg a {
+    font-size: 19px;
+    margin-top: 12px;
+}
+.cms-sde-home .notification-banner .notification-banner-warning-msg {
+    padding: 16px;
+    padding-bottom: 8px;
+}
+.cms-sde-home div.top-container[role="region"] {
+    max-width: 97.5%;
+    width: 98%;
+}
+.cms-sde-home .is-fcl-global div.top-container[role="region"] .notification-banner {
+    margin-bottom: 24px;
+    margin-top: 0;
+}
+.cms-sde-home .notification-banner .notification-banner-box-inner {
+    padding: 0 3px;
+}
+.cms-sde-home.cms-index-index .sensitive-data {
+    margin: 0 0 20px 0;
+    max-width: 98%;
+    width: 98%;
+}
+.notification-banner span.notification-banner-close-icon {
+    font-size: 16px;
+    padding: 16px 16px;
+}
+
+.notification-banner span.notification-banner-close-icon:before {
+    color: @color-black;
+    content: '\e616';
+    font-family: @luma-icons;
+}
+
+body button.cf-fbt-ivt:hover {
+    background: url('https://survey.us.confirmit.com/isa/EKDPGOEFJDEIPHDADQDHOPMXBXPVFILM/feedback/VerticalFeedbackTab.jpg');
+    background-image: url('https://survey.us.confirmit.com/isa/EKDPGOEFJDEIPHDADQDHOPMXBXPVFILM/feedback/VerticalFeedbackTab.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    border: 0 solid @background-border-image;
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break = @screen__xl) {
+    body.with-tiger-d195836fixloadtimeherobanner {
+        .hero-banner-pagebuilder-content {
+            > div.hero-banner-desktop-message {
+                display: block !important;
+            }
+        }
+    } 
+}
+
+@media screen and (min-width: 1200px) {
+    body.epro-store:not(.cms-sde-home) {
+        div.notification-banner {
+            margin-top: 22px;
+        }
+    }
+
+    .is-fcl-global {
+        div.top-container[role="region"] {
+            .notification-banner {
+                margin-bottom: 33px;
+                margin-top: 7px;
+            }
+        }
+    }
+    .cms-sde-home.is-fcl-global {
+        div.top-container[role="region"] {
+            .notification-banner {
+                margin-bottom: 24px;
+                margin-top: 0px;
+            }
+        }
+    }
+    // new code 
+    .cms-sde-home.commercial-store-home.cms-index-index {
+        .sensitive-data {
+            margin: 24px auto 20px auto !important;
+        }
+    }
+    .cms-sde-home.home-container-new .home-wrapper-new .new-project-container {
+        margin: 0 0%;
+    }
+}
+
+@media only screen and (max-width: 1199px) {
+    .top-container .notification-banner {
+        margin: 10px 0;
+    }
+    div.top-container[role="region"] {
+        margin-bottom: 0px
+    }
+}
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 1200px) and (max-width: @screen__xl) {
+        body.with-tiger-d195836fixloadtimeherobanner {
+            .hero-banner-pagebuilder-content {
+                > div.hero-banner-laptop-message {
+                    display: block !important;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1199px) {
+    .top-container .notification-banner {
+        width: 100%;
+    }
+    .commercial-epro-store  {
+        div.top-container[role="region"] {
+            width: 100%;
+        }
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .is-fcl-global.epro-store {
+        div.top-container[role="region"] {
+            margin-top: 6px;
+        }
+    }
+}
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 768px) and (max-width: 1023px) {
+        body.with-tiger-d195836fixloadtimeherobanner {
+            .hero-banner-pagebuilder-content {
+                > div.hero-banner-tablet-message {
+                    display: block !important;
+                }
+            }
+        }
+    } 
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .commercial-epro-store  {
+        div.top-container[role="region"] {
+            top: 85px;
+            .notification-banner {
+                width: 100%;
+            }
+        }
+    }
+    .commercial-store-home  {
+        div.top-container[role="region"] {
+            top: 25px !important;
+            .notification-banner {
+                width: 100%;
+            }
+        }
+    }
+
+    body.cms-sde-home.commercial-store-home  {
+        .page-wrapper {
+            .sections.nav-sections {
+                margin-bottom: 0px;
+            }
+        }
+        div.top-container[role="region"] {
+            top: 25px;
+            margin: 0 auto 20px auto;
+            width: auto;
+            .notification-banner {
+                margin-top: 0px;
+                width: 100%;
+            }
+        }
+    }
+    body.epro-store  {
+        div.top-container[role="region"] {
+            top: 32px;
+            margin: 0 auto 20px auto;
+            .notification-banner {
+                margin-bottom: 32px;
+            }
+        }
+    }
+
+    .cms-sde-home.commercial-store-home {
+        .page-wrapper main.page-main-full-width {
+            margin-top: 16px;
+        }
+    }
+
+    body.cms-sde-home.cms-index-index .sensitive-data {
+        margin-left: auto !important;
+        margin-right: auto !important;
+        min-width: 95.5%;
+        padding-right: 10px;
+        margin-top: 16px;
+    }
+    
+    .commercial-store-home.selfreg-store  {
+        div.top-container[role="region"] {
+            top: 69px;
+        }
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1199px) {
+    body.cms-sde-home.commercial-store-home  {
+        div.top-container[role="region"] {
+            padding: 0 4%;
+            .notification-banner {
+                margin: 4px 0;
+            }
+        }
+        .sensitive-data {
+            max-width: 94%;
+            min-width: 94%;
+            width: 94%;
+            margin: 0px auto 32px auto !important;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break = @screen__m - 1) {
+    body.with-tiger-d195836fixloadtimeherobanner {
+        .hero-banner-pagebuilder-content,
+        .mobile-hero-banner-content {
+            > div.hero-banner-mobile-message {
+                display: block !important;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .notification-banner .notification-banner-box-inner {
+        width: 75px;
+    }
+    .top-container .notification-banner {
+        position: relative;
+        z-index: 999;
+        background: @notificationBannerBg;
+        left: 0;
+        right: 0;
+    }
+
+    body.cms-sde-home {
+        .notification-banner {
+            .notification-banner-warning-msg {
+                padding-right: 31px;
+            }
+        }
+    }
+
+    .cms-sde-home.cms-index-index  {
+        div.top-container[role="region"] {
+            width: auto;
+        }
+        .sensitive-data {
+            margin-top: 0px !important;
+            margin-left: 0% !important;
+            margin-right: 0% !important;
+            width: 100%;
+            min-width: 100%;
+        }
+    }
+    .cms-sde-home {
+        .top-container .notification-banner {
+                margin: 21px 0 10px 0;
+        }
+    }
+
+    body.epro-store  {
+        div.top-container[role="region"] {
+            top: 30px;
+            margin: 0 auto 20px auto;
+        }
+    }
+}

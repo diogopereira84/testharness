@@ -1,0 +1,535 @@
+//variables
+@coupon-border-color: #6f7f87;
+@color-white: #fff;
+@promo-content-color: #152830;
+@font-color-for-fedex-border: #2f4047;
+@fedex-color-for-border-one: #4d148c;
+@fedex-color-for-border-two: #6236ff;
+@fedex-color-for-border-three: #f25100;
+@background-color-for-fedex-border: #ff6200;
+@blue-color-for-carousel: #006bb4;
+@promo-banner-for-xbold: 'FedEx Sans XBold';
+@promo-banner-for-regular: 'FedEx Sans Regular';
+@promo-banner-for-medium: 'FedEx Sans Medium';
+@color: #152830;
+
+.pagebuilder-column.header-slick-slider {
+    display: none !important;
+}
+.pagebuilder-column.header-slick-slider.slick-initialized {
+    display: flex !important;
+}
+
+.widget-promo-banner-container {
+    .block-id-for-mobile {
+        display: none;
+    }
+    .placeholder-html-code.promo-coupon-label a {
+        color: @color;
+    }
+    .placeholder-html-code.promo-coupon-label a:hover {
+        text-decoration: none;
+    }
+    .promo-content {
+        p {
+            display: inline;
+        }
+        background-color: @color-white;
+        color: @promo-content-color;
+        font-family: @promo-banner-for-medium;
+        font-size: 14px;
+        font-weight: 500;
+        height: 21px;
+        letter-spacing: .71px;
+        line-height: 18px;
+        margin: 4px 0 6px 10px;
+        padding: 0;
+        width: auto;
+    }
+    .slick-prev,
+    .slick-next {
+        z-index: 1 !important;
+    }
+
+    [data-element='inner'] {
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+    }
+    .placeholder-html-code.promo-coupon-label.promo-banner-coupon-border {
+        background-color: @color-white;
+        border: 1px solid @coupon-border-color;
+        box-sizing: border-box;
+        color: @font-color-for-fedex-border;
+        height: 28px;
+        margin: -1px 5px 0 5px;
+        padding: 5px 11px;
+        text-align: center;
+        width: auto;
+        a {
+            color: @font-color-for-fedex-border;
+        }
+    }
+    .slick-next {
+        box-shadow: none !important;
+    }
+    .slick-prev {
+        box-shadow: none !important;
+    }
+    .slick-prev:focus {
+        box-shadow: 0 0 1px 1px @blue-color-for-carousel !important;
+    }
+    .slick-next:focus {
+        box-shadow: 0 0 1px 1px @blue-color-for-carousel !important;
+    }
+    button.slick-prev.slick-arrow {
+        background: none;
+        height: auto;
+        margin-left: 163px;
+        width: auto;
+    }
+    .slick-slider .slick-prev::before {
+        font-size: 24px;
+    }
+    button.slick-next.slick-arrow {
+        background: none;
+        height: auto;
+        margin-right: 108px;
+        padding-right: 0;
+        right: 96px;
+        width: auto;
+    }
+    .slick-slider .slick-next::before {
+        font-size: 24px;
+    }
+    figure {
+        display: flex !important;
+        height: 28px;
+        justify-content: center;
+        padding-top: 2px;
+    }
+    img {
+        height: 20px !important;
+        margin-top: 2px;
+        width: 20px;
+    }
+    .promo-coupon-label {
+        background: @color-white !important;
+        color: @promo-content-color;
+        font-family: @promo-banner-for-xbold;
+        font-size: 14px;
+        font-weight: 500;
+        letter-spacing: .71px;
+        line-height: 18px;
+        margin: 4px 5px 0 5px;
+        a {
+            color: @promo-content-color !important;
+        }
+    }
+    a.promo-detail-link {
+        color: @promo-content-color;
+        font-family: @promo-banner-for-regular;
+        font-size: 14px;
+        letter-spacing: .71px;
+        line-height: 19px;
+        margin: 4px 5px 5px 5px;
+        text-decoration: underline;
+    }
+    .promo-detail-link {
+        background: @color-white !important;
+    }
+    .fedex-color-border {
+        line-height: 0;
+        hr {
+            background: linear-gradient(270deg, @fedex-color-for-border-one 0%, @fedex-color-for-border-two 45.89%, @fedex-color-for-border-three 100%);
+            background-color: @background-color-for-fedex-border;
+            height: 3px;
+            margin-top: 4px;
+            margin-bottom: 0;
+            transform: scaleX(-1);
+            width: 1340px;
+        }
+    }
+}
+@media only screen and (max-width : 1024px) {
+    .widget-promo-banner-container {
+        .block-id-for-mobile {
+            display: block;
+        }
+        .block-id {
+            display: none;
+        }
+    }
+}
+
+/*General CSS For Revamped Promo Banner*/
+/*For 1440 Breakpoints*/
+.sections.nav-sections {
+    margin-bottom: 0;
+}
+
+/*For Canva Page*/
+.canva-index-index {
+    .widget-promo-banner-container {
+        .fedex-color-border {
+            display: none;
+        }
+
+        [data-element='inner'] {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .pagebuilder-column.header-slick-slider.slick-initialized.slick-slider {
+            padding: 10px 0 0 0 !important;
+        }
+    }
+
+    .widget.block.block-static-block {
+        margin-bottom: 0;
+    }
+}
+
+/*For Product and Cart Page*/
+.catalog-product-view .widget-promo-banner-container .fedex-color-border {
+    padding: 0 16px !important;
+}
+@media only screen and (min-width: 1200px){
+    .checkout-cart-index .widget-promo-banner-container .fedex-color-border {
+        padding: 0 0 10px 0 !important;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .widget-promo-banner-container {
+        button.slick-prev.slick-arrow {
+            margin-left: 65px;
+        }
+
+        button.slick-next.slick-arrow {
+            margin-right: 0;
+            padding-right: 0;
+            right: 96px;
+        }
+    }
+}
+
+/*For Promo Banner - >=768 and <1200 breakpoint*/
+
+@media only screen and (max-width: 1199px) {
+    /* To fix padding issue on Canva page*/
+    body.canva-index-index {
+        .widget-promo-banner-container {
+            .pagebuilder-column.header-slick-slider.slick-initialized.slick-slider {
+                padding: 15px 10px 14px 10px !important;
+            }
+        }
+    }
+    .pagebuilder-column.header-slick-slider {
+        padding: 15px 10px 14px 10px !important;
+    }
+    .cms-retail-home-page {
+        .widget-promo-banner-container {
+            .fedex-color-border {
+                hr {
+                    float: left;
+                }
+            }
+        }
+    }
+    .widget-promo-banner-container {
+        .fedex-color-border {
+            hr {
+                float: left;
+                margin-top: 0 !important;
+            }
+        }
+        .slick-slider {
+            .slick-next::before,
+            .slick-prev::before {
+                width: 24px;
+                height: 24px;
+                float: left;
+                padding: 0;
+            }
+        }
+        button.slick-prev.slick-arrow {
+            margin-left: 0;
+        }
+        button.slick-next.slick-arrow {
+            margin-right: 0;
+            right: 25px;
+        }
+        figure {
+            padding-top: 0;
+        }
+        button.slick-next.slick-arrow,
+        .quote-details-items .actions-toolbar>.action.slick-next.slick-arrow {
+            padding-right: 0;
+        }
+        .slick-prev {
+            left: 25px;
+        }
+        .slick-next {
+            right: 25px;
+        }
+        .slick-slider .slick-prev::before {
+            padding-left: 0;
+        }
+        .slick-prev,
+        .slick-next {
+            width: auto;
+            height: auto;
+        }
+        .slick-slide {
+            padding: 0 40px;
+        }
+        .promo-content {
+            font-size: 12px;
+            height: auto;
+            line-height: 18px;
+            margin: 5px 5px 5px 10px;
+            text-transform: uppercase;
+            p {
+                display: inline;
+                margin: 0;
+            }
+        }
+        .placeholder-html-code.promo-coupon-label.promo-banner-coupon-border {
+            font-size: 12px;
+            letter-spacing: .78px;
+            line-height: 24px;
+            padding: 2px 12px;
+            margin-top: 0;
+        }
+        a.promo-detail-link {
+            font-size: 12px;
+            line-height: 15px;
+            margin-bottom: 6px;
+            margin-left: 8px;
+            margin-top: 7px;
+            vertical-align: middle;
+        }
+        .promo-coupon-label {
+            color: @promo-content-color;
+            font-family: @promo-banner-for-xbold;
+            font-size: 12px;
+            font-weight: 500;
+            height: auto;
+            letter-spacing: .71px;
+            line-height: 22px;
+            margin: 4px 0 0 0;
+        }
+    }
+}
+
+/*For Promo Banner - <=767 breakpoint*/
+@media (max-width:767px) {
+    body.canva-index-index {
+        .widget-promo-banner-container {
+            .pagebuilder-column.header-slick-slider.slick-initialized.slick-slider {
+                padding: 12px 10px 8px 10px !important;
+            }
+        }
+    }
+    .pagebuilder-column.header-slick-slider {
+        padding: 12px 10px 8px 10px !important;
+    }
+
+    .widget-promo-banner-container {
+        figure {
+            display: block !important;
+            height: auto;
+            padding: 0;
+            text-align: center;
+        }
+        img {
+            display: inline-block;
+            float: none;
+            vertical-align: middle;
+        }
+        .promo-content {
+            display: inline;
+            float: none;
+        }
+        .promo-coupon-label {
+            clear: both !important;
+            display: none !important;
+            float: none !important;
+        }
+    }
+}
+
+/*For Promo Banner - <=450 breakpoint*/
+@media (max-width:450px) {
+    .widget-promo-banner-container {
+        figure {
+            img {
+                display: none;
+            }
+        }
+        .slick-prev {
+            left: 10px;
+            width: auto;
+            height: auto;
+        }
+        .slick-next {
+            right: 10px !important;
+            width: auto;
+            height: auto;
+        }
+        .slick-slide {
+            padding: 0 20px;
+        }
+    }
+}
+
+/*For Promo Banner - <=320 breakpoint*/
+@media (max-width:320px) {
+    .widget-promo-banner-container {
+        .promo-content {
+            display: inline;
+            font-size: 12px;
+            margin: 0;
+            p {
+                display: inline;
+                font-size: 12px;
+                line-height: 15px;
+                vertical-align: middle;
+            }
+        }
+        .promo-coupon-label {
+            display: none !important;
+            font-size: 12px;
+            line-height: 15px;
+            margin: 0 7px;
+            text-transform: uppercase;
+            vertical-align: middle;
+        }
+        a.promo-detail-link {
+            display: inline;
+            font-size: 12px;
+            line-height: 15px;
+            margin: 0 7px;
+            vertical-align: middle;
+        }
+        .placeholder-html-code.promo-coupon-label.promo-banner-coupon-border {
+            display: none !important; 
+            font-size: 12px;
+            line-height: 18px;
+            margin: 0 5px 0;
+            padding: 5px 10px 3px;
+            vertical-align: middle;
+        }
+        .slick-prev {
+            left: 10px;
+        }
+        .slick-next {
+            right: 10px;
+        }
+    }
+}
+/*D-86504*/
+.epro-fedex ~ .page-wrapper .sections.nav-sections {
+    margin-bottom: 25px;
+}
+.cms-sde-home .page-wrapper .sections.nav-sections {
+    margin-bottom: 25px;
+}
+
+/*Promo Banner Changes for Canva Editor Page*/
+.canva-index-index .canva-content.btn-xs-tdevice.ml-auto [data-element='main'] {
+    color: @promo-content-color;
+    font-size: 14px;
+    letter-spacing: .71px;
+    line-height: 18px;
+    text-align: center;
+    width: auto;
+
+    p {
+        font-family: @promo-banner-for-xbold;
+
+        strong {
+            font-family: @promo-banner-for-medium;
+            font-weight: 500;
+        }
+
+        a {
+            color: @promo-content-color;
+            font-family: @promo-banner-for-regular;
+            text-decoration: underline;
+        }
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .canva-index-index .wlgn-enable-page-header .canva-header.d-flex.canva-pdp-header {
+        padding-right: 47px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .canva-index-index .wlgn-enable-page-header {
+        .canva-header.d-flex.canva-pdp-header {
+            padding-left: 45px;
+            padding-right: 15px;
+
+            [data-element='main'] {
+                font-size: 12px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 1199px) {
+    .canva-index-index .wlgn-enable-page-header .canva-header .canva-design .fs-14 {
+        font-size: 11px;
+        line-height: 16.5px;
+    }
+}
+/*End of Promo Banner Changes for Canva Editor Page*/
+@media only screen and (max-width: 767px) { 
+    .widget-promo-banner-container {
+        .promo-mobilecontent {
+            display: inline;
+        }
+        .promo-desktopcontent {
+            display: none;
+        }
+    }
+}
+@media only screen and (min-width: 768px) {
+    .widget-promo-banner-container {
+        .promo-mobilecontent {
+            display: none;
+        }
+        .promo-desktopcontent {
+            display: inline; 
+        }
+    }
+}
+@media (min-width: 1200px) {
+    body {
+        .widget-promo-banner-container {
+            .fedex-color-border {
+                hr {
+                    margin-top: 0 !important;
+                }
+            }
+        }
+    }
+}
+body {
+    .widget-promo-banner-container {
+        .fedex-color-border {
+            padding: 0 16px 10px !important;
+        }
+        .slick-slider {
+            .slick-prev {
+                color: #2F4047 !important;
+            }
+            .slick-next {
+                color: #2F4047 !important;
+            }
+        }
+    }
+}

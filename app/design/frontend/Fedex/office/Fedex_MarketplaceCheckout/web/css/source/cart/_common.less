@@ -1,0 +1,141 @@
+@step-color: #4b148a;
+
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    body.checkout-cart-index {
+
+        // Class added by the module toggle
+        &.marketplace-cart {}
+        .cart-summary {
+            .checkout-methods-items {
+             .action.primary.checkout,
+             .cart-to-checkout.express-checkout-cart-button {
+                 &.disabled-button {
+                     background: @fx-grey-700;
+                     color: @fx-grey-100;
+                     cursor: not-allowed;
+                     pointer-events: none;
+                     border-color: @fx-grey-700;
+                     opacity: 1;
+                     > span {
+                         color: @fx-grey-100;
+                     }
+                 }
+             }
+            }
+         }
+    }
+}
+
+// Mobile, @screen__m: 480px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__xxs) {
+    body.checkout-cart-index {
+
+        // Class added by the module toggle
+        &.marketplace-cart {}
+    }
+}
+
+// Mobile, @screen__m: 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    body.checkout-cart-index {
+
+        // Class added by the module toggle
+        &.marketplace-cart {
+            .page-wrapper {
+                .breadcrumbs {
+                    display: none;
+                }
+                .cart-container {
+                    .delivery-methods-section {
+                        .delivery-methods {
+                            margin-top: -15px;
+                            > h3 {
+                                font-size: 18px;
+                                margin-bottom: 24px;
+                                letter-spacing: 0.75px;
+                            }
+                            .delivery-methods-wrapper {
+                                .delivery-method-container {
+                                    .method {
+                                        padding: 16px 24px;
+
+                                        .icon-area {
+                                            margin-left: -3px;
+                                            margin-bottom: 17px;
+                                        }
+
+                                        .name {
+                                            font-size: 16px;
+                                            margin-bottom: 15px;
+                                        }
+
+                                        .rate.in-store {
+                                            font-size: 12px;
+                                            letter-spacing: 0.32px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+//  Tablet, @screen__m: 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    body.checkout-cart-index {
+
+        // Class added by the module toggle
+        &.marketplace-cart {}
+    }
+}
+
+//  Tablet, 768px
+//  _____________________________________________
+& when (@media-target ='desktop'),
+(@media-target ='all') {
+    @media all and (min-width: 768px) and (max-width: 1024px) {
+        body.checkout-cart-index {
+
+            // Class added by the module toggle
+            &.marketplace-cart {}
+        }
+    }
+}
+
+//  Tablet, @screen__l: 1024px (styles-m.css)
+//  _____________________________________________
+
+& when (@media-target ='mobile'),
+(@media-target ='all') {
+    @media screen and (min-width: 768px) and (max-width: 1024px) {
+        body.checkout-cart-index {
+
+            // Class added by the module toggle
+            &.marketplace-cart {}
+        }
+    }
+}
+
+//  Desktop, @screen__l: 1024px (styles-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+    body.checkout-cart-index {
+
+        // Class added by the module toggle
+        &.marketplace-cart {}
+    }
+}

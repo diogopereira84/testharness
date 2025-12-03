@@ -1,0 +1,48 @@
+{
+    "company_additional_data": {
+        "column": {
+            "id": true,
+            "company_id": true,
+            "self_reg_data": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_SELFREG_ID_COMPANY_ENTITY_ID": true
+        }
+    },
+    "user_groups_permission": {
+        "column": {
+            "id": true,
+            "group_id": true,
+            "user_id": true,
+            "company_id": true,
+            "order_approval": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "USER_GROUPS_PERMISSION_COMPANY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "USER_GROUPS_PERMISSION_COMPANY_ID_COMPANY_ENTITY_ID": true,
+            "USER_GROUPS_PERMISSION_GROUP_ID_USER_GROUPS_ID": true
+        }
+    },
+    "user_groups": {
+        "column": {
+            "id": true,
+            "group_name": true,
+            "group_type": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "USER_GROUPS_GROUP_TYPE": true,
+            "USER_GROUPS_GROUP_NAME": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}

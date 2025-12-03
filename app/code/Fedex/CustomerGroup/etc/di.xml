@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+   <type name="Magento\Ui\Component\MassAction">
+        <plugin name="CustomerMassActionPlugin"
+           type="Fedex\CustomerGroup\Plugin\Ui\Component\MassActionPlugin"/>
+    </type>
+   <preference for="Magento\Customer\Model\Group" type="Fedex\CustomerGroup\Model\Group"/>
+   <preference for="Magento\Customer\Controller\Adminhtml\Group\NewAction" type="Fedex\CustomerGroup\Controller\Adminhtml\Group\NewGroup"/>
+   <preference for="Magento\CatalogPermissions\Observer\ApplyCategoryPermissionObserver" type="Fedex\CustomerGroup\Observer\ApplyCategoryPermissionObserver"/>
+   <preference for="Magento\CatalogPermissions\Observer\ApplyCategoryPermissionOnIsActiveFilterToCollectionObserver" type="Fedex\CustomerGroup\Observer\ApplyCategoryPermissionOnIsActiveFilterToCollectionObserver"/>
+</config>

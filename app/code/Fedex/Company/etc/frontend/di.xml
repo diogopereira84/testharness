@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="fedex_company_config_provider" xsi:type="object">Fedex\Company\Model\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- Start Code B-1859537 : Commercial admin user allow to access view order page from shared order page -->
+    <type name="Magento\Company\Controller\Order\OrderViewAuthorization">
+        <plugin name="Fedex_Company_Plugin_Sales_Controller_Order_OrderViewAuthorization" type="Fedex\Company\Plugin\Sales\Controller\Order\OrderViewAuthorization" />
+    </type>
+    <!-- End Code B-1859537 : Commercial admin user allow to access view order page from shared order page -->
+    <type name="Magento\Sales\Controller\Order\View">
+        <plugin name="redirect_blocked_company" type="Fedex\Company\Plugin\Sales\Controller\Order\ViewPlugin" sortOrder="60"/>
+    </type>
+</config>

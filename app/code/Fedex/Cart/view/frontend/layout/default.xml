@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+     <head>
+        <css src="Fedex_Cart::css/promo.css"/>
+     </head>
+    <body>
+        <referenceContainer name="page.wrapper">
+            <block class="Magento\Framework\View\Element\Template" name="header.top.cart.notification" template="Fedex_Cart::cart/cart-notification.phtml" before="-"/>
+            <block class="Magento\Framework\View\Element\Template" name="cart.limit.alert.notification" template="Fedex_Cart::cart/alert-limit-notification.phtml" before="-"/>
+            <block class="Magento\Framework\View\Element\Template" name="product.preview.img" template="Fedex_Cart::cart/preview-img.phtml" before="-"/>
+        </referenceContainer>
+
+        <referenceContainer name="after.body.start">
+            <block name="epro_fedex" before="-"
+                   class="Magento\Framework\View\Element\Template"
+                   template="Fedex_Cart::epro_class.phtml"/>
+        </referenceContainer>
+
+        <referenceBlock name="checkout.cart.coupon.promo" template="Fedex_Cart::cart/promo.phtml">
+            <arguments>
+               <argument name="viewModel" xsi:type="object">
+                    Fedex\Cart\ViewModel\CheckoutConfig
+               </argument>
+            </arguments>
+        </referenceBlock>
+
+        <referenceBlock name="checkout.cart.account" template="Fedex_Cart::cart/account.phtml">
+            <arguments>
+                <argument name="viewModelForAccount" xsi:type="object">
+                    Fedex\Cart\ViewModel\CheckoutConfig
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.warning.message">
+            <arguments>
+                <argument name="viewModelForWarningMessage" xsi:type="object">
+                    Fedex\Cart\ViewModel\CheckoutConfig
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

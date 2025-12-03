@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Fedex\LiveSearch\Api\Data\ConfigInterface" type="Fedex\LiveSearch\Model\Config"/>
+	<preference for="Magento\LiveSearchProductListing\Block\Frontend\Search\SaaSContext" type="Fedex\LiveSearch\Block\Frontend\Search\SaaSContext"/>
+	<preference for="Magento\LiveSearchProductListing\Block\Frontend\Category\SaaSContext" type="Fedex\LiveSearch\Block\Frontend\Category\SaaSContext"/>
+	<preference for="Magento\LiveSearchProductListing\Plugin\ContainerReader" type="Fedex\LiveSearch\Plugin\ContainerReader"/>
+	<preference for="Fedex\LiveSearch\Api\Data\SharedCatalogSkipInterface" type="Fedex\LiveSearch\Model\SharedCatalogSkip"/>
+    <type name="Magento\Framework\View\Layout\Reader\Container">
+        <plugin name="product_listing_container_reader"
+                type="Magento\LiveSearchProductListing\Plugin\ContainerReader" disabled="true"/>
+    </type>
+    <type name="Magento\Framework\View\Layout\Reader\Container">
+        <plugin name="product_listing_container_reader_ls"
+                type="Fedex\LiveSearch\Plugin\ContainerReader"/>
+    </type>
+    <type name="Fedex\LiveSearch\Plugin\ContainerReader">
+        <arguments>
+            <argument name="containersToRemove" xsi:type="array">
+                <item name="storefront_features/website_configuration/product_listing_widgets_active" xsi:type="array">
+                    <item name="0" xsi:type="string">title</item>
+                    <item name="1" xsi:type="string">page.main.title</item>
+                    <item name="2" xsi:type="string">category.products</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Layout\Reader\Block">
+        <plugin name="product_listing_block_reader"
+                type="Magento\LiveSearchProductListing\Plugin\BlockReader" disabled="true"/>
+    </type>
+    <type name="Magento\Framework\View\Layout\Reader\Block">
+        <plugin name="product_listing_block_reader_ls"
+                type="Fedex\LiveSearch\Plugin\BlockReader"/>
+    </type>
+    <type name="Fedex\LiveSearch\Plugin\BlockReader">
+        <arguments>
+            <argument name="blocksToRemove" xsi:type="array">
+                <item name="storefront_features/website_configuration/product_listing_widgets_active" xsi:type="array">
+                    <item name="0" xsi:type="string">product.price.render.default</item>
+                    <item name="1" xsi:type="string">search.result</item>
+                    <item name="2" xsi:type="string">search.search_terms_log</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogDataExporter\Model\Provider\Product\AttributeMetadata">
+        <plugin name="livesearch_plugin_product_attributemetadata" type="Fedex\LiveSearch\Plugin\Model\Provider\Product\AttributeMetadataPlugin" />
+    </type>
+</config>
+

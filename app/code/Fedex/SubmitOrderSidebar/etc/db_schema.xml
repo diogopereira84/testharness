@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+   <table name="sales_shipment" resource="default" engine="innodb">
+      <column xsi:type="varchar" name="estimated_delivery_duration" nullable="true" length="250" comment="Order Estimated Delivery Duration" />
+       <column xsi:type="datetime" name="shipping_due_date" nullable="true" comment="Shipping Due Date"/>
+       <index referenceId="SALES_SHIPMENT_SHIPPING_DUE_DATE" indexType="btree">
+           <column name="shipping_due_date"/>
+       </index>
+   </table>
+   <table name="sales_order_payment" resource="default" engine="innodb">
+      <column xsi:type="varchar" name="retail_transaction_id" nullable="true" length="250" comment="Retail Transection Id" />
+      <column xsi:type="text" name="product_line_details" nullable="true" comment="Product Line Details" />
+   </table>
+    <table name="quote">
+        <column xsi:type="text" name="billing_fields" nullable="true" comment="Custom Billing Fields Data" />
+    </table>
+</schema>

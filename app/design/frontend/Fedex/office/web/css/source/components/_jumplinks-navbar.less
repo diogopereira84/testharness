@@ -1,0 +1,47 @@
+& when (@media-common = true) {
+  .jumplinksRow { 
+    display: flex;
+    position: sticky;
+    top: 0;
+    padding: 15px 0 5px;
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+    overflow-x: auto;
+    z-index: 10;
+
+    .webpage-jumplinks {
+      &::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background-color: #dadce0;
+        border-width: 7px 7px 7px 5px;
+        border-style: solid;
+        border-color: @fx-white-100;
+      }
+
+      ul {
+          display: flex;
+          margin: 0;
+          padding: 0 15px;
+          justify-content: center;
+          list-style: none;
+          
+          a {
+            color: #000;
+            margin: 0 10px;
+            font-weight: 500;
+            text-decoration: none;
+            white-space: nowrap;
+          }
+      }
+    }
+  }  
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+  .jumplinksRow {
+    justify-content: center;
+  }
+}

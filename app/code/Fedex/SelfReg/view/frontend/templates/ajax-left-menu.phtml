@@ -1,0 +1,59 @@
+<?php
+$ajaxLeftMenuUrl = $this->getUrl('selfreg/ajax/leftmenu');
+$isMvpCatalogEnble = $block->isMvpCatalogEnble();
+$isSpinnerToggleEnable = $block->isLoaderRemovedEnable();
+?>
+<script>
+require(['jquery'], function($){
+	$(document).ready(function(){
+		let isMvpCatalogEnable = "<?php echo $isMvpCatalogEnble; ?>";
+        let loaderToggleEnabled = "<?php echo $isSpinnerToggleEnable; ?>";
+        let showLoader = false;
+
+		if (isMvpCatalogEnable) {
+            if (!loaderToggleEnabled) {
+                $('.loading-mask-ajax-menu').show();
+                showLoader = true;
+            }
+
+		    $.ajax({
+		        data: null,
+		        url: '<?php echo $ajaxLeftMenuUrl; ?>',
+		        method: 'POST',
+                showLoader: showLoader,
+		        success: function(result){
+		        	let htmlObject = $('.catalog-category-view .sidebar-main').append(result);
+					$('.sidebar-main').addClass("ajax-updated");
+					var windowsize = $(window).width();
+					if(windowsize > 1023) {
+						if($(".right-top-header-links").hasClass("ajax-updated") && $(".sidebar-main").hasClass("ajax-updated") && $(".navigation").hasClass("ajax-updated")) {
+							$('.loading-mask-ajax-menu').hide();
+						}
+					}else{
+						if($(".navigation").hasClass("ajax-updated")) {
+							$('.loading-mask-ajax-menu').hide();
+						}
+					}
+
+		        	if (htmlObject.find('.category-tree>ul>li:nth-child(1)>p>a').text().trim() == "Shared Catalog") {
+						htmlObject.find('.category-tree>ul>li:nth-child(1)').addClass("shared_catalog_left_nav active");
+						htmlObject.find('.category-tree>ul>li:nth-child(1)>ul').css("display", "block")
+					} else {
+		        		htmlObject.find('.category-tree>ul>li:nth-child(1)').addClass("print_products_left_nav");
+					}
+
+					if (htmlObject.find('.category-tree>ul>li:nth-child(2)>p>a').text().trim() == "Shared Catalog") {
+						htmlObject.find('.category-tree>ul>li:nth-child(2)').addClass("shared_catalog_left_nav active");
+						htmlObject.find('.category-tree>ul>li:nth-child(2)>ul').css("display", "block")
+					} else {
+		        		htmlObject.find('.category-tree>ul>li:nth-child(2)').addClass("print_products_left_nav");
+		        	}
+		        	htmlObject.find('.category-tree>ul>li').prepend('<div class="left-nav-parent-icon"></div>')
+		        	htmlObject.find('.category-tree>ul>li>ul').addClass("top-level-parent");
+					htmlObject.trigger('contentUpdated');
+		    	}
+		    });
+		}
+	});
+});
+</script>

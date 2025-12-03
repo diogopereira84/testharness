@@ -1,0 +1,213 @@
+<?php
+
+declare(strict_types=1);
+
+/**@var Fedex\MarketplaceProduct\ViewModel\Product\Attribute $viewModel*/
+$viewModel      = $block->getData('view_model');
+$productViewModel = $block->getData('product_availability_view_model');
+$catalogConfig = $viewModel->getCatalogConfig();
+$offer          = $viewModel->getBestOffer();
+$tigerDisplayUnitCost3P1PProducts = $viewModel->getTigerDisplayUnitCost3P1PProducts();
+list($minQty, $maxQty, $punchoutDisabled) = $viewModel->getMinMaxPunchoutInfo($offer, $viewModel->getProduct());
+$basePrice = null;
+if ($viewModel->isProductHasOffer()) {
+    $basePrice = $viewModel->getBasePriceWithoutFormat() ?? $viewModel->getDiscount();
+}
+$unavailableQtyClass='';
+if($productViewModel->isE441563ToggleEnabled() && !$productViewModel->checkProductAvailable($viewModel->getProduct())) {
+    $unavailableQtyClass = $productViewModel->getUnavailableQtyCssClass()??'';
+}
+$isPricePerceptionToggleEnabled = $catalogConfig->isPricePerceptionToggleEnabled() ?? false;
+$pricePerceptionDisclaimerText3p = $catalogConfig->getPricePerceptionDisclaimerText3p() ?? '';
+$enableQtyBox = ($punchoutDisabled && $viewModel->isEssendantToggleEnabled());
+?>
+
+<?php if(is_null($offer) && !$viewModel->isTigerTeamD232505ToggleEnabled()): ?>
+    <div id="price-box-error-2" class="message-block message-error d-flex mt-25 mb-30">
+        <div class="icon d-flex d-no-shrink v-center">
+            <img alt="Error icon" class="img-auto" src="<?php echo $this->getViewFileUrl('images/error-white.svg');?>">
+        </div>
+        <div class="message-text">
+            <?php echo __($viewModel->getOfferErrorRelationMessage()) ?>
+        </div>
+        <div class="ml-auto">
+            <button type="button" class="close-message" aria-label="Close error message">
+            </button>
+        </div>
+    </div>
+
+<?php elseif(!is_null($offer)): ?>
+
+    <?php if ($enableQtyBox): ?>
+        <div id="qty-box" class="qty-box v-center mt-20-sm d-flex mt-24">
+            <label for="qty" class="fs-16 lh-24 ls-1 fedex-bold weight-700">Quantity</label>
+            <div class="qty-area ml-auto text-right">
+                <div class="qty-group d-flex">
+                    <button class="qty-btn-default btn-subtract <?= $unavailableQtyClass?>" type="button" tittle="substract" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                        <img src="<?= $block->getViewFileUrl('Fedex_MarketplaceProduct::images/minus.svg') ?>" alt="minus" style="display: inline-block; vertical-align: middle;"/>
+                    </button>
+                    <?php if($minQty==0 && $maxQty==0):?>
+                    <input id="qty" type="number" class="form-control no-padding text-center item-quantity fedex-light fs-16 lh-24 weight-300 <?= $unavailableQtyClass?>"
+                           value="1" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                    <?php else:?>
+                    <input id="qty" type="number" class="form-control no-padding text-center item-quantity fedex-light fs-16 lh-24 weight-300 <?= $unavailableQtyClass?>"
+                           min="<?= $minQty ?>" max="<?= $maxQty ?>" value="<?= $minQty ?>" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                    <?php endif;?>
+                    <button class="qty-btn-default btn-add <?= $unavailableQtyClass?>" type="button" tittle="add" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                        <img src="<?= $block->getViewFileUrl('Fedex_MarketplaceProduct::images/plus.svg') ?>" alt="plus" style="display: inline-block; vertical-align: middle;"/>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <span id="qty-error-text" class="error hide">Accepted values are between <?= $minQty ?> and <?= $maxQty ?></span>
+
+        <script id="price-per-qty-template" type="text/x-magento-template">
+            <div id="dynamic-qty-value" class="fs-16 lh-13 ls-0 weight-500">
+                <span class="cl-secondary"><%- data.qty %> for </span>
+                <span class="fedex-medium"><%- data.value_per_qty %></span>
+            </div>
+        </script>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Fedex_MarketplaceProduct/js/add-to-cart-3p": {
+                        "minQty":     "<?= $minQty ?>",
+                        "maxQty":     "<?= $maxQty ?>",
+                        "basePrice":  "<?= $basePrice ?>",
+                        "isUnavailable": <?= !empty($unavailableQtyClass) ? 'true' : 'false' ?>
+                    }
+                }
+            }
+        </script>
+
+        <hr class="mt-16 mb-16" />
+    <?php endif; ?>
+
+    <div id="price-box-2" class="price-box <?= $tigerDisplayUnitCost3P1PProducts ? 'unit-cost-toggle' : '' ?>">
+        <div class="v-center-lg pricing-section mt-20-sm <?= $tigerDisplayUnitCost3P1PProducts ? 'unit-cost-toggle d-flex mt-16' : 'mt-50' ?>">
+            <div class="price-disclaimer">
+                <span class="starting-at fs-24 lh-32 ls-0 fedex-light">Unit cost:</span>
+                <?php if($tigerDisplayUnitCost3P1PProducts && !$viewModel->isProductFxoNonCustomizableProduct()): ?>
+                    <div class="unit-cost-warning fs-12 pt-7 d-none visible-m-l-xl">
+                        <span>
+                            <?php echo __("*The price listed above is an approximation.") ?> <br />
+                            <?php echo __("Actual cost is subject to change based on additional customization.") ?>
+                        </span>
+                    </div>
+                <?php endif; ?>
+                <?php if($isPricePerceptionToggleEnabled && $pricePerceptionDisclaimerText3p): ?>
+                    <div class="pt-7 fs-12 d-none visible-m-l-xl">
+                        <div class="d-inline-block">
+                            <?= /* @noEscape */ $pricePerceptionDisclaimerText3p ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="price-area ml-auto text-right">
+                <div class="cl-secondary fs-14 lh-22 text-italic price-warning">
+                    <?php if(!$tigerDisplayUnitCost3P1PProducts): ?>
+                        <span>
+                            <?php echo __("The price listed above is an approximation. Actual cost is subject to change based on additional customization.") ?>
+                        </span>
+                    <?php endif; ?>
+                </div>
+                <div class="prices <?= $tigerDisplayUnitCost3P1PProducts ? 'unit-cost-toggle': '' ?>">
+                    <div class="cl-primary fedex-bold weight-bold ls--11 <?= $tigerDisplayUnitCost3P1PProducts ? 'fs-24 lh-32 mb-0' : 'fs-40 lh-24 mb-10' ?>">
+                        <input id="hidden-offer-price" type="hidden" />
+                        <span>
+                            <?php if($viewModel->isNewUnitCostAvailable()): ?>
+                                <?= $viewModel->getProductUnitCost().' each';?>
+                            <?php else: ?>
+                                <?php echo $viewModel->formatCurrency($viewModel->getDiscount());?>
+                            <?php endif; ?>
+                        </span>
+                    </div>
+                    <?php if($viewModel->getTigerDisplayUnitCost3P1PProducts()): ?>
+                        <?php if($viewModel->isBasePriceAndBaseQuantityAvailable() && !$enableQtyBox): ?>
+                            <div class="fs-16 lh-13 ls-0 weight-500">
+                                <span class="cl-secondary"><?= $viewModel->getBaseQuantity();?> for </span>
+                                <span class="fedex-medium">
+                                    <?= $viewModel->getBasePrice(); ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if($viewModel->hasDiscountAndPriceRanges()): ?>
+                            <?php if($viewModel->hasDiscountForMoreQuantities()): ?>
+                                <div class="fs-16 lh-13 ls-0 weight-500 mt-20">
+                                    <span class="cl-secondary"><?= $viewModel->getMaxOriginQuantity() ;?> for </span>
+                                    <?php if($viewModel->hasDiscountPerQtyPrice()): ?>
+                                        <span class="cl-secondary strike-through">
+                                            <?php echo $viewModel->formatCurrency($viewModel->getMaxOriginPrice());?>
+                                        </span>
+                                    <?php endif; ?>
+                                    <span class="fedex-medium">
+                                        <?php echo $viewModel->formatCurrency($viewModel->getMaxDiscountPrice());?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="fs-16 lh-13 ls-0 weight-500">
+                                <span class="cl-secondary">Unit cost: </span>
+
+                                <?php if($viewModel->hasDiscount()): ?>
+                                    <span class="cl-secondary strike-through">
+                                        <?php echo $viewModel->formatCurrency($viewModel->getMinOriginPrice());?>
+                                    </span>
+                                <?php endif; ?>
+
+                                <span class="fedex-medium">
+                                    <?php echo $viewModel->formatCurrency($viewModel->getMinDiscountPrice());?>
+                                </span>
+                            </div>
+                        <?php elseif($viewModel->hasPriceRanges()): ?>
+                            <?php if($viewModel->getMaxOriginQuantity() > 1): ?>
+                                <div class="fs-16 lh-13 ls-0 weight-500 mt-20">
+                                    <span class="cl-secondary"><?= $viewModel->getMaxOriginQuantity();?> for </span>
+                                    <span class="fedex-medium">
+                                        <?php echo $viewModel->formatCurrency($viewModel->getMaxOriginPrice());?>
+                                    </span>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="fs-16 lh-13 ls-0 weight-500">
+                                <span class="cl-secondary">Unit cost: </span>
+
+                                <span class="fedex-medium">
+                                    <?php echo $viewModel->formatCurrency($viewModel->getMinOriginPrice());?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+
+                    <?php if($viewModel->getDiscountSaved()): ?>
+                        <div class="you-saved discount-price cl-primary fedex-medium fs-13 lh-9 ls-0 weight-500">
+                            <img alt="Sale tag icon" class="img-auto valign-middle mr-5" src="<?php echo $this->getViewFileUrl('images/sale.png');?>"/>
+                            <span>You saved</span>
+                            <span><?php echo $viewModel->getDiscountSaved();?>
+                            </span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+
+        <?php if($tigerDisplayUnitCost3P1PProducts && !$viewModel->isProductFxoNonCustomizableProduct()): ?>
+            <div class="unit-cost-warning fs-12 hidden-m-l-xl">
+                <span>
+                    <?php echo __("*The price listed above is an approximation.") ?> <br />
+                    <?php echo __("Actual cost is subject to change based on additional customization.") ?>
+                </span>
+            </div>
+        <?php endif; ?>
+        <?php if($isPricePerceptionToggleEnabled && $pricePerceptionDisclaimerText3p): ?>
+            <div class="pt-7 fs-12 hidden-m-l-xl">
+                <div class="d-inline-block price-perception-wysiwyg">
+                    <?= /* @noEscape */ $pricePerceptionDisclaimerText3p ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php endif; ?>

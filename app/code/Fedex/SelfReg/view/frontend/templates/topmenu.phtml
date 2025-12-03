@@ -1,0 +1,27 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+// B-1145896
+$viewModel = $block->getData('view_model');
+$isSharedCatalogEnabled = $viewModel->isSharedCatalogEnabled();
+$isLoaderRemovedEnabled = $viewModel->isLoaderRemovedEnable();
+
+if ($isSharedCatalogEnabled) { ?>
+    <div class="loading-mask-ajax-menu" data-role="loader">
+        <div class="loader-mvp">
+            <img alt="Loading..." src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_SelfReg/js/topmenu<?= $viewModel->toggleTopMenuSpeedUp() ? '_speedup' : '' ?>": {
+                    "topmenuUrl": "<?= $this->getUrl('selfreg/ajax/topmenu') ?>",
+                    "isLoaderRemovedEnabled": "<?= $isLoaderRemovedEnabled; ?>"
+                }
+            }
+        }
+    </script>
+<?php } ?>

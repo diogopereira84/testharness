@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\SubmitOrderSidebar\Api\Data\DeliveryInterface" type="Fedex\SubmitOrderSidebar\Model\Data\UnifiedDataLayer\Delivery"/>
+    <preference for="Fedex\SubmitOrderSidebar\Api\Data\LineItemInterface" type="Fedex\SubmitOrderSidebar\Model\Data\UnifiedDataLayer\Delivery\LineItem"/>
+    <preference for="Fedex\SubmitOrderSidebar\Api\Data\UnifiedDataLayerInterface" type="Fedex\SubmitOrderSidebar\Model\Data\UnifiedDataLayer"/>
+    <preference for="Fedex\SubmitOrderSidebar\Api\BillingFieldBuilderInterface" type="Fedex\SubmitOrderSidebar\Model\BillingFieldBuilder"/>
+    <preference for="Fedex\SubmitOrderSidebar\Api\Data\BillingFieldOptionInterface" type="Fedex\SubmitOrderSidebar\Model\Data\BillingField"/>
+    <preference for="Fedex\SubmitOrderSidebar\Api\Data\BillingFieldCollectionInterface" type="Fedex\SubmitOrderSidebar\Model\Data\BillingField\Collection"/>
+    <type name="Fedex\SubmitOrderSidebar\Model\UnifiedDataLayer\DataSourceComposite">
+        <arguments>
+            <argument name="sources" xsi:type="array">
+                <item name="customer" xsi:type="object">Fedex\SubmitOrderSidebar\Model\UnifiedDataLayer\Source\CustomerDataSource</item>
+                <item name="order" xsi:type="object">Fedex\SubmitOrderSidebar\Model\UnifiedDataLayer\Source\OrderDataSource</item>
+                <item name="firstPartyDelivery" xsi:type="object">Fedex\SubmitOrderSidebar\Model\UnifiedDataLayer\Source\FirstPartyDeliveryDataSource</item>
+                <item name="thirdPartyDelivery" xsi:type="object">Fedex\SubmitOrderSidebar\Model\UnifiedDataLayer\Source\ThirdPartyDeliveryComposite</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        <plugin name="CustomizeFieldOrderItem" type="Fedex\SubmitOrderSidebar\Plugin\ToOrderItem" sortOrder="1" />
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="fedex_submit_order_sidebar_config_provider" xsi:type="object">Fedex\SubmitOrderSidebar\Model\SubmitOrderSidebarConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

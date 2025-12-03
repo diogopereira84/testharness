@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+        <!-- catalog_migration_process table create for catalog migration import -->
+        <table name="catalog_migration_process" resource="default" engine="innodb" comment="Catalog Migration Process">
+                <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
+                comment="Catalog process queue id"/>
+                <column xsi:type="int" name="catalog_sync_queue_id" padding="10" unsigned="true" nullable="false" comment="Catalog Sync Queue Id"/>
+                <column xsi:type="varchar" name="status" nullable="false" length="10"  comment="Status"/>
+                <column xsi:type="longtext" name="data" nullable="true" comment="Data" disabled='true' />
+                <column xsi:type="longtext" name="json_data" nullable="true" comment="Data"/>
+                <column xsi:type="varchar" name="summary" nullable="true" length="255" comment="Summary"/>
+                <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+                <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+                <constraint xsi:type="primary" referenceId="PRIMARY">
+                        <column name="id"/>
+                </constraint>
+                <constraint xsi:type="foreign" referenceId="CATALOG_SYNC_QUEUE_ID_CATALOG_MIGRATION_PROCESS_CATALOG_SYNC_QUEUE_D" table="legacyCatalogMigrationProcess" column="catalog_sync_queue_id" referenceTable="catalog_sync_queue" referenceColumn="id"/>
+        </table>
+        <!-- Created new is_import coloumn in catalog_sync_queue for catalog migration import -->
+        <table name="catalog_sync_queue" resource="default" engine="innodb" comment="Catalog Sync Queue">
+                <column xsi:type="smallint" name="is_import" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Is Migration Catalog Import"/>
+        </table>
+</schema>

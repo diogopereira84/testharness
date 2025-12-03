@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**@var Fedex\SSO\ViewModel\SsoConfiguration $fclLogin*/
+$fclLogin = $block->getData('fcl_login');
+$popupErrorHeading = "sso/login_error_popup/login_error_popup_heading";
+$popupErrorMessage = "sso/login_error_popup/login_error_popup_message";
+$popupErrorRetryLogin = "sso/login_error_popup/login_error_popup_retry_login";
+?>
+<?php
+$style = 'style="display:none;"';
+$cookieName = $fclLogin->getFCLCookieNameToggle() ? $fclLogin->getFCLCookieConfigValue() : 'fdx_login';
+if (
+    $fclLogin->getLoginErrorCode() &&
+    $fclLogin->getCustomCookie($cookieName) != 'no'
+) {
+    $style = '';
+}
+?>
+<div class="fcl-login-error-popup" id="fcl-login-error-popup" role="alert" aria-label="fcl-login-error-popup" <?= $style; ?>>
+    <div class="fcl-login-error-popup-warning">
+        <img src="<?= $escaper->escapeHtml(__($block->getViewFileUrl('images/sso/warning.png')));?>"
+        alt="Warning Icon">
+    </div>
+    <div class="fcl-login-error-popup-container">
+        <div class="heading">
+            <?= $escaper->escapeHtml(__($fclLogin->getConfigValue($popupErrorHeading))) ?>
+        </div>
+        <div class="text-section">
+            <?= $escaper->escapeHtml(__($fclLogin->getConfigValue($popupErrorMessage))) ?>
+        </div>
+        <div class="retry-login-link">
+            <a href="javascript:void(0)" id="retry-login" data-mage-init='{"retry-link":{}}'>
+                <?= $escaper->escapeHtml(__($fclLogin->getConfigValue($popupErrorRetryLogin))) ?>
+            </a>
+        </div>
+    </div>
+    <div class="login-error-popup-error-close"></div>
+</div>
+<script type="text/x-magento-init">
+{
+        "*": {
+                "Fedex_SSO/js/fclprofile": {
+                }
+        }
+}
+</script>

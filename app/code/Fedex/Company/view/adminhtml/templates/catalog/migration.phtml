@@ -1,0 +1,31 @@
+<?php
+/**
+ * @author Fedex
+ * @package Fedex_Company
+ */
+?>
+<div class="admin__field-label">
+    <label>
+        <span><?= $block->escapeHtml(__('Upload CSV')); ?></span>
+    </label>
+</div>
+<div class="admin__field-control">
+    <input class="admin__control-text lagecy-catalog-input" type="text" readonly />
+    <button class="lagecy-catalog-browse-btn">
+        <span><?= $block->escapeHtml(__('Browse')); ?></span>
+    </button>
+    <button class="lagecy-catalog-confirm-btn primary" style="display: none">
+        <span><?= $block->escapeHtml(__('Confirm')); ?></span>
+    </button>
+    <input class="admin__control-file lagecy-catalog-browse-file" type="file" style="display: none;"/>
+</div>
+<?php echo $this->getBlockHtml('formkey'); ?>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "migrateLagecyCatalogDataHandler"
+    ], function($, migrateLagecyCatalogDataHandler){
+        let migrateRequestUrl = '<?= $block->getUrl('catalogmigration/index/migration') ?>';
+        migrateLagecyCatalogDataHandler.init(migrateRequestUrl);
+    });
+</script>

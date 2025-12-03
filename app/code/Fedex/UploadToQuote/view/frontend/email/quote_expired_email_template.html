@@ -1,0 +1,157 @@
+<!--@subject Your Quote is Expired @-->
+<!--@vars {
+"var user_name|raw":"User Name",
+"var quote_id|raw":"323332",
+"var items":"Items",
+"var sub_total|raw":"subTotal",
+"var total|raw":"Total",
+"var quote_placed_date":"Quote Placed On",
+"var quote_expiration_date":"Quote Expiration Date",
+"var is_epro_customer":"isEproCustomer",
+"var is_bid_checkout_enable":"Online Fuse Bid Checkout Enabled",
+"var store_location_email":"Store Location Email",
+"var store_location_phone":"Store Location Phone",
+"var store_location_address_line_1":"Store Location Address Line 1",
+"var store_location_address_line_2":"Store Location Address Line 2",
+"var store_location_address_city_state_pincode":"Store Location City State Zip",
+"var show_store_info":"Show Store Info"
+} @-->
+
+<div class="email-container">
+	<div class="content-section">
+		<div class="email-solutation"
+			style="margin-top:0;margin-bottom:48px;font-size:16px;line-height:24px;font-weight:400;color:#333;">
+			<span>Hi {{var user_name|raw}},</span><br><br>
+			{{if show_store_info}}
+			{{trans "We have not received approval for your quote within the allotted time period and"}}<br>{{trans "your quote has expired."}}<br><br>
+			{{trans "Thank you for choosing FedEx Office. We look forward to working with you again"}}<br>{{trans "soon!"}}
+			{{else}}
+			{{trans "We wanted to inform you that your quote has expired. If you would like to receive a new quote or
+			have any questions, please feel free to contact your local FedEx Office."}}<br><br>
+
+			{{trans "We&rsquo;d love the opportunity to earn your business and show how our team of friendly experts can
+			provide flexible solutions to make your copying, printing, signage, and large format needs easier, faster,
+			and more reliable."}}<br><br>
+
+			{{trans "We sincerely appreciate your business."}}<br>
+			{{/if}}
+		</div>
+		{{if !show_store_info}}
+			<div class="store-info" style="margin-bottom:24px; font-family: 'FedEx Sans Regular'; color: #333;">
+				<div style="font-weight:700;font-size:18px;line-height:24px;margin-bottom:8px;">
+					Store Information
+				</div>
+				<div style="font-weight: 400; font-size: 14px; line-height: 24px; color: #407177;">
+					<a href="https://www.google.com/maps/search/?api=1&query={{var store_location_address_line_1 | url_encode}}+{{var store_location_address_city_state_pincode | url_encode}}"
+						target="_blank" style="color: #407177; text-decoration: underline;">
+						{{var store_location_address_line_1}}
+					</a><br>
+					<a href="https://www.google.com/maps/search/?api=1&query={{var store_location_address_city_state_pincode | url_encode}}"
+						target="_blank" style="color: #407177; text-decoration: underline;">
+						{{var store_location_address_city_state_pincode}}
+					</a><br>
+					<span style="color: #000000;">{{var store_location_phone|raw}}</span><br>
+					<a href="mailto:{{var store_location_email|raw}}" style="color: #407177; text-decoration: underline;">
+						{{var store_location_email|raw}}
+					</a>
+				</div>
+			</div>
+		{{/if}}
+		<div class="email-status">
+			<span class="email-summary"
+				style="font-weight:700;font-size:18px;line-height:24px;text-transform:uppercase;color:#333;font-style:normal;">{{trans
+				"Summary"}}</span><br>
+			<span class="declined"
+				style="color:#E3002D;text-align:right;font-size:18px;font-style:italic;font-weight:700;line-height:24px;">{{trans
+				"Expired"}}</span>
+		</div>
+		<div class="quote-info">
+			<span class="quote-no" style="color:#333;">Quote Number: {{var quote_id|raw}}</span>
+		</div>
+		<div>
+			<span class="quote-expiration">Quote Expiration Date: {{var quote_expiration_date}}</span>
+		</div>
+		<div class='field-container'>
+			{{layout handle="email_quote_decline_customer_items" items=$items area="frontend"}}
+		</div>
+		<hr>
+		<div class="quote-place-date"
+			style="margin-left:8px;font-size:14px;line-height:24px;font-weight:400;color:#333;line-height:24px;font-style:normal;">
+			Quote Placed On: {{var quote_placed_date}}</div>
+	</div>
+	<div class="quote-footer"
+		style="margin-left:8px;font-size:16px;line-height:24px;font-weight:400;color:#333;margin-bottom:48px;">
+		If you have questions about your quote, please call {{var store_location_phone|raw}} or email us at {{var
+		store_location_email|raw}}. We look forward to working with you again soon!
+	</div>
+</div>
+<style>
+	.email-solutation {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-top: 48px;
+		margin-bottom: 48px;
+	}
+
+	.email-summary {
+		color: #333;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 24px;
+		text-transform: uppercase;
+	}
+
+	.declined {
+		color: #E3002D;
+		font-size: 18px;
+		font-style: italic;
+		font-weight: 700;
+		line-height: 24px;
+	}
+
+	.quote-no {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.quote-expiration {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.quote-info {
+		color: #0078B4;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.quote-place-date {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-bottom: 48px;
+	}
+
+	.quote-footer {
+		font-family: 'FedEx Sans Regular';
+		font-size: 16px;
+	}
+</style>

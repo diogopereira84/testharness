@@ -1,0 +1,36 @@
+<?php
+/**
+ * @var $block \Magento\CatalogSearch\Block\Advanced\Result
+ */
+/** this changes need for valid apply filters and configuration before search process is started */
+$productList = $block->getProductListHtml();
+?>
+
+<?php if (!$block->getResultCount()) : ?>    
+    <h2 class="toolbar-title">
+        <?php echo __('Showing 0 results for: \'%1\'', $block->escapeHtml($block->getSearchValues())) ?>
+    </h2> 
+    <div class="noresult noresult--bg-red">
+        <div class="noresult__alert">
+            <div class="noresult__icon"></div>
+        </div>
+        <div class="noresult__content noresult--bg-white noresult--brdr-red">
+            <p class="noresult__message">
+                <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('We can’t find any items matching these search criteria')) ?>
+                <?= /* @noEscape */ $block->getAdditionalHtml() ?>
+                <?php if ($messages = $block->getNoteMessages()) : ?>
+                    <?php foreach ($messages as $message) : ?>
+                        <br /><?= /* @noEscape */ $message ?>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            </p>
+            <a class="noresult__link" href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search')) ?></a>
+        </div>
+    </div>
+<?php endif; ?>
+
+<?php if ($block->getResultCount()) : ?>
+    <h2 class="toolbar-title"><?php echo __('Showing %1 results for: \'%2\'', $block->getResultCount(), $block->escapeHtml($block->getSearchValues())) ?></h2>
+    <div class="search results"><?= /* @noEscape */ $productList ?></div>
+<?php endif; ?>
+<?php $block->getSearchCriterias(); ?>

@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+   <head>
+      <link src="Fedex_EnhancedProfile::js/navigation.js"/>
+   </head>
+   <body>
+      <referenceBlock name="customer_account_navigation">
+         <block class="Fedex\EnhancedProfile\Block\Account\Navigation" name="preferences-link" cacheable="false">
+            <arguments>
+              <argument name="path" xsi:type="string">customer/account/preferences</argument>
+              <argument name="label" xsi:type="string">Preferences</argument>
+              <argument name="sortOrder" xsi:type="number">140</argument>
+            </arguments>
+         </block>
+         <block class="Fedex\EnhancedProfile\Block\Account\ManageUserLink"
+                   name="customer-account-company-company-users-link" cacheable="false" after="-">
+                <arguments>
+                    <argument name="path" xsi:type="string">company/users</argument>
+                    <argument name="label" xsi:type="helper" helper="Fedex\SelfReg\Helper\Data::getLabel"></argument>
+                    <argument name="sortOrder" xsi:type="number">90</argument>
+                </arguments>
+            </block>
+      </referenceBlock>
+      <!-- Remove unwanted account navigation links -->
+      <!--Customer balance link-->
+      <referenceBlock name="customer-account-navigation-customer-balance-link" remove="true" />
+      <!-- Downloadable product link -->
+      <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true" />
+      <!-- Subscription link -->
+      <referenceBlock name="customer-account-navigation-newsletter-subscriptions-link" remove="true" />
+      <!-- Billing agreement link -->
+      <referenceBlock name="customer-account-navigation-billing-agreements-link" remove="true" />
+      <!-- Product review link -->
+      <referenceBlock name="customer-account-navigation-product-reviews-link" remove="true" />
+      <!-- My credit card link -->
+      <referenceBlock name="customer-account-navigation-my-credit-cards-link" remove="true" />
+      <!-- Contact Information heading -->
+      <referenceBlock name="customer-account-navigation-account-link" class="Fedex\EnhancedProfile\Block\Account\ContactInformation">
+         <arguments>
+            <argument name="label" xsi:type="string" translate="true">Contact &amp; Login</argument>
+         </arguments>
+      </referenceBlock>
+      <!-- Account edit link -->
+      <referenceBlock name="customer-account-navigation-account-edit-link" remove="true" />
+      <!-- Address link -->
+      <referenceBlock name="customer-account-navigation-address-link" remove="true" />
+      <!-- Orders link -->
+      <referenceBlock name="customer-account-navigation-orders-link" remove="true" />
+      <!-- Wish list link -->
+      <referenceBlock name="customer-account-navigation-wish-list-link" remove="true" />
+      <!-- Gift card link -->
+      <referenceBlock name="customer-account-navigation-gift-card-link" remove="true" />
+      <!-- Order by SKU -->
+      <referenceBlock name="customer-account-navigation-checkout-sku-link" remove="true" />
+      <!-- Gift registry -->
+      <referenceBlock name="customer-account-navigation-giftregistry-link" remove="true" />
+      <!-- Reward points -->
+      <referenceBlock name="customer-account-navigation-reward-link" remove="true" />
+      <!-- Company Struture -->
+      <referenceBlock name="customer-account-navigation-company-link" remove="true" />
+      <!-- Invitation Link -->
+      <referenceBlock name="customer-account-navigation-magento-invitation-link" remove="true" />
+      <!-- B-1271828-My Profile should be similar to that of retail -->
+      <referenceBlock name="customer-account-navigation-company-profile-link" remove="true"/>
+      <referenceBlock name="customer-account-navigation-purchase-order-rule-link" remove="true"/>
+      <referenceBlock name="purchase.order.index.my" remove="true"/>
+      <referenceBlock name="customer-account-navigation-quotes-link">
+         <arguments>
+            <argument name="label" xsi:type="string" translate="true">My Quotes</argument>
+            <argument name="sortOrder" xsi:type="number">200</argument>
+            <argument name="attributes" xsi:type="array">
+               <item name="class" xsi:type="string">my-quotes-epro-sidebar</item>
+            </argument>
+         </arguments>
+      </referenceBlock>
+      <referenceBlock name="customer-account-navigation-quotes-link" remove="false"/>
+      <referenceBlock name="customer-account-navigation-personal-address-book" remove="false" />
+      <referenceBlock name="customer-account-navigation-company-users-link" remove="true"/>
+      <referenceBlock name="customer-account-navigation-purchaseorder-link" remove="true"/>
+      <referenceBlock name="my-purchase-orders" remove="true"/>
+   </body>
+</page>

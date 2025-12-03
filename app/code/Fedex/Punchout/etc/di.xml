@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+    <preference for="Fedex\Punchout\Api\CustomerInterface" type="Fedex\Punchout\Model\Customer"/>
+    <preference for="Magento\Framework\Webapi\Rest\Response\Renderer\Xml" type="Fedex\Punchout\Rest\Response\Xml"/>
+    <preference for="Fedex\Punchout\Api\Data\ConfigInterface" type="Fedex\Punchout\Model\Config"/>
+    <type name="Magento\Framework\Webapi\Rest\Request">
+        <plugin name="force_txt_response" type="Fedex\Punchout\Plugin\Magento\Framework\Webapi\Rest\Request"/>
+    </type>
+    <type name="Magento\Framework\Controller\ResultInterface">
+        <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin" disabled="true"/>
+    </type>
+    <type name="Magento\Framework\Webapi\Rest\Response\RendererFactory">
+        <plugin sortOrder="1" name="fedex_punchout_renderer_factory"
+                type="Fedex\Punchout\Plugin\Webapi\Rest\Response\RendererFactoryPlugin"/>
+    </type>
+</config>

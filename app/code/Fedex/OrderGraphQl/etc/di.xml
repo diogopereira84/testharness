@@ -1,0 +1,19 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Fedex\OrderGraphQl\Model\Resolver\DataProvider\OrderSearchRequest">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="created_at" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\CreatedAtFilterStrategy</item>
+                <item name="customer_email" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\EmailFilterStrategy</item>
+                <item name="customer_firstname" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\FirstnameFilterStrategy</item>
+                <item name="increment_id" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\IncrementIdFilterStrategy</item>
+                <item name="customer_lastname" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\LastnameFilterStrategy</item>
+                <item name="shipping_due_date" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\ShippingDueDateFilterStrategy</item>
+                <item name="status" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\StatusFilterStrategy</item>
+                <item name="telephone" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\TelephoneFilterStrategy</item>
+                <item name="gtn" xsi:type="object">Fedex\OrderGraphQl\Model\Filter\GTNFilterStrategy</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Fedex\OrderGraphQl\Api\GetPoliticalDisclosureInformationInterface"
+                type="Fedex\OrderGraphQl\Model\GetPoliticalDisclosureInformation"/>
+</config>

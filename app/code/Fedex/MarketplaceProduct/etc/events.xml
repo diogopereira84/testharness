@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="mirakl_offer_import_after">
+        <observer name="mirakl_connector_refresh_price"
+                  instance="Fedex\MarketplaceProduct\Observer\OfferImportAfterRefreshPriceObserver"/>
+    </event>
+    <event name="admin_system_config_changed_section_ondemand_setting">
+        <observer name="fedex_marketplace_product_config_change_observer" instance="Fedex\MarketplaceProduct\Observer\UpdateMktProductCategoriesObserver" />
+    </event>
+    <event name="catalog_product_import_bunch_save_after">
+        <observer name="catalog_product_import_catalog_observer" instance="Fedex\MarketplaceProduct\Observer\UpdateCatalogObserver"/>
+    </event>
+
+</config>

@@ -1,0 +1,169 @@
+<?php
+/** @var Fedex\EnhancedProfile\ViewModel\CompanySettings $companySettings */
+$companySettings = $block->getData('company_settings');
+$companyLogo = $companySettings->getCompanyLevelSiteLogo();
+$companyConfiguration = $companySettings->getCompanyConfiguration();
+
+// Data Sync For Notification Banner Settings
+$notificationBannerConfigurations = $companySettings->getCompanyConfigNotificationBanner();
+
+// Data Sync For Delivery Options Settings
+$isDeliveryEnabled = !empty($companyConfiguration->getIsDelivery())
+    ? $companyConfiguration->getIsDelivery() : "0";
+$isPickupEnabled = !empty($companyConfiguration->getIsPickup()) ? $companyConfiguration->getIsPickup() : "0";
+$isHcToggle = !empty($companyConfiguration->getHcToggle()) ? $companyConfiguration->getHcToggle() : "0";
+$deliveryOptions = !empty($companySettings->getAllowedDeliveryOptions())
+    ? $companySettings->getAllowedDeliveryOptions() : [];
+
+// Data Sync For Order Confirmation Email Settings
+$isOrderConfirmationEmailEnabled = !empty($companyConfiguration->getIsSuccessEmailEnable())
+    ? $companyConfiguration->getIsSuccessEmailEnable() : "0";
+
+// Data Sync For Catalog and Document User Settings
+$catalogDocumentUserConfigData = [
+    'is_reorder_enabled' => $companySettings->getCompanyConfigReorderEnabled(),
+    'allow_own_document' => !empty($companyConfiguration->getAllowOwnDocument())
+        ? $companyConfiguration->getAllowOwnDocument() : "0",
+    'allow_shared_catalog' => !empty($companyConfiguration->getAllowSharedCatalog())
+        ? $companyConfiguration->getAllowSharedCatalog() : "0",
+    'box_enabled' => !empty($companyConfiguration->getBoxEnabled())
+        ? $companyConfiguration->getBoxEnabled() : "0",
+    'dropbox_enabled' => !empty($companyConfiguration->getDropboxEnabled())
+        ? $companyConfiguration->getDropboxEnabled() : "0",
+    'google_enabled' => !empty($companyConfiguration->getGoogleEnabled())
+        ? $companyConfiguration->getGoogleEnabled() : "0",
+    'microsoft_enabled' => !empty($companyConfiguration->getMicrosoftEnabled())
+        ? $companyConfiguration->getMicrosoftEnabled() : "0",
+];
+$defaultSiteLogoIcon = $block->getViewFileUrl('Fedex_EnhancedProfile::images/sitelogo.png');
+$downArrow = $block->getViewFileUrl('Fedex_EnhancedProfile::images/down.png');
+$upArrow = $block->getViewFileUrl('Fedex_EnhancedProfile::images/up-arrow.png');
+$infoWarningIcon = $block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');
+$popupInfoIcon = $block->getViewFileUrl('Fedex_NotificationBanner::images/lightbulb-icon.png');
+$selectedCheckoboxIcon = $block->getViewFileUrl('Fedex_CatalogMvp::images/selected-checkbox.png');
+$warningIconImage = $block->getViewFileUrl('Fedex_EnhancedProfile::images/warning-sitelevel-account.png');
+
+/** @var Fedex\EnhancedProfile\ViewModel\EnhancedProfile $enhancedProfile */
+$enhancedProfile = $block->getData('enhanced_profile');
+?>
+<div class="company-settings">
+    <form class="company-settings-form" method="post" enctype="multipart/form-data" id="company-settings-form">
+     <input type="hidden" name="company_id" id="company_id" value="<?=$companySettings->getCompanyId()?>">
+    <div class="company-settings-save-section" id="company-settings-save-section">
+        <h3 class="save-changes-title">
+            <?= $escaper->escapeHtml(__("Please save any changes made to any of the sections below.")) ?>
+        </h3>
+        <button type="submit" class="save-changes-btn" id="save-changes-btn">
+            <span class="save-changes-btn-title"><?= $escaper->escapeHtml(__("SAVE CHANGES")) ?></span>
+        </button>
+    </div>
+    <div class="ëxpand-all-section">
+        <span class="ëxpand-all" id="expand-all" tabindex="0"><?= $escaper->escapeHtml(__("EXPAND ALL")) ?></span>
+        <span class="collapse-all" tabindex="0"><?= $escaper->escapeHtml(__("COLLAPSE ALL")) ?></span>
+    </div>
+    <div class='company-settings-accordion'>
+        <ul class='company-settings-details'>
+            <li class="accordion-li site-logo">
+                <a href='javascript:void(0)'>
+                    <span class="accordion-title">
+                        <?= $escaper->escapeHtml(__("Site Logo Settings")) ?>
+                    </span>
+                    <img src="<?=$downArrow;?>" alt="down-icon" class="down-icon">
+                    <img src="<?=$upArrow;?>" alt="up-icon" class="up-icon">
+                </a>
+                <ul class="accordion-ul site-logo-settings">
+                    <?= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")
+                        ->setTemplate("Fedex_EnhancedProfile::company-settings/sitelogo-settings.phtml")
+                        ->setCompanyLogo($companyLogo)
+                        ->toHtml() ?>
+                </ul>
+            </li>
+            <li class="accordion-li order-confirmation">
+                <a href='javascript:void(0)'>
+                    <span class="accordion-title">
+                        <?= $escaper->escapeHtml(__("Order Confirmation Settings")) ?>
+                    </span>
+                    <img src="<?=$downArrow;?>" alt="down-icon" class="down-icon">
+                    <img src="<?=$upArrow;?>" alt="up-icon" class="up-icon">
+                </a>
+                <ul class="accordion-ul order-confirmation-settings">
+                    <?= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")
+                        ->setTemplate("Fedex_EnhancedProfile::company-settings/orderconfirmation-settings.phtml")
+                        ->setInfoWarningIcon($infoWarningIcon)
+                        ->setOrderConfirmationEmailEnabled($isOrderConfirmationEmailEnabled)
+                        ->toHtml() ?>
+                </ul>
+            </li>
+            <li class="accordion-li notification-banners">
+                <a href='javascript:void(0)'>
+                    <span class="accordion-title">
+                        <?= $escaper->escapeHtml(__("Notification Banner Settings")) ?>
+                    </span>
+                    <img src="<?=$downArrow;?>" alt="down-icon" class="down-icon">
+                    <img src="<?=$upArrow;?>" alt="up-icon" class="up-icon">
+                </a>
+                <ul class="accordion-ul notification-banner-settings">
+                    <?= $this->getLayout()->createBlock("Fedex\EnhancedProfile\Block\Account\CompanySettings\NotificationBannerSettings")
+                        ->setTemplate("Fedex_EnhancedProfile::company-settings/notificationbanner-settings.phtml")
+                        ->setInfoWarningIcon($infoWarningIcon)
+                        ->setWarningIconImage($warningIconImage)
+                        ->setPopupInfoIcon($popupInfoIcon)
+                        ->setCompanyConfigNotificationBanner($notificationBannerConfigurations)
+                        ->toHtml() ?>
+                </ul>
+            </li>
+            <li class="accordion-li delivery-options">
+                <a href='javascript:void(0)'>
+                    <span class="accordion-title">
+                        <?= $escaper->escapeHtml(__("Delivery Options Settings")) ?>
+                    </span>
+                    <img src="<?=$downArrow;?>" alt="down-icon" class="down-icon">
+                    <img src="<?=$upArrow;?>" alt="up-icon" class="up-icon">
+                </a>
+                <ul class="accordion-ul delivery-options-settings">
+                    <?= $this->getLayout()->createBlock("Fedex\EnhancedProfile\Block\Account\CompanySettings\DeliveryOptions")
+                        ->setTemplate("Fedex_EnhancedProfile::company-settings/deliveryoptions-settings.phtml")
+                        ->setInfoWarningIcon($infoWarningIcon)
+                        ->setCheckboxCheckedIcon($selectedCheckoboxIcon)
+                        ->setCompanyIsDeliveryEnabled($isDeliveryEnabled)
+                        ->setCompanyIsPickupEnabled($isPickupEnabled)
+                        ->setCompanyIsHcToggle($isHcToggle)
+                        ->setCompanySelectedDeliveryOptions($deliveryOptions)
+                        ->toHtml() ?>
+                </ul>
+            </li>
+            <li class="accordion-li catalog-and-document-user">
+                <a href='javascript:void(0)'>
+                    <span class="accordion-title">
+                        <?= $escaper->escapeHtml(__("Catalog and Document User Settings")) ?>
+                    </span>
+                    <img src="<?=$downArrow;?>" alt="down-icon" class="down-icon">
+                    <img src="<?=$upArrow;?>" alt="up-icon" class="up-icon">
+                </a>
+                <ul class="accordion-ul catalog-and-document-user-settings">
+                    <?= $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")
+                        ->setTemplate("Fedex_EnhancedProfile::company-settings/catalogdocumentuser-settings.phtml")
+                        ->setInfoWarningIcon($infoWarningIcon)
+                        ->setCatalogDocumentUserConfigData($catalogDocumentUserConfigData)
+                        ->toHtml() ?>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    </form>
+</div>
+<script type="text/x-magento-init">
+    {
+        ".company-settings-accordion": {
+            "Fedex_EnhancedProfile/js/company-settings" : {
+                "defaultSiteLogo": "<?= /* @noEscape */ $defaultSiteLogoIcon ?>",
+                "companyLogo": "<?= /* @noEscape */ $companyLogo ?>",
+                "infoIconImage": "<?= /* @noEscape */ $popupInfoIcon ?>",
+                "warningIconImage": "<?= /* @noEscape */ $warningIconImage ?>",
+                "ctaText": "<?= /* @noEscape */ isset($notificationBannerConfigurations['cta_text']) ? $notificationBannerConfigurations['cta_text'] : '' ?>",
+                "ctaLink": "<?= /* @noEscape */ isset($notificationBannerConfigurations['cta_link']) ? $notificationBannerConfigurations['cta_link'] : '' ?>",
+                "explorersCompanySettingsCustomerAdmin": "<?= $enhancedProfile->isCompanySettingToggleEnabled(); ?>"
+            }
+        }
+    }
+</script>

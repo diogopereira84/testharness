@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="xmen_order_approval_b2b" translate="label" type="select" sortOrder="385" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>E-406987 - X-MEN-Commercial B2B Approval Workflow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_b2b_order_declined_reorder" translate="label" type="select" sortOrder="385" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>X-MEN B2b Order Declined Reorder-B-2246508</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="fedex" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <group id="b2b_order_approval_config" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>B2B Order Approval Setting</label>
+                <field id="order_success_toast_msg" translate="label comment" type="textarea" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Sucess Toast Message</label>
+                    <comment>Add message for order success toast message</comment>
+                </field>
+                <field id="order_decline_toast_msg" translate="label comment" type="textarea" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Decline Toast Message</label>
+                    <comment>Add message for order decline toast message</comment>
+                </field>
+                <field id="order_approve_toast_msg" translate="label comment" type="textarea" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Approve Toast Message</label>
+                    <comment>Add message for order approve toast message</comment>
+                </field>
+            </group>
+            <group id="transactional_email">
+                <!--Order Approval B2b Request Confirmation Email Configuration-->
+                <field id="b2b_order_request_confirmation_email_enable" type="select"
+                       translate="label" sortOrder="71" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Order Approval B2b Request Confirmation Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Order Approval B2b Request Confirmation Email</comment>
+                </field>
+                <field id="b2b_order_request_confirmation_email_template" translate="label"
+                       type="select" sortOrder="72" showInDefault="1" showInStore="1"
+                       showInWebsite="1">
+                    <label>Order Approval B2b Request Confirmation Email Template</label>
+                    <comment>Select email template for Order Approval B2b Request Confirmation</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <!--Order Approval B2b Request Decline Email Configuration-->
+                <field id="b2b_order_request_decline_email_enable" type="select"
+                       translate="label" sortOrder="73" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Order Approval B2b Request Decline Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Order Approval B2b Request Decline Email</comment>
+                </field>
+                <field id="b2b_order_request_decline_email_template" translate="label"
+                       type="select" sortOrder="74" showInDefault="1" showInStore="1"
+                       showInWebsite="1">
+                    <label>Order Approval B2b Request Decline Email Template</label>
+                    <comment>Select email template for Order Approval B2b Request Decline</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <!--Order Approval B2b Admin Review Email Configuration-->
+                <field id="b2b_order_admin_review_email_enable" type="select"
+                       translate="label" sortOrder="75" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Order Approval B2b Admin Review Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Order Approval B2b Admin Review Email</comment>
+                </field>
+                <field id="b2b_order_admin_review_email_template" translate="label"
+                       type="select" sortOrder="76" showInDefault="1" showInStore="1"
+                       showInWebsite="1">
+                    <label>Order Approval B2b Admin Review Email Template</label>
+                    <comment>Select email template for Order Approval B2b Admin Review</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <!--Order Approval B2b Expired Email Configuration-->
+                <field id="b2b_order_expired_email_enable" type="select"
+                       translate="label" sortOrder="77" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Order Approval B2b Expired Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Order Approval B2b Expired Email</comment>
+                </field>
+                <field id="b2b_order_expired_email_template" translate="label"
+                       type="select" sortOrder="78" showInDefault="1" showInStore="1"
+                       showInWebsite="1">
+                    <label>Order Approval B2b Expired Email Template</label>
+                    <comment>Select email template for Order Approval B2b Expired</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

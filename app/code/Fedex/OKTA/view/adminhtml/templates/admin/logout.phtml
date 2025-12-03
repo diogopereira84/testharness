@@ -1,0 +1,25 @@
+<?php
+/**
+ * @var \Fedex\OKTA\Block\Adminhtml\Auth\Logout $block
+ */
+?>
+
+<form method="post" action="" id="login-form" data-mage-init='{"form": {}, "validation": {}}' autocomplete="off">
+    <fieldset class="admin__fieldset">
+        <legend class="admin__legend">
+            <span><?= $block->escapeHtml(__('You have logged out.')) ?></span>
+        </legend><br/>
+        <p>
+            <button onclick="setLocation('<?= $block->escapeUrl($block->getFrontendUrlHelper()->getBaseUrl()); ?>')"
+                    type="button">
+                <?= $block->escapeHtml(__('Go to the storefront')); ?>
+            </button>
+        </p>
+        <p>
+            <button onclick="setLocation('<?= $block->escapeUrl($block->getUrl('*')); ?>')"
+                    type="button">
+                <?= $block->escapeHtml(__('Go back to login page')); ?>
+            </button>
+        </p>
+    </fieldset>
+</form>

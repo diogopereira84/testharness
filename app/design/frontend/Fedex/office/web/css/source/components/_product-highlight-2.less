@@ -1,0 +1,94 @@
+& when (@media-common = true) {
+    .product-highlight-design-2 {
+        margin-left: 16px !important;
+        margin-right: 16px !important;
+        figure > img {
+            width: 100%;
+        }
+
+        .pagebuilder-column {
+            div:not(:first-child) {
+                margin-top: auto;
+            }
+        }
+
+        .slick-dots {
+            padding: 5px 0;
+
+            li {
+                height: 10px;
+                width: 10px;
+
+                button {
+                    width: 12px;
+                    height: 12px;
+
+                    border: none;
+
+                    background-color: #D8D8D8;
+
+                }
+
+                &.slick-active {
+                    button {
+                        background-color: #55656C;
+                    }
+                }
+            }
+        }
+
+        .slick-slide {
+            display: flex;
+            justify-content: center;
+            padding: 0;
+        }
+        
+        .slick-arrow {
+            display:none !important;
+        }
+
+        &.photobook {
+            .pagebuilder-button-link {
+                &, &:active, &:focus, &:visited &:hover {
+                    font-family: 'FedEx Sans Bold';
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .product-highlight-design-2 {
+        .pagebuilder-column {
+            &:first-child {
+                margin-right: 25px !important;
+            }
+
+            &:not(:first-child):not(:last-child) {
+                margin-left: 25px !important;
+                margin-right: 25px !important;
+            }
+
+            &:last-child {
+                margin-left: 25px !important;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    div[data-content-type='row'] {
+        .product-highlight-design-2 {
+            margin: 15px 16px !important;
+        }
+    }
+    .product-highlight-design-2 {
+        &:not(.photobook) {
+            .pagebuilder-column {
+                margin: 0 0 15px 0 !important;
+                border: 1px solid #D8D8D8 !important;
+            }
+        }
+    }
+}

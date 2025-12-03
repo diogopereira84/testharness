@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Store\Model\Config\Importer\Processor\Update" type="Fedex\Ondemand\Model\Config\Importer\Processor\Update" />
+    <preference for="Fedex\Ondemand\Api\Data\ConfigInterface" type="Fedex\Ondemand\Model\Config"/>
+    <type name="Magento\Cms\Controller\Noroute\Index">
+        <plugin name="ondemand_noroute_handling_selfreg_landing_page"
+                type="Fedex\Ondemand\Plugin\Cms\Noroute\IndexPlugin" sortOrder="10" />
+    </type>
+</config>

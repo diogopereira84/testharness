@@ -1,0 +1,61 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $helper \Magento\Search\Helper\Data */
+$sdeHelper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+$isCommercialStore = $this->helper('Fedex\Commercial\Helper\CommercialHelper')->isGlobalCommercialCustomer();
+if(!$sdeHelper->getIsSdeStore() && !$isCommercialStore) :
+$helper = $this->helper(\Magento\Search\Helper\Data::class);
+$isMobile = $this->getData('mobile-only'); // This argument is define the mini search block used on megamenu
+$mobileTag = $isMobile ? '-mobile' : '';
+?>
+<div class="block block-search<?= $mobileTag ?> fedex-regular">
+    <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
+    <div class="block block-content">
+        <form class="form minisearch d-flex" id="search_mini_form<?= $mobileTag ?>"
+              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+            <div class="field search d-flex">
+                <label class="label" for="search<?= $mobileTag ?>" data-role="minisearch-label">
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                </label>
+                <div class="control w-100 relative"> 
+                    <input id="search<?= $mobileTag ?>"
+                           data-mage-init='{"quickSearch":{
+                                "formSelector":"#search_mini_form<?= $mobileTag ?>",
+                                "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
+                                "destinationSelector":"#search_autocomplete<?= $mobileTag ?>",
+                                "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>"}
+                           }'
+                           type="text"
+                           name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                           value="<?= /* @noEscape */ $helper->getEscapedQueryText() ?>"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Search for products here...')) ?>"
+                           class="input-text <?= $this->getData('mobile-only') ? 'mobile-search-field' : '' ?> max-cart-limit"
+                           maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                           role="combobox"
+                           aria-haspopup="false"
+                           aria-autocomplete="both"
+                           autocomplete="off"
+                           aria-expanded="false"/>
+                    <div id="search_autocomplete<?= $mobileTag ?>" class="search-autocomplete w-100"></div>
+                    <?= $block->getChildHtml() ?>
+                </div>
+            </div>
+            <div class="actions">
+                    <button type="submit"
+                        class="<?= $isMobile ? '' : 'action search' ?> p-0"
+                        aria-label="Search"
+                    >
+                    </button>
+            </div>
+        </form>
+    </div>
+</div>
+<?php endif; ?>

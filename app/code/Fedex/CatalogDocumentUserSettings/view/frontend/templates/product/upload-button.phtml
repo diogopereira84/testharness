@@ -1,0 +1,20 @@
+<?php
+$helper = $this->helper('Fedex\Delivery\Helper\Data');
+$punchoutHelper = $this->helper('Fedex\Punchout\Helper\Data');
+$siteName = $helper->getCompanySite();
+if ($siteName) {
+    $tazToken = $punchoutHelper->getTazToken();
+} else {
+    $tazToken = null;
+}
+?>
+<button  class="print-upload-button max-cart-limit"
+ onclick="openIframe.uploadPrintProduct(event)('<?php echo '1534436209752-2'; ?>',
+  '<?php echo $siteName; ?>', '<?php echo $tazToken; ?>')" class="upload-product-button">UPLOAD A FILE</button>
+<script type="text/javascript">
+    let openIframe;
+    require(['product'], function(product) {
+        openIframe = product;
+    });
+</script>
+

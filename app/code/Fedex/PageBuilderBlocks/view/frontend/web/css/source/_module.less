@@ -1,0 +1,149 @@
+//
+//   Importing blocks styles
+//
+@import 'blocks/_faq.less';
+@import 'blocks/_canva-carousel.less';
+@import '_shop-by-categories.less';
+
+@tabBackgroundColor: #ffffff;
+@tabHeaderBorderColor: #E3E3E3;
+@tabHeaderColor: #333333;
+@tabHeaderActiveColor: #4D148C;
+@tabHeaderFocusColor: #00699d;
+@learnMoreBtnColor: #0078B4;
+@fontFamilyLight: 'Fedex Sans Light';
+@fontFamilyRegular: 'FedEx Sans Regular';
+@fontFamilyBold: 'FedEx Sans Bold';
+
+.new-marketing-tab-content ul.tabs-navigation {
+    width: 47.5% !important;
+    margin-left: auto !important;
+    list-style-type: none !important;
+    display: flex !important;
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+        width: 100% !important;
+        display: block !important;
+        margin-top: 20px;
+        margin-bottom: 30px !important;
+    }
+    @media only screen and (min-width: 768px) and (max-width: 1024px) {
+        width: 100% !important;
+        margin-top: 20px;
+        margin-bottom: 30px !important;
+    }
+}
+.pagebuilder-column.new-marketing-tab-content {
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+        margin-left: 7px !important;
+        margin-right: 7px;
+    }
+}
+.new-marketing-tab-content {
+    padding-left: 10px;
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+        padding-left: 0px;
+    }
+    @media only screen and (min-width: 768px) and (max-width: 1124px) {
+        padding-left: 0px;
+    }
+    .tabs-navigation li.tab-header {
+        background: @tabBackgroundColor !important;
+        flex: 1 !important;
+        text-align: center !important;
+        @media only screen and (min-width: 320px) and (max-width: 767px) {
+            width: 100%;
+            a.tab-title {
+                border-bottom: 1px solid @tabHeaderBorderColor;
+            }
+        }
+        a.tab-title {
+            padding: 1rem 1rem !important;
+        }
+        a span {
+            color: @tabHeaderColor;
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 32px;
+            font-family: @fontFamilyRegular;
+            @media only screen and (min-width: 768px) and (max-width: 1024px) {
+                line-height: 24px !important;
+            }
+            @media only screen and (min-width: 320px) and (max-width: 767px) {
+                line-height: 24px !important;
+            }
+        }
+    }
+    .tabs-navigation li.tab-header.ui-state-active {
+        a span {
+            color: @tabHeaderActiveColor !important;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 32px;
+            font-family: @fontFamilyBold;
+        }
+        border-bottom: 3px solid @tabHeaderActiveColor !important;
+    }
+    .tabs-navigation li.tab-header:focus {
+        box-shadow: 0px 0px 7px 1px @tabHeaderFocusColor;
+        z-index: 999;
+    }
+    .tabs-navigation li.tab-header:not(.ui-state-active) {
+        border-bottom: 1px solid @tabHeaderBorderColor !important;
+    }
+    .pagebuilder-column .marketing-tab-video .pagebuilder-mobile-hidden {
+        box-sizing: border-box;
+        max-height: 420px !important;
+    }
+    .learn-more-btn {
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 1.1875px;
+        text-align: left;
+        color: @learnMoreBtnColor;
+        .pagebuilder-button-link span {
+            font-family: @fontFamilyBold;
+            font-size: 14px;
+        }
+        .pagebuilder-button-link:focus {
+            box-shadow: 0px 0px 7px 1px @tabHeaderFocusColor;
+            margin-left: 5px;
+        }
+        .pagebuilder-button-link {
+            padding: 0px !important;
+        }
+    }
+    .learn-more-btn [aria-label='learn-more-btn'] {
+        padding: 0;
+    }
+    .marketing-tab-content {
+        font-family: @fontFamilyLight;
+        .elevate_workflow_title {
+            margin-top: 20px;
+            font-family: @fontFamilyLight;
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 32px;
+            text-align: left;
+        }
+        ul {
+            padding-left: 30px;
+            @media only screen and (min-width: 320px) and (max-width: 767px) {
+                padding-left: 25px !important;
+                padding-right: 20px;
+            }
+        }
+        ul > li {
+            color: @tabHeaderColor !important;
+            margin-bottom: 5px !important;
+            font-family: @fontFamilyLight;
+            font-size: 16px !important;
+            line-height: 24px !important;
+            span {
+                strong {
+                    font-weight: 700;
+                    font-family: @fontFamilyBold;
+                }
+            }
+        }
+    }
+}

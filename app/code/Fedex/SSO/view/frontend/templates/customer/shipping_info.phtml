@@ -1,0 +1,56 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$defaultShippinggAddress = $block->getDefaultShippingAddress();
+if (is_array($defaultShippinggAddress)) {
+    
+    if (!empty($defaultShippinggAddress['firstname'])) {
+        echo '<span class="hide-firstname">' .$block->escapeHtml($defaultShippinggAddress['firstname']).'</span>';
+    }
+    
+    if (!empty($defaultShippinggAddress['lastname'])) {
+        echo '<span class="hide-lastname">' .$block->escapeHtml($defaultShippinggAddress['lastname']).'</span><br>';
+    }
+
+    if (!empty($defaultShippinggAddress['company'])) {
+        echo $block->escapeHtml($defaultShippinggAddress['company']).'<br>';
+    }
+
+    if (!empty($defaultShippinggAddress['street'][0])) {
+        echo $block->escapeHtml($defaultShippinggAddress['street'][0]);
+    }
+
+    if (!empty($defaultShippinggAddress['street'][1])) {
+        echo ', '.$block->escapeHtml($defaultShippinggAddress['street'][1]);
+    }
+
+    if (!empty($defaultShippinggAddress['city'])) {
+        echo '<br>'.$block->escapeHtml($defaultShippinggAddress['city']).',';
+    }
+
+    if (!empty($defaultShippinggAddress['region']['region_code'])) {
+        echo ' '.$block->escapeHtml($defaultShippinggAddress['region']['region_code']);
+    }
+
+    if (!empty($defaultShippinggAddress['postcode'])) {
+        echo ' '.$block->escapeHtml($defaultShippinggAddress['postcode']);
+    }
+
+    if (!empty($defaultShippinggAddress['telephone'])) {
+        echo '<br>('.$block->escapeHtml(substr($defaultShippinggAddress['telephone'], 0, 3).') '
+        .substr($defaultShippinggAddress['telephone'], 3, 3).'-'
+        .substr($defaultShippinggAddress['telephone'], 6, 4));
+    }
+
+    if (!empty($defaultShippinggAddress['custom_attributes']['email_id']['value'])) {
+        echo '<br><span class="hide-email">'.$block->escapeHtml(
+            $defaultShippinggAddress['custom_attributes']['email_id']['value']
+        ).'</span>';
+    }
+} else {
+    echo $block->escapeHtml($defaultShippinggAddress);
+}
+?>

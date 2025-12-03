@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ * B-1096386 | Display Quote ID instead on quote name on My Quotes screen
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <columns name="negotiable_quote_columns" component="uiB2bListing">
+        <column name="entity_id" class="Fedex\Orderhistory\Ui\Component\Listing\Column\EntityId" sortOrder="0">
+            <settings>
+                <label translate="true">Quote Id</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+        
+        <column name="quote_name" class="Fedex\Orderhistory\Ui\Component\Listing\Column\Name" component="Magento_NegotiableQuote/js/quote/grid/columns/text_with_title">
+            <settings>
+                <label translate="true">Quote Name</label>
+                <sortable>false</sortable>
+            </settings>
+        </column>
+    </columns>
+</listing>

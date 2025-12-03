@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="adminhtml_company_save_after">
+        <observer name="companySaveAfter" instance="Fedex\Ondemand\Observer\Adminhtml\GenerateCompanyUrl" />
+    </event>
+    <event name="controller_action_predispatch_sales_order_view">
+        <observer name="restrict_website" instance="Fedex\Ondemand\Observer\Adminhtml\BeforeOrderView" />
+    </event>
+</config>

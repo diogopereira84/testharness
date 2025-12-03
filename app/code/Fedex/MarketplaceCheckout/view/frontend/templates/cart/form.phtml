@@ -1,0 +1,212 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
+/**  @var $block \Magento\Checkout\Block\Cart\Grid */
+/** @var $escaper \Magento\Framework\Escaper */
+
+?>
+<?php
+/** @var Fedex\MarketplaceCheckout\ViewModel\Cart $viewModel */
+$viewModel = $block->getData('marketplace_view_model');
+$productUnavailableModel = $block->getData('product_availability_view_model');
+$FEDEX_SELLER_NAME = $viewModel->getFedexSellerName();
+
+
+$viewModelForWarningMessage = $block->getData('viewModelForWarningMessage');
+$warningMessageFlag = $viewModelForWarningMessage->getWarningMessage();
+
+$uploadToQuoteViewModel = $block->getData("uploadtoquote_view_model");
+$isCheckoutQuotePriceDashable = $uploadToQuoteViewModel->checkoutQuotePriceisDashable();
+$styleDisplayNoneButton = ($viewModel->isImprovingUpdateItemQtyCart())?';display:none;':'';
+$emptyCartButtonClass = ($viewModel->isImprovingUpdateItemQtyCart())?'empty_cart_button':'';
+
+?>
+
+<?= $block->getChildHtml('form_before') ?>
+<?php
+if($productUnavailableModel->isE441563ToggleEnabled()){
+   echo $block->getChildHtml('cart.error.message');
+}
+?>
+<form action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updatePost')) ?>" method="post" id="form-validate" data-mage-init='{"Magento_Checkout/js/action/update-shopping-cart":
+              {"validationURL" : "<?= $escaper->escapeUrl($block->getUrl('checkout/cart/updateItemQty')) ?>",
+              "updateCartActionContainer": "#update_cart_action_container"}
+          }' class="form form-cart">
+    <?= $block->getBlockHtml('formkey') ?>
+    <div class="item-text"><?= $escaper->escapeHtml(__('Item')) ?></div>
+    <div class="cart table-wrapper<?= $viewModel->getMergedCells() == 2 ? ' detailed' : '' ?>">
+        <?php if ($block->getPagerHtml()) : ?>
+            <div class="cart-products-toolbar cart-products-toolbar-top toolbar" data-attribute="cart-products-toolbar-top"><?= $block->getPagerHtml() ?>
+            </div>
+        <?php endif ?>
+        <table id="shopping-cart-table" class="cart items data table" data-mage-init='{
+                    "shoppingCart":{
+                        "emptyCartButton": ".action.clear",
+                        "updateCartActionContainer": "#update_cart_action_container"
+                    }
+                }' data-bind="scope: 'cart-vendor-split-scope'">
+
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Shopping Cart Items')) ?></caption>
+            <thead>
+                <tr>
+                    <th class="col item" scope="col"><span><?= $escaper->escapeHtml(__('Item')) ?></span></th>
+                    <th class="col price text-align" scope="col">
+                        <span><?= $escaper->escapeHtml(__('Price')) ?></span>
+                    </th>
+                    <th class="col qty" scope="col"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
+                    <th class="col discount" scope="col"><span><?= $escaper->escapeHtml(__('Discount')) ?></span></th>
+                    <th class="col subtotal" scope="col"><span><?= $escaper->escapeHtml(__('Subtotal')) ?></span></th>
+                </tr>
+            </thead>
+
+            <?php $sellersInCart = $viewModel->getAllSellersInCart() ?>
+            <?php $itemsPrinted = array() ?>
+            <?php $products = $block->getItems() ?>
+
+            <br />
+            <!-- ko foreach: { data: allSellersInfo(), as: 'seller'} -->
+            <tbody class="seller-table">
+                <tr class="marketplace-seller-name product-tooltip">
+                    <td colspan="5">
+                        <div class="name-wrapper">
+                            <span data-bind="text: seller.name"></span>
+                            <!-- ko if: seller.tooltip != '' -->
+                            <div class="tooltip-area seller-tooltip d-flex relative">
+                                <i role="button" tabindex="0" class="pointer" aria-describedby="seller-info-tooltip"></i>
+                                <div id="seller-info-tooltip" role="tooltip" class="tooltip absolute cl-stonegray d-none fedex-light fs-16 lh-24 p-10 weight-300">
+                                    <span data-bind="text: seller.tooltip"></span>
+                                </div>
+                            </div>
+                            <!-- /ko -->
+                        </div>
+                    </td>
+                </tr>
+
+                <?php foreach ($block->getItems() as $k => $_item) : ?>
+
+                    <?php $_product = $_item->getProduct() ?>
+
+                    <?php if (!in_array($k, $itemsPrinted)) : ?>
+                        <!-- ko if: $parent.compareItemSellerName({id: '<?= $_item->getId() ?>', sellerName: seller.name}) -->
+                        <div class="cart item">
+                            <?php if($_product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE): ?>
+                                <tr class="item-info">
+                                    <?= $block->getItemHtml($_item) ?>
+                                    <?php if($productUnavailableModel->isE441563ToggleEnabled() &&
+                                        !$productUnavailableModel->checkProductAvailable($_product)):?>
+                                        <td colspan="6" class="cart-error-message-box">
+                                            <div class="cart-error-message d-flex mb-24">
+                                                <span class="info-icon"></span>
+                                                <div class="cl-error">
+                                                    <div class="fs-16 lh-24 m-0"><?php echo $productUnavailableModel->getProductCartlineErrorMessageTitle();?></div>
+                                                    <i class="fs-16 lh-24 fedex-light weight-300"><?php echo $productUnavailableModel->getProductCartlineErrorMessage();?> </i>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    <?php endif;?>
+                                </tr>
+                            <?php else: ?>
+                                <?= $block->getItemHtml($_item) ?>
+                            <?php endif;?>
+                        </div>
+                        <tr class="border">
+                            <td colspan="6">
+                                <div></div>
+                            </td>
+                        </tr>
+                        <?php array_push($itemsPrinted, $k) ?>
+                        <!-- /ko -->
+                    <?php endif; ?>
+                <?php endforeach ?>
+                <tr class="delivery-methods-section" style="<?= $isCheckoutQuotePriceDashable ? 'display: none' : '' ?>">
+                    <td colspan="6">
+                        <div class="delivery-methods">
+                            <h3><?= __('Delivery Methods') ?></h3>
+                            <div class="delivery-methods-wrapper">
+                                <div class="delivery-method-container" data-bind="attr: {'testid': 'pickup-delivery-method-' + ($index() + 1)},
+                                    visible: $parent.isPickupVisible(seller)">
+                                    <button type="button" class="in-storepickup method" tabindex="0" data-bind="click: $parent.setPickupDeliveryMethod, attr: {name: 'method-' + ($index() + 1), class: $parent.isPreferredDeliveryMethod('pick-up') + ' in-storepickup method'}">
+                                        <div class="icon-area">
+                                            <img class="icon" src="<?php echo $this->getViewFileUrl('Fedex_MarketplaceCheckout::images/icons/store.svg') ?>" alt="Pickup method icon" />
+                                        </div>
+                                        <p class="name">
+                                            <?= __('In-store pickup') ?>
+                                        </p>
+                                        <p class="rate in-store">
+                                            <?= __('Free pickup available') ?>
+                                        </p>
+                                    </button>
+                                </div>
+                                <!-- ko if: $parent.isDeliveryAvailable -->
+                                <div class="delivery-method-container" data-bind="class: seller.name !== $parent.FEDEX_SELLER_NAME ? 'marketplace-seller' : '', attr: {'testid': 'shipping-delivery-method-' + ($index() + 1)}">
+                                    <button type="button" data-bind="click: $parent.setShippingDeliveryMethod, attr: {class: $parent.isPreferredDeliveryMethod('shipping') + ' shipping method'}" class="shipping method" tabindex="0">
+                                        <div class="icon-area">
+                                            <img class="icon" src="<?php echo $this->getViewFileUrl('Fedex_MarketplaceCheckout::images/icons/delivery.svg') ?>" alt="Shipping method icon" />
+                                        </div>
+                                        <p class="name">
+                                            <?= __('Shipping') ?>
+                                        </p>
+                                        <p class="rate">
+                                            <?= __('Rate added at checkout') ?>
+                                        </p>
+                                    </button>
+                                </div>
+                                <!-- /ko -->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+            <!-- /ko -->
+        </table>
+
+        <?php if ($block->getPagerHtml()) : ?>
+            <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar" data-attribute="cart-products-toolbar-bottom"><?= $block->getPagerHtml() ?>
+            </div>
+        <?php endif ?>
+    </div>
+    <div class="cart main actions">
+        <?php if ($block->getContinueShoppingUrl()) : ?>
+            <a class="action continue" href="<?= $escaper->escapeUrl($block->getContinueShoppingUrl()) ?>" title="<?= $escaper->escapeHtml(__('Continue Shopping')) ?>">
+                <span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span>
+            </a>
+        <?php endif; ?>
+        <button type="button" name="update_cart_action" data-cart-empty="" value="empty_cart" title="<?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?>" class="action clear <?= $emptyCartButtonClass?>" id="empty_cart_button" data-testid="clear-shopping-cart">
+            <span><?= $escaper->escapeHtml(__('Clear Shopping Cart')) ?></span>
+        </button>
+
+        <?php if (!$viewModel->isThirdPartyOnlyCart() || $viewModel->isThirdPartyOnlyCartWithAnyPunchoutDisabled()) : ?>
+            <button type="submit" style="background-color:#ffffff;
+                color:#0078B4;
+                width:219px;
+                height:40px;
+                border: 1px solid #0078B4;
+                font-weight: 700<?= $styleDisplayNoneButton?>" name="update_cart_action" data-cart-item-update="" value="update_qty" title="<?= $escaper->escapeHtml(__('UPDATE SHOPPING CART')) ?>" class="action update" data-testid="update-shopping-cart" id="update_shopping_cart">
+                <span><?= $escaper->escapeHtml(__('UPDATE SHOPPING CART')) ?></span>
+            </button>
+        <?php endif; ?>
+        <input type="hidden" value="" id="update_cart_action_container" data-cart-item-update="" />
+    </div>
+</form>
+<?= $block->getChildHtml('checkout.cart.order.actions') ?>
+<?= $block->getChildHtml('shopping.cart.table.after') ?>
+
+<script>
+    let body = document.querySelector('body');
+
+    body.classList.add('marketplace-cart');
+</script>
+<script type="text/x-magento-init">
+    {
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "cart-vendor-split-scope": {
+                    "component": "Fedex_MarketplaceCheckout/js/view/cart/cart-vendor-split",
+                    "combinedWarningMessageEnable": "<?= (bool) $warningMessageFlag; ?>"
+                }
+            }
+        }
+    }
+}
+</script>

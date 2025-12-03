@@ -1,0 +1,48 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="orders_cleanup" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<label>Orders cleanup</label>
+			<tab>fedex_configurations</tab>
+			<resource>Fedex_OrdersCleanup::config_fedex_orderscleanup</resource>
+			<group id="remove" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Remove Orders</label>
+				<field id="is_enabled" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Is Enabled</label>
+					<comment/>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="loggedin_user_order_retention_days" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Logged In User Order Retention</label>
+					<comment>The age of orders, measured in days, must be stored in the database from the most recent update date.</comment>
+				</field>
+				<field id="guest_user_order_retention_days" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Guest User Order Retention</label>
+					<comment>The age of orders, measured in days, must be stored in the database from the most recent update date.</comment>
+				</field>
+				<field id="terminate" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Terminate the process</label>
+					<comment>Terminate the process if the number of errors exceeds this limit.</comment>
+				</field>
+				<field id="enable_logging" type="select" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enable logging</label>
+					<comment>Enable for troubleshooting</comment>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<group id="manual" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Manually Remove Orders</label>
+					<field id="date" translate="label comment" sortOrder="10" type="date" showInDefault="1" showInStore="1" >
+						<label>Date</label>
+						<frontend_model>Fedex\OrdersCleanup\Block\DatePicker</frontend_model>
+					</field>
+					<field id="cleanup" translate="button_label" sortOrder="28" showInDefault="1"
+						   showInWebsite="0" showInStore="0">
+						<label/>
+						<button_label>Remove Orders</button_label>
+						<frontend_model>Fedex\OrdersCleanup\Block\Adminhtml\System\Config\RemoveOrders</frontend_model>
+					</field>
+				</group>
+			</group>
+		</section>
+	</system>
+</config>

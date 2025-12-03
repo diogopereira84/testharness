@@ -1,0 +1,11 @@
+<?php
+$sdeCheckoutViewModel = $block->getData('sde_checkout_header');
+if ($sdeCheckoutViewModel->getIsSdeStore()):
+    ?>
+<div class="fedx-checkout-logo">
+    <a href="<?= $block->escapeUrl($block->getUrl(''))?>">
+        <img src="<?= /* @noEscape */ $block->getViewFileUrl('images/fedex-checkout-logo.png'); ?>"
+            alt="<?= $block->escapeHtmlAttr('FedEx Office')?>"/>
+    </a>
+</div>
+<?php endif;?>

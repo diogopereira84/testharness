@@ -1,0 +1,106 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Fedex\Canva\Api\Data\SizeInterface $size */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\Canva\ViewModel\Cms\Page\Canva $canva  */
+$canva = $block->getCanva();
+/** @var \Fedex\Canva\Api\Data\SizeCollectionInterface $sizeCollection  */
+$sizeCollection = $block->getData('canva_sizes');
+?>
+<!--StartCanvaSizeModal-->
+<?php if ($canva->useModal()): ?>
+    <div id="canva-modal" class="canva-modal">
+        <div class="modal-body-content">
+            <form action="">
+                <label id="canva-label" class="options-label"><?= $escaper->escapeHtml(__('Select a size')) ?></label>
+                <div class="btn-group-wrapper">
+                    <div class="slick-select relative mb-25">
+                        <button aria-labelledby="canva-label" aria-haspopup="listbox" aria-expanded="false" type="button" class="slick-title bg-cl-white border-rollingstone fedex-light fs-16 lh-30 p-12 text-left weight-300 w-100">
+                            <span class="slick-selected">
+                                <?= $escaper->escapeHtml(__('Select an option')) ?>
+                            </span>
+                            <span class="luma-icon down-icon cl-coralblack fs-14 float-right"></span>
+                            <input type="hidden" class="slick-value" value="">
+                        </button>
+                        <ul role="listbox" aria-activedescendant="" tabindex="-1" class="slick-options absolute bg-cl-white border-iron d-none mb-0 pl-0 pointer text-left">
+                            <?php foreach ($canva->getOptionsAvailable() as $option): ?>
+                                <?php
+                                    $selected = ($option['default']) ? 'true' : 'false';
+                                    $label = $option['display_width'] . 'x' . $option['display_height'];
+                                ?>
+                                <li role="option" aria-selected="<?= $escaper->escapeHtml($selected) ?>"
+                                    class="slick-option fedex-light fs-16 mb-0 p-12"
+                                    data-value="<?= $escaper->escapeHtml($option['product_mapping_id']) ?>">
+                                        <?= $escaper->escapeHtml(__($label . ' ' . $option['orientation'])) ?>
+                                </li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                    <div>
+                        <button type="button" class="btn-primary btn-start lh-24 start-design">
+                            <?= $escaper->escapeHtml(__('START DESIGNING')) ?>
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+<?php endif; ?>
+<!--EndCanvaSizeModal-->
+
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/modal",
+        'mage/url',
+        'Magento_Customer/js/customer-data',
+        "eventActions",
+        'Fedex_Canva/js/model/canva'
+    ],function($, modal, url, customerData, canvasEvent, canvaModel) {
+        var canvaSizes = <?= /* @noEscape */ $canva->getOptionsAvailable()->toJson()?>;
+        var canvaDefaultSize = '<?= /* @noEscape */ $canva->getDefaultSize()?>';
+        var canvaSizesEnabled = <?= ($canva->hasDesign()) ? 'true' : 'false'?>;
+
+        if(!canvaSizesEnabled || canvaSizes.length <= 0) {
+            return;
+        }
+
+        const canvaModal = $('#canva-modal');
+        const options = {
+            buttons: [],
+            modalClass: 'canva-size-popup'
+        };
+        if (canvaModal.length) {
+            canvaModal.modal(options);
+        }
+
+        const startDesignButton = $('.start-design');
+        startDesignButton.on('click', function (){
+            var canvaSize = $('.canva-modal .slick-value').val();
+            if (canvaSize != '') {
+                canvaModel.resetProcess(canvaModel.process.EDITOR, canvaSize, null, null, window.location.pathname);
+                sessionStorage.setItem("back-url", location.href);
+                window.location = url.build('canva');
+            }
+        });
+
+        $(document).on('click', ".canva-modal-link", function(args) {
+            args.preventDefault();
+            if (canvaSizes.length == 1) {
+                canvaModel.resetProcess(canvaModel.process.EDITOR, canvaDefaultSize, null, null, window.location.pathname);
+                sessionStorage.setItem("back-url", location.href);
+                window.location = url.build('canva');
+            } else {
+                if (canvaModal.length) {
+                    canvaModal.modal(options).modal('openModal');
+                    $('.canva-size-popup').attr('aria-label','Select Canva Size');
+                }
+            }
+        }.bind(this));
+
+        var browserDesignsButton = $( ".pagebuilder-banner-button:contains('BROWSE DESIGNS')" );
+        if(browserDesignsButton.length) {
+            browserDesignsButton.addClass('canva-modal-link');
+}
+    });
+</script>

@@ -1,0 +1,159 @@
+<?php
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var \Fedex\TrackOrder\Block\Order\OrderDetails $block */
+/** @var \Fedex\TrackOrder\ViewModel\TrackOrderHome $trackOrderViewModel */
+$trackOrderViewModel = $trackOrderViewModel ?? $block->getTrackOrderHomeViewModel();
+if ($trackOrderViewModel && $trackOrderViewModel->toggleCodeImprovementLogic()) {
+    $orderData = $block->getData('order_data');
+    $key = $block->getData('order_key');
+    $orderStatusDetail = $block->getData('order_status');
+    $trackOrderViewModel = $block->getTrackOrderHomeViewModel();
+    $orderStatusImageUrl = $this->getViewFileUrl('Fedex_TrackOrder::images/' . $orderStatusDetail . '-icon.png');
+}
+?>
+<ul class="progress-tracker progress-tracker--vertical <?= $trackOrderViewModel->toggleCodeImprovementLogic() ? 'improvement' : '' ?>">
+  <li class="progress-step">
+      <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+          <div class="progress-marker <?= $orderStatusDetail ?> first" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id1"></div>
+      <?php else:?>
+          <div class="progress-marker" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id1">
+              <style>
+                  div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id1"]::before {
+                      background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png'); ?>');
+                      background-size: cover;
+                  }
+
+                  div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id1"]::after {
+                  <?php if($orderStatusDetail == 'Ordered'): ?>
+                      background-color: none;
+                      width: 38px;
+                      height: 38px;
+                      margin-left: -5px;
+                  <?php elseif ($orderStatusDetail == 'Processing'): ?>
+                      background-color: #109a10 !important;
+                  <?php elseif ($orderStatusDetail == 'Cancelled'): ?>
+                      background-color: #f40f0f !important;
+                  <?php elseif ($orderStatusDetail == 'Delay'): ?>
+                      background-color: #f9b200 !important;
+                  <?php else :?>
+                      background-color: #109a10 !important;
+                  <?php endif; ?>
+                  }
+              </style>
+          </div>
+      <?php endif;?>
+    <div class="progress-text">
+        <?php if($orderStatusDetail == 'Ordered') :?>
+            <h4 class="progress-title current-progress-title">Ordered</h4>
+        <?php else: ?>
+            <h4 class="progress-title">Ordered</h4>
+        <?php endif; ?>
+    </div>
+  </li>
+
+  <li class="progress-step">
+      <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+          <div class="progress-marker <?= $orderStatusDetail ?> second" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id2"></div>
+      <?php else:?>
+          <div class="progress-marker" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id2">
+              <style>
+                  .progress-step div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id2"]::after {
+                  <?php if ($orderStatusDetail == 'Processing' || $orderStatusDetail == 'Cancelled' || $orderStatusDetail == 'Delay'): ?>
+                      top: 44px;
+                      height: 40%;
+                  <?php endif; ?>
+                  }
+                  div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id2"]::before {
+                  <?php if($orderStatusDetail == 'Ordered'): ?>
+                      background-image: none;
+                  <?php elseif ($orderStatusDetail == 'Processing' || $orderStatusDetail == 'Cancelled' || $orderStatusDetail == 'Delay'): ?>
+                      width: 38px;
+                      height: 38px;
+                      margin-left: -5px;
+                      background-image: url('<?= $orderStatusImageUrl; ?>' );
+                  <?php else :?>
+                      background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Processing-icon.png'); ?>');
+
+                  <?php endif; ?>
+
+                      background-size: cover;
+                  }
+
+                  div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id2"]::after {
+                  <?php if($orderStatusDetail == 'Shipped' || $orderStatusDetail == 'Ready for Pickup' ||
+                    $orderStatusDetail == 'Complete'): ?>
+                      background-color: #109a10 !important;
+
+                  <?php else :?>
+                      background-color: none;
+
+                  <?php endif; ?>
+                  }
+              </style>
+          </div>
+      <?php endif;?>
+    <div class="progress-text">
+        <?php if (in_array($orderStatusDetail, ['Ordered', 'Delay', 'Ready for Pickup', 'Shipped', 'Processing', 'Complete'])): ?>
+            <?php if ($orderStatusDetail == 'Processing' || $orderStatusDetail == 'Delay') : ?>
+                <h4 class="progress-title current-progress-title">Processing</h4>
+            <?php else : ?>
+                <h4 class="progress-title">Processing</h4>
+            <?php endif; ?>
+        <?php else : ?>
+            <h4 class="progress-title"> <?= $orderStatusDetail ?> </h4>
+        <?php endif; ?>
+    </div>
+  </li>
+
+  <li class="progress-step last-progress-step">
+      <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+          <div class="progress-marker <?= $orderStatusDetail ?> last" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id3"></div>
+      <?php else:?>
+          <div class="progress-marker" id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id3">
+              <style>
+                  div[id="ProductDtlSec<?= $orderData[$key]['order_id']; ?>-progress-marker-id3"]::before {
+                  <?php if($orderStatusDetail == 'Shipped' || $orderStatusDetail == 'Ready for Pickup' ||
+                    $orderStatusDetail == 'Complete'): ?>
+                      width: 38px;
+                      height: 38px;
+                      margin-left: -5px;
+                      background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png'); ?>');
+                  <?php else :?>
+                      background-image: none;
+                  <?php endif; ?>
+
+                      background-size: cover;
+                  }
+              </style>
+          </div>
+      <?php endif;?>
+    <div class="progress-text">
+        <?php if ($orderData[$key]['shipment_type'][1] == 'pickup') : ?>
+            <?php if ($orderStatusDetail == 'Ready for Pickup' || $orderStatusDetail == 'Complete') : ?>
+                <h4 class="progress-title current-progress-title"><?= $orderStatusDetail ?>></h4>
+            <?php else : ?>
+                <h4 class="progress-title">Ready for Pickup</h4>
+            <?php endif; ?>
+        <?php elseif ($orderData[$key]['shipment_type'][1] == 'shipment') : ?>
+            <?php if ($orderStatusDetail != 'Cancelled' && $orderStatusDetail != 'Shipped') : ?>
+                <h4 class="progress-title">*Shipped</h4>
+            <?php else : ?>
+                <?php if ($orderStatusDetail == 'Shipped') : ?>
+                    <h4 class="progress-title current-progress-title">Shipped</h4>
+                <?php else : ?>
+                    <h4 class="progress-title">Shipped</h4>
+                <?php endif; ?>
+            <?php endif; ?>
+        <?php endif; ?>
+    </div>
+    <?php if(($orderData[$key]['shipment_type'][1] == 'shipment') && ($orderStatusDetail != 'Cancelled')): ?>
+      <div class="shipping_status_note">
+          <?= $escaper->escapeHtml(__('*For updates following shipped, click the ')) ?>
+          <a href="<?= $escaper->escapeUrl($orderData[$key]['track_order_url'] . $orderData[$key]['tracking_number']) ?>">
+              <?= $escaper->escapeHtml(__('FedEx tracking number')) ?>
+          </a>
+          <?= $escaper->escapeHtml(__(' for this order.')) ?>
+      </div>
+    <?php endif; ?>
+  </li>
+</ul>

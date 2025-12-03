@@ -1,0 +1,70 @@
+<!-- /**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */ -->
+ <!-- ko if: shouldShowAddFedexAccountField() -->
+    <div class="fedex-account-container discount-block-container">
+        <div class="fedex-account-title discount-title" data-role="account-title"
+            data-bind="visible: !isFedexAccount()">
+            <button type="button" tabindex="0" class="fedex-account-number-label label-text fedex-account-button"
+                data-bind="i18n: fedexNumMainLabelText, event: { click: showAddFedexAccountField}"
+                data-testid="order-summary-button-add-fedex-office-account-for-discount-if-discount-toggle-is-enabled"></button>
+        </div>
+        <form id="discount-fedex-form form" action="" class="discount-fedex-form form" method="post">
+            <div class="fieldset fedex-account-block field-wrap" data-bind="visible: showFedexAccount()">
+                <input type="hidden" name="remove" id="remove-account-discount" value="0" />
+
+                <div class="field _required apply-field-group">
+                    <label class="label" data-bind="attr: { for: uid()}">
+                        <!-- ko if: label -->
+                        <span data-bind="i18n: label"></span>
+                        <!-- /ko -->
+                    </label>
+                    <div class="control">
+                        <input class="input-text" type="text" autocomplete="off" class="fedex_account_no disocunt-text-field"
+                            id="fedex_account_no" placeholder="Ex. 123456789" value="" aria-label="fedex account number"
+                            aria-required="true" data-bind="
+                            attr: {
+                                name: inputName()
+                            }, event: { blur: onBlurFedexAccount }"
+                            data-testid="checkout-order-summary-input-fedex-office-account-number-if-discount-toggle-enabled">
+
+                    </div>
+                    <div class="actions-toolbar discount-actions-toolbar">
+                        <div class="primary">
+                            <button type="submit" title="Apply" class="action submit primary"
+                                data-bind="click: applyFedexAccount"
+                                data-testid="checkout-order-summary-button-fedex-office-account-number-apply-if-discount-toggle-enabled">
+                                <span data-bind="i18n: applyButtonLabel()"></span>
+                            </button>
+                            <p id="apply-account-discount-loader" class="loadersmall"></p>
+                        </div>
+                    </div>
+                    <p class="form-error-message-account"></p>
+                </div>
+            </div>
+            <div class="fieldset fedex-account-block-applied field-wrap" data-bind="visible: isFedexAccount()">
+                <div class="field _required apply-field-group">
+                    <label class="label" data-bind="attr: { for: uid()}">
+                        <!-- ko if: label -->
+                        <span data-bind="i18n: label"></span>
+                        <!-- /ko -->
+                    </label>
+                    <div class="control">
+                        <div class="applied-fedex-number">
+                            <div class="applied-fedex-number-text">FedEx Office Print Account <span class="ending-in">ending in</span>
+                                <span class="applied-account-four-digit" data-bind="i18n: fedexAccountNumber"></span>
+                            </div>
+                            <!-- ko if: canShowFedexAccountRemoveBtn() -->
+                            <button class="removed_fedex_account" id="removed_fedex_account"
+                                data-bind="click: applyFedexAccount"
+                                data-testid="checkout-order-summary-button-applied-fedex-number-remove-if-discount-toggle-enabled">Remove</button>
+                            <!-- /ko -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+<!-- /ko -->
+

@@ -1,0 +1,367 @@
+<?php
+
+/**@var Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper $fxoCmVM */
+$fxoCmVM = $block->getData('fxo_cm_vm');
+$userworkspaceSession = '{}';
+$FXOCMBaseUrl = $block->escapeUrl($fxoCmVM->getBaseUrl());
+$FXOCMClientId = $block->escapeHtml($fxoCmVM->getClientId());
+$isRetailCustomer = $fxoCmVM->isRetail();
+$areaCode = $fxoCmVM->checkAreaCode();
+$driveUploadEnable = ($fxoCmVM->isEnabled())?"true":"false";
+$boxEnabled = ($fxoCmVM->isBoxEnabled())?"true":"false";
+$dropBoxEnable = ($fxoCmVM->isDropboxEnabled())?"true":"false";
+$googleEnabled = ($fxoCmVM->isGoogleEnabled())?"true":"false";
+$microSoftEnabled = ($fxoCmVM->isMicrosoftEnabled())?"true":"false";
+$getIsSdeStore = ($fxoCmVM->getIsSdeStore())?"true":"false";
+$isMvpSharedCatalogEnable = ($fxoCmVM->isMvpSharedCatalogEnable()) ? "true" : "false";
+$isSelfRegCustomer = ($fxoCmVM->isSelfRegCustomer())?"true":"false";
+$uploadToQuoteData = $fxoCmVM->getUploadToQuoteConfigValue();
+$emptyUploadToQuoteConfigValue = $fxoCmVM->getEmptyUploadToQuoteConfigValue();
+$configValueData = $fxoCmVM->getPrintInstructionsForCompanyAdmin();
+$isSelfRegCustomerAdminUser = ($configValueData['isSelfRegCustomerAdminUser']) ? "true" : "false";
+$isNonStandardCatalogToggleEnabled = ($configValueData['isNonStandardCatalogToggleEnabled']) ? "true" : "false";
+$skuOnlyProductId = $fxoCmVM->getSkuOnlyProductId();
+$additionalPrintInstructionsData = $fxoCmVM->getAdditionalPrintInstructionsConfigValue();
+$fedexAccountNumber = $fxoCmVM->getFedexAccountNumber();
+$enableUploadToQuote = ($fxoCmVM->getEnableUploadToQuote())?"true":"false";
+$enableUploadToQuoteForNSCFlow = ($fxoCmVM->getEnableUploadToQuoteForNSCFlow())?"true":"false";
+$allProductsPageUrl = $block->escapeUrl($fxoCmVM->getallProductsPageUrl());
+$tazToken = $block->escapeHtml($fxoCmVM->getTazToken());
+$siteName = $block->escapeHtml($fxoCmVM->getSiteName());
+$integrationType = $block->escapeHtml($fxoCmVM->getIntegrationType());
+$footerContent = $block->escapeHtml($fxoCmVM->getFooterContent());
+$logourl = $block->escapeUrl($fxoCmVM->getLogoUrl());
+$site = $block->escapeHtml($fxoCmVM->getCompanyName());
+if ($fxoCmVM->isTigerE468338ToggleEnabled()) {
+    $allItems = $fxoCmVM->getCheckoutItem();
+    $cartCount = is_array($allItems) ? count($allItems) : 0;
+} else {
+    $cartCount = is_object($fxoCmVM->getCheckoutItem())?$fxoCmVM->getCheckoutItem()->getSize():0;
+}
+$footerText = $block->escapeHtml($fxoCmVM->getFooterText());
+$footerLink = $block->escapeUrl($fxoCmVM->getFooterLink());
+$isEproCustomer = $fxoCmVM->isEproCustomer();
+$fxoCMEnableForEproCustomDoc = $fxoCmVM->checkFxoCmEproCustomDocEnabled();
+//Batch upload on then set singleProjectMode false/ Batch upload off then set singleProjectMode true
+$isBatchUploadEnable = ($fxoCmVM->isBatchUploadEnable())?"false":"true";
+$loggedinCustomer = ($fxoCmVM->checkLoggedInCustomer())?"true":"false";
+$newDocumentsApiImage = ($fxoCmVM->isNewDocumentsApiImageEnable())?"true":"false";
+$eproMigratedCustomDocToggle = $fxoCmVM->getEproMigratedCustomDocToggle();
+if ($isBatchUploadEnable == "false") {
+    $userworkspaceSession = !empty($fxoCmVM->getWorkspaceData()) ? $fxoCmVM->getWorkspaceData() :$userworkspaceSession;
+}
+
+$homeUrl = $block->escapeUrl($fxoCmVM->getHomeUrl());
+
+$finalRedirectUrl = $homeUrl . 'configurator/index/index/?viewproject=true';
+$redirectUrlAuth = $homeUrl . 'oauth/index/index/rc/'.base64_encode($finalRedirectUrl);
+$wlgnLoginPageUrl = $block->escapeUrl($fxoCmVM->getGeneralConfig('sso/general/wlgn_login_page_url'));
+$queryParameter = $block->escapeHtml($fxoCmVM->getGeneralConfig('sso/general/query_parameter'));
+$getLoginMockToggle = $fxoCmVM->getGeneralConfig('wiremock_service/selfreg_wiremock_group/fcl_login_api_wiremock_enable');
+$redirectLoginUrl = $wlgnLoginPageUrl . '?' . $queryParameter . '=' . $redirectUrlAuth;
+
+$redirectUrl = $block->escapeUrl($fxoCmVM->getRedirectUrl());
+$dyesubSKU='';
+$isDyeSubProduct = "0";
+$vendorOptions = '{}';
+
+$fxo_web_analytics_scripts_forsta_enabled = $fxoCmVM->getGeneralConfig("fedex/confirmit/enabled") == 1 ? 'false' : 'true';
+
+$fxo_web_analytics_scripts_contentsquare_contentsquare_active = $fxoCmVM->getGeneralConfig("web/contentsquare/contentsquare_active") == 1 ? 'false' : 'true';
+$fxo_web_analytics_scripts_app_dynamics_active = $fxoCmVM->getGeneralConfig("web/app_dynamics/active") == 1 ? 'false' : 'true';
+$fxo_web_analytics_scripts_gdl_gdl_active = $fxoCmVM->getGeneralConfig("web/gdl/gdl_active") == 1 ? 'false' : 'true';
+$fxo_web_analytics_scripts_newrelic_newrelic_active = $fxoCmVM->getGeneralConfig("web/newrelic/newrelic_active") == 1 ? 'false' : 'true';
+$fxo_web_analytics_scripts_nuance_nuance_active = $fxoCmVM->getGeneralConfig("web/nuance/nuance_active") == 1 ? 'false' : 'true';
+
+if ($getLoginMockToggle) {
+        $redirectLoginUrl = $homeUrl . 'selfreg/landing/mock';
+}
+
+// B-2216800 migrate workspace file and project on new doc API
+if($fxoCmVM->isNewDocumentsApiImageEnable() &&
+    $fxoCmVM->isUserWorkSpaceNewDocumentToggle() &&
+    !$fxoCmVM->isRemoveLegacyDocumentToggle() &&
+    $userworkspaceSession != '{}') {
+        $userworkspaceSession = $fxoCmVM->migrateWorkspaceId($userworkspaceSession);
+}
+$newProduct = $block->getRequest()->getParam('newproduct');
+$itemId = $block->getRequest()->getParam('edit');
+$configuratorType = '';
+$skuexist = '';
+$customizeFields = '[{}]';
+$isEproUploadToQuoteToggleEnable = $fxoCmVM->isEproUploadToQuoteToggleEnable();
+if ($isEproCustomer && $fxoCMEnableForEproCustomDoc) {
+    $sku = $block->escapeUrl($block->getRequest()->getParam('id'));
+
+    if ($sku) {
+        $productData = $fxoCmVM->getProductData($sku);
+        $customizeFields = $productData->getData('customization_fields') ?? '[{}]';
+    }
+}
+if ($isMvpSharedCatalogEnable === "true"){
+    $sku = $block->escapeHtml($block->getRequest()->getParam('sku'));
+    $productJson = '{}';
+    $instanceId = '';
+    $configuratorType = 'NEW';
+    if ($sku) {
+        $productData = $fxoCmVM->getProductData($sku);
+        $productJson = $productData->getData('external_prod');
+        $configuratorType = 'EDIT';
+        $skuexist = 1;
+        $instanceId = 123;
+        if ($itemId != "") {
+            $customizeFields = $fxoCmVM->getItemCustomDocumentData($itemId);
+            if ($fxoCmVM->getItemExternalProd($itemId)) {
+                $productJson = $fxoCmVM->getItemExternalProd($itemId);
+            }
+        } else {
+            $customizeFields = $productData->getData('customization_fields') ?? '[{}]';
+        }
+        $customieConfigurationType = $block->getRequest()->getParam('configurationType');
+        if ($customieConfigurationType == "customize") {
+            $configuratorType = 'CUSTOMIZE';
+            $qty = $block->getRequest()->getParam('qty');
+            if($qty && $productJson) {
+                $productJsondecode = json_decode((string) $productJson, true);
+                $productJsondecode['qty'] = (int) $qty;
+                $productJson = json_encode((array) $productJsondecode);
+            }
+        }
+        if($fxoCmVM->isDyeSubEnabled()){
+            $isDyeSubProduct = $productData->getData('is_customer_canvas');
+        }
+    } else {
+        $instanceId = $block->getRequest()->getParam('edit');
+        if ($instanceId) {
+            $configuratorType = 'EDIT';
+            $items = $fxoCmVM->getCheckoutItem();
+            foreach ($items as $item) {
+                if ($instanceId == $item->getData('instance_id')) {
+                    $externalProductJson = $fxoCmVM->getExternalProd($item);
+                    $productJson = json_encode($externalProductJson);
+                    if($fxoCmVM->isDyeSubEnabled() && $item->getProduct()->getData('is_customer_canvas')){
+                        $vendorOptions = $fxoCmVM->getVendorOptions($item);
+                        $dyesubSKU = $item->getProduct()->getSku();
+                        $isDyeSubProduct = "1";
+                    }
+
+                    break;
+                }
+            }
+        }
+    }
+}
+
+// Epro Customer fot Migrated custom doc
+if ($eproMigratedCustomDocToggle && $fxoCMEnableForEproCustomDoc && $isEproCustomer && $customizeFields != '[{}]') {
+    $configurationTypeRequest = $block->getRequest()->getParam('configurationType');
+    if($configurationTypeRequest=='customize'){
+      $configuratorType = 'CUSTOMIZE';
+    }
+}
+
+$fixedQtyHandlerToggle = ($fxoCmVM->getFixedQtyHandlerToggle()) ? "true": "false";
+$convertToSizeModalText = ($fxoCmVM->getConvertToSizeModalText()) ?: "";
+$convertToSizeModalRedirectLink = ($fxoCmVM->getallProductsPageUrl()) ?: "";
+
+$printReadyCustomDocFixToggle = $fxoCmVM->getPrintReadyCustomDocFixToggle();
+$pageGroups = '[]';
+if ($printReadyCustomDocFixToggle && $customizeFields != '[{}]' && $configuratorType == 'CUSTOMIZE') {
+    $pageGroups = $fxoCmVM->getPageGroups($productJson);
+}
+
+$isProductBundleSetupComplete = true;
+$isBundleProductHandler = $block->getData('bundle_product_handler');
+if ($isBundleProductHandler && $isBundleProductHandler->isTigerE468338ToggleEnabled()) {
+    $isProductBundleSetupComplete = $isBundleProductHandler->isBundleProductSetupCompleted() ? 'true': 'false';
+}
+?>
+
+<div class="container-page">
+    <div id ="iframe_container">
+        <div class="loading">
+            <div class="lds-grid">
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+            <h3 class="iframe_text"></h3>
+        </div>
+    </div>
+</div>
+
+<?php
+// check if SKU is coming from query paramter
+$viewProject = 'false';
+if ($isMvpSharedCatalogEnable == "false") {
+    $sku = '';
+    $sku = $block->escapeUrl($block->getRequest()->getParam('id'));
+    $skuexist = 0;
+    if ($sku) {
+        $skuexist = 1;
+    }
+    $productJson = '{}';
+    $configuratorType = 'NEW';
+    $instanceId = $block->getRequest()->getParam('edit');
+
+    if (!empty($instanceId)) {
+        $configuratorType = 'EDIT';
+        if($fxoCmVM->isDyeSubEnabled()){
+            $isDyeSubProduct = $fxoCmVM->getDyesubProductByInstanceId($instanceId);
+        }
+
+
+    }
+}
+
+// Epro Customer fot Migrated custom doc
+if ($isEproCustomer && $eproMigratedCustomDocToggle && $fxoCMEnableForEproCustomDoc) {
+        $sku = $block->escapeUrl($block->getRequest()->getParam('id'));
+        if($sku){
+          if ($customizeFields != '[{}]') {
+                $productJson = $productData->getData('external_prod');
+           }
+
+        }
+        // For migrate custom doc edit in epor
+        $itemId = $block->getRequest()->getParam('edit');
+        if ($itemId) {
+            $customizeFields = $fxoCmVM->getItemCustomDocumentData($itemId);
+            if ($customizeFields != "[{}]") {
+                $configuratorType = 'CUSTOMIZE';
+                if ($fxoCmVM->getItemExternalProd($itemId)) {
+                    $productJson = $fxoCmVM->getItemExternalProd($itemId);
+                }
+            }
+        }
+}
+
+   $viewProject = $block->getRequest()->getParam('viewproject');
+
+    if ($viewProject) {
+        $configuratorType = 'EDIT';
+    }
+
+    // for redirect flow
+     $configuratorStateId = '';
+   $configuratorStateId = $block->getRequest()->getParam('responseid');
+
+    // logic for epro custom doc
+    $eproCustomDoc = 0;
+    $eproConfiguratorType = $block->getRequest()->getParam('configurationType');
+    if ($isEproCustomer && $eproConfiguratorType == "customize") {
+        $configuratorType = 'CUSTOMIZE';
+        $eproCustomDoc = 1;
+    }
+
+    // To edit epro legacy custom doc when instance id is 0 (B-2187143)
+    if ($isEproCustomer && $fxoCMEnableForEproCustomDoc) {
+        $editID = $block->getRequest()->getParam('edit');
+        if ($editID == "0") {
+            $configuratorType = 'CUSTOMIZE';
+            $eproCustomDoc = 1;
+        }
+    }
+    // checked if epro customer and catlogmvp toggle off and sitename is not blank
+    // fix added for legacy custom doc for epro customize
+    if ($isEproCustomer && $isMvpSharedCatalogEnable == 'false' && $siteName != '') {
+        $customizeFields = '[]';
+    }
+    if($fxoCmVM->isDyeSubEnabled()){
+        $isDyeSubFromCatalog = $block->getRequest()->getParam('isDyeSubFromCatalog');
+    }
+
+
+?>
+
+<script type="text/javascript">
+    require(['jquery','fedex/storage','domReady!'], function ($,fxoStorage) {
+        if ("<?= $integrationType?>" == "URL_REDIRECT" && "<?= $configuratorStateId?>" == "" ) {
+            if (window.e383157Toggle) {
+                fxoStorage.set("uploadcancelurl","<?= $redirectUrl ?>");
+            } else {
+                window.localStorage.setItem("uploadcancelurl","<?= $redirectUrl ?>");
+            }
+        }
+        if (!window.localStorage.getItem("currentUrl")){
+            window.localStorage.setItem("currentUrl",window.location.href);
+        }
+    });
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_FXOCMConfigurator/js/configuratorscript": {
+                "FXOCMBaseUrl": "<?= $FXOCMBaseUrl?>",
+                "FXOCMClientId": "<?= $FXOCMClientId?>",
+                "sku": "<?= $sku ?>",
+                "skuexist": "<?= $skuexist ?>",
+                "driveUploadEnable": <?= $driveUploadEnable?>,
+                "boxEnabled": "<?= $boxEnabled?>",
+                "dropBoxEnable": "<?= $dropBoxEnable?>",
+                "googleEnabled": "<?= $googleEnabled?>",
+                "microSoftEnabled": "<?= $microSoftEnabled?>",
+                "configuratorType": "<?= $configuratorType?>",
+                "product" : <?= $productJson ?>,
+                "instanceId" : "<?= $instanceId ?>",
+                "getIsSdeStore" : "<?= $getIsSdeStore ?>",
+                "isMvpSharedCatalogEnable" : "<?= $isMvpSharedCatalogEnable ?>",
+                "uploadToQuoteData" : <?= json_encode($uploadToQuoteData) ?>,
+                "emptyUploadToQuoteConfigValue" : <?= json_encode($emptyUploadToQuoteConfigValue) ?>,
+                "additionalPrintInstructionsData" : <?= json_encode($additionalPrintInstructionsData) ?>,
+                "fedexAccountNumber" : "<?= $fedexAccountNumber ?>",
+                "enableUploadToQuote" : "<?= $enableUploadToQuote ?>",
+                "enableUploadToQuoteNSCFlow" : "<?= $enableUploadToQuoteForNSCFlow ?>",
+                "loggedinCustomer" : "<?= $loggedinCustomer ?>",
+                "newDocumentsApiImage" : "<?= $newDocumentsApiImage ?>",
+                "newProduct" : "<?= $newProduct ?>",
+                "singleProjectMode" : "<?= $isBatchUploadEnable ?>",
+                "userworkspace" : <?= $userworkspaceSession ?>,
+                "redirectUrl" : "<?= $redirectUrl?>",
+                "allProductsPageUrl": "<?= $allProductsPageUrl?>",
+                "viewProject": "<?= $viewProject?>",
+                "customizeFields" : <?= $customizeFields ?>,
+                "accessToken" : "<?= $tazToken ?>",
+                "siteName" : "<?= $siteName ?>",
+                "isSelfRegCustomerAdminUser" : <?= $isSelfRegCustomerAdminUser ?>,
+                "isNonStandardCatalogToggleEnabled" : <?= $isNonStandardCatalogToggleEnabled ?>,
+                "skuOnlyProductId" : "<?= $skuOnlyProductId ?>",
+                "configuratorStateId": "<?= $configuratorStateId?>",
+                "integrationType": "<?= $integrationType?>",
+                "footerContent": "<?= $footerContent?>",
+                "logourl": "<?= $logourl ?>",
+                "site": "<?= $site ?>",
+                "footerText": "<?= $footerText ?>",
+                "footerLink": "<?= $footerLink ?>",
+                "cartCount": "<?= $cartCount ?>",
+                "eproCustomDoc": "<?= $eproCustomDoc ?>",
+                "fxoCMEnableForEproCustomDoc": "<?= $fxoCMEnableForEproCustomDoc ?>",
+                "fixedQtyHandlerToggle": "<?= $fixedQtyHandlerToggle ?>",
+                "convertToSizeModalText": "<?= $convertToSizeModalText ?>",
+                "convertToSizeModalRedirectLink": "<?= $convertToSizeModalRedirectLink ?>",
+                "pageGroups": <?= $pageGroups ?>,
+                "printReadyCustomDocFixToggle": "<?= $printReadyCustomDocFixToggle ?>",
+                "isEproUploadToQuoteToggleEnable": <?= $isEproUploadToQuoteToggleEnable ?>,
+                "isEproCustomer": "<?= $isEproCustomer ?>",
+                "redirectLoginUrl": "<?= $redirectLoginUrl ?>",
+                "isBundleProductSetupCompleted": "<?= $isProductBundleSetupComplete ?>",
+                "isDyeSubFromCatalog": "<?= $isDyeSubFromCatalog ?>",
+                "vendorOptionsConfig":<?= $vendorOptions ?>,
+                "dyesubSKU":"<?= $dyesubSKU ?>",
+                "isDyeSubProduct":"<?= $isDyeSubProduct ?>",
+                "fxo_web_analytics_scripts_forsta_enabled": "<?= $fxo_web_analytics_scripts_forsta_enabled ?>",
+                "fxo_web_analytics_scripts_contentsquare_contentsquare_active": "<?= $fxo_web_analytics_scripts_contentsquare_contentsquare_active ?>",
+                "fxo_web_analytics_scripts_app_dynamics_active": "<?= $fxo_web_analytics_scripts_app_dynamics_active ?>",
+                "fxo_web_analytics_scripts_gdl_gdl_active": "<?= $fxo_web_analytics_scripts_gdl_gdl_active ?>"
+            }
+        }
+    }
+</script>

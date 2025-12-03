@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\CSP\Api\CspManagementInterface" type="Fedex\CSP\Model\CspManagement" />
+	<type name="Magento\Csp\Model\CompositePolicyCollector">
+		<arguments>
+			<argument name="collectors" xsi:type="array">
+				<item name="fedex-csp-whitelist" xsi:type="object" sortOrder="9002">Fedex\CSP\Model\Collector\ConfigWhitelistCollector</item>
+			</argument>
+		</arguments>
+	</type>
+    <type name="Magento\Csp\Model\Collector\CspWhitelistXml\FileResolver">
+        <plugin name="create_empty_cart" type="Fedex\CSP\Model\Collector\CspWhitelistXml\FileResolver"/>
+    </type>
+</config>

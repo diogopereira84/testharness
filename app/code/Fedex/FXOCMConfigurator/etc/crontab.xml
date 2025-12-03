@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+  <group id="fxocm_workspace">
+    <job name="fxocm_workspace_enable" instance="Fedex\FXOCMConfigurator\Cron\DeleteWorkSpace" method="execute">
+        <config_path>fedex/workspace_project_setting/delete_project_cron_time</config_path>
+    </job>
+  </group>
+  <group id="fxocm_reorder">
+    <job name="fxocm_order_document_life_extend_cron" instance="Fedex\FXOCMConfigurator\Cron\OrderDocumentLifeExtendCron" method="execute">
+        <schedule>30 00 * * *</schedule>
+    </job>
+  </group>  
+</config> 

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="pod2_user_preference" resource="default" engine="innodb" comment="User Preferences Table">
+        <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID"/>
+        <column name="email" xsi:type="varchar" nullable="false" length="255" comment="Email"/>
+        <column name="company_url" xsi:type="varchar" nullable="false" length="255" comment="Company URL"/>
+        <column name="key" xsi:type="varchar" nullable="false" length="255" comment="Key"/>
+        <column name="value" xsi:type="text" nullable="true" comment="Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="UNIQUE_USER_PREF">
+            <column name="email"/>
+            <column name="company_url"/>
+            <column name="key"/>
+        </constraint>
+        <index referenceId="IDX_USER_PREF_EMAIL" indexType="btree">
+            <column name="email"/>
+        </index>
+        <index referenceId="IDX_USER_PREF_COMPANY_URL" indexType="btree">
+            <column name="company_url"/>
+        </index>
+        <index referenceId="IDX_USER_PREF_KEY" indexType="btree">
+            <column name="key"/>
+        </index>
+    </table>
+</schema>

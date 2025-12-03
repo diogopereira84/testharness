@@ -1,0 +1,32 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<?php
+    $shipment = $block->getShipment();
+    $shippingstatus = $block->getShipment()->getShipmentStatus();
+    $shipmentHelper = $this->helper(\Fedex\Shipment\Helper\StatusOption::class);
+?>
+<tbody>
+    <?php if ($shippingstatus) { ?>
+    <tr>
+        <th id="">Shipment Status</th>
+        <td><?= $block->escapeHtml($shipmentHelper->shipmentStatus($shippingstatus)); ?></td>
+    </tr>
+    <?php } ?>
+    <?php if ($shipment->getData("pickup_allowed_until_date")) { ?>
+        <tr>
+            <th id="">Pickup Allowed Until Date</th>
+            <td><?= $block->escapeHtml($shipment->getData("pickup_allowed_until_date")); ?></td>
+        </tr>
+    <?php } ?>
+    <?php if ($shipment->getData("fxo_work_order_number")) { ?>
+        <tr>
+            <th id="">FXO Work Order Number</th>
+            <td><?= $block->escapeHtml($shipment->getData("fxo_work_order_number")); ?></td>
+        </tr>
+    <?php } ?>
+    <tr></tr>
+</tbody>

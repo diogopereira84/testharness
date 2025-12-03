@@ -1,0 +1,397 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Framework\App\Action\Action;
+use Fedex\Catalog\ViewModel\ProductList;
+
+// B-1149167 : RT-ECVS-SDE-SDK changes for File upload
+/** @var $viewModel ProductList */
+$viewModel = $block->getData('product_list_view_model');
+$tazToken = $viewModel->getTazToken();
+$siteName = $viewModel->getSiteName();
+$eProClass = $viewModel->getWrapperClass();
+$isCommercialCustomer = $viewModel->isCommercialCustomer();
+$catalogHelper = $viewModel->getCatalogDocumentUserSettingsHelper();
+$helper = $viewModel->getDeliveryDataHelper();
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$catalogMvpToggle = $catalogMvpHelper->isMvpSharedCatalogEnable();
+$customerAdmin = $catalogMvpHelper->isSelfRegCustomerAdmin();
+$isPrintProductCategory = $catalogMvpHelper->checkPrintCategory();
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper'); ?>
+
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <div class="loading-mask" style="display: none;" data-role="loader"><div class="loader"><img alt="Loading..." src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>"><p>Please wait...</p></div></div>
+    <?php if ($catalogMvpToggle) { ?>
+        <div class="loading-mask-mvp"  data-role="loader">
+            <div class="loader-mvp"><img alt="Loading..."
+                src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+                <p>Please wait...</p>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="products wrapper <?php echo $eProClass; ?> <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+
+        <ol class="products list items product-items customer-view catalog-mvp-print-product">
+            <?php if($isCommercialCustomer): ?>
+                <li class="item product product-item heading">
+                    <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                </li>
+            <?php endif; ?>
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product):?>
+                <?php
+                    $attributeSetId = $_product->getAttributeSetId();
+                    $attribute_set_name = $helper->getProductAttributeName($attributeSetId);
+                    $custmizable = (bool)$_product->getData('customizable');
+
+                    if($attribute_set_name == 'PrintOnDemand'
+                        && $_product->getData('external_prod') !== null) {
+                      $externalProdData=$_product->getData('external_prod');
+                      $externalProdData=json_decode($externalProdData,true);
+
+                      $catalogProductId=(isset($externalProdData['catalogReference']['catalogProductId'])) ?
+                       $externalProdData['catalogReference']['catalogProductId'] : "";
+                    }
+                 ?>
+        <?php if ($viewMode == 'list') { ?>
+            <li class="item product product-item">
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
+                    }
+                    ?>
+                    <?php if($isCommercialCustomer): ?>
+						<?= $productImage->toHtml() ?>
+                    <?php else: ?>
+						<a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+						   class="product photo product-item-photo"
+						   tabindex="-1">
+							<?= $productImage->toHtml() ?>
+						</a>
+                    <?php endif; ?>
+                     <?php
+                            $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                            $length = 50;
+                            if ($isCommercialCustomer && strlen($proName) > $length) {
+                                $proName = wordwrap($proName, $length);
+                                $proNameArray = explode("\n", $proName, 2);
+                                $proName = $proNameArray[0] . ' ...';
+                             }
+                        ?>
+                        <div class="product-name-list">
+                            <strong class="product name product-item-name">
+                                <?php if($isCommercialCustomer): ?>
+                                    <?=/* @noEscape */ $proName;  ?>
+                                <?php else: ?>
+                                    <a class="product-item-link"
+                                       href="<?= $escaper->escapeUrl($_product->getProductUrl()); ?>">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                               <?php endif; ?>
+                           </strong>
+                       </div>
+                       <?php
+                        if ($viewMode == 'grid') {
+                        ?>
+                            <div class="modified-info">
+                                <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?>
+                            </div>
+                        <?php } ?>
+                    <div class="product details product-item-details">
+
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?php if ($attribute_set_name != 'FXOPrintProducts') : ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                        <?php endif; ?>
+                        <?php if ($_product->isAvailable()):?>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php endif; ?>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()):?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+
+                                        <form data-role="tocart-form"
+                                              data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
+                                              action="<?= $escaper->escapeUrl($postParams['action']) ?>"
+                                              method="post">
+                                            <input type="hidden"
+                                                   name="product"
+                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                            <input type="hidden"
+                                                   name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                   value="<?=
+                                                   /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                    ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
+                                            <?php if ($attribute_set_name == 'FXOPrintProducts') : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadPrintProduct(event)('<?php echo $_product->getSku(); ?>', '<?php echo $siteName; ?>', '<?php echo $tazToken; ?>') : event.preventDefault()"
+                                                    class="action tocart primary primary upload-file" tabindex="0">
+                                                    Upload File
+                                                </button>
+                                            <?php elseif ($attribute_set_name == 'PrintOnDemand' && $custmizable == true) : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadCustomDocProduct(event)('<?php echo $tazToken; ?>', '<?php echo $siteName; ?>', '<?php echo $catalogProductId; ?>') : event.preventDefault()"
+                                                    class="action tocart custmizable_button primary primary" tabindex="0">
+                                                    Customize
+                                                </button>
+                                            <?php else: ?>
+                                                    <button type="submit"
+                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    class="action tocart primary add-to-cart">
+                                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                                    </button>
+                                             <?php  endif;  ?>
+                                        </form>
+                                    <?php else:?>
+                                        <?php if($viewMode=='grid'): ?>
+                                        <?php if ($_product->isAvailable()):?>
+                                            <div class="stock available">
+                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else:?>
+                                            <div class="stock unavailable">
+                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-primary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                    ) : '' ?>
+                                <div data-role="add-to-links" class="actions-secondary">
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')):?>
+                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-secondary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                    ) : '' ?>
+                            </div>
+                            <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?= /* @noEscape */ $_helper->productAttribute(
+                                        $_product,
+                                        $_product->getShortDescription(),
+                                        'short_description'
+                                    ) ?>
+                                    <?= $escaper->escapeHtml(__('Learn More')) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?= strpos((string)$pos, $viewMode . '-actions') ?
+                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    $position,
+                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                ) : '' ?>
+            </li>
+        <?php } else { ?>
+                <li class="item product product-item">
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
+                    }
+                    ?>
+                    <?php // Product Image ?>
+                    <?php if($isCommercialCustomer): ?>
+                        <?= $productImage->toHtml() ?>
+                    <?php else: ?>
+                        <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                           class="product photo product-item-photo"
+                           tabindex="-1">
+                            <?= $productImage->toHtml() ?>
+                        </a>
+                    <?php endif; ?>
+                     <?php
+                            $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                            $length = 50;
+                            if ($isCommercialCustomer && strlen($proName) > $length) {
+                                $proName = wordwrap($proName, $length);
+                                $proNameArray = explode("\n", $proName, 2);
+                                $proName = $proNameArray[0] . ' ...';
+                             }
+                        ?>
+                    <div class="another-box">
+                    <div class="product details product-item-details">
+
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?php if ($attribute_set_name != 'FXOPrintProducts') : ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                        <?php endif; ?>
+                        <?php if ($_product->isAvailable()):?>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php endif; ?>
+
+                        <div class="product-item-inner-grid">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()):?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+
+                                        <form data-role="tocart-form"
+                                              data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
+                                              action="<?= $escaper->escapeUrl($postParams['action']) ?>"
+                                              method="post">
+                                            <input type="hidden"
+                                                   name="product"
+                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                            <input type="hidden"
+                                                   name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                   value="<?=
+                                                   /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                    ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
+                                            <?php if ($attribute_set_name == 'FXOPrintProducts') : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadPrintProduct(event)('<?php echo $_product->getSku(); ?>', '<?php echo $siteName; ?>', '<?php echo $tazToken; ?>') : event.preventDefault()"
+                                                    class="action tocart primary primary upload-file" tabindex="0">
+                                                    Upload File
+                                                </button>
+                                            <?php elseif ($attribute_set_name == 'PrintOnDemand' && $custmizable == true) : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadCustomDocProduct(event)('<?php echo $tazToken; ?>', '<?php echo $siteName; ?>', '<?php echo $catalogProductId; ?>') : event.preventDefault()"
+                                                    class="action tocart custmizable_button primary primary" tabindex="0">
+                                                    Customize
+                                                </button>
+                                            <?php else: ?>
+                                                    <button type="submit"
+                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    class="action tocart primary add-to-cart">
+                                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                                    </button>
+                                             <?php  endif;  ?>
+                                        </form>
+                                    <?php else:?>
+                                        <?php if($viewMode=='grid'): ?>
+                                        <?php if ($_product->isAvailable()):?>
+                                            <div class="stock available">
+                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else:?>
+                                            <div class="stock unavailable">
+                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-primary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                    ) : '' ?>
+                                <div data-role="add-to-links" class="actions-secondary">
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')):?>
+                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-secondary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                    ) : '' ?>
+                            </div>
+                            <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?= /* @noEscape */ $_helper->productAttribute(
+                                        $_product,
+                                        $_product->getShortDescription(),
+                                        'short_description'
+                                    ) ?>
+                                    <?= $escaper->escapeHtml(__('Learn More')) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="name-date-box">
+                        <div class="product-name-list">
+                            <strong class="product name product-item-name">
+                                <?php if($isCommercialCustomer): ?>
+                                    <?=/* @noEscape */ $proName;  ?>
+                                <?php else: ?>
+                                    <a class="product-item-link"
+                                       href="<?= $escaper->escapeUrl($_product->getProductUrl()); ?>">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                               <?php endif; ?>
+                           </strong>
+                       </div>
+                    </div>
+                </div>
+                <?= strpos((string)$pos, $viewMode . '-actions') ?
+                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    $position,
+                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                ) : '' ?>
+            </li>
+        <?php } ?>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<script type="text/javascript">
+    requirejs(['jquery'], function(jQuery){
+        if (jQuery('.products.wrapper').hasClass('products-grid')) {
+            jQuery('body').addClass('print-products-grid');
+        }
+        if (jQuery('.products.wrapper').hasClass('products-list')) {
+            jQuery('body').addClass('print-products-list');
+        }
+    });
+    require(['jquery', 'jquery/ui','Magento_Ui/js/modal/modal'], function($){
+        $(document).ready(function() {
+            $('.loading-mask-mvp').hide();
+        });
+    });
+</script>

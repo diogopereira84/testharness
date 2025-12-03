@@ -1,0 +1,33 @@
+//  variables
+@border-color : #ced5d9;
+/*B-1309407: hide shipping after subtotal when estimated shipping is available*/
+.checkout-index-index {
+    .hide-shipping-total {
+        display: none !important;
+    }
+    .opc-block-summary {
+        .table-totals {
+            .grand {
+                .amount {
+                    strong {
+                        font-family: 'Fedex Sans Bold';
+                    }
+                }
+            }
+        }
+    }
+}
+.submitorder-index-ordersuccess {
+    table.order-table {
+        >tbody {
+            tr {
+                th {
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    tr.total-estimated-shipping {
+        border-top: 1px solid @border-color;
+    }
+}

@@ -1,0 +1,1968 @@
+@whiteColor: #fff;
+@fontFedexSansLight: 'FedEx Sans Light';
+@toolTipTextColor: #000;
+
+// Start Site Level Payments Css
+@sitePColor1: #FFFFFF;
+@sitePColor2: #008200;
+@sitePColor3: #AAB9BF;
+@sitePColor4: #000000;
+@site-font-family: "FedEx Sans";
+@site-fedex-sans-regular: 'FedEx Sans Regular';
+@site-fedex-sans-bold: 'FedEx Sans Bold';
+@site-fedex-sans-xbold: 'FedEx Sans XBold';
+@site-fedex-sans-light: 'FedEx Sans Light';
+@site-fedex-sans-medium: 'FedEx Sans Medium';
+@site-color-gray: #333333;
+@site-color-light-blue: #00689C;
+@site-color-orange: #ff6200;
+@site-color-border-gray: #E3E3E3;
+
+.site-level-payments-body.account.is-fcl .columns {
+    padding-left:0;
+}
+.site-level-payments-body.account.is-fcl .page-wrapper .page-main .column.main {
+    padding-left:40px;
+}
+.alternate-checkbox-container {
+    margin-right: 5px;
+}
+.new-fedex-account-error span {
+    color: @fedex-account-error;
+    display: flex;
+    font-size: 12px;
+    width: 100%;
+    margin-left: -20px;
+}
+
+.modals-wrapper {
+    .add-account-popup-modal {
+        .modal-inner-wrap {
+            height: 424px;
+            width: 656px !important;
+            padding: 64px 48px 48px 48px;
+            overflow-y: unset;
+            .action-close {
+                right: 10px;
+                top: 10px;
+            }
+
+            .action-close:before {
+                font-size: 16px;
+            }
+
+            span.modal-content-fedex-account-form-sub-heading h2 {
+                font-size: 32px;
+                line-height: 40px;
+                font-family: 'FedEx Sans Light';
+            }
+
+            span.modal-content-fedex-account-form-sub-heading,
+            p.print-account-description {
+                font-weight: 300;
+                font-family: 'FedEx Sans Light';
+                text-align: center;
+                margin-bottom: 16px;
+                display: flex;
+            }
+
+            p.fedex-account-description {
+                font-weight: 300;
+                font-size: 16px;
+                line-height: 24px;
+                font-family: 'FedEx Sans Light';
+            }
+        }
+
+        .modal-content-fedex-account-form-container {
+            text-align: center;
+            width: 560px;
+
+            .modal-content-fedex-account-form-sub-heading {
+                color: @site-color-gray;
+                text-align: center;
+                font-family: "FedEx Sans Light";
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 32px;
+            }
+
+            .fedex-account-model-warning-icon {
+                display: flex;
+                justify-content: center;
+                padding-bottom: 24px;
+                width: 100%;
+                height: 88px;
+                img {
+                    width: 58.67px;
+                    height: 51.33px;
+                    margin: 18px;
+                }
+            }
+
+            .fedex-account-description {
+                color: @site-color-gray;
+                text-align: center;
+                font-family: "FedEx Sans Light";
+                font-size: 16px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 24px;
+            }
+
+            .actions {
+                display: flex;
+                padding-top: 40px;
+
+                .fedex-account-cancel {
+                    padding: 16px 24px 16px 24px;
+                    flex: 1 0 0;
+                    border: 2px solid var(--grays-gray-50, @site-color-gray);
+                    background: var(--core-white, @sitePColor1);
+                    color: var(--grays-gray-50, @site-color-gray);
+                    font-family: 'FedEx Sans Regular';
+                    font-size: 19px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 24px;
+                    letter-spacing: 1.19px;
+                    text-transform: uppercase;
+                    border-radius: 0px;
+                    width: 272px;
+                    height: 56px;
+                }
+
+                .fedex-account-cancel:hover {
+                    border: 2px solid var(--core-orange, @site-color-orange);
+                    color: var(--core-orange, @site-color-orange);
+                }
+
+                .fedex-account-save {
+                    color: var(--core-white, @sitePColor1);
+                    font-family: 'FedEx Sans Regular';
+                    font-size: 19px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 24px;
+                    letter-spacing: 1.19px;
+                    text-transform: uppercase;
+                    padding: 16px 24px 16px 24px;
+                    background: var(--core-orange, @site-color-orange);
+                    border: 2px solid var(--core-orange, @site-color-orange);
+                    margin-left: 16px;
+                    width: 272px;
+                    height: 56px;
+                    border-radius: 0px;
+                }
+
+                .fedex-account:disabled {
+                    background: var(--core-grey, @site-color-gray);
+                    border: 2px solid var(--core-grey, @site-color-gray);
+                    color: @site-color-gray;
+                }
+            }
+        }
+    }
+}
+
+.customer-account-sharedcreditcards {
+    .page-title {
+        span.base {
+            font-size: 32px !important;
+        }
+    }
+    .expiration-month, .expiration-year, .expiration-year option:first-child, .expiration-month option:first-child {
+        color: #8E8E8E;
+    }
+}
+
+.modal-popup.site-level-warning-popup {
+    text-align: center;
+    color: @site-color-gray;
+    font-family: @site-fedex-sans-light;
+    font-size: 16px;
+    line-height: 24px;
+
+    .modal-inner-wrap {
+        width: 656px !important;
+        height: 392px;
+        padding: 64px 48px 48px 48px;
+        border: 1px solid @site-color-border-gray;
+        .modal-title {
+            border-bottom: 0px solid #c1c1c1;
+            font-size: 32px;
+            padding-bottom: unset;
+            .site-level-warning-icon-img {
+                width: 88px;
+                height: 88px;
+            }
+        }
+        button.action-close {
+            right: 15px;
+            top: 15px;
+        }
+        button.action-close::before {
+            color: @site-color-gray;
+            font-size: 19px;
+        }
+        .modal-footer {
+            width: 558px;
+            padding-left: unset;
+            padding-right: unset;
+            padding-bottom: 0px;
+            button {
+                padding: 16px 24px 16px 24px;
+                margin: unset;
+                border-radius: unset;
+            }
+            .site-level-action-secondary {
+                margin-right: 6px;
+                width: 271px;
+                height: 56px;
+                padding: 16px 24px 16px 24px;
+                border: 2px solid @site-color-gray;
+            }
+            .site-level-action-primary {
+                margin-left: 6px;
+                width: 271px;
+                height: 56px;
+                padding: 16px 24px 16px 24px;
+            }
+        }
+        .site-level-action-secondary {
+            background: @sitePColor1;
+            border: 2px solid @site-color-gray;
+            span {
+                color: @site-color-gray;
+                font-size: 19px;
+                line-height: 24px;
+                font-weight: 700;
+                font-family: @site-fedex-sans-bold;
+                letter-spacing: 1.19px;
+            }
+        }
+        .site-level-action-primary {
+            background: @site-color-orange;
+            span {
+                color: @sitePColor1;
+                font-size: 19px;
+                line-height: 24px;
+                font-weight: 700;
+                font-family: @site-fedex-sans-bold;
+                letter-spacing: 1.19px;
+            }
+        }
+        .site-level-warning-popup-content .site-level-warning-title {
+            color: @site-color-gray;
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: 300;
+            font-family: @site-fedex-sans-light;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+        .site-level-warning-popup-content .site-level-warning-description {
+            color: @site-color-gray;
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 300;
+            font-family: @site-fedex-sans-light;
+        }
+    }
+}
+.site-level-payments-credit-card-container {
+    .company-settings-save-section {
+        display: flex;
+        width: 985px;
+        align-items: center;
+        margin-bottom: 48px;
+
+        .save-changes-title {
+            width: 753px;
+            font-family: @site-fedex-sans-regular;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 1px;
+            color: #000000;
+            margin: 0;
+        }
+
+        .save-changes-btn {
+            width: 207px;
+            height: 56px;
+            padding: 16px 24px;
+            background: #ff6200;
+            border-radius: unset;
+            border: unset;
+            font-family: @site-fedex-sans-medium;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 24px;
+            letter-spacing: 1px;
+            text-align: center;
+            color: #ffffff;
+        }
+    }
+    .block {
+        .block-title.stored-credit-cards {
+            display: flex;
+            margin-bottom: 24px !important;
+            width: 560px;
+            padding-bottom: 8px !important;
+            align-items: center;
+            border-bottom: 1px solid #e3e3e3 !important;
+
+            h3 {
+                color: @site-color-gray;
+                font-family: @site-fedex-sans-light;
+                font-size: 24px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 32px;
+                margin: 0;
+            }
+        }
+        .block-content.credit-card-container-section{
+            .box-add-new-card {
+                height: 40px;
+                margin: 0;
+                width: 225px;
+                .box-title {
+                    margin: 0;
+                    padding: 8px 16px;
+                    display: block;
+                }
+                a.box-title-content {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                }
+                span.box-title-content-text {
+                    font-family: @site-fedex-sans-bold;
+                    font-size: 19px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 24px;
+                    letter-spacing: 1.188px;
+                    text-transform: uppercase;
+                    padding-top: 3px;
+                }
+            }
+            .credit-card-form-container {
+                margin-top: 24px;
+
+                h4.credit-card-inforimation {
+                    margin: 0 !important;
+                }
+
+                .box-credit-card-form-container {
+                    width: 530px !important;
+                    max-width: 530px !important;
+
+                    select {
+                        background: #ffffff url('../images/enhanced-profile/select-down.svg') no-repeat 100% 45%;
+                        padding-right: 8px;
+                    }
+                    .credit-card-inforimation {
+                        color: @site-color-gray;
+                        font-size: 16px;
+                        font-weight: 300;
+                        height: 24px;
+                        line-height: 24px;
+                        margin: 0;
+                        width: 177px;
+                    }
+                    .input-container {
+                        display: flex;
+                        flex-direction: column;
+                        width: 524px;
+                        .input-textbox {
+                            width: 100%;
+                            padding: 8px 8px 8px 12px;
+                            color: #8E8E8E;
+                            border: 1px solid #8E8E8E;
+                        }
+                        .input-textbox.card-number {
+                            padding: 8px 0 8px 48px;
+                        }
+                    }
+                    .expiration-date-container, .cvv-container, .input-container,
+                    .zipcode-container, .city-container, .state-container {
+                        .input-label {
+                            color: @site-color-gray;
+                        }
+                    }
+                    .zipcode-container .account-credit-card-error.error .fedex-icon-error{
+                        width: 35px;
+                    }
+                    .expiration-date-container {
+                        width: 405px;
+                        .expiration-month-container {
+                            width: 248px;
+                        }
+                        .expiration-year-container {
+                            width: 157px;
+                        }
+                    }
+                    .cvv-container {
+                        width: 88px;
+                        margin-left: 32px;
+                        .input-textbox {
+                            width: 100%;
+                        }
+                    }
+                    .billing-address-heading {
+                        margin: 0;
+                        padding: 16px 0 0;
+                        line-height: 32px;
+                        font-size: 20px !important;
+                        font-style: normal;
+                        font-weight: 300 !important;
+                        color: #333;
+                    }
+                    .zipcode-container {
+                        margin-right: 16px;
+                        width: 112px;
+                        display: flex;
+                        flex-direction: column;
+                        .input-textbox {
+                            display: flex;
+                            height: 48px;
+                            padding: 8px 8px 8px 12px;
+                            align-items: center;
+                            align-self: stretch;
+                        }
+                    }
+                    .zipcode-container {
+                        margin-right: 16px;
+                        width: 112px;
+                        display: flex;
+                        flex-direction: column;
+                        .input-textbox {
+                            display: flex;
+                            height: 48px;
+                            padding: 8px 8px 8px 12px;
+                            align-items: center;
+                            align-self: stretch;
+                            width: 100%;
+                        }
+                    }
+                    .city-container {
+                        margin-right: 16px;
+                        width: 264px;
+                        display: flex;
+                        flex-direction: column;
+                        .input-textbox {
+                            display: flex;
+                            height: 48px;
+                            padding: 8px 8px 8px 12px;
+                            align-items: center;
+                            align-self: stretch;
+                            width: 100%;
+                        }
+                    }
+                    .state-container {
+                        width: 116px;
+                        display: flex;
+                        flex-direction: column;
+                        .input-textbox {
+                            display: flex;
+                            height: 48px;
+                            padding: 8px 8px 8px 12px;
+                            align-items: center;
+                            align-self: stretch;
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .credit-card-container-feature {
+        display: inline-block;
+
+        .checkmark-terms-condition-container {
+            margin: 0 !important;
+            display: flex;
+            width: 252px;
+            height: 24px;
+            padding: 12px;
+            .alternate-checkbox-container {
+                margin-right: 0;
+            }
+            .alternate-check-container {
+                display: flex;
+                width: 100%;
+                justify-content: space-between;
+            }
+            .terms-condition-text {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #333;
+                font-family: "FedEx Sans Regular";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                padding-top: 5px;
+            }
+        }
+
+        .credit-card-container {
+        width: 630px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        margin: 24px 0;
+
+        .enhanced-profile-toggle {
+            .labels {
+                &::before {
+                    content: attr(data-on);
+                    position: absolute;
+                    left: 10px;
+                    opacity: 0;
+                    transition: all 0.4s ease-in-out;
+                }
+
+                position: absolute;
+                top: 4px;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                color: @sitePColor1;
+                font-size: 12px;
+                font-family: @site-font-family;
+                font-weight: 700;
+                line-height: 16px;
+                letter-spacing: 0.75px;
+                transition: all 0.4s ease-in-out;
+
+                &::after {
+                    content: attr(data-off);
+                    position: absolute;
+                    right: 7px;
+                    opacity: 1;
+                    color: @sitePColor4;
+                    transition: all 0.4s ease-in-out;
+                }
+            }
+
+            input:checked ~ .labels {
+                &::after {
+                    opacity: 0;
+                }
+
+                &::before {
+                    opacity: 1;
+                }
+            }
+
+            float: left;
+            position: relative;
+            margin-top: 0px;
+            margin-left: 8px;
+            width: 11%;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 64px;
+            height: 24px;
+
+            input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+        }
+
+        .custom-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: @sitePColor1;
+            border: 1px solid @sitePColor3;
+            -webkit-transition: .4s;
+            transition: .4s;
+
+            &:before {
+                position: absolute;
+                content: "";
+                height: 24px;
+                width: 24px;
+                left: 0px;
+                bottom: 0px;
+                background-color: @sitePColor1;
+                -webkit-transition: .4s;
+                transition: .4s;
+            }
+        }
+
+        input:checked + .custom-slider:before {
+            transform: translateX(35px);
+            filter: drop-shadow(0px 1px 4px rgba(18, 30, 36, 0.40)) drop-shadow(0px 0px 1px @sitePColor3);
+        }
+
+        input:checked + .custom-slider {
+            background-color: @sitePColor2;
+        }
+
+        .custom-slider.round {
+            border-radius: 34px;
+
+            &:before {
+                border-radius: 50%;
+                filter: drop-shadow(0px 1px 4px rgba(18, 30, 36, 0.40)) drop-shadow(0px 0px 1px @sitePColor3);
+            }
+        }
+
+        .info-icon {
+            .tooltip-icon {
+                height: 24px;
+                width: 24px;
+                vertical-align: middle;
+                margin-left: 0.5rem;
+            }
+            .toggle-icon-tooltip-img.tooltip-icon {
+                height: 32px;
+                width: 32px;
+            }
+            .tooltip-content {
+                font-family: "Fedex Sans Light";
+            }
+        }
+
+        .toggle-title {
+            width: 472px;
+            height: 16px;
+            margin-right: 8px;
+            font-weight: 700;
+            font-size: 12px;
+            line-height: 16px;
+            letter-spacing: 0.75px;
+            font-family: 'FedEx Sans Regular';
+            font-style: normal;
+            text-transform: uppercase;
+        }
+
+        .enhanced-profile .tooltip-content {
+            margin-left: 90px;
+            line-height: 16px;
+            font-weight: 400;
+            width: 510px;
+            height: 12px;
+        }
+
+        .account-credit-cards-toggle {
+            display: flex;
+            align-items: center;
+
+            .enhanced-profile-toggle {
+                margin-left: 16px;
+                width: 64px;
+            }
+
+            .toggle-title {
+                font-family: 'FedEx Sans XBold';
+                font-style: normal;
+                text-transform: uppercase;
+                display: flex;
+                width: auto;
+                margin: 0;
+            }
+            .info-icon {
+                display: flex;
+
+                .my-tooltip {
+                    margin-left: 16px;
+                }
+            }
+
+            input:checked + .custom-slider {
+                background-color: @sitePColor2;
+            }
+
+            .switch {
+                cursor: pointer;
+            }
+
+            input:checked + .custom-slider:before {
+                transform: translateX(40px);
+            }
+        }
+    }
+
+    .credit-card-container-section {
+        width: 560px;
+        display: flex;
+        flex-direction: column;
+        .credit-cart-content {
+            width: 100%;
+            margin-top: 0;
+            .credit-card-head {
+                background-color: #ffffff;
+                border: 1px solid #e3e3e3;
+                box-sizing: border-box;
+                display: flex;
+                height: 80px;
+                padding: 16px 24px;
+                align-items: center;
+                align-self: stretch;
+                justify-content: space-between;
+
+                .head-left {
+                    display: flex;
+                    width: 248px;
+                    align-items: center;
+                    .left {
+                        padding: 0;
+                        display: flex;
+                        width: 24px;
+                        height: 24px;
+                        align-items: center;
+                        img {
+                            height: 24px;
+                            width: 24px;
+                        }
+                    }
+                    .right {
+                        padding: 0 0 0 8px;
+                        display: flex;
+                        flex-direction: column;
+                        .card-type{
+                            color: #333;
+                        }
+                        .card-number {
+                            font-size: 16px;
+                            color: #333;
+                        }
+                    }
+                }
+                .head-mid {
+                    padding: 0;
+                    width: 248px;
+                    .card-expires {
+                        font-size: 16px;
+                        color: #333;
+                        width: 100%;
+                        font-family: 'FedEx Sans Light Italic';
+                    }
+                }
+            }
+            .credit-card-body {
+                background-color: #FAFAFA;
+                border: 1px solid #E3E3E3;
+                margin-bottom: 0;
+                padding: 24px 24px 24px 56px;
+                .credit-card-name {
+                    display: flex;
+                    justify-content: space-between;
+                    padding-bottom: 16px;
+
+                    .name-title {
+                        color: #333;
+                        font-family: 'FedEx Sans Bold';
+                        font-size: 14px;
+                        font-weight: 700;
+                        height: 24px;
+                        letter-spacing: 0.75px;
+                        line-height: 24px;
+                        padding: 0;
+                        text-transform: uppercase;
+                        width: 120px;
+                    }
+                    .name {
+                        color: #333;
+                    }
+                    .action {
+                        height: 32px;
+                        width: 67px;
+                        display: flex;
+                        .action-edit {
+                            background-color: #ffffff;
+                            border: 1px solid #333;
+                            color: #333;
+                            height: 32px;
+                            padding: 4px 16px !important;
+                        }
+                    }
+                }
+                .credit-card-address {
+                    display: flex;
+                    justify-content: space-between;
+                    position: relative;
+                    .address-content {
+                        width: 186px;
+                        display: flex;
+                        flex-direction: column;
+                        .address-title {
+                            color: #333;
+                            font-family: 'FedEx Sans Bold';
+                            font-size: 14px;
+                            font-weight: 700;
+                            height: 24px;
+                            letter-spacing: 0.75px;
+                            line-height: 24px;
+                            padding: 0;
+                            text-transform: uppercase;
+                            width: 100%;
+                            margin: 0;
+                        }
+                        .content {
+                            .name {
+                                color: #333;
+                            }
+                        }
+                    }
+                    .action {
+                        padding: 0;
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                    }
+                }
+            }
+        }
+    }
+    }
+    .checkmark-container.credit-card-container {
+        padding-top: 16px !important;
+        padding-bottom: 16px;
+        margin: 0;
+    }
+    .fedex-account-container-feature {
+        margin-top: 48px;
+        .credit-card-container {
+            margin: 48px 0;
+        }
+        .fedex-account-container-section {
+            width: 100%;
+            .block-title.fedex-account-title {
+                margin-bottom: 48px !important;
+                padding-bottom: 48px !important;
+                h2 {
+                    color: @site-color-gray;
+                    font-family: @site-fedex-sans-light;
+                    font-size: 32px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 40px;
+                    margin: 0;
+                }
+            }
+            .fedex-new-account-container {
+                .block-title.fedex-new-account-title {
+                    border-bottom: none !important;
+                    padding: 0 !important;
+                    margin-bottom: 16px !important;
+                }
+                .fedex-new-account-container-form {
+                    display: flex;
+                    width: 617px;
+                    align-items: center;
+                    height: 94px;
+                    .input-container.error {
+                        padding-top: 20px;
+                    }
+                    .input-container {
+                        display: flex;
+                        width: 518px;
+                        flex-direction: column;
+                        justify-content: center;
+                        align-items: flex-start;
+                        flex-shrink: 0;
+                        margin-top: 0;
+                        .input-label{
+                            color: #333;
+                            font-weight: 700;
+                        }
+                        .new-fedex-account-error {
+                            display: flex;
+                            width: 510px;
+                            padding: 4px 0px 4px 26px;
+                            justify-content: space-between;
+                            align-items: center;
+                            align-content: center;
+                            flex-wrap: wrap;
+                        }
+                    }
+                    .fedex-new-account-add-button {
+                        display: flex;
+                        justify-content: space-around;
+                        align-items: center;
+                        width: 100%;
+                        padding-top: 16px;
+                        height: 94px;
+                        .add-new-account-button {
+                            background-color: #ff6200;
+                            border: none !important;
+                            border-radius: 0;
+                            color: #ffffff;
+                            font-family: 'FedEx Sans Bold';
+                            font-size: 19px;
+                            font-weight: bold;
+                            height: 48px;
+                            letter-spacing: 1px;
+                            line-height: 24px;
+                            text-align: center;
+                            text-transform: uppercase;
+                            width: 78px;
+                        }
+                    }
+                }
+            }
+            .fedex-account-shipping-container {
+                display: flex;
+                flex-direction: column;
+                margin: 48px 0;
+                .shipping-description-container {
+                    display: block;
+                    width: 944px;
+                    color: #333;
+                    font-family: "FedEx Sans Light";
+                    font-size: 20px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 32px;
+                    margin-bottom: 48px;
+                    a {
+                        color: @site-color-light-blue;
+                    }
+                }
+                .faq-description-container {
+                    display: block;
+                    color: #333;
+                    font-family: "FedEx Sans Light";
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 24px;
+                    a {
+                        color: @site-color-light-blue;
+                    }
+                }
+            }
+            .fedex-account-list-container {
+                display: flex;
+                flex-direction: column;
+                .block-title.stored-credit-cards.fedex-account-list-title {
+                    border-bottom: none !important;
+                    padding-bottom: 0 !important;
+                }
+                .fedex-account-lists-section {
+                    display: flex;
+                    flex-direction: column;
+                    .payment-account-list {
+                        margin-top: 0;
+                        margin-bottom: 24px;
+                        width: 560px;
+                        display: flex;
+                        flex-direction: column;
+                        .payment-account-top {
+                            display: flex;
+                            padding: 16px 24px;
+                            align-items: center;
+
+                            .shipping-account-container {
+                                display: flex;
+                                width: 407px;
+                                flex-direction: column;
+                                h3 {
+                                    color:  #333;
+                                    font-family: @site-fedex-sans-bold;
+                                    font-size: 14px;
+                                    font-style: normal;
+                                    font-weight: 700;
+                                    line-height: 24px; /* 171.429% */
+                                    letter-spacing: 0.75px;
+                                    text-transform: capitalize;
+                                }
+                                .mask-account {
+                                    color: #333;
+                                    font-family: "Fedex Sans Light Italic";
+                                    font-size: 16px;
+                                    font-style: italic;
+                                    font-weight: 300;
+                                    line-height: 24px;
+                                }
+                            }
+                            .default-container {
+                                color: #FFF;
+                                text-align: right;
+                                font-family: "FedEx Sans Regular";
+                                font-size: 16px;
+                                font-style: normal;
+                                font-weight: 400;
+                                line-height: 24px;
+                                padding-left: 16px;
+                                .print-text {
+                                    display: flex;
+                                    padding: 4px 16px;
+                                    justify-content: center;
+                                    align-items: center;
+                                    border-radius: 100px;
+                                    background: #4D148C;
+                                }
+                                .ship-text {
+                                    display: flex;
+                                    padding: 4px 16px;
+                                    justify-content: center;
+                                    align-items: center;
+                                    border-radius: 100px;
+                                    background: #FF6200;
+                                    width: 57px;
+                                }
+                            }
+                        }
+                        .payment-account-info-container {
+                            display: flex;
+                            padding: 16px 24px;
+                            align-items: flex-start;
+                            align-self: stretch;
+                            width: auto;
+                            height: auto;
+                            margin-top: 0;
+                            flex-direction: column;
+                            .payment-account-info-container-top {
+                                display: flex;
+                                width: 100%;
+                                justify-content: flex-start;
+                                margin-bottom: 8px;
+                                .status-container, .eligible-for-container{
+                                    text-align: left;
+                                    width: 171.5px;
+                                    margin-right: 16px;
+                                    h4 {
+                                        color: #333;
+                                        font-family: "FedEx Sans Bold";
+                                        font-size: 14px;
+                                        font-style: normal;
+                                        font-weight: 700;
+                                        line-height: 24px;
+                                        letter-spacing: 0.75px;
+                                        text-transform: uppercase;
+                                        height: 24px;
+                                        margin-bottom: 8px;
+                                    }
+                                    p {
+                                        color: #333;
+                                        font-family: "FedEx Sans Regular";
+                                        font-size: 14px;
+                                        font-style: normal;
+                                        font-weight: 400;
+                                        line-height: 24px;
+                                        height: 24px;
+                                        i {
+                                            color: #008A00;
+                                            font-size: 7px;
+                                            margin-right: 8px;
+                                        }
+                                        .dollar-icon {
+                                            top: 0;
+                                        }
+                                    }
+                                }
+                                .status-container {
+                                    margin-right: 64px !important;
+                                }
+                                .action-container {
+                                    width: 89px;
+                                }
+                                .eligible-for-container {
+                                    p {
+                                        display: flex;
+                                    }
+                                }
+                            }
+                            .payment-account-info-container-bottom.credit-card-container {
+                                margin: 0 !important;
+                                width: 299px;
+                                height: 32px;
+                                justify-content: center;
+                                align-items: center;
+                                display: flex;
+                                .account-credit-cards-toggle {
+                                    width: 299px;
+                                    align-items: center;
+                                    justify-content: center;
+                                     .toggle-title {
+                                        color: #333;
+                                        font-family: "FedEx Sans Regular";
+                                        font-size: 14px;
+                                        font-style: normal;
+                                        font-weight: 400;
+                                        line-height: 24px;
+                                        height: 24px;
+                                        letter-spacing: 0.75px;
+                                        text-transform: capitalize;
+                                    }
+                                    .info-icon {
+                                        .my-tooltip {
+                                            margin-left: 0;
+                                        }
+                                        .tooltip-icon {
+                                            margin-left: 8px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+    .site-level-payments-credit-card-container {
+        .company-settings-save-section {
+            .save-changes-title {
+                width: 536px;
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+    .site-level-payments-credit-card-container {
+        display: flex;
+        flex-direction: column;
+        width: 672px;
+        padding: 0 48px;
+        .company-settings-save-section {
+            width: 100%;
+            justify-content: space-between;
+            .save-changes-title {
+                width: 440px;
+            }
+        }
+        .credit-card-container-feature {
+            .block-title.stored-credit-cards {
+                margin-top: 0;
+            }
+        }
+        .credit-card-container-section {
+            .credit-card-form-container {
+                .box-credit-card-form-container {
+                    .cvv-container {
+                        width: 88px !important;
+                    }
+                }
+            }
+        }
+        .fedex-account-container-section {
+            .fedex-account-shipping-container {
+                width: 672px !important;
+                .shipping-description-container {
+                    width: 672px !important;
+                }
+                .faq-description-container {
+                    width: 672px !important;
+                }
+            }
+            .fedex-account-list-container {
+                .block-title.stored-credit-cards.fedex-account-list-title {
+                    width: 100% !important;
+                    margin-right: 0;
+                    justify-content: center;
+                }
+                .fedex-account-lists-section {
+                    align-items: center;
+                }
+            }
+        }
+    }
+    .modal-popup.add-account-popup-modal {
+        left: 0 !important;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 419px) {
+    .customer-account-sharedcreditcards {
+        .page-title {
+            span.base {
+                font-size: 30px !important;
+            }
+        }
+        .modal-popup.site-level-warning-popup {
+            .modal-inner-wrap {
+                width: 288px !important;
+                height: 440px;
+                padding: 32px 24px 24px 24px !important;
+                margin: 5rem auto;
+
+                .modal-footer {
+                    width: 240px;
+                    padding: 0;
+                    display: flex;
+                    flex-direction: column-reverse;
+                    justify-content: space-between;
+                    margin: 0;
+                    .site-level-action-secondary, .site-level-action-primary {
+                        width: 240px;
+                        margin: 0;
+                    }
+                    .site-level-action-primary {
+                        margin-bottom: 16px;
+                    }
+                }
+            }
+        }
+        .modal-popup.add-account-popup-modal {
+            left: 0 !important;
+            .modal-inner-wrap {
+                width: 288px !important;
+                height: 480px;
+                padding: 32px 24px 24px 24px !important;
+                margin: 5rem auto;
+
+                .modal-content-fedex-account-form-container {
+                    width: 240px;
+                    display: flex;
+                    flex-direction: column;
+
+                    .fedex-account-model-warning-icon {
+                        padding-bottom: 16px;
+                    }
+                    .modal-content-fedex-account-form-sub-heading {
+                        margin-bottom: 0;
+                    }
+                    .actions {
+                        display: flex;
+                        padding-top: 16px;
+                        flex-direction: column-reverse;
+                        .fedex-account-cancel {
+                          width: 240px;
+                        }
+                        .fedex-account-save{
+                            width: 240px;
+                            margin-bottom: 16px;
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .site-level-payments-credit-card-container {
+        width: 288px;
+        .company-settings-save-section {
+            width: 288px;
+            flex-direction: column;
+            .save-changes-title {
+                width: 288px;
+                padding-bottom: 24px;
+                margin-bottom: 24px;
+                border-bottom: 1px solid #E3E3E3;
+            }
+        }
+        .block.shared-credit-card-block.credit-card-container-feature {
+            width: 288px;
+            .block-title.stored-credit-cards {
+                width: 288px !important;
+            }
+            .block-content.credit-card-container-section{
+                width: 288px !important;
+                .credit-cart-content {
+                    .credit-card-head {
+                        flex-direction: column;
+                        height: auto;
+                    }
+                    .credit-card-body {
+                        padding: 20px 20px 20px 20px;
+                        .credit-card-address {
+                            .action {
+                                top: -86px;
+                            }
+                        }
+                    }
+                }
+            }
+            .credit-card-form-container {
+                width: 288px !important;
+                .box-credit-card-form-container {
+                    width: 288px !important;
+                    max-width: 288px !important;
+                    .input-container, .expiration-date-container, .cvv-container, .state-container {
+                        width: 288px !important;
+                        .expiration-month-container {
+                            width: 180px;
+                        }
+                        .expiration-year-container {
+                            width: 108px;
+                            margin-top: 0;
+                            top: 5px;
+                        }
+                    }
+                    .cvv-container {
+                        width: 288px;
+                        margin-left: 0;
+                    }
+                    .city-container {
+                        width: 160px;
+                        margin-right: 0;
+                    }
+                }
+            }
+            .credit-card-container {
+                width: 288px;
+
+                .cc-toggle-enable {
+                    display: flex !important;
+                    flex-direction: row;
+
+                    .toggle-title {
+                        order: 1;
+                    }
+                    .toggle-title.cc-toogle-title-mobile {
+                        width: 151px;
+                        margin-right: 16px;
+                        padding-bottom: 10px;
+                    }
+                    .switch-credit-cards-toggle {
+                        order: 3;
+                    }
+
+                    .info-icon {
+                        order: 2;
+                        display: flex;
+                        width: 36px;
+
+                        .my-tooltip {
+                            margin-left: 0;
+
+                            .credit-card-payment-info {
+                                left: -184px !important;
+
+                                &:before {
+                                    left: 195px !important;
+                                }
+
+                                &:after {
+                                    left: 195px !important;
+                                }
+                            }
+                        }
+
+                        .tooltip-icon {
+                            margin-left: 0;
+                        }
+                    }
+                }
+                .toggle-title.print-account-title-label {
+                    width: 172px;
+                    padding-bottom: 10px;
+                }
+            }
+            .checkmark-container.credit-card-container.credit-card-editable-for-mobile {
+                display: flex;
+                flex-direction: column;
+                .account-credit-cards-toggle {
+                    width: 100%;
+                }
+                .info-icon.editable-info-icon {
+                    display: none;
+                }
+                .info-icon.editable-info-icon-outside {
+                    display: block !important;
+                    width: 100%;
+                    padding-top: 5px;
+                }
+            }
+            .fedex-account-container-section {
+                .block-title.stored-credit-cards.fedex-account-title {
+                    margin-bottom: 0;
+                }
+                .fedex-new-account-container-form {
+                    width: 288px;
+                    display: flex;
+                    flex-direction: column;
+                    height: auto;
+                    .input-container {
+                        width: 288px;
+                        .new-fedex-account-error {
+                            width: 268px;
+                            padding: 4px 10px 4px 10px;
+                            span {
+                                margin-left: 0;
+                            }
+                        }
+                    }
+                    .fedex-new-account-add-button {
+                        justify-content: flex-start;
+                        align-items: flex-start;
+                        padding-top: 0;
+                        .add-new-account-button {
+                            width: 175px;
+                        }
+                    }
+                }
+                .fedex-account-shipping-container {
+                    margin-top: 0;
+                    .shipping-description-container {
+                        width: 288px;
+                    }
+                }
+                .fedex-account-list-container{
+                    .fedex-account-lists-section {
+                        .payment-account-list {
+                            width: 288px;
+                            .payment-account-top {
+                                align-items: flex-start;
+                                flex-direction: column;
+                                .shipping-account-container {
+                                    width: 100%;
+                                }
+                                .default-container {
+                                    padding-left: 0;
+                                    padding-top: 16px;
+                                }
+                            }
+                            .payment-account-info-container {
+                                 padding: 16px 0;
+                                .payment-account-info-container-top {
+                                    flex-direction: column;
+                                    padding-left: 24px;
+                                    width: 240px;
+                                    padding-right: 24px;
+                                    .status-container,  .eligible-for-container {
+                                        text-align: left;
+                                        width: 100%;
+                                        margin-right: 0;
+                                        display: flex;
+                                        flex-direction: column;
+                                        height: 72px;
+                                        margin-bottom: 16px;
+                                    }
+                                    .action-container {
+                                        width: 240px;
+                                    }
+                                }
+                                .payment-account-info-container-bottom.credit-card-container {
+                                    width: 252px;
+                                    height: 68px;
+                                    padding: 10px 18px;
+                                    .account-credit-cards-toggle {
+                                        width: 100%;
+                                        justify-content: start;
+                                        height: 48px;
+                                        .toggle-title {
+                                            margin-bottom: 24px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 1199px) {
+    .site-level-payments-body.account.is-fcl .page-wrapper .page-main .column.main {
+        padding-left: 0;
+    }
+    .site-level-payments-body.account .page-main .page-title-wrapper .page-title {
+        margin-right: 0;
+    }
+}
+// End Site Level Payments Css
+
+.account.is-fcl.customer-account-sharedcreditcards {
+    .page-main .column.main .block.shared-credit-card-block {
+        margin-bottom: 0 !important;
+    }
+
+    .block.shared-credit-card-block .tooltip {
+        position: relative;
+        display: inline-flex;
+        top: 11px;
+    }
+    .block.shared-credit-card-block span.tooltip svg {
+        cursor: pointer;
+    }
+
+    .tooltip .tooltiptext {
+        background-color: @whiteColor;
+        border-radius: 3px;
+        box-shadow: 0 4px 7px 0 rgba(0, 0, 0, 0.2), 0 6px 10px 0 rgba(0, 0, 0, 0.19);
+        color: @toolTipTextColor;
+        font-family: @fontFedexSansLight;
+        left: 50%;
+        left: 29px;
+        opacity: 0;
+        padding: 8px 12px;
+        position: absolute;
+        text-align: center;
+        text-align: left;
+        top: -18px;
+        transition: opacity 0.3s;
+        visibility: hidden;
+        width: 389px !important;
+        z-index: -1;
+    }
+
+    .block.shared-credit-card-block .tooltip > svg:hover +.tooltiptext {
+        visibility: visible;
+        opacity: 1;
+        z-index: 9;
+    }
+
+    span.tooltiptext:before {
+        border-bottom: 8px solid transparent;
+        border-right: 8px solid @whiteColor;
+        border-top: 8px solid transparent;
+        content: "";
+        display: block;
+        height: 0;
+        left: -6px;
+        position: absolute;
+        top: 32%;
+        width: 0;
+    }
+
+    .page-main {
+        .title-format {
+            .page-title {
+                span.base {
+                    width: 450px;
+                    display: contents;
+                }
+            }
+        }
+    }
+
+    .alternate-check-container {
+       display:flex;
+       width:100%;
+    }
+}
+.customer-account-sharedcreditcards {
+    .checkmark-terms-condition-container {
+        margin-left: 15px;
+        margin-top: 40px;
+    }
+    .btn-submit-container {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+    .set-as-default {
+        color: @color-dark-grey;
+        float: left;
+        font-family: @my-profile-font-regular;
+        font-size: 14px;
+        letter-spacing: 0;
+        line-height: 24px;
+        margin-left: 0px;
+        margin-top: 2px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .alternate-check-container {
+        float: left;
+        top: 10px;
+        position: relative;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .customer-account-sharedcreditcards {
+        .action {
+            .action-edit {
+                display: none !important;
+            }
+        }
+
+        .mobile-edit {
+            display: block !important;
+        }
+
+        .page-main {
+            padding-left: 18px;
+            padding-right: 15px;
+            padding-top: 0;
+
+            .block-title {
+                border-bottom: 1px solid @profile-title-border !important;
+                color: @color-dark-grey;
+                font-family: @fedex-sans-light;
+                font-size: 24px;
+                font-weight: 300;
+                height: 42px;
+                letter-spacing: .44px;
+                line-height: 32px;
+                margin-bottom: 16px !important;
+                margin-top: 16px;
+                padding-bottom: 0 !important;
+
+                strong {
+                    font-size: 24px !important;
+                }
+            }
+        }
+
+        .page-title {
+            color: @color-dark-grey;
+            font-family: @fedex-sans-light;
+            font-size: 40px;
+            font-weight: 300;
+            height: 52px;
+            letter-spacing: 0;
+            line-height: 52px;
+            margin: 0;
+            padding: 0;
+            top: -25px;
+            position: relative;
+        }
+
+        .credit-card-inforimation {
+            border-bottom: none;
+            color: @color-dark-grey;
+            font-family: @fedex-sans-light;
+            font-size: 20px;
+            font-weight: 300;
+            height: 32px;
+            letter-spacing: 0;
+            line-height: 32px;
+            margin: 16px 0 1px 0 !important;
+            padding: 0;
+        }
+
+        .box-credit-card-form-container {
+            float: none;
+            max-width: 500px;
+        }
+
+        .input-container {
+            float: left;
+            margin-top: 15px;
+            position: relative;
+            width: 100%;
+        }
+
+        .input-textbox {
+            margin-top: 5px;
+            padding: 11px 0 13px 12px;
+        }
+
+        .img-card {
+            left: 0;
+            margin-left: 8px;
+            position: absolute;
+            top: 34px;
+            width: 32px;
+        }
+
+        .card-number {
+            padding-left: 46px !important;
+        }
+
+        .expiration-month-container {
+            float: left;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .expiration-year-container {
+            float: left;
+            margin-top: 5px;
+            width: 100%;
+            top: 8px;
+            position: relative;
+        }
+
+        .billing-address-heading {
+            color: @color-dark-grey;
+            float: left;
+            font-family: @fedex-sans-light;
+            font-size: 20px;
+            font-weight: 300;
+            height: 26px;
+            letter-spacing: .37px;
+            line-height: 26px;
+            margin-bottom: 6px !important;
+            margin-top: 32px !important;
+            padding: 0 !important;
+            width: 100%;
+        }
+
+        .fedex-account-title {
+            float: left;
+            margin-bottom: 16px !important;
+            width: 100%;
+        }
+
+        .block-content {
+            float: left;
+            width: 100%;
+
+            .fedex-account-content {
+                height: 48px !important;
+                line-height: 32px;
+            }
+        }
+
+        .expiration-date-container {
+            width: 100%;
+        }
+
+        .cvv-container {
+            float: left;
+            margin-left: 0;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .second-address-line-link {
+            a {
+                color: @color-blue;
+                font-family: @fedex-sans-bold;
+                font-size: 14px;
+                height: 24px;
+                letter-spacing: .75px;
+                line-height: 24px;
+                margin: 0 !important;
+                padding: 0 !important;
+                text-decoration: none;
+                text-transform: uppercase !important;
+
+                .plus-sign {
+                    font-size: 30px;
+                    position: relative;
+                    top: 5px;
+                }
+            }
+
+            height: 24px;
+            margin-bottom: 8px;
+            margin-top: 16px;
+        }
+
+        .state-container {
+            float: left;
+            margin-top: 16px;
+            width: 100%;
+        }
+
+        .alternate-check-container {
+            float: left;
+            top: 10px;
+            position: relative;
+        }
+
+        .checkmark-container {
+            float: left;
+            height: 48px;
+            margin-left: 10px;
+            padding-top: 28px;
+            width: 100%;
+        }
+
+        .checkmark-terms-condition-container {
+            float: left;
+            height: 48px;
+            margin-left: 10px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .btns-container {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+        }
+
+        .btn-cancel-container {
+            margin-top: 8px;
+            order: 2;
+            width: 100%;
+        }
+
+        .btn-cancel {
+            border-radius: 0;
+            padding-bottom: 17px;
+            padding-top: 15px;
+            width: 100%;
+        }
+
+        .btn-submit-container {
+            float: left;
+            margin-left: 0;
+            margin-top: 16px;
+            order: 1;
+            width: 100%;
+        }
+
+        .btn-submit {
+            border-radius: 0;
+            padding-bottom: 17px;
+            padding-top: 15px;
+            width: 100%;
+            top: 15px;
+            position: relative;
+        }
+
+        .columns {
+            padding-left: 0 !important;
+            position: relative;
+        }
+
+        .block-collapsible-nav-title {
+            strong {
+                color: @color-dark-grey;
+                font-family: @fedex-sans-light;
+                font-size: 16px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 24px;
+            }
+        }
+
+
+        .block-collapsible-nav {
+            .title {
+                background-color: @sitePColor1;
+                border: 1px solid @color-grey;
+                box-sizing: border-box;
+                height: 48px;
+                padding: 12px 0 12px 12px;
+            }
+
+            margin: 0 2px 0 -2px !important;
+            top: 0;
+            width: 100% !important;
+        }
+
+        .page-title-wrapper {
+            margin-top: 96px;
+            top: 10px;
+            position: relative;
+        }
+
+        .box-add-new-card {
+            a {
+                .plus-sign {
+                    font-size: 30px;
+                    position: relative;
+                    top: 5px;
+                }
+
+                color: @color-blue;
+                font-family: @fedex-sans-bold;
+                font-size: 14px;
+                font-weight: bold;
+                letter-spacing: .88px;
+                line-height: 24px;
+                text-transform: uppercase;
+                text-decoration: none;
+            }
+
+            height: 64px;
+            margin-bottom: 31px;
+        }
+    }
+}
+
+.customer-account-sharedcreditcards .block-collapsible-nav .item.current>strong {
+    border-color: #4D148C;
+    font-family: 'FedEx Sans Regular';
+    color: #000000;
+    line-height: 22px;
+    font-weight: 400;
+    height: 14px;
+    padding-left: 16px;
+}
+
+@media screen and (min-width: 320px) and (max-width: 479px) {
+    .customer-account-sharedcreditcards#html-body {
+        #maincontent {
+            .sidebar.sidebar-main .block.block-collapsible-nav {
+                display: block !important;
+                top: -95px;
+            }
+        }
+    }
+}
+
+@media screen and (min-width:639px) and (max-width:1199px) {
+    .customer-account-sharedcreditcards#html-body {
+        #maincontent {
+            .main .page-title #page-title-wrapper {
+                font-size: 32px;
+                font-family: 'FedEx Sans Regular';
+            }
+
+            .sidebar.sidebar-main .block.block-collapsible-nav {
+                display: block !important;
+                top: -25px;
+            }
+
+            .pages .items {
+                display: none;
+            }
+        }
+    }
+}
+@media screen and (max-width: 849px) {
+    .account.is-fcl.customer-account-sharedcreditcards .tooltip .tooltiptext {
+        left: 28px;
+        top: -15px;
+        width: 308px !important;
+    }
+}
+@media screen and (max-width: 700px) and (min-width: 425px) {
+    body.account.is-fcl.customer-account-sharedcreditcards .tooltip .tooltiptext {
+        left: -211px;
+        top: -28px;
+        width: 190px !important;
+    }
+    .account.is-fcl.customer-account-sharedcreditcards span.tooltiptext:before {
+        border-left: 8px solid #fff;
+        left: unset;
+        border-right: 0;
+        right: -6px;
+    }
+}
+
+@media screen and (max-width: 424px) {
+    .account.is-fcl.customer-account-sharedcreditcards .tooltip .tooltiptext {
+        left: 26px;
+        top: -49px;
+        width: 115px !important;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .account.is-fcl.customer-account-sharedcreditcards {
+        .store-credit-card {
+            .custom-radio-btn {
+                padding-bottom: 23px;
+                display: contents;
+                label {
+                    line-height: 24px;
+                    padding: 0 0 40px 40px;
+                    text-align: left;
+                    display: contents;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .customer-account-sharedcreditcards {
+        .set-as-default {
+            margin-top: 0px;
+        }
+    }
+}

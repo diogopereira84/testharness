@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var SaaSContext $block */
+use Magento\LiveSearch\Block\Adminhtml\SaaSContext;
+
+/** @var \Fedex\GraphqlDocs\ViewModel\Admin\GraphQLSchemaBrowser $viewModel */
+$viewModel = $block->getViewModel();
+$graphQLEndpoint = $viewModel ? $viewModel->getGraphQLEndpointUrl() : '';
+
+$searchApiKey = "search_gql";
+?>
+
+<div
+    data-is-api-key-valid="<?php /*phpcs:ignore*/ if ($block->escapeHtmlAttr($block->isApiKeyValid())):?>true<?php else:?>false<?php endif; ?>"
+    data-magento-introspection-url="<?=  /*phpcs:ignore*/  rtrim($block->escapeUrl($graphQLEndpoint), "/"); ?>"
+    id="root"
+></div>
+
+<script src="<?= $block->escapeUrl($block->getViewFileUrl('Fedex_GraphqlDocs::js/admin-ui.js')); ?>"></script>
+
+<style>
+    .graphiql-sessions {
+        display: none !important;
+    }
+    .spectrum-Tabs.spectrum-Tabs--horizontal.SearchAdmin-Navigation {
+        display: none;
+    }
+    .graphiql-container .graphiql-main {
+        display: block;
+    }
+    .graphiql-sidebar .graphiql-sidebar-section:first-child button:nth-child(2),
+    .graphiql-sidebar .graphiql-sidebar-section:first-child button:nth-child(3) {
+        display: none;
+    }
+    .graphiql-sidebar .graphiql-sidebar-section:nth-child(2) button:nth-child(3) {
+        display: none;
+    }
+    .graphiql-doc-explorer-content, .graphiql-doc-explorer-content p, .graphiql-doc-explorer-title,
+    .graphiql-plugin, ul#listbox--\:rl\:, span.graphiql-doc-explorer-search-field, span.graphiql-doc-explorer-search-argument,
+    .graphiql-doc-explorer-header-content, .graphiql-doc-explorer-section-title, span.graphiql-doc-explorer-search-type,
+    .graphiql-doc-explorer-search-empty, .graphiql-doc-explorer-content code {
+        font-size: 14px !important;
+    }
+</style>
+
+<script>
+    require(['jquery'], function ($) {
+        $(function () {
+            window.location.hash = '/graphql';
+        });
+    });
+</script>

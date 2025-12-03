@@ -1,0 +1,143 @@
+<?php
+$isShowEmailNotificationSection = $block->isShowEmailSendingSection();
+$isSdeStore = $block->isSdeStore();
+$reviewOrderDivName = "";
+?>
+<div class="field admin-permission">
+    <input type="hidden" id="manage_users-hidden" name="manage_users-hidden" />
+    <label class="field-name" for="admin-permission">
+        <span>Admin Permissions</span>
+    </label>
+    <?php
+    $permissions = $block->getAllRolePermission();
+    $count = 0;
+    $_columnCount = 2;
+    $internalCount  = 1;
+    ?>
+    <?php $_collectionSize = $permissions->count() ?>
+
+    <?php foreach ($permissions as $permission) : ?>
+        <?php if ($permission->getSortOrder() > 0) : ?>
+            <?php if ($count++ % $_columnCount == 0) : ?>
+                <?php $sectionControl = ($internalCount != 1) ? "second" : "first"; ?>
+                <div class="control <?= $sectionControl ?>-section">
+                <?php endif ?>
+                <?php
+                $permissionLabel = $permission->getLabel();
+                $permissionLabel = explode("::", $permissionLabel);
+                $label = $permissionLabel[0] ?? "";
+                $code = $permissionLabel[1] ?? "";
+                $toolTip = $permission->getTooltip();
+                if ($isSdeStore && $code== "review_orders") {
+                    $reviewOrderDivName = 'review-order-sde';
+                }
+                ?>
+                <div class="<?= $code ?> admin-permission-option-section <?= $reviewOrderDivName ?>">
+                    <input type="checkbox" class="skip_pre_populate edit_single_role_permissions" id="<?= $code ?>" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-permission-<?= $code ?>" name="role_permissions[<?= $code ?>]" value="<?= $permission->getId() ?>">
+                    <label for="<?= $code ?>"><?= $label ?></label>
+                    <button type="button" aria-label="tooltip" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-tooltip" class="tooltip-button">
+                        <svg class="<?= $code ?>-tooltip" xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 24.1667C9.16125 24.1667 4.83334 19.8388 4.83334 14.5C4.83334 9.16129 9.16125 4.83337 14.5 4.83337C19.8388 4.83337 24.1667 9.16129 24.1667 14.5C24.1667 19.8388 19.8388 24.1667 14.5 24.1667ZM14.5 22.9584C19.1714 22.9584 22.9583 19.1714 22.9583 14.5C22.9583 9.82863 19.1714 6.04171 14.5 6.04171C9.82859 6.04171 6.04167 9.82863 6.04167 14.5C6.04167 19.1714 9.82859 22.9584 14.5 22.9584ZM16.6146 18.7292H14.8021H12.9896C12.6559 18.7292 12.3854 18.4587 12.3854 18.125C12.3854 17.7914 12.6559 17.5209 12.9896 17.5209H14.1979V13.5938H13.5938C13.2601 13.5938 12.9896 13.3233 12.9896 12.9896C12.9896 12.656 13.2601 12.3855 13.5938 12.3855H14.8021C15.1358 12.3855 15.4063 12.656 15.4063 12.9896V17.5209H16.6146C16.9483 17.5209 17.2188 17.7914 17.2188 18.125C17.2188 18.4587 16.9483 18.7292 16.6146 18.7292ZM13.5938 9.96879C13.5938 9.47035 13.9979 9.06254 14.5 9.06254C14.9984 9.06254 15.4063 9.47035 15.4063 9.96879C15.4063 10.4709 14.9984 10.875 14.5 10.875C13.9979 10.875 13.5938 10.4709 13.5938 9.96879Z" fill="#4D148C"></path>
+                        </svg>
+                    </button>
+                    <div class="<?= $code ?>-tooltip-message tooltip-message" style="display: none;"><?= $toolTip ?>
+                    </div>
+                </div>
+                <?php $internalCount++;
+                if ($count % $_columnCount == 0 || $count == $_collectionSize) : ?>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endforeach; ?>
+</div>
+<?php if ($isShowEmailNotificationSection) : ?>
+    <div class="field email-approval-section" style="display: none;">
+        <label class="email-approval-message">Would you like this user to receive site access approval emails?</label>
+        <div class="email-approval-selection">
+            <div>
+                <input type="radio" class="skip_pre_populate edit_single_role_permissions" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-permission-email-yes" id="email-approval-yes" aria-label="email-yes" name="email-approval" value="<?= $block->getManageruserEmailAllow($permissions) ?>">
+                <label for="email-approval-yes">Yes</label>
+            </div>
+            <div>
+                <input type="radio" class="skip_pre_populate edit_single_role_permissions" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-permission-email-no" id="email-approval-no" aria-label="email-no" name="email-approval" value="<?= $block->getManageruserEmailDeny($permissions) ?>">
+                <label for="email-approval-no">No</label>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
+<script>
+    require(['jquery'], function($) {
+        var isShowEmailNotificationSection = '<?= $isShowEmailNotificationSection ?>';
+        /*Display tooltip for shared order*/
+        $("#add-user-form .shared_orders-tooltip").hover(function() {
+            $("#add-user-form .shared_orders-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .shared_orders-tooltip-message").hide();
+        });
+
+        /*Display tooltip for credit card*/
+        $("#add-user-form .shared_credit_cards-tooltip").hover(function() {
+            $("#add-user-form .shared_credit_cards-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .shared_credit_cards-tooltip-message").hide();
+        });
+
+        /*Display tooltip for manage user*/
+        $("#add-user-form .manage_users-tooltip").hover(function() {
+            $("#add-user-form .manage_users-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .manage_users-tooltip-message").hide();
+        });
+
+        /*Display tooltip for manage catalog*/
+        $("#add-user-form .manage_catalog-tooltip").hover(function() {
+            $("#add-user-form .tooltip-message").hide();
+            $("#add-user-form .manage_catalog-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .manage_catalog-tooltip-message").hide();
+        });
+
+        /*Display tooltip for site settings*/
+        $("#add-user-form .site_settings-tooltip").hover(function() {
+            $("#add-user-form .tooltip-message").hide();
+            $("#add-user-form .site_settings-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .site_settings-tooltip-message").hide();
+        });
+
+           /*Display tooltip for review orders*/
+           $("#add-user-form .review_orders-tooltip").hover(function() {
+            $("#add-user-form .tooltip-message").hide();
+            $("#add-user-form .review_orders-tooltip-message").show();
+        }, function() {
+            $("#add-user-form .review_orders-tooltip-message").hide();
+        });
+
+        if (isShowEmailNotificationSection) {
+            /*Enable manage user email section*/
+            $(document).on("click", "#add-user-form #manage_users", function() {
+                if ($(this).is(":checked")) {
+                    $("#add-user-form .email-approval-section").show();
+                    if ($("#manage_users-hidden").val() != 1) {
+                        $("#add-user-form #saveuser").prop('disabled', true);
+                        $("#add-user-form #saveuser").addClass("disable-save-user");
+                    }
+                } else {
+                    $("#add-user-form .email-approval-section").hide();
+                    if ($("#manage_users-hidden").val() != 1) {
+                        $("#add-user-form #saveuser").prop('disabled', false);
+                        $("#add-user-form #saveuser").removeClass("disable-save-user");
+                        $('#add-user-form input[name="email-approval"]').prop('checked', false);
+                    }
+                }
+            });
+        }
+
+        /*Enable validation for save button*/
+        $(document).on("click","#add-user-form input[name='email-approval']",function(){
+            $("#add-user-form #saveuser").prop('disabled', false);
+            $("#add-user-form #saveuser").removeClass("disable-save-user");
+        });
+    });
+</script>

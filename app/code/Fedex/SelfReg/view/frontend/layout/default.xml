@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer-account-navigation-company-roles-link" remove="true"/>
+        <referenceContainer name="header.container">
+            <block class="Fedex\SelfReg\Block\Home" name="ajax-login" template="Fedex_SelfReg::ajax-login.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="store.menu">
+            <block class="Magento\Framework\View\Element\Template" name="ajax.top.menu" template="Fedex_SelfReg::topmenu.phtml" after="catalog.topnav">
+                 <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Fedex\SelfReg\Block\User\ManageUserGroupsLink" name="manage-user-groups-link" after="customer-account-manage-users-link">
+                <arguments>
+                <argument name="path" xsi:type="string">company/user/groups</argument>
+                <argument name="label" xsi:type="string">Manage User Groups</argument>
+                <argument name="sortOrder" xsi:type="number">80</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,13 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+/** @var \Magento\Framework\Escaper $escaper */
+$helper = $this->helper('Magento\Catalog\Helper\Output');
+$product = $block->getProduct();
+?>
+<div>
+    <div>
+        <div class="message-text">
+            <?= $helper->productAttribute($product, $product->getData('description'), 'description') ?>
+        </div>
+    </div>
+</div>

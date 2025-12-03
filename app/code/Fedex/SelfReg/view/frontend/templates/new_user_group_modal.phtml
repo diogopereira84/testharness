@@ -1,0 +1,219 @@
+<?php
+/**
+ * Copyright ©FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\SelfReg\ViewModel\CompanyUser $view_model */
+$view_Model_For_Toggel = $block->getData('view_model');
+$groupTypevisibiliy = ($view_Model_For_Toggel->displayGroupTypeSection());
+$groupTypeSection = 'none';
+if ($groupTypevisibiliy) {
+    $groupTypeSection = 'block';
+}
+if (!$groupTypevisibiliy && !$view_Model_For_Toggel->isAllowedSharedCatalog()) {
+    $groupTypevisibiliy = true;
+    $groupTypeSection = 'none';
+}
+
+
+?>
+<div class="new-user-group-modal-container"
+    id="new_user_group_modal_container"
+    data-mage-init='{"newUserGroupModal": {"groupTypeSection": "<?= $groupTypeSection; ?>"}}'
+    style="display: none;">
+    <input type="hidden" name="groupId" id="groupId">
+    <input type="hidden" name="siteUrl" id="siteUrl">
+    <h2 class="new-user-group-header"></h2>
+    <div class="new-user-group-container">
+        <span class="new-user-group-label">
+            <?= $escaper->escapeHtml(__('NAME')); ?>
+        </span>
+        <input type="text"
+            class="new-user-group-name"
+            id="new-user-group-name"
+            placeholder="<?=$escaper->escapeHtmlAttr(__('Group name')); ?>">
+        <div class="group-name-error"></div>
+
+        <?php if ($groupTypevisibiliy): ?>
+        <div style="display:<?php echo $groupTypeSection;?>">    
+            <label for="name" class="group_type">
+                <?= $escaper->escapeHtml(__('GROUP TYPE')); ?>
+            </label><br>
+            <label for="name" class="group_change">
+                <?= $escaper->escapeHtml(__('This cannot be changed later')); ?>
+            </label>
+            <div class="control" id="group_type_radio">
+                <div class="group_type_radio_sub_section">
+                    <div class="group_type_radio_label">
+                        <input type="radio" class="required-entry custom_radio_group"
+                            id="group_type_folder_permissions"
+                            name="group_type_radio"
+                            value="folder_permissions"
+                            aria-labelledby="folder_permissions_label">
+                        <span id="folder_permissions_label">
+                            <?= $escaper->escapeHtml(__('Folder Permissions')); ?>
+                        </span>
+                    </div>
+                    <div class="tooltip-area-folder information">
+                        <svg class="custom-tooltip" xmlns="http://www.w3.org/2000/svg"
+                            width="25" height="25" viewBox="0 0 29 29" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" 
+                                d="M14.5 24.1667C9.16125 24.1667 4.83334 19.8388 4.83334
+                                    14.5C4.83334 9.16129 9.16125 4.83337 14.5 4.83337C19.8388
+                                    4.83337 24.1667 9.16129 24.1667 14.5C24.1667 19.8388 19.8388
+                                    24.1667 14.5 24.1667ZM14.5 22.9584C19.1714 22.9584 22.9583
+                                    19.1714 22.9583 14.5C22.9583 9.82863 19.1714 6.04171 14.5
+                                    6.04171C9.82859 6.04171 6.04167 9.82863 6.04167 14.5C6.04167
+                                    19.1714 9.82859 22.9584 14.5 22.9584ZM16.6146
+                                    18.7292H14.8021H12.9896C12.6559 18.7292 12.3854 18.4587 12.3854
+                                    18.125C12.3854 17.7914 12.6559 17.5209 12.9896
+                                    17.5209H14.1979V13.5938H13.5938C13.2601 13.5938 12.9896 13.3233
+                                    12.9896 12.9896C12.9896 12.656 13.2601 12.3855 13.5938
+                                    12.3855H14.8021C15.1358 12.3855 15.4063 12.656 15.4063
+                                    12.9896V17.5209H16.6146C16.9483 17.5209 17.2188 17.7914 17.2188
+                                    18.125C17.2188 18.4587 16.9483 18.7292 16.6146 18.7292ZM13.5938
+                                    9.96879C13.5938 9.47035 13.9979 9.06254 14.5 9.06254C14.9984
+                                    9.06254 15.4063 9.47035 15.4063 9.96879C15.4063 10.4709 14.9984
+                                    10.875 14.5 10.875C13.9979 10.875 13.5938 10.4709 13.5938 9.96879Z"
+                                fill="#4D148C"></path>
+                        </svg>
+                        <div class="tooltip-box">
+                            <span class="tooltiptext">
+                                <?= $escaper->escapeHtml(__('Create a folder permissions group to limit access to folders in your Catalog')); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="group_type_radio_sub_section">
+                    <div class="group_type_radio_label">
+                        <input type="radio" class="required-entry custom_radio_group"
+                            id="group_type_order_approval"
+                            name="group_type_radio"
+                            value="order_approval"
+                            aria-labelledby="order_approval_label">
+                        <span id="order_approval_label">
+                            <?= $escaper->escapeHtml(__('Order Approval')); ?>
+                        </span>
+                    </div>
+                    <div class="tooltip-area-order information">
+                        <svg class="custom-tooltip" xmlns="http://www.w3.org/2000/svg"
+                            width="25" height="25" viewBox="0 0 29 29" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M14.5 24.1667C9.16125 24.1667 4.83334
+                                    19.8388 4.83334 14.5C4.83334 9.16129 9.16125
+                                    4.83337 14.5 4.83337C19.8388 4.83337 24.1667
+                                    9.16129 24.1667 14.5C24.1667 19.8388 19.8388
+                                    24.1667 14.5 24.1667ZM14.5 22.9584C19.1714
+                                    22.9584 22.9583 19.1714 22.9583 14.5C22.9583
+                                    9.82863 19.1714 6.04171 14.5 6.04171C9.82859
+                                    6.04171 6.04167 9.82863 6.04167 14.5C6.04167
+                                    19.1714 9.82859 22.9584 14.5 22.9584ZM16.6146
+                                    18.7292H14.8021H12.9896C12.6559 18.7292 12.3854
+                                    18.4587 12.3854 18.125C12.3854 17.7914 12.6559
+                                    17.5209 12.9896 17.5209H14.1979V13.5938H13.5938C13.2601
+                                        13.5938 12.9896 13.3233 12.9896 12.9896C12.9896 12.656
+                                        13.2601 12.3855 13.5938 12.3855H14.8021C15.1358 12.3855
+                                        15.4063 12.656 15.4063 12.9896V17.5209H16.6146C16.9483
+                                        17.5209 17.2188 17.7914 17.2188 18.125C17.2188 18.4587
+                                        16.9483 18.7292 16.6146 18.7292ZM13.5938 9.96879C13.5938
+                                        9.47035 13.9979 9.06254 14.5 9.06254C14.9984 9.06254 15.4063
+                                        9.47035 15.4063 9.96879C15.4063 10.4709 14.9984 10.875 14.5
+                                        10.875C13.9979 10.875 13.5938 10.4709 13.5938 9.96879Z"
+                                fill="#4D148C"></path>
+                        </svg>
+                        <div class="tooltip-box">
+                            <span class="tooltiptext">
+                                <?= $escaper->escapeHtml(__('Create a group of users that will have their orders routed to an assigned Order Approver')); ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+        <?php endif; ?>
+    
+        <div class="new-user-group-users" id="new_user_group_users">
+            <label for="new_group_user_area" class="new-user-group-users-label"><?= $escaper->escapeHtml(__('USERS')); ?></label>
+            <div class="field-new-group-users"> 
+                <div class="control new-group-users-list" id="selected_new_group_users_container">
+                    <div class="edit_new_group_users_search">
+                        <input type="text"
+                            id="new_group_user_area"
+                            name="tag"
+                            class="new-group-user-area"
+                            placeholder="Add people">
+                    </div>
+                    <input type="hidden" class="" name="new-group-users-ids" id="new_group_users_id">
+                </div>
+                <div class="edit_new_group_users_datalist_wrapper_new" style="display: none;">
+                    <div id="edit_new_group_users_search_dropdown"></div>
+                </div>
+            </div>
+            
+        </div>
+
+        <?php if ($groupTypevisibiliy): ?>
+        <div class="new-user-group-order-approval"
+            id="new-user-group-order-approval"
+            style="display:none">
+            <label for="name" class="new-user-group-order-approval-label">
+                <?= $escaper->escapeHtml(__('ORDER APPROVERS')); ?>
+            </label>
+            <div class="tooltip-area-order-approval information">
+                <svg class="custom-tooltip" xmlns="http://www.w3.org/2000/svg"
+                    width="25" height="25" viewBox="0 0 29 29" fill="none">
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M14.5 24.1667C9.16125 24.1667 4.83334 19.8388 4.83334
+                            14.5C4.83334 9.16129 9.16125 4.83337 14.5 4.83337C19.8388
+                            4.83337 24.1667 9.16129 24.1667 14.5C24.1667 19.8388 19.8388
+                            24.1667 14.5 24.1667ZM14.5 22.9584C19.1714 22.9584 22.9583 19.1714
+                            22.9583 14.5C22.9583 9.82863 19.1714 6.04171 14.5 6.04171C9.82859
+                            6.04171 6.04167 9.82863 6.04167 14.5C6.04167 19.1714 9.82859 22.9584
+                            14.5 22.9584ZM16.6146 18.7292H14.8021H12.9896C12.6559 18.7292 12.3854
+                            18.4587 12.3854 18.125C12.3854 17.7914 12.6559 17.5209 12.9896
+                            17.5209H14.1979V13.5938H13.5938C13.2601 13.5938 12.9896 13.3233 12.9896
+                            12.9896C12.9896 12.656 13.2601 12.3855 13.5938 12.3855H14.8021C15.1358
+                            12.3855 15.4063 12.656 15.4063 12.9896V17.5209H16.6146C16.9483 17.5209
+                            17.2188 17.7914 17.2188 18.125C17.2188 18.4587 16.9483 18.7292 16.6146
+                            18.7292ZM13.5938 9.96879C13.5938 9.47035 13.9979 9.06254 14.5
+                            9.06254C14.9984 9.06254 15.4063 9.47035 15.4063 9.96879C15.4063 10.4709
+                            14.9984 10.875 14.5 10.875C13.9979 10.875 13.5938 10.4709 13.5938 9.96879Z"
+                        fill="#4D148C"></path>
+                </svg>
+                <div class="tooltip-box">
+                    <span class="tooltiptext">
+                        <?= $escaper->escapeHtml(__('A user must have the Review
+                        Orders permission active to approve orders.')); ?>
+                    </span>
+                </div>
+            </div>
+            <div class="field-name-users">
+                <div class="control users-list" id="selected-users-container">
+                    <div class="edit_users_search">
+                        <input type="text"
+                            id="new-user-order-approval-area"
+                            name="tag"
+                            class="new-user-order-approval"
+                            placeholder="Add people">
+                    </div>
+                    <input type="hidden" name="order_approver_users_ids"
+                        id="selected_order_approver">
+                </div>
+                <div class="edit_users-datalist-wrapper-new" style="display: none;">
+                    <div id="edit_users_search_dropdown"></div>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
+        <div class="new-user-group-modal-buttons">
+            <button class="new-user-group-cancel-button" type="button">
+                <span><?= $escaper->escapeHtml(__('CANCEL')); ?></span>
+            </button>
+            <button class="new-user-group-save-button" type="button">
+                <span><?= $escaper->escapeHtml(__('SAVE')); ?></span>
+            </button>
+        </div>
+    </div>
+</div>

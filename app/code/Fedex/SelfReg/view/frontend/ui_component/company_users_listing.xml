@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">company_users_listing.company_users_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>company_users_columns</spinner>
+        <deps>
+            <dep>company_users_listing.company_users_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="company_users_listing_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <updateUrl path="company/ui/render"/>
+        </settings>
+        <dataProvider class="Magento\Company\Ui\DataProvider\Users\DataProvider" name="company_users_listing_data_source">
+            <settings>
+                <requestFieldName>entity_id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <filters name="listing_filters" class="Magento\Company\Ui\Component\Filters\Status" component="Magento_Company/js/users/grid/filters/filters">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="params" xsi:type="array">
+                    <item name="filters_modifier" xsi:type="array"/>
+                    <item name="statusActive" xsi:type="string"/>
+                    <item name="statusInactive" xsi:type="string"/>
+                </item>
+                <item name="applied" xsi:type="array">
+                    <item name="status" xsi:type="array">0</item>
+                    <item name="statusA" xsi:type="array">1</item>
+                </item>
+            </item>
+        </argument>
+        <settings>
+            <statefull>
+                <property name="applied" xsi:type="boolean">false</property>
+            </statefull>
+        </settings>
+    </filters>
+    <columns name="company_users_columns" component="uiB2bListing">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="table_css_class" xsi:type="string">data table</item>
+            </item>
+        </argument>
+        <settings>
+            <childDefaults>
+                <param name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">company_users_listing.company_users_listing.listing_top.bookmarks</item>
+                    <item name="root" xsi:type="string">columns.${ $.index }</item>
+                    <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                </param>
+            </childDefaults>
+            <storageConfig>
+                <namespace>current</namespace>
+                <provider>company_users_listing.company_users_listing.listing_top.bookmarks</provider>
+            </storageConfig>
+        </settings>
+        <selectionsColumn name="ids" sortOrder="9" class="Fedex\SelfReg\Ui\Component\Listing\Column\CheckBox" component="Fedex_SelfReg/js/grid/columns/multiselect">
+            <settings>
+                <resizeEnabled>true</resizeEnabled>
+                <resizeDefaultWidth>30</resizeDefaultWidth>
+                <indexField>entity_id</indexField>
+            </settings>
+        </selectionsColumn>
+        <column name="entity_id">
+            <settings>
+                <label translate="true">ID</label>
+                <sortable>false</sortable>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="name" sortOrder="10">
+            <settings>
+                <label translate="true">NAME</label>
+                <sortable>true</sortable>
+                <sorting>asc</sorting>
+                <fieldClass>
+                    <class name="long-text-field">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="email" sortOrder="20" class="Fedex\SelfReg\Ui\Component\Listing\Column\CustomerEmail">
+            <settings>
+                <label translate="true">EMAIL</label>
+                <sortable>true</sortable>
+                <fieldClass>
+                    <class name="long-text-field">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="external_user_id" sortOrder="25" class="Fedex\SelfReg\Ui\Component\Listing\Column\ExternalUserId">
+            <settings>
+                <label translate="true">User ID</label>
+                <fieldClass>
+                    <class name="long-text-field">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="role_name" sortOrder="30" class="Fedex\SelfReg\Ui\Component\Listing\Column\Role">
+            <settings>
+                <label translate="true">ROLE</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="customer_group_id" sortOrder="30" class="Fedex\SelfReg\Ui\Component\Listing\Column\UserGroup">
+            <settings>
+                <label translate="true">USER GROUP</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="team" sortOrder="40" component="Magento_Company/js/users/grid/columns/text-with-dash-placeholder">
+            <settings>
+                <label translate="true">Team</label>
+                <sortable>true</sortable>
+                <visible>false</visible>
+            </settings>
+        </column>
+        <column name="status" sortOrder="50" class="Magento\Company\Ui\Component\Listing\Column\CustomerStatus">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="fieldClass" xsi:type="string">custom_column_status</item>
+                <item name="componentDisabled" xsi:type="boolean">true</item>
+                </item>
+            </argument>
+            <settings>
+                <filter>select</filter>
+                <options class="Magento\Company\Model\Customer\Source\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">STATUS</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="customer_status" sortOrder="50" class="Fedex\SelfReg\Ui\Component\Listing\Column\CustomerStatus">
+            <settings>
+                <filter>select</filter>
+                <options class="Fedex\SelfReg\Model\Customer\Source\Status"/>
+                <dataType>select</dataType>
+                <label translate="true">STATUS</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at" sortOrder="60" class="Fedex\SelfReg\Ui\Component\Listing\Column\AddedDate">
+            <settings>
+                <label translate="true">DATE ADDED</label>
+                <sortable>true</sortable>
+                <fieldClass>
+                    <class name="long-text-field date_added">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <actionsColumn name="actions" sortOrder="70" class="Fedex\SelfReg\Ui\Component\Listing\Column\CompanyUsersActions" component="Fedex_SelfReg/js/users/grid/columns/actions">
+            <settings>
+                <fieldClass>
+                    <class name="col actions">true</class>
+                </fieldClass>
+                <label>ACTIONS</label>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+                <indexField>entity_id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+    <container name="listing_top">
+        <paging name="listing_paging" component="uiB2bPaging">
+            <settings>
+                <selectProvider>company_users_listing.company_users_listing.company_users_columns.ids</selectProvider>
+                <storageConfig>
+                    <namespace>current.paging</namespace>
+                    <provider>company_users_listing.company_users_listing.listing_top.bookmarks</provider>
+                </storageConfig>
+            </settings>
+        </paging>
+    </container>
+</listing>

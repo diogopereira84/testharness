@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <!-- API Endpoint for Orders -->
+    <route url="/V1/marketplacewebhook/order" method="POST">
+        <service class="Fedex\MarketplaceWebhook\Api\MiraklWebhookInterface" method="handleWebhook"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

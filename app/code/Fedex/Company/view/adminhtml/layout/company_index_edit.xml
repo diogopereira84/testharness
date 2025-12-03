@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Pratibha
+ * Core Customization, added custom css  
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>
+    <head>
+        <css src="Fedex_Company::css/font-awesome/css/font-awesome.css"/>
+        <!-- B-1205796 : API integration for CC details and Billing details in Magento Admin -->
+        <link src="Fedex_Company::js/cc_validation.js"/>
+        <link src="Fedex_Company::js/shared-catalog-validation.js"/>
+    </head>
+    <body>
+        <referenceContainer name="header">
+            <block class="Fedex\Company\Block\Adminhtml\Script" name="googlemaps.api" template="Fedex_Company::Script.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="admin.scope.col.wrap" />
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="company.edit.credit" template="Fedex_Company::credit.phtml" before="-" />
+            <uiComponent name="company_form"/>
+        </referenceContainer>
+    </body>
+</page>

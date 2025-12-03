@@ -1,0 +1,18 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+	<body> 
+		<referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="fxo_cm_sdk" template="Fedex_FXOCMConfigurator::sdk.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+		<referenceContainer name="top.container">
+            <block class="Magento\Framework\View\Element\Template" name="preview_block" template="Fedex_CatalogMvp::preview.phtml">
+                <arguments>
+                     <argument name="fxo_cm_view_model" xsi:type="object">Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

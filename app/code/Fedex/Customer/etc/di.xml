@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\Customer\Api\Data\ConfigInterface" type="Fedex\Customer\Model\Config"/>
+    <preference for="Fedex\Customer\Api\SalesForceInterface" type="Fedex\Customer\Model\SalesForce"/>
+    <preference for="Fedex\Customer\Api\Data\SalesForceCustomerSubscriberInterface" type="Fedex\Customer\Model\Data\SalesForceCustomerSubscriber"/>
+    <preference for="Fedex\Customer\Api\Data\SalesForceResponseInterface" type="Fedex\Customer\Gateway\Response\SalesForce"/>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="commandcustomer_emailupdate" xsi:type="object">Fedex\Customer\Console\UpdateCustomerEmail</item>
+                <item name="commandcustomer_ssoemailupdate" xsi:type="object">Fedex\Customer\Console\UpdateCustomerEmailSso</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\Customer\Console\UpdateCustomerEmail">
+        <arguments>
+            <argument name="customerFactory" xsi:type="object">Magento\Customer\Model\CustomerFactory</argument>
+            <argument name="customerResource" xsi:type="object">Magento\Customer\Model\ResourceModel\Customer</argument>
+            <argument name="state" xsi:type="object">Magento\Framework\App\State</argument>
+            <argument name="companyFactory" xsi:type="object">Magento\Company\Model\CompanyFactory</argument>
+            <argument name="resourceConnection" xsi:type="object">Magento\Framework\App\ResourceConnection</argument>
+        </arguments>
+    </type>
+     <type name="Magento\Customer\Api\CustomerRepositoryInterface">
+        <plugin name="remote_assistance_plugin" type="Fedex\Customer\Plugin\CustomerPlugin" sortOrder="10"/>
+        <plugin name="login_as_customer_customer_repository_plugin" sortOrder="20"/>
+    </type>
+</config>

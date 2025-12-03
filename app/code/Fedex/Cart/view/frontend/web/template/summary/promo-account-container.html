@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- ko ifnot: isCustomerShippingAccount3PEnabled -->
+<div class="shipping-disclaimer-container message-block message-info d-flex mt-12 hide">
+    <div class="icon d-no-shrink self-center info-icon">
+    </div>
+    <div class="message-text disclaimer-message">
+    </div>
+    <div class="ml-auto">
+        <button type="button" class="close-message" aria-label="Close disclaimer message" data-bind="click: closeShippingDisclaimerMessage">
+        </button>
+    </div>
+</div>
+<!-- /ko -->
+<div class="shipping-message-container message-block message-info d-flex" style="display: none;">
+    <div class="icon d-no-shrink self-center info-icon">
+    </div>
+    <div class="message-text">
+        <p class="discount-message m-0"></p>
+    </div>
+    <div class="ml-auto">
+        <button type="button" class="close-message" aria-label="Close discount message" data-bind="click: closeDiscountMessage"></button>
+    </div>
+</div>
+<div class="checkout-promo-account-container">
+    <!-- ko foreach: elems() -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</div>

@@ -1,0 +1,61 @@
+type Query {
+    getPrimaryMegaMenu: GetMenuData @resolver( class: "Magedelight\\Megamenu\\Model\\Resolver\\PrimaryMegamenu"),
+    getMegaMenuById (
+        id: Int @doc(description: "Get Megamenu by Id.")
+    ) : GetMenuData @resolver( class: "Magedelight\\Megamenu\\Model\\Resolver\\Megamenu")
+}
+
+type GetMenuData {
+    menu: menuData
+}
+
+type menuData {
+    menu_id: Int @doc(description: "Menu id"),
+    menu_design_type: String @doc(description: "Menu design type"),
+    menu_name: String @doc(description: "Menu Name"),
+    menu_alignment: String @doc(description: "Menu Alignment"),
+    is_active: Int @doc(description: "Is active"),
+    menu_type: Int @doc(description: "Menu Type"),
+    is_sticky: Int @doc(description: "Is Sticky"),
+    customer_groups: String @doc(description: "Customer Groups"),
+    creation_time: String @doc(description: "Create Time"),
+    update_time: String @doc(description: "Update Time"),
+    store_id: String @doc(description: "Available Stores"),
+    menu_items: [menuItems]
+}
+
+type menuItems {
+    item_id: Int @doc(description: "Menu item id"),
+    item_name: String @doc(description: "Menu item name"),
+    item_type: String @doc(description: "Menu item type"),
+    sort_order: Int @doc(description: "Menu item sort order"),
+    item_parent_id: Int @doc(description: "Menu item parent id"),
+    menu_id: Int @doc(description: "Menu id"),
+    object_id: String @doc(description: "Object Id for the menu item eg. categoryId, CmsPageId etc.."),
+    item_link: String @doc(description: "Menu item link"),
+    item_columns: Int @doc(description: "Menu item columns"),
+    item_font_icon: String @doc(description: "Menu item font icon"),
+    item_class: String @doc(description: "Menu item additional classes"),
+    animation_option: String @doc(description: "Menu item animation options"),
+    category_display: Int @doc(description: "Sub Category display"),
+    category_vertical_menu: String @doc(description: "Vertical menu"),
+    category_vertical_menu_bg: String @doc(description: "Vertical menu BG Color"),
+    creation_time: String @doc(description: "Menu creation time"),
+    update_time: String @doc(description: "Menu update time"),
+    item_columns: [itemColumns],
+    category_columns: [categoryColumns],
+    childrens: [menuItems]
+}
+
+type categoryColumns {
+    type: String @doc(description: "Column Type: Header, Footer, Right, Left"),
+    enable: Boolean @doc(description: "Column enabled"),
+    value: String @doc(description: "Block Identifier"),
+    showtitle: Boolean @doc(description: "Show Title for column"),
+}
+
+type itemColumns {
+    type: String @doc(description: "Column Type: Header, Footer, Right, Left"),
+    value: String @doc(description: "Block Identifier"),
+    showtitle: Boolean @doc(description: "Show Title for column"),
+}

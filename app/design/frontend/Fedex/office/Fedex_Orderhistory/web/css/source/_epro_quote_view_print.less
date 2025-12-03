@@ -1,0 +1,137 @@
+// variables
+@epro_quote_view_print_font_family_regular: 'FedEx Sans Regular';
+@epro_quote_view_print_font_family_light: 'FedEx Sans Light';
+@epro_quote_view_print_font_family_bold: 'FedEx Sans Bold';
+@epro_quote_view_print_color: @fx-grey-500;
+@epro_quote_view_print_white_color: @fx-white-100;
+@epro_quote_view_print_orange_color: @fx-orange-500;
+
+.epro-quote-view-print-option {
+    .page-wrapper {
+        .quote-id-title {
+            color: @epro_quote_view_print_color;
+            font-family: @epro_quote_view_print_font_family_light;
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+            margin-bottom: 20px;
+            margin-top: 8px !important;
+            padding-left: 268px;
+        }
+        .quote-date {
+            margin-top: -20px;
+            .quote-date-created {
+                color: @epro_quote_view_print_color;
+                font-family: @epro_quote_view_print_font_family_light;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 24px;
+                b {
+                    font-family: @epro_quote_view_print_font_family_regular !important;
+                    font-weight: 400 !important;
+                    padding: 0 8px 8px 0;
+                }
+            }
+            .quote-date-expired {
+                color: @epro_quote_view_print_color;
+                font-family: @epro_quote_view_print_font_family_light;
+                font-size: 18px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 24px;
+                b {
+                    font-family: @epro_quote_view_print_font_family_regular !important;
+                    font-weight: 400 !important;
+                    padding: 0 8px 8px 0;
+                }
+            }
+        }
+        .quote-actions-toolbar {
+            .quote-view-links {
+                margin: 24px 0 48px -66px !important;
+                .epro_print_button {
+                    background-color: @upload_to_quote_white_color;
+                    border: 2px solid @epro_quote_view_print_orange_color;
+                    border-radius: 0;
+                    color: @epro_quote_view_print_orange_color;
+                    font-family: @upload_to_quote_font_family_bold;
+                    font-size: 19px;
+                    font-style: normal;
+                    font-weight: 700;
+                    letter-spacing: 1.188px;
+                    line-height: 24px;
+                    padding: 16px 24px;
+                    text-align: center;
+                    text-transform: uppercase;
+                }
+                .btn-close {
+                    display: none;
+                }
+                .action.delete {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1440px) and (max-width:1440px) {
+    .epro-quote-view-print-option {
+        .page-wrapper {
+            .quote-id-title {
+                margin-bottom: 34px !important;
+                padding-left: 61px;
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-quote-view-print-option {
+        .page-wrapper {
+            .quote-id-title {
+                margin-bottom: 0;
+                padding-left: 14px !important;
+            }
+            .quote-actions-toolbar {
+                .quote-view-links {
+                    margin: 32px 0 48px -41px !important;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .epro-quote-view-print-option {
+        .page-wrapper {
+            .quote-id-title {
+                margin-bottom: 32px;
+                padding-left: 14px !important;
+            }
+            .quote-actions-toolbar {
+                .quote-view-links {
+                    margin: 24px 0 48px -41px !important;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .epro-quote-view-print-option {
+        .page-wrapper {
+            .quote-date {
+                .quote-date-expired {
+                    margin-top: 8px;
+                }
+            }
+            .quote-id-title {
+                padding-left: 14px !important;
+            }
+            .quote-actions-toolbar {
+                .quote-view-links {
+                    margin: 36px 0 48px 0 !important;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<head>
+		<css src="Fedex_UploadToQuote::css/quote-detail.css" />
+	</head>
+	<body>
+		<referenceBlock name="negotiable.quote.comments">
+			<action method="setTemplate">
+				<argument name="template" xsi:type="string">
+					Fedex_UploadToQuote::quote/view/comments.phtml
+				</argument>
+			</action>
+			<block class="Fedex\UploadToQuote\Block\Adminhtml\Quote\View\SpecialInstructions" name="special.instructions.block" template="Fedex_UploadToQuote::quote/view/special_instructions.phtml" />
+		</referenceBlock>
+		<referenceBlock name="negotiable.quote.info">
+			<action method="setTemplate">
+				<argument name="template" xsi:type="string">
+					Fedex_UploadToQuote::quote/view/info.phtml
+				</argument>
+			</action>
+			<arguments>
+				<argument name="upload_to_quote_info_view_model" xsi:type="object">Fedex\UploadToQuote\ViewModel\Info</argument>
+			</arguments>
+			<block class="Magento\Framework\View\Element\Template" name="u2q.info.block" template="Fedex_UploadToQuote::quote/view/created_by.phtml">
+				<arguments>
+					<argument name="view_model" xsi:type="object">
+						Fedex\UploadToQuote\ViewModel\QuoteDetailPageEnhancement
+					</argument>
+				</arguments>
+			</block>
+		</referenceBlock>
+	</body>
+</page>

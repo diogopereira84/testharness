@@ -1,0 +1,29 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\Canva\ViewModel\ConfigAdapter $config */
+/** @var \Fedex\Canva\ViewModel\PodConfiguration $pod */
+$config = $block->getConfig();
+$pod = $block->getPod();
+$params = [
+    'text' => 'to-send-in-the-js-file',
+    'displayEle' => '#text',
+    'container' => 'design-catalog__container',
+    'loaderIcon' => $escaper->escapeUrl(
+        $block->getViewFileUrl('images/canva-spinner.gif', ['module' => 'Fedex_Canva'])
+    ),
+    "loginModal" => "#canva-login-modal",
+    "featureToggle" => $config->getFeatureToggle(),
+    "tigerE424480Toggle" => $config->getTigerE424480Toggle()
+];
+?>
+<div class="canva-iframe"
+     data-mage-init='{"canva-iframe": <?= $escaper->escapeHtml(json_encode($params)); ?>}' >
+    <div id="design-catalog__container">
+    </div>
+</div>
+<style type="text/css" media="all">
+    .canva-iframe iframe {
+        width: 100%;
+    }
+</style>

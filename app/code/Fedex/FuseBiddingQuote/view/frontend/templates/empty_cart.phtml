@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var Fedex\FuseBiddingQuote\ViewModel\FuseBidViewModel $fuseBidViewModel */
+$fuseBidViewModel = $block->getData('fusebidQuoteViewModal');
+?>
+
+<?php
+if ($fuseBidViewModel->isFuseBidToggleEnabled()): ?>
+    <div id="retail-empty-cart-modal-popup" class="retail-empty-cart-modal-popup-content" style="display: none;">
+        <div class="warning-icon-container">
+            <img class="warning-icon" alt="Warning" 
+            src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/commercial-order-approval/warning.png'));?>"/>
+        </div>
+        <h3 class="empty-cart-checkout-title">
+            <?= $escaper->escapeHtml(__('We cannot combine this quote with existing items in your cart')) ?>
+        </h3>
+        <div class="empty-cart-checkout-message">
+            <?= $escaper->escapeHtml(__('Please continue to checkout with the items in your cart and return back to this page to complete this order.')) ?>
+        </div>
+        <div class="empty-cart-checkout-popup-btn-container">
+            <button type="button" data-role="closeBtn" class="btn-popup-cancel">
+                <?= $escaper->escapeHtml(__('Cancel')) ?>
+            </button>
+            <button type="button" class="btn-close-checkout btn-goto-cart">
+                <?= $escaper->escapeHtml(__('go to cart')) ?>
+            </button>
+        </div>
+    </div>
+    <script>
+        require(['emptyCartModalPopup'], function(emptyCartModalPopup) {
+        });
+    </script>
+<?php endif; ?>

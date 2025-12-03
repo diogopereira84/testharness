@@ -1,0 +1,424 @@
+<?php
+/**
+ * Magedelight
+ * Copyright (C) 2017 Magedelight <info@magedelight.com>
+ *
+ * @category Magedelight
+ * @package Magedelight_Megamenu
+ * @copyright Copyright (c) 2017 Mage Delight (http://www.magedelight.com/)
+ * @license http://opensource.org/licenses/gpl-3.0.html GNU General Public License,version 3 (GPL-3.0)
+ * @author Magedelight <info@magedelight.com>
+ */
+?>
+    <div id="catalogprint.sidebar">
+        <div class="entry-edit">
+            <div class="entry-edit-head">
+                <h4><?= /* @noEscape */  __('Category Selection') ?></h4>
+            </div>
+            <div class="fieldset">
+                <div class="hor-scroll">
+                    <input type="hidden" name="category_ids" id="product_categories" value="">
+                    <input type="hidden" name="category_ids_path" id="product_categories_path" value="">
+        <?php if ($block->getRoot()): ?>
+                    <div id="product-categories" class="tree"></div>
+                </div>
+                <button type="button" class="form-button categoryAdd ui-button"><?= /* @noEscape */ __('Add to menu'); ?></button>
+            </div>
+        </div>
+    </div>
+        <script>
+        var tree;
+        require([
+            "jquery",
+            'Magento_Ui/js/modal/modal',
+            'jquery-ui-modules/tabs',
+            "prototype",
+            "extjs/ext-tree-checkbox",
+            "mage/adminhtml/form",
+            "mage/translate"
+        ], function (jQuery, modal) {
+
+            var registry = {
+                data: [],
+
+                set: function (key, value) {
+                    this.data[key] = value;
+                },
+
+                get: function (key) {
+                    return this.data[key];
+                }
+            };
+
+            var treeRoot = '#product-categories';
+
+            /**
+             * Fix ext compatibility with prototype 1.6
+             */
+            Ext.lib.Event.getTarget = function (e) {
+                var ee = e.browserEvent || e;
+                return ee.target ? Event.element(ee) : null;
+            };
+
+            Ext.tree.TreePanel.Enhanced = function (el, config) {
+                Ext.tree.TreePanel.Enhanced.superclass.constructor.call(this, el, config);
+            };
+
+
+            Ext.extend(Ext.tree.TreePanel.Enhanced, Ext.tree.TreePanel, {
+
+                loadTree: function (config, firstLoad) {
+                    var parameters = config['parameters'];
+                    var data = config['data'];
+
+                    this.storeId = parameters['store_id'];
+
+                    if (this.storeId != 0 && $('add_root_category_button')) {
+                        $('add_root_category_button').hide();
+                    }
+
+                    if ((typeof parameters['root_visible']) != 'undefined') {
+                        this.rootVisible = parameters['root_visible'] * 1;
+                    }
+
+                    var root = new Ext.tree.TreeNode(parameters);
+
+                    this.nodeHash = {};
+                    this.setRootNode(root);
+                    this.modal = modal;
+
+                    if (firstLoad) {
+                        this.addListener('click', this.categoryClick);
+                        /*this.addListener('beforenodedrop', categoryMove.bind(this));*/
+                    }
+
+                    this.loader.buildCategoryTree(root, data);
+                    this.el.dom.innerHTML = '';
+                    // render the tree
+                    this.render();
+
+
+                    var selectedNode = this.getNodeById(parameters['category_id']);
+                    if (selectedNode) {
+                        this.currentNodeId = parameters['category_id'];
+                    } else {
+                        if (parameters['parent'] > 0 && parameters['category_id'] === 0) {
+                            this.currentNodeId = parameters['parent'];
+                        }
+                    }
+                    this.selectCurrentNode();
+
+                    // Temporary solution will be replaced after refactoring of tree functionality
+                    jQuery('body').off('tabsactivate.tree').on('tabsactivate.tree', jQuery.proxy(function (e, ui) {
+                        this.activeTab = jQuery(ui.newTab).find('a').prop('id');
+                    }, this))
+                },
+
+                request: function (url, params) {
+                    if (!params) {
+                        if (this.activeTab) {
+                            var params = {active_tab_id: this.activeTab};
+                        }
+                        else {
+                            var params = {};
+                        }
+                    }
+                    if (!params.form_key) {
+                        params.form_key = FORM_KEY;
+                    }
+                    var result = new Ajax.Request(
+                        url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ),
+                        {
+                            parameters: params,
+                            method: 'post'
+                        }
+                    );
+
+                    return result;
+                },
+
+                selectCurrentNode: function () {
+                    var selectedNode = this.getNodeById(this.currentNodeId);
+
+                    if (selectedNode) {
+                        if ((typeof selectedNode.attributes.path) != 'undefined') {
+                            var path = selectedNode.attributes.path;
+                            if (!this.storeId) {
+                                path = '0/' + path;
+                            }
+                            this.selectPath(path);
+                        } else {
+                            this.getSelectionModel().select(selectedNode);
+                        }
+                    }
+                },
+
+                categoryClick: function (node, e) {
+                    categoryClick(node,e);
+                }
+
+            });
+
+            function reRenderTree(switcherParams) {
+                // re-render tree by store switcher
+                if (tree && switcherParams) {
+                    var url;
+                    if (switcherParams.useConfirm) {
+                        if (!confirm("<?= $block->escapeJs(__('Please confirm site switching. All data that hasn\'t been saved will be lost.')) ?>")) {
+                            return false;
+                        }
+                    }
+
+                    if ($('add_root_category_button')) {
+                        if (!switcherParams.scopeId) {
+                            $('add_root_category_button').show();
+                        }
+                        else {
+                            $('add_root_category_button').hide();
+                        }
+                    }
+
+                    if (tree.useAjax) {
+                        // retain current selected category id
+                        url = tree.switchTreeUrl + switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+                        // load from cache
+                        // load from ajax
+                        // add form key
+                        var params = {
+                            form_key: FORM_KEY
+                        };
+                        new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&isAjax=true' : '?isAjax=true' ), {
+                            parameters: params,
+                            method: 'post',
+                            onComplete: function (transport) {
+                                var response;
+
+                                try {
+                                    response = JSON.parse(transport.responseText);
+                                } catch (e) {
+                                    console.warn('An error occurred while parsing response');
+                                }
+
+                                if (!response || !response['parameters']) {
+                                    return false;
+                                }
+
+                                _renderNewTree(response, switcherParams.scopeParams);
+                            }
+                        });
+                    } else {
+                        var baseUrl = '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>';
+                        var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
+                        url = parseSidUrl(baseUrl, urlExt);
+                        setLocation(url);
+                    }
+                }
+                // render default tree
+                else {
+                    _renderNewTree();
+                }
+            }
+
+            function _renderNewTree(config, scopeParams) {
+                if (!config) {
+                    var config = defaultLoadTreeParams;
+                }
+
+                if (tree) {
+                    tree.purgeListeners();
+                    tree.el.dom.innerHTML = '';
+                }
+                tree = new Ext.tree.TreePanel.Enhanced('product-categories', newTreeParams);
+
+                tree.loadTree(config, true);
+
+                    tree.on('check', function (node) {
+                        if (node.attributes.checked) {
+                            categoryAdd(node);
+                        } else {
+                            categoryRemove(node);
+                        }
+                        varienElementMethods.setHasChanges(node.getUI().checkbox);
+                    }, tree);
+
+                // try to select current category
+                var selectedNode = tree.getNodeById(config.parameters.category_id);
+                if (selectedNode) {
+                    tree.currentNodeId = config.parameters.category_id;
+                }
+
+            }
+
+             function categoryClick(node, e) {
+                    if (node.disabled) {
+                        return;
+                    }
+                    node.getUI().check(!node.getUI().checked());
+                    varienElementMethods.setHasChanges(Event.element(e), e);
+                };
+
+                function categoryAdd(node) {
+                    var nodeArray = new Array();
+                    var nodeObject = {text: node.attributes.text, id: node.id};
+                    if ($('product_categories').value) {
+                        nodeArray = JSON.parse($('product_categories').value);
+                    }
+
+                    var nodeExist = false;
+                    for (index = 0; index < nodeArray.length; ++index) {
+                        if (nodeArray[index].id == node.id) {
+                            nodeExist = true;
+                        }
+                    }
+                    if (!nodeExist) {
+                        nodeArray.push(nodeObject);
+                    }
+
+                    $('product_categories').value = JSON.stringify(nodeArray);
+                }
+                function categoryRemove(node) {
+                    var nodeArray = new Array();
+                    var nodeObject = {text: node.attributes.text, id: node.id};
+                    if ($('product_categories').value) {
+                        nodeArray = JSON.parse($('product_categories').value);
+                    }
+
+                    var nodeExist = false;
+                    for (index = 0; index < nodeArray.length; ++index) {
+                        if (nodeArray[index].id == node.id) {
+                            nodeArray.splice(index, 1);
+                            break;
+                        }
+                    }
+                    $('product_categories').value = JSON.stringify(nodeArray);
+                }
+
+            jQuery(function () {
+                categoryLoader = new Ext.tree.TreeLoader({
+                    dataUrl: '<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())) ?>'
+                });
+
+                categoryLoader.processResponse = function (response, parent, callback) {
+                    var config = JSON.parse(response.responseText);
+
+                    this.buildCategoryTree(parent, config);
+
+                    if (typeof callback == "function") {
+                        callback(this, parent);
+                    }
+                };
+
+                categoryLoader.buildCategoryTree = function (parent, config) {
+
+                    if (!config)
+                        return null;
+
+                    if (parent && config && config.length) {
+                        for (var i = 0; i < config.length; i++) {
+                            config[i].uiProvider = Ext.tree.CheckboxNodeUI;
+                            var node;
+                            var _node = Object.clone(config[i]);
+                            if (_node.children && !_node.children.length) {
+                                delete(_node.children);
+                                node = new Ext.tree.AsyncTreeNode(_node);
+
+                            } else {
+                                node = new Ext.tree.TreeNode(config[i]);
+                            }
+                            parent.appendChild(node);
+                            node.loader = node.getOwnerTree().loader;
+                            if (config[i].children) {
+                                this.buildCategoryTree(node, config[i].children);
+                            }
+                        }
+                    }
+                };
+
+                categoryLoader.buildHash = function (node) {
+                    var hash = {};
+
+                    hash = this.toArray(node.attributes);
+
+                    if (node.childNodes.length > 0 || (node.loaded == false && node.loading == false)) {
+                        hash['children'] = new Array;
+
+                        for (var i = 0, len = node.childNodes.length; i < len; i++) {
+                            if (!hash['children']) {
+                                hash['children'] = new Array;
+                            }
+                            hash['children'].push(this.buildHash(node.childNodes[i]));
+                        }
+                    }
+
+                    return hash;
+                };
+
+                categoryLoader.toArray = function (attributes) {
+                    var data = {form_key: FORM_KEY};
+                    for (var key in attributes) {
+                        var value = attributes[key];
+                        data[key] = value;
+                    }
+
+                    return data;
+                };
+
+                categoryLoader.on("beforeload", function (treeLoader, node) {
+                    treeLoader.baseParams.id = node.attributes.id;
+                    treeLoader.baseParams.store = node.attributes.store;
+                    treeLoader.baseParams.form_key = FORM_KEY;
+                });
+
+
+
+                 categoryLoader.on("load", function (treeLoader, node, config) {
+                        varienWindowOnload();
+                        node.childNodes.each(function (e) {
+                            if ($('product_categories_path').value.split(',').indexOf(e.attributes.id) != -1)
+                                e.expand();
+                        })
+                    });
+
+
+
+
+
+
+                scopeSwitcherHandler = reRenderTree;
+
+                newTreeParams = {
+                    animate: false,
+                    loader: categoryLoader,
+                    enableDD: true,
+                    containerScroll: true,
+                    selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
+                    rootVisible: '',
+                    useAjax: <?= $block->escapeJs($block->getUseAjax()) ?>,
+                    switchTreeUrl: '<?= $block->escapeJs($block->escapeUrl($block->getSwitchTreeUrl())) ?>',
+                    editUrl: '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>',
+                    currentNodeId: <?= (int)$block->getCategoryId() ?>,
+                    baseUrl: '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>'
+                };
+
+                defaultLoadTreeParams = {
+                    parameters: {
+                        text: <?= /* @noEscape */ json_encode(htmlentities($block->getRoot()->getName())) ?>,
+                        draggable: false,
+                        allowDrop: <?php if ($block->getRoot()->getIsVisible()):?>true<?php else:?>false<?php endif; ?>,
+                        id: <?= (int)$block->getRoot()->getId() ?>,
+                        expanded: 1,
+                        store_id: <?= (int)$block->getStore()->getId() ?>,
+                        category_id: <?= (int)$block->getCategoryId() ?>,
+                        parent: <?= (int)$block->getRequest()->getParam('parent') ?>
+                    },
+                    data: <?= /* @noEscape */ $block->getTreeJson() ?>
+                };
+
+                reRenderTree();
+            });
+
+
+
+        });
+    </script>
+<?php endif; ?>

@@ -1,0 +1,210 @@
+<?php
+/**
+ * Copyright © Fedex, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * @var $escaper \Magento\Framework\Escaper
+ * @var $block \Magento\NegotiableQuote\Block\Adminhtml\Quote\View\Info
+ * @var $viewModel \Magento\NegotiableQuote\ViewModel\Quote\Info
+ * @var Fedex\UploadToQuote\ViewModel\Info
+ */
+?>
+<?php
+    $quote = $block->getQuote();
+    $viewModel = $block->getViewModel();
+
+    $quoteInfoViewModel = $block->getData('upload_to_quote_info_view_model');
+    $isUploadToQuoteSubmitDateEnabled = $quoteInfoViewModel->toggleUploadToQuoteSubmitDate();
+?>
+<section class="admin__page-section quote-view-account-information">
+    <div class="admin__page-section-title">
+        <span class="title"><?= $escaper->escapeHtml(__('Quote & Account Information')) ?></span>
+    </div>
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item quote-information">
+            <?php /* Quote Information */ ?>
+            <div class="admin__page-section-item-title">
+                <span class="title">
+                    <?= $escaper->escapeHtml(__('Quote # %1', $quote->getId())) ?>
+                </span>
+                <input type="hidden" name="quote_id" value="<?= (int) $quote->getId() ?>">
+            </div>
+            <div class="admin__page-section-item-content"
+                 data-mage-init='{"Magento_NegotiableQuote/quote/create/validate-date": {}}'>
+                <table class="admin__table-secondary quote-information-table">
+                    <tr>
+                        <th>
+                            <?= $escaper->escapeHtml(__('Name')) ?></th>
+                        <td>
+                            <div class="admin__field-control control quote-name-control">
+                                <input data-role="quote_name"
+                                       type="text"
+                                       class="input-text"
+                                       value="<?= $escaper->escapeHtmlAttr($block->getQuoteName()) ?>"
+                                       id="quote_name"
+                                       name="quote[name]"
+                                       data-mage-init='{ "Magento_NegotiableQuote/quote/actions/validate-field" : {} }'
+                                       <?= /* @noEscape */ !$block->canEdit() ? 'disabled' : '' ?>>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <?= $escaper->escapeHtml(__('Status')) ?></th>
+                        <td>
+                            <span id="quote_status">
+                                <?= $escaper->escapeHtml($block->getQuoteStatusLabel()) ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <?= $escaper->escapeHtml(__('Created')) ?></th>
+                        <td>
+                            <?php
+                                if ($isUploadToQuoteSubmitDateEnabled){
+                                    $createdAt = $quoteInfoViewModel->getSubmitDate($quote->getId());;
+                                }else{
+                                    $createdAt = $block->getQuoteCreatedAt();
+                                }
+                            ?>
+                            <span data-role="compare-date" id="quote_created">
+                                <?= /* @noEscape */ $createdAt ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            <?= $escaper->escapeHtml(__('Created By')) ?></th>
+                        <td>
+                            <span id="quote_created_by">
+                                <?php 
+                                if ($quoteInfoViewModel->isMazegeeksD234006Adminquoteissueforfusebidding()) {
+                                    echo $escaper->escapeHtml($quoteInfoViewModel->getQuoteCreatedBy()) ;
+                                } else {
+                                    echo $escaper->escapeHtml($viewModel->getQuoteCreatedBy()) ;
+                                }
+                                ?>
+                            </span>
+                        </td>
+                    </tr>
+                    <?= $block->getChildHtml('u2q.info.block') ?>
+                    <?php $currencyLabel = $block->getCurrencyRateLabel() ?>
+                    <?php if ($currencyLabel): ?>
+                        <tr class="currency-rate">
+                            <th>
+                                <?= $escaper->escapeHtml($currencyLabel . ' ' . __('rate')) ?></th>
+                            <td>
+                                <span id="quote_rate"><?= $escaper->escapeHtml($block->getCurrencyRate()) ?></span>
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                    <tr>
+                        <th>
+                            <?= $escaper->escapeHtml(__('Expiration Date')) ?></th>
+                        <td>
+                            <div class="admin__field-control control">
+                                <?php
+                                $expPeriodTime = $block->getExpirationPeriodTime();
+                                if ($expPeriodTime): ?>
+                                    <input data-role="expiration-date"
+                                           type="text"
+                                           class="input-text"
+                                           value="<?= /* @noEscape */ $block->formatDate($expPeriodTime) ?>"
+                                           id="expiration_date"
+                                           name="quote[expiration_date]"
+                                           data-mage-init='{
+                                           "Magento_NegotiableQuote/js/quote/expiration/calendar": {
+                                               "dateFormat": "<?= $escaper->escapeJs($block->getDateFormat()); ?>",
+                                               "showsTime": false,
+                                               "buttonText": "Select Date",
+                                               "disabled": <?= /* @noEscape */ !$block->canEdit() ? 'true' : 'null' ?>,
+                                               "minDate": 0
+                                           }}'>
+                                <?php else: ?>
+                                    <input data-role="expiration-date"
+                                           type="text"
+                                           class="input-text"
+                                           value=""
+                                           id="expiration_date"
+                                           name="quote[expiration_date]"
+                                           data-mage-init='{
+                                           "Magento_NegotiableQuote/js/quote/expiration/calendar": {
+                                               "dateFormat": "<?= $escaper->escapeJs($block->getDateFormat()); ?>",
+                                               "showsTime": false,
+                                               "buttonText": "Select Date",
+                                               "disabled": <?= /* @noEscape */ !$block->canEdit() ? 'true' : 'null' ?>,
+                                               "minDate": 0
+                                           }}'>
+                                <?php endif; ?>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="admin__page-section-item quote-account-information">
+            <?php /* Account Information */ ?>
+            <div class="admin__page-section-item-title">
+                <span class="title"><?= $escaper->escapeHtml(__('Account Information')) ?></span>
+                <div class="actions">
+                    <a href="<?= $escaper->escapeUrl($block->getCompanyUrl()) ?>" target="_blank">
+                        <?= $escaper->escapeHtml(__('Edit Company')) ?>
+                    </a>
+                </div>
+            </div>
+            <table class="admin__table-secondary quote-information-table">
+                <tr>
+                    <th>
+                        <?= $escaper->escapeHtml(__('Company')) ?></th>
+                    <td>
+                        <span id="quote_company">
+                            <?php if ($block->existsCompany()): ?>
+                                <a href="<?= $escaper->escapeUrl($block->getCompanyUrl()) ?>">
+                                    <?= $escaper->escapeHtml($block->getCompanyName()) ?>
+                                </a>
+                            <?php else: ?>
+                                <?= $escaper->escapeHtml($block->getCompanyName()) ?>
+                            <?php endif; ?>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?= $escaper->escapeHtml(__('Company Admin Email')) ?></th>
+                    <td>
+                        <span id="quote_mailto">
+                            <?php if(!$quote->getIsBid()):?>
+                            <a href="<?= 'mailto:' . $escaper->escapeUrl($block->getCompanyAdminEmail()) ?>">
+                                <?= $escaper->escapeHtml($block->getCompanyAdminEmail()) ?>
+                            </a>
+                            <?php endif;?>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <th>
+                        <?= $escaper->escapeHtml(__('Sales Rep')) ?></th>
+                    <td>
+                        <span id="quote_salesrep">
+                            <?php if ($block->existsSalesRepresentative()): ?>
+                                <a href="<?= $escaper->escapeUrl($block->getSalesRepUrl()) ?>">
+                                    <?= $escaper->escapeHtml($block->getSalesRep()) ?>
+                                </a>
+                            <?php else: ?>
+                                <?= $escaper->escapeHtml($block->getSalesRep()) ?>
+                            <?php endif; ?>
+                        </span>
+                    </td>
+                </tr>
+                <?php $extra = $block->getChildBlock('extra.container'); ?>
+                <?php if ($extra): ?>
+                    <?= $extra->getChildHtml() ?>
+                <?php endif; ?>
+            </table>
+        </div>
+    </div>
+</section>

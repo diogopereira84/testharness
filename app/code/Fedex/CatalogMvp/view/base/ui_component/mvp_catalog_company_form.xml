@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * B-1257375 - Add configuration for site access (use access flow- all registered users, users from specific domain and admin approval)
+ *
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">company_form.company_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Company Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="reset" class="Magento\Company\Block\Adminhtml\Edit\ResetButton"/>
+            <button name="save" class="Magento\Company\Block\Adminhtml\Edit\SaveButton"/>
+            <button name="delete" class="Magento\Company\Block\Adminhtml\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Company\Block\Adminhtml\Edit\BackButton"/>
+        </buttons>
+        <namespace>company_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>company_form.company_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="mvp_catalog_company_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="company/index/save"/>
+        </settings>
+        <dataProvider class="Magento\Company\Model\Company\DataProvider" name="mvp_catalog_company_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="is_catalog_mvp_enabled" sortOrder="75">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">MVP Catalog Setting</label>
+            <dataScope>is_mvp_catalog_enabled</dataScope>
+           <visible>true</visible>
+        </settings>
+        <field name="is_catalog_mvp_enabled">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">MVP Catalog Setting</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
+                    </item>
+                    <item name="default" xsi:type="string">1</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">MVP Catalog Setting</label>
+                <tooltip>
+                    <description translate="true">MVP Catalog Setting</description>
+                </tooltip>
+            </settings>
+        </field>
+    </fieldset>
+</form>

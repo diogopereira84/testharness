@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<!-- CSS class names should be changed -->
+<?php if (($_products = $block->getProductCollection()) && $_products->getSize()):?>
+    <div class="block widget block-new-products-names">
+    <?php if ($block->getData('title')): ?>
+        <div class="block-title" tabindex="0">
+            <strong><?= /* @noEscape */ $block->getTitle(); ?></strong> <span class="plus"></span>
+        </div>
+        <?php endif; ?>
+        <div class="block-content">
+            <?php $suffix = $block->getNameInLayout(); ?>
+            <ol id="widget-new-products-<?= $block->escapeHtmlAttr($suffix) ?>"
+                class="product-items product-items-names">
+                <?php
+                $productPositions = $block->getMenuCategoryProductsPostions();
+
+                if (count($productPositions) > 0) {
+                    $products = $block->getProducts();
+                    // Sort by position key
+                    usort($products, function ($a, $b) {
+                        return $a['position'] <=> $b['position'];
+                    });
+                    foreach ($products as $product): ?>
+                        <li class="product-item">
+                            <strong class="product-item-name">
+                                <a href="<?= $block->escapeUrl($product['url']) ?>"
+                                title="<?= /* @noEscape */ $block->stripTags($product['name'], null, true) ?>"
+                                class="product-item-link">
+                                    <?= /* @noEscape */ $product['name'] ?>
+                                </a>
+                            </strong>
+                        </li>
+                    <?php endforeach;
+                } else {
+                    ?>
+                    <?php foreach ($_products->getItems() as $_product):?>
+                        <li class="product-item">
+                            <strong class="product-item-name">
+                                <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
+                                title="<?= /* @noEscape */ $block->stripTags($_product->getName(), null, true) ?>"
+                                class="product-item-link">
+                                    <?= /* @noEscape */ $_product->getName() ?>
+                                </a>
+                            </strong>
+                        </li>
+                    <?php endforeach; ?>
+                <?php } ?>
+            </ol>
+        </div>
+    </div>
+<?php endif; ?>

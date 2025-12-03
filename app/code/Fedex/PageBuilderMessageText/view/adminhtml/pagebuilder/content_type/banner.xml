@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_PageBuilder:etc/content_type.xsd">
+    <type name="banner"
+          label="Banner"
+          component="Magento_PageBuilder/js/content-type"
+          preview_component="Magento_PageBuilder/js/content-type/banner/preview"
+          form="pagebuilder_banner_form"
+          menu_section="media"
+          icon="icon-pagebuilder-banner"
+          sortOrder="30"
+          translate="label">
+        <children default_policy="deny"/>
+        <appearances>
+    <appearance name="collage-left" master_template="Fedex_PageBuilderMessageText/content-type/banner/collage-left/master">
+       <elements>
+	    <element name="content">
+		<attribute name="messagelaptop" source="messagelaptop"/>
+		<attribute name="messagetablet" source="messagetablet"/>
+		<attribute name="messagemobile" source="messagemobile"/>
+	    </element>
+            <element name="link">
+                <attribute name="data-analytics" source="data-analytics"/>
+            </element>
+           <element name="aria">
+               <attribute name="aria-label" source="aria-label"/>
+           </element>
+	</elements>
+    </appearance>
+    <appearance name="collage-centered" master_template="Fedex_PageBuilderMessageText/content-type/banner/collage-centered/master">
+        <elements>
+	    <element name="content">
+		<attribute name="messagelaptop" source="messagelaptop"/>
+		<attribute name="messagetablet" source="messagetablet"/>
+		<attribute name="messagemobile" source="messagemobile"/>
+	    </element>
+            <element name="link">
+                <attribute name="data-analytics" source="data-analytics"/>
+            </element>
+            <element name="aria">
+                <attribute name="aria-label" source="aria-label"/>
+            </element>
+	</elements>
+    </appearance>
+    <appearance name="collage-right" master_template="Fedex_PageBuilderMessageText/content-type/banner/collage-right/master">
+        <elements>
+	    <element name="content">
+		<attribute name="messagelaptop" source="messagelaptop"/>
+		<attribute name="messagetablet" source="messagetablet"/>
+		<attribute name="messagemobile" source="messagemobile"/>
+	    </element>
+            <element name="link">
+                <attribute name="data-analytics" source="data-analytics"/>
+            </element>
+            <element name="aria">
+                <attribute name="aria-label" source="aria-label"/>
+            </element>
+	</elements>
+    </appearance>
+    <appearance name="poster" master_template="Fedex_PageBuilderMessageText/content-type/banner/poster/master">
+        <elements>
+	    <element name="content">
+		<attribute name="messagelaptop" source="messagelaptop"/>
+		<attribute name="messagetablet" source="messagetablet"/>
+		<attribute name="messagemobile" source="messagemobile"/>
+	    </element>
+            <element name="link">
+                <attribute name="data-analytics" source="data-analytics"/>
+            </element>
+            <element name="aria">
+                <attribute name="aria-label" source="aria-label"/>
+            </element>
+	</elements>
+    </appearance>
+</appearances>
+    </type>
+</config>

@@ -1,0 +1,27 @@
+<?php
+/**@var Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper $fxoCmViewModel*/
+
+$fxoCmViewModel = $block->getData('fxo_cm_view_model');
+$fxocmEproCustomDoc = $fxoCmViewModel->checkFxoCmEproCustomDocEnabled();
+?>
+
+<?php if (!$fxocmEproCustomDoc): ?>
+<div data-mage-init='{ "iframe": { } }' class="container"></div>
+
+<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+<?php else: ?>
+<?= $this->getLayout()
+    ->createBlock(
+        "Magento\Framework\View\Element\Template",
+        "fxo.cm.configurator",
+        [
+            'data' => [
+                'fxo_cm_vm' => $fxoCmViewModel,
+                'bundle_product_handler' => $block->getData('bundleProductHandlerViewModel')
+            ]
+        ]
+    )
+    ->setTemplate("Fedex_FXOCMConfigurator::fxo_cm_configurator.phtml")
+    ->toHtml();
+?>
+<?php endif; ?>

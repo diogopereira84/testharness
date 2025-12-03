@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\OKTA\Model\Oauth\PostbackValidatorInterface" type="Fedex\OKTA\Model\Oauth\PostbackValidator" />
+    <preference for="Fedex\OKTA\Model\Oauth\UrlBuilderInterface" type="Fedex\OKTA\Model\Oauth\UrlBuilder" />
+    <preference for="Fedex\OKTA\Model\Oauth\OktaTokenInterface" type="Fedex\OKTA\Model\Oauth\OktaToken" />
+    <preference for="Fedex\OKTA\Model\Oauth\OktaUserInfoInterface" type="Fedex\OKTA\Model\Oauth\OktaUserInfo" />
+
+    <preference for="Fedex\OKTA\Api\Backend\AuthRepositoryInterface" type="Fedex\OKTA\Model\Backend\AuthRepository"/>
+    <preference for="Fedex\OKTA\Api\Frontend\AuthRepositoryInterface" type="Fedex\OKTA\Model\Frontend\AuthRepository"/>
+
+    <type name="Fedex\OKTA\Model\EntityDataValidator">
+        <arguments>
+            <argument name="requiredFields" xsi:type="array">
+                <item name="email" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_EMAIL</item>
+                <item name="sub" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_SUB</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <!-- handling admin user loginHandler params -->
+    <type name="Fedex\OKTA\Model\Backend\LoginHandler">
+        <arguments>
+            <argument name="entityDataValidator" xsi:type="object">BackendEntityValidator</argument>
+        </arguments>
+    </type>
+    <virtualType name="BackendEntityValidator" type="Fedex\OKTA\Model\EntityDataValidator">
+        <arguments>
+            <argument name="requiredFields" xsi:type="array">
+                <item name="email" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_EMAIL</item>
+                <item name="sub" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_SUB</item>
+                <item name="firstname" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_FIRSTNAME</item>
+                <item name="lastname" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_LASTNAME</item>
+                <item name="groups" xsi:type="const">Fedex\OKTA\Model\EntityDataValidator::KEY_GROUPS</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="BackendJwtVerifierBuilder" type="Fedex\OKTA\Model\Oauth\JwtVerifierBuilder">
+        <arguments>
+            <argument name="oktaHelper" xsi:type="object">Fedex\OKTA\Model\Config\Backend</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Backend\Controller\Adminhtml\Auth\Login">
+        <plugin sortOrder="1" name="fedexOKTALogin" type="Fedex\OKTA\Plugin\Controller\Adminhtml\Auth\LoginPlugin"/>
+    </type>
+    <type name="Magento\Backend\Controller\Adminhtml\Auth\Logout">
+        <plugin sortOrder="1" name="fedexOKTALogout" type="Fedex\OKTA\Plugin\Controller\Adminhtml\Auth\LogoutPlugin"/>
+    </type>
+
+</config>

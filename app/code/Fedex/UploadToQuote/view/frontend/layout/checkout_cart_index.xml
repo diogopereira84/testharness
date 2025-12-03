@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="checkout.cart.container">
+            <container name="checkout.cart.sidebar_print_instruction_message" as="sidebar_print_instruction_message" label="Sidebar Print Instruction Message" htmlTag="div" htmlClass="sidebar-print-instruction-container" after="checkout.cart.form.before" before="cart.summary">
+                <block class="Magento\Framework\View\Element\Template" name="checkout.cart.summary.print_intruction_message" template="Fedex_UploadToQuote::print_instruction_message.phtml">
+                    <arguments>
+                        <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                        <argument name="orderApprovalB2bViewModal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+        <referenceBlock name="cart.summary.actions">
+            <arguments>
+                <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.simple">
+            <arguments>
+                <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

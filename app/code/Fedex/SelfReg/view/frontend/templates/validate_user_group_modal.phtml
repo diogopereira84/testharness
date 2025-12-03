@@ -1,0 +1,37 @@
+<?php
+
+/** @var Fedex\SelfReg\ViewModel\CompanyUser $view_model */
+
+$getUserGroupOrderApproversToggle = $block->getData('view_model')
+                                        ->getUserGroupOrderApproversToggle();
+
+if ($getUserGroupOrderApproversToggle):
+?>
+<div id="validateUserGroupContainer"
+    style="display: none;"
+    class="validate-modal">
+    <div class="modal-body-content modal-contents mx-auto">
+        <div class="cl-stone-gray text-center">
+            <div class="validate-modal-icon">
+                <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/expired-items/expiring-icon.png'))?>"
+                    class="img-title" alt="Alert Icon">
+            </div>
+            <h3 class="txt-title weight-300" id="validateUserGroupTitle">
+            </h3>
+            <p class="fs-12 lh-24 mb-20 weight-300">
+                <?= $escaper->escapeHtml(__('Would you like to change
+                        them to this user group?')) ?>
+            </p>
+            <div class="mx-auto mt-5 btn-group-actions d-flex h-center justify-between">
+                <button type="button" class="validate-user-group-cancel-button">
+                    <span><?= $escaper->escapeHtml(__('NO, CANCEL')); ?></span>
+                </button>
+                <button type="button" class="validate-user-group-save-button">
+                    <span><?= $escaper->escapeHtml(__('YES, CHANGE')); ?></span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+endif;

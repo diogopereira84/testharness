@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<span class="product-image-container">
+    <span class="product-image-wrapper">
+        <!-- ko ifnot: isCheckImage($parents[1]) -->
+            <!-- ko if: !IsNonStandardFile($parents[1]) -->
+            <img data-bind="attr: {src: imgLoaderUrl()}" class="product-loader" />
+            <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko if: Boolean($parents[1].is_marketplace_product) -->
+        <img class="product-image-photo"
+            data-bind="attr: {src: $parents[1].seller_image, 'width': getWidth($parents[1]), 'height': getHeight($parents[1]), 'alt': getAlt($parents[1]), 'title': getAlt($parents[1]) }"/>
+        <!-- /ko -->
+        <!-- ko ifnot: Boolean($parents[1].is_marketplace_product) -->
+            <!-- ko if: !IsNonStandardFile($parents[1]) -->
+            <img class="product-image-photo"
+                data-bind="attr: {onload: imgLoad(getSrc($parents[1]), $element), 'width': getWidth($parents[1]), 'height': getHeight($parents[1]), 'alt': getAlt($parents[1]), 'title': getAlt($parents[1]) }"/>
+            <!-- /ko -->
+            <!-- ko if: IsNonStandardFile($parents[1]) -->
+                <img class="product-image-photo" data-bind="attr: {onload: imgLoad(getNonStandardImage(), $element), 'width': getWidth($parents[1]), 'height': getHeight($parents[1]), 'alt': getAlt($parents[1]), 'title': getAlt($parents[1]) }"/>
+            <!-- /ko -->
+        <!-- /ko -->
+    </span>
+</span>

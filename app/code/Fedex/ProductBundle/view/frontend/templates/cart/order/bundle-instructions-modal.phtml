@@ -1,0 +1,71 @@
+<?php
+
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+?>
+<?php if ($bundleProductHandler->isTigerE468338ToggleEnabled() && !$bundleProductHandler->isBundleProductSetupCompleted()): ?>
+    <div class="bundle-modal-placeholder">
+        <div data-bind="mageInit: {
+        'Fedex_ProductBundle/js/instruction-modal':{
+            'modalClass': 'ddt-modal bundle-modal',
+            'type': 'popup',
+            'trigger': '[data-trigger=bundle-instructions]',
+            'responsive': false,
+            'buttons': [{
+                text: jQuery.mage.__('Okay, Got it'),
+                class: 'btn-action-primary text-uppercase btn-actions'
+            }]
+        }}">
+            <div class="bundle-modal-body">
+                <div class="instructions-title d-flex flex-col v-center">
+                    <div class="bundle-icon">
+                        <img
+                            src="<?= $block->getViewFileUrl('Fedex_ProductBundle::images/bundle-modal-title.svg'); ?>"
+                            alt="bundle icon">
+                    </div>
+                    <h2 class="fedex-light fs-24 lh-32 ls-0 m-0">Product Bundling How-to</h2>
+                </div>
+                <div class="instructions-content">
+                    <div class="step-item d-flex">
+                        <div class="step-number d-flex v-center">
+                            <div class="step-circle d-flex v-center h-center d-no-shrink fs-14 cl-grey-100"></div>
+                            <span class="step-name fs-14 lh-24">Step One</span>
+                            <div class="step-vertical-divider desktop"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="fs-16 lh-24 mt-0 mb-8"><?= $escaper->escapeHtml($bundleProductHandler->getTitleStepOne()) ?></h3>
+                            <p class="fs-12 lh-16 mt-0 mb-0"><?= $escaper->escapeHtml($bundleProductHandler->getDescriptionStepOne()) ?></p>
+                            <div class="step-vertical-divider mobile"></div>
+                        </div>
+                    </div>
+
+                    <div class="step-item d-flex">
+                        <div class="step-number d-flex v-center">
+                            <div class="step-circle d-flex v-center h-center d-no-shrink fs-14 cl-grey-100"></div>
+                            <span class="step-name fs-14 lh-24">Step Two</span>
+                            <div class="step-vertical-divider desktop"></div>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="fs-16 lh-24 mt-0 mb-8"><?= $escaper->escapeHtml($bundleProductHandler->getTitleStepTwo()) ?></h3>
+                            <p class="fs-12 lh-16 mt-0 mb-0"><?= $escaper->escapeHtml($bundleProductHandler->getDescriptionStepTwo()) ?></p>
+                            <div class="step-vertical-divider mobile"></div>
+                        </div>
+                    </div>
+
+                    <div class="step-item d-flex">
+                        <div class="step-number d-flex v-center">
+                            <div class="step-circle d-flex v-center h-center d-no-shrink fs-14 cl-grey-100"></div>
+                            <span class="step-name fs-14 lh-24">Step Three</span>
+                        </div>
+                        <div class="step-content">
+                            <h3 class="fs-16 lh-24 mt-0 mb-8"><?= $escaper->escapeHtml($bundleProductHandler->getTitleStepThree()) ?></h3>
+                            <p class="fs-12 lh-16 mt-0 mb-0"><?= $escaper->escapeHtml($bundleProductHandler->getDescriptionStepThree()) ?></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

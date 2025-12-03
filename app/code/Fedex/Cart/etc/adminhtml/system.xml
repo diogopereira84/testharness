@@ -1,0 +1,93 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="checkout" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+            <resource>Magento_Checkout::checkout</resource>
+            <group id="cart" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="max_cart_item_limit" translate="label" type="text" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Max Cart Items Limit</label>
+                    <validate>validate-digits-range digits-range-1-9999 required-entry</validate>
+                    <comment>Please enter a value between 1-9999</comment>
+                </field>
+                <field id="min_cart_item_threshold" translate="label" type="text" sortOrder="22" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Cart Items Limit Warning Threshold</label>
+                    <validate>validate-max-limit validate-digits-range digits-range-1-9999 required-entry</validate>
+                </field>
+            </group>
+        </section>
+
+        <tab id="notification_promocode_tab" translate="label" sortOrder="12">
+            <label>Discount Code Configuration</label>
+        </tab>
+        <section id="notification_promocode" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>notification_promocode_tab</tab>
+            <resource>Fedex_Cart::notificationpromocode_config</resource>
+            <group id="notification_promocode_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Combined Discount Warning Message</label>
+                <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="notificaiton_promocode_editor" translate="label comment" sortOrder="2" type="textarea" showInStore="1" showInDefault="1" canRestore="0">
+                    <label>Content</label>
+                </field>
+            </group>
+        </section>
+        <section id="enable_promo_code_features" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Enable Promo code features</label>
+            <tab>sales</tab>
+            <resource>Fedex_Cart::enable_promo_code_features_config</resource>
+            <group id="enable_promo_code_features_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Enable Promo code features</label>
+                <field id="enable_promo_code_features_retail" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>For Retail User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_promo_code_features_commercial" translate="label comment" type="select" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>For Commercial User</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="tiger_b1973447_display_selfreg_cart_fxo_discount_3P_only" translate="label" type="select" sortOrder="450" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TIGER - B-1973447 - Commercial B2B (SelfReg) Marketplace</label>
+                    <comment>Cart/Checkout Display of FXO Print Account for Discount (AC 10)</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_e458381_essendant" translate="label" type="select" sortOrder="430" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-458381|E-461931 - Essendant</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-2353103 : Add Admin Toggle For Base64 Img -->
+                <field id="is_remove_base64_image" translate="label" type="select" sortOrder="-1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Mage Geeks - E-470579 - Remove Base64 Image</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-2353103 : Add Admin Toggle For Base64 Img-->
+                <field id="tiger_d207139" translate="label" type="select" sortOrder="431" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-207139 - Customers Blocked from Removing FXO Print Account from Shopping Cart (Retail) if in Profile</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_208155_promo_mixed_cart" translate="label" type="select" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-208155 Ratchet: Unable to apply promo code on a mixed cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d227706_scheduled_maintenance_page_non_essendant_products" translate="label" type="select" sortOrder="510" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-227706 - Scheduled Maintenance page when trying to edit the non-essendant Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

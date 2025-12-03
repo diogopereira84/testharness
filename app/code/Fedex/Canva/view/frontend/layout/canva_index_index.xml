@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Design and Print | FedEx Office</title>
+        <meta name="description" content="Search for your next project, continue your designs, and easily gain inspiration for new ideas from our huge example product catalog."/>
+    </head>
+    <body>
+        <referenceContainer name="footer" remove="true"/>
+        <referenceBlock name="absolute_footer" remove="true"/>
+        <referenceBlock name="copyright" remove="true"/>
+        <referenceContainer name="header.nav.top.panel" htmlTag="div" htmlClass="panel header-top canva-home-header"/>
+        <referenceContainer name="top.container" htmlTag="div" htmlClass="top-container canva-home-header">
+            <block class="Magento\Framework\View\Element\Template" name="canva.index.home.header" template="Fedex_Canva::index/header-home.phtml" after="navigation.sections">
+                <arguments>
+                    <argument name="provider" xsi:type="object">Fedex\Canva\ViewModel\BlockProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="header.container">
+            <block class="Fedex\Canva\Block\CanvaHeader" name="canva.index.header" template="Fedex_Canva::index/header.phtml">
+                <arguments>
+                    <argument name="provider" xsi:type="object">Fedex\Canva\ViewModel\BlockProvider</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="canva.index.index" template="Fedex_Canva::index/index.phtml">
+                <arguments>
+                    <argument name="config" xsi:type="object">Fedex\Canva\ViewModel\ConfigAdapter</argument>
+                    <argument name="pod" xsi:type="object">Fedex\Canva\ViewModel\PodConfiguration</argument>
+                    <argument name="bundleProductHandlerViewModel" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" name="canva.login.modal" template="Fedex_Canva::login/modal.phtml">
+                <arguments>
+                    <argument name="config" xsi:type="object">Fedex\Canva\ViewModel\ConfigAdapter</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

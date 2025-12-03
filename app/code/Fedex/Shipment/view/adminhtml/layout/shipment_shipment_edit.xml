@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+        <css src="jquery/fileUploader/css/jquery.fileupload-ui.css"/>
+	<script src="Fedex_Shipment::js/shipment-status.js"/>
+    </head>
+    <update handle="editor"/>
+    <body>
+        <referenceContainer name="content">
+            <block class="Fedex\Shipment\Block\Adminhtml\Shipment\Edit" name="shipment_shipment_edit"/>
+        </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Fedex\Shipment\Block\Adminhtml\Shipment\Edit\Tabs" name="shipment_shipment_edit_tabs">
+                <block class="Fedex\Shipment\Block\Adminhtml\Shipment\Edit\Tab\Main" name="shipment_shipment_edit_tab_main"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">main_section</argument>
+                    <argument name="block" xsi:type="string">shipment_shipment_edit_tab_main</argument>
+                </action>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

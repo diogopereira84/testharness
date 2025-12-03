@@ -1,0 +1,27 @@
+<?php
+/** @var $block \Fedex\Catalog\Block\Product\View\AboutUs\Info */
+$productInfo = $block->getProductInfo();
+if (count($productInfo) > 0) {
+    $contentLeft = $productInfo['content-left'];
+    $contentRight = $productInfo['content-right'];
+    $contentRightMobile = $productInfo['content-right-mobile'];
+}
+?>
+
+<?php if (count($productInfo) > 0): ?>
+    <div class="info-ideas-content-wrapper w-50">
+        <?php if ($contentLeft): ?>
+            <div class="info-content fedex-light fs-18 lh-32 pb-20">
+                <?= $contentLeft ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php if ($contentRight): ?>
+        <div class="info-img d-flex w-50 pt-15">
+            <img class="info-desktop-img" src="<?= $contentRight ?>" alt="Product Info Tab"/>
+            <?php if ($contentRightMobile): ?>
+                <img class="info-mobile-img mobile-img hidden-l-xl" src="<?= $contentRightMobile ?>" alt="Product Info Tab"/>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+<?php endif; ?>

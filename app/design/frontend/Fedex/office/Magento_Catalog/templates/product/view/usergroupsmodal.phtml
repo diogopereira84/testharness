@@ -1,0 +1,63 @@
+<?php
+/**
+ * Fedex\SelfReg\Block\UserGroupsList $block
+ */
+$categoryId = $block->getData('categoryId');
+$customerGroups = $block->getUserGroups($categoryId);
+$isFolderRestricted = $block->doesDenyAllPermissionExist($categoryId);
+?>
+
+<h3>RESTRICT FOLDER ACCESS</h3>
+<div class="folder-permission-edit-folder-access-toggle-wrapper">
+    <span class="folder-permission-edit-folder-access-access-status-off">Off: All user groups can access this folder.</span>
+    <span class="folder-permission-edit-folder-access-access-status-on" style="display:none;">On: Only selected user groups can access this folder.</span>
+    <div class="published">
+        <label class="switch">
+            <input type="checkbox" id="folder-access-toggle" class="folder-access-toggle-checkbox" <?= $isFolderRestricted ? 'checked' : '' ?>>
+            <span class="custom-slider round">
+                <span class="labels" data-on="<?= $isFolderRestricted ? 'ON' : '' ?>" data-off="<?= $isFolderRestricted ? '' : 'OFF' ?>"></span>
+            </span>
+        </label>
+    </div>
+</div>
+<div class="folder-permission-edit-folder-access-assigned-user-groups">
+    <span class="folder-permission-edit-folder-access-user-groups-title">ASSIGNED USER GROUPS</span>
+    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_Catalog::images/product/placeholder/Union.png')) ?>" alt="Info" class="folder-permission-edit-folder-access-tooltip-icon" title="Assign user groups that can access this folder.">
+</div>
+<div class="folder-permission-edit-folder-access-user-search-control">
+    <input type="text" id="folder-permission-edit-folder-access-user-group-search" minlength="2" placeholder="Search for user group..." class="folder-permission-edit-folder-access-search-field"/>
+    <button type="submit" class="folder-permission-edit-folder-access-search-button" aria-label="User Group Search" id="folder-permission-edit-folder-access-user-group-search-button">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_Catalog::images/product/placeholder/Search.png')) ?>" alt="Search" class="folder-permission-edit-folder-access-search-icon">
+    </button>
+</div>
+<div class="field-name-usergroups">
+    <div id="edit-folder-user_groups_list_container">
+        <ul class="folder-permission-user-groups-list">
+            <li>
+                <input type="checkbox" id="select_all" class="user-group-name-button" name="select_all" value="select_all"/>
+                <label for="select_all" class="user-group-name-button-label" tabindex="0">
+                    <?= $block->escapeHtml(__("Select All")) ?>
+                </label>
+            </li>
+
+            <?php if (!empty($customerGroups) && is_array($customerGroups)): ?>
+                <?php foreach ($customerGroups as $groupId => $groupData): ?>
+                    <li>
+                        <input type="checkbox" id="user_group_<?= $groupId; ?>" class="user-group-name-checkbox" name="user_group[]" value="<?= $groupId; ?>" <?= ! empty($groupData['permission']) && $groupData['permission'] == \Magento\CatalogPermissions\Model\Permission::PERMISSION_ALLOW ? 'checked' : '' ?> />
+                        <img src="<?=$block->getViewFileUrl('images/user-group/UserGroups-icon.png');?>" alt="User Groups Icon">
+                        <label for="user_group_<?= $groupId; ?>" class="user-group-name-checkbox-label" tabindex="0">
+                            <?=$block->escapeHtml(__(trim(preg_replace('/<.*?>\s*/', '', $groupData['customer_group_code']))))?>
+                        </label>
+                    </li>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <li>No customer groups available.</li>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+
+<div class="folder-permission-edit-folder-access-modal-footer">
+    <button class="folder-permission-edit-folder-access-cancel-button" type="button">CANCEL</button>
+    <button class="folder-permission-edit-folder-access-save-button" data-folder-id="<?= $categoryId ?>" type="button">SAVE</button>
+</div>

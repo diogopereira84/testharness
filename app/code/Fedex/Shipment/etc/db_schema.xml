@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <!-- Create table to add shipment status from admin-->
+    <table name="shipment_status" resource="default" engine="innodb" comment="Shipment Status">
+        <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="ID"/>
+        <column xsi:type="int" name="value" nullable="true" comment="Value"/>
+        <column xsi:type="varchar" name="label" nullable="true" length="100" comment="Label"/>
+        <column xsi:type="varchar" name="key" nullable="true" length="100" comment="Key"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="SHIPMENT_STATUS_UNIQUE">
+            <column name="value"/>
+            <column name="label"/>
+            <column name="key"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="SHIPMENT_STATUS_VALUE_UNIQUE">
+            <column name="value"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="SHIPMENT_STATUS_KEY_UNIQUE">
+            <column name="key"/>
+        </constraint>
+    </table>
+    <!-- Create table to save order references from shipment status update api parameters-->
+    <table name="shipment_order_references" resource="sales" engine="innodb" comment="Shipment Order References">
+        <column xsi:type="smallint" name="id" padding="6" unsigned="false" nullable="false" identity="true"
+                comment="ID"/>
+        <column xsi:type="varchar" name="customer_order_number" nullable="true" length="50"
+                comment="Customer Order Number"/>
+        <column xsi:type="varchar" name="order_reference_key" nullable="true" length="100"
+                comment="Order Reference Key"/>
+        <column xsi:type="varchar" name="order_reference_value" nullable="true" length="100"
+                comment="Order Reference Value"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign"
+                    referenceId="SHIPMENT_ORDER_REFERENCE_CUSTOMER_ORDER_NUMBER_SALES_ORDER_INCREMENT_ID"
+                    table="shipment_order_references"
+                    column="customer_order_number" referenceTable="sales_order" referenceColumn="increment_id"
+                    onDelete="CASCADE"/>
+    </table>
+    <!-- Create table to save shipment status update api parameters-->
+    <table name="shipment_order_value" resource="default" engine="innodb" comment="Shipment Order Value">
+        <column xsi:type="int" name="id" padding="6" unsigned="false" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="fxo_work_order_number" nullable="false" length="100"
+                comment="FXO Work Order Number"/>
+        <column xsi:type="varchar" name="transaction_id" nullable="true" length="100" comment="Transaction Id"/>
+        <column xsi:type="varchar" name="customer_order_number" nullable="true" length="50"
+                comment="Customer Order Number"/>
+        <column xsi:type="varchar" name="order_created_system" nullable="true" length="100"
+                comment="Order Created System"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="SHIPMENT_ORDER_VALUE_FXO_WORK_ORDER_NUMBER" indexType="btree">
+            <column name="fxo_work_order_number"/>
+        </index>
+        <index referenceId="SHIPMENT_ORDER_VALUE_TRANSACTION_ID" indexType="btree">
+            <column name="transaction_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="SHIPMENT_ORDER_VALUE_CUSTOMER_ORDER_NUMBER_SALES_ORDER_INCREMENT_ID"
+                    table="shipment_order_value"
+                    column="customer_order_number" referenceTable="sales_order" referenceColumn="increment_id"
+                    onDelete="CASCADE"/>
+    </table>
+    <!-- Create column in sales shipment table to save Pickup Allowed Until Date from shipment status update api parameters-->
+    <table name="sales_shipment" resource="sales" engine="innodb" comment="Sales Shipment">
+        <column xsi:type="datetime" name="pickup_allowed_until_date" nullable="true"
+                comment="Pickup Allowed Until Date"/>
+        <column xsi:type="varchar" name="fxo_work_order_number" nullable="true" length="100"
+                comment="FXO Work Order Number"/>
+        <column xsi:type="varchar" name="shipping_account_number" nullable="true" length="100"
+                comment="Shipping Account Number"/>
+        <column xsi:type="datetime" name="order_completion_date" nullable="true" comment="Order Completion Date"/>
+        <column xsi:type="varchar" name="ready_for_pickup_email_sent" nullable="true" length="100"
+                comment="Ready For Pickup Email Sent"/>
+        <column xsi:type="datetime" name="ready_for_pickup_email_sent_date" nullable="true"
+                comment="Ready For Pickup Email Sent Date"/>
+        <column xsi:type="varchar" name="fxo_shipment_id" nullable="true" length="100" comment="FXO Shipment Id"/>
+        <!-- D-113011 : SDE-receiving multiple order cancellation emails -->
+        <column xsi:type="smallint" name="is_cancellation_email_sent" nullable="false" default="0"
+                comment="Is Order Cancellation Email Sent"/>
+        <column xsi:type="smallint" name="is_completion_email_sent" nullable="false" default="0"
+                comment="Is Order Completion Email Sent"/>
+    </table>
+    <!-- Create column in sales order payment table to save fedex account number-->
+    <table name="sales_order_payment" resource="sales" engine="innodb" comment="Sales Order Payment">
+        <column xsi:type="varchar" name="fedex_account_number" nullable="true" length="100"
+                comment="Fedex Account Number"/>
+    </table>
+    <!-- Create column in sales order table to save Order Completion Date and Job Number of Order-->
+    <table name="sales_order" resource="sales" engine="innodb" comment="Sales Shipment">
+        <column xsi:type="varchar" name="job_number" nullable="true" length="100" comment="Job Number"/>
+    </table>
+    <!-- Create table to save producing store address-->
+    <table name="order_producing_address" resource="default" engine="innodb" comment="Order Producing Address">
+        <column xsi:type="int" name="id" unsigned="false" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
+                comment="Store ID"/>
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="true" identity="false"
+                comment="Order ID"/>
+        <column xsi:type="int" name="shipment_id" unsigned="true" nullable="true" identity="false"
+                comment="Shipping Id"/>
+        <column xsi:type="varchar" name="address" nullable="true" length="500" comment="Address"/>
+        <column xsi:type="varchar" name="phone_number" nullable="true" length="100" comment="Phone Number"/>
+        <column xsi:type="varchar" name="email_address" nullable="true" length="100" comment="Email Address"/>
+        <column xsi:type="text" name="additional_data" nullable="true" comment="Additional Details"/>
+        <column xsi:type="varchar" name="location_id" nullable="true" length="40" comment="Pickup location id"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="ORDER_PRODUCING_ADDRESS_LOCATION_ID" indexType="btree">
+            <column name="location_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="ORDER_PRODUCING_ADDRESS_STORE_ID_STORE_STORE_ID"
+                    table="order_producing_address" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="ORDER_PRODUCING_ADDRESS_ORDER_ID_SALES_ORDER_ORDER_ID"
+                    table="order_producing_address" column="order_id"
+                    referenceTable="sales_order" referenceColumn="entity_id" onDelete="SET NULL"/>
+        <constraint xsi:type="unique" referenceId="ORDER_PRODUCING_ADDRESS_STORE_ID">
+            <column name="store_id"/>
+            <column name="order_id"/>
+            <column name="shipment_id"/>
+        </constraint>
+        <index referenceId="ORDER_PRODUCING_ADDRESS_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+        <constraint xsi:type="foreign" referenceId="ORDER_PRODUCING_ADDRESS_SHIPMENT_ID_SALES_SHIPMENT_SHIPMENT_ID"
+                    table="order_producing_address" column="shipment_id"
+                    referenceTable="sales_shipment" referenceColumn="entity_id" onDelete="SET NULL"/>
+    </table>
+    <table name="fedex_due_date_log" resource="default" engine="innodb" comment="FedEx Shipment Due Date Change Log">
+        <column name="log_id" xsi:type="int" unsigned="true" nullable="false" identity="true" comment="Log ID"/>
+        <column name="order_id" xsi:type="int" nullable="false" comment="Order ID"/>
+        <column name="shipment_id" xsi:type="int" nullable="false" comment="Shipment ID"/>
+        <column name="old_due_date" xsi:type="datetime" nullable="true" comment="Old Due Date"/>
+        <column name="new_due_date" xsi:type="datetime" nullable="false" comment="New Due Date"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="log_id"/>
+        </constraint>
+
+        <index referenceId="FEDEX_DUE_DATE_LOG_ORDER_IDX" indexType="btree">
+            <column name="order_id"/>
+        </index>
+
+        <index referenceId="FEDEX_DUE_DATE_LOG_SHIPMENT_IDX" indexType="btree">
+            <column name="shipment_id"/>
+        </index>
+    </table>
+</schema>

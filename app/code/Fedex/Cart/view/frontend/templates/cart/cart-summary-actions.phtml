@@ -1,0 +1,134 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $viewModel \Fedex\Cart\ViewModel\CartSummary */
+/** @var \Magento\Framework\Escaper $escaper */
+$viewModel = $block->getData('cart_summary_view_model');
+$isViewMyProjectButtonEnable = $viewModel->isViewMyProjectButtonEnable();
+$viewMyProjectUrl = $viewModel->getViewMyProjectUrl();
+$getFormKey = $viewModel->getFormKey();
+$expressCheckoutViewModel = $block->getData('express_checkout_view_model');
+$noticeText = 'Document prices displayed are estimated and do not include shipping and tax.';
+$productViewModel = $block->getData('product_availability_view_model');
+$uploadToQuoteViewModel = $block->getData("upload-to-quote-view-model");
+
+$continueShoppingUrl = $block->getBaseUrl();
+if ($viewModel->getUpdateContinueShoppingCtaToggle()) {
+    $continueShoppingUrl = $viewModel->getAllPrintProductUrl();
+}
+
+if ($viewModel->isSdeStore()) {
+    $noticeText = 'Document prices displayed are estimated and do not include shipping,
+     packaging and handling (if applicable) or tax.';
+    $continueShoppingUrl = $viewModel->getSdeCategoryUrl();
+}
+$checkLegacyDocApiOnCartToggle = (bool) $viewModel->checkLegacyDocApiOnCartToggle();
+$hasLegacyDocument = $checkLegacyDocApiOnCartToggle && (bool) $viewModel->checkLegacyDocOnCartSummary();
+
+/** expired item start */
+$expiredItemViewModal = $block->getData('expiredItemViewModal');
+$isExpired = ($expiredItemViewModal->isCustomerLoggedIn() &&
+            ($expiredItemViewModal->getExpiredItems() || $hasLegacyDocument)) ? true : false;
+
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$uploadToQuoteViewModel = $block->getData('uploadToQuoteViewModal');
+
+$proceedBtnText = ($uploadToQuoteViewModel->checkoutQuotePriceisDashable()) ?
+'Proceed With Quote Request' : 'Proceed To Checkout';
+
+$unavailableMessageCssClass = '';
+if ($productViewModel->isE441563ToggleEnabled() &&
+    ($productViewModel->checkCartHaveUnavailbleProduct())) {
+    $unavailableMessageCssClass = $productViewModel->getUnavailableButtonCssClass()??'';
+}
+/** @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+$isBundleProductsSetupCompleted = $bundleProductHandler->isBundleProductSetupCompleted() ? 1 : 0;
+?>
+<div class="checkout-cart-summary-actions-container" data-bind="scope: 'check-products-availability-scope'">
+    <ul class="checkout methods items checkout-methods-items" id="apply-loader">
+        <li class="item">
+            <button type="button"
+            disabled="disabled"
+            data-bind="
+                enable: (!hasDisabledProducts() || <?= (int)!$isBundleProductsSetupCompleted ?>),
+                css: hasDisabledProducts() || <?= (int)!$isBundleProductsSetupCompleted ?> ? 'disabled-button' : '',
+                click: goToCheckout
+            "
+            data-role="proceed-to-checkout"
+            data-testid="proceed-to-checkout-cta"
+            title="Go To Checkout"
+            class="action primary checkout cart-to-checkout non-express-checkout-cart
+            <?= !$isBundleProductsSetupCompleted ? 'disabled-button' : ''?>
+            <?= ($isExpired) ? 'disabled' : '' ?>
+            <?= $unavailableMessageCssClass ?>">
+            <span><?= $escaper->escapeHtml(__($proceedBtnText)); ?></span>
+            </button>
+        </li>
+        <?php if ($expressCheckoutViewModel->getIsFclCustomer() && !$uploadToQuoteViewModel->checkoutQuotePriceisDashable()): ?>
+            <li class="item">
+                <button type="button"
+                disabled="disabled"
+                data-bind="
+                    enable: !hasDisabledProducts(),
+                    css: hasDisabledProducts() || <?= (int)!$isBundleProductsSetupCompleted ?> ? 'disabled' : '',
+                    click: goToExpressCheckout
+                "
+                data-role="proceed-to-checkout"
+                title="<?= $escaper->escapeHtmlAttr(__('Express Checkout')); ?>"
+                class="action primary checkout cart-to-checkout
+                express-checkout-cart-button
+                        <?= ($isExpired || !$isBundleProductsSetupCompleted) ? 'disabled' : '' ?> <?= $unavailableMessageCssClass ?>">
+                    <span><?= $escaper->escapeHtml(__('Express Checkout')); ?></span>
+                </button>
+            </li>
+        <?php endif; ?>
+    </ul>
+    <div class="shipping-note text-center">
+    <?= $escaper->escapeHtml(__($noticeText)); ?>
+    </div>
+    <?php if ($isViewMyProjectButtonEnable): ?>
+        <form action="<?= $escaper->escapeUrl($viewMyProjectUrl)?>" method="post">
+            <div class="view-my-project-container">
+                <button class="view-my-project-btn" type="submit" data-testid="view-my-project">
+                <?=$escaper->escapeHtml(__('View My Projects'));?>
+                </button>
+            </div>
+            <input type="hidden" name="form_key" value="<?php echo $viewModel->getFormKey() ?>" />
+        </form>
+    <?php elseif ($viewModel->isAccessToWorkspaceToggleEnable()):?>
+        <form action="<?= $escaper->escapeUrl($viewModel->getWorkspaceUrl())?>" method="get">
+            <div class="view-my-project-container">
+                <button class="view-my-project-btn" type="submit" data-testid="view-my-project">
+                    <?=$escaper->escapeHtml(__('View My Projects'));?>
+                </button>
+            </div>
+            <input type="hidden" name="form_key" value="<?php echo $viewModel->getFormKey() ?>" />
+        </form>
+    <?php endif;?>
+    <form action="<?=$escaper->escapeUrl($continueShoppingUrl)?>" method="post">
+        <div class="secondary continue-button-container">
+            <input type="hidden" name="form_key" value="<?= $block->getFormKey() ?>">
+            <button class="cart-continue-shopping-btn" type="submit" data-testid="continue-shopping">
+            <?= $escaper->escapeHtml(__('Continue Shopping')); ?>
+            </button>
+        </div>
+    </form>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "check-products-availability-scope": {
+                        "component": "Fedex_Cart/js/check-products-availability",
+                        "isQuoteRequest": "<?= (bool) $uploadToQuoteViewModel->checkoutQuotePriceisDashable() ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

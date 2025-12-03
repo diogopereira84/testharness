@@ -1,0 +1,69 @@
+<!--@subject {{trans 'order confirmation'}} @-->
+<style>{{var template_styles|raw}}{{css file="Fedex_MarketplaceCheckout::css/email.css"}}</style>{{inlinecss file="Fedex_MarketplaceCheckout::css/email-inline.css"}}
+<table style='max-width: 612px; margin: auto' width='612'>
+    <tr class='email-intro'>
+        <td colspan='6'>
+            <p class='greeting'>{{trans 'Hi %customer_first_name  %customer_last_name,' customer_first_name=$customer_first_name customer_last_name=$customer_last_name}}</p>
+            {{if is_expected_delivery_enabled}}
+                <p>Your order has been submitted! Thanks for choosing FedEx Office. We've got it from here!</p>
+                <p>
+                    {{trans 'If your order is being shipped, tracking information will be emailed to you once your products ship.'}}
+                </p>
+            {{/if}}
+            {{if producingstore_phonenumber_display}}
+                <p>We've got it from here! Thanks for choosing FedEx Office.</p>
+                <p>
+                    {{trans 'If you need to cancel this order, please contact us at '}}
+                    {{trans '<a style="color: #333;" href='tel:%producingstore_phonenumber'>%producingstore_phonenumber</a> as soon as possible.' producingstore_phonenumber=$producingstore_phonenumber |raw}}
+                </p>
+                <p>
+                    {{trans 'We look forward to working with you again soon! '}}
+                </p>
+            {{/if}}
+            {{if producingstore_regular_number_display}}
+                <p>We've got it from here! Thanks for choosing FedEx Office.</p>
+                <p>
+                    {{trans 'If you need to cancel this order, please contact us at '}}
+                    {{trans ' %phone_number_one' phone_number_one='1.800.GoFedEx' |raw}}
+                    {{trans ' or <a style="color: #333;" href='tel:%phone_number_two'>%phone_number_two</a> as soon as possible.' phone_number_two='1.800.463.3339' |raw}}
+                </p>
+                <p>
+                    {{trans 'We look forward to working with you again soon! '}}
+                </p>
+            {{/if}}
+        </td>
+    </tr>
+    <tr class='email-information'>
+        <td colspan='6'>
+            <table class='order-summary'>
+                <tr >
+                    <td style="padding-bottom: 24px">
+                        <h1 style="margin-bottom: 0px;">{{trans 'ORDER SUMMARY'}}</h1>
+                        <p style="margin-bottom: 0px;">{{trans 'Order Number:' }}
+                            {{trans '<a href='%account_url?gtns=%increment_id'>' increment_id=$gtn  account_url=$this.getUrl($store,'track/',[_nosid:1]) |raw}}
+                                {{trans '%increment_id</a>' increment_id=$gtn |raw}}
+                        </p>
+                        {{if po_number}}
+                            <p style="margin-bottom: 10px;">{{trans 'Purchase Order Number: %po_number' po_number=$po_number}}</p>
+                        {{/if}}
+                        <p style="margin-bottom: 0px;">{{trans 'Click your order number for more information.'}}</p>
+                    </td>
+                </tr>
+            </table>
+            {{var item_html|raw}}
+            <table class='email-date' style="max-width: 612px; margin: auto" width="612">
+                <tr >
+                    <td style="padding-top: 16px; border-top: 1px solid #ccc; font-family: FedEx Sans; font-size: 14px; font-weight: 400; line-height: 24px;">
+                        <p>
+                            {{trans 'Order Placed On: <span class='no-link'>%created_at</span>' created_at=$order_date |raw}}
+                        </p>
+                        {{depend footer_messages_html}}
+                            {{var footer_messages_html|raw}}
+                        {{/depend}}
+                    </td>
+                </tr>
+            </table>
+            {{var order_details_html|raw}}
+        </td>
+    </tr>
+</table>

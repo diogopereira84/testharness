@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php if ($block->canShowSensitiveMessageBlock()): ?>
+    <div class="sensitive-data" role="region" aria-label="sensitive-data">
+        <div class="logo-img">
+            <img src="<?=$block->getViewFileUrl('Fedex_SDE::images/secure.svg') ?>" alt="Sensitive Data Workflow"/>
+        </div>
+        <div class="content-block">
+            <div class="title"><?= /* @noEscape */ $block->getSdeSecureTitle(); ?></div>
+            <div class="text-block"><?= /* @noEscape */ $block->getSdeSecureContent(); ?></div>
+        </div>
+    </div>
+<?php endif; ?>

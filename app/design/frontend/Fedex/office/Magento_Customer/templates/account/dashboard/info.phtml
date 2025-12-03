@@ -1,0 +1,133 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Info $block */
+
+?>
+
+<?php
+    /** @var \Fedex\SSO\ViewModel\SsoConfiguration $fclLogin */
+    $fclLogin = $block->getData('fcl_login');
+
+    /** @var \Fedex\Commercial\ViewModel\CommercialSsoConfiguration $sdeLogin */
+    $sdeLogin = $block->getData('view_model');
+
+    /** @var \Fedex\EnvironmentManager\ViewModel\ToggleConfig $toggleConfig */
+    $toggleConfig = $block->getData('toggle_config');
+
+    /** @var \Fedex\SelfReg\ViewModel\CompanyUser $selfRegLogin */
+    $selfRegLogin = $block->getData('selfreg_helper');
+
+    $helper = $this->helper('Fedex\Header\Helper\Data');
+    $customer=$helper->getCustomer($block->getCustomer()->getId());
+    $explorersD193926FixToggleEnable = $helper->getToggleD193926Fix();
+    $isEproCustomer = $this->helper('Fedex\Delivery\Helper\Data');
+    $eproCustomer = $isEproCustomer->isEproCustomer();
+?>
+<div class="block block-dashboard-info">
+    <?php if (($fclLogin->isFclCustomer()) || ($sdeLogin->getIsRequestFromSdeStore())):?>
+        <div class="block-title"><?= $block->escapeHtml(__('Contact & Shipping Information')) ?></div>
+    <?php elseif ($eproCustomer && $fclLogin->isimprovingpasswordtoggle()): ?>
+        <div class="block-title"><?= $block->escapeHtml(__('Account Information')) ?></div>
+    <?php else: ?>
+        <div class="block-title"><?= $block->escapeHtml(__('Contact & Shipping Information')) ?></div>
+    <?php endif; ?>
+    <div class="block-content">
+        <div class="box box-information">
+            <?php if (!$fclLogin->isFclCustomer() || !$sdeLogin->getIsRequestFromSdeStore()):?>
+            <strong class="box-title">
+                <span><?= $block->escapeHtml($eproCustomer && $fclLogin->isimprovingpasswordtoggle() ? __('Contact Information') : __('Contact')) ?></span>
+            </strong>
+            <?php endif; ?>
+
+            <div class="box-content">
+                <p>
+                    <?= $block->escapeHtml($block->getName()) ?><br>
+                    <?php if ($explorersD193926FixToggleEnable && $eproCustomer) {
+                        echo '<span>'.$block->escapeHtml($customer->getData('email')).'</span><br>';
+                   ?><?php } else {
+                        echo '<span>'.$block->escapeHtml($block->getCustomer()->getEmail()).'</span><br>';
+                   } ?>
+                    <?php
+                    if (!$fclLogin->isFclCustomer() && !$sdeLogin->getIsRequestFromSdeStore()) {
+                        $helper = $this->helper('Fedex\Header\Helper\Data');
+                        $customer=$helper->getCustomer($block->getCustomer()->getId());
+                        if (!empty($customer)) {
+                            if($customer->getContactNumber()){
+                                echo '<span>'.$block->escapeHtml(__($customer->getContactNumber())).'</span><br>';
+                            }
+                            if($customer->getContactExt()){
+                                echo '<span>'.$block->escapeHtml(__($customer->getContactExt())).'</span><br>';
+                            }
+                            ?>
+                        <?php } else {
+                            ?>
+                            <span><?= $block->escapeHtml(__('Contact Number:')) ?></span><br>
+                            <span><?= $block->escapeHtml(__('Ext: ')) ?></span><br>
+                        <?php }
+                        }
+                    ?>
+                </p>
+                <?= $block->getChildHtml('customer.account.dashboard.info.extra'); ?>
+            </div>
+            <div class="box-actions">
+                <?php if ($fclLogin->isFclCustomer() || $sdeLogin->getIsRequestFromSdeStore() || $selfRegLogin->isSelfRegCustomerWithFclEnabled()):?>
+                    <button class="first-edit-focus" aria-label="focus button" tabindex="-1" hidden="hidden">
+                    </button>
+                    <?php elseif($selfRegLogin->isEproCustomer()):?>
+                    <div class="box-actions" style="display: block !important;">
+                        <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('customer/account/edit')) ?>">
+                            <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                        </a>
+                    </div>
+                    <?php elseif($selfRegLogin->isEproCustomer() && $toggleConfig->getToggleConfigValue('tech_titans_d_184741')):?>
+                    <div class="box-actions" style="display: block !important;">
+                        <a class="action edit edit-account-link" onclick="changeText(this);"
+                           data-url="<?= $block->escapeHtml($fclLogin->getFclMyProfileUrl()) ?>" href="javascript:void(0)">
+                            <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                        </a>
+                    </div>
+                <?php endif;?>
+            </div>
+        </div>
+        <?php if ($block->isNewsletterEnabled()): ?>
+            <div class="box box-newsletter">
+                <strong class="box-title">
+                    <span><?= $block->escapeHtml(__('Newsletters')) ?></span>
+                </strong>
+                <div class="box-content">
+                    <p>
+                        <?php if ($block->getIsSubscribed()): ?>
+                            <?= $block->escapeHtml(__('You are subscribed to "General Subscription".')) ?>
+                        <?php else: ?>
+                            <?= $block->escapeHtml(__('You aren\'t subscribed to our newsletter.')) ?>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <div class="box-actions">
+                    <?php if ($fclLogin->isFclCustomer() || $selfRegLogin->isSelfRegCustomerWithFclEnabled()):?>
+                        <a class="action edit edit-account-link" onclick="changeText(this);"
+                        data-url="<?= $block->escapeHtml($fclLogin->getFclMyProfileUrl()) ?>"
+                        href="javascript:void(0)">
+                            <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                        </a>
+                    <?php else: ?>
+                        <a class="action edit" href="<?= $block->escapeUrl($block->getUrl('newsletter/manage')) ?>">
+                            <span><?= $block->escapeHtml(__('Edit')) ?></span></a>
+                    <?php endif;?>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?= $block->getChildHtml('additional_blocks'); ?>
+    </div>
+</div>
+<div class="no-display">
+    <div id="modal">
+        <div class="modal-body-content">
+            <h2><?= $block->escapeHtml(__('Click Refresh to see your changes')) ?></h2>
+        </div>
+    </div>
+</div>

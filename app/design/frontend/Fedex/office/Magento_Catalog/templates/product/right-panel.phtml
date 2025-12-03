@@ -1,0 +1,176 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+$viewModel          = $block->getData('product_list_view_model');
+$viewModelMvpHelper = $block->getData('view_model_mvphelper');
+$catalogMvpHelper   = $viewModel->getCatalogMvpHelper();
+
+$nonStandardCatalogToggle = $viewModelMvpHelper->isNonStandardCatalogToggleEnabled();
+$isCustomDocEnabled       = $catalogMvpHelper->customDocumentToggle();
+$isD206810ToggleEnabled   = $viewModel->isD206810ToggleEnabled();
+
+/*
+ * B-1611718 panel tabs
+ */
+$panelTabs = [
+    'Print Properties',
+    'Description',
+    'Tags',
+];
+
+if ($viewModelMvpHelper->isSharedCatalogPermissionEnabled()) {
+    $panelTabs[] = 'Last Modified';
+}
+
+$panelTabs[] = 'Quantity';
+
+$descTags = [
+    'Print Properties',
+    'Description',
+    'Tags',
+];
+
+if ($viewModelMvpHelper->isSharedCatalogPermissionEnabled()) {
+    $descTags[] = 'Last Modified';
+}
+
+$tags = [
+    'Tag ABC',
+    'Tag ABC',
+];
+
+$menuItems = [
+    'Preview',
+];
+
+if (
+    $viewModelMvpHelper->isCatalogExpiryNotificationToggle()
+    && $viewModelMvpHelper->isSharedCatalogPermissionEnabled()
+) {
+    $menuItems = array_merge(
+        $menuItems,
+        [
+            'Renew',
+            'Edit',
+            'Delete',
+            'Download File(s)',
+            'Move',
+            'Rename',
+            'Duplicate',
+        ]
+    );
+}
+
+if ($nonStandardCatalogToggle && $viewModelMvpHelper->isSharedCatalogPermissionEnabled()) {
+    $menuItems[] = 'Settings';
+    $menuItems[] = 'Request Change';
+}
+?>
+<div class="right-pannel">
+    <div id="accordion" class="panel-container" data-mage-init='{"accordion":{
+    "active": [1],
+    "collapsible": true,
+    "openedState": "active",
+    "multipleCollapsible": true
+    }}' aria-busy="true">
+        <div class="panel-top">
+            <div class="item-panel-new">
+                <div class="panel-top-content">
+                    <div class="item-title" id="right-panel-item-title"></div>
+                    <?php if($isCustomDocEnabled): ?>
+                        <div class="item-custom-doc-box">
+                            <div class="item-custom-option"></div>
+                            <div class="item-status"></div>
+                        </div>
+                    <?php else: ?>
+                        <div class="item-status"></div>
+                    <?php endif; ?>
+                </div>
+                <div class="panel-top-actions" >
+                    <div class="flyout-close-button-mobile flyout-close-button-tablet">
+                        <span id="close-button" class="cancel-setting">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M8.19526 8.19526C7.93491 8.45561 7.93491 8.87772 8.19526 9.13807L15.0572 16L8.19526 22.8619C7.93491 23.1223 7.93491 23.5444 8.19526 23.8047C8.45561 24.0651 8.87772 24.0651 9.13807 23.8047L16 16.9428L22.8619 23.8047C23.1223 24.0651 23.5444 24.0651 23.8047 23.8047C24.0651 23.5444 24.0651 23.1223 23.8047 22.8619L16.9428 16L23.8047 9.13807C24.0651 8.87772 24.0651 8.45561 23.8047 8.19526C23.5444 7.93491 23.1223 7.93491 22.8619 8.19526L16 15.0572L9.13807 8.19526C8.87772 7.93491 8.45561 7.93491 8.19526 8.19526Z" fill="#333333"/>
+                            </svg>
+                        </span>
+                    </div>
+                    <div class="kebab-hidden">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                    d="M24 33C25.656 33 27 34.344 27 36C27 37.656 25.656 39 24 39C22.344 39 21 37.656 21 36C21 34.344 22.344 33 24 33ZM24 21C25.656 21 27 22.344 27 24C27 25.656 25.656 27 24 27C22.344 27 21 25.656 21 24C21 22.344 22.344 21 24 21ZM27 12C27 10.344 25.656 9 24 9C22.344 9 21 10.344 21 12C21 13.656 22.344 15 24 15C25.656 15 27 13.656 27 12Z" fill="#333333"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php foreach ($panelTabs as $panelTab): ?>
+            <?php if($panelTab != "Quantity"): ?>
+                <div class="panel-tab <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="collapsible">
+                    <div data-role="trigger">
+                        <div class="tab-wrapper">
+                            <div class="tab-title">
+                                <?= $escaper->escapeHtml(__($panelTab)) ?>
+                            </div>
+                            <div class="tab-icon"></div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="panel-content <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="content">
+                <?php if ($panelTab == "Print Properties"): ?>
+                    <div class="content-wrapper-print-properties">
+                        <div class="gallery-media" >
+
+                                <img alt="gallery" class="preview-image-container" datashowpreview="1" datasku="" src="<?= $block->getViewFileUrl('images/gallery.png');?>">
+
+                        </div>
+                        <div class="print-properties"></div>
+                    </div>
+                <?php elseif ($panelTab == "Tags"): ?>
+                    <div class="content-wrapper <?php if ($panelTab == "Tags"): ?> tags <?php endif; ?>">
+                        <div class="content-title">Tag(s)</div>
+                        <div class="tags-wrapper"></div>
+                    </div>
+                <?php elseif ($panelTab == "Last Modified"): ?>
+                    <div class="content-wrapper <?php if ($panelTab == "Last Modified"): ?> last modified <?php endif; ?>">
+                        <div class="content-title">Last Modified</div>
+                        <div class="last-modified-wrapper"></div>
+                    </div>
+                <?php elseif ($panelTab == "Quantity"): ?>
+                    <div class="content-wrapper" style="padding: 17px 20px 30px 11px">
+                        <div class="content-title"><?= $panelTab ?></div>
+                        <div class="quantity-wrapper">
+                            <div class="qty-box-label">
+                                <div class="field-box-qty">
+                                    <input class="qty-box-value" value="50"
+                                            tabindex="-1" aria-label="qty-box-value">
+                                    <select class="qty-dropbox-value" aria-label="qty-box-value" ></select>
+                                </div>
+                            </div>
+                            <div class="cart-chip-wrapper">
+                                <div class="cart-chip">
+                                    <div class="cart-chip-label">
+                                        <?= $escaper->escapeHtml(__('Add to cart')) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="content-wrapper">
+                        <div class="content-title"><?= __('Description'); ?></div>
+                        <div class="content-desc"><?= __(''); ?></div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <!--B-1611718-->
+    <div class="dropdown-menu" style="display: none">
+        <?php foreach ($menuItems as $menuItem): ?>
+            <div class="menu-item">
+                <div class="menu-item-label <?php echo $menuItem; ?> <?= 'action_kebab_right_item_'.strtolower($menuItem)?>"><?= $menuItem; ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>

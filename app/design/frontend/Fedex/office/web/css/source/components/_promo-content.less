@@ -1,0 +1,311 @@
+.promo-content-border(@height; @width; @left: 0px; @top: 100%) {
+    &::before {
+        content: '';
+        position: absolute;
+
+        width: @width;
+        height: @height;
+
+        left: @left;
+        top: @top;
+
+        background-color: #CED5D9;
+    }
+}
+
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .promo-content {
+        color: @fx-grey-1200;
+        background-color: #F7F9FA;
+
+        font-family: 'FedEx Sans Light';
+        font-size: 16px;
+        line-height: 24px;
+
+        h4 {
+            .font-primary-medium();
+            font-size: 20px
+        }
+
+        h2 {
+            line-height: 40px;
+        }
+
+        h3 {
+            font-size: 24px;
+            line-height: 30px;
+            margin: 20px 0;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0;
+        }
+
+        .promo-content-block {
+            display: flex;
+            flex-wrap: wrap;
+            align-content: flex-start;
+
+            width: 100%;
+        }
+
+        .promo-content-row {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+
+            padding: 10px 0;
+        }
+
+        .pagebuilder-column-group {
+            display: flex;
+            flex-wrap: wrap;
+
+            .pagebuilder-column {
+                position: relative;
+            }
+        }
+
+        &.photobook {
+            .promo-content-block {
+                &:first-child {
+                    padding-left: 0;
+                }
+            }
+        }
+
+        &.calendar {
+            .pagebuilder-column-group {
+                justify-content: center;
+            }
+        }
+
+        &.third-party {
+           .promo-content-row {
+               justify-content: center;
+
+               span {
+                    width: 100%;
+                    text-align: center;
+               }
+            }
+        }
+    }
+}
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+//
+// 768+px
+//
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .promo-content {
+
+        h2 {
+            font-size: 32px;
+        }
+
+        &.third-party {
+            margin: 25px;
+
+            .promo-content-row {
+                &:not(:first-child,:last-child) {
+                    position: relative;
+    
+                    .promo-content-border (
+                         @height: 1px;
+                         @width: 90%;
+                         @left: 5%;
+                     );
+                }
+            }
+    
+            .pagebuilder-column-group {
+                justify-content: space-evenly;
+                flex-wrap: nowrap;
+    
+            }
+        }
+    }
+}
+
+
+//
+// 1440+px
+//
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    .promo-content {
+        &.calendar, &.third-party {
+            padding: 25px 100px;
+        }
+
+        &.photobook {
+            padding: 58px 120px 79px;
+
+            .promo-content-block {
+                padding: 0 30px;
+            }
+
+            .pagebuilder-column-group {
+                flex-wrap: nowrap;
+    
+                > :first-child {
+                    padding: 0 90px 0 0;
+
+                    .promo-content-border (
+                        @width: 1px;
+                        @height: calc(~"100% - 70px");
+                        @left: 100%;
+                        @top: 50px;
+                    );
+                }
+    
+                > :last-child {
+                    padding: 0 0 0 90px;
+                } 
+            }
+        }
+    }
+}
+
+
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .promo-content {
+        &.calendar, &.third-party, &.third-party {
+            padding: 15px 100px;
+        }
+        &.photobook {
+            padding: 30px 430px 80px 50px;
+
+            .promo-content-block {
+                padding: 0 40px;
+            }
+
+            .pagebuilder-column-group {
+                .pagebuilder-column {
+                    padding: 40px 0;
+
+                    &:first-child {
+                        .promo-content-border (
+                            @width: 300px;
+                            @height: 1px;
+                        );
+                    }
+                }
+            }  
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .promo-content {
+        &.calendar, &.third-party {
+            padding: 30px;
+        }
+
+        &.third-party {
+            margin: 25px 20px;
+
+            h2 {
+                font-size: 26px;
+            }
+        }
+
+
+        &.photobook {
+            padding: 30px 64px 80px 20px;
+
+            .promo-content-block {
+                padding: 0 25px;
+            }
+
+            .pagebuilder-column-group {
+                .pagebuilder-column {
+                    padding: 40px 0;
+
+                    &:first-child {
+                        .promo-content-border (
+                            @width: calc(~"100% - 40px");
+                            @height: 1px;
+                        );
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .promo-content {
+
+        .promo-content-row {
+            flex-wrap: wrap;
+        }
+
+        &.third-party {
+            margin: 25px 15px;
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .pagebuilder-column-group {
+                flex-wrap: wrap;
+            }
+
+            .promo-content-row {
+                flex-wrap: nowrap;
+
+                &:not(:first-child,:last-child) {
+                    position: relative;
+    
+                    .promo-content-border (
+                            @height: 1px;
+                            @width: 100%;
+                        );
+                }
+            }
+
+            .promo-content-block {
+                padding: 0 10px;
+            }
+        }
+
+        &.photobook, &.calendar {
+            padding: 30px 15px 0;
+        }
+
+        &.photobook {
+            .pagebuilder-column-group {
+                .pagebuilder-column {
+                    padding: 0;
+                }
+            }
+
+            .pagebuilder-column {
+
+                .promo-content-block {
+                    margin-bottom: 30px;
+                }
+
+                &:first-child {
+                    .promo-content-border (
+                        @width: calc(~"100% - 30px");
+                        @height: 1px;
+                    );
+                }
+            }
+        }
+    }
+}

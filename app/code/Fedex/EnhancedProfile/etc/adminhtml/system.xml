@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="enhanced_profile_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Enhanced Profile Configuration</label>
+                <field id="terms_and_condition_url" type="text" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Terms and Conditions URL</label>
+                    <comment>Please enter terms and conditions page URL.</comment>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="preferred_delivery_method_list_api" type="text" translate="label" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Preferred Delivery Method API URL</label>
+                    <comment>Please enter Preferred Delivery Method list API.</comment>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="creditcardtokens" type="text" translate="label" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Credit Card Tokens URL</label>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="faq_url" type="text" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>FAQ URL</label>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="account_summary" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fedex Account Summary API URL</label>
+                    <validate>validate-url</validate>
+                </field>
+                <field id="add_shipping_account_url" type="text" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Add Shipping Account</label>
+                    <comment>Enter FedEx URL to add shipping account</comment>
+                    <validate>validate-url</validate>
+                </field>
+                <group id="shipping_account" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Fedex Shipping Account Component Configuration</label>
+                    <field id="box_title_guest" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Box Title Guest</label>
+                        <config_path>enhanced_profile_group/shipping_account/box_title_guest</config_path>
+                    </field>
+                    <field id="box_description_guest" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Box Description Guest</label>
+                        <config_path>enhanced_profile_group/shipping_account/box_description_guest</config_path>
+                    </field>
+                    <field id="box_title_customer" type="text" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Box Title Customer</label>
+                        <config_path>enhanced_profile_group/shipping_account/box_title_customer</config_path>
+                    </field>
+                    <field id="box_description_customer" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Box Description Customer</label>
+                        <config_path>enhanced_profile_group/shipping_account/box_description_customer</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration">
+            <group id="environment_toggle">
+                <field id="tiger_e486666" translate="label" type="select" sortOrder="1502" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-486666 - Shipping Account for Logged In User Only</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

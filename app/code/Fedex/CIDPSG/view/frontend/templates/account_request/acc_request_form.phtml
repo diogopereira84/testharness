@@ -1,0 +1,84 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$templateClass = \Magento\Framework\View\Element\Template::class;
+$states = $block->getAllStates('US');
+$statesBoth = $block->getBothStates();
+$params = $block->getUrlParams();
+$natureOfBusiness = $block->getNatureOfBusinessOptions();
+$tcText = $block->getAccountTermConditionText();
+$confirmationPopupMsg = $block->getConfirmationPopupMessage();
+$confirmationMsgData = [
+    'msg' => $confirmationPopupMsg,
+    'title' => 'Application Submitted'
+];
+$pegaRetryCount = $block->getPegaRetryCount();
+$appSourceArr = ['Online', 'PSG', 'PSG/FDX'];
+$appSource = 'Online';
+if (isset($params['source']) && in_array($params['source'], $appSourceArr)) {
+    $appSource = $params['source'];
+}
+?>
+<div class="cidpsg-acc-req-container-main">
+    <form name="cidpsg_acc_req_form" id="cidpsg_acc_req_form" class="cidpsg-acc-req-form" autocomplete="off"
+    data-mage-init='{"validation": {}}'>
+        <div class="company-info-container">
+            <?= $block->getLayout()->createBlock($templateClass)
+            ->setTemplate('Fedex_CIDPSG::account_request/company_info.phtml')
+            ->setData('states', $states)
+            ->toHtml() ?>
+        </div>
+        <?php if (isset($params['account']) && $params['account'] == 1): ?>
+            <div class="charge-acc-option-container">
+                <?= $block->getLayout()->createBlock($templateClass)
+                ->setTemplate('Fedex_CIDPSG::account_request/charge_acc_option.phtml')
+                ->setData('charge_acc_data', [$states, $statesBoth, $natureOfBusiness])
+                ->toHtml() ?>
+            </div>
+        <?php endif; ?>
+        <div class="tax-exempt-status-container">
+            <?= $block->getLayout()->createBlock($templateClass)
+            ->setTemplate('Fedex_CIDPSG::account_request/tax_exempt_status.phtml')
+            ->setData('states', $states)
+            ->toHtml() ?>
+        </div>
+        <div class="questionnaire-container">
+            <?= $block->getLayout()->createBlock($templateClass)
+            ->setTemplate('Fedex_CIDPSG::account_request/questionnaire.phtml')->toHtml() ?>
+        </div>
+        <div class="terms-and-conditions-container">
+            <?= $block->getLayout()->createBlock($templateClass)
+            ->setTemplate('Fedex_CIDPSG::account_request/terms_and_conditions.phtml')
+            ->setData('tc_text', $tcText)
+            ->toHtml() ?>
+        </div>
+        <div class="account-request-btn-container">
+        <input id="app_source" name="app_source" type="hidden" value="<?= $block->escapeHtmlAttr($appSource) ?>" />
+            <button type="button" id="btn_save_changes" title="Submit" class="btn-orage-submit"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-btn-save-changes" disabled>
+                <?=$block->escapeHtml(__('SUBMIT'))?>
+            </button>
+        </div>
+    </form>
+    <?= $block->getLayout()->createBlock($templateClass)
+    ->setTemplate("Fedex_CIDPSG::confirmation_popup.phtml")
+    ->setData('confirmation_popup_msg', $confirmationMsgData)
+    ->toHtml() ?>
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "cidpsgaccount": {},
+        "accountRequestValidate": {},
+        "cidpsgcalendar": {}
+    },
+    ".v-validate": {
+        "Fedex_CIDPSG/js/cid_custom_validation": {}
+    }
+}
+</script>
+<script>
+    window.pegaRetryCount = <?= (int) $pegaRetryCount ?>;
+</script>

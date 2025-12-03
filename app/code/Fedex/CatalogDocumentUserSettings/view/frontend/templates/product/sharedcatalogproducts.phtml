@@ -1,0 +1,12 @@
+<?php
+
+$companyConfiguration = $this->helper('Fedex\CatalogDocumentUserSettings\Helper\Data')->getCompanyConfiguration();
+$allowSharedCatalog = (bool) $companyConfiguration->getAllowSharedCatalog();
+
+if($allowSharedCatalog){
+	echo $this->getLayout()
+	->createBlock('Magento\Cms\Block\Block')
+	->setBlockId('shared_catalog_products')
+	->toHtml();
+}
+?>

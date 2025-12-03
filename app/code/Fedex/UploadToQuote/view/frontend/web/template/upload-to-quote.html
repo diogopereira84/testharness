@@ -1,0 +1,130 @@
+<!--
+Upload to quote checkout review
+-->
+<ul class="no-disk upload-to-quote">
+    <li class="root-container">
+
+        <!-- TODO: Universal error alert component -->
+        <div role="dialog" aria-label="API Error" class="error-container api-error-hide pickup-error-hide">
+            <div class="icon-container">
+                <img data-bind="attr: { src: crossUrl}" alt="Error icon" />
+            </div>
+            <div class="message-container">
+                <p>System error. Please Try Again</p>
+            <p class="message"></p>
+            </div>
+            <img class="img-close-pop" data-bind="attr: { src: crossIcon}" alt="Close error message" />
+        </div>
+
+        <div role="dialog" aria-label="API Error" class="error-container upload-to-quote-api-error-hide">
+            <div class="icon-container">
+              <img data-bind="attr: { src: crossUrl}" alt="Error icon" />
+            </div>
+            <div class="message-container">
+            </div>
+            <img class="img-close-pop" data-testid="B-1739959-upload-to-quote-img-popup" data-bind="attr: { src: crossIcon}" alt="Close error message" />
+          </div>
+        <div class="shipping-title-checkout">
+            <h1 class="checkout-heading">Review</h1>
+            <hr>
+            <ul class="checkout-breadcrumb">
+                  <li class="cart-summary-breadcrumb" data-bind="click: goToCart" tabindex="0" data-testid="upload-to-quote-breadcrumb-cart-summary">
+                      <span>Cart Summary</span>
+                  </li>
+                <li class="review-quote-request-breadcrumb" tabindex="-1" data-testid="upload-to-quote-breadcrumb-review-quote-request">
+                    <span>Review Quote Request</span>
+                </li>
+            </ul>
+
+        <!-- New Pickup Component -->
+        <!-- ko if: window.checkoutConfig?.tiger_team_E_469378_u2q_pickup && !isRestrictedProductionLocation() -->
+            <!-- ko foreach: getRegion('pickup-selector-region') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+        <!-- /ko -->
+
+        <!-- Legacy Pickup Search Form -->
+        <!-- ko if: !window.checkoutConfig?.tiger_team_E_469378_u2q_pickup || isRestrictedProductionLocation() -->
+               <div class="pickup-search-form-container" id="quote-pickup-search-form-container">
+                       <div class="input-filed-container">
+                           <div class="zipcode-container">
+                               <label data-bind="text: zipCodePickupTitle" for="zipcodeLocation" class="search-text">
+                               </label>
+                               <input class="input-text zipcodeLocation" autocomplete="off" type="text" name="zipcodeLocation" id="zipcodeLocation" data-bind="event: { change: enableSaveLocationPickup, blur: enableSaveLocationPickup, keyup: enableSaveLocationPickup }, attr: {placeholder: zipCodePickupTitle}" data-testid="B-1739959-upload-to-quote-zip-code-city-state"/>
+                               
+                           </div>
+                           <div class="search-button-container">
+                             <button id="save-location-code-pickup" class="button action continue primary save-location-code-pickup" data-bind="click: onClickSaveLocationCode" data-testid="B-1739959-upload-to-quote-button-save-location-code-by-zip-code" disabled="disabled">SAVE</button>
+                           </div>
+                       </div>
+               </div>
+        <!-- /ko -->
+
+        <!--End-Contact Form HTML-->
+	        <div class="store-form-container" style="display: none;">
+				<h3>Recommended store(s)</h3>
+				<div class="stores">
+					<strong class="store-name">FedEx Office Print & Ship</strong>
+					<p class="location-name"></p>
+				</div>
+				<div class="multi-stores">
+					<p>Please select one of the following locations</p>
+					<div class="store-list"></div>
+			    </div>
+		    </div>
+	    	<hr>
+		</div>
+		<div class="upload-to-quote-contact-submit-quote-request">
+			<div class="upload-to-quote-contact-section" data-bind="visible: showUploadToQuoteContactForm(), event: { change: validateContactForm, input: validateContactForm }">
+		    	<h3 class="contact-heading">Contact Information</h3>
+		    	<hr>
+		    	<div class="subtitle">Who should we contact with questions regarding this requested quote?</div>
+			    <div class="contact-name-container">
+		            <div class="contact-first-name">
+		              <label class="contact-form-font" for="contact-fname">FIRST NAME</label>
+		              <input class="contact-fname" type="text" id="contact-fname" aria-label="First name" data-testid="B-1739959-upload-to-quote-contact-first-name" maxlength="30" data-bind="event: { change: validateContactFirstName, blur: validateContactFirstName }"/>
+		              <span class="contact-fname-error"></span>
+		            </div>
+		            <div class="contact-last-name">
+		              <label class="contact-form-font" for="contact-lname">LAST NAME</label>
+		              <input class="contact-lname" type="text" id="contact-lname" aria-label="Last name" data-testid="B-1739959-upload-to-quote-contact-last-name" data-bind="event: { change: validateContactLastName, blur: validateContactLastName }" maxlength="30"/>
+		              <p class="contact-lname-error"></p>
+		            </div>
+		        </div>
+		        <div class="contact-number-container">
+		            <div class="contact-phone-no">
+		              <label class="contact-form-font" for="contact-number">PHONE NUMBER</label>
+		              <input class="contact-number" type="text" id="contact-number" data-testid="B-1739959-upload-to-quote-contact-number" aria-label="Phone Number" placeholder="(555) 555-5555" data-bind="event: { change: validateContactNumber, blur: validateContactNumber }" maxlength="14"/>
+		              <p class="contact-number-error"></p>
+		            </div>
+		            <div class="contact-phone-ext">
+		              <label class="contact-form-font" for="contact-ext">EXT.</label>
+		              <input class="contact-ext" type="number" placeholder="Ext." data-testid="B-1739959-upload-to-quote-contact-ext"
+		                id="contact-ext" aria-label="Ext Number" maxlength="5"/>
+		            </div>
+		        </div>
+		        <div class="contact-email-container">
+		            <label class="contact-form-font" for="contact-email">EMAIL ADDRESS</label>
+		            <input class="contact-email" type="email" id="contact-email" data-testid="B-1739959-upload-to-quote-contact-email" aria-label="Email" data-bind="event: { change: validateContactEmail, blur: validateContactEmail }" maxlength="180"/>
+		            <p class="contact-email-error"></p>
+		        </div>
+		    </div>
+	        <div class="actions-toolbar" data-bind="visible: showUploadToQuoteContactForm()">
+	          <div class="primary">
+
+                <!-- ko if: !window.checkoutConfig?.tiger_team_E_469378_u2q_pickup -->
+	            <button data-role="submit-quote-request" type="submit" data-testid="B-1739959-upload-to-quote-submit-quote-request" class="button action continue primary submit-quote-request place-pickup-order" id="submit-quote-request" disabled="disabled" data-bind="click: onClickSubmitQuote">
+	              <span>Submit Quote Request</span>
+	            </button>
+                <!-- /ko -->
+                 <!-- ko if: window.checkoutConfig?.tiger_team_E_469378_u2q_pickup -->
+                <button data-role="submit-quote-request" type="submit" data-testid="B-1739959-upload-to-quote-submit-quote-request" class="button action continue primary submit-quote-request place-pickup-order" id="submit-quote-request" data-bind="click: onClickSubmitQuote">
+	              <span>Submit Quote Request</span>
+	            </button>
+                <!-- /ko -->
+	          </div>
+	        </div>
+        </div>
+        <div class="alternate-from-container"></div>
+    </li>
+</ul>

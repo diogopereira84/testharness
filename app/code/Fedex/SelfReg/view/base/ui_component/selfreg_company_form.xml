@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * B-1257375 - Add configuration for site access (use access flow- all registered users, users from specific domain and admin approval)
+ *
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">company_form.company_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Company Information</item>
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <buttons>
+            <button name="reset" class="Magento\Company\Block\Adminhtml\Edit\ResetButton"/>
+            <button name="save" class="Magento\Company\Block\Adminhtml\Edit\SaveButton"/>
+            <button name="delete" class="Magento\Company\Block\Adminhtml\Edit\DeleteButton"/>
+            <button name="back" class="Magento\Company\Block\Adminhtml\Edit\BackButton"/>
+        </buttons>
+        <namespace>company_form</namespace>
+        <dataScope>data</dataScope>
+        <deps>
+            <dep>company_form.company_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="selfreg_company_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <submitUrl path="company/index/save"/>
+        </settings>
+        <dataProvider class="Magento\Company\Model\Company\DataProvider" name="selfreg_company_form_data_source">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>entity_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="company_admin" sortOrder="40">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Company Admin</label>
+            <dataScope>company_admin</dataScope>
+        </settings>
+        <field name="website_id" formElement="select" sortOrder="10" component="Magento_Company/js/edit/add-user-website">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">website_id</item>
+                    <item name="value" xsi:type="string">0</item>
+                    <item name="addUserUrl" xsi:type="url" path="company/index/addUser"/>
+                    <item name="modalProvider" xsi:type="string">ns = company_form, index = replace_company_admin_modal2</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Website</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Company\Model\Company\Source\Website"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="job_title" sortOrder="20" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">job_title</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Job Title</label>
+            </settings>
+        </field>
+        <field name="email" sortOrder="30" component="Magento_Company/js/edit/add-user" formElement="email">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">email</item>
+                    <item name="modalProvider" xsi:type="string">ns = company_form, index = replace_company_admin_modal</item>
+                    <item name="getCustomerDataUrl" xsi:type="url" path="company/index/addUser"/>
+                </item>
+            </argument>
+            <settings>
+                <elementTmpl>Magento_Company/edit/email-field</elementTmpl>
+                <validation>
+                    <rule name="validate-customer-status" xsi:type="boolean">true</rule>
+                    <rule name="validate-customer-company" xsi:type="boolean">true</rule>
+                    <rule name="validate-email" xsi:type="boolean">true</rule>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Email</label>
+            </settings>
+        </field>
+        <field name="prefix" sortOrder="40" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">prefix</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Prefix</label>
+            </settings>
+        </field>
+        <field name="firstname" sortOrder="50" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">firstname</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">First Name</label>
+            </settings>
+        </field>
+        <field name="middlename" sortOrder="60" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">middlename</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Middle Name/Initial</label>
+            </settings>
+        </field>
+        <field name="lastname" sortOrder="70" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">lastname</item>
+                </item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label translate="true">Last Name</label>
+            </settings>
+        </field>
+        <field name="suffix" sortOrder="80" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">suffix</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Suffix</label>
+            </settings>
+        </field>
+        <field name="gender" sortOrder="90" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="source" xsi:type="string">gender</item>
+                    <item name="value" xsi:type="string">3</item>
+                </item>
+            </argument>
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">Gender</label>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Company\Model\Company\Source\Gender"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+    <fieldset  name="self_reg_login" sortOrder="70">
+        <settings>
+            <collapsible>true</collapsible>
+            <label translate="true">Self-Registration WLGN Login</label>
+            <dataScope>self_reg_login</dataScope>
+        </settings>
+        <field name="enable_selfreg">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="dataType" xsi:type="string">boolean</item>
+                    <item name="formElement" xsi:type="string">checkbox</item>
+                    <item name="source" xsi:type="string">category</item>
+                    <item name="prefer" xsi:type="string">toggle</item>
+                    <item name="label" xsi:type="string" translate="true">Enable Self Registration</item>
+                    <item name="valueMap" xsi:type="array">
+                        <item name="true" xsi:type="string">1</item>
+                        <item name="false" xsi:type="string">0</item>
+                    </item>
+                    <item name="validation" xsi:type="array">
+                        <item name="required-entry" xsi:type="boolean">false</item>
+                    </item>
+                    <item name="default" xsi:type="string">0</item>
+                </item>
+            </argument>
+            <settings>
+                <label translate="true">Enable Self Registration</label>
+                <tooltip>
+                    <description translate="true">Enable Self Registration</description>
+                </tooltip>
+            </settings>
+        </field>
+    </fieldset>
+</form>

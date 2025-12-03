@@ -1,0 +1,209 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$items = $block->getItems();
+$count = $block->escapeHtml(__($items['count']));
+$i = 1;
+$quoteDetailsViewModel = $block->getData('quoteDetailsViewModel');
+?>
+
+<table class="quote-items">
+   <tr style="background-color:#f2f2f2;border-collapse:collapse;">
+      <th class="fedex-ofc-items" style="width:75%;text-align:left;padding-top:4px;padding-bottom:8px;padding-left:8px;padding-right:8px;font-size:16px;line-height:24px;font-weight:700;color:#333;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+         <?php $counter = $items['firstPartyItemsCounter'] ?>
+         <?php $counterMessage = '('.$counter.' '.($counter > 1 ? __('Items') : __('Item')).')' ?>
+
+         <?= $block->escapeHtml( __('FedEx Office'.' '.$counterMessage )) ?>
+      </th>
+
+      <th class="fedex-ofc" style="padding-top:4px;padding-bottom:8px;font-size:16px;line-height:24px;color:#333;font-weight:700;padding-left:3%;padding-right:10px;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+         <?= $block->escapeHtml(__('Qty')) ?>
+      </th>
+
+      <th class="fedex-ofc-price" style="padding-top:4px;font-size:16px;line-height:24px;font-weight:700;color:#333;padding-bottom:8px;padding-left:7%;padding-right:1%;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+         <?=$block->escapeHtml(__('Price'))?>
+      </th>
+   </tr>
+   <?php foreach ($items as $key => $item): ?>
+      <?php if (is_int($key) && empty( $item['thirdPartySellerName'] )): ?>
+         <?php $isParent = isset($item['is_parent']) ? $item['is_parent'] : false; ?>
+         <?php $flagBorder = $count != $i && $item['AdditionalPrintInstruction']=='' && !$isParent ? true : false; ?>
+         <?php $flagSi = $count != $i ? true : false; ?>
+         <tr style="font-size:14px;line-height:24px;font-weight:400;color:#333;">
+            <td style="padding:8px;padding-bottom:8px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+               <?= $block->escapeHtml($item['item'])?>
+            </td>
+
+            <td style="padding-left:5%;padding-bottom:8px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+               <?= $block->escapeHtml($item['qty']) ?>
+            </td>
+
+            <td class="quote-price" style="padding:8px;padding-left:8%;padding-bottom:8px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+               <?= $block->escapeHtml(strip_tags( $item['price'])) ?>
+            </td>
+         </tr>
+         <tr>
+            <?php if($item['AdditionalPrintInstruction']):?>
+               <td class="print-int" colspan="3" style="font-size:12px;line-height:16px;font-weight:400;color:#333;padding-left:8px;"<?=$flagSi ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;padding-bottom:16px;" : "";?>>
+                  <?=$block->escapeHtml(__('Additional Print Instructions'))?>
+                  <p style="word-break:break-all;margin-top:0;margin-bottom:0;padding-top:0;">
+                     <i><?=$block->escapeHtml(__($item['AdditionalPrintInstruction']))?></i>
+                  </p>
+               </td>
+            <?php endif;?>
+         </tr>
+            <?php if($isParent && !empty($item['childrenData'])):
+                $totalItems = count($item['childrenData']);
+                $childItemsCounter = 1;
+               ?>
+                <?php foreach ($item['childrenData'] as $child):
+                    $flagBorder = $childItemsCounter == $totalItems ? true : false;?>
+                    <tr style="font-size:14px;line-height:24px;font-weight:400;color:#333;">
+                       <td style="padding:8px;padding-bottom:8px;padding-left:32px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+                           <?= $block->escapeHtml($child['item'])?>
+                       </td>
+
+                       <td style="padding-left:5%;padding-bottom:8px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+                           <?= $block->escapeHtml($child['qty']) ?>
+                       </td>
+
+                       <td class="quote-price" style="padding:8px;padding-left:8%;padding-bottom:8px;"<?=$flagBorder ? "border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;border-collapse:collapse;padding-bottom:16px;" : "";?>>
+                           <?= $block->escapeHtml(strip_tags( $child['price'])) ?>
+                       </td>
+                    </tr>
+                    <?php $childItemsCounter++; ?>
+                <?php endforeach;?>
+            <?php endif;?>
+      <?php endif;?>
+   <?php $i++; endforeach;?>
+</table>
+
+
+<br>
+
+<?php if ( $quoteDetailsViewModel->isUploadToQuoteEnabled() ): ?>
+<!-- MarketPlace Data -->
+
+   <table class="quote-items marketplace-items">
+      <?php foreach ($items['thirdPartySellers'] as $sellerName => $qtyFromSeller ): ?>
+         <tr style="background-color:#f2f2f2; border-collapse:collapse;">
+            <th class="fedex-ofc-items" style="width:75%;text-align:left;padding-top:4px;padding-bottom:8px;padding-left:8px;padding-right:8px;font-size:16px;line-height:24px;font-weight:700;color:#333;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+               <?php $counter = $qtyFromSeller ?>
+               <?php $counterMessage = '('.$counter.' '.($counter > 1 ? __('Items') : __('Item')).')' ?>
+               <?= $block->escapeHtml( __( $sellerName.' '.$counterMessage ) ) ?>
+            </th>
+            <th class="fedex-ofc" style="padding-top:4px;padding-bottom:8px;font-size:16px;line-height:24px;color:#333;font-weight:700;padding-left:3%;padding-right:10px;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+               <?=$block->escapeHtml(__('Qty'))?>
+            </th>
+
+            <th class="fedex-ofc-price" style="padding-top:4px;font-size:16px;line-height:24px;font-weight:700;color:#333;padding-bottom:8px;padding-left:7%;padding-right:1%;border-bottom-style:solid;border-bottom:1px;border-bottom-color:#8e8e8e;">
+               <?=$block->escapeHtml(__('Price'))?></th>
+         </tr>
+         <?php foreach ($items as $key => $item): ?>
+            <?php if ( is_int($key) && $item['thirdPartySellerName'] == $sellerName ): ?>
+               <tr style="font-size:14px;line-height:24px;font-weight:400;color:#333;">
+                  <td style="padding:8px;padding-bottom:8px;">
+                     <?= $block->escapeHtml($item['itemName']) ?>
+                  </td>
+
+                  <td style="padding-left:5%;padding-bottom:8px;">
+                     <?= $block->escapeHtml($item['qty'])?>
+                  </td>
+
+                  <td class="quote-price" style="padding:8px;padding-left:8%;padding-bottom:8px;">
+                     <?= $block->escapeHtml(strip_tags($item['price']))?>
+                  </td>
+               </tr>
+            <?php endif ?>
+         <?php endforeach;?>
+      <?php endforeach;?>
+   </table>
+<!-- End of MarketPlace Data -->
+<?php endif; ?>
+
+<hr>
+<table class="transaction"
+style="margin-top:10px;font-size:14px;line-height:24px;font-weight:400;color:#333;">
+   <tr>
+      <td class="email-items" style="padding:0;padding-left:45.5%;">
+      <?=$block->escapeHtml(__("Items ("))?><?=$block->escapeHtml(__($items['count']))?><?=$block->escapeHtml((")"))?></td>
+      <td class="email-subtotal" style="padding-left:77px;">
+      <?= $block->escapeHtml(strip_tags($items['subTotal'])) ?></td>
+   </tr>
+   <tr style="border-bottom-style:solid;border-bottom:1px;border-bottom-color:#e3e3e3;">
+      <td class="email-tax" style="padding:0;padding-left:45.5%;"><?=$block->escapeHtml(__('Tax'))?></td>
+      <td class="email-taxTotal" style="padding-left:77px;"><?=$block->escapeHtml(__('$--.--'))?></td>
+   </tr>
+   <tr>
+      <td class="email-discount" style="padding:0;padding-left:45.5%;"><?=$block->escapeHtml(__('Total Discount(s)'))?></td>
+      <td class="email-discountTotal" style="padding-left:77px;"><?=$block->escapeHtml(strip_tags($items['totalDiscount'] ?? '-'))?></td>
+   </tr>
+   <tr>
+      <td class="email-total" style="padding:0;padding-left:45.5%;"><?=$block->escapeHtml(__('Total'))?></td>
+      <td class="email-total-to" style="padding-left:77px;"><?= $block->escapeHtml(strip_tags($items['total'])) ?></td>
+   </tr>
+</table>
+
+<style>
+    .fedex-ofc {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+    }
+    .fedex-td {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    .prinnt-int {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px;
+    }
+    .transaction {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+        margin-left: 130px;
+    }
+   td.email-items,
+   td.email-tax,
+   td.email-total,
+   td.email-discount {
+      padding-left: 54% !important;
+      width: 77%;
+   }
+   th.fedex-ofc-items {
+      width: 71% !important;
+   }
+   table.quote-items {
+      width: 100%;
+   }
+   th.fedex-ofc-price {
+      padding-left: 5% !important;
+   }
+   td.quote-price {
+      padding-left: 6% !important;
+   }
+   td.email-subtotal,
+   td.email-taxTotal,
+   td.email-total-to,
+   td.email-discountTotal {
+      padding-left: 58px !important;
+   }
+</style>

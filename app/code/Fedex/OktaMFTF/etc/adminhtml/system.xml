@@ -1,0 +1,37 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="okta_mftf" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<label>Credentials Automation for ePro</label>
+			<tab>fedex_configurations</tab>
+			<resource>Fedex_OktaMFTF::config_fedex_OktaMFTF</resource>
+			<group id="general" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>General</label>
+                <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>This control governs access to the Okta authentication endpoint, allowing or blocking automated authentication for testing purposes only.</comment>
+                </field>
+				<field id="admin_user" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>ePro User ID</label>
+                    <comment>Add ePro User customer ID</comment>
+				</field>
+			</group>
+			<group id="credentials" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Okta Credentials</label>
+                <field id="domain" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Domain</label>
+                </field>
+                <field id="authorization_server_id" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Authorization Server ID</label>
+                </field>
+                <field id="grant_type" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Grant Type</label>
+                </field>
+                <field id="scope" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Scope</label>
+                </field>
+			</group>
+		</section>
+	</system>
+</config>

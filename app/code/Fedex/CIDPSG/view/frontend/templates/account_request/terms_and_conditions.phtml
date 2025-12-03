@@ -1,0 +1,133 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$tcText = $block->getData('tc_text');
+?>
+<div class="block-title">
+    <h2><?= $block->escapeHtml(__('Terms and Conditions')) ?></h2>
+    <p><?= $block->escapeHtml(__('Please review the following terms and conditions before submitting
+        your account set-up information. In order to submit your request, you must accept the following
+        terms and conditions.')) ?>
+    </p>
+</div>
+<div class="grey-background">
+    <div id="term_condition_container" class="form-section-container">
+        <div class="section-title">
+            <h5><?= $block->escapeHtml(__('Application Submitter')) ?></h5>
+            <div data-content-type="divider" data-appearance="default" data-element="main">
+                <hr data-element="line" data-pb-style="PXRD72G">
+            </div>
+        </div>
+        <div id="term_condition_row1" class="term-condition-row1">
+            <div id="term_condition_col1" class="left-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="tc_fname">
+                        <?= $block->escapeHtml(__('First name')) ?>
+                    </label>
+                    <input
+                    class="input-textbox minimum-characters-limit-two v-validate
+                    account-user-first-name-validation"
+                    type="text" name="tc_fname" id="tc_fname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-tc-fname"
+                    maxlength="20"
+                    data-msg-required="First name is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="tc_lname">
+                        <?= $block->escapeHtml(__('Last name')) ?>
+                    </label>
+                    <input
+                    class="input-textbox minimum-characters-limit-two v-validate
+                    account-user-last-name-validation"
+                    type="text" name="tc_lname" id="tc_lname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-tc-lname"
+                    maxlength="20"
+                    data-msg-required="Last name is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="tc_title">
+                        <?= $block->escapeHtml(__('Title')) ?>
+                    </label>
+                    <input
+                    class="input-textbox minimum-characters-limit-two
+                    v-validate set-maximum-characters-limit-seventy validate-tc-title"
+                    type="text" name="tc_title" id="tc_title"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-tc-title"
+                    maxlength="70"
+                    data-msg-required="Title is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+            </div>
+            <div id="term_condition_col2" class="right-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="tc_email">
+                        <?= $block->escapeHtml(__('E-mail')) ?>
+                    </label>
+                    <input
+                    class="input-textbox v-validate set-maximum-characters-limit-seventy"
+                    type="text" name="tc_email" id="tc_email"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-tc-email"
+                    maxlength="70"
+                    data-msg-required="E-mail is required."
+                    data-msg-validate-email="Please enter valid email address (Ex: johndoe@domain.com)."
+                    data-validate="{required:true,'validate-length':true, 'validate-email':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="tc_phoneno">
+                        <?= $block->escapeHtml(__('Phone No.')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-user-phone"
+                    type="text" name="tc_phoneno" id="tc_phoneno" placeholder="(___) ___-____"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-tc-phone-no"
+                    maxlength="14"
+                    data-msg-required="Phone No. is required."
+                    data-validate="{required:true, 'validate-length':true}"
+                    >
+                </div>
+            </div>
+        </div>
+        <div id="term_condition_row2" class="term-condition-row2">
+            <?php
+            if ($tcText) { ?>
+                <div class="term-condition-outter-container">
+                    <div class="term-condition-text" tabindex="0">
+                        <?= $block->escapeHtml(__($tcText)) ?>
+                    </div>
+                    <div class="white-bg">&nbsp;</div>
+                </div>
+            <?php }?>
+            <div class="checkmark-container">
+                <div class="alternate-check-container">
+                    <label class="alternate-checkbox-container" for="tc_set_as_default">
+                        <input type="checkbox"
+                        name="tc_set_as_default"
+                        id="tc_set_as_default"
+                        class="tc_set_as_default v-validate required-entry"
+                        aria-label="set as default" value="0" tabindex="-1"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-tc-set-default"
+                        data-msg-required="The Terms and Conditions acceptance is required."
+                        data-validate="{required:true, 'validate-one-required-by-name':true}"
+                        >
+                        <span class="checkmark tnc-check" id="tnc_check" tabindex="0"></span>
+                    </label>
+                    <input id="tc_checkbox" name="tc_checkbox_val" type="hidden" value="0" />
+                    <div class="set-as-default">
+                        <?= $block->escapeHtml(__('I accept these terms and conditions.')) ?>
+                    </div>
+                    <span id="tc_set_as_default-error" class="mage-error tc-set-as-default-error" style="display:none">
+                        <?= $block->escapeHtml(__('The Terms and Conditions acceptance is required.')) ?>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

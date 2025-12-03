@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_CartGraphQl
+ * @copyright    Copyright (c) 2022 Fedex
+ * @author       Tiago Hayashi Daniel <tdaniel@mcfadyen.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\QuoteGraphQl\Model\Resolver\CreateEmptyCart">
+        <plugin name="create_empty_cart" type="Fedex\CartGraphQl\Plugin\CreateEmptyCartPlugin"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\Cart">
+        <plugin name="lookup_cart" type="Fedex\CartGraphQl\Plugin\CartPlugin"/>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\UpdateGuestCartContactInformation">
+        <plugin name="update_guest_cart_after_contact_information" type="Fedex\CartGraphQl\Plugin\UpdateGuestCartAfterContactInformation"/>
+    </type>
+    <type name="Magento\Sales\Model\Service\OrderService">
+        <plugin name="copy_quote_notes_to_order" type="Fedex\CartGraphQl\Plugin\OrderServicePlugin"/>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\CreateOrUpdateOrder">
+        <plugin name="set_order_notes_on_quote" type="Fedex\CartGraphQl\Plugin\SetOrderNotesOnQuote"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\CartItemPrices">
+        <plugin name="instore-item-prices-resolve" type="Fedex\CartGraphQl\Plugin\CartItemPricesPlugin"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\CartPrices">
+        <plugin name="instore-cart-prices-resolve" type="Fedex\CartGraphQl\Plugin\CartPricesPlugin"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\Discounts">
+        <plugin name="instore-cart-discounts-resolve" type="Fedex\CartGraphQl\Plugin\DiscountsPlugin"/>
+    </type>
+    <type name="Magento\LiveSearchAdapter\Model\QueryArgumentProcessor\FilterHandler\CategoryFilterHandler">
+        <plugin name="category-ids-als-filter" type="Fedex\CartGraphQl\Plugin\CategoryFilterHandlerPlugin"/>
+    </type>
+    <type name="Magento\LiveSearchAdapter\Model\QueryArgumentProcessor\ContextQueryArgumentProcessor">
+        <plugin name="customer-group-context-removal"
+                type="Fedex\CartGraphQl\Plugin\ContextQueryArgumentProcessorPlugin"/>
+    </type>
+    <type name="Magento\LiveSearchAdapter\Model\QueryArgumentProcessor\FilterQueryArgumentProcessor">
+        <plugin name="shared-catalog-filter"
+                type="Fedex\CartGraphQl\Plugin\FilterQueryArgumentProcessorPlugin"/>
+    </type>
+    <preference for="Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch"
+                type="Fedex\CartGraphQl\Model\Resolver\Products\DataProvider\ProductSearch"/>
+    <type name="Fedex\B2b\Model\Quote\Address">
+        <plugin name="instore-shipping-rates-collect"
+                type="Fedex\CartGraphQl\Plugin\AddressPlugin"/>
+    </type>
+    <type name="Mirakl\GraphQl\Model\Resolver\CartItems">
+        <plugin name="multi-product-add-fix"
+                type="Fedex\CartGraphQl\Plugin\CartItemsPlugin"/>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\UpdateOrderDelivery">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateShippingMethod</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\SubmitOrderSidebar\Model\SubmitOrderDataArray">
+        <plugin name="after_submit_order" type="Fedex\CartGraphQl\Plugin\AfterSubmitOrderDataArrayPlugin"/>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\Notes">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\UpdateGuestCartContactInformation">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\CreateOrUpdateOrder">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\AddProductsToCart">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartId</item>
+                <item name="validate-cart-items" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartItems</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\UpdateCartItems">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartId</item>
+                <item name="validate-cart-items" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartItems</item>
+                <item name="validate-cart-update-items" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateUpdateCartItems</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\PlaceOrder">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\CartStoreId">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-model" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateModel</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\CartLocationId">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-model" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateModel</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\AddOrUpdateFedexAccountNumber">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\CartGraphQl\Model\Resolver\AddOrUpdateDueDate">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-cart-id" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateCartIdForCreateOrder</item>
+                <item name="validate-due-date" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateDueDate</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\QuoteGraphQl\Model\Cart\GetCartForUser"
+                type="Fedex\CartGraphQl\Model\Cart\GetCartForUser"/>
+    <type name="Fedex\CartGraphQl\Model\Resolver\CartItemData">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-model" xsi:type="object">Fedex\CartGraphQl\Model\Validation\Validate\BatchValidateModel</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products">
+        <plugin name="before_products" type="Fedex\CartGraphQl\Plugin\BeforeProductsPlugin"/>
+    </type>
+    <type name="Magento\CatalogGraphQl\Model\Resolver\Products">
+        <plugin name="after_products" type="Fedex\CartGraphQl\Plugin\AfterProductsPlugin"/>
+    </type>
+    <preference for="Fedex\CartGraphQl\Api\PoliticalDisclosureServiceInterface" type="Fedex\CartGraphQl\Model\PoliticalDisclosureService" />
+</config>

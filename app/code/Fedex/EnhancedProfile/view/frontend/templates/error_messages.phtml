@@ -1,0 +1,21 @@
+<?php
+$imgCloseIcone = $block->getViewFileUrl('images/enhanced-profile/close-button.png');
+$imgCheckIcone = $block->getViewFileUrl('images/enhanced-profile/check-icon.png');
+?>
+<div class="msg-container" role="region" aria-label="message">
+  <div class="succ-msg" style="display: none;">
+    <span class="icon-container">
+      <span><img class="img-check-icon" alt="Check icon"
+      src="<?= $block->escapeHtmlAttr($imgCheckIcone); ?>"></span>
+    </span>
+    <span class="message"><?= $block->escapeHtml("Success Messages") ?></span>
+    <img id="succ_msg_close" class="img-close-msg" alt="close icon"
+    src="<?= $block->escapeHtmlAttr($imgCloseIcone); ?>" tabindex="0">
+  </div>
+  <div class="err-msg" style="display: none;">
+    <span class="icon-container"><span><i class="fa fa-times"></i></span></span>
+    <span class="message"><?= $block->escapeHtml("Sytem error, please try again") ?></span>
+    <img id="err_msg_close" class="img-close-msg" alt="close icon"
+    src="<?= $block->escapeHtmlAttr($imgCloseIcone); ?>" tabindex="0">
+  </div>
+</div>

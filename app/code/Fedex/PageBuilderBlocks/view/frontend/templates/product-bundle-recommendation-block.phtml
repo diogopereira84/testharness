@@ -1,0 +1,94 @@
+<?php
+/**
+ * @category Fedex
+ * @package Fedex_PageBuilderBlocks
+ * @copyright Copyright (c) 2024 FedEx
+ */
+
+/** @var \Fedex\PageBuilderBlocks\Block\ProductBundleRecommendation $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
+$products = $block->getProducts();
+$title = $block->getTitle();
+$message = $block->getMessage();
+$ctaLabel = $block->getCtaLabel();
+$ctaLink = $block->getBundleUrl();
+$price = $block->getBundlePrice();
+?>
+
+<div class="product-bundle-recommendation-block">
+    <div class="block-content">
+        <div class="block-top d-flex">
+            <div class="content-wrapper">
+                <?php if ($title): ?>
+                    <h2 class="block-title cl-gray fedex-light weight-300"><?= $escaper->escapeHtml($title) ?></h2>
+                <?php endif; ?>
+
+                <div class="block-subtitle d-flex v-center">
+                    <div class="block-message-price lh-32 d-flex v-center">
+                        <?php if ($message): ?>
+                            <div class="block-message cl-gray fedex-light fs-20 weight-300">
+                                <?= $escaper->escapeHtml($message) ?>
+                            </div>
+                        <?php endif; ?>
+
+                        <?php if ($price): ?>
+                            <div class="block-price cl-primary lh-32 fs-20 fedex-bold weight-700">
+                                <?= $escaper->escapeHtml($price) ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+
+                    <?php if ($ctaLabel && $ctaLink): ?>
+                        <div class="block-cta mobile">
+                            <a href="<?= $escaper->escapeUrl($ctaLink) ?>"
+                               class="action secondary cta-button lh-24 fs-19 fedex-bold ls-1-19 weight-700">
+                                <?= $escaper->escapeHtml($ctaLabel) ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php if ($ctaLabel && $ctaLink): ?>
+                <div class="block-cta desktop">
+                    <a href="<?= $escaper->escapeUrl($ctaLink) ?>"
+                       class="action secondary cta-button lh-24 fs-19 fedex-bold ls-1-19 weight-700">
+                        <?= $escaper->escapeHtml($ctaLabel) ?>
+                    </a>
+                </div>
+            <?php endif; ?>
+        </div>
+
+        <?php if (!empty($products)): ?>
+            <div class="products-grid-wrapper">
+                <?php foreach ($products as $productData): ?>
+                    <div class="product-item">
+                        <div class="product-item-wrapper">
+                            <?php if ($productData['image_url']): ?>
+                                <div class="product-item-image">
+                                    <img src="<?= $escaper->escapeUrl($productData['image_url']) ?>"
+                                         alt="<?= $escaper->escapeHtmlAttr($productData['name']) ?>"
+                                         class="product-image-picture"/>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="product-item-details">
+                                <h3 class="product-item-name lh-32 fs-20">
+                                    <?= $escaper->escapeHtml($productData['name']) ?>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+
+            <script type="text/x-magento-init">
+                {
+                    ".product-bundle-recommendation-block .products-grid-wrapper": {
+                        "Fedex_PageBuilderBlocks/js/bundleRecommendationCarousel": {}
+                    }
+                }
+            </script>
+        <?php endif; ?>
+    </div>
+</div>

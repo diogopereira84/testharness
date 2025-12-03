@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_TrackOrder
+ * @copyright   Copyright (c) 2023 Fedex
+ * @author      sirichandana <sirichandana.guttha@fedex.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="seo_settings" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+            <label>SEO Settings</label>
+            <tab>cjpublicis_tabid</tab>
+            <resource>Fedex_TrackOrder::config_seo_settings</resource>
+            <group id="order_tracking" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" translate="label">
+                <label>Order Tracking Page</label>
+                <field id="metatitle" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1"
+                       translate="label">
+                    <label>Meta Title</label>
+                    <comment>Set the title for the Order Tracking page</comment>
+                </field>
+                <field id="metadescription" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1"
+                       translate="label">
+                    <label>Meta Description</label>
+                    <comment>Set the meta description for the Order Tracking page</comment>
+                </field>
+                <field id="track_order_header" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1"
+                       translate="label">
+                    <label>Track Order Header</label>
+                    <comment>Set the header text for the FedEx Track Order section</comment>
+                </field>
+                <field id="track_order_description" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1"
+                       translate="label">
+                    <label>Track Order Description</label>
+                    <comment>Set the description text for the FedEx Track Order section</comment>
+                </field>
+                <field id="track_shipment_url" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1"
+                       translate="label">
+                    <label>Track Shipment Link</label>
+                    <comment>Set the Track Shipment HyperLink for the FedEx Track Order section</comment>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" translate="label">
+            <group id="environment_toggle" translate="label">
+                <field id="tiger_e433689" translate="label" type="select" sortOrder="790" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-433689 Order Tracking Delivery Date Update (3p only)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d191698" translate="label" type="select" sortOrder="790" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-191698 Order tracking page not showing 1p cancellation status in mixed cart scenario</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="fedex">
+            <group id="one_p_product" sortOrder="1100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_order_due_date_message" translate="label"
+                       type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Order Due Date Change Message</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

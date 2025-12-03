@@ -1,0 +1,60 @@
+<?php
+declare(strict_types=1);
+use Magento\Framework\View\Element\Template;
+const TIGER_ESSENDANT_TOGGLE = 'tiger_e458381_essendant';
+/** @var $block Template */
+$toggleViewModel = $block->getData('toggle_view_model');
+$e383157Toggle = $toggleViewModel->getToggleConfigValue('tigerteam_e383157Toggle') == '1' ? 1 : 0;
+$fxoCMEnableForEproCustomDoc = $toggleViewModel->getToggleConfigValue('fxo_cm_epr_custom_doc') ? 1 : 0;
+$e411396Toggle = $toggleViewModel->getToggleConfigValue('tigerteam_e411396Toggle') ? 1 : 0;
+$d172420_extNumberTypeChange = $toggleViewModel->getToggleConfigValue('d172420_ext_number_type_change') ? 1 : 0;
+$tiger_team_D_186617_unable_to_delete_1p3p_product = $toggleViewModel->getToggleConfigValue('tiger_team_D_186617_unable_to_delete_1p3p_product') ? 1 : 0;
+$E398131_NewDocumentImage = $toggleViewModel->getToggleConfigValue('new_documents_api_image_preview_toggle') ? 1 : 0;
+$tigerE424573OptimizingProductCards = $toggleViewModel->getToggleConfigValue('tiger_E424573_optimizing_product_cards') ? 1 : 0;
+$E443304StopRedirectMvpAddtocart = $toggleViewModel->getToggleConfigValue('E443304_stop_redirect_mvp_addtocart') ? 1 : 0;
+$D195327Toggle = $toggleViewModel->getToggleConfigValue('tiger_d195327') ? 1 : 0;
+$tiger_D195836FixLoadTimeHeroBanner = $toggleViewModel->getToggleConfigValue('tiger_d195836_fix_high_load_time_for_hero_banner') ? 1 : 0;
+$d198297_toggle = $toggleViewModel->getToggleConfigValue('techtitans_d_198297') ? 1 : 0;
+$tigerEssendantToggle = $toggleViewModel->getToggleConfigValue(TIGER_ESSENDANT_TOGGLE) ? 1 : 0;
+$d196604_toggle = $toggleViewModel->getToggleConfigValue('techtitans_d_196604') ? 1 : 0;
+$d196640_toggle = $toggleViewModel->getToggleConfigValue('explorer_D196640_add_to_cart_is_calling_delivery_options') ? 1 : 0;
+$d207891_toggle = $toggleViewModel->getToggleConfigValue('d207891_toggle') ? 1 : 0;
+$d204823_toggle = $toggleViewModel->getToggleConfigValue('tigerteam_d204823_toggle_undefined_url') ? 1 : 0;
+$mazegeek_B2352379_discount_breakdown = $toggleViewModel->getToggleConfigValue('mazegeek_B2352379_discount_breakdown') ? 1 : 0;
+$tiger_D_215205_shipping_method_and_expected_delivery_fix = $toggleViewModel->getToggleConfigValue('tiger_D_215205_shipping_method_and_expected_delivery_fix') ? 1 : 0;
+$tiger_E_478196_dye_sub_pod_2_updates = $toggleViewModel->getToggleConfigValue('tiger_E_478196_dye_sub_pod_2_updates') ? 1 : 0;
+$tiger_d_217190 = $toggleViewModel->getToggleConfigValue('tiger_d_217190') ? 1 : 0;
+$tiger_d217169 = $toggleViewModel->getToggleConfigValue('tiger_d217169') ? 1 : 0;
+$hawks_d218499_customer_section_load_session_evict_unnecessary_calls_toggle = $toggleViewModel->getToggleConfigValue('hawks_d218499_customer_section_load_session_evict_unnecessary_calls') ? 1 : 0;
+$techTitans_d203652 = $toggleViewModel->getToggleConfigValue('tech_titans_d_203652') ? 1 : 0;
+$hawks_d229949_customer_section_load_marketplace_evict_unnecessary_calls = $toggleViewModel->getToggleConfigValue('hawks_d229949_customer_section_load_marketplace_evict_unnecessary_calls') ? 1 : 0;
+$d_231886_recaptcha_errors = $toggleViewModel->getToggleConfigValue('d_231886_recaptcha_errors') ? 1 : 0;
+$configToggles = <<<script
+        window.e383157Toggle = $e383157Toggle;
+        window.fxocmEproCustomDoc = $fxoCMEnableForEproCustomDoc;
+        window.e411396Toggle = $e411396Toggle;
+        window.d172420_extNumberTypeChange = $d172420_extNumberTypeChange;
+        window.tiger_team_D_186617_unable_to_delete_1p3p_product = $tiger_team_D_186617_unable_to_delete_1p3p_product;
+        window.E398131_NewDocumentImage = $E398131_NewDocumentImage;
+        window.tigerE424573OptimizingProductCards = $tigerE424573OptimizingProductCards;
+        window.E443304StopRedirectMvpAddtocart = $E443304StopRedirectMvpAddtocart;
+        window.tiger_d195327_toggle = $D195327Toggle;
+        window.tiger_D195836FixLoadTimeHeroBanner = $tiger_D195836FixLoadTimeHeroBanner;
+        window.d196604_toggle = $d196604_toggle;
+        window.d196640_toggle = $d196640_toggle;
+        window.d198297_toggle = $d198297_toggle;
+        window.d207891_toggle = $d207891_toggle;
+        window.d204823_toggle_undefined_url = $d204823_toggle;
+        window.tigerEssendantToggle = $tigerEssendantToggle;
+        window.mazegeek_B2352379_discount_breakdown = $mazegeek_B2352379_discount_breakdown;
+        window.tiger_D_215205_shipping_method_and_expected_delivery_fix = $tiger_D_215205_shipping_method_and_expected_delivery_fix;
+        window.tiger_E_478196_dye_sub_pod_2_updates = $tiger_E_478196_dye_sub_pod_2_updates;
+        window.tiger_d_217190 = $tiger_d_217190;
+        window.tiger_D217169 = $tiger_d217169;
+        window.hawks_d218499_customer_section_load_session_evict_unnecessary_calls_toggle = $hawks_d218499_customer_section_load_session_evict_unnecessary_calls_toggle;
+        window.techTitans_d203652 = $techTitans_d203652;
+        window.hawks_d229949_customer_section_load_marketplace_evict_unnecessary_calls = $hawks_d229949_customer_section_load_marketplace_evict_unnecessary_calls;
+        window.d_231886_recaptcha_errors = $d_231886_recaptcha_errors;
+    script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $configToggles, false); ?>

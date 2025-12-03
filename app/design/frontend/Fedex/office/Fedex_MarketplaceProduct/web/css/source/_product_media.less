@@ -1,0 +1,99 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    .catalog-product-view {
+        .content-wrapper {
+            .product.media.sticky {
+                .fotorama-item {
+
+                    .fotorama__nav-wrap {
+                        .fotorama__nav {
+                            margin: 12px 0;
+
+                            &::before,
+                            &::after {
+                                all: unset;
+                            }
+
+                            .fotorama__nav__shaft {
+                                .fotorama__thumb-border {
+                                    display: none;
+                                }
+
+                                div[data-nav-type="thumb"] {
+                                    margin: unset;
+                                    padding-right: 14.5px;
+
+
+                                    &:first-child {
+                                        margin-left: 0;
+                                    }
+
+                                    &:last-child {
+                                        margin-right: 0;
+                                    }
+
+                                    .fotorama__thumb {
+                                        height: 135px;
+                                        width: 135px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                .upload-alert {
+
+                    .d-no-shrink.icon,
+                    div:last-child {
+                        padding: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    .catalog-product-view {
+        .content-wrapper {
+            .product.media.sticky {
+                .fotorama-item {
+                    .fotorama__stage {
+                        margin-left: unset;
+
+                        .fotorama__stage__shaft.fotorama__grab {
+                            img {
+                                height: 100%;
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                    .fotorama__nav-wrap {
+                        .fotorama__nav {
+                            height: 135px !important;
+
+                            .fotorama__nav__shaft {
+                                div[data-nav-type="thumb"] {
+                                    height: 135px !important;
+                                    margin: unset;
+                                    padding-right: 14.5px;
+                                    width: 135px !important;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

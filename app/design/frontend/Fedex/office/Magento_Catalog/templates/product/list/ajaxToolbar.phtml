@@ -1,0 +1,64 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+	$helper = $this->helper('Fedex\Delivery\Helper\Data');
+	$isCommercialCustomer = $helper->isCommercialCustomer();
+
+	$eProClass = 'retail-session';
+	if($isCommercialCustomer){
+		$eProClass = 'ero-session';
+	}
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Fedex\Catalog\Block\Product\ProductList\Toolbar
+ */
+
+// phpcs:disable Magento2.Security.IncludeFile.FoundIncludeFile
+// phpcs:disable PSR2.Methods.FunctionCallSignature.SpaceBeforeOpenBracket
+
+
+?>
+<?php if ($block->getCollection()->count()) : ?>
+    <?php $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());
+        $widgetOptions = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['productListToolbarForm']);
+    ?>
+    <div class="toolbar toolbar-products <?php echo $eProClass; ?>" data-mage-init='{"ajaxProductListToolbarForm":<?= /* @noEscape */ $widgetOptions ?>}'>
+        <!-- B-1625415 -->
+        <?php if ($block->isExpanded() && $block->isMvpCatalogEnabled()) :?>
+            <?php //include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+        <?php else: ?>
+            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/viewmode.phtml')) ?>
+        <?php endif; ?>
+
+        <?php if ($block->getSearchHelper()->getEscapedQueryText()) :?>
+            <?php  include ($block->getTemplateFile('Fedex_Catalog::product/list/toolbar/amount-query.phtml')) ?>
+        <?php else: ?>
+            <div class="mobile-row-perpage-visible">
+                <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
+            </div>
+            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/amount.phtml')) ?>
+        <?php endif; ?>
+        <?= $block->getPagerHtml() ?>
+        <div class="mobile-row-perpage-hidden">
+            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/limiter.phtml')) ?>
+        </div>
+        <?php if ($block->isExpanded()) :?>
+            <?php include ($block->getTemplateFile('Magento_Catalog::product/list/toolbar/ajaxSorter.phtml')) ?>
+        <?php endif; ?>
+    </div>
+<?php
+elseif ($block->isMvpCatalogEnabled() && $block->getChildCategoryCount()) : ?>
+    <?php $widget = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonDecode($block->getWidgetOptionsJson());
+    $widgetOptions = $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($widget['productListToolbarForm']);
+    ?>
+    <div class="toolbar toolbar-products <?php echo $eProClass; ?>" data-mage-init='{"ajaxProductListToolbarForm":<?= /* @noEscape */ $widgetOptions ?>}'>
+        <?php include($block->getTemplateFile('Magento_Catalog::product/list/toolbar/ajaxSorter.phtml')) ?>
+    </div>
+<?php endif; ?>

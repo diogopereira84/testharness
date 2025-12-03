@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © Fedex, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="catalog_product_save_before">
+        <observer name="inventory" instance="Fedex\Shipto\Observer\SaveAdminUserId"/>
+    </event>
+    <event name="catalog_product_load_after">
+        <observer name="lockattribute" instance="Fedex\Shipto\Observer\LockAttribute"/>
+    </event>
+</config>

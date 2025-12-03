@@ -1,0 +1,177 @@
+<?php
+    $orderId = $apiOrderData['order_id'];
+    $orderDate = $apiOrderData['order_details']['submissionTime'];
+    $notificationBannerImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Notification-banner.png');
+    $infoImage = $this->getViewFileUrl('Fedex_TrackOrder::images/info.png');
+    $orderStatusComponent = $block->getTemplateFile('Fedex_TrackOrder::api_order_status_component.phtml');
+    $upArrowImage = $this->getViewFileUrl('Fedex_TrackOrder::images/up-arrow.png');
+    $downArrowImage = $this->getViewFileUrl('Fedex_TrackOrder::images/down-arrow.png');
+    $orderedIconImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png');
+    $orderedIconDelayImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Delay-icon.png');
+    $orderStatusDetailImage = $this->getViewFileUrl('Fedex_TrackOrder::images/'.$orderStatusDetail.'-icon.png');
+    $fedexItemsCount = count($apiOrderData['order_details']['productDetails']);
+    $productPlaceholderImage = $this->getViewFileUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
+?>
+<div class="orderDetailsResponse">
+    <h3 class="orderId weight-300 mt-8">Order <strong class="weight-300"><?= $orderId; ?></strong></h3>
+    <h4 class="orderCreatedDate weight-300 mt-0">Order Created: <strong class="weight-300"><?= date('M d, Y',strtotime($orderDate)); ?></strong></h4>
+    <div class="orderTypeHeading mt-10">
+        <div class="seller-name fs-20 lh-32 mb-8">In-store pickup (FedEx Office)</div>
+    </div>
+    <?php if ($fedexItemsCount > 0) { ?>
+        <div class="orderItemDetails">
+            <div class="orderItemDetailsHeading pb-10 fs-18">
+                <div class="heading1">Items</div>
+                <div class="heading2">Status</div>
+                <div class="heading3">Expected Release Time</div>
+                <div class="heading4"></div>
+            </div>
+            <div class="orderItemDetailsContent" id="orderItemDetailsContentFor<?= $orderId; ?>">
+                <div class="content1"><?= $fedexItemsCount; ?></div>
+                <div class="content2">
+                    <?php if (in_array($orderStatusDetail, ['Ordered', 'Ready for Pickup', 'Shipped', 'Picked Up', 'Complete'])): ?>
+                        <img src="<?= $orderedIconImage; ?>" alt="Ordered Icon"/>
+                    <?php else : ?>
+                        <img src="<?= $orderStatusDetailImage; ?>" alt="Order Status Detail Image"/>
+                    <?php endif; ?>
+
+                    <?php if ($orderStatusDetail == 'Delay') : ?>
+                        Processing
+                    <?php else : ?>
+                        <?= $orderStatusDetail ?>
+                    <?php endif; ?>
+                </div>
+                <div class="content3">
+                    <?= date('F d, Y',strtotime($apiOrderData['order_details']['expectedReleaseTime'])) ?>
+                </div>
+                <div class="content4">
+                    <img src="<?= $downArrowImage; ?>" alt="Down arrow Icon"
+                         id="productrow<?= $apiOrderData['order_id']; ?>" class="productImage chevron-down"
+                         onClick="ShowProducthide(
+                             'ProductDtlSec<?= $orderId; ?>',
+                             'orderItemDetailsContentFor<?= $orderId; ?>',
+                             'productrow<?= $orderId; ?>'
+                         );"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="orderItemDetailsContentSmall"
+             id="orderItemDetailsContentForSmall<?= $apiOrderData['order_id']; ?>">
+            <div class="itemDetailsSmall">
+                <div class="heading1">Items</div>
+                <div class="content1"><?= count($apiOrderData['order_details']['productDetails']); ?></div>
+            </div>
+            <div class="statusDetailsSmall">
+                <div class="heading1">Status</div>
+                <div class="statusDetailsSmallIcon">
+                    <?php if (in_array($orderStatusDetail, ['Ordered', 'Ready for Pickup', 'Shipped', 'Picked Up', 'Complete'])): ?>
+                        <img src="<?= $orderedIconImage; ?>" alt="Ordered Icon"/>
+                    <?php else : ?>
+                        <img src="<?= $orderStatusDetailImage; ?>" alt="Order Status Detail Image"/>
+                    <?php endif; ?>
+
+                    <?php if ($orderStatusDetail == 'Delay') : ?>
+                        Processing
+                    <?php else : ?>
+                        <?= $orderStatusDetail ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="deliveryDetailsSmall">
+                <div class="heading1">Expected Release Time</div>
+                <div class="content1">
+                    <?= date('F d, Y', strtotime($apiOrderData['order_details']['expectedReleaseTime'])) ?>
+                </div>
+            </div>
+            <div class="showHideIconSmall">
+                <img src="<?= $this->getViewFileUrl('Fedex_TrackOrder::images/down-arrow.png'); ?>"
+                     id="productrow<?= $apiOrderData['order_id']; ?>" alt="Down arrow Icon"
+                     onClick="ShowProducthide(
+                         'ProductDtlSecSmall<?= $orderId; ?>',
+                         'orderItemDetailsContentForSmall<?= $orderId; ?>',
+                         'productrow<?= $orderId; ?>'
+                     );"
+                />
+            </div>
+        </div>
+        <div class="orderDetailsSectionSmall" id="ProductDtlSecSmall<?= $orderId; ?>">
+            <div class="detailedItemDetailsSmall">
+                <div class="heading1">Items</div>
+                <?php $orderItemRows = $apiOrderData['order_details']['productDetails'];
+                foreach ($orderItemRows as $itemData) { ?>
+                    <div class="row1ItemDetailsSmall">
+                        <div class="itemImageSmall">
+                            <img src="<?= $productPlaceholderImage; ?>" alt="Order Item Image">
+                        </div>
+                        <div class="itemNameQtySmall">
+                            <span><?= $itemData['product']['name']; ?></span>
+                            <span>x<?= $itemData['product']['qty']; ?></span>
+                        </div>
+                    </div>
+                <?php } ?>
+            </div>
+            <div class="detailedItemStatusSmall">
+                <div class="heading1">Status</div>
+                <?php include $orderStatusComponent ?>
+            </div>
+            <div class="detailedItemDeliverySmall">
+                <div class="heading1">Expected Release Time</div>
+                <div class="contentSmall">
+                    <p> <?= date('l',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                    <p class="expected_order_delivery_date"> <?= date('F d, Y',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                    <p> by <?= date('h:i a',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                </div>
+            </div>
+            <div class="showHideIconSmall">
+                <img src="<?= $upArrowImage; ?>" id="productrow<?= $orderId; ?>"
+                     alt="Up arrow Icon"
+                     onClick="ShowProducthide(
+                         'ProductDtlSecSmall<?= $orderId; ?>',
+                         'orderItemDetailsContentForSmall<?= $orderId; ?>',
+                         'productrow<?= $orderId; ?>'
+                     );"
+                />
+            </div>
+        </div>
+        <div class="orderDetailsSection" id="ProductDtlSec<?= $orderId; ?>">
+            <div class="detailedItemDetails">
+                <?php $orderItemRows = $apiOrderData['order_details']['productDetails']; ?>
+                <div class="orderItemrow">
+                    <div class="rowItem1">
+                        <?php foreach ($orderItemRows as $index => $itemData) { ?>
+                            <div class="rowItem1Details">
+                                <div class="itemImage">
+                                    <img src="<?= $productPlaceholderImage; ?>" alt="Item Image">
+                                </div>
+                                <div class="itemNameQty">
+                                    <span><?= $itemData['product']['name']; ?></span>
+                                    <span>x<?= $itemData['product']['qty']; ?></span>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    </div>
+                    <div class="rowItem2">
+                        <?php include $orderStatusComponent ?>
+                    </div>
+                    <div class="rowItem3">
+                        <p> <?= date('l',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                        <p class="expected_order_delivery_date"> <?= date('F d, Y',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                        <p> by <?= date('h:i a',strtotime($apiOrderData['order_details']['expectedReleaseTime'])); ?> </p>
+                    </div>
+                    <div class="rowItem4">
+                        <img src="<?= $upArrowImage; ?>"
+                             alt="Up arrow Icon"
+                             id="productrow<?= $orderId; ?>" class="productImage chevron-up"
+                             onClick="ShowProducthide(
+                                 'ProductDtlSec<?= $orderId; ?>',
+                                 'orderItemDetailsContentFor<?= $orderId; ?>',
+                                 'productrow<?= $orderId; ?>'
+                             );"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+</div>

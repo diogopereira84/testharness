@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$infoUrl = $this->getInfoWarningIcon();
+$deliveryOptions = $block->getDeliveryOptions();
+$isDeliveryEnabled = $this->getCompanyIsDeliveryEnabled();
+$isPickupEnabled = $this->getCompanyIsPickupEnabled();
+$checkboxCheckedIcon = $this->getCheckboxCheckedIcon();
+$isHcToggle = $this->getCompanyIsHcToggle();
+$deliveryOptionsData = $this->getCompanySelectedDeliveryOptions();
+$selectedDeliveryOptions = array_keys($deliveryOptionsData);
+?>
+<li class="delivery-options-content">
+    <h4 class="delivery-options-title">
+        <?= $escaper->escapeHtml(__("Choose which shipping options are enabled for your site.")) ?>
+    </h4>
+    <div class="ep-enable-shipping enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("ENABLE SHIPPING")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-enable-shipping" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Enable shipping icon" />
+                <span id="info-enable-shipping" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                    <?= $escaper->escapeHtml(__("When enabled, users will be able to choose 'shipping' as a delivery options during checkout.")) ?>
+                </span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Shipping Toggle" name="is_delivery" id="enable-shipping-toggle" <?= $isDeliveryEnabled ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-shipping-options">
+        <h4 class="shipping-option-label"><?= $escaper->escapeHtml(__("Allowed Shipping Options")) ?></h4>
+        <div class="shipping-options-container">
+            <div class="wrapper">
+                <button type="button" class="shipping-options toggle-next ellipsis">
+                    <i class="arrow down"></i>
+                </button>
+                <div class="checkboxes" id="Shipping-Methods">
+                    <div class="inner-wrap">
+                        <?php
+                        $counter = 1;
+                        foreach ($deliveryOptions as $option): ?>
+                            <label class="shipping-option-row">
+                                <img src="<?= $checkboxCheckedIcon; ?>" tabindex='0' class="shipping-option-checkbox-checked checkbox-checked-icon-id-<?= $counter; ?> <?php if (in_array($option['value'], $selectedDeliveryOptions)) { echo 'show';}?>" data-id="<?= $counter; ?>" alt="Checkbox checked" />
+                                <input name="allowed_delivery_options[]" type="checkbox" value="<?= $option['value'] ?>" data-id="<?= $counter; ?>" class="checkBox val checkbox-icon-id-<?= $counter; ?> <?php if (in_array($option['value'], $selectedDeliveryOptions)) { echo 'hidden';}?>" <?php if (in_array($option['value'], $selectedDeliveryOptions)) { echo 'checked'; } ?> />
+
+                                <span class="shipping-option-level"><?= $option['label'] ?></span>
+                            </label>
+                        <?php $counter++;
+                        endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ep-enable-store-pickup enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("ENABLE STORE PICKUP")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-enable-store-pickup" src="<?= $infoUrl; ?>"
+                 class="tooltip-toggle tooltip-icon" alt="Enable Store Pickup icon" />
+                <span id="info-enable-store-pickup" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                    <?= $escaper->escapeHtml(__("When enabled, users will be able to choose 'store pickup' as a delivery options during checkout.")) ?>
+                </span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Pickup Toggle" name="is_pickup" id="enable-store-pickup-toggle" <?= $isPickupEnabled ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-allow-hotel-convention">
+        <div class="allow-hotels-wrapper">
+            <label>
+                <img tabindex="0" src="<?= $checkboxCheckedIcon; ?>" class="checkbox-checked <?php if ($isHcToggle) { echo "show"; } ?>" alt="hotel-checkbox"/>
+                <input name="hc_toggle" type="checkbox" tabindex="0" class="hotel-checkbox <?php if ($isHcToggle) { echo "hidden"; } ?>" <?= $isHcToggle ? 'checked' : ''; ?> />
+                <span class="hotel-label"><?= $escaper->escapeHtml(__("Allow Hotel and Convention store locations")) ?></span>
+                <span class="enhanced-profile-tooltip hotel-checkbox-tooltip">
+                    <img aria-describedby="info-allow-hotels" src="<?= $infoUrl; ?>"
+                     class="tooltip-toggle tooltip-icon allow-hotel-tooltip" tabindex="0" alt="Enable Store Pickup icon" />
+                    <span id="info-allow-hotels" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                        <?= $escaper->escapeHtml(__("When enabled, users will be able to choose 'Hotel and Convention' locations as a pick up option. These locations may result in higher rates")) ?>
+                    </span>
+                </span>
+            </label>
+        </div>
+    </div>
+</li>

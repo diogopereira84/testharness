@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="customer_canvas_api" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Customer Canvas Design</label>
+                <field id="customer_canvas_api_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>API URL</label>
+                </field>
+                <field id="customer_canvas_auth_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Auth URL</label>
+                </field>
+                <field id="customer_canvas_store_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CustomerCanvas Store ID</label>
+                </field>
+                <field id="customer_canvas_tenant_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CustomerCanvas TenantId</label>
+                </field>
+                <field id="customer_canvas_client_id" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="customer_canvas_client_secret" translate="label" type="obscure" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Secret Key</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="customer_canvas_retention_period" translate="label" type="text" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Retention Period (months)</label>
+                    <validate>validate-digits</validate>
+                    <comment>Enter the retention period in months (If this value is updated, the expiration calculation for all DyeSub products will be recalculated accordingly.)</comment>
+                </field>
+            </group>
+        </section>
+        <section id="ondemand_setting" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="product_creation_restriction" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Product Creation Restrictions</label>
+                <field id="excluded_product_list_for_customer_admin_catalog_creation" translate="label" type="text" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Excluded Product List for Admin Catalog</label>
+                    <comment>This is a comma delimited SKU list. Products mentioned in this list will not be included in the CTC catalog creation flow, They will still be available in Customer flow if their site has that product enabled.</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

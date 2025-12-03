@@ -1,0 +1,300 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/**@var Fedex\Commercial\ViewModel\CommercialSsoConfiguration $commercialViewModel*/
+/**@var Fedex\Commercial\Helper\CommercialHelper $commercialHelper */
+$commercialViewModel = $block->getData('commercial_login');
+$improvingPasswordToggle = $commercialViewModel->isimprovingpasswordtoggle() ?? false;
+$isCommercialStore = $commercialViewModel->isGlobalCommercialCustomerRequest();
+$isSdeStore = $commercialViewModel->getIsRequestFromSdeStore();
+$isSdeFclLogin = $commercialViewModel->getIsRequestFromSdeStoreFclLogin();
+$currentUrl = $commercialViewModel->getCommercialCurrentUrl();
+$isSelfRegAdmin = $commercialViewModel->isSelfRegAdmin();
+$isSelfRegCompany = $commercialViewModel->isSelfRegCompany();
+$customerSession = $commercialViewModel->commercialCustomerSession();
+$commercialLogoutInfo = $commercialViewModel->getCommercialLogoutInfo();
+$commercialHelper = $this->helper('\Fedex\Commercial\Helper\CommercialHelper');
+$isSelfRegHelperUpdates = $commercialHelper->isSelfRegAdminUpdates();
+$isSelfRegAdminUser = $commercialHelper->getSelfRegAdminUser();
+$isCompanyAdminUser = $commercialHelper->getCompanyAdminUser();
+$companyInfo = $commercialHelper->getCompanyInfo();
+$activeClass = 'active-profile-tab';
+$uploadToQuoteViewModel = $block->getData('upload_to_quote_viewmodel');
+$uploadToQuoteHistoryViewModel = $block->getData('upload_to_quote_history_viewmodel');
+$isEproCustomer = $uploadToQuoteHistoryViewModel->isEproCustomer();
+$myQuoteUrl = $block->getUrl('negotiable_quote/quote/');
+
+if ($isEproCustomer || ($isSelfRegCompany && $uploadToQuoteViewModel->isUploadToQuoteEnable())) {
+    $myQuoteUrl = $block->getUrl('uploadtoquote/index/quotehistory');
+}
+$has_manage_user_permission=false;
+$has_share_credit_card_permission=false;
+$hasShareOrderPermission=false;
+$hasSiteSettingsPermission = false;
+if ($commercialHelper->isRolePermissionToggleEnable()) {
+    $has_share_credit_card_permission=$commercialHelper->getDeliveryDataHelper()->checkPermission('shared_credit_cards');
+    $has_manage_user_permission=$commercialHelper->getDeliveryDataHelper()->checkPermission('manage_users');
+    $hasShareOrderPermission = $commercialHelper->getDeliveryDataHelper()->checkPermission('shared_orders');
+    $hasSiteSettingsPermission = $commercialHelper->getDeliveryDataHelper()->checkPermission('site_settings');
+}
+
+$isCustomerAdmin = false;
+$isEproStore = false;
+$isCompanySettingsToggle = $commercialHelper->isCompanySettingsToggleEnable();
+
+$isCustomerAdmin = $commercialHelper->getDeliveryDataHelper()->isCustomerAdminUser();
+$isEproStore = isset($commercialLogoutInfo['login_method']) &&
+    $commercialLogoutInfo['login_method'] === 'commercial_store_epro';
+
+/**@var Fedex\Cart\ViewModel\UnfinishedProjectNotification $unfinishedProjectViewModel */
+$unfinishedProjectViewModel = $block->getData('unfinished_project_viewmodel');
+$accountHelper = $this->helper('\Fedex\EnhancedProfile\Helper\Account');
+$loginAsAdmin = $accountHelper->getAdminIdByLoginAsCustomer();
+$isPersonalAddressBookToggleEnable = $commercialHelper->isPersonalAddressBookToggleEnable();
+if ($isCommercialStore): ?>
+<div class="commercial-right-header-links">
+    <div class="commercial-login-msg">
+        <div class="commercial-welcome" data-bind="scope: 'customer'">
+            <?php if($customerSession->getCustomer()): ?>
+            <span class="logged-in"
+            data-bind="text: new String('<?=$escaper->escapeHtml(__('Welcome, %1', '%1'))?>')
+            .replace('%1', '<?=$customerSession->getCustomer()->getFirstname(); ?>')" data-text="<?= 'Welcome ' . $customerSession->getCustomer()->getFirstname(); ?>">
+            </span>
+            <?php endif; ?>
+            <?php
+            $isSdeCustomer = false;
+            if ($commercialViewModel->isSdeCustomer()):
+                $isSdeCustomer = ((bool) $commercialViewModel->isSdeCustomer());
+                ?>
+                <script>
+                    window.checkout.is_sde_customer = <?=/* @noEscape */$isSdeCustomer?>
+                </script>
+            <?php endif; ?>
+        </div>
+        <div class="commercial-customer-dropdown customerdropdown" tabindex="0">
+            <?php $loginIconUrl = $block->getViewFileUrl('images/sso/login_icon.png')?>
+            <img
+                src="<?=$escaper->escapeHtmlAttr($loginIconUrl);?>"
+                class="commercial-login-icon" alt="<?=$escaper->escapeHtmlAttr(__("Log in or Sign Up"))?>"/>
+        </div>
+        <div class="commercial-customer-menu" style="display:none">
+            <ul class="header links header-style-uniform" role="menu">
+                    <li class="commercial-order-history commercial-customer-account commercial-user-name ">
+                        <span class="mobile-user-name">
+                        <?= $escaper->escapeHtmlAttr(__("Hi, " . $commercialViewModel->getCommercialCustomerName())); ?>
+                    </span>
+                    </li>
+
+                <?php
+                if($accountHelper->isCTCAdminToggleEnable()){
+                    if (!$loginAsAdmin) {
+                        if (!$isSdeStore || $isSdeFclLogin):?>
+                            <li class="commercial-order-history commercial-customer-account commercial-my-profile
+                            <?= $block->getUrl('customer/account')=== $currentUrl ? 'active-profile-tab' : '';?>">
+                                <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account'))?>">
+                                <?php
+
+                                    $label = $improvingPasswordToggle && !$isEproCustomer
+                                        ? __("Contact & Login")
+                                        : __("Contact Information");
+
+                                    echo $escaper->escapeHtmlAttr($label);
+                                ?>
+                                </a>
+                            </li>
+                        <?php endif;
+                    }
+                } else{
+                    if (!$isSdeStore || $isSdeFclLogin):?>
+                    <li class="commercial-order-history commercial-customer-account commercial-my-profile
+                    <?= $block->getUrl('customer/account')=== $currentUrl ? 'active-profile-tab' : '';?>">
+                        <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account'))?>">
+                        <?php
+
+                            $label = $improvingPasswordToggle && !$isEproCustomer
+                                ? __("Contact & Login")
+                                : __("Contact Information");
+
+                            echo $escaper->escapeHtmlAttr($label);
+                        ?>
+                        </a>
+                    </li>
+                    <?php endif;
+                } ?>
+
+                <?php if ($unfinishedProjectViewModel->isProjectAvailable()): ?>
+                <li class="commercial-order-history hrborder commercial-sales-history">
+                    <a href="<?= $escaper->escapeUrl('/ondemand/'.$companyInfo['company_url_extension'] .'/configurator/index/index?viewproject=true') ?>">
+                    <?=$escaper->escapeHtmlAttr(__("My Projects"))?></a>
+                </li>
+                <?php elseif ($unfinishedProjectViewModel->isAccessToWorkspaceToggleEnable()):?>
+                    <li class="commercial-order-history hrborder commercial-sales-history">
+                        <a href="<?= $escaper->escapeUrl($unfinishedProjectViewModel->getWorkspaceUrl()) ?>">
+                            <?=$escaper->escapeHtmlAttr(__("My Projects"))?></a>
+                    </li>
+                <?php endif; ?>
+                <li class="commercial-order-history hrborder commercial-sales-history
+                <?= $block->getUrl('sales/order/history') === $currentUrl ? $activeClass : '';?>">
+                    <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('sales/order/history'))?>">
+                    <?=$escaper->escapeHtmlAttr(__("My Orders"))?></a>
+                </li>
+                <?php if (
+                    (isset($commercialLogoutInfo['login_method']) &&
+                        $commercialLogoutInfo['login_method'] === 'commercial_store_epro')
+                    || ($isSelfRegCompany && $uploadToQuoteViewModel->isUploadToQuoteEnable())
+                ): ?>
+                    <li class="commercial-order-history hrborder commercial-quote
+                        <?= $myQuoteUrl === $currentUrl ? $activeClass : '';?>">
+                        <a href="<?=$escaper->escapeHtmlAttr($myQuoteUrl)?>" >
+                            <?=$escaper->escapeHtmlAttr(__("My Quotes"))?></a>
+                    </li>
+                <?php endif; ?>
+                <?php if (
+                   $isPersonalAddressBookToggleEnable && !$isEproStore
+                ): ?>
+                    <li class="commercial-order-history hrborder commercial-quote personal-address-book
+                        <?= $block->getUrl('personaladdressbook/index/view/') === $currentUrl ? $activeClass : '';?>">
+                        <a href="<?=$block->getUrl('personaladdressbook/index/view/')?>" >
+                            <?=$escaper->escapeHtmlAttr(__("Personal Address Book"))?></a>
+                    </li>
+                <?php endif; ?>
+                <?php if($accountHelper->isCTCAdminToggleEnable()) { ?>
+
+                    <?php if (!$loginAsAdmin) : ?>
+                        <?php if (!$isEproStore): ?>
+                            <?php if($isSelfRegAdminUser || $commercialHelper->isRolePermissionToggleEnable()) : ?>
+                                <li class="commercial-order-history hrborder commercial-quote custom-shared-credit-class
+                                <?= $block->getUrl('customer/account/accountsandcreditcards/') === $currentUrl ? $activeClass : '';?>">
+                                    <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/accountsandcreditcards/'))?>" >
+                                        <?=$escaper->escapeHtmlAttr(__("Accounts & Credit Cards"))?></a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if($isSelfRegAdminUser || $commercialHelper->isRolePermissionToggleEnable()) : ?>
+                                <li class="commercial-order-history hrborder commercial-quote custom-preferences-class
+                                <?= $block->getUrl('customer/account/preferences/') === $currentUrl ? $activeClass : '';?>">
+                                    <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/preferences/'))?>" >
+                                        <?=$escaper->escapeHtmlAttr(__("Preferences"))?></a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                    <?php if($isCustomerAdmin|| $hasShareOrderPermission) : ?>
+                        <li class="commercial-order-history commercial-quote custom-shared-order-class
+                        <?= $block->getUrl('shared/order/history/') === $currentUrl ? $activeClass : '';?>">
+                            <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('shared/order/history/'))?>" >
+                                <?=$escaper->escapeHtmlAttr(__("Shared Orders"))?></a>
+                        </li>
+                    <?php endif; ?>
+
+                <?php }else{ ?>
+
+                        <?php if (!$isEproStore): ?>
+                            <?php if($isSelfRegAdminUser || $commercialHelper->isRolePermissionToggleEnable()) : ?>
+                                <li class="commercial-order-history hrborder commercial-quote custom-shared-credit-class
+                                <?= $block->getUrl('customer/account/accountsandcreditcards/') === $currentUrl ? $activeClass : '';?>">
+                                    <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/accountsandcreditcards/'))?>" >
+                                        <?=$escaper->escapeHtmlAttr(__("Accounts & Credit Cards"))?></a>
+                                </li>
+                            <?php endif; ?>
+                            <?php if($isSelfRegAdminUser || $commercialHelper->isRolePermissionToggleEnable()) : ?>
+                                <li class="commercial-order-history hrborder commercial-quote custom-preferences-class
+                                <?= $block->getUrl('customer/account/preferences/') === $currentUrl ? $activeClass : '';?>">
+                                    <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/preferences/'))?>" >
+                                        <?=$escaper->escapeHtmlAttr(__("Preferences"))?></a>
+                                </li>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                        <?php if($isCustomerAdmin|| $hasShareOrderPermission) : ?>
+                            <li class="commercial-order-history commercial-quote custom-shared-order-class
+                            <?= $block->getUrl('shared/order/history/') === $currentUrl ? $activeClass : '';?>">
+                                <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('shared/order/history/'))?>" >
+                                    <?=$escaper->escapeHtmlAttr(__("Shared Orders"))?></a>
+                            </li>
+                        <?php endif; ?>
+
+                <?php } ?>
+
+
+                <?php if($isCustomerAdmin || $has_manage_user_permission) : ?>
+                    <li class="commercial-order-history hrborder commercial-quote
+                    <?= $block->getUrl('company/users/') === $currentUrl ? $activeClass : '';?>">
+                        <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('company/users/'))?>" >
+                        <?=$escaper->escapeHtmlAttr(__("Manage Users"))?></a>
+                    </li>
+                <?php endif; ?>
+
+                <?php if ($isCompanySettingsToggle && ($isCompanyAdminUser ||  $hasSiteSettingsPermission)) : ?>
+                        <li class="commercial-order-history hrborder commercial-quote custom-site-settings-class
+                            <?= $block->getUrl('customer/account/sitesettings/') === $currentUrl ? $activeClass : ''; ?>">
+                            <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('customer/account/sitesettings/')) ?>">
+                                <?= $escaper->escapeHtmlAttr(__("Site Settings")) ?></a>
+                        </li>
+                <?php endif; ?>
+
+                <?php if ($isCompanyAdminUser || $has_share_credit_card_permission) : ?>
+                    <?php if ($isCompanySettingsToggle) :?>
+                        <li class="commercial-order-history hrborder commercial-quote custom-shared-credit-class
+                            <?= $block->getUrl('customer/account/sharedcreditcards/') === $currentUrl ? $activeClass : '';?>">
+                            <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/sharedcreditcards/'))?>" >
+                            <?=$escaper->escapeHtmlAttr(__("Site Level Payments"))?></a>
+                        </li>
+                    <?php else :?>
+                        <li class="commercial-order-history hrborder commercial-quote custom-shared-credit-class
+                            <?= $block->getUrl('customer/account/sharedcreditcards/') === $currentUrl ? $activeClass : '';?>">
+                            <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('customer/account/sharedcreditcards/'))?>" >
+                            <?=$escaper->escapeHtmlAttr(__("Shared Credit Cards"))?></a>
+                        </li>
+                    <?php endif;?>
+                <?php endif; ?>
+
+                <?php if (
+                        isset($commercialLogoutInfo['login_method']) &&
+                        $commercialLogoutInfo['login_method'] !== 'commercial_store_epro'
+                    ) : ?>
+                    <li class="commercial-order-history hrborder sde-my-order log-out wlgn-logout fxo-logout">
+                        <a href="javascript:void(0)"
+                            login-method="<?= $escaper->escapeHtmlAttr($commercialLogoutInfo['login_method']) ?>"
+                            data-url="<?= $escaper->escapeUrl($commercialLogoutInfo['logoutUrl'])?>">
+                            <?= $escaper->escapeHtmlAttr(__("Log Out")) ?></a>
+                    </li>
+                <?php endif; ?>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "customer": {
+                        "component": "Magento_Customer/js/view/customer"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+                "Fedex_Commercial/js/primary-header-menu-dropdown": {
+                }
+        }
+    }
+</script>
+<script type="text/javascript">
+    require(['jquery', 'fedex/storage', 'domReady!'], function ($, fxoStorage) {
+
+        var companyUrlExtension = '<?php echo $companyInfo['company_url_extension'] ?? ''; ?>';
+        fxoStorage.set('companyUrlExtension', companyUrlExtension);
+
+        if($('body').hasClass('my-account-nav-consistency')) {
+            $('.customerdropdown').on('keyup', function(e){
+                if (e.keyCode === 13) {
+                    $('.commercial-customer-menu').toggle();
+                }
+            });
+        }
+    });
+</script>
+<?php endif;?>

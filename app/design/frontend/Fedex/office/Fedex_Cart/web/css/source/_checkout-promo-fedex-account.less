@@ -1,0 +1,680 @@
+@border-radius: 100px;
+@font-size-16px: 16px;
+@font-size-12px: 12px;
+@font-family-regular: 'FedEx Sans Regular';
+@font-family-bold: 'FedEx Sans Bold';
+@font-family-light: 'Fedex Sans Light';
+@full-width: 100%;
+@color: @fx-grey-1100;
+@color-white: @fx-white-100;
+@color-black: #000;
+@color-blue: #0078b4;
+@color-red: #f00;
+@field-text-color: @fx-grey-1200;
+@bold: bold;
+@letter-spacing: .75px;
+@uppercase: uppercase;
+@position-absolute: absolute;
+@position-relative: relative;
+@display-none: none;
+@display-block: block;
+@cursor-pointer: pointer;
+@focus-border-color: @fx-purple-500;
+@clear-both: both;
+@promo-fedex-accoun-border-color: #ced5d9;
+@cursor-pointer: pointer;
+@text-align-center: center;
+@discount-background-color: #f7f9fa;
+@zero-px: 0;
+@color-grey: #67777E;
+@applied-code-background: @fx-grey-1000;
+@applied-remove-btn-color: @fx-grey-1200;
+@warning-box-orange-color: @fx-yellow-100;
+@applied-code-text-border-color: @fx-grey-900;
+@input-place-holder-color: @fx-grey-1300;
+
+body:not(.promo-account) {
+  .checkout-promo-account-container .warning-message-container,
+  .checkout-promo-account-container .discount-block-container {
+    display: none;
+  }
+}
+.promo-account .opc-block-summary {
+    margin-bottom: @zero-px;
+}
+.checkout-promo-account-container {
+    clear: @clear-both;
+}
+.discount-block-container {
+    margin-top: 12px;
+}
+.discount-block-container .discount-title {
+    border: 1px solid @promo-fedex-accoun-border-color;
+    padding: 21px 15px;
+}
+.discount-title .label-text {
+    color: @color-blue;
+    cursor: @cursor-pointer;
+    font-family: @font-family-bold;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: .88px;
+    text-align: @text-align-center;
+    text-transform: @uppercase;
+}
+.fieldset.field-wrap {
+    background: @discount-background-color;
+    margin: @zero-px;
+    padding: 16px 27px;
+}
+.field._required.apply-field-group .control {
+    width: 272px;
+}
+.discount-block-container label.label > span {
+    color: @color;
+    font-family: @font-family-bold;
+    font-size: 12px;
+    font-weight: bold;
+}
+form .promo-code-block-applied .field.apply-field-group {
+    justify-content: left;
+}
+.field._required.apply-field-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: @text-align-center;
+}
+.discount-block-container label.label {
+    width: 100%;
+}
+.actions-toolbar.discount-actions-toolbar {
+    margin: @zero-px;
+    position: relative;
+    width: 96px;
+}
+.field._required.apply-field-group .control {
+    width: 272px;
+}
+.actions-toolbar.discount-actions-toolbar div.primary {
+    height: 48px;
+}
+p.form-error-message {
+    color: @color-red;
+    font-family: @font-family-regular;
+    margin-bottom: 0px;
+    padding-top: 4px;
+    padding-left: 0px;
+    width: 100%;
+    font-size: @font-size-12px;
+}
+p.form-error-message-account {
+    color: @color-red;
+    font-family: @font-family-regular;
+    margin-bottom: 0px;
+    padding-top: 4px;
+    padding-left: 0px;
+    width: 100%;
+    font-size: @font-size-12px;
+}
+.checkout-coupon-code-error-message {
+    padding-top: 3px;
+    font-size: 12px;
+    font-family: 'FedEx Sans Regular';
+    line-height: 16px;
+    color: @fx-red-100;
+    letter-spacing: normal;
+    width: 100%;
+    display: flex;
+    }
+    .checkout-error-cross-icon {
+    font-size: 12px;
+    font-weight: bold !important;
+    padding-left: 5px;
+    padding-right: 7px;
+    width: 12px;
+    height: 12px;
+    cursor: pointer;
+    }
+.field._required.apply-field-group .control input {
+    border-right: @zero-px;
+    color: @field-text-color;
+    font-family: @font-family-light;
+    font-size: 16px !important;
+    font-weight: 300;
+    height: 48px !important;
+    letter-spacing: @zero-px;
+    padding-left: 12px;
+}
+.actions-toolbar.discount-actions-toolbar .primary button {
+    background-color: @color-white;
+    border: 1px solid @color-grey;
+    color: @applied-remove-btn-color;
+    font-family: @font-family-bold;
+    font-size: 16px;
+    font-weight: bold;
+    height: 48px;
+    letter-spacing: 1px;
+    padding: @zero-px;
+    width: 96px;
+}
+.actions-toolbar.discount-actions-toolbar .primary button:hover {
+    border: 1px solid @color-blue;
+    color: @color-blue;
+}
+.field._required.apply-field-group > .label:after {
+    visibility: hidden;
+}
+
+.fieldset.promo-code-block-applied.field-wrap {
+    background: none;
+    border: 1px solid @promo-fedex-accoun-border-color;
+}
+.fieldset.promo-code-block-applied.field-wrap .control {
+    width: 100%;
+}
+.applied-code {
+    position: relative;
+    width: 123px;
+}
+.applied-code-text {
+    background: @applied-code-background;
+    border: 1px solid @applied-code-text-border-color;
+    border-radius: 100px;
+    color: @applied-remove-btn-color;
+    font-family: @font-family-regular;
+    font-size: 16px;
+    height: 30px;
+    letter-spacing: @zero-px;
+    line-height: 35px;
+    text-align: center;
+    width: 123px;
+}
+.applied-code button {
+    background: none;
+    border: @zero-px solid;
+    border-radius: 100%;
+    font-size: @zero-px;
+    height: 16px;
+    padding: @zero-px;
+    position: absolute;
+    right: 9px;
+    top: 8px;
+    width: 16px;
+    z-index: 999;
+}
+.applied-code button:after {
+    border: 1px solid @applied-remove-btn-color;
+    border-radius: 20px;
+    color: @applied-remove-btn-color;
+    content: '\e616';
+    font-family: 'luma-icons';
+    font-size: 10px;
+    font-weight: 100;
+    padding: 2px;
+}
+
+.fieldset.fedex-account-block-applied.field-wrap {
+    background: none;
+    border: 1px solid @promo-fedex-accoun-border-color;
+    padding: 18px 16px 20px 32px;
+}
+.fedex-account-block-applied .field._required.apply-field-group .control {
+    width: 100%;
+}
+.applied-fedex-number {
+    display: flex;
+}
+.applied-fedex-number-text {
+    color: @applied-remove-btn-color;
+    font-family: @font-family-light;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: @zero-px;
+    line-height: 120%;
+    width: 100%;
+    margin-top: 8px;
+}
+span.applied-account-four-digit, span.ending-in {
+    color: #6e7789;
+}
+.applied-fedex-number .removed_fedex_account {
+    background: none;
+    border: @zero-px;
+    color: @color-blue;
+    font-family: @font-family-bold;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: .75px;
+    padding: @zero-px;
+    text-transform: @uppercase;
+}
+.field._required.apply-field-group .control input::placeholder {
+    color: @input-place-holder-color;
+    font-family: @font-family-light;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: @zero-px;
+    padding-left: 8px;
+}
+.promo-account .fedex-account-checkbox-container {
+    display: none;
+}
+//Warning message box style
+.warning-message-container,
+.shipping-warning-message-container {
+    background: @color-white;
+    border: 1px solid @warning-box-orange-color;
+    box-shadow: 0 2px 4px 0 rgba(47, 64, 71, .3);
+    display: flex;
+    margin: @zero-px auto;
+    margin-top: 12px;
+    width: 100%;
+    z-index: 1;
+}
+.warning-message-container.promo-warning,
+.shipping-warning-message-container.promo-warning {
+    border: 1px solid @focus-border-color;
+    margin-top: 10px;
+    margin-bottom: 12px;
+}
+
+.promo-warning-message-inner-box,
+.shipping-warning-message-inner-box {
+    width: 68px;
+}
+.promo-warning-message-inner-box img,
+.shipping-warning-message-inner-box img {
+    height: 30px;
+    width: 30px;
+    left: 50%;
+    position: relative;
+    top: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    z-index: 1;
+}
+.cart-summary {
+    .promo-warning-message-inner-box {
+        img {
+            height: 32px;
+            width: 32px;
+        }
+    }
+}
+
+span.warning-message-close-icon:before {
+    color: @applied-remove-btn-color;
+    content: '\e616';
+    font-family: 'luma-icons';
+}
+span.warning-message-close-icon {
+    cursor: pointer;
+    font-size: 16px;
+    padding: 9px 12px;
+    position: static;
+    z-index: 999;
+}
+.warning-message-checkout {
+    color: @applied-remove-btn-color;
+    font-family: @font-family-regular;
+    font-size: 14px;
+    letter-spacing: @zero-px;
+    padding: 10px @zero-px 10px 10px;
+    width: 100%;
+}
+.warning-message-checkout p {
+    margin: @zero-px;
+}
+.promo-account .opc-wrapper {
+    width: 65.666667%;
+}
+.promo-account .opc-wrapper ul {
+    padding-left: 0;
+}
+.promo-account aside.opc-sidebar {
+    width: 34.333333%;
+}
+.warning-message-container {
+    box-sizing: border-box;
+}
+//Checkout summary actions style start
+.checkout-summary-button-container {
+    width: 100%;
+    margin: 15px 0;
+}
+.promo-account .checkout-summary-button-container button,
+.promo-account .checkout-summary-button-container button:hover,
+.promo-account .checkout-summary-button-container button:focus {
+    background: @fx-orange-500;
+    width: 100%;
+    border-radius: 0;
+    border: 0px solid @fx-orange-500;
+    padding: 18px 0;
+    text-transform: uppercase;
+}
+.promo-account .checkout-summary-button-container button span{
+    color: @fx-white-100;
+    font-family: "FedEx Sans Bold";
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+.promo-account .submit-btn {
+    border-radius: 0;
+}
+.promo-account .submit-orderr {
+    width: 100%;
+    margin-left: 0;
+}
+.checkout-index-index .submit-orderr {
+    margin-top: 25px;
+}
+//Checkout summary actions style end
+
+//Responsiveness style
+@media (min-width: 1400px) {
+    form .field._required.apply-field-group .control {
+        width: 75%;
+    }
+    form .actions-toolbar.discount-actions-toolbar {
+        width: 25%;
+    }
+    form .actions-toolbar.discount-actions-toolbar .primary button {
+        width: 105px;
+    }
+}
+@media (min-width: 1300px) {
+    .field._required.apply-field-group .control {
+        width: 70%;
+    }
+    toolbar.discount-actions-toolbar {
+        width: 25%;
+    }
+}
+@media (max-width: 1200px) {
+    .field._required.apply-field-group .control {
+        width: 72%;
+    }
+    .actions-toolbar.discount-actions-toolbar {
+        width: 28%;
+    }
+    .actions-toolbar.discount-actions-toolbar .primary button {
+        width: 100%;
+    }
+    .fieldset.promo-code-block-applied.field-wrap,
+    .actions-toolbar.discount-actions-toolbar .primary button {
+        box-sizing: border-box;
+        width: 100%;
+    }
+    .fieldset.promo-code-block-applied.field-wrap .control {
+        width: 100%;
+    }
+    .applied-fedex-number .removed_fedex_account {
+        font-size: 12px;
+    }
+    .fieldset.fedex-account-block-applied.field-wrap {
+        padding: 18px 16px 20px 26px;
+    }
+}
+@media (min-width: 1024px) {
+    .checkout-index-index {
+        .checkout-promo-account-container {
+            .discount-block-container {
+                .discount-title {
+                    .fedex-account-number-label {
+                        text-align: left;
+                    }
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1023px) {
+    // payment page responsive style start
+    .promo-account .payment-forms-container {
+        width: 85%;
+        margin: 0 auto;
+    }
+    .promo-account .payment-title-text {
+        position: relative;
+        left: -36px;
+        margin-top: 14px;
+    }
+    .promo-account li#step_code {
+        width: 95%;
+        margin: 0 auto;
+    }
+    .promo-account .method-selection-container {
+        padding-bottom: 4.8rem;
+    }
+    .promo-account .name-card-container,
+    .promo-account .card-number-container,
+    .promo-account .expiration-cvv-container,
+    .promo-account .company-name-container,
+    .promo-account .address-one-container,
+    .promo-account .address-two-container,
+    .promo-account .city-state-container
+     {
+        width: 100%;
+    }
+    .promo-account .cvv-number-container {
+        margin-left: 48px;
+    }
+    .promo-account .billing-address-heading {
+        margin-top: 3rem;
+    }
+    .promo-account .shipping-address {
+        width: 50%;
+        margin-bottom: 54px;
+    }
+    .promo-account  .billing-address-form-container {
+        margin-top: 74px;
+    }
+    .promo-account .opc-block-summary .minicart-items-wrapper {
+        padding-top: 24px;
+    }
+    .promo-account div#opc-sidebar table.data.table.table-totals {
+        margin-top: 0;
+    }
+    .promo-account .opc-block-summary .product-item .price {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .promo-account .opc-block-summary .product-item .product-item-inner {
+        position: relative;
+    }
+
+    .promo-account .opc-block-summary .minicart-items .product > .product-image-container {
+        width: 100px;
+    }
+    // payment page responsive style end
+
+    .field._required.apply-field-group .control {
+        width: 271px;
+    }
+    .actions-toolbar.discount-actions-toolbar {
+        width: 96px;
+    }
+    .actions-toolbar.discount-actions-toolbar .primary {
+        width: 100%;
+    }
+    .fedex-account-block .field._required.apply-field-group label.label,
+    .promo-code-block .field._required.apply-field-group label.label {
+        width: 363px;
+    }
+    .promo-account form .promo-code-block-applied .apply-field-group {
+        justify-content: left;
+    }
+    .fieldset.fedex-account-block-applied.field-wrap {
+        padding: 18px 56px 20px 71px;
+    }
+    .applied-fedex-number .removed_fedex_account {
+        font-size: 14px;
+    }
+    .fieldset.promo-code-block-applied.field-wrap {
+        padding-left: 71px;
+    }
+    .promo-account .opc-wrapper {
+        margin-bottom: 20px;
+        width: 100%;
+    }
+    .promo-account aside.opc-sidebar {
+        width: 85%;
+    }
+    form p.form-error-message {
+        width: 363px;
+    }
+    form p.form-error-message-account {
+        width: 363px;
+    }
+}
+@media (max-width: 812px) {
+    .discount-block-container .discount-title {
+        text-align: @text-align-center;
+        .label-text {
+            text-align: left;
+        }
+    }
+
+    aside.opc-sidebar {
+        clear: @clear-both;
+        float: none;
+        width: 86%;
+    }
+    .warning-message-checkout {
+        font-size: 15px;
+    }
+}
+@media (max-width: 768px) {
+    div.checkout-coupon-code-error-message {
+        margin-left: 95px;
+    }
+}
+@media (min-width: 767px) {
+    #coupon-code-error-message {
+        white-space: nowrap;
+    }
+}
+@media (max-width: 767px) {
+    .checkout-summary-button-container {
+        margin-top: 44px;
+    }
+    .promo-account li#step_code {
+        width: 100%;
+    }
+    .promo-account .payment-container .select-credit-card, .promo-account .payment-container .select-fedex-acc {
+        width: 100%;
+        margin: 0;
+    }
+    .promo-account .payment-container .select-credit-card {
+        margin-bottom: 15px;
+    }
+    .promo-account .payment-container .method-selection-container {
+        flex-wrap: wrap;
+    }
+    .promo-account .payment-forms-container {
+        width: 100%;
+    }
+    .promo-account .payment-title-text {
+        left: 0;
+        font-size: 24px;
+    }
+    .promo-account .additional-billing-info .aditional-billing-heading {
+        height: auto;
+    }
+    .promo-account .cvv-number-container {
+        width: 100%;
+        margin-left: 0;
+    }
+    .promo-account .expiration-month-container {
+        width: 70%;
+    }
+    .promo-account .method-selection-container {
+        padding-bottom: 35px;
+    }
+    .promo-account .billing-address-form-container {
+        margin-top: 0;
+        margin-bottom: 22px;
+    }
+    .promo-account .add-state-container,
+    .promo-account .add-zip-container,
+    .promo-account .add-city-container {
+        width: 30%;
+    }
+    .promo-account ul.checkout-breadcrumb li {
+        font-size: 17px;
+    }
+    .promo-account .opc-block-summary .minicart-items .product > .product-image-container {
+        width: 63px !important;
+        clear: both;
+        height: auto !important;
+    }
+    .promo-account .opc-block-summary .minicart-items .product-item-details {
+        padding-left: 0;
+        clear: both;
+        padding-top: 24px;
+        position: inherit;
+    }
+    .applied-fedex-number {
+        flex-wrap: wrap;
+    }
+    .applied-fedex-number-text {
+        width: 100%;
+    }
+    .applied-fedex-number .removed_fedex_account {
+        font-size: 14px;
+        margin-top: 21px;
+        text-align: left;
+    }
+    form .fieldset.fedex-account-block-applied.field-wrap {
+        padding: 18px 16px 11px 26px;
+    }
+    form .field._required.apply-field-group .control {
+        width: 61%;
+    }
+    form .actions-toolbar.discount-actions-toolbar {
+        width: 39%;
+    }
+    form .fedex-account-block .field._required.apply-field-group label.label,
+    form .promo-code-block .field._required.apply-field-group label.label {
+        width: 100%;
+    }
+    .fedex-account-block .field._required.apply-field-group label.label span,
+    .promo-code-block .field._required.apply-field-group label.label span {
+        float: left;
+    }
+    .fieldset.promo-code-block-applied.field-wrap {
+        padding-left: 27px;
+    }
+    .promo-account .opc-block-summary {
+        padding: 5px 11px 0 11px;
+        width: 100%;
+    }
+    div#shipping-method-buttons-container div.primary {
+        height: auto;
+    }
+    .opc-wrapper .methods-shipping {
+        padding-left: @zero-px;
+    }
+    form p.form-error-message {
+        width: 100%;
+    }
+    form p.form-error-message-account {
+        width: 100%;
+    }
+    div.checkout-coupon-code-error-message {
+        margin-left: 0px;
+    }
+}
+@media (max-width: 1023px) {
+    .is-fcl-global.promo-account {
+        .billing-address-form-container {
+            margin-top: 0;
+        }
+    }
+}
+@media (max-width: 1023px) {
+    .promo-account aside.opc-sidebar {
+        width: 100% !important;
+    }
+}

@@ -1,0 +1,25 @@
+<?php
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var $viewModel \Fedex\BrowserVersionCheck\ViewModel\Config */
+/** @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer */
+
+$viewModel = $block->getData('viewModel');
+$config = json_encode($viewModel->getConfig());
+$scriptString = <<<script
+    window.browser_version_check = {$config};
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<div class="browser-notification message-block message-info absolute bg-cl-white d-flex mx-auto hide">
+    <div class="icon d-no-shrink self-center">
+        <img alt="Notification icon" class="valign-middle" src="<?php echo $this->getViewFileUrl('images/information.png');?>">
+    </div>
+    <div class="message-text">
+        <div class="message-title fedex-bold"></div>
+        <div class="message-details"></div>
+    </div>
+    <div class="ml-auto">
+        <button type="button" class="close-message" aria-label="Close outdated browser notification">
+        </button>
+    </div>
+</div>

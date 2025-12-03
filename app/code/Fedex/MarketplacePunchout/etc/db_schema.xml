@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="customer_punchout_unique_id" resource="default" engine="innodb"
+           comment="will store Punchout Unique ID for Customers">
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="false" identity="false"/>
+        <column xsi:type="varchar" name="customer_email" nullable="false" length="255"/>
+        <column xsi:type="varchar" name="unique_id" nullable="false" length="255" />
+        <constraint xsi:type="foreign" referenceId="CUSTOMER_PUNCHOUT_UNIQUE_ID_CUSTOMER_ID_CUSTOMER_ENTITY_ENTITY_ID"
+                    table="customer_punchout_unique_id" column="customer_id" referenceTable="customer_entity"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="CUSTOMER_PUNCHOUT_UNIQUE_ID_CUSTOMER_ID">
+            <column name="customer_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="CUSTOMER_PUNCHOUT_UNIQUE_ID_UNIQUE_ID">
+            <column name="unique_id"/>
+        </constraint>
+    </table>
+</schema>

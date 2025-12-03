@@ -1,0 +1,17 @@
+<?php
+/**@var Fedex\NewRelic\ViewModel\NewRelicCustomAttribute $block*/
+$isEproCustomer = $block->getData('view_model')->isEproCustomer();
+$assignedCompany = $block->getData('view_model')->getAssignedCompany();
+$isCustomerLoggedIn = $block->getData('view_model')->isCustomerLoggedIn();
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_NewRelic/js/newrelic-eprocustomer": {
+                "isEproCustomer": "<?= $isEproCustomer ?>",
+                "assignedCompany": "<?= $assignedCompany ?>",
+                "isCustomerLoggedIn": "<?= $isCustomerLoggedIn ?>"
+            }
+        }
+    }
+</script>

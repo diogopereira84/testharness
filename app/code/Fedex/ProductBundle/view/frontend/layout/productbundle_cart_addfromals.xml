@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Catalog\Block\Product\View" name="product.info" template="Fedex_ProductBundle::catalog/product/view/form.phtml">
+                <block class="Fedex\ProductEngine\Block\Product\Attributes\Bundle" name="product.info.config" template="Fedex_ProductEngine::product/view/attributes_bundle.phtml">
+                    <arguments>
+                        <argument name="toggle_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                        <argument name="product_availability_view_model"
+                                  xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                    </arguments>
+                </block>
+                <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle" name="product.info.bundle.options" as="type_bundle_options" template="Fedex_ProductBundle::catalog/product/view/type/bundle/options.phtml" after="product.info.config">
+                    <arguments>
+                        <argument name="submitOnLoad" xsi:type="number">1</argument>
+                    </arguments>
+                    <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Select" name="product.info.bundle.options.select" as="select">
+                        <arguments>
+                            <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                            <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Multi" name="product.info.bundle.options.multi" as="multi"/>
+                    <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Radio" name="product.info.bundle.options.radio" as="radio">
+                        <arguments>
+                            <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                            <argument name="validateQuantityViewModel" xsi:type="object">Magento\Bundle\ViewModel\ValidateQuantity</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Option\Checkbox" name="product.info.bundle.options.checkbox" as="checkbox">
+                        <arguments>
+                            <argument name="tier_price_renderer" xsi:type="object">\Magento\Bundle\Block\DataProviders\OptionPriceRenderer</argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

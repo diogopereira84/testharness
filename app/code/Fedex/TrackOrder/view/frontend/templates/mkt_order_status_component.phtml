@@ -1,0 +1,147 @@
+<?php
+$trackOrderViewModel = $trackOrderViewModel ?? $block->getTrackOrderHomeViewModel();
+if ($trackOrderViewModel && $trackOrderViewModel->toggleCodeImprovementLogic()) {
+    $orderData = $block->getData('order_data');
+    $key = $block->getData('order_key');
+    /** @var Fedex\TrackOrder\ViewModel\TrackOrderHome $trackOrderViewModel */
+    $trackOrderViewModel = $block->getTrackOrderHomeViewModel();
+    $isMktOrderDelayed = $block->isMktOrderDelayed($orderData, $key);
+    $sellerId = $block->getData('seller_id');
+    $seller = $block->getData('seller');
+    $track = $block->getData('track');
+    $orderMktStatusDetail = $trackOrderViewModel->getMktOrderStatusDetail($orderData, $key, $sellerId, $track);
+}
+$trackingDetails = $trackOrderViewModel->getTrackingDetails($orderData, $key, $sellerId ?? null, $seller ?? null);
+$originStatusProgressKey = $trackingDetails['originStatusProgressKey'];
+$trackMktOrderUrl = $trackingDetails['trackMktOrderUrl'];
+$mktTrackingNumber = $trackingDetails['mktTrackingNumber'];
+
+$orderMktStatusDetailImageUrl = $isMktOrderDelayed?
+    $this->getViewFileUrl('Fedex_TrackOrder::images/Delay-icon.png')
+    : $this->getViewFileUrl('Fedex_TrackOrder::images/'.$orderMktStatusDetail.'-icon.png');
+?>
+<ul class="progress-tracker progress-tracker--vertical <?= $trackOrderViewModel->toggleCodeImprovementLogic() ? 'improvement' : '' ?>">
+    <li class="progress-step">
+        <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+            <div class="progress-marker <?= $orderMktStatusDetail ?> first" id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id1"></div>
+        <?php else:?>
+        <div class="progress-marker"
+             id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id1">
+            <style>
+                div[id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id1"]::before {
+                    background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png'); ?>');
+                    background-size: cover;
+                }
+
+                div[id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id1"]::after {
+                <?php if($orderMktStatusDetail == 'Ordered'): ?>
+                    background-color: none;
+                <?php elseif (!$isMktOrderDelayed && $orderMktStatusDetail == 'Processing' ||
+                ($orderMktStatusDetail == 'Shipped')): ?>
+                    background-color: #109a10 !important;
+                <?php elseif ($orderMktStatusDetail == 'Cancelled'): ?>
+                    background-color: #f40f0f !important;
+                <?php elseif ($isMktOrderDelayed || $orderMktStatusDetail == 'Delay'): ?>
+                    background-color: #f9b200 !important;
+                <?php else :?>
+                    background-color: #109a10 !important;
+                <?php endif; ?>
+                }
+            </style>
+        </div>
+        <?php endif;?>
+        <div class="progress-text"><h4 class="progress-title">Ordered</h4></div>
+    </li>
+
+    <li class="progress-step">
+        <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+            <div class="progress-marker <?= $orderMktStatusDetail ?> second" id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id2"></div>
+        <?php else:?>
+        <div class="progress-marker"
+             id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id2">
+            <style>
+                div[id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id2"]::before {
+                <?php if($orderMktStatusDetail == 'Ordered'): ?>
+                    background-image: none;
+                <?php elseif (
+                    $orderMktStatusDetail == 'Processing' ||
+                    $orderMktStatusDetail == 'Cancelled' ||
+                    $orderMktStatusDetail == 'Delay'
+                ): ?>
+                    width: 38px;
+                    height: 38px;
+                    margin-left: -5px;
+                    background-image: url('<?= $orderMktStatusDetailImageUrl; ?>' );
+                <?php else :?>
+                    background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Processing-icon.png'); ?>');
+                <?php endif; ?>
+                    background-size: cover;
+                }
+
+                div[id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id2"]::after {
+                <?php if($orderMktStatusDetail == 'Shipped'): ?>
+                    background-color: #109a10 !important;
+                <?php else :?>
+                    background-color: none;
+                <?php endif; ?>
+                }
+            </style>
+        </div>
+        <?php endif;?>
+        <div class="progress-text">
+            <?php if(
+                $orderMktStatusDetail == 'Shipped' ||
+                $orderMktStatusDetail == 'Processing' ||
+                $orderMktStatusDetail == 'Ordered' ||
+                $orderMktStatusDetail === 'Delay'
+            ) {
+                if ($orderMktStatusDetail == 'Processing' || $orderMktStatusDetail == 'Delay') {
+                    echo '<h4 class="progress-title current-progress-title">Processing</h4>';
+                } else {
+                    echo '<h4 class="progress-title">Processing</h4>';
+                }
+            } else {
+                echo '<h4 class="progress-title"> '. $orderMktStatusDetail .' </h4>';
+            } ?>
+        </div>
+    </li>
+
+    <li class="progress-step last-progress-step">
+        <?php if($trackOrderViewModel->toggleCodeImprovementLogic()):?>
+            <div class="progress-marker <?= $orderMktStatusDetail ?> last" id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id3"></div>
+        <?php else:?>
+        <div class="progress-marker" id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id3">
+            <style>
+                div[id="MktProductDtlSec<?= $originStatusProgressKey; ?>-progress-marker-id3"]::before {
+                <?php if($orderMktStatusDetail == 'Shipped'): ?>
+                    width: 38px;
+                    height: 38px;
+                    margin-left: -5px;
+                    background-image: url('<?= $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png'); ?>');
+                <?php else :?>
+                    background-image: none;
+                <?php endif; ?>
+
+                    background-size: cover;
+                }
+            </style>
+        </div>
+        <?php endif;?>
+        <div class="progress-text">
+            <?php if($orderMktStatusDetail == 'Shipped') {
+                    echo '<h4 class="progress-title current-progress-title">*Shipped</h4>';
+                } else {
+                    echo '<h4 class="progress-title">*Shipped</h4>';
+                } ?>
+        </div>
+        <?php if($orderMktStatusDetail != 'Cancelled'): ?>
+            <div class="shipping_status_note">
+                <?= $escaper->escapeHtml(__('*For updates following shipped, click the ')) ?>
+                <a href="<?= $escaper->escapeUrl($trackMktOrderUrl . $mktTrackingNumber) ?>">
+                    <?= $escaper->escapeHtml(__('FedEx tracking number')) ?>
+                </a>
+                <?= $escaper->escapeHtml(__(' for this order.')) ?>
+            </div>
+        <?php endif; ?>
+    </li>
+</ul>

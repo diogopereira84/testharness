@@ -1,0 +1,132 @@
+<?php
+declare(strict_types=1);
+
+/** @var $block \Fedex\ProductEngine\Block\Product\Attributes */
+$visibleAttributesList = $block->getVisibleAttributes();
+$peUrl = $block->getProductEngineUrl();
+$canvaFlag = $block->hasCanvaLink();
+$canvaLink = $block->getDefaultCanvaLink();
+$toggleViewModel = $block->getData('toggle_view_model');
+$productViewModel = $block->getData('product_availability_view_model');
+$customQtyEnabled = (bool)$toggleViewModel->getToggleConfigValue('enable_custom_qty');
+$quantityAttribute = $block->getQuantityAttributeCode();
+$textboxLabel = $block->getTextboxOptionLabel();
+$labelText = $block->getLabelText();
+$unavailableQtyClass = ($productViewModel->isE441563ToggleEnabled()
+    && !$productViewModel->checkProductAvailable($block->getProduct()))?
+    $productViewModel->getUnavailableQtyCssClass():'';
+$quantityHtml = ''; // Store quantity HTML
+?>
+<div class="product-engine-attributes">
+    <h2 class="old-1p-layout mt-0 mb-0">Make your selections</h2>
+    <?php echo $this->getChildHtml('product.canva'); ?>
+    <input type="hidden" name="product_id" id="product-id" value="<?= $block->getPeProductId() ?>">
+    <input type="hidden" name="preset_id" id="preset-id" value="<?= $block->getProduct()->getData('preset_id') ?>">
+    <div id="config-accordion" class="accordion">
+        <?php foreach ($visibleAttributesList as $key => $attributeData): ?>
+            <?php
+            /** @var \Magento\Eav\Api\Data\AttributeInterface $attribute */
+            $attribute = $attributeData['attribute'];
+            $options   = $attributeData['options'];
+            $attributeCode = $attribute->getAttributeCode();
+            ?>
+            <?php if ($customQtyEnabled && $attributeCode === $quantityAttribute && array_search($textboxLabel, array_column($options, $labelText)) !== false): ?>
+                <?php ob_start(); ?>
+                <div class="border-0 <?= $unavailableQtyClass; ?>">
+                    <div class="pt-32 pr-10 pb-12 pl-3">
+                        <div class="d-flex mb-10 v-center">
+                            <span id='qty-label' class="title fedex-bold fs-16 ls-1 lh-24">QUANTITY</span>
+                            <div class="form-block ml-auto">
+                                <div class="d-flex border-rollingstone qty-stepper">
+                                    <button class="btn-stepper step-down" aria-label="Decrease Quantity" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                                        <span class="luma-icon step-icon minus"></span>
+                                    </button>
+                                    <input type="hidden" class="selected" id="<?= $attributeCode; ?>" name="<?= $attributeCode; ?>" value="<?= $block->getMinSaleQty() ?>" />
+                                    <input type="number" name="qty-field" aria-labelledby="qty-label" class="qty-field cl-stonegray ml-5 mr-5 text-center" value="<?= $block->getMinSaleQty() ?>" data-min-value="<?= $block->getMinSaleQty() ?>" data-max-value="<?= $block->getMaxSaleQty() ?>" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?> />
+                                    <button class="btn-stepper step-up" aria-label="Increase Quantity" <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>>
+                                        <span class="luma-icon step-icon plus"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <span id="qty-error-text" class="error hide">Accepted values are between <?= $block->getMinSaleQty() ?> and <?= $block->getMaxSaleQty() ?></span>
+                    </div>
+                </div>
+                <?php $quantityHtml = ob_get_clean(); ?>
+            <?php else: ?>
+                <div data-role="collapsible" class="border-bottom-iron collapsible pointer <?= ($attributeCode == 'quantity')?$unavailableQtyClass:''?>">
+                    <div data-role="trigger" class="handle">
+                        <span role="img" aria-label="Accordion" class="icons" data-role="icons"></span>
+                        <span class="title fedex-bold fs-12 ls-1 lh-16"><?= strtoupper($attribute->getDefaultFrontendLabel()) ?></span>
+                        <div class="subtitle">
+                            <span class="selected fedex-light fs-14 lh-24"></span>
+                            <input type="hidden" class="selected" name="<?= $attributeCode; ?>" id="<?= $attributeCode; ?>"/>
+                        </div>
+                    </div>
+                </div>
+                <div data-role="content" class="content fancy-scroll" data-contentindex="<?= $key ?>">
+                    <ul class="dropdown p-0 pointer">
+                        <?php foreach ($options as $option): ?>
+                            <?php echo $html = $block->getOptionHtml($attributeCode, $quantityAttribute, $option, $labelText, $textboxLabel);?>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            <?php endif;?>
+        <?php endforeach; ?>
+    </div>
+    <?= $quantityHtml; ?>
+</div>
+
+<?= $block->getChildHtml('product.info.config.product_engine.error_messages') ?>
+<?= $block->getChildHtml('product.info.config.price.box') ?>
+
+<script>
+    require([
+        'jquery',
+        'productEngineAttributes',
+        'prototype',
+        'accordion',
+    ], function ($, peAttributes)
+    {
+        let self = this;
+
+        $("#config-accordion").accordion({
+            animate: 200,
+            collapsible: true,
+            active: false,
+            icons: { "header": "collapsed", "activeHeader": "expanded" }
+        });
+
+        $( ".accordion .dropdown .option.selected" ).each(function(){
+            var listItem = $(this);
+            var selectedOptionLabel = listItem.data('label');
+            var selectedOptionValue = listItem.data('value');
+            var collapseHandle =  listItem.closest(".content").prev()
+            collapseHandle.find("span.selected").text(selectedOptionLabel).attr({'data-value': selectedOptionValue});
+            collapseHandle.find("input.selected").val(selectedOptionValue ? selectedOptionValue : selectedOptionLabel);
+        });
+
+        $( ".accordion .dropdown .option" ).on( "click", function(event) {
+            var listItem = $(this);
+            var selectedOptionLabel = listItem.data('label');
+            var selectedOptionValue = listItem.data('value');
+            var collapseSection = listItem.closest(".content");
+            var collapseHandle =  collapseSection.prev();
+            var collapsibleIndex = collapseSection.data("contentindex");
+            var isQuantityField = collapseHandle.find('input.selected').attr('id') === 'quantity';
+            collapseSection.find('li.selected').removeClass('selected');
+            listItem.addClass('selected');
+            collapseHandle.find("span.selected").text(selectedOptionLabel).attr({'data-value': selectedOptionValue});
+            $("#config-accordion").accordion("deactivate", collapsibleIndex);
+            collapseHandle.find("input.selected").val(isQuantityField ? selectedOptionLabel : selectedOptionValue ).trigger('change');
+        });
+
+        let peAttributesInstance = peAttributes({
+            peUrl: '<?= $peUrl ?>',
+            inputSelectedSelection: '.product-engine-attributes input.selected'
+        });
+        $(document).ready(function() {
+            peAttributesInstance.initProductEngine();
+        });
+    });
+</script>

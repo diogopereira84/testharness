@@ -1,0 +1,32 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability $productViewModel */
+$productViewModel = $block->getData('products_availability_view_model');
+$product = $block->getProduct();
+$unavailable = false;
+
+if($productViewModel->isE441563ToggleEnabled() && !$productViewModel->checkProductAvailable($product)){
+    $unavailable = true;
+}
+
+$isD228743ToggleEnabled = $productViewModel->isTigerTeamD228743ToggleEnabled();
+$shouldRender = $isD228743ToggleEnabled || $unavailable;
+$visibilityClass = $isD228743ToggleEnabled ? ($unavailable ? 'd-flex' : 'd-none') : 'd-flex';
+$extraToggleClass = $isD228743ToggleEnabled ? ' d_228743' : '';
+?>
+<?php if ($shouldRender): ?>
+<div class="product-unavailability-message<?= $extraToggleClass ?> message-block message-error mt-25 <?= $visibilityClass ?>">
+    <div class="icon d-flex d-no-shrink v-center">
+        <img alt="Error icon" class="img-auto" src="<?php echo $this->getViewFileUrl('images/error-white.svg');?>">
+    </div>
+    <div class="message-text">
+        <h3 class="message-title cl-error fs-14 lh-24 m-0 fedex-bold weight-700">
+            <?= $productViewModel->getProductPDPErrorMessageTitle() ?>
+        </h3>
+        <p class="fs-14 lh-21 m-0">
+            <?= $productViewModel->getProductPDPErrorMessage() ?>
+        </p>
+    </div>
+</div>
+<?php endif; ?>

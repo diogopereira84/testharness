@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Fedex\ProductBundle\ViewModel\BundleProductHandler">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Checkout\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Bundle\Model\Product\Type">
+        <plugin name="fedex_bundle_type_prepare_for_cart_advanced" type="Fedex\ProductBundle\Plugin\Bundle\TypePlugin" sortOrder="10" />
+    </type>
+    <type name="Magento\Quote\Model\Quote\Item\Repository">
+        <arguments>
+            <argument name="cartItemProcessors" xsi:type="array">
+                <item name="bundle" xsi:type="object">\Fedex\ProductBundle\Model\CartItemProcessor\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="product_bundle_checkout_config_provider" xsi:type="object">Fedex\ProductBundle\Model\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
+

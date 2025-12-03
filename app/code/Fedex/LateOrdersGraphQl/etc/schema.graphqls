@@ -1,0 +1,118 @@
+# Module: Fedex_LateOrdersGraphQl
+# GraphQL schema for "Late Orders" and "orderDetailsById" in POD 2.0 (Magento)
+
+type Query @doc(description: "Root query type for Late Orders GraphQL API") {
+    lateOrders(
+        filter: LateOrderFilterInput @doc(description: "Filter to query late orders")
+        currentPage: Int = 1 @doc(description: "Current page for pagination")
+        pageSize: Int = 100 @doc(description: "Number of items per page")
+    ): LateOrderSearchResult!
+    @resolver(class: "\\Fedex\\LateOrdersGraphQl\\Model\\Resolver\\LateOrders")
+    @doc(description: "Query for Late Orders list")
+
+    orderDetailsById(
+        orderId: String! @doc(description: "Order ID to fetch details for")
+    ): OrderDetails!
+    @resolver(class: "\\Fedex\\LateOrdersGraphQl\\Model\\Resolver\\OrderDetailsById")
+    @doc(description: "Query for Late Order details by ID")
+}
+
+enum LateOrderStatus @doc(description: "Possible statuses for a late order") {
+    new @doc(description: "Order is new")
+    processing @doc(description: "Order is being processed")
+    complete @doc(description: "Order is complete")
+    canceled @doc(description: "Order is canceled")
+    hold @doc(description: "Order is on hold")
+    closed @doc(description: "Order is closed")
+    ordered @doc(description: "Order has been placed")
+}
+
+input LateOrderFilterInput @doc(description: "Input for filtering late orders") {
+  since: String @doc(description: "Start date/time for filtering orders")
+  until: String @doc(description: "End date/time for filtering orders")
+  status: LateOrderStatus = new @doc(description: "Status to filter orders by")
+  is_1p: Boolean = true @doc(description: "Filter for 1P orders")
+}
+
+type LateOrderSummary @doc(description: "Summary information for a late order") {
+  orderId: String! @doc(description: "Unique identifier for the order")
+  createdAt: String! @doc(description: "Order creation date/time")
+  status: LateOrderStatus! @doc(description: "Current status of the order")
+  is_1p: Boolean! @doc(description: "Indicates if the order is 1P")
+}
+
+type PageInfo @doc(description: "Pagination information for results") {
+  currentPage: Int! @doc(description: "Current page number")
+  pageSize: Int! @doc(description: "Number of items per page")
+  totalPages: Int! @doc(description: "Total number of pages available")
+  hasNextPage: Boolean! @doc(description: "Whether there is a next page")
+}
+
+type LateOrderSearchResult @doc(description: "Search result for late orders") {
+  items: [LateOrderSummary!]! @doc(description: "List of late order summaries")
+  totalCount: Int! @doc(description: "Total number of late orders found")
+  pageInfo: PageInfo! @doc(description: "Pagination info for the result set")
+}
+
+type Customer @doc(description: "Customer information") {
+  name: String! @doc(description: "Customer's full name")
+  email: String! @doc(description: "Customer's email address")
+  phone: String @doc(description: "Customer's phone number")
+}
+
+type Address @doc(description: "Address details") {
+  line1: String @doc(description: "First line of the address")
+  line2: String @doc(description: "Second line of the address")
+  city: String @doc(description: "City name")
+  region: String @doc(description: "Region or state")
+  postalCode: String @doc(description: "Postal or ZIP code")
+  country: String @doc(description: "Country code or name")
+}
+
+enum FulfillmentType @doc(description: "Type of fulfillment for the order") {
+  PICKUP @doc(description: "Order will be picked up")
+  DELIVERY @doc(description: "Order will be delivered")
+}
+
+type Fulfillment @doc(description: "Fulfillment details for the order") {
+  type: FulfillmentType @doc(description: "Type of fulfillment")
+  pickupTime: String @doc(description: "Scheduled pickup time")
+  deliveryTime: String @doc(description: "Scheduled delivery time")
+  shippingAccountNumber: String @doc(description: "Shipping account number")
+  shippingAddress: Address @doc(description: "Shipping address details")
+}
+
+type DownloadLink @doc(description: "Download link for order documents") {
+  href: String! @doc(description: "URL for the download link")
+}
+
+type StoreRef @doc(description: "Reference to the store fulfilling the order") {
+    storeId: String! @doc(description: "Unique store identifier")
+    storeNumber: String! @doc(description: "Store number")
+    storeEmail: String! @doc(description: "Store email address")
+}
+
+type ProductConfigEntry @doc(description: "Product configuration entry") {
+  key: String! @doc(description: "Configuration key")
+  value: String @doc(description: "Configuration value")
+}
+
+type OrderDetailsItem @doc(description: "Item details within an order") {
+  productId: String! @doc(description: "Product identifier")
+  documentId: [String]! @doc(description: "List of document IDs for the item")
+  productConfiguration: [ProductConfigEntry]! @doc(description: "Product configuration entries")
+  productionInstructions: [String]! @doc(description: "Production instructions for the item")
+  downloadLinks: [DownloadLink]! @doc(description: "Download links for item documents")
+}
+
+type OrderDetails @doc(description: "Detailed information for a specific order") {
+  orderId: String! @doc(description: "Unique identifier for the order")
+  status: LateOrderStatus! @doc(description: "Current status of the order")
+  createdAt: String! @doc(description: "Order creation date/time")
+  customer: Customer! @doc(description: "Customer information")
+  fulfillment: Fulfillment @doc(description: "Fulfillment details")
+  store: StoreRef! @doc(description: "Store fulfilling the order")
+  items: [OrderDetailsItem!]! @doc(description: "List of items in the order")
+  orderNotes: String @doc(description: "Additional notes for the order")
+  is_1p: Boolean! @doc(description: "Indicates if the order is 1P")
+}

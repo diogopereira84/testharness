@@ -1,0 +1,40 @@
+<?php
+/** This changes need to valid applying filters and configuration before search process is started. */
+$productList = $block->getProductListHtml();
+$searchHelper = $this->helper(\Magento\Search\Helper\Data::class);
+?>
+<?php if ($block->getResultCount()) : ?>
+    <?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
+<div class="search results">
+    <?php if ($messages = $block->getNoteMessages()) : ?>
+    <div class="message notice">
+        <div>
+            <?php foreach ($messages as $message) : ?>
+                <?= /* @noEscape */ $message ?><br />
+            <?php endforeach; ?>
+        </div>
+    </div>
+    <?php endif; ?>
+    <?= /* @noEscape */ $productList ?>
+</div>
+<?php else : ?>
+
+<h2 class="toolbar-title"><?php echo __('Showing 0 results for: \'%1\'', $searchHelper->getEscapedQueryText()) ?></h2>
+<div class="noresult noresult--bg-red">
+    <div class="noresult__alert">
+        <div class="noresult__icon"></div>
+    </div>
+    <div class="noresult__content noresult--bg-white noresult--brdr-red">
+        <p class="noresult__message">
+            <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('We can’t find any items matching these search criteria')) ?>
+            <?= /* @noEscape */ $block->getAdditionalHtml() ?>
+            <?php if ($messages = $block->getNoteMessages()) : ?>
+                <?php foreach ($messages as $message) : ?>
+                    <br /><?= /* @noEscape */ $message ?>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </p>
+        <a class="noresult__link" href="<?= $block->getUrl('catalogsearch/advanced') ?>"><?= $block->escapeHtml(__('Modify your search')) ?></a>
+    </div>
+</div>
+<?php endif; ?>

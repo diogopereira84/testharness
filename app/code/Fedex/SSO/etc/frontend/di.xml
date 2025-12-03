@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="sso_section" xsi:type="string">Fedex\SSO\CustomerData\SSOSection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Model\Data\Customer">
+        <plugin name="Fedex_SSO_Customer" type="Fedex\SSO\Plugin\Customer" sortOrder="10" disabled="false"  />
+    </type>
+    <type name="Magento\Framework\View\Result\Page">
+        <plugin name="uniqueClassForRetail" type="Fedex\SSO\Plugin\Result\Page" />
+    </type>
+</config>

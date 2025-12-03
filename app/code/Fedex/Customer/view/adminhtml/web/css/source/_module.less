@@ -1,0 +1,87 @@
+@tooltip_background: #fff;
+@required_field_icon_color: #de002e;
+
+& when (@media-common = true) {
+    .customer-user-permissions {
+        .admin-permissions-bold {
+            font-weight: 600;
+        }
+
+        .site-approval-email-legend {
+            &:after {
+                color: @required_field_icon_color;
+                content: '*';
+                font-feature-settings: 'clig' off, 'liga' off;
+                margin-left: 1rem;
+                position: relative;
+                top: 27px;
+            }
+        }
+
+        .site-approval-email-title {
+            max-width: 100%;
+            width: 15rem;
+        }
+
+        .site-access-email-option {
+            padding-top: 0rem;
+        }
+
+        .admin-permissions-options-container {
+            display: grid;
+            grid-template-columns: max-content 1fr;
+            
+            .admin-permissions-option {
+                display: flex;
+                padding-top: 1rem;
+
+                &:nth-child(2n) {
+                    margin-left: 6rem;
+                }
+            
+                .admin__field-tooltip,
+                .admin-permissions-tooltip {
+                    padding-left: .5rem;
+
+                    &:hover .admin-permissions-tooltip-content {
+                        display: block;
+                    }
+
+                    .admin-permissions-tooltip-content {
+                        @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+                        .lib-css(box-shadow, @_shadow);
+                        background: @tooltip_background;
+                        border: 1px solid @field-tooltip-content__border-color;
+                        border-radius: 1px;
+                        bottom: @field-tooltip-icon__size + @field-tooltip-content-arrow__size;
+                        display: none;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 16px;
+                        line-height: 24px;
+                        padding: @field-tooltip-content__padding;
+                        position: absolute;
+                        right: -29rem;
+                        width: @field-tooltip-content__width;
+                        z-index: @field-tooltip-content__z-index;
+
+                        &:after,
+                        &:before {
+                            .lib-arrow(down, @field-tooltip-content-arrow__size, @field-tooltip-content__border-color);
+                            content: '';
+                            display: block;
+                            position: absolute;
+                            top: 100%;
+                            z-index: 3;
+                        }
+
+                        &:after {
+                            border-top-color: @tooltip_background;
+                            margin-top: -1px;
+                            z-index: 4;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

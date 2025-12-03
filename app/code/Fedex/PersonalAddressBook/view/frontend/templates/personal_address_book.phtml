@@ -1,0 +1,170 @@
+<?php
+$states = $block->getStateOption();
+?>
+<div class="personal-address-search-container" role="search" aria-label="message">
+    <div class="address-search-section flex-container">
+        <label class="search-label" for="search"><strong>SEARCH BY:</strong></label>
+        <select name="address-search-options" aria-label="address-search-options" class="address-search-options" id="addressSearchOptions">
+            <option value="lastName">Last Name</option>
+            <option value="firstName">First Name</option>
+            <option value="companyName">Company</option>
+            <option value="personal_address_address">Address</option>
+            <option value="personal_address_city">City</option>
+            <option value="personal_address_state">State</option>
+            <option value="personal_address_zip">Zip</option>
+        </select>
+        <div class="personal-address-search-control flex-container">
+            <input aria-label="searchkeyword" type="text" name="personal-address-search"
+                value=""
+                id="keyword"
+                minlength="3"
+                placeholder="<?=$escaper->escapeHtmlAttr(__('Search by last name')); ?>"
+                class="personal-address-search-field"
+            />
+            <div class="clear-all">
+                <a href="javascript:void(0);" tabindex="0" id="personalAddressClearAll" style="display:none;">Clear All</a>
+            </div>
+            <button type="submit" class="personal-address-search-button" aria-label="Personal Address Search" id="personalAddressSearch">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                    <rect opacity="0.01" width="32" height="32" fill="white"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M18.026 18.9688C16.7543 20.0289 15.1182 20.6667 13.3333 20.6667C9.28348 20.6667 6 17.3832 6 13.3333C6 9.28292 9.2832 6 13.3333 6C17.3835 6 20.6667 9.28292 20.6667 13.3333C20.6667 15.1182 20.0289 16.7543 18.9688 18.026L25.8047 24.8619C26.0651 25.1223 26.0651 25.5444 25.8047 25.8047C25.5444 26.0651 25.1223 26.0651 24.8619 25.8047L18.026 18.9688ZM19.3333 13.3333C19.3333 10.0193 16.6471 7.33333 13.3333 7.33333C10.0196 7.33333 7.33333 10.0193 7.33333 13.3333C7.33333 16.6468 10.0199 19.3333 13.3333 19.3333C16.6468 19.3333 19.3333 16.6468 19.3333 13.3333Z" fill="#333333"/>
+                </svg>
+            </button>
+        </div>
+        
+    </div>
+    <div class="error-message">
+        <span class="error-cross">✕</span>
+        Minimum character count of 2 required.
+    </div>
+    <label class="filter-label" for="filter"><strong>FILTER BY LAST NAME</strong></label>
+    <div class="flex-container address-filter-section">
+        <a tabindex="0" class="clear-address-search search-bar-nav">CLEAR</a>
+        <?php foreach (range('A', 'Z') as $alphaNavigation):?>
+            <a class="search-address-alphabet search-bar-nav" data-alphabet="<?=$escaper->escapeHtmlAttr(__($alphaNavigation))?>" tabindex="0" id="alph_<?=$escaper->escapeHtmlAttr(__( $alphaNavigation)); ?>">
+            <?=$escaper->escapeHtmlAttr(__( $alphaNavigation)); ?>
+            </a>
+        <?php endforeach;?>
+    </div>
+    <hr>
+    <div class="secondary add-new-address">
+        <button class="add-new-address-btn action" type="submit" data-testid="addNewAddress" tabindex="0">
+        <?= $block->escapeHtml(__('ADD NEW ADDRESS')); ?>
+        </button>
+    </div>
+</div>
+  <!-- Modal -->
+  <div role="dialog" id="addressModal" class="modal">
+        <div class="personal-modal-content">
+            <div class="personal-modal-header">
+                <h2>New Contact</h2>
+            </div><br>
+            <p class="personal-recipient-information">Recipient information</p>
+            <div class="personal-modal-body">
+                <form id="personal-addressForm" method="POST" data-mage-init='{"validation":{}}'>
+                    <input type="hidden" class = "customer_ids" name="customerid" id="contactIdInput" />
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">First Name*</label>
+                            <input minlength="2" maxlength="30" class="required" type="text" id="firstName" name="firstName" Placeholder="First Name">
+                            <span id="firstname_validate" class="field-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Last Name*</label>
+                            <input minlength="2" maxlength="30" class="required" type="text" id="lastName" name="lastName" Placeholder="Last Name">
+                            <span id="lastname_validate" class="field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email*</label>
+                        <input type="email" id="email" name="email" Placeholder="name@email.com" class="required validate-email">
+                        <span id="email_validate" class="field-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="company">Company Name</label>
+                        <input type="text" id="company" name="company">
+                        <span id="company_validate" class="field-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="country">Country*</label>
+                        <select class="form_country" name="country_id"  disabled="true"  aria-required="true" aria-invalid="false"><option data-title="United States" value="US" >United States</option></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="address">Address*</label>
+                        <div class="address-line-one">
+                            <input type="text" id="addressLine1"  Placeholder="Address" class="required">
+                            <span id="address1_validate" class="field-error"></span><br>
+                        </div>
+                        <div class="address-line-two">
+                            <input type="text" id="addressLine2" name="addressLine2" >
+                            <span id="address2_validate" class="field-error"></span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="city">City*</label>
+                            <input type="text" id="city" name="city" Placeholder="City" class="required">
+                            <span id="city_validate" class="field-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="state">State</label>
+                            <select id="state" name="state">
+                            <?php foreach ($states as $key => $stateCode): ?>
+                            <?php if (strlen($stateCode) == 2): ?>
+                                    <option data-title="<?= $stateCode ?>"><?= $stateCode ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipCode">ZIP Code*</label>
+                            <input type="text" id="zipCode" name="zipCode"  Placeholder="Zip Code" class="required">
+                            <span id="zip_validate" class="field-error"></span>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Phone Number*</label>
+                            <input type="tel" id="phone" name="phone" Placeholder="Phone Number" class="required">
+                            <span id="phone_validate" class="field-error"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="ext">Ext</label>
+                            <input type="number" id="ext" name="ext">
+                        </div>
+                    </div>
+                    <div class="form-group" id="residence_checkbox">
+                        <input type="checkbox" value="residence" class="residence">
+                        <label class="residence_check">
+                            I'm shipping to a residence (Optional)
+                        </label>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn-address-cancel">CANCEL</button>
+                        <button disabled type="submit" class="btn-address-add">ADD</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<div class="address-validation-info" style="display: none;">
+    <div class="address-validation-info-title">Avoid delivery delays by using our verified shipping address.</div>
+    <div class="recommended-validated-addresses address-validation-container" tabindex="0">
+    </div>
+    <div class="original-validated-addresses address-validation-container" tabindex="0">
+    </div>
+</div>
+<script>
+    require(['personalAddressData'], function(personalAddressData) {
+        if (typeof (window.checkout) != 'undefined') {
+            document.title = 'My Account | FedEx Office';
+        }
+    });
+</script>
+

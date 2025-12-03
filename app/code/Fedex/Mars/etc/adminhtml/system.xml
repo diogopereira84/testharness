@@ -1,0 +1,90 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_Mars
+ * @copyright   Copyright (c) 2023 Fedex
+ * @author      Olimjon Akhmedov <olimjon.akhmedov.osv@fedex.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="mars_quote_identifier_d241246" translate="label" type="select" sortOrder="1800" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-241246 MARS quote identifier</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable to add content_type = 'QUOTE' field to quote JSON for MARS upload</comment>
+                </field>
+                <field id="mazegeeks_mars_b2743693" translate="label" type="select" sortOrder="1801" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks B-2743693 - MARS: Ecommerce to provide all JSON elements even if it is null</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="mars" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>Mars</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Mars::config_fedex_mars</resource>
+            <group id="general" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>General</label>
+                <field id="is_enabled" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Is Enabled</label>
+                    <comment/>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="api_url" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Api Url</label>
+                    <comment/>
+                </field>
+                <field id="api_max_tries" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Max tries</label>
+                    <comment>Number of time to call API before failure</comment>
+                </field>
+                <field id="success_codes" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Success Codes</label>
+                    <comment>Success codes from Mars (i.e. 200,201,100)</comment>
+                </field>
+                <field id="json_content" type="select" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Enable logging</label>
+                    <comment>Enable for troubleshooting</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="token" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>Token</label>
+                <field id="client_secret" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Client Secret</label>
+                    <comment/>
+                </field>
+                <field id="resource" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Resource</label>
+                    <comment/>
+                </field>
+                <field id="grant_type" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Grant Type</label>
+                    <comment/>
+                </field>
+                <field id="client_id" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Client Id</label>
+                    <comment/>
+                </field>
+                <field id="api_url" type="text" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Api Url</label>
+                    <comment/>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

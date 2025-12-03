@@ -1,0 +1,32 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**@var Fedex\PageBuilderPromoBanner\ViewModel\WidgetData $pageBuilderBannerWidget */
+$pageBuilderBannerWidget = $block->getData('promo_banner_widget');
+$pageBuilderBannerWidgetData = $pageBuilderBannerWidget->getWidgetById();
+$promoSliderScript = <<<script
+require(['jquery', 'promoslider'], function($){});
+script;
+
+?>
+<div class="widget-promo-banner-container" role="region" aria-label="carousel">
+    <?php if (empty($pageBuilderBannerWidgetData['block_id_for_mobile'])): ?>
+        <?php foreach ($pageBuilderBannerWidgetData as $key => $val): ?>
+            <div class="<?= $block->escapeHtmlAttr(str_replace('_', '-', $key)) ?>">
+            <?php $blockContent = $pageBuilderBannerWidget->getBlock($pageBuilderBannerWidgetData['block_id']) ?>
+                <?= /* @noEscape */ $blockContent ?>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <?php foreach ($pageBuilderBannerWidgetData as $key => $val): ?>
+            <div class="<?= $block->escapeHtmlAttr(str_replace('_', '-', $key)) ?>">
+                <?= /* @noEscape */ $pageBuilderBannerWidget->getBlock($val) ?>
+            </div>
+        <?php endforeach; ?>
+    <?php endif; ?>
+    <input type="hidden" value="<?= $block->escapeHtmlAttr($block->getUrl()) ?>couponcode" id="promoBaseUrl"/>
+</div>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $promoSliderScript, false); ?>

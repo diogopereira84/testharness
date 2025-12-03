@@ -1,0 +1,15 @@
+<?php
+    $viewModel = $block->getData("promo-banner-view-model");
+    $promoBannerUrl = $viewModel->getPromoBannerUrl();
+    $promoBannerIsNewTab = $viewModel->getPromoBannerIsNewTab();
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_Header/js/promo_banner_link": {
+                "promoBannerUrl": "<?= $promoBannerUrl?>",
+                "promoBannerIsNewTab": "<?= $promoBannerIsNewTab?>"
+            }
+        }
+    }
+</script>

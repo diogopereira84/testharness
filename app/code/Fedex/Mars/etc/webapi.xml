@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_Mars
+ * @copyright   Copyright (c) 2023 Fedex
+ * @author      Olimjon Akhmedov <olimjon.akhmedov.osv@fedex.com>
+ */
+-->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/fedex-mars/eventprocess/:id" method="GET">
+        <service class="Fedex\Mars\Api\OrderProcessInterface" method="getOrderJson"/>
+        <resources>
+            <resource ref="anonymous"/>
+        </resources>
+    </route>
+</routes>

@@ -1,0 +1,125 @@
+<?php
+/**
+ * @category Fedex
+ * @package Fedex_CatalogSearch
+ * @copyright Fedex (c) 2021.
+ * @author Iago Lima <ilima@mcfadyen.com>
+ */
+use Magento\Framework\App\Action\Action;
+
+?>
+<?php
+$helper = $this->helper('Fedex\Delivery\Helper\Data');
+/**
+ * Product list template
+ *
+ * @var $block \Fedex\CatalogSearch\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
+?>
+<?php if (!$_productCollection->count()):?>
+    <div class="noresult noresult--bg-red">
+        <div class="noresult__alert">
+            <div class="noresult__icon"></div>
+        </div>
+        <div class="noresult__content noresult--bg-white noresult--brdr-red">
+            <p class="noresult__message">
+                <?= $block->escapeHtml( __('We can\'t find products matching the selection.')) ?>
+            </p>
+            <a class="noresult__link" href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search')) ?></a>
+        </div>
+    </div>
+<?php else:?>
+    <?= $block->getToolbarHtml() ?>
+    <?= $block->getAdditionalHtml() ?>
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned() ?? 0;
+    ?>
+    <div class="loading-mask" style="display: none;" data-role="loader"><div class="loader" data-role="image"><img alt="Loading..." src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>"><p>Please wait...</p></div></div>
+    <div class="products wrapper <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+        <ol class="products list items product-items">
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <?php foreach ($_productCollection as $_product):?>
+                <?php $attributeSetId = $_product->getAttributeSetId();
+                $attribute_set_name = $helper->getProductAttributeName($attributeSetId);
+                ?>
+                <li class="item product product-item">
+                    <div class="product-item-info"
+                         id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                         data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                        <?php
+                        $productImage = $block->getImage($_product, $imageDisplayArea);
+                        if ($pos != null) {
+                            $position = 'left:' . $productImage->getWidth() . 'px;'
+                                . 'top:' . $productImage->getHeight() . 'px;';
+                        }
+                        ?>
+                        <?php // Product Image ?>
+                        <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                           class="product photo product-item-photo"
+                           tabindex="-1">
+                            <?= $productImage->toHtml() ?>
+                        </a>
+                        <div class="product details product-item-details">
+                            <?php
+                            $_productNameStripped = $block->stripTags($_product->getName(), null, true);
+                            ?>
+                            <strong class="product name product-item-name">
+                                <a class="product-item-link"
+                                   href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
+                                    <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?>
+                                </a>
+                            </strong>
+                        </div>
+                    </div>
+                    <?= strpos($pos, $viewMode . '-actions') ?
+                        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            $position,
+                            'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                        ) : '' ?>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <?= $block->getToolbarHtml() ?>
+    <?php if (!$block->isRedirectToCartEnabled()):?>
+        <script type="text/x-magento-init">
+        {
+            "[data-role=tocart-form], .form.map.checkout": {
+                "catalogAddToCart": {
+                    "product_sku": "<?= $escaper->escapeJs($_product->getSku()) ?>"
+                }
+            }
+        }
+        </script>
+    <?php endif; ?>
+<?php endif; ?>
+
+<script type="text/javascript">
+    let openIframe;
+    require(['product'], function(product) {
+        openIframe = product;
+    });
+</script>

@@ -1,0 +1,497 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    .qty-box {
+        label {
+            text-transform: uppercase;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        button {
+            border: none;
+            color: @fx-grey-500;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            padding: 8px 0;
+            font-size: 16px;
+            font-weight: 300;
+            line-height: 24px;
+            text-align: center;
+            height: auto;
+            width: 60px;
+
+            &:disabled {
+                background: @fx-grey-700;
+                opacity: 0.5;
+            }
+        }
+
+        button {
+            background: @fx-white-100;
+            padding: 8px;
+            &.disabled-qty {
+                background: @fx-grey-700;
+                opacity: 0.5;
+            }
+        }
+
+        .qty-group {
+            border: 1px solid @fx-grey-100;
+        }
+    }
+
+    .page-layout-third-party-product-full-width {
+        .content-wrapper {
+            display: flex;
+
+            .product-info-main {
+                box-sizing: border-box;
+                width: 100%;
+
+                hr {
+                    border-top: 1px solid #e3e3e3;
+                }
+
+                .product-options {
+                    .product-add-form {
+                        padding-top: 0;
+                    }
+                }
+
+                .product-options-wrapper {
+                    .swatch-opt {
+                        margin: 0;
+                    }
+                    .swatch-attribute {
+                        padding: 16px 0;
+
+                        .swatch-attribute-options {
+                            margin: 0;
+                            margin-top: 16px;
+                        }
+
+                        &:last-child {
+                            padding-bottom: 32px;
+                        }
+                    }
+                }
+
+                >div {
+                    .preferred-provider {
+                        align-items: center;
+                        display: flex;
+                        line-height: 24px;
+                        margin-bottom: 24px;
+
+                        .shop-id {
+                            color: #4D148C;
+                            font-family: "FedEx Sans Bold";
+                            font-size: 14px;
+                            font-weight: bold;
+                            letter-spacing: 0;
+                            line-height: 24px;
+                        }
+
+                        .tooltip-area {
+                            align-items: center;
+                            display: flex;
+                            position: relative;
+
+                            &:hover .tooltip-box {
+                                display: block;
+                            }
+
+                            img {
+                                height: 16px;
+                                margin-left: 8px;
+                                transform: translateY(-1.5px);
+                                width: 16px;
+                            }
+
+                            .tooltip-box {
+                                background-color: @fx-white-100;
+                                box-shadow: 0 2px 6px 1px rgba(47, 64, 71, 0.3);
+                                box-sizing: border-box;
+                                display: none;
+                                font-family: "FedEx Sans Light";
+                                padding: 10px;
+                                position: absolute;
+                                z-index: 1;
+
+                                &::before {
+                                    background-color: @fx-white-100;
+                                    content: "";
+                                    height: 12px;
+                                    position: absolute;
+                                    transform: translateY(-50%) rotate(-45deg);
+                                    width: 12px;
+                                }
+                            }
+                        }
+                    }
+
+                    .mt-0.mb-0 {
+                        margin-bottom: 20px;
+                    }
+
+                    .product-description {
+                        h2 {
+                            margin-bottom: 20px;
+                            margin-top: 0;
+                        }
+
+                        ul {
+                            color: @fx-grey-1200 !important;
+                            font-family: "FedEx Sans Regular";
+                            font-size: 18px;
+                            letter-spacing: 0;
+                            line-height: 28px;
+                            padding-left: 30px !important;
+
+                            li span {
+                                color: @fx-grey-1200 !important;
+                                font-size: 16px;
+                            }
+                            li {
+                              margin-bottom: 1rem !important;
+                            }
+                        }
+
+                        p {
+                            color: @fx-grey-1200;
+                            font-family: "FedEx Sans Regular";
+                            letter-spacing: 0;
+                            line-height: 26px;
+                            > span {
+                                font-size: 16px
+                            }
+                        }
+                    }
+
+                    #config-accordion {
+                        display: none;
+                    }
+                }
+                .swatch-attribute-label {
+                    color: #333333;
+                    font-family: 'FedEx Sans Bold';
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.75px;
+                }
+                .swatch-attribute-selected-option {
+                    display: none;
+                }
+
+                .swatch-attribute.color {
+                    .swatch-option.color::before {
+                        content: '';
+                        position: relative;
+                        display: inline-block;
+                        width: 24px;
+                        height: 24px;
+                        background-color: var(--swatch-color);
+                        border: 1px solid #F2F2F2;
+                    }
+                }
+
+                .swatch-option {
+                    background-color: white !important;
+                    border-color: rgba(227, 227, 227, 1);
+                    box-shadow: none;
+                    font-family: 'FedEx Sans Light';
+                    font-weight: 300;
+                    font-size: 16px;
+                    line-height: 24px;
+                    color: rgba(0, 0, 0, 0.75);
+                    padding: 12px;
+                    min-width: auto;
+                    height: auto;
+                    margin-right: 8px;
+                    outline: none;
+                    display: flex;
+                    gap: 8px;
+
+                    &.disabled {
+                        border-color: @fx-grey-350;
+                        color: @fx-grey-100;
+                        background-color: @fx-grey-600 !important;
+                        pointer-events: auto;
+                        cursor: help;
+
+                        &:after {
+                            background: unset;
+                        }
+                    }
+
+                    &.image::after,
+                    &.color::after {
+                        content: attr(data-option-label);
+                        position: relative;
+                        background: unset;
+                    }
+
+                    &.image::before {
+                        content: '';
+                        background-image: var(--bg-image);
+                        position: relative;
+                        display: inline-block;
+                        width: 24px;
+                        height: 24px;
+                        border: 1px solid #F2F2F2;
+                    }
+
+                    &.selected {
+                        border-color: rgba(77, 20, 140, 1);
+                    }
+                }
+
+                .price-box {
+                    span.price {
+                        display: unset;
+                        width: unset;
+                    }
+
+                    .price-area {
+                        display: flex;
+
+                        .price-warning {
+                            text-align: start;
+                        }
+
+                        .prices {
+                            min-width: 200px;
+
+                            .strike-through {
+                                margin-left: 2px;
+                                margin-right: 5px;
+                            }
+
+                            .you-saved {
+                                font-family: "FedEx Sans Bold";
+                                margin-top: 20px;
+                            }
+                        }
+                    }
+
+                }
+
+                .file-upload-container {
+                    margin-top: 30px;
+
+                    input[type=button] {
+                        border-radius: unset;
+                        box-sizing: border-box;
+                        cursor: pointer;
+                        font-family: "FedEx Sans Bold";
+                        font-size: 19px;
+                        height: 56px;
+                        text-transform: uppercase;
+                        width: 100%;
+
+                        &.btn-primary {
+                            background-color: @fx-orange-500;
+                            border: unset;
+                            color: white;
+                            &.disabled-button {
+                                background: @fx-grey-700;
+                                color: @fx-grey-100;
+                                cursor: not-allowed;
+                                pointer-events: none;
+                                border-color: @fx-grey-700;
+                            }
+                        }
+
+                        &.btn-secondary {
+                            background-color: transparent;
+                            border: 2px solid @fx-orange-500;
+                            color: @fx-orange-500;
+                        }
+                    }
+                }
+            }
+        }
+        .swatch-option-tooltip {
+            border: none;
+            box-shadow: 0px 2px 6px 0px rgba(71, 25, 25, 0.3);
+            box-sizing: border-box;
+            max-width: 307px;
+            padding: 16px;
+            z-index: 800;
+
+            .title {
+                color: @fx-grey-500;
+                text-align: left;
+
+            }
+            .corner {
+                &:before {
+                    border-color: rgba(71, 25, 25, 0.15) transparent transparent transparent;
+                    top: 4px;
+                }
+                &:after {
+                    top: 2px;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Desktop (styles-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+    .page-layout-third-party-product-full-width {
+        .content-wrapper {
+            .product-info-main {
+                .price-box {
+                    .price-area {
+                        justify-content: space-between;
+
+                        .price-warning {
+                            max-width: 390px;
+                            order: 0;
+                        }
+                    }
+                }
+
+                .product-description {
+                    ul {
+                        li span {
+                            font-size: 18x !important;
+                        }
+                    }
+
+                    p {
+                        > span {
+                            font-size: 18px !important
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    .page-layout-third-party-product-full-width {
+        .content-wrapper {
+            .product-info-main {
+                >div {
+                    .preferred-provider {
+                        .tooltip-area {
+                            .tooltip-box {
+                                left: 26px;
+                                width: 375px;
+
+                                &::before {
+                                    left: -6px;
+                                    top: 50%;
+                                }
+                            }
+                        }
+                    }
+                }
+                .price-box {
+                    .price-area {
+                        justify-content: space-between;
+
+                        .price-warning {
+                            transform: translateY(-6px);
+                        }
+
+                        .prices:not(.unit-cost-toggle) {
+                            transform: translateY(-40px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    .page-layout-third-party-product-full-width {
+        .content-wrapper {
+            .product-info-main {
+                >div {
+                    .preferred-provider {
+                        .tooltip-area {
+                            .tooltip-box {
+                                left: -190px;
+                                top: 18px;
+                                width: 290px;
+
+                                &::before {
+                                    right: 77px;
+                                    top: 0;
+                                }
+                            }
+                        }
+                    }
+                    .product-description {
+                        p, li span {
+                            font-size: 16px;
+                            line-height: 24px;
+                        }
+                    }
+                }
+
+                .price-box {
+                    .price-area {
+                        justify-content: space-between;
+
+                        .price-warning {
+                            margin-bottom: 20px;
+                            margin-top: 30px;
+                        }
+
+                        .prices {
+                            transform: translateY(-15px);
+                        }
+
+                        .prices.unit-cost-toggle {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__xs) {
+    .page-layout-third-party-product-full-width {
+        .content-wrapper {
+            .product-info-main {
+
+                .price-box {
+                    .starting-at {
+                        font-size: 18px;
+                    }
+
+                    .price-area {
+                        flex-direction: column;
+                        justify-content: unset;
+
+                        .price-warning {
+                            margin-bottom: unset;
+                            margin-top: 24px;
+                            order: 2;
+                        }
+
+                        .prices {
+                            margin-top: 20px;
+                            transform: unset;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

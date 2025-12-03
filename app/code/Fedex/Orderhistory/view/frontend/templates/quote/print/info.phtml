@@ -1,0 +1,75 @@
+<?php
+/**
+ * B-1058846 - Print Quote Receipt
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php /** @var $block \Magento\NegotiableQuote\Block\Quote\Info */?>
+<?php $quote = $block->getQuote()?>
+<?php $snapshot = $block->getQuote(true)?>
+<?php $addresses = $block->getAllAddresses()?>
+<?php $orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+$isModuleEnabled = $orderHistoryHelper->isModuleEnabledForPrint();
+?>
+<div class="block block-order-details-view quote-shipping-info">
+    <div class="block-title">
+   <!-- B-1148619 Print Quote Receipt -->
+    <?php if ($orderHistoryHelper->isEnhancementEnabledForPrint()): ?>
+            <div class="query-order"><?=$block->escapeHtml(__('Questions about your order?'))?></div>
+            <div class="cc-no"><?=$block->escapeHtml(__('Call 1.800.GoFedEx or 1.800.463.3339'))?></div>
+        <?php else: ?>
+            <strong><?=$block->escapeHtml(__('Shipping Information'))?></strong>
+        <?php endif;?>
+    </div>
+    <div class="block-content">
+        <div class="box box-order-billing-address">
+            <div class="box-content">
+                <div class="box box-shipping-address">
+                    <strong class="box-title">
+                        <span><?=$block->escapeHtml(__('Shipping/Pickup Address'))?></span>
+                    </strong>
+                    <div class="box-content">
+                        <?php if ($addressHtml = $block->getAddressHtml()): ?>
+                            <address>
+                                <?=/* @noEscape */$addressHtml?>
+                            </address>
+                        <?php else: ?>
+                            <p><?=$block->escapeHtml(__('You have no shipping address for this quote.'))?></p>
+                        <?php endif?>
+                    </div>
+                </div>
+                <div class="box box-order-shipping-method">
+                    <strong class="box-title">
+                        <span><?=$block->escapeHtml(__('Shipping Method'))?></span>
+                    </strong>
+                    <div class="box-content">
+                        <?php if ($isModuleEnabled): ?>
+                        <?php if ($snapshot->getShippingDescription()
+                        && $snapshot->getShippingMethod() != 'fedexshipping_PICKUP'): ?>
+                            <?=$block->escapeHtml($snapshot->getShippingDescription())?>
+                        <?php else: ?>
+                            <?=$block->escapeHtml(__('No Shipping Information Available'))?>
+                        <?php endif;?>
+                        <?php else: ?>
+                            <?php if ($snapshot->getShippingDescription()): ?>
+                                <?=$block->escapeHtml($snapshot->getShippingDescription())?>
+                            <?php else: ?>
+                                <?=$block->escapeHtml(__('No Shipping Information Available'))?>
+                            <?php endif;?>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- B-1148619 Print Quote Receipt -->
+<?php if ($isModuleEnabled): ?>
+<style type="text/css" >
+    .copyright {
+       display:none;
+    }
+</style>
+<?php endif;?>

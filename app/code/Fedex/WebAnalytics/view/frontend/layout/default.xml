@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+        <referenceBlock name="require.js">
+            <block class="Fedex\WebAnalytics\Block\AppDynamics" name="app_dynamics_head_script" template="Fedex_WebAnalytics::appdynamics.phtml"/>
+        </referenceBlock>
+		<referenceContainer name="header.container">
+			<block name="forsta" template="Fedex_WebAnalytics::forsta_script.phtml" before="-">
+				<arguments>
+					<argument name="forsta_view_model" xsi:type="object">Fedex\WebAnalytics\ViewModel\Data</argument>
+				</arguments>
+			</block>
+		</referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block name="nuance" template="Fedex_WebAnalytics::nuance.phtml" after="-">
+                <arguments>
+                    <argument name="nuance_view_model" xsi:type="object">Fedex\WebAnalytics\Model\Nuance</argument>
+                </arguments>
+            </block>
+            <block name="wa_extra_scripts" template="Fedex_WebAnalytics::extra_scripts.phtml" after="-">
+                <arguments>
+                    <argument name="webanalytics_viewmodel" xsi:type="object">Fedex\WebAnalytics\ViewModel\GeneralWebAnalytics</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+	</body>
+</page>

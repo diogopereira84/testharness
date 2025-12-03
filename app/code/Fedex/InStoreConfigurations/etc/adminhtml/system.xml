@@ -1,0 +1,156 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_InStoreConfigurations
+ * @copyright   Copyright (c) 2024 Fedex
+ * @author      Eduardo Oliveira
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="instore_toggle_configuration" translate="label" sortOrder="1002" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>InStore Configuration</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="instore_group_toggles" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>InStore Configuration</label>
+                <field id="instore_section_enable_xbehalfof_graphql" translate="label" type="select" sortOrder="70" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - Enable X-On-Behalf-Of header requirement</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_section_adobe_livesearch_custom_shared_catalog_id" translate="label" type="text" sortOrder="105" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - Custom Shared Catalog ID on Adobe Livesearch</label>
+                </field>
+                <field id="instore_section_fix_place_order_retry" translate="label" type="select" sortOrder="130" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - Fix Place Order Retry</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="status_mapping" translate="label" sortOrder="150" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Instore-Order Search Request-Status Mapping</label>
+                    <frontend_model>Fedex\InStoreConfigurations\Block\Adminhtml\Form\Field\StatusMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="shipment_mapping" translate="label" sortOrder="160" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Instore-Order Search Request-Shipment Mapping</label>
+                    <frontend_model>Fedex\InStoreConfigurations\Block\Adminhtml\Form\Field\StatusMapping</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="instore_section_checkout_retry_improvement_enabled" translate="label" type="select" sortOrder="140" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - B-2066936 - Enable Checkout Retry Improvement</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_rate_quote_product_association_enabled" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>InStore - D-182978 - Unable to add product to cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_add_or_update_due_date_enabled" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>InStore - B-2185746 - Add Or Update Due Date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_add_or_update_fedex_account_number_enabled" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>InStore - B-2197948 - Add Or Update Fedex Account Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_support_lte_identifier_enabled" translate="label" type="select" sortOrder="140" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-515744 Magento Support for LTE (Local Tax Exemption) Handling for FUSE Print Order Entry</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_delivery_dates_fields_for_fuse" translate="label" type="select" sortOrder="145" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Tiger - B-2423263 - Delivery Date Fields for Local Delivery and Shipment in FUSE</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_section_add_notes" translate="label" type="select" sortOrder="160" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - Add Notes Mutation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_fedex_log_to_newrelic" translate="label" type="select" sortOrder="170" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Log GraphQL Headers to New Relic</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_fedex_log_to_newrelic_headers" translate="label" type="textarea" sortOrder="180" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Log GraphQL Header Codes to New Relic</label>
+                    <comment>Add header values as comma separated.</comment>
+                </field>
+                <field id="instore_newrelic_graphql_mutations_list" translate="label" type="multiselect" sortOrder="190" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Log GraphQL Headers to New Relic</label>
+                    <source_model>Fedex\InStoreConfigurations\Model\Config\Source\GraphQLMutationsList</source_model>
+                    <comment>Select the GraphQL Mutations List to be logged in New Relic</comment>
+                </field>
+                <field id="instore_handle_raq_timeout_error_enabled" translate="label" type="select" sortOrder="200" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>InStore - B-2163634 - Handle RAQ Timeout Error</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_fedex_shipment_service_type_enable" translate="label" type="select" sortOrder="220" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>B-2236404 - Ronin - External Delivery and Local Delivery Enable/Disable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_fedex_shipment_service_types" translate="label" sortOrder="240" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>B-2236404 - Ronin - External Delivery and Local Delivery</label>
+                    <frontend_model>Fedex\InStoreConfigurations\Block\Adminhtml\Form\Field\ServiceTypes</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+                <field id="instore_fedex_estimated_subtotal_fix_enabled" translate="label" type="select" sortOrder="250" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>D-181981 - Estimated subtotal still remains when product is removed on Order summary page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_fedex_delivery_pricing_fix_enabled" translate="label" type="select" sortOrder="260" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>B-2316488 - Ronin - Order Delivery API - Cart Pricing Details</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_user_cannot_perform_cart_operations_fix_enabled" translate="label" type="select" sortOrder="280" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>D-201267 - Ronin - User Cannot Perform Cart Operation Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_unable_to_place_orders" translate="label" type="select" sortOrder="290" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>D-207730 - Unable to place orders due to removed preference</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_empty_token_error" translate="label" type="select" sortOrder="300" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>D-194457 - Token Error in report.critical</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_due_date_update" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - E-497765 Order Edit MVP - Change Due Date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_newrelic_get_all_quotes" translate="label" type="select" sortOrder="290" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Log GraphQL Headers X-PARENT-SPAN-ID to New Relic for getAllQuotes</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Add the x-parent-span-id analytics header to getAllQuotes mutation only due to call volume.</comment>
+                </field>
+                <field id="instore_filter_get_all_quotes" translate="label" type="select" sortOrder="290" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Tiger Team - D-226090 - Filter out getAllQuotes</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to filter the negotiable quotes based on its presence in the quote integration entity</comment>
+                </field>
+                <field id="instore_add_ship_by_date_to_due_date" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - B-2638281 Modify updateOrderDelivery Mutation for Ship By Date Edit</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to add due date on updateOrderDelivery mutation</comment>
+                </field>
+                <field id="instore_add_political_disclosure_to_order_search" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - B-2617120 - FUSE integration: update GraphQL query orderSearchRequest</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to political disclosure info to orderSearchRequest query</comment>
+                </field>
+                <field id="instore_add_political_disclosure_to_place_order" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - B-2617120 - FUSE integration: update GraphQL mutation placeOrder (EPRO and Commercial/Retail Washington State Political Enhancement)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to add political disclosure in placeOrder mutation</comment>
+                </field>
+                <field id="instore_fuse_shipping_discount" translate="label" type="select" sortOrder="300" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Tiger Team - D-233969 [HIGH] FUSE Local Delivery Discount Not Applied When Using CAS Account (PUD/Shipping Delivery)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to apply shipping discount in Fuse</comment>
+                </field>
+                <field id="instore_fuse_save_lte_identifier" translate="label" type="select" sortOrder="300" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-242127 Order Flow:  Tax is not reflecting as 0 on Order Summary Page | FUSE L3 and L6</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this to save lte identifier in quote</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

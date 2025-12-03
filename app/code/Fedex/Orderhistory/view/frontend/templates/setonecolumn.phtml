@@ -1,0 +1,137 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+$viewModel = $block->getData('view_model');
+$setonecol = $viewModel->isSetOneColumn();
+$setonecolretail = $viewModel->isSetOneColumnRetail();
+$setSdeProfileTrue = $viewModel->isSdeStoreEnabled();
+$isSelfRegCustomerWithFclEnabled = $viewModel->isSelfRegCustomerWithFclEnabled();
+$loginType = $viewModel->getLoginType();
+$currentActionName = $block->getRequest()->getFullActionName();
+$setOneColRetailReOrder = $viewModel->isSetOneColumnRetailReOrder();
+$setTwoColEproReOrder = $viewModel->isSetTwoColumnEproReOrder();
+
+//B-1501794
+$isSelfRegCompany = $viewModel->isSelfRegCompany();
+$isEnhancementClass = $viewModel->isEnhancementClass();
+$isRetailEnhancementClass = $viewModel->isRetailEnhancementClass();
+
+// B-1160912 - Print the screen of view order and view quote via Ctrl+P
+$enableCtrlPFunctionality = $viewModel->helper->enableCtrlPFunctionality();
+
+/** @var \Fedex\EnvironmentManager\ViewModel\ToggleConfig $fclLogin */
+$toggleConfig = $block->getData('toggle_config');
+
+$isEproCustomer = $viewModel->isEproCustomer();
+
+//B-1856293
+$getCurrentUrl = $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+$urlContent = 'sales/order/view';
+
+$isPrintUrl = true;
+if (strpos($getCurrentUrl, $urlContent) !== false) {
+    $isPrintUrl = false;
+}
+
+if ($setonecol) { ?>
+	<?php if(!$isEproCustomer || !$isPrintUrl || $setSdeProfileTrue): ?>
+    	<div class="epro-order-history"></div>
+	<?php endif; ?>
+	<?php if ($isEnhancementClass):?>
+		<div class="epro-order-history-enhancement"></div>
+		<script type="text/javascript">
+            require(['jquery'], function($){
+				$(document).ready(function($) {
+					$("span.show-detail").attr('tabindex', 0);
+				});
+				$(document).ajaxComplete(function() {
+					setTimeout(function(){
+						var i=0;
+						$(".action-menu-item").each(function () {
+							$(this).attr("aria-label", "View Link "+i);
+							i++;
+						});
+					}, 5000);
+				});
+            });
+		</script>
+	<?php endif;?>
+	<?php if (!$setSdeProfileTrue && !$isSelfRegCustomerWithFclEnabled): ?>
+    <script>
+    	require([ 'jquery'], function($){
+    		$(document).ready(function($) {
+				<?php if($isEproCustomer && $isPrintUrl): ?>
+					$('body').addClass("page-layout-2columns-left");
+    				$('body').removeClass("page-layout-1column");
+				<?php else: ?>
+					$('body').removeClass("page-layout-2columns-left");
+					$('body').addClass("page-layout-1column");
+				<?php endif; ?>
+		    });
+	    });
+    </script>
+	<?php endif;?>
+	<?php if ($setTwoColEproReOrder && !$setSdeProfileTrue && $currentActionName == "sales_order_history"): ?>
+	    <script>
+	    	require([ 'jquery'], function($){
+	    		$(document).ready(function($) {
+	    			$('body').removeClass("page-layout-1column");
+	    			$('body').addClass("page-layout-2columns-left");
+
+	    			$('.sidebar.sidebar-main li.nav.item').find('span, a').each(function() {
+					    var element = $(this);
+					    // B-1501794
+					    <?php if($loginType == 'FCL' && $isSelfRegCompany):?>
+							if (element.text() == "Roles and Permissions") {
+								element.parent().remove();
+							}
+					    <?php elseif ($isSelfRegCompany): ?>
+                        if (element.text() == "Roles and Permissions") {
+                            element.parent().remove();
+                        }
+					    <?php endif;?>
+					});
+			    });
+		    });
+	    </script>
+	<?php endif;?>
+<?php } elseif ($setonecolretail) { ?>
+	<div class="retail-order-history"></div>
+    <?php if ($isRetailEnhancementClass): ?>
+		<div class="retail-order-history-enhancement"></div>
+	<?php endif;?>
+	<?php if (!$setOneColRetailReOrder && $currentActionName == "sales_order_history"): ?>
+	    <script>
+	    	require([ 'jquery'], function($){
+	    		$(document).ready(function($) {
+	    			$('body').removeClass("page-layout-2columns-left");
+	    			$('body').addClass("page-layout-1column");
+			    });
+		    });
+	    </script>
+	<?php endif;?>
+<?php } ?>
+<?php
+	// B-1160912 - Print the screen of view order and view quote via Ctrl+P
+	if($enableCtrlPFunctionality):
+		$printUrl = $viewModel->helper->getPrintUrl();
+?>
+<script>
+	window.addEventListener('keydown', function(event) {
+		if (event.keyCode === 80 &&
+		(event.ctrlKey || event.metaKey)
+		&& !event.altKey
+		&& (!event.shiftKey || window.chrome || window.opera)) {
+			window.location.href = '<?= $printUrl; ?>';
+			event.preventDefault();
+			if (event.stopImmediatePropagation) {
+				event.stopImmediatePropagation();
+			} else {
+				event.stopPropagation();
+			}
+			return;
+		}
+	}, true);
+</script>
+<?php endif;?>

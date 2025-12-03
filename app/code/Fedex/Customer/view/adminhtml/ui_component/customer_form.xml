@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <dataSource name="customer_form_data_source">
+        <settings>
+            <submitUrl path="customer/index/savepermissions"/>
+        </settings>
+    </dataSource>
+    <fieldset name="customer">
+        <field name="customer_status" component="Fedex_Customer/js/Status"></field>
+        <field name="extension_attributes.assistance_allowed" component="Fedex_Customer/js/RemoteAssistance"></field>
+    </fieldset>
+    <htmlContent name="userpermissions_content">
+        <block class="Fedex\Customer\Block\Adminhtml\Edit\Tab\UserPermissionsTab" name="user_permissions_tab" template="Fedex_Customer::tab/user_permissions_tab_view.phtml">
+            <arguments>
+                <argument name="sort_order" xsi:type="number">30</argument>
+                <argument name="tab_label" xsi:type="string" translate="true">User Permissions</argument>
+            </arguments>
+            <block class="Fedex\SelfReg\Block\User\Search" name="customer_permissions_search" template="Fedex_Customer::tab/view/customer_user_permissions.phtml"/>
+        </block>
+    </htmlContent>
+</form>

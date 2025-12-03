@@ -1,0 +1,69 @@
+<?php
+/**
+ * @var \Fedex\MarketplaceAdmin\Block\Sales\Order\View\Items\Column\Mirakl $block
+ * @var \Mirakl\Connector\Helper\Tax $taxHelper
+ */
+$item = $block->getItem();
+$order = $item->getOrder();
+$taxHelper = $this->helper('Mirakl\Connector\Helper\Tax');
+
+?>
+<?php if (!$item->getMiraklShopId()): ?>
+    <?php echo __('N/A') ?>
+<?php else:
+    $mirakShippingLabel = $block->getCustomShippingTypeLabel($order, $item);
+    ?>
+    <dl class="item-options">
+        <dt><strong><?php echo __('Offer: ') ?></strong></dt>
+        <dd><?php echo $item->getMiraklOfferId() ?></dd>
+
+        <dt><strong><?php echo __('Shop: ') ?></strong></dt>
+        <dd><?php echo $item->getMiraklShopName() ?> (<?php echo $item->getMiraklShopId() ?>)</dd>
+
+        <dt class="nobr"><strong><?php echo __('Shipping Type: ') ?></strong></dt>
+        <dd><?php echo $mirakShippingLabel ?></dd>
+
+        <dt class="nobr"><strong><?php echo __('Shipping Charges: ') ?></strong></dt>
+        <dd>
+            <?php if ($taxHelper->displaySalesShippingBoth() || $taxHelper->displaySalesShippingExclTax()): ?>
+                <div class="price-excl-tax">
+                    <?php if ($taxHelper->displaySalesShippingBoth()): ?>
+                        <span class="label"><?php /* @escapeNotVerified */ echo __('Excl. Tax'); ?>:</span>
+                    <?php endif; ?>
+
+                    <?php echo $order->formatBasePrice($block->getItemBaseShippingPriceExclTax()) ?>
+
+                    <?php if ($order->isCurrencyDifferent()): ?>
+                        [<?php echo $order->formatPrice($block->getItemShippingPriceExclTax()) ?>]
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
+
+            <?php if ($taxHelper->displaySalesShippingBoth() || $taxHelper->displaySalesShippingInclTax()): ?>
+                <div class="price-incl-tax">
+                    <?php if ($taxHelper->displaySalesShippingBoth()): ?>
+                        <span class="label"><?php /* @escapeNotVerified */ echo __('Incl. Tax'); ?>:</span>
+                    <?php endif; ?>
+
+                    <?php echo $order->formatBasePrice($block->getItemBaseShippingPriceInclTax()) ?>
+
+                    <?php if ($order->isCurrencyDifferent()): ?>
+                        [<?php echo $order->formatPrice($block->getItemShippingPriceInclTax()) ?>]
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
+
+            <?php if ($item->getMiraklBaseShippingTaxAmount()): ?>
+                <div class="tax-amount">
+                    <span class="label"><?php echo __('Tax'); ?>:</span>
+
+                    <?php echo $order->formatBasePrice($item->getMiraklBaseShippingTaxAmount()) ?>
+
+                    <?php if ($order->isCurrencyDifferent()): ?>
+                        [<?php echo $order->formatPrice($item->getMiraklShippingTaxAmount()) ?>]
+                    <?php endif ?>
+                </div>
+            <?php endif ?>
+        </dd>
+    </dl>
+<?php endif ?>

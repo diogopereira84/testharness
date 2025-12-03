@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_postdispatch_sales_order_history">
+        <observer name="add_body_class" instance="Fedex\Orderhistory\Observer\AddBodyClassObserver"/>
+    </event>
+    <event name="controller_action_postdispatch_sales_order_view">
+        <observer name="add_body_class_selfreg" instance="Fedex\Orderhistory\Observer\AddBodyClassObserverSelfreg"/>
+    </event>
+    <event name="controller_action_postdispatch_shared_order_history">
+        <observer name="add_body_class_marketplace_history" instance="Fedex\Orderhistory\Observer\AddBodyClassObserver"/>
+    </event>
+</config>

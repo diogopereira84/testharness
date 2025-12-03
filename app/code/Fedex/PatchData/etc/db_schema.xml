@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework/Setup/Declaration/Schema/etc/db_schema.xsd">
+    <table name="fxo_patch_list" resource="default" engine="innodb" comment="List of Executed Patches">
+        <column name="patch_id" xsi:type="int" nullable="false" identity="true" unsigned="true" comment="Patch ID"/>
+        <column name="patch_name" xsi:type="varchar" nullable="false" length="255" comment="Patch Name"/>
+        <column name="patch_status" xsi:type="smallint" nullable="false" default="0" comment="Patch Status (0 = pending, 1 = executed, 2 = removed)"/>
+        <column name="created_at" xsi:type="timestamp" nullable="false" default="CURRENT_TIMESTAMP" comment="Created At"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false" on_update="true" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="patch_id"/>
+        </constraint>
+        <index referenceId="FXO_PATCH_LIST_PATCH_NAME_IDX">
+            <column name="patch_name"/>
+        </index>
+    </table>
+</schema>

@@ -1,0 +1,109 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Fedex\SelfReg\Block\User\Search $block */
+$permissions = $block->getCustomerRolePermissions();
+$customerPermissons = $block->getCustomerPermissions();
+$emailAllowEmailDenyIds = [
+    $block->getManageruserEmailAllow($permissions), $block->getManageruserEmailDeny($permissions)
+];
+$emailDenyEmailAllowIds = array_reverse($emailAllowEmailDenyIds);
+$emailAllowStr = implode(",", $emailAllowEmailDenyIds);
+$emailDenyStr = implode(",", $emailDenyEmailAllowIds);
+$isManagedUsersSelected = false;
+$isEmailAllowSelected = array_key_exists((int) $emailAllowStr, $customerPermissons);
+$isEmailDenySelected = array_key_exists((int) $emailDenyStr, $customerPermissons);
+?>
+<div class="fieldset-wrapper customer-user-permissions">
+    <div class="fieldset-wrapper-title">
+        <span class="title"><?= $escaper->escapeHtml(__('User Permissions')) ?></span>
+    </div>
+    <div class="admin__fieldset-wrapper-content">
+        <fieldset class="admin__fieldset">
+            <fieldset class="admin__field">
+                <legend class="admin__field-label">
+                    <span class="admin-permissions-bold"><?= $escaper->escapeHtml(__('Admin Permissions')) ?></span>
+                </legend>
+                <div class="admin__field-control admin-permissions-options-container">
+                    <?php foreach ($permissions as $permission): ?>
+                        <?php if ($permission->getSortOrder() > 0): ?>
+                            <?php
+                            $permissionLabel = $permission->getLabel();
+                            $permissionLabel = explode("::", $permissionLabel);
+                            $label = $permissionLabel[0] ?? "";
+                            $code = $permissionLabel[1] ?? "";
+                            $toolTip = $permission->getTooltip();
+                            $permissionId = $permission->getId();
+                            $isChecked = array_key_exists($permissionId, $customerPermissons);
+                            if ($label === "Manage Users" && $isChecked) {
+                                $isManagedUsersSelected = true;
+                            }
+                            ?>
+                            <div class="admin-permissions-option">
+                                <div class="admin__field admin__field-option">
+                                    <input type="checkbox"
+                                        class="admin__control-checkbox"
+                                        data-form-part="customer_form"
+                                        name="user_permissions[<?= $escaper->escapeHtmlAttr($permissionId) ?>]"
+                                        id="admin-permissions-option-<?= $escaper->escapeHtmlAttr($code) ?>"
+                                        <?= $isChecked ? 'checked' : '' ?> />
+                                    <label class="admin__field-label"
+                                        for="admin-permissions-option-<?= $escaper->escapeHtmlAttr($code) ?>">
+                                        <span><?= $escaper->escapeHtml($label) ?></span>
+                                    </label>
+                                </div>
+                                <div class="admin__field-tooltip admin-permissions-tooltip">
+                                    <a class="admin__field-tooltip-action action-help" target="_blank" tabindex="1">
+                                        <span><?= $escaper->escapeHtml(__('What is this?')) ?></span>
+                                    </a>
+                                    <div class="admin-permissions-tooltip-content">
+                                        <?= $escaper->escapeHtml($toolTip) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+            <fieldset class="admin__field site-access-approval-email-section"
+                style="<?= $escaper->escapeHtml($isManagedUsersSelected ? '' : 'display: none;') ?>">
+                <legend class="admin__field-label site-approval-email-legend">
+                    <span class="admin-permissions-bold site-approval-email-title">
+                        <?= $escaper->escapeHtml(__(
+                            'Would you like this user to receive site access approval emails?'
+                        )) ?>
+                    </span>
+                </legend>
+                <div class="admin__field-control">
+                    <div>
+                        <div class="admin__field admin__field-option site-access-email-option">
+                            <input type="radio"
+                                class="admin__control-radio"
+                                data-form-part="customer_form"
+                                name="email_permission"
+                                value="<?= $escaper->escapeHtmlAttr($emailAllowStr) ?>"
+                                id="site-access-approval-email-option-yes"
+                                <?= $isEmailAllowSelected ? 'checked' : '' ?> />
+                            <label class="admin__field-label" for="site-access-approval-email-option-yes">
+                                <span><?= $escaper->escapeHtml('Yes') ?></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="admin__field admin__field-option">
+                            <input type="radio"
+                                class="admin__control-radio"
+                                data-form-part="customer_form"
+                                name="email_permission"
+                                value="<?= $escaper->escapeHtmlAttr($emailDenyStr) ?>"
+                                id="site-access-approval-email-option-no"
+                                <?= $isEmailDenySelected ? 'checked' : '' ?> />
+                            <label class="admin__field-label" for="site-access-approval-email-option-no">
+                                <span><?= $escaper->escapeHtml('No') ?></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </fieldset>
+    </div>
+</div>

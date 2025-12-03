@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="right.top.header.links">
+            <block class="Fedex\SSO\Block\RetailLoginInfo" ttl="0" name="header.top.fcl.login.new" after='trackOrderIcon.navbar'>
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="upload_to_quote_viewmodel" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" ifconfig="sso/general/is_enable" name="header.top.fcl.login.popup" template="Fedex_SSO::header/fcl_login_popup.phtml">
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" ifconfig="environment_toggle_configuration/environment_toggle/sgc_new_model_popup_order_submission" name="header.top.order.association" template="Fedex_SSO::header/order_association.phtml">
+                <arguments>
+                    <argument name="order_association" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" ifconfig="sso/general/is_enable" name="header.top.fcl.checkout.login.popup" template="Fedex_SSO::header/fcl_checkout_login_popup.phtml">
+                <arguments>
+                    <argument name="fcl_checkout_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="header.top.fcl.quote.login.popup" template="Fedex_SSO::header/quote_login_popup.phtml">
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="upload_to_quote" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="header.container" htmlClass="page-header wlgn-enable-page-header" />
+
+        <referenceContainer name="top.container">
+            <block class="Magento\Framework\View\Element\Template" ifconfig="sso/general/is_enable" name="header.top.fcl.error.popup" template="Fedex_SSO::header/login_error_popup.phtml" before="notification.banner">
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="header.top.fcl.fuse.error.popup" template="Fedex_FuseBiddingQuote::back_to_login_popup.phtml">
+                <arguments>
+                    <argument name="fusebidQuoteViewModal" xsi:type="object">Fedex\FuseBiddingQuote\ViewModel\FuseBidViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+        <referenceContainer name="page.wrapper">
+            <block class="Fedex\SSO\Block\RetailLoginInfo" ttl="0" name="header.top.fcl.login.new.mobile" after='trackOrderIcon.navbar'>
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="upload_to_quote_viewmodel" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <!--Add file to add session timeout logic for Retail and Epro to resolve product is missing issue in checkout-->
+        <referenceContainer name="before.body.end">
+            <block class="Fedex\SSO\Block\LoginInfo" name="session.timeout" template="Fedex_SSO::session_timeout.phtml">
+                <arguments>
+                    <argument name="session_timeout" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="toggle_config" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                </arguments>
+            </block>
+            <block name="session.timeout.modal" template="Fedex_SSO::session_timeout_modal.phtml" after="session.timeout">
+                <arguments>
+                    <argument name="session_config" xsi:type="object">Fedex\SSO\ViewModel\SessionTimeout</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <consumer name="createInvoiceMarketplaceOnlyOrders" queue="createInvoiceMarketplaceOnlyOrders" connection="amqp"
+              handler="Fedex\MarketplaceWebhook\Model\CreateInvoiceMarketplaceOnlyOrders::execute"/>
+    <consumer name="sendDeliveryNotification" queue="sendDeliveryNotification" connection="amqp"
+              handler="Fedex\MarketplaceWebhook\Model\SendDeliveryNotification::execute"/>
+
+    <consumer name="miraklWebhookProcessor" queue="miraklWebhookProcessor" connection="amqp"
+              handler="Fedex\MarketplaceWebhook\Model\OrderWebhookEnhancement::execute"/>
+</config>

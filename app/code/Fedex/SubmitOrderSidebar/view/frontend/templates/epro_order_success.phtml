@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Fedex_SubmitOrderSidebar/js/view/gdl-event-epro": {}
+    }
+}
+</script>
+<script type="text/javascript">
+    require(['jquery'], function($) {
+        $(window).on('load', function() {
+            window.dispatchEvent(new Event('flush_fedex_local_storage'));
+        });
+    });
+</script>

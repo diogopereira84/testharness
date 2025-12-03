@@ -1,0 +1,538 @@
+
+// Alert Box style import
+@import '_alert-box.less';
+// Modal box style for cart line items
+@import '_modal-box.less';
+//Promo Account fields Style
+@import '_promo-account.less';
+// Checkout Promo Account style
+@import '_checkout-promo-fedex-account.less';
+@import '_checkout-cart.less';
+
+//variables
+@discount_breakdown_color_green: @fx-green-100;
+
+.discount-breakdown
+{
+    #cart-totals .toggle-discount #discdrop:focus {
+        box-shadow: 0 0 3px 1px #00699d;
+    }
+    .order_outer_container .discount_breakdown {
+        display: none;
+    }
+    tr.discount_breakdown td.amount {
+        padding-right: 0px !important;
+    }
+    .bundle_discount .price {
+        color: @fx-green-100;
+    }
+    .volume_discount .price {
+        color: @fx-green-100;
+    }
+    .account_discount .price {
+        color: @discount_breakdown_color_green !important;
+    }
+    .promo_discount .price {
+        color: @fx-green-100;
+    }
+    .shipping_discount .price {
+        color: @fx-green-100;
+    }
+    .opc-block-summary .table-totals {
+        .discount {
+            font-size: 16px;
+        }
+        display: table;
+        .incl .is_review_page {
+            display: none;
+        }
+        .amount {
+            font-family: 'FedEx Sans Bold'  !important;
+        }
+    }
+    .table-wrapper {
+        .grand.totals .amount .price {
+            font-family: 'FedEx Sans Bold'  !important;
+        }
+    }
+    .page-main .order-table {
+        .arrow-down {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            display: inline-block;
+            border-top: 10px solid black;
+            margin-left: 10px;
+        }
+        .up {
+            transform: rotate(-180deg);
+           -webkit-transform: rotate(-180deg);
+        }
+        .total-disc-dropdown
+        {
+            border-bottom: 1px solid #CED5D9;
+        }
+}
+}
+.cart-alertbox.unfinished-project-popup {
+    .notification-msg {
+        padding-bottom: 10px;
+    }
+    .my-projects-link {
+        font-family: 'FedEx Sans Bold';
+    }
+}
+.commercial-epro-store .cart-container {
+        margin-bottom: 5%;
+}
+.opc-block-summary .table-totals{
+    .not-calculated {
+        font-style: normal !important;
+    }
+    .incl .is_review_page {
+            display: none;
+        }
+    display: none;
+    .totals.shipping.excl .mark .value{
+      display: none;
+  }
+}
+
+.cart.table-wrapper {
+    .col > .price {
+        color: @fx-grey-500 !important;
+        font-family: 'FedEx Sans Bold'  !important;
+    }
+    .discountval > .price {
+        color: @fx-green-100 !important;
+    }
+    .discountval > .discoutnull{
+        padding-left: 25%;
+    }
+}
+//Fixes the Magento view port issue for cart
+@media only screen and (min-width: 768px) and (max-width: 768px) {
+    .epro-store .modal-content {
+        padding: 0px !important;
+    }
+    .commercial-epro-store {
+        .cart-container .table-wrapper .item-info{
+            td.col.qty.text-center {
+                width: 90px;
+            }
+
+        }
+    }
+    .checkout-cart-index .cart-container .form-cart {
+        order: 2;
+        width: 71%;
+        float: left;
+        -ms-flex-order: 1;
+        -webkit-order: 1;
+        order: 1;
+        padding-right: 4%;
+        position: relative;
+    }
+    .checkout-cart-index .cart-container .cart-summary {
+        width: 25%;
+        float: right;
+        order: 2;
+        padding: 1px 20px 25px;
+        top: 0px;
+    }
+    .checkout-cart-index .cart-container span.product-image-container img {
+        height: auto;
+        width: 100px !important;
+    }
+    .checkout-cart-index .cart-container .form-cart tr.item-info {
+        display: flex;
+    }
+    .checkout-cart-index .cart-container {
+        flex-flow: inherit;
+    }
+    .cart.table-wrapper table.cart.items.data.table thead tr th.col  {
+        display: block;
+    }
+    .cart.table-wrapper table.cart.items.data.table thead tr th.col.item,
+    .cart.table-wrapper table.cart.items.data.table tr td.col.item.custom-print-item {
+        width: 100%;
+    }
+    .cart.table-wrapper table.cart.items.data.table > thead > tr {
+        display: flex;
+    }
+    .checkout-cart-index .cart.table-wrapper {
+        border-top: 0px solid #cccccc;
+    }
+    .checkout-cart-index .cart-container {
+        padding: 0 5px;
+    }
+    .checkout-cart-index .cart.table-wrapper .cart-container tr.item-actions > td {
+        padding-top: 40px;
+    }
+    .cart-container .form-cart .actions.main {
+        display: block;
+        text-align: right;
+    }
+    .cart-container .form-cart .actions.main .action.clear {
+        margin-bottom: 0;
+        padding-right: 20px;
+    }
+    .cart.table-wrapper .col.qty[data-th]:before,
+    .cart.table-wrapper .col.price[data-th]:before,
+    .cart.table-wrapper .col.subtotal[data-th]:before,
+    .cart.table-wrapper .col.msrp[data-th]:before {
+        display: none;
+    }
+    .cart.table-wrapper .discountval > .price {
+        color: @fx-green-100 !important;
+    }
+  }
+  @media only screen and (min-width: 320px) and (max-width: 375px) {
+    .commercial-epro-store {
+        .opc-block-summary {
+            padding: 5px 11px 0 11px;
+            width: 100%;
+        }
+        .modal-content {
+            padding: 0px !important;
+        }
+    }
+  }
+  @media only screen and (min-width: 320px) and (max-width: 425px) {
+    .checkout-index-index {
+        .minicart-items-wrapper {
+            .minicart-items {
+                .product-item-details {
+                    padding-left: 12px !important;
+                }
+            }
+        }
+    }
+    .page-layout-product-full-width {
+        .product.media {
+            .marketing_description {
+                @supports not (-webkit-overflow-scrolling: touch) {
+                    ul {
+                        padding-left: 0px !important;
+                    }
+                }
+            }
+        }
+    }
+    .is-fcl-global .opc-shipping-account-number .fedex_account_number .fedex_account_number-field {
+        width: 100% !important;
+    }
+  }
+  @media only screen and (min-width: 320px) and (max-width: 767px) {
+    .cms-sde-home .opc-summary-wrapper {
+        #opc-sidebar{
+            .minicart-items-wrapper {
+                .minicart-items {
+                    .product-item-name {
+                        width: 50% !important;
+                    }
+                }
+            }
+        }
+    }
+    .cart-summary>.title {
+        display: block;
+    }
+    .cms-sde-home {
+        .cart-container .form-cart .actions .update{
+            margin-bottom: 10%;
+        }
+    }
+    .epro-store {
+        .cart-container {
+            .cart-summary>.title {
+                display: block !important;
+            }
+            .cart-summary {
+                    order: 2 !important;
+                }
+        }
+    }
+    .commercial-epro-store {
+        .cart-summary>.title {
+            display: block !important;
+        }
+        .cart-container {
+            margin-bottom: 15%;
+            .form-cart{
+                order:1 !important;
+            }
+            .cart-summary{
+                order:2 !important;
+            }
+        }
+        .cart.table-wrapper .product-item-photo{
+            position:initial !important;
+        }
+    }
+    .cart.table-wrapper .discountval > .discoutnull{
+        padding-right: inherit;
+    }
+    .cart.table-wrapper .discountval > .price {
+        color: @fx-green-100 !important;
+    }
+    #shopping-cart-table thead tr th.col.subtotal {
+        display:none !important;
+    }
+    #shopping-cart-table tbody tr td.col.subtotal[data-th]:before {
+        float:left;
+    }
+    .cart.table-wrapper .col > .price{
+        float:right;
+    }
+    .discount_breakdown_mincart{
+        .product-item-pricing {
+            .price-container{
+                .price{
+                    color: #2f4047ed !important;
+                    font-weight: 100 !important;
+                    font-family: 'FedEx Sans Regular' !important;
+                    text-decoration: line-through;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 1199px) {
+    .place-pickup-order {
+        margin-left: 29px;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .epro-store {
+        .cart-summary>.title {
+            display: block !important;
+        }
+    }
+    .commercial-epro-store {
+        .cart-summary>.title {
+            display: block !important;
+        }
+        .cart-container {
+            .form-cart .actions.main {
+                text-align: center;
+            }
+            margin-bottom: 5%;
+            flex-flow: wrap;
+            .form-cart{
+                width:100%;
+            }
+        }
+        .cart-summary{
+            top: 0px !important;
+            float: none !important;
+            clear: both;
+            width: 80% !important;
+            margin: 0 auto !important;
+        }
+        .cart-expireditem-inline-err-msg-outer-most-info .expired-item-inline-err-msg{
+            width:198% !important;
+        }
+        .place-pickup-order {
+            margin-left: 10%;
+        }
+    }
+}
+@media only screen and (min-width: 1025px) and (max-width: 1200px) {
+    .epro-store .modal-content {
+        padding: 7px;
+    }
+}
+@media only screen and (min-width: 769px) and (max-width: 1024px) {
+    .cart-container {
+        flex-flow: wrap;
+        display: flex;
+        .cart-item-section {
+            width: 100% !important;
+            padding-right: 1%;
+        }
+        .form-cart {
+            width:100% !important;
+            .actions.main {
+                text-align: center !important;
+            }
+        }
+        div.cart-summary {
+            padding: 22px 30px !important;
+            top: 0 !important;
+            width: 88%;
+            float: none;
+            clear: both;
+            margin: 8px auto;
+        }
+    }
+    .commercial-epro-store {
+        .cart-container {
+            margin-bottom: 5%;
+            flex-flow: wrap;
+            .form-cart {
+                width:100%;
+                order:1 !important;
+            }
+            .cart-summary{
+                order:2 !important;
+            }
+        }
+        .cart-summary{
+            top: 0px !important;
+            float: none !important;
+            clear: both;
+            width: 80% !important;
+            margin: 0 auto !important;
+        }
+        .cart-expireditem-inline-err-msg-outer-most-info .expired-item-inline-err-msg{
+            width:198% !important;
+        }
+    }
+        .cart.table-wrapper .discountval > .price {
+            color: @fx-green-100 !important;
+        }
+        .cart.table-wrapper .discountval .discountnull {
+            padding-left: 25%;
+        }
+        .discount_breakdown_mincart{
+            .product-item-pricing {
+                .price-container{
+                    .price{
+                        color: #2f4047ed !important;
+                        font-weight: 100 !important;
+                        font-family: 'FedEx Sans Regular' !important;
+                        text-decoration: line-through;
+                    }
+                }
+            }
+        }
+}
+
+#cart-totals {
+    .toggle-discount {
+        cursor: pointer;
+        #discdrop {
+            color: inherit;
+        }
+        .arrow {
+            border: solid black;
+            border-width: 0 1px 1px 0;
+            display: inline-block;
+            padding: 4px;
+            margin-left: 8px;
+            margin-bottom: 2px;
+        }
+        .down {
+          transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
+        }
+        .up {
+            margin-bottom: -1.5px;
+           transform: rotate(-135deg);
+           -webkit-transform: rotate(-135deg);
+        }
+    }
+    .table-wrapper .discount_breakdown {
+        display: none;
+        td{
+            border-top:none;
+            padding-right: 0px !important;
+        }
+    }
+}
+
+.discount_breakdown_mincart{
+    .promotional-msg{
+        font-size: 12.5px;
+        padding: 0 0 20px 10px;
+    }
+    .subtotal .label:after{
+        content:"";
+    }
+    .product-item-pricing {
+        .price-container{
+            float: left;
+            margin-right: 10px;
+            .price{
+                color: #2f4047ed;
+                font-weight: 100;
+                text-decoration: line-through;
+            }
+        }
+    }
+}
+.commercial-epro-store {
+    .opc-block-summary .table-totals .grand strong {
+            font-size: 19px !important;
+    }
+}
+.commercial-store-home {
+    .discount_breakdown_mincart{
+        .promotional-msg{
+            font-size: 12.5px;
+            padding: 0 30px 20px 30px;
+        }
+    }
+}
+.selfreg-store {
+    .discount_breakdown_mincart{
+        .promotional-msg{
+            font-size: 12.5px;
+            padding: 0 30px 20px 30px;
+        }
+    }
+}
+//B-1535945
+@media only screen and (min-width: 1025px) {
+    .commercial-epro-store {
+        .cart-container .form-cart {
+            order: 2;
+            width: 68%;
+            float: left;
+            -ms-flex-order: 1;
+            -webkit-order: 1;
+            order: 1;
+            padding-right: 1%;
+            position: relative;
+        }
+        .cart-container .cart-summary {
+            width: 32%;
+            float: right;
+            order: 2;
+            padding: 1px 20px 25px;
+            top: 0px;
+        }
+    }
+}
+@media only screen and (max-width: 768px) {
+    .commercial-epro-store {
+        .cart-summary {
+            .checkout-methods-items{
+                padding: 0px 10px !important;
+            }
+        }
+    }
+}
+.checkout-cart-index {
+    .cart-container span.product-image-container {
+        max-width: 100%;
+    }
+    .discount #discount-account-form .field.apply-field {
+        overflow-x: visible;
+        width: 80%;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .checkout-cart-index {
+        .cart-container span.product-image-container {
+            max-width: 116px;
+        }
+        .discount #discount-account-form .field.apply-field {
+            overflow-x: hidden;
+            width: 100%;
+        }
+    }
+}

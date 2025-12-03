@@ -1,0 +1,397 @@
+<?php
+    /** @var \Fedex\TrackOrder\Block\Order\OrderDetails $block */
+    /** @var \Fedex\TrackOrder\ViewModel\TrackOrderHome $trackOrderViewModel */
+    $trackOrderViewModel = $trackOrderViewModel ?? $block->getTrackOrderHomeViewModel();
+    $orderData = $block->getData('order_data');
+    $key = $block->getData('order_key');
+    $trackOrderViewModel->initOrderContext($orderData, $key);
+    $orderStatusDetail = $trackOrderViewModel->getOrderStatusDetail();
+    $orderMktStatusDetail = $trackOrderViewModel->getMktOrderStatusDetail($orderData, $key);
+    $orderStatus = $trackOrderViewModel->getOrderStatusHeading();
+    $order = $block->getOrderByIncrementId($orderData[$key]['order_id']);
+    $orderId = $orderData[$key]['order_id'];
+    $orderDate = $orderData[$key]['order_date'];
+    $trackOrderUrl = $orderData[$key]['track_order_url'];
+    $trackingNumber = $orderData[$key]['tracking_number'];
+    $orderStatusComponent = $block->getTemplateFile('Fedex_TrackOrder::order_status_component.phtml');
+    $mktOrderStatusComponent = $block->getTemplateFile('Fedex_TrackOrder::mkt_order_status_component.phtml');
+    $miraklItemCount = $trackOrderViewModel->getMiraklItemCount();
+    $fedexItemsCount = $trackOrderViewModel->getFedexItemsCount();
+?>
+<div class="orderDetailsResponse">
+    <h3 class="orderId weight-300 mt-8">Order <strong class="weight-300"><?= $orderId; ?></strong></h3>
+    <h4 class="orderCreatedDate weight-300 mt-0">Order Created: <strong class="weight-300"><?= $orderDate; ?></strong></h4>
+
+    <?php if ($fedexItemsCount > 0): ?>
+        <div class="orderTypeHeading mt-10">
+            <div class="seller-name fs-20 lh-32 mb-8"><?= $orderData[$key]['shipment_type'][0]; ?></div>
+            <div>
+                <?php if ($orderStatusDetail == 'Cancelled'): ?>
+                    Cancelled
+                <?php else: ?>
+                   <?php if ($orderData[$key]['shipment_type'][1] == 'pickup'): ?>
+                        Pickup at <strong> <?= $orderData[$key]['pickup_address'] ?></strong>
+                    <?php elseif ($orderData[$key]['shipment_type'][1] == 'shipment'
+                        && isset($orderData[$key]['shipment_type'][2])
+                        && $orderData[$key]['shipment_type'][2] !== false): ?>
+
+                        <?php if ($orderStatusDetail == 'shipped'): ?>
+                            <div class="shipping-method fs-18 lh-24">FedEx Tracking # <a href="<?= $trackOrderUrl . $trackingNumber ?>"><?= $trackingNumber ?></a></div>
+                        <?php elseif (isset($orderData[$key]['shipment_type'][2]) && strlen($orderData[$key]['shipment_type'][2]) > 0): ?>
+                            <div class="shipping-method fs-18 lh-24"><?= $orderData[$key]['shipment_type'][2] ?><sup class="reg fs-18">®</sup></div>
+                        <?php endif; ?>
+                    <?php elseif ($orderData[$key]['shipment_type'][1] == 'shipment' && $orderStatusDetail == 'Shipped'): ?>
+                        FedEx Tracking # <a href="<?= $trackOrderUrl . $trackingNumber ?>"><?= $trackingNumber ?></a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
+        </div>
+
+        <?php if (!$trackOrderViewModel->isOrderDueDateDelayed() && $trackOrderViewModel->isOrderDelayed() && ($orderStatusDetail != 'Cancelled' &&
+                $orderStatusDetail != 'Ready for Pickup' && $orderStatusDetail != 'Shipped')): ?>
+            <div class="orderDelayBanner">
+                <div class="delay_Notification_icon">
+                    <img src="<?= $trackOrderViewModel->getNotificationBannerImageUrl(); ?>" alt="Notification Banner"/>
+                </div>
+                <div class="delay_notification_text">
+                    <span class="delay_heading">
+                         Order Delayed
+                    </span>
+                    <span class="delay_description">
+                         Due to unforeseen circumstances, this order is
+                         expected to be delayed. No scheduled delivery/availability date is known at this time.
+                         You'll receive an email when the order status is updated.
+                    </span>
+                </div>
+                <button class="close_delay_banner" onclick="closeDelayBanner(this)">X</button>
+            </div>
+        <?php endif; ?>
+
+        <?php if ($trackOrderViewModel->isOrderDueDateDelayed()): ?>
+            <div class="orderInfoBanner d-flex mb-20 relative border-violet pt-15 pb-15" role="banner">
+                <div class="info_icon d-flex v-center h-center pl-15 pr-15">
+                    <img src="<?= $trackOrderViewModel->getInfoImageUrl(); ?>" alt="Information Icon" />
+                </div>
+                <div class="info_text d-flex flex-col">
+                    <span class="info_heading weight-700">Expected delivery updated</span>
+                    <span class="info_description">
+                        <?= $trackOrderViewModel->getProductDueDateMessage(); ?>
+                    </span>
+                </div>
+                <button class="close_delay_banner" aria-label="Close">X</button>
+            </div>
+        <?php endif; ?>
+
+        <div class="orderItemDetails">
+            <div class="orderItemDetailsHeading pb-10 fs-18">
+                <div class="heading1">Items</div>
+                <div class="heading2">Status</div>
+                <div class="heading3"><?= $orderStatus; ?></div>
+                <div class="heading4"></div>
+            </div>
+            <div class="orderItemDetailsContent" id="orderItemDetailsContentFor<?= $orderId; ?>">
+                <div class="content1"><?= $fedexItemsCount; ?></div>
+                <div class="content2">
+                    <?php
+                    // Determine the correct status to display
+                    $displayStatus = $orderStatusDetail;
+                    if ($orderStatusDetail == 'Ready for Pickup' && $orderData[$key]['shipment_type'][1] == 'shipment') {
+                        $displayStatus = 'Shipped';
+                    }
+                    ?>
+                    <?php if (in_array($orderStatusDetail, ['Ordered', 'Ready for Pickup', 'Shipped', 'Picked Up', 'Complete'])): ?>
+                        <img src="<?= $trackOrderViewModel->getOrderedIconImageUrl(); ?>" alt="Ordered Icon"/>
+                    <?php else: ?>
+                        <img src="<?= $trackOrderViewModel->getOrderStatusDetailIconImageUrl(); ?>" alt="Order Status Detail Image"/>
+                    <?php endif; ?>
+
+                    <?php if ($orderStatusDetail == 'Delay'): ?>
+                        Processing
+                    <?php else: ?>
+                        <?= $orderStatusDetail ?>
+                    <?php endif; ?>
+                </div>
+                <div class="content3">
+                    <?php if ($orderStatusDetail == 'Cancelled' && !empty($orderData[$key]['cancelled_date'][1])): ?>
+                        <?= $orderData[$key]['cancelled_date'][1] ?>
+                    <?php elseif ($orderStatusDetail != 'Cancelled' && !empty($orderData[$key]['delivery_date'][1])): ?>
+                        <?= $orderData[$key]['delivery_date'][1] ?>
+                    <?php endif; ?>
+                </div>
+                <div class="content4">
+                    <img src="<?= $trackOrderViewModel->getDownArrowImageUrl(); ?>" alt="Down arrow Icon"
+                         id="productrow<?= $orderData[$key]['order_id']; ?>" class="productImage chevron-down"
+                         onClick="ShowProducthide(
+                             'ProductDtlSec<?= $orderId; ?>',
+                             'orderItemDetailsContentFor<?= $orderId; ?>',
+                             'productrow<?= $orderId; ?>'
+                         );"
+                    />
+                </div>
+            </div>
+        </div>
+        <div class="orderItemDetailsContentSmall"
+             id="orderItemDetailsContentForSmall<?= $orderData[$key]['order_id']; ?>">
+            <div class="itemDetailsSmall">
+                <div class="heading1">Items</div>
+                <div class="content1"><?= $orderData[$key]['orderItemsTotal']; ?></div>
+            </div>
+            <div class="statusDetailsSmall">
+                <div class="heading1">Status</div>
+                <div class="statusDetailsSmallIcon">
+                    <?php
+                    // Determine the correct status to display
+                    $displayStatus = $orderStatusDetail;
+                    if ($orderStatusDetail == 'Ready for Pickup' && $orderData[$key]['shipment_type'][1] == 'shipment') {
+                        $displayStatus = 'Shipped';
+                    }
+                    ?>
+                    <?php if (in_array($orderStatusDetail, ['Ordered', 'Ready for Pickup', 'Shipped', 'Picked Up', 'Complete'])): ?>
+                        <img src="<?= $trackOrderViewModel->getOrderedIconImageUrl(); ?>" alt="Ordered Icon"/>
+                    <?php else: ?>
+                        <img src="<?= $trackOrderViewModel->getOrderStatusDetailIconImageUrl(); ?>" alt="Order Status Detail Image"/>
+                    <?php endif; ?>
+
+                    <?php if ($orderStatusDetail == 'Delay'): ?>
+                        Processing
+                    <?php else: ?>
+                        <?= $orderStatusDetail ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="deliveryDetailsSmall">
+                <div class="heading1"><?= $orderStatus; ?></div>
+                <div class="content1">
+                    <?php if ($orderStatusDetail == 'Cancelled' && !empty($orderData[$key]['cancelled_date'][1])): ?>
+                        <?= $orderData[$key]['cancelled_date'][1] ?>
+                    <?php elseif ($orderStatusDetail != 'Cancelled' && !empty($orderData[$key]['delivery_date'][1])): ?>
+                        <?= $orderData[$key]['delivery_date'][1] ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="showHideIconSmall">
+                <img src="<?= $this->getViewFileUrl('Fedex_TrackOrder::images/down-arrow.png'); ?>"
+                     id="productrow<?= $orderData[$key]['order_id']; ?>" alt="Down arrow Icon"
+                     onClick="ShowProducthide(
+                         'ProductDtlSecSmall<?= $orderId; ?>',
+                         'orderItemDetailsContentForSmall<?= $orderId; ?>',
+                         'productrow<?= $orderId; ?>'
+                     );"
+                />
+            </div>
+        </div>
+        <div class="orderDetailsSectionSmall" id="ProductDtlSecSmall<?= $orderId; ?>">
+            <div class="detailedItemDetailsSmall">
+                <div class="heading1">Items</div>
+                <?php foreach ($orderData[$key]['orderItems'] as $itemData): ?>
+                    <div class="row1ItemDetailsSmall">
+                        <div class="itemImageSmall">
+                            <img src="<?= $itemData['imgurl']; ?>" alt="Order Item Image">
+                        </div>
+                        <div class="itemNameQtySmall">
+                            <span><?= $itemData['name']; ?></span>
+                            <span>x<?= $itemData['qty']; ?></span>
+                        </div>
+                        <?php if(isset($itemData['is_bundle']) && $itemData['is_bundle']): ?>
+                            <div class="detail-toggle pt-16 pb-16">
+                                <a href="#" aria-expanded="false" class="chevron-down fs-14 lh-24 ls-0-75 fedex-bold text-uppercase cl-digital-blue no-underline"
+                                   data-item-id="<?= $itemData['id'] ?>"
+                                   id="small-show-products-<?= $itemData['id'] ?>">
+                                    <?= $escaper->escapeHtml(__("SHOW PRODUCTS")) ?></a>
+                            </div>
+                            <script type="text/x-magento-init" class="fedex-product-bundle-children-init">
+                                {
+                                    "*": {
+                                        "Fedex_ProductBundle/js/order-bundle-children": {
+                                            "parentSelector": "#small-show-products-<?= $itemData['id']; ?>",
+                                                    "childrenSelector": ".small-item-info-parent-<?= $itemData['id']; ?>",
+                                                    "childrenShowDetailSelector": ".item-info-parent-<?= $itemData['id']; ?>",
+                                                    "mobileChildrenTitleSelector": "#bundle-children-count-title-<?= $itemData['id']; ?>",
+                                                    "lastChildrenSeparatorSelector": "#last-children-separator-<?= $itemData['id']; ?>"
+                                                }
+                                            }
+                                        }
+                            </script>
+                        <?php foreach ($itemData['children'] as $childItemData): ?>
+                            <div class="rowItem1Details bundle-child small-item-info-parent-<?= $itemData['id'] ?>" style="display: none;">
+                                <div class="itemImage">
+                                    <img src="<?= $childItemData['imgurl']; ?>" alt="Item Image">
+                                </div>
+                                <div class="itemNameQty">
+                                    <span><?= $childItemData['name']; ?></span>
+                                    <span>x<?= $childItemData['qty']; ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        <?php endif;?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <div class="detailedItemStatusSmall">
+                <div class="heading1">Status</div>
+                <?php if ($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+                    <?= $block->getTrackorderOrderStatusComponent($orderData, $key, $orderStatusDetail, 'first') ?>
+                <?php else: ?>
+                    <?php include $orderStatusComponent ?>
+                <?php endif; ?>
+            </div>
+            <div class="detailedItemDeliverySmall">
+                <div class="heading1"><?= $orderStatus; ?></div>
+                <div class="contentSmall">
+                    <?php if ($orderStatusDetail == 'Cancelled'): ?>
+                        <?php if (!empty($orderData[$key]['cancelled_date'][0])): ?>
+                            <p><?= /* @noEscape */ $orderData[$key]['cancelled_date'][0]; ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($orderData[$key]['cancelled_date'][1])): ?>
+                            <p class="expected_order_delivery_date"><?= /* @noEscape */ $orderData[$key]['cancelled_date'][1]; ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($orderData[$key]['cancelled_date'][2])): ?>
+                            <p> at <?= /* @noEscape */ $orderData[$key]['cancelled_date'][2]; ?></p>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <?php if (!empty($orderData[$key]['delivery_date'][0])): ?>
+                            <p><?= /* @noEscape */ $orderData[$key]['delivery_date'][0]; ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($orderData[$key]['delivery_date'][1])): ?>
+                            <p class="expected_order_delivery_date"><?= /* @noEscape */ $orderData[$key]['delivery_date'][1]; ?></p>
+                        <?php endif; ?>
+                        <?php if (!empty($orderData[$key]['delivery_date'][2])): ?>
+                            <p> by <?= /* @noEscape */ $orderData[$key]['delivery_date'][2]; ?></p>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="showHideIconSmall">
+                <img src="<?= $trackOrderViewModel->getUpArrowImageUrl(); ?>" id="productrow<?= $orderId; ?>"
+                     alt="Up arrow Icon"
+                     onClick="ShowProducthide(
+                         'ProductDtlSecSmall<?= $orderId; ?>',
+                         'orderItemDetailsContentForSmall<?= $orderId; ?>',
+                         'productrow<?= $orderId; ?>'
+                     );"
+                />
+            </div>
+        </div>
+        <div class="orderDetailsSection" id="ProductDtlSec<?= $orderId; ?>">
+            <div class="detailedItemDetails">
+                <div class="orderItemrow">
+                    <div class="rowItem1">
+                        <?php foreach ($orderData[$key]['orderItems'] as $index => $itemData): ?>
+                            <div class="rowItem1Details">
+                                <div class="itemImage">
+                                    <img src="<?= $itemData['imgurl']; ?>" alt="Item Image">
+                                </div>
+                                <div class="itemNameQty">
+                                    <span><?= $itemData['name']; ?></span>
+                                    <span>x<?= $itemData['qty']; ?></span>
+                                </div>
+                                <?php if(isset($itemData['is_bundle']) && $itemData['is_bundle']): ?>
+                                    <div class="detail-toggle pt-16 pb-16">
+                                        <a href="#" aria-expanded="false" class="chevron-down fs-14 lh-24 ls-0-75 fedex-bold text-uppercase cl-digital-blue no-underline"
+                                           data-item-id="<?= $itemData['id'] ?>"
+                                           id="show-products-<?= $itemData['id'] ?>">
+                                            <?= $escaper->escapeHtml(__("SHOW PRODUCTS")) ?></a>
+                                    </div>
+                                    <script type="text/x-magento-init" class="fedex-product-bundle-children-init">
+                                        {
+                                            "*": {
+                                                "Fedex_ProductBundle/js/order-bundle-children": {
+                                                    "parentSelector": "#show-products-<?= $itemData['id']; ?>",
+                                                    "childrenSelector": ".item-info-parent-<?= $itemData['id']; ?>",
+                                                    "childrenShowDetailSelector": ".item-info-parent-<?= $itemData['id']; ?>",
+                                                    "mobileChildrenTitleSelector": "#bundle-children-count-title-<?= $itemData['id']; ?>",
+                                                    "lastChildrenSeparatorSelector": "#last-children-separator-<?= $itemData['id']; ?>"
+                                                }
+                                            }
+                                        }
+                                    </script>
+                                    <?php foreach ($itemData['children'] as $childItemData): ?>
+                                        <div class="rowItem1Details bundle-child item-info-parent-<?= $itemData['id'] ?>" style="display: none;">
+                                            <div class="itemImage">
+                                                <img src="<?= $childItemData['imgurl']; ?>" alt="Item Image">
+                                            </div>
+                                            <div class="itemNameQty">
+                                                <span><?= $childItemData['name']; ?></span>
+                                                <span>x<?= $childItemData['qty']; ?></span>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                <?php endif;?>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                    <div class="rowItem2">
+                        <?php if ($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+                            <?= $block->getTrackorderOrderStatusComponent($orderData, $key, $orderStatusDetail, 'second') ?>
+                        <?php else: ?>
+                            <?php include $orderStatusComponent ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="rowItem3">
+                        <?php if ($trackOrderViewModel->isOrderDueDateDelayed()): ?>
+                            <p class="order-due-date-changed weight-600 fs-16 cl-primary">Updated</p>
+                        <?php endif; ?>
+                        <?php if ($orderStatusDetail == 'Cancelled'): ?>
+                            <?php if (!empty($orderData[$key]['cancelled_date'][0])): ?>
+                                <p> <?= $orderData[$key]['cancelled_date'][0]; ?> </p>
+                            <?php endif; ?>
+                            <?php if (!empty($orderData[$key]['cancelled_date'][1])): ?>
+                                <p class="expected_order_delivery_date"><?= $orderData[$key]['cancelled_date'][1]; ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($orderData[$key]['cancelled_date'][2])): ?>
+                                <p> at <?= $orderData[$key]['cancelled_date'][2]; ?> </p>
+                            <?php endif; ?>
+                        <?php else: ?>
+                            <?php if (!empty($orderData[$key]['delivery_date'][0])): ?>
+                                <p> <?= $orderData[$key]['delivery_date'][0]; ?> </p>
+                            <?php endif; ?>
+                            <?php if (!empty($orderData[$key]['delivery_date'][1])): ?>
+                                <p class="expected_order_delivery_date"><?= $orderData[$key]['delivery_date'][1]; ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($orderData[$key]['delivery_date'][2])): ?>
+                                <p> by <?= $orderData[$key]['delivery_date'][2]; ?></p>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                    <div class="rowItem4">
+                        <img src="<?= $trackOrderViewModel->getUpArrowImageUrl(); ?>"
+                             alt="Up arrow Icon"
+                             id="productrow<?= $orderId; ?>" class="productImage chevron-up"
+                             onClick="ShowProducthide(
+                                 'ProductDtlSec<?= $orderId; ?>',
+                                 'orderItemDetailsContentFor<?= $orderId; ?>',
+                                 'productrow<?= $orderId; ?>'
+                             );"
+                        />
+                    </div>
+                </div>
+                <div class="delivery_note">
+                    <?php if ($trackOrderViewModel->isOrderTrackingDeliveryDateUpdateEnable()): ?>
+                        <?= __('Expected delivery may be affected by weather and other service disruptions including production or transit delays.') ?>
+                    <?php else: ?>
+                    Delivery estimation may be effected by weather and other service disruptions including
+                    production or transit delays.
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <?php if ($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+        <?= $block->getTrackorderMktMultiple3PSellersTracker($orderData, $key) ?>
+    <?php else: ?>
+        <?php include($block->getTemplateFile('Fedex_TrackOrder::marketplace/multiple_3p_sellers_tracker.phtml')) ?>
+    <?php endif; ?>
+</div>
+<script type="text/javascript">
+    function closeDelayBanner(button) {
+        var banner = button.parentNode;
+        banner.style.display = 'none';
+    }
+
+    [...document.querySelectorAll('.close_delay_banner')].forEach(button => {
+        button.addEventListener('click', function() {
+            closeDelayBanner(this);
+        });
+    });
+</script>

@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Create account form template
+ */
+/* @var $block \Magento\CustomAttributeManagement\Block\Form\Renderer\Text */
+?>
+<?php
+$fieldCssClass = 'field field-' . $block->getHtmlId();
+$fieldCssClass .= $block->isRequired() ? ' required' : '';
+if($block->escapeHtmlAttr($block->getFieldName())=='contact_number')
+{
+    $fieldCssClass .= ' required' ;
+}
+?>
+<div class="<?= /* @noEscape */ $fieldCssClass ?>">
+    <label class="label" for="<?= $block->getHtmlId() ?>"><span><?= $block->escapeHtml($block->getLabel()) ?></span></label>
+    <div class="control">
+        <?php if($block->escapeHtmlAttr($block->getFieldName())=='contact_number') { ?>
+        <input type="text" id="<?= $block->getHtmlId() ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>" data-validate="{required:true}"  value="<?= /* @noEscape */ $block->getEscapedValue() ?>" class="input-text<?= $block->getHtmlClass() ?>">
+        
+        <?php } else {?>
+            <input type="text" id="<?= $block->getHtmlId() ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>"  value="<?= /* @noEscape */ $block->getEscapedValue() ?>" class="input-text<?= $block->getHtmlClass() ?>">
+        
+        <?php } ?>
+        <?php if ($_message = $block->getAdditionalDescription()) : ?>
+        <div class="note"><?= /* @noEscape */ $_message ?></div>
+        <?php endif; ?>
+    </div>
+</div>

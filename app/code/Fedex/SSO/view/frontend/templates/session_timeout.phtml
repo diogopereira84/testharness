@@ -1,0 +1,26 @@
+<?php
+/**@var Fedex\SSO\ViewModel\SsoConfiguration $sessionTimeout*/
+$sessionTimeout = $block->getData('session_timeout');
+
+/**@var Fedex\EnvironmentManager\ViewModel\ToggleConfig*/
+$toggleConfig = $block->getData('toggle_config');
+//B-1216135: SDE Logout Functionality
+$idleTimeout = $sessionTimeout->getSdeLogoutIdleTimeOut() ?
+    $sessionTimeout->getSdeLogoutIdleTimeOut()
+    : $block->getWebCookieConfig('cookie_lifetime');
+$activeTimeout = true;
+?>
+<?php
+if ((!$sessionTimeout->isFclCustomer() && $sessionTimeout->getCurrentStoreCode() == 'main_website_store')
+    || $sessionTimeout->isSdeStore() == 1
+): ?>
+    <input type="hidden" name="is_sde_store" id="is_sde_store"
+        value="<?= $block->escapeHtmlAttr($sessionTimeout->isSdeStore()) ?>"/>
+    <input type="hidden" name="sde_logout_url" id="sde_logout_url"
+        value="<?= $block->escapeUrl($sessionTimeout->getSdeLogoutUrl()) ?>"/>
+    <input type="hidden" name="session_timeout" id="session_timeout"
+        value="<?= $block->escapeHtmlAttr($idleTimeout) ?>"/>
+    <input type="hidden" name="active_session_timeout" id="active_session_timeout"
+        value="<?= $block->escapeHtmlAttr($activeTimeout) ?>"/>
+<?php endif;
+?>

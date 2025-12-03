@@ -1,0 +1,96 @@
+.message-block {
+    box-shadow: 0px 2px 4px 0px rgba(51, 51, 51, 0.30);
+    color: @fx-grey-1200;
+    .message-text {
+        font-family: "FedEx Sans Regular";
+        font-size: 14px;
+        line-height: 24px;
+        padding: 12px 16px;
+
+        .message-title {
+            font-family: "FedEx Sans Bold";
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+    &.message-success {
+        border: 1px solid @fx-green-100;
+        .icon {
+            background-color: @fx-green-100;
+        }
+    }
+    &.message-error {
+        border: 1px solid @fx-red-100;
+        .icon {
+            background-color: @fx-red-100;
+        }
+    }
+    &.message-info {
+        border: 1px solid @fx-purple-500;
+        .icon {
+            margin-left: 14px;
+            margin-right: 6px;
+        }
+    }
+
+    &.no-border {
+        border: none;
+    }
+
+    .close-message {
+        background-color: transparent;
+        border: 0;
+        color: inherit;
+        margin: 10px 14px 0 0;
+        padding: 6px;
+        &:before {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            font-size: 14px;
+            font-weight: normal;
+            content: '\e616';
+            font-family: 'luma-icons';
+        }
+        &:active,
+        &:focus,
+        &:hover {
+            background-color: transparent;
+            border: 0;
+        }
+    }
+}
+.browser-notification {
+    top: 149px;
+    right: 0;
+    left: 0;
+    max-width: 648px;
+    z-index: 2;
+}
+.checkout-container .checkout-error {
+    border: 1px solid @fx-red-400;
+    top: 130px;
+    right: 0;
+    left: 0;
+    width: 95%;
+    .icon {
+        background-color: @fx-red-400;
+        padding: 6px 5px 4px;
+        width: 38px;
+    }
+    .error-response {
+        padding: 15px 18px 10px;
+    }
+    .img-close-pop {
+        background-color: #FFFFFF !important;
+        border-width: 0 !important;
+        margin-right: 17px;
+    }
+    .close-image {
+        height: 15px;
+    }
+}
+@media (min-width: 1024px) {
+    .checkout-container .checkout-error {
+        width: 40%;
+    }
+}

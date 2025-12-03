@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="db_cleanup_configuration" translate="label" sortOrder="1002" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>DB Cleanup Configuration</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="cleaup_setting" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Cleaup Data</label>
+                <field id="prev_month" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Cleanup older entries from(in month)</label>
+                    <comment>Entry in this field must be greater than or equals to 14</comment>
+                </field>            
+            </group>
+        </section>
+    </system>
+</config>

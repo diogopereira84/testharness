@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Quote\Model\Cart\ShippingMethodConverter">
+        <plugin name="add_production_location_to_method" type="Fedex\Delivery\Plugin\Model\ProductionLocation" disabled="false" sortOrder="10"/>
+    </type>
+    <type name="Magento\Quote\Model\Quote\Address\Rate">
+        <plugin name="add_production_location_to_method_rate" type="Fedex\Delivery\Plugin\Model\Address\Rate" disabled="false" sortOrder="3"/>
+    </type>
+    <type name="Magento\Quote\Model\ShippingMethodManagement">
+        <plugin name="shipping_method_management" type="Fedex\Delivery\Plugin\Model\ShippingMethodManagement" disabled="false"/>
+        <plugin name="cheapest_fastest_shipping" type="Fedex\Delivery\Plugin\Model\CheapestFastestShippingPlugin" sortOrder="9"/>
+    </type>
+    <preference for="Fedex\Delivery\Api\ShippingMessageInterface" type="Fedex\Delivery\Model\ShippingMessage"/>
+    <preference for="Fedex\Delivery\Model\ShippingMessage\TransportInterface" type="Fedex\Delivery\Model\ShippingMessage\Transport"/>
+    <preference for="Fedex\Delivery\Model\ShippingMessage\RuleCompositeInterface" type="Fedex\Delivery\Model\ShippingMessage\RuleComposite"/>
+    <type name="Fedex\Delivery\Model\ShippingMessage\RuleComposite">
+        <arguments>
+            <argument name="rules" xsi:type="array">
+                <item name="isInvalidCoupon" xsi:type="object">Fedex\Delivery\Model\ShippingMessage\Rule\IsInvalidCoupon</item>
+                <item name="requestRule" xsi:type="object">Fedex\Delivery\Model\ShippingMessage\Rule\RequestRule</item>
+                <item name="isEnabledRule" xsi:type="object">Fedex\Delivery\Model\ShippingMessage\Rule\IsEnabledRule</item>
+                <item name="hasCouponRule" xsi:type="object">Fedex\Delivery\Model\ShippingMessage\Rule\HasCouponRule</item>
+                <item name="isShippingRule" xsi:type="object">Fedex\Delivery\Model\ShippingMessage\Rule\IsShippingRule</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin sortOrder="1" name="fedexDeliveryLayoutProcessor"
+                type="Fedex\Delivery\Plugin\Block\Checkout\LayoutProcessorPlugin"/>
+    </type>
+    <type name="Fedex\Delivery\Helper\Data">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="fedex_delivery_layout_processor_plugin" type="Fedex\Delivery\Plugin\Checkout\Block\Checkout\LayoutProcessorPlugin"/>
+    </type>
+</config>

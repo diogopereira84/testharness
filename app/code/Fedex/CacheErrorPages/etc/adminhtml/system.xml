@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="performance" translate="label" type="text" sortOrder="1002" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Performance</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_CacheErrorPages::config</resource>
+            <group id="cache_error_pages" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Caching for Error Pages</label>
+                <field id="enable_page_404" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable 404 Page Cache</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable or disable caching for 404 error pages to improve performance</comment>
+                </field>
+                <field id="lifetime_page_404" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Lifetime for 404 Cache (in seconds)</label>
+                    <validate>required validate-number</validate>
+                    <comment>Specify the duration in seconds for which the 404 page should be cached. Default is 86400 seconds (24 hours).</comment>
+                    <depends>
+                        <field id="performance/cache_error_pages/enable_page_404">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="optimization" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Optimization</label>
+                <field id="disable_query_tracking" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>B-2562150 Disable saveIncrementalPopularity() and saveNumResults() methods</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

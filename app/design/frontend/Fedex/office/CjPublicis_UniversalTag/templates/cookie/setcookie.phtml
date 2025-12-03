@@ -1,0 +1,20 @@
+<?php
+$dataHelper = $this->helper('CjPublicis\UniversalTag\Helper\Data');
+$params = array_change_key_case($dataHelper->getParams());
+$tagId = $dataHelper->getStoreConfig('universaltag/general/tag_id');
+$indexUrl = $this->getUrl().'cookie/index/index';
+$urlEncodedUrl = urlencode($indexUrl);
+$mczbfScript = <<<script
+    (function(a,b,c,d){
+            a='https://www.mczbf.com/tags/{$tagId}/tag.js?cookieUrl={$urlEncodedUrl}';
+            b=document;c='script';d=b.createElement(c);d.src=a;
+            d.type='text/java'+c;d.async=true;
+            d.id='cjapitag';
+            a=b.getElementsByTagName(c)[0];a.parentNode.insertBefore(d,a)
+            })();
+script;
+
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $mczbfScript, false); ?>
+
+

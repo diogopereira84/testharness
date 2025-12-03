@@ -1,0 +1,266 @@
+type Query {
+  orderSearchRequest(
+    filters: OrderFiltersInput @doc(description: "Query by filter")
+    sorts: [SortsInput] @doc(description: "Apply sorts")
+  ): OrderSearch
+    @resolver(class: "Fedex\\OrderGraphQl\\Model\\Resolver\\OrderSearchRequest")
+    @doc(description: "Query for orders")
+}
+input OrderFiltersInput @doc(description: "Order search filtering") {
+  location: LocationInput
+  contact: ContactInput
+  submissionTimeDateRange: SubmissionTimeDateRangeInput
+  productionDueTimeDateRange: ProductionDueTimeDateRangeInput
+  orderStatuses: [String]
+  omni: OmniInput
+}
+input SortsInput @doc(description: "Sort returned list of orders") {
+  attribute: String
+  ascending: Boolean
+}
+input LocationInput {
+  id: String!
+}
+input ContactInput {
+  phoneNumberDetails: [PhoneNumberDetailsInput]
+  emailDetail: EmailDetailInput
+  personName: PersonNameInput
+}
+input PhoneNumberDetailsInput {
+  phoneNumber: PhoneNumberInput
+  usage: String
+}
+input PhoneNumberInput {
+  number: String!
+  extension: String
+}
+input EmailDetailInput {
+  emailAddress: String!
+}
+input PersonNameInput {
+  firstName: String!
+  lastName: String!
+}
+input SubmissionTimeDateRangeInput {
+  startDateTime: String!
+  endDateTime: String!
+}
+input ProductionDueTimeDateRangeInput {
+  startDateTime: String!
+  endDateTime: String!
+}
+input OmniInput {
+  text: String!
+  attributes: [String]
+}
+type OrderSearchTest {
+  response: String
+}
+type OrderSearch {
+  partialResults: Boolean
+  orderSummaries: [Order]
+}
+type Order {
+  orderNumber: String
+  status: String
+  currency: String
+  totalAmount: String
+  submissionTime: String
+  submissionTime: String
+  submissionTime: String
+  orderContact: OrderContact
+  productSummaries: [ProductSummary]
+  recipientSummaries: [RecipientSummary]
+  recipients: [RecipientSummary]
+  jobSummaries: [JobSummary]
+  productDetails: [ProductDetails],
+  transactionReference: TransactionReference
+  compliance: Compliance
+}
+type OrderContact {
+  contact: Contact
+}
+type Contact {
+  phoneNumberDetails: [PhoneNumberDetails]
+  emailDetail: EmailDetail
+  personName: PersonName
+}
+type PhoneNumberDetails {
+  phoneNumber: PhoneNumber
+  usage: String
+}
+type PhoneNumber {
+  number: String,
+}
+type EmailDetail {
+  emailAddress: String
+}
+type PersonName {
+  firstName: String
+  lastName: String
+}
+type ProductSummary {
+  id: String
+  name: String
+  userProductName: String
+}
+type RecipientSummary {
+  reference: String
+  contact: RecipientContact
+  productAssociations: [ProductAssociations]
+}
+type RecipientContact {
+  personName: RecipientName
+  company: RecipientCompany
+  emailDetail: RecipientEmail
+  phoneNumberDetails: [RecipientPhoneNumberDetails]
+}
+type RecipientName {
+  firstName: String
+  lastName: String
+}
+type RecipientCompany {
+  name: String
+}
+type RecipientEmail {
+  emailAddress: String
+}
+type RecipientPhoneNumberDetails {
+  phoneNumber: RecipientPhoneNumber
+  usage: String
+}
+type RecipientPhoneNumber {
+  number: String
+}
+type ProductAssociations {
+  id: String
+  quantity: Int
+}
+type JobSummary {
+  jobGTN: String
+  parentGTN: String
+  location: Location
+  status: String
+  seller: String
+  recipientReferences: [RecipientReference]
+  currency: String
+  netAmount: Float
+  productionDueTime: String
+  expectedReleaseTime: String
+}
+type Location {
+  id: String
+}
+type RecipientReference {
+  reference: String
+  trackingNumbers: [String]
+  productAssociations: [JobProductAssociation]
+}
+type JobProductAssociation {
+  id: String
+  quantity: Int
+  currency: String
+  netAmount: Float
+  reference: String
+  binLocation: String
+  status: String
+}
+type ProductDetails {
+    product: Product
+    sensitiveData: Boolean
+}
+type TransactionReference {
+    reference: String
+    source: String
+}
+type Product {
+    contentAssociations: [ContentAssociation]
+    features: [Feature]
+    id: String
+    instanceId: String
+    isOutSourced: Boolean
+    name: String
+    pageExceptions: [String]
+    priceable: Boolean
+    productionContentAssociations: [ContentAssociation]
+    proofRequired: Boolean
+    properties: [Property]
+    qty: Int
+    userProductName: String
+    version: Int
+    vendorReference: VendorReference
+    externalSkus: [ExternalSku]
+}
+type ContentAssociation {
+    contentReference: String
+    contentReqId: String
+    contentType: String
+    desc: String
+    fileName: String
+    name: String
+    pageGroups: [PageGroup]
+    parentContentReference: String
+    printReady: Boolean
+    purpose: String
+    specialInstructions: String
+}
+type PageGroup {
+    end: Int
+    height: Float
+    orientation: String
+    start: Int
+    width: Float
+}
+type Feature {
+    choice: Choice
+    id: String
+    name: String
+}
+type Choice {
+    id: String
+    name: String
+    properties: [Property]
+}
+type Property {
+    id: String
+    name: String
+    value: String
+}
+type VendorReference {
+    vendorId: String
+    vendorProductName: String
+    vendorProductDesc: String
+}
+type ExternalSku {
+    skuDescription: String
+    skuRef: String
+    code: String
+    unitPrice: Float
+    price: Float
+    qty: Int
+}
+type Compliance {
+  washingtonPolitical: PoliticalDisclosureInformation @doc(description: "Washington state political disclosure information for the order")
+}
+
+type PoliticalDisclosureInformation @doc(description: "Contains political disclosure details for an order") {
+  applicable: Boolean @doc(description: "Indicates if political disclosure is applicable for the order")
+  description: String @doc(description: "Candidate, PAC, or ballot issue associated with the order")
+  eventDate: String @doc(description: "Election date relevant to the order")
+  sponsor: String @doc(description: "Sponsoring committee for the order")
+  customer: PoliticalDisclosureCustomer @doc(description: "Customer details for political disclosure")
+}
+
+type PoliticalDisclosureCustomer @doc(description: "Customer details for political disclosure") {
+  emailAddress: String
+  address: PoliticalDisclosureAddress
+}
+
+type PoliticalDisclosureAddress @doc(description: "Address for political disclosure") {
+  streetLines: [String]
+  city: String
+  stateOrProvinceCode: String
+  postalCode: String
+  countryCode: String
+  addressClassification: String
+}

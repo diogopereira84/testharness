@@ -1,0 +1,91 @@
+
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    body {
+        .shop-by-type-overlay {
+            > h2 {
+                color: #333333;
+            }
+            .shop-by-type-categories-or-products {
+                display: grid;
+                grid-template-rows: repeat(4, auto);
+                gap: 3rem;
+                a.item{
+                    border: 1px solid #E3E3E3;
+                    box-sizing: border-box;
+
+                    img {
+                        &::before {
+                            background: #ebebeb;
+                            color: #8E8E8E;
+                            display: flex;
+                            align-items: center;
+                            min-height: 200px;
+                            justify-content: center;
+                        }
+                    }
+
+                    .item-title {
+                        font-size: 20px;
+                        min-height: 80px;
+                        box-sizing: border-box;
+                    }
+                }
+            }
+        }
+    }
+} 
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    body {
+        .shop-by-type-overlay {
+            .shop-by-type-categories-or-products {
+                grid-template-columns: 1fr;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    body {
+        .shop-by-type-overlay {
+            .shop-by-type-categories-or-products {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    }
+}
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    body {
+        .shop-by-type-overlay {
+            .shop-by-type-categories-or-products {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    body {
+        .shop-by-type-overlay {
+            .shop-by-type-categories-or-products {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    // your code
+}

@@ -1,0 +1,18 @@
+<?php
+/**
+ * @var \Magento\Catalog\Block\Product\View $block
+ * @var \Magento\Catalog\Model\Product $product
+ * @var \Fedex\MarketplaceProduct\ViewModel\Product\Attribute $viewModel
+ */
+
+$product = $block->getProduct();
+$viewModel = $block->getData('view_model');
+
+if ($product && $viewModel) {
+    $brandName = $product->getAttributeText('brand');
+    $url = $block->getUrl('catalogsearch/result', ['_query' => ['q' => $brandName]]);
+    if ($viewModel->isEssendantToggleEnabled() && $brandName != ''): ?>
+        <a href="<?= $block->escapeUrl($url); ?>" class="brand underline d-block mb-8 lh-24 hidden-m-l-xl"><?= $block->escapeHtml($brandName); ?></a>
+    <?php endif;
+}
+?>

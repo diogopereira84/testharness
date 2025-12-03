@@ -1,0 +1,75 @@
+<?php
+
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\LiveSearchStorefrontPopover\Block\Frontend\SaaSContext;
+
+/** @var $secureRenderer SecureHtmlRenderer */
+/** @var $block SaaSContext */
+/** @var $parameters Fedex\LiveSearch\ViewModel\Parameters */
+
+$parameters = $block->getData('parameters');
+if($parameters) :
+    if ($parameters->isTigerD200529Enabled()) {
+        $params = $parameters->getLiveSearchParameters(
+            $block->getEnvironmentId(),
+            $block->getWebsiteCode(),
+            $block->getStoreCode(),
+            $block->getStoreViewCode(),
+            $block->getCustomerGroupCode()
+        );
+        $paramsJson = json_encode(array_filter($params, fn($v) => $v !== null));
+        $liveSearchParametersScript = "window.LiveSearchParameters = $paramsJson;";
+    } else {
+        $displayUnitCost3p1pProductsToggle = $parameters->isDisplayUnitCost3p1pProductsToggleEnabled() ? 'true' : 'false';
+        $sharedCatalogId = json_encode($parameters->getSharedCatalogId());
+        $isEnhancedCommercialSortByEnabled = $parameters->getEnhancedCommercialSortByToggle() ? 'true' : 'false';
+        $isEssendantToggleEnabled = $parameters->isEssendantToggleEnabled() ? 'true' : 'false';
+        $commercialCustomerParams = $parameters->isCommercialCustomer()
+            ? 'siteName:"' . $parameters->getSiteName() . '",
+        TazToken:"' . $parameters->getTazToken() . '",'
+            : '';
+        $isE441563ToggleEnabled = $parameters->isE441563ToggleEnabled() ? 'true' : 'false';
+        // Updated to use new function - simplifies the template logic
+        $hideUnpublishedInSearch = $parameters->getUnpublishedSearchVisibility() ? 'false' : 'true';
+        $attributeSetIds = json_encode($isEssendantToggleEnabled ? $parameters->getAttributeSetList() : []);
+        $isVariantQueryEnabled = $parameters->getIsVariantQueryEnabled() ? 'true' : 'false';
+        $isTigerD200529Enabled = $parameters->isTigerD200529Enabled() ? 'true' : 'false';
+        $isTigerD236292Enabled = $parameters->isTigerD236292Enabled() ? 'true' : 'false';
+        $allowOwnDocument = $parameters->isAllowOwnDocument() ? '1' : '0';
+        $isTigerTeamD217182Enabled = $parameters->isTigerTeamD217182Enabled() ? 'true' : 'false';
+        $liveSearchParametersScript = <<<script
+    window.LiveSearchParameters = {
+        environmentId: "{$block->getEnvironmentId()}",
+        websiteCode: "{$block->escapeJs($block->getWebsiteCode())}",
+        storeCode: "{$block->escapeJs($block->getStoreCode())}",
+        storeViewCode: "{$block->escapeJs($block->getStoreViewCode())}",
+        placeholderImage: "{$parameters->getDefaultPlaceholderUrl('thumbnail')}",
+        serviceUrl: "{$parameters->getServiceUrl()}",
+        graphqlServiceUrl: "{$parameters->getGraphqlServiceUrl()}",
+        XApiKey: "{$parameters->getXApiKey()}",
+        customerGroup: "{$block->escapeJs($block->getCustomerGroupCode())}",
+        customerGroupId: "{$block->escapeJs($parameters->getCustomerGroupId())}",
+        displayUnitCost3p1pProductsToggle: $displayUnitCost3p1pProductsToggle,
+        ellipsisEnabled: "{$parameters->isEllipsisControlEnabled()}",
+        ellipsisTotalCharacters: "{$parameters->getEllipsisControlTotalCharacters()}",
+        ellipsisStartCharacters: "{$parameters->getEllipsisControlStartCharacters()}",
+        ellipsisEndCharacters: "{$parameters->getEllipsisControlEndCharacters()}",
+        sharedCatalogId: $sharedCatalogId,
+        isE441563ToggleEnabled: {$isE441563ToggleEnabled},
+        isEssendantToggleEnabled: $isEssendantToggleEnabled,
+        isEnhancedCommercialSortByEnabled: {$isEnhancedCommercialSortByEnabled},
+        hideUnpublishedInSearch: $hideUnpublishedInSearch,
+        attributeSets: $attributeSetIds,
+        enableVariantQuery: {$isVariantQueryEnabled},
+        isTigerD200529Enabled: {$isTigerD200529Enabled},
+        isTigerD236292Enabled: {$isTigerD236292Enabled},
+        tiger_team_d_217182: {$isTigerTeamD217182Enabled},
+        allowOwnDocument: {$allowOwnDocument},
+        tigerTeamD240007Enabled: "{$parameters->isTigerTeamD240007Enabled()}",
+        {$commercialCustomerParams}
+    };
+    script;
+    }
+?>
+    <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $liveSearchParametersScript, false); ?>
+<?php endif; ?>

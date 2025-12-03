@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">    
+     <event name="catalog_product_save_before">
+        <observer name="fedex_catalogMvp_product_save_before_observer" instance="Fedex\CatalogMvp\Observer\ProductSaveBeforeObserver" />
+    </event>
+    <event name="catalog_product_save_after">
+        <observer name="fedex_catalogMvp_product_save_after_observer" instance="Fedex\CatalogMvp\Observer\ProductSaveAfterObserver" />
+    </event>
+    <event name="controller_action_catalog_product_save_entity_after">
+        <observer name="fedex_catalogMvp_admin_product_save_entity_after_observer" instance="Fedex\CatalogMvp\Observer\ProductEntitySaveAfterObserver" />
+    </event>
+        <event name="catalog_product_delete_before">
+         <observer name="fedex_catalogMvp_product_delete_before_observer" instance="Fedex\CatalogMvp\Observer\ProductDeleteBeforeObserver" />
+   </event>
+    <event name="catalog_product_delete_after">
+        <observer name="fedex_catalogMvp_product_delete_after_observer" instance="Fedex\CatalogMvp\Observer\ProductDeleteAfterObserver" />
+    </event>
+    <event name="catalog_category_prepare_save">
+        <observer name="fedex_category_save_after_observer" instance="Fedex\CatalogMvp\Observer\ETag\CategorySaveAfterEtagUpdateObserver" />
+    </event>
+</config>

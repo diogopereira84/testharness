@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\Pricing\Render;
+
+/**
+ * @var \Magento\CatalogWidget\Block\Product\ProductsList|\Fedex\CustomizedMegamenu\Block\Product\ProductsList $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+?>
+<?php if ($exist = ($block->getProductCollection() && $block->getProductCollection()->getSize())) : ?>
+    <?php
+    $productMostPopularImage = 'product_most_popular_image';
+    $type = 'widget-product-grid';
+
+    $mode = 'grid';
+    $items = $block->getProductCollection()->getItems();
+    $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    $helper  = $this->helper('\Magento\Catalog\Helper\Image');
+    $productImageAttribute = $block->getProductImageId() ?? $productMostPopularImage;
+    ?>
+    <div class="block widget block-products-list <?= /* @noEscape */ $mode ?>">
+        <?php if ($block->getTitle()) : ?>
+            <div class="block-title">
+                <strong><?= $block->escapeHtml(__($block->getTitle())) ?></strong>
+            </div>
+        <?php endif ?>
+        <div class="block-content">
+            <?= /* @noEscape */ '<!-- ' . $productImageAttribute . '-->' ?>
+            <div class="products-<?= /* @noEscape */ $mode ?> <?= /* @noEscape */ $mode ?>">
+                <ol class="product-items <?= /* @noEscape */ $type ?>" id="simple-product-grid">
+                    <?php $iterator = 1; ?>
+                    <?php foreach ($items as $_item) : ?>
+                        <?= /* @noEscape */ ($iterator == 1) ? '<li class="product-item">' : '</li><li class="product-item">' ?>
+                        <?php $iterator++; ?>
+                        <a href="<?= $block->escapeUrl($block->getProductUrl($_item)) ?>" class="all-unset product-item-wrapper">
+                            <?php
+                            if($productImageAttribute !== $productMostPopularImage) {
+                                $imageurl = $helper->init($_item, $productImageAttribute)->getUrl();
+                                if (!$imageurl && ($_item->getMostPopularImage() == "no_selection" || $_item->getMostPopularImage() == "")) {
+                                    $imageurl = $block->getViewFileUrl($helper->getPlaceholder("most_popular_image"));
+                                }
+                            } else {
+                                $imageurl = $helper->init($_item, $productMostPopularImage)->setImageFile($_item->getMostPopularImage())->getUrl();
+                                if (($_item->getMostPopularImage() == "no_selection") || ($_item->getMostPopularImage() == "")) {
+                                    $imageurl = $block->getViewFileUrl($helper->getPlaceholder("most_popular_image"));
+                                }
+                            }
+                            ?>
+                            <div class="product-item-photo">
+                                <img src="<?php echo $imageurl; ?>" alt="<?= $block->escapeHtml($_item->getName()) ?>" />
+                            </div>
+                            <div class="product-item-details">
+                                <strong class="product-item-name">
+                                    <span title="<?= $block->escapeHtml($_item->getName()) ?>"
+                                       class="product-item-link"><?= $escaper->escapeHtml($_item->getName()) ?></span>
+                                </strong>
+                                <div class="widget-price-container">
+                                    <span>Starting at</span>
+                                    <?php if ($block->isNewUnitCostAvailable($_item, $productImageAttribute)): ?>
+                                        <div class="unit-cost price-box price-final_price">
+                                            <span class="price-container price-final_price tax weee">
+                                                <span class="price-wrapper" data-price-type="finalPrice">
+                                                    <?= $block->getProductUnitCost($_item).' '; ?>
+                                                </span>
+                                                <span class="label"><?= __("each") ?></span>
+                                            </span>
+                                        </div>
+                                    <?php else: ?>
+                                        <?= $block->getProductPriceHtml($_item, $type, Render::ZONE_ITEM_LIST, [], $productImageAttribute) ?>
+                                        <?php if($block->getTigerDisplayUnitCost3P1PProducts()):?>
+                                          <span class="label"><?= __("each") ?></span>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </a>
+                        <?= ($iterator == count($items) + 1) ? '</li>' : '' ?>
+                    <?php endforeach ?>
+                </ol>
+            </div>
+            <?= $block->getPagerHtml() ?>
+        </div>
+    </div>
+<?php endif;?>

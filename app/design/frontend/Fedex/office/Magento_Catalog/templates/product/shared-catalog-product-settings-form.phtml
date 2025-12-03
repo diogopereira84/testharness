@@ -1,0 +1,78 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$characterLimit = $block->getData('mvphelper_mvp_setting_popup')->getCharLimitToggle();
+
+ if ($block->getData('mvphelper_mvp_setting_popup')->isSharedCatalogPermissionEnabled() &&
+ (!$block->getData('mvphelper_mvp_setting_popup')->checkPrintCategory())) {
+?>
+<div id="setting-formp-popup" class="shared-catalog-setting-form-container" style="display:none;">
+    <div class="shared-catalog-form-header">
+        <span class="shared-catalog-form-header-title">
+            <?=$block->escapeHtml(__('Settings'));?>
+        </span>
+    </div>
+    <div class="shared-catalog-form-sub-title">
+        <span class="shared-catalog-form-sub-heading">
+            <?=$block->escapeHtml( __('Provide the information you would like to publish to the shared catalog.'));?>
+        </span>
+    </div>
+    <form id="my-form" action="" method="post">
+        <div class="field shared-catalog-setting-name">
+            <label for="name" class="label">Name</label>
+            <div class="control">
+            <?php
+                    if ($characterLimit) { ?>
+                        <input type="text" id="shared-catalog-setting-name" name="name" class="input-text" required maxlength="100"/>
+                    <?php } else { ?>
+                        <input type="text" id="shared-catalog-setting-name" name="name" class="input-text" required />
+                    <?php }?>
+            </div>
+        </div>
+        <div class="start-end-date-container">
+            <div class="field shared-catalog-setting-start-date">
+                <label for="start-date" class="label">Start Date</label>
+                <div class="control">
+                <input type="datetime-local" id="start-date" name="start-date" class="input-text" required />
+                </div>
+            </div>
+            <div class="field shared-catalog-setting-start-date">
+                <label for="end-date" class="label">End Date</label>
+                <div class="control">
+                <input type="datetime-local" id="shared-catalog-setting-start-date"
+                name="end-date" class="input-text" required />
+                </div>
+                <div class="control">
+                    <input type="radio" id="no-end-date" name="no-end-date" class="input-text" aria-label="no-end-date"
+                    />
+                    <label for="no-end-date" class="label">No End Date</label>
+                </div>
+            </div>
+        </div>
+        <div class="field shared-catalog-setting-description">
+            <label for="description" class="label">Description (Optional)</label>
+            <div class="control">
+            <input type="textarea" id="shared-catalog-setting-description"
+            name="description" class="input-text-area" required />
+            </div>
+        </div>
+        <div class="field shared-catalog-setting-tag">
+            <label for="name" class="label">Tag (Optional)</label>
+            <div class="control">
+            <input type="text" id="shared-catalog-setting-tag"
+            name="tag" class="input-text" required />
+            </div>
+        </div>
+        <div class="actions">
+            <button type="submit" class="action primary primary-outline cancel-setting">Cancel</button>
+            <button type="submit" class="action primary complete-setting">Complete</button>
+        </div>
+    </form>
+</div>
+<?php
+}
+?>

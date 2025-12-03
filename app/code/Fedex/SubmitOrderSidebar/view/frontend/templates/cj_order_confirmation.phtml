@@ -1,0 +1,81 @@
+<?php
+use Fedex\SubmitOrderSidebar\Block\OrderConfirmation;
+/**
+ * @var OrderConfirmation $block
+ */
+$cjData = $block->addCJOrderObjectScript();
+if ($cjData) { ?>
+    <script type="text/javascript">
+            var orderConfirmationResponse = JSON.parse(localStorage.getItem('CJTransactionData'));
+            var transactionResponse = JSON.parse(orderConfirmationResponse);
+            var transactionResponseOutput = transactionResponse.output.checkout;
+            var orderId = transactionResponseOutput.lineItems[0].retailPrintOrderDetails[0].origin.orderNumber;
+            var currency = transactionResponseOutput.transactionTotals.currency;
+            var totalDiscountAmount = transactionResponseOutput.transactionTotals.totalDiscountAmount;
+            var productCount = transactionResponseOutput.lineItems[0].retailPrintOrderDetails[0].productLines;
+
+            /**
+            * Getting Items
+            */
+            var items = []
+            itemsArray = new Array();
+            function itemsData(unitPrice, itemId, quantity, discount) {
+                this.unitPrice = unitPrice;
+                this.itemId = itemId;
+                this.quantity = quantity;
+                this.discount = discount;
+            }
+            for (i = 0; i < productCount.length; i++) {
+                let unitPrice = parseFloat(productCount[i].productRetailPrice) / productCount[i].unitQuantity;
+                itemsArray.push(new itemsData(unitPrice,
+                productCount[i].productId, productCount[i].unitQuantity, productCount[i].productDiscountAmount));
+            }
+            var itemLevelDiscount = 0;
+            for (i = 0; i < itemsArray.length; i++) {
+                var dict = {};
+                dict['unitPrice'] = itemsArray[i].unitPrice;
+                dict['itemId'] = itemsArray[i].itemId;
+                dict['quantity'] = itemsArray[i].quantity;
+                dict['discount'] = itemsArray[i].discount;
+                itemLevelDiscount += parseFloat(itemsArray[i].discount);
+                items[i] = dict;
+            }
+
+            /**
+            * Getting Cookies
+            */
+            function getCookie(name){
+                var pattern = RegExp(name + "=.[^;]*");
+                var matched = document.cookie.match(pattern);
+                if(matched){
+                    var cookie = matched[0].split('=');
+                    return cookie[1];
+                }
+                return '';
+            }
+
+            /**
+            * Getting Coupon Code
+            */
+            let couponCode = localStorage.getItem('coupon_code');
+
+            if (!window.cj) window.cj = {};
+            var orderLevelDiscount = totalDiscountAmount - itemLevelDiscount;
+            cj.order = {
+                enterpriseId:  '<?= $block->escapeHTML($cjData['enterprise_id']) ?>',
+                pageType: 'conversionConfirmation',
+                userId: '<?= $block->escapeHTML($cjData['user_id']) ?>',
+                emailHash:  '<?= !empty($cjData['email_id']) ?
+                $block->escapeHTML(hash('sha256', strtolower($cjData['email_id']))) :
+                $block->escapeHTML($cjData['email_id']);
+                ?>',
+                orderId: orderId,
+                actionTrackerId: '<?= $block->escapeHTML($cjData['action_id']) ?>',
+                currency: currency,
+                discount: orderLevelDiscount,
+                coupon: couponCode,
+                cjeventOrder: getCookie('cje'),
+                items: items
+            };
+    </script>
+<?php } ?>

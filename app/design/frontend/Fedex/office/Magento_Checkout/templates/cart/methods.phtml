@@ -1,0 +1,88 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+?>
+<?php
+/** @var $block \Magento\Checkout\Block\Cart */
+
+$sdeHelper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+$isSdeStore = $sdeHelper->getIsSdeStore();
+$noticeText = $isSdeStore ? 'Document prices displayed are estimated and do not include shipping, packaging and handling (if applicable) or tax.' : 'Document prices displayed are estimated and do not include shipping and tax.';
+?>
+<?php if (!$block->hasError()) :?>
+    <?php $methods = $block->getMethods('methods') ?: $block->getMethods('top_methods') ?>
+    <ul class="checkout methods items checkout-methods-items">
+        <?php foreach ($methods as $method) :?>
+            <?php $methodHtml = $block->getMethodHtml($method); ?>
+            <?php if (trim($methodHtml) !== '') :?>
+                <li class="item"><?= /* @noEscape */ $methodHtml ?></li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </ul>
+<?php endif; ?>
+</br>
+<div class="shipping-note text-center">
+<?= __($noticeText) ?>
+</div>
+</br>
+</br>
+<?php
+$helper = $this->helper('Fedex\CustomerDetails\Helper\Data');
+//SDE Category url
+$categoryUrl = $sdeHelper->getSdeCategoryUrl();
+$continueShoppingUrl = $block->getBaseUrl();
+$cartSummaryViewModal = $block->getData('cartSummaryViewModal');
+
+if ($cartSummaryViewModal->getUpdateContinueShoppingCtaToggle()) {
+    $continueShoppingUrl = $cartSummaryViewModal->getAllPrintProductUrl();
+
+    if ($block->getBaseUrl() == $categoryUrl) {
+        $categoryUrl = $continueShoppingUrl;
+    }
+}
+
+$cartLineItemLimitConfHelper = $this->helper('\Fedex\Cart\Helper\Data');
+$cartHelperData = $this->helper('\Magento\Checkout\Helper\Cart');
+$cartItemConf = $cartLineItemLimitConfHelper->getMaxCartLimitValue();
+$cartItemLimitNum = (int) $cartItemConf['maxCartItemLimit']; //Configure line of max number items in cartin
+$buttonDisabled = ($cartHelperData->getItemsCount() >= $cartItemLimitNum) && !empty($cartItemLimitNum)? 'style="background: #e1e1e1; border: 1px solid #cccccc; color: #333333" disabled': '';
+?>
+<form action="<?php echo $block->escapeUrl($continueShoppingUrl) ?>" method="post">
+      <?php if($this->getContinueShoppingUrl() && !$isSdeStore): ?>
+        <div style="text-align: center" class="secondary">
+            <input type="hidden" name="form_key" value="<?= $block->getFormKey() ?>">
+            <button class="cart-continue-shopping-btn"  
+                    type="submit"
+                    class="action continue" <?= $buttonDisabled; ?>>
+				    <?= $block->escapeHtml(__('CONTINUE SHOPPING')) ?>
+            </button>
+      </div>
+    <?php endif; ?>
+</form>
+
+<form action="<?php echo $block->escapeUrl($categoryUrl) ?>" method="post">
+<?php if($this->getContinueShoppingUrl() && $isSdeStore): ?>
+        <div style="text-align: center" class="secondary">
+            <input type="hidden" name="form_key" value="<?= $block->getFormKey() ?>">
+            <button class="cart-continue-shopping-btn"  
+                    type="submit" 
+					title="<?= $block->escapeHtml(__('CONTINUE SHOPPING')) ?>"
+                    class="action continue" <?= $buttonDisabled; ?>>
+				<span><span><?= $block->escapeHtml(__('CONTINUE SHOPPING')) ?></span></span>
+            </button>
+      </div>
+<?php endif; ?>
+</form>
+<?php
+if (!empty($cartItemLimitNum) && ($cartHelperData->getItemsCount() >= $cartItemLimitNum)) : ?>
+<script>
+    require(['jquery'], function ($) {
+        $(".secondary.continue-button-container button.cart-continue-shopping-btn").
+        prop('disabled', true).
+        addClass('disabled-continue-button');
+    });
+</script>
+<?php endif; ?>

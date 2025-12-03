@@ -1,0 +1,1538 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/**
+ * @var \Magento\Orderhistory\Block\Order\History $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+use Magento\Catalog\Model\Product\Type;
+
+$slectedCheckoboxIcon = 'images/order-history/selected-checkbox.png';
+$_orders = $block->getOrders();
+/** @var \Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement $viewModel */
+$viewModel = $block->getData('order_enhancement_view_model');
+$checkLegacyDocReorderSectionToggle = $viewModel->checkLegacyDocReorderSectionToggle();
+$reorderToggle = $viewModel->isRetailOrderHistoryReorderEnabled();
+$isReorderEnabled = $viewModel->isReorderEnabled();
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productinfo_handler_view_model');
+
+// Millionaires - E-398131 : Adoption of New Document Platform toggle value
+$newDocumentApiImageToggle = $viewModel->isNewDocumentImageToggleEnabled();
+
+// B-900093 | code to sort collection by date
+$orderBy = $this->getRequest()->getParam('orderby') ? $this->getRequest()->getParam('orderby') : 'DESC';
+$sortBy = $this->getRequest()->getParam('sortby') ? $this->getRequest()->getParam('sortby') : 'created_at';
+$queryParam = $this->getRequest()->getParams();
+if ($orderBy == 'DESC') {
+    $queryParam['orderby'] = 'ASC';
+    $queryParam['sortby'] = $sortBy;
+} else {
+    $queryParam['orderby'] = 'DESC';
+    $queryParam['sortby'] = $sortBy;
+}
+$historyUrl = $this->getUrl(
+    'sales/order/history',
+    ['_current' => true, '_use_rewrite' => true, '_query' => $queryParam]
+);
+/**
+ * @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler
+ */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+?>
+<?= $block->getChildHtml('info') ?>
+<?php if ($_orders && count($_orders)): ?>
+<div data-testid="orders-history-wrapper" class="table-wrapper orders-history retail-sales-order-history
+		enabled-marketplace-customer
+		<?= $reorderToggle ? 'retail-reorder' : ''; ?>">
+    <table data-testid="table-order-items" class="data table table-order-items history" id="my-orders-table">
+    <caption class="table-caption"><?= $block->escapeHtml(__('Orders')) ?></caption>
+    <thead>
+    <tr>
+        <th scope="col" class="col sort-order-table-heading id
+					 <?php echo $sortBy == 'ext_order_id' ? 'active' : '' ?>"
+            sortby="ext_order_id" orderby="<?php if (
+            $sortBy == 'ext_order_id' &&
+            $orderBy == 'DESC'
+        ) {
+            echo 'DESC';
+        } else {
+            echo 'ASC';
+        } ?>">
+            <a href="javascript:void(0)" class="<?php echo $sortBy == 'ext_order_id' ? 'active' : '' ?>">
+                <?= $block->escapeHtml(__('Order Number')) ?>
+            </a>
+        </th>
+        <th scope="col" class="col sort-order-table-heading date
+					 <?php echo $sortBy == 'created_at' ? 'active' : '' ?>"
+            sortby="created_at" orderby="<?php if (
+            $sortBy == 'created_at' &&
+            $orderBy == 'DESC'
+        ) {
+            echo 'DESC';
+        } else {
+            echo 'ASC';
+        } ?>">
+            <a href="javascript:void(0)" class="<?php echo $sortBy == 'created_at' ? 'active' : '' ?>">
+                <?= $block->escapeHtml(__('Order Date')) ?>
+                <span class="sort-order-table fa
+							 <?php if ($sortBy == 'created_at' && $orderBy == 'DESC') {
+                    echo 'fa-long-arrow-down';
+                } else {
+                    echo 'fa-long-arrow-up';
+                } ?>"
+                      sortby="created_at" orderby="<?php if (
+                    $sortBy == 'created_at' &&
+                    $orderBy == 'DESC'
+                ) {
+                    echo 'DESC';
+                } else {
+                    echo 'ASC';
+                } ?>">
+								</span>
+            </a>
+        </th>
+        <th scope="col" class="col sort-order-table-heading status
+					 <?php echo $sortBy == 'status' ? 'active' : '' ?>"
+            sortby="status" orderby="<?php if (
+            $sortBy == 'status' &&
+            $orderBy == 'DESC'
+        ) {
+            echo 'DESC';
+        } else {
+            echo 'ASC';
+        } ?>">
+            <a href="javascript:void(0)" class="<?php echo $sortBy == 'status' ? 'active' : '' ?>">
+                <?= $block->escapeHtml(__('Status')) ?>
+            </a>
+        </th>
+        <th scope="col" class="col sort-order-table-heading total
+					 <?php echo $sortBy == 'grand_total' ? 'active' : '' ?>" sortby="grand_total"
+            orderby="<?php if ($sortBy == 'grand_total' && $orderBy == 'DESC') {
+                echo 'DESC';
+            } else {
+                echo 'ASC';
+            } ?>">
+            <a href="javascript:void(0)" class="<?php echo $sortBy == 'grand_total' ? 'active' : '' ?>">
+                <?= $block->escapeHtml(__('Total')) ?>
+            </a>
+        </th>
+        <th scope="col" class="col actions"><?= $block->escapeHtml(__('Action')) ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach ($_orders as $_order):
+        $miraklItemCount = $viewModel->getMiraklItemsCount($_order);
+        $fedexItemsCount = $viewModel->getFedexItemsCount($_order);
+        $miraklItemsCountText = $miraklItemCount == 1 ? '1 item' : $miraklItemCount . ' items';
+        $fedexItemsCountText = $fedexItemsCount == 1 ? '1 item' : $fedexItemsCount . ' items';
+        $isReOrderable = false;
+        $has3pProduct = false;
+        $orderItemStatusLegacyDocument = false;
+        $isReOrderable = $viewModel->isReOrderable($_order->getId());
+        $statusLabel = $viewModel->orderStatusLabel($_order->getStatusLabel());
+        $orderItemStatusLegacyDocument = $viewModel->checkLegacyDocumentForReorder($_order->getId());
+        // Count total items and legacy items
+        $totalItems = is_array($orderItemStatusLegacyDocument) ? count($orderItemStatusLegacyDocument) : 0;
+        $legacyItemCount = is_array($orderItemStatusLegacyDocument)
+            ? count(array_filter($orderItemStatusLegacyDocument, fn($value) => $value))
+            : 0;
+
+         // If all items are legacy, disable the entire order
+        $isEntireOrderLegacy = ($totalItems > 0 && $totalItems === $legacyItemCount) ? true : false;
+        ?>
+        <tr class="table-row <?= $isEntireOrderLegacy && $checkLegacyDocReorderSectionToggle ? 'reorder-disabled' : ((!$isReOrderable && $reorderToggle) ?
+                 'reorder-disabled' : ''); ?>">
+            <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id">
+                <?php if ($reorderToggle): ?>
+                    <a href="javascript:void(0)" aria-label="carrot-icon"
+                       class="view-order-carrot-toggle toggle-<?= $_order->getId(); ?>"></a>
+                <?php endif; ?>
+                <span class="data-class"><?= $block->escapeHtml($_order->getRealOrderId()) ?></span></td>
+            <td data-th="<?= $block->escapeHtml(__('Order Date')) ?>" class="col date">
+                <span class="data-class"><?= /* @noEscape */date('m/d/Y', strtotime($_order->getCreatedAt())) ?></span></td>
+            <td data-th="<?= $block->escapeHtml(__('Status')) ?>"
+                class="col status">
+								<span class="data-class"><?= $block->escapeHtml($statusLabel) ?>
+								</span>
+            </td>
+            <td data-th="<?= $block->escapeHtml(__('Total')) ?>" class="col total">
+								<span class="data-class">
+									<?= /* @noEscape */$_order->formatPrice($_order->getGrandTotal()) ?></span>
+            </td>
+            <td data-th="<?= $block->escapeHtml(__('Action')) ?>" class="col actions1 view-order-action">
+                <?php if ($reorderToggle): ?>
+                <span data-testid="reorder-button" class="data-class" data-bind="scope: 'reorder_check_product'">
+
+											<?php if ($isReorderEnabled): ?>
+                                                <a href="javascript:void(0)" aria-label="orderExpand"
+                                                   class="action view orderExpand"
+                                                   data-bind="click: function(data, event) {
+                                                    checkItemAvailability(data, event)
+                                                }"
+                                                   data-id="<?= $_order->getId(); ?>">
+												<span><?= $block->escapeHtml(__('View Order')) ?></span>
+												</a>
+                                            <?php else: ?>
+                                                <a href="javascript:void(0)" aria-label="orderExpand"
+                                                   class="action view orderExpand" data-bind="click: getProductPreviewUrl"
+                                                   data-id="<?= $_order->getId(); ?>">
+												<span><?= $block->escapeHtml(__('View Order')) ?></span>
+												</a>
+                                            <?php endif; ?>
+
+                    <?php else: ?>
+                        <span data-testid="view-order-button" class="data-class">
+										<a href="javascript:void(0)" aria-label="orderExpand"
+                                           class="action view orderExpand" data-id="<?= $_order->getId(); ?>">
+									 		<span><?= $block->escapeHtml(__('View Order')) ?></span>
+										</a>
+									</span>
+                    <?php endif; ?>
+            </td>
+            <td class="col reorder-order-label-check" id="order-expand-<?= $_order->getId(); ?>">
+                <?php if ($reorderToggle): ?>
+
+                    <?php if ($isReorderEnabled): ?>
+                        <label class="order-label-items <?= ($isEntireOrderLegacy && $checkLegacyDocReorderSectionToggle) ? 'disable-checkbox' :
+           (!$isReOrderable ? $block->escapeHtmlAttr(__('disable-checkbox')) : ''); ?>">
+                        <input <?= ($isEntireOrderLegacy && $checkLegacyDocReorderSectionToggle) ? 'disabled' :
+           ($isReOrderable ? $block->escapeHtmlAttr(__('enabled')) : $block->escapeHtmlAttr(__('disabled'))); ?>
+                                aria-label="reorder item"
+                                class="checkbox-order selected-order-<?= $_order->getId(); ?>"
+                                type="checkbox" data-order-id="<?= $_order->getId(); ?>"/>
+                            <img tabindex="0" src="<?= $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                 class="order-checked-icon order-checked-<?= $_order->getId(); ?>"
+                                 alt="Order Checked" />
+                        </label>
+                    <?php endif; ?>
+
+                <?php endif; ?>
+                <span class="item-label-text"><?= $block->escapeHtml(__('ITEM')) ?></span>
+            </td>
+        </tr>
+
+    <tr class="order-items-row order-row order-id-<?= $_order->getId(); ?>">
+        <td class="order-items-table" colspan="6">
+        <table data-testid="fedex-office-order" class="table order-item" aria-label="order-item">
+        <thead>
+        <tr>
+            <?php if ($reorderToggle): ?>
+
+                <?php if ($isReorderEnabled): ?>
+                                     <th scope="col" class="col reorder-checkbox tnc">
+                        <label class="order-label <?= (!$isReOrderable || $isEntireOrderLegacy && $checkLegacyDocReorderSectionToggle) ? 'disable-checkbox' : ''; ?>">
+                            <input <?= ($isReOrderable || !$isEntireOrderLegacy && $checkLegacyDocReorderSectionToggle) ? 'enabled' : 'disabled'; ?>
+                                class="checkbox-order selected-order-<?= $_order->getId(); ?>" type="checkbox"
+                                aria-label="reorder item" data-order-id="<?= $_order->getId(); ?>"/>
+                            <img tabindex="0"
+                                 src="<?= $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                 class="order-checked-icon order-checked-<?= $_order->getId(); ?>" alt="Order Checked" />
+                        </label>
+                    </th>
+
+                <?php else: ?>
+                    <th scope="col" class="col reorder-hide"></th>
+                <?php endif; ?>
+
+            <?php endif; ?>
+            <th scope="col" class="col order-item"><?= $block->escapeHtml(__('Item')) ?></th>
+            <th scope="col" class="col item-status"><?= $block->escapeHtml(__('Status')) ?></th>
+            <th scope="col" class="col item-unit-price"><?= $block->escapeHtml(__('Unit Price')) ?></th>
+            <th scope="col" class="col item-qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+            <th scope="col" class="col item-total item-total-col"><?= $block->escapeHtml(__('Total')) ?></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <?php if ($fedexItemsCount > 0): ?>
+        <tr class="fedex-office-products-table">
+            <td colspan="6">
+                <table class="fedex-office-table">
+                    <tbody>
+                    <tr>
+                        <td id="fedex-office-table-title" colspan="3">
+                            FedEx Office (<?= $fedexItemsCountText ?>)
+                        </td>
+                    </tr>
+                    </tbody>
+                    <tbody>
+                    <tr class="mobile-delivery-method">
+                        <td class="delivery-method">
+                            <?php
+                            $isPickUp = ($_order->getShippingMethod() == $viewModel::SHIPPING_TYPE_PICKUP) ? 1 : 0;
+                            $shippingType = $isPickUp ? 'In-store pickup' : 'Shipping';
+                            $shippingTypeIcon = 'delivery';
+                            $address = $isPickUp ? 'Pickup location' : 'Shipping address';
+                            $shippingDescription = $viewModel->getOrderShippingDescription($_order);
+                            ?>
+                            <?php if ($isPickUp) : ?>
+                                <?php $shippingTypeIcon = 'store-pickup' ?>
+                            <?php endif; ?>
+                            <img class="img-title" alt="Delivery method icon" src="<?php echo $block->getViewFileUrl('Fedex_MarketplaceCustomer::images/icons/' . $shippingTypeIcon . '.svg'); ?>" />
+                            <p><?= $shippingType ?></p>
+                        </td>
+                        <td class="shipping-address-column">
+                            <span class="shipping-address-title"><?= $block->escapeHtml($address) ?></span>
+                            </br>
+                            <?php $shippingAddress = $_order->getShippingAddress() ?>
+                            <span>
+                                <?=
+                                    implode(',', $shippingAddress->getStreet()) . ', ' .
+                                    $shippingAddress->getCity() . ', ' .
+                                    $shippingAddress->getRegionCode() . ', ' .
+                                    $shippingAddress->getCountryId() . ' ' . $shippingAddress->getPostcode()
+                                ?>
+                            </span>
+                        </td>
+                        <td class="estimated-delivery-column">
+                            <?php $estimatedLabel = $block->escapeHtml(__('Expected Delivery')) ?>
+                            <?php if ($isPickUp): ?>
+                                <?php $estimatedLabel = 'Pickup date and time' ?>
+                            <?php endif ?>
+                            <p class="estimated-delivery-title"><?= $estimatedLabel ?></p>
+                            <?php
+                            if ($shippingDueDate = $viewModel->getShippingDueDate($_order)):
+                                $shippingDescription = $shippingDueDate;
+                            endif;?>
+                            <p><?= $shippingDescription ?></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </td>
+        </tr>
+    <?php endif; ?>
+        <?php
+        $attrLable = null;
+        $attrValue = null;
+        $thumbnailImgUrl = null;
+        $orderItems = $viewModel->getItemsByOrderId($_order->getId());
+        $orderItemsCount = 0;
+        $productCount = 0;
+
+        $_1PItemStatus = $viewModel->getShipmentStatus1P($_order);
+
+        foreach ($orderItems as $index => $orderItem):
+            if ($orderItem->getData('mirakl_offer_id')) {
+                $has3pProduct = true;
+                continue;
+            }
+
+            $product_json = $productInfoHandler->getItemExternalProd($orderItem) ?? [];
+
+            $id = isset($product_json['id']) ? $product_json['id'] : '';
+            $version = isset($product_json['version']) ? $product_json['version'] : '';
+            $features = $product_json['features'] ?? [];
+            $previewUrl = $product_json['preview_url'] ?? null;
+            $isOutSourced = isset($product_json['isOutSourced']) ? $product_json['isOutSourced'] : false;
+            if (count($features)) {
+                $attrLable = $features[0]['name'] ?? null;
+                $attrValue = $features[0]['choice']['name'] ?? null;
+            }
+
+            if (empty($previewUrl)) {
+                $prodObj = $orderItem->getProduct();
+                $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($prodObj);
+            }
+
+            $customHtmlAttributes = null;
+
+            if (
+                $reorderToggle && isset($orderItem
+                        ->getProductOptions()['info_buyRequest'])
+            ) {
+                $serializedProductData = $viewModel->serializeProductData($orderItem
+                    ->getProductOptions()['info_buyRequest']);
+                $serializedProductJsonData = json_encode($serializedProductData['serializedProductData']);
+                $customHtmlAttributes = 'product-instance="' .
+                    $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+                    $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) . '" product-status="1"';
+                $productStatus = true;
+                $productId = $orderItem->getProductId();
+                $product = $viewModel->loadProductObj($productId);
+
+                if ($product == false) {
+                    $customHtmlAttributes = 'product-instance="' .
+                        $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+                        $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+                        '" product-status="0"';
+                    $productStatus = false;
+                    $productCount++;
+                }
+            }
+
+            $prodObj = $orderItem->getProduct();
+            $newDocumentImage = $newDocumentApiImageToggle ? $newDocumentApiImageToggle : false;
+            if ($prodObj) {
+                $isCustomize = $viewModel->getProductCustomAttributeValue($prodObj->getId(), 'customizable');
+                if ($prodObj->getData('pod2_0_editable') && ($isCustomize) || $newDocumentImage ){
+                    $newDocumentImage = true;
+                }
+            }
+            ?>
+            <tr class="expend-order <?= $orderItem->getProductType() === Type::TYPE_BUNDLE ? 'expend-order-bundle' : '' ?>"
+                <?= /* @noEscape */$customHtmlAttributes ?>
+                order-id="<?= $_order->getId(); ?>"
+                order-increment-id="<?= $_order->getIncrementId(); ?>"
+                item-id="<?= $orderItem->getId(); ?>"
+                item-sku="<?= $orderItem->getSku() ?>"
+                item-qty="<?= $orderItem->getQtyOrdered() ?>"
+                item-product-type="<?= $orderItem->getProductType() ?>"
+                product-content-reference="<?= $previewUrl; ?>" newDocumentImage=<?= $newDocumentImage ? $newDocumentImage : false; ?>>
+                <?php if ($reorderToggle): ?>
+
+                    <?php if ($isReorderEnabled): ?>
+                        <td class="col reorder-checkbox-item">
+                            <label class="item-label
+								<?= (!$isReOrderable || !$productStatus || ($checkLegacyDocReorderSectionToggle &&
+                                            $orderItemStatusLegacyDocument[$orderItem->getId()])) ?
+                                $block->escapeHtmlAttr(__('disable-checkbox')) :
+                                $block->escapeHtmlAttr(__('')); ?>">
+                                <input <?= ($checkLegacyDocReorderSectionToggle && $orderItemStatusLegacyDocument[$orderItem->getId()])
+                                        ? 'disabled'
+                                        : (($isReOrderable && $productStatus)
+                                            ? $block->escapeHtmlAttr(__('enabled'))
+                                            : $block->escapeHtmlAttr(__('disabled'))); ?>
+
+                                    aria-label="reorder item"
+                                    data-testid="checkbox-item-<?= $index ?>"
+                                    class="checkbox-item checkbox-item-ls select-order-<?= $_order->getId(); ?>
+																	selected-order-item-<?= $orderItem->getId(); ?>"
+                                    type="checkbox"
+                                    data-is-OutSourced="<?= $isOutSourced ?>"
+                                    data-product-id="<?= $orderItem->getProductId(); ?>"
+                                    data-item-qty="<?= $orderItem->getQtyOrdered(); ?>"
+                                    data-order-id="<?= $_order->getId(); ?>"
+                                    data-order-increment-id="<?= $_order->getIncrementId(); ?>"
+                                    data-item-id="<?= $orderItem->getId(); ?>"
+                                    data-product-type="<?= $orderItem->getProductType() ?>"/>
+                                <img tabindex="0"
+                                     src="<?php echo $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                     class="item-checked-icon checked-order-items-
+																<?= $_order->getId(); ?> checked-order-item-<?= $orderItem->getId(); ?>"
+                                     alt="Item Checked" />
+                            </label>
+                        </td>
+                    <?php else: ?>
+                        <td></td>
+                    <?php endif; ?>
+
+                <?php endif; ?>
+                <td class="col item">
+                    <div class="item-info">
+                        <?php if ($reorderToggle): ?>
+
+                            <?php if ($isReorderEnabled): ?>
+                                <label class="reorder-item-label-check
+									<?= (!$isReOrderable || !$productStatus  || ($checkLegacyDocReorderSectionToggle &&
+                                            $orderItemStatusLegacyDocument[$orderItem->getId()])) ?
+                                    $block->escapeHtmlAttr(__('disable-checkbox')) :
+                                    $block->escapeHtmlAttr(__('')); ?>">
+                                    <input <?= ($checkLegacyDocReorderSectionToggle &&
+                                            !$orderItemStatusLegacyDocument[$orderItem->getId()] || $isReOrderable && $productStatus) ?
+                                        $block->escapeHtmlAttr(__('enabled')) :
+                                        $block->escapeHtmlAttr(__('disabled')); ?>
+                                        aria-label="reorder item" class="checkbox-item checkbox-item-ss select-order-<?= $_order->getId(); ?>
+																selected-order-item-<?= $orderItem->getId(); ?>"
+                                        type="checkbox"
+                                        data-is-OutSourced="<?= $isOutSourced ?>"
+                                        data-product-id="<?= $orderItem->getProductId(); ?>"
+                                        data-item-qty="<?= $orderItem->getQtyOrdered(); ?>"
+                                        data-order-id="<?= $_order->getId(); ?>"
+                                        data-order-increment-id="<?= $_order->getIncrementId(); ?>"
+                                        data-item-id="<?= $orderItem->getId(); ?>"
+                                        data-product-type="<?= $orderItem->getProductType() ?>"/>
+                                    <img tabindex="0"
+                                         src="<?php echo $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                         class="item-checked-icon checked-order-items-<?= $_order->getId(); ?>
+																checked-order-item-<?= $orderItem->getId(); ?>" alt="Item Checked" />
+                                </label>
+                                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                     class="product-engine-loader" alt="product image" aria-label="product-loader" style="display: none;"/>
+                            <?php endif; ?>
+
+                        <?php endif; ?>
+                        <div class="item-img">
+                            <?php if (!empty($previewUrl)): ?>
+                                <span class="product-image-container prev-img-loader" >
+															<div data-bind="if: productPreviewImg">
+																<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                                                     class="product-loader"
+                                                                     alt="product image"
+                                                                     aria-label="product-loader"
+                                                                />
+																<img class="preview-product-img"
+                                                                     id="content-reference-image-<?= $orderItem->getId(); ?>"
+                                                                     alt="product preview image"
+                                                                     aria-label="preview-product-img"
+                                                                     src="#" />
+															</div>
+															<div data-bind="ifnot: productPreviewImg">
+																<img src="#" alt="Product Image"
+                                                                     class="product-empty-image" aria-label="product-empty-image" />
+															</div>
+														</span>
+                            <?php else: ?>
+                                <span class="product-item-photo">
+															<img src="<?= $thumbnailImgUrl; ?>" class="product-thumbnail" />
+														</span>
+                            <?php endif; ?>
+                        </div>
+
+                        <div class="item-detail">
+                            <p class="product-item-name">
+                                <?php if (!empty($previewUrl) && isset($product_json['userProductName'])) { ?>
+                                    <?php echo $product_json['userProductName']; ?>
+                                <?php } else if (!empty($previewUrl) && isset($product_json['fxo_product'])) { ?>
+                                    <?php
+                                    $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? [];
+                                    echo $fxoProduct ? $fxoProduct->name : $orderItem->getName();
+                                    ?>
+                                <?php } else { ?>
+                                    <?= $block->escapeHtml($orderItem->getName()) ?>
+                                <?php } ?>
+                            </p>
+
+                            <?php if ($attrLable && $attrValue): ?>
+                                <p class="size-info">
+                                    <span><?= $attrLable . ' - '; ?></span><span class="paper-size"><?= $attrValue; ?></span>
+                                </p>
+                            <?php endif; ?>
+                            <?php if (
+                                $bundleProductHandler && $bundleProductHandler->isTigerE468338ToggleEnabled()
+                                && $orderItem->getProductType() === Type::TYPE_BUNDLE && $orderItem->getChildrenItems()
+                            ): ?>
+                                <div class="detail-toggle pt-4 pb-4">
+                                    <a href="#" aria-expanded="true" class="chevron-down chevron-up fs-14 lh-24 ls-0-75 fedex-bold text-uppercase cl-digital-blue no-underline"
+                                       data-item-id="<?= $escaper->escapeHtmlAttr($orderItem->getId()) ?>"
+                                       id="show-products-<?= $escaper->escapeHtmlAttr($orderItem->getId()) ?>">
+                                        <?= $escaper->escapeHtml(__("HIDE PRODUCTS")) ?></a>
+                                </div>
+                                <script type="text/x-magento-init">
+                                    {
+                                        "*": {
+                                            "Fedex_ProductBundle/js/order-bundle-children": {
+                                                "parentSelector": "#show-products-<?= $escaper->escapeHtmlAttr($orderItem->getId()); ?>",
+                                                "childrenSelector": ".item-info-parent-<?= $orderItem->getId() ?>",
+                                                "childrenShowDetailSelector": ".item-info-parent-<?= $orderItem->getId() ?> + .product-details-row",
+                                                "mobileChildrenTitleSelector":"#bundle-children-count-title-<?= $orderItem->getId() ?>",
+                                                "lastChildrenSeparatorSelector": "#last-children-separator-<?= $orderItem->getId() ?>"
+                                            }
+                                        }
+                                    }
+                                </script>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </td>
+
+                <td data-th="<?= $block->escapeHtml(__('Status')) ?>"
+                    class="col item-status">
+                                                    <span>
+                                                        <?= $viewModel->getStatusLabelMapping($_1PItemStatus, $viewModel->isOrderDelayed($_order)) ?>
+                                                    </span>
+                    <?php $trackingNumbers = $_order->getTracksCollection()->getItems(); ?>
+                    <?php if ($trackingNumbers): ?>
+                        <?php $shipments = $_order->getShipmentsCollection()->getItems();
+                        if ($shipments) {
+                            $trackingNumber = $viewModel->getTrackingNumbersBySellerType($trackingNumbers, $shipments, 'first_party');
+                            if ($trackingNumber) {
+                                ?>
+                                <span class="tracking-numbers">Tracking number(s)</span>
+                                <?= $trackingNumber ?>
+                            <?php }
+                        }?>
+                    <?php endif; ?>
+                </td>
+
+                <td data-th="<?= $block->escapeHtml(__('Unit Price')) ?>"
+                    class="col unit-price"><?= $_order->formatPrice($orderItem->getPrice()) ?>
+                </td>
+                <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
+                    <span class="item-qty"><?= /* @noEscape */(int) $orderItem->getQtyOrdered(); ?></span></td>
+                <td data-th="<?= $block->escapeHtml(__('Total')) ?>" class="col total item-total-data">
+                    <?= /* @noEscape */$_order->formatPrice($orderItem->getRowTotal()-$orderItem->getDiscountAmount()) ?></td>
+            </tr>
+            <?php if (
+                $bundleProductHandler && $bundleProductHandler->isTigerE468338ToggleEnabled()
+                && $orderItem->getProductType() === Type::TYPE_BUNDLE && $orderItem->getChildrenItems()
+            ): ?>
+                <?php
+                /**
+                 * @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler
+                 * @var \Fedex\ProductBundle\ViewModel\ItemRendererProvider $itemRendererProvider
+                 */
+                $bundleProductHandler = $block->getData('bundleProductHandler');
+                $itemRendererProvider = $block->getData('item_renderer_provider');
+                ?>
+                <?php $childrenCount = $bundleProductHandler->getBundleChildrenItemsCount($orderItem); ?>
+                <?php if ($childrenCount) : ?>
+                    <tr id="bundle-children-count-title-<?= $orderItem->getId() ?>"
+                        class="weight-bold fs-14 lh-24 fedex-bold text-uppercase ls-0-75">
+                        <td colspan="6">
+                            <?= $escaper->escapeHtml(__('Bundled Items (%1)', $childrenCount)) ?>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+
+                <?php foreach ($orderItem->getChildrenItems() as $child) : ?>
+                    <?= $itemRendererProvider->getMyOrdersChildItemHtml($child) ?>
+                <?php endforeach; ?>
+
+                <tr id="last-children-separator-<?= $orderItem->getId() ?>">
+                    <td colspan="6" class="pb-12 pt-12"></td>
+                </tr>
+            <?php endif; ?>
+            <?php if ($orderItem->getProductType() !== Type::TYPE_BUNDLE): ?>
+            <?php if ($reorderToggle): ?>
+            <tr class="product-details-row">
+            <td colspan="6">
+            <table>
+            <tbody>
+            <?php
+            $additionalAttributesData = json_decode((string) $_order->getPayment()->getProductLineDetails());
+            if (!empty($additionalAttributesData) && !empty($product_json['id'])) {
+                $productId = $product_json['id'];
+                $qty = $product_json['qty']; ?>
+                <tr>
+                    <td class="detail-toggle">
+                        <a href="javascript:void(0)"
+                           class="show-properties-view-order"
+                           data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                           id="show-hide-detail-<?=$block->escapeHtmlAttr($orderItem->getId()); ?>">
+													<span>
+														<?= $block->escapeHtml(__('SHOW DETAILS')) ?>
+													</span>
+                        </a>
+                        <a href="javascript:void(0)"
+                           class="hide-properties-view-order"
+                           data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                           id="hide-show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>"
+                           style="display:none;">
+													<span>
+														<?= $block->escapeHtml(__('HIDE DETAILS')) ?>
+													</span>
+                        </a>
+                </div>
+                </tr>
+                <?php if($checkLegacyDocReorderSectionToggle && $isEntireOrderLegacy) : ?>
+                        <tr data-testid="reorder-items-not-available" class="reorder-items-not-available-row">
+                        <td colspan="5">
+                            <div class="reorder-items-not-available-msg-cantainer">
+                                <img class="warning-mes-img"
+                                     alt="warning img" src="<?= $this->getViewFileUrl('images/order-history/warning-message.png'); ?>"/>
+                                <div class="reorder-items-not-available-content-wraper">
+                                    <div data-testid="reorder-items-not-available-title" class="reorder-items-not-available-title" title="Reorder is unavailable">
+                                        <span><?= $block->escapeHtml(__("Reorder is unavailable.")); ?></span>
+                                    </div>
+                                    <p data-testid="reorder-items-not-available-description" class="reorder-items-not-available-description">
+                                        <?= $block->escapeHtml(__("One or more of your previous product configurations is unavailable.")); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php endif;?>
+
+                <tr class="retail-product-attributes"
+                    data-content-id="<?= $block->escapeHtml($orderItem->getId()); ?>" style="display:none">
+                    <td >
+                        <table class="extra-attributes extra-properties-view-order-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>">
+                            <!-- Nested table -->
+                            <thead>
+                            <tr>
+                                <th scope="col" class="col item-sku">Sku</th>
+                                <th scope="col" class="col item-base-price">Base Price</th>
+                                <th scope="col" class="col item-qty">Qty</th>
+                                <th scope="col" class="col item-discount">Discount</th>
+                                <th scope="col" class="col item-total">Total</th>
+                            </tr>
+                            </thead>
+                            <?php
+                            foreach ($additionalAttributesData as $additionalAttributes) {
+
+                                if ($productId == $additionalAttributes->productId && $qty == $additionalAttributes->unitQuantity) {
+                                    foreach ($additionalAttributes->productLineDetails as $key => $additionalAttribute) { ?>
+
+                                        <tr class="attribute-row">
+                                            <td data-th="<?= $block->escapeHtml(__('SKU')) ?>" class="col attribute-name item-sku" >
+																		<span class="attributes-item-name">
+																			<?= $block->escapeHtml($additionalAttribute->description); ?>
+																		</span>
+                                            </td>
+                                            <td data-th="<?= $block->escapeHtml(__('BASE PRICE')) ?>" class="col attribute-base-price item-base-price">
+																		<span class="attribute-item-base-price">
+																		<?= /* @noEscape */$_order->formatPrice($additionalAttribute->detailPrice); ?>
+																		</span>
+                                            </td>
+                                            <td data-th="<?= $block->escapeHtml(__('QTY')) ?>" class="col attribute-qty item-qty">
+																		<span class="attribute-item-qty ">
+																			<?= $block->escapeHtml($additionalAttribute->unitQuantity); ?>
+																		</span>
+                                            </td>
+                                            <td data-th="<?= $block->escapeHtml(__('DISCOUNT')) ?>" class="col attribute-discount item-discount">
+                                                                        <span class="attribute-item-discount">
+                                                                            <?php if ($additionalAttribute->detailDiscountPrice > 0): ?>
+                                                                                - <?= /* @noEscape */ $_order->formatPrice($additionalAttribute->detailDiscountPrice); ?>
+                                                                            <?php else: ?>
+                                                                                -
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                            </td>
+                                            <td data-th="<?= $block->escapeHtml(__('TOTAL')) ?>" class="col attribute-total item-total">
+																		<span class="attribute-item-total">
+																		<?= /* @noEscape */$_order->formatPrice($additionalAttribute->detailPrice); ?>
+																		</span>
+                                            </td>
+                                        </tr>
+                                    <?php }
+                                    break;
+                                }
+                            } ?>
+                            <tr class="additional details">
+                                <td colspan="5">
+                                    <div class="configurater-product-attr"
+                                         id="configurater-product-attr-<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                        <span class="title">ADDITIONAL DETAILS</span>
+                                        <ul class="additional-details"
+                                            role="listbox" aria-labelledby="show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                            <?php
+                                            if (!empty($product_json['features'])) {
+                                                foreach ($product_json['features'] as $configAttribute) {
+                                                    if (!empty($configAttribute['name'])) {
+
+                                                        echo "<li tabindex='0' role='option'>" . $configAttribute['name'] .
+                                                            ": " . $configAttribute['choice']['name'] . "</li>";
+
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                        </ul>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+
+                <tr class="reorder-items-not-available-row">
+                    <td colspan="5">
+                        <div class="reorder-items-not-available-msg-cantainer" style="display: none;">
+                            <img class="warning-mes-img"
+                                 alt="warning img" src="<?= $this->getViewFileUrl('images/order-history/warning-message.png'); ?>"/>
+                            <div class="reorder-items-not-available-content-wraper">
+                                <div class="reorder-items-not-available-title" title="Reorder is unavailable">
+                                    <span><?= $block->escapeHtml(__("Reorder is unavailable.")); ?></span>
+                                </div>
+                                <p class="reorder-items-not-available-description">
+                                    <?= $block->escapeHtml(__("One or more of your previous product configurations is unavailable.")); ?>
+                                </p>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+            <?php } ?>
+            </tbody>
+            </table>
+            </td>
+            </tr>
+        <?php endif; ?>
+        <?php endif; ?>
+            <?php $orderItemsCount++; endforeach; ?>
+        <?php $thirdPartySellers = $viewModel->getThirdPartySellers($_order);?>
+        <?php if (count($thirdPartySellers)>0):?>
+            <?php foreach ($thirdPartySellers as $seller => $items):?>
+                <tr class="fedex-office-products-table delivery-method-table">
+                    <td colspan="6">
+                        <table class="fedex-office-table">
+                            <tbody>
+                            <?php
+                            $totalItems = count($items);
+                            $miraklItemsCountText = $totalItems == 1 ? '1 item' : $totalItems.' items';
+                            ?>
+                            <tr>
+                                <th id="fedex-office-table-title" colspan="3">
+                                    <?= $escaper->escapeHtml($seller.' ('.$miraklItemsCountText.')') ?>
+                                </th>
+                            </tr>
+                            </tbody>
+                            <tbody>
+                            <tr class="mobile-delivery-method">
+                                <td class="delivery-method">
+                                    <img class="img-title" alt="Delivery method icon" src="<?php echo $block->getViewFileUrl('Fedex_MarketplaceCustomer::images/icons/delivery.svg'); ?>" />
+                                    <p>Shipping</p>
+                                </td>
+                                <td class="shipping-address-column">
+                                    <p class="shipping-address-title">Shipping address</p>
+                                    <?php if ($orderItem->getMiraklOfferId() != null && $viewModel->getMiraklShippingByItem($orderItem)): ?>
+                                        <span>
+                                                                <?= $viewModel->getMiraklShippingByItem($orderItem) ?>
+                                                            </span>
+                                    <?php else: ?>
+                                        <?php $shippingAddress = $_order->getShippingAddress() ?>
+                                        <span>
+                                            <?=
+                                              implode(',', $shippingAddress->getStreet()) . ', ' .
+                                              $shippingAddress->getCity() . ', ' .
+                                              $shippingAddress->getRegionCode() . ', ' .
+                                              $shippingAddress->getCountryId() . ' ' . $shippingAddress->getPostcode()
+                                            ?>
+                                        </span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="estimated-delivery-column">
+                                    <p class="estimated-delivery-title"><?= $block->escapeHtml(__('Expected Delivery')) ?></p>
+                                    <p><?= $viewModel->getEstimatedDeliveryThirdPartyBYOrderItems($items); ?></p>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                <?php
+                $attrLable = null;
+                $attrValue = null;
+                $thumbnailImgUrl = null;
+                $orderItemsCount = 0;
+                $productCount = 0;
+                foreach ($items as $index => $orderItem):
+                    $additionalData = (array) json_decode($orderItem->getData('additional_data'));
+
+                    $product_json = $productInfoHandler->getItemExternalProd($orderItem) ?? [];
+                    $previewUrl = "";
+                    $marketplaceItemInfo = [];
+                    $isMarketplaceProduct = false;
+                    if ($orderItem->getData('mirakl_offer_id')) {
+                        $isMarketplaceProduct = true;
+                    }
+                    if (!is_null($orderItem->getAdditionalData())) {
+                        $marketplaceItemInfo = json_decode($orderItem->getAdditionalData());
+                        if (isset($marketplaceItemInfo->isMarketplaceProduct) && isset($marketplaceItemInfo->features)) {
+                            $product_json['features'] = $marketplaceItemInfo->features;
+                        }
+                    }
+                    $previewUrl = $marketplaceItemInfo->image ?? '';
+                    $id = isset($product_json['id']) ? $product_json['id'] : '';
+                    $version = isset($product_json['version']) ? $product_json['version'] : '';
+                    $features = $product_json['features'] ?? [];
+                    $isOutSourced = isset($product_json['isOutSourced']) ? $product_json['isOutSourced'] : false;
+                    if (empty($previewUrl)) {
+                        $prodObj = $orderItem->getProduct();
+                        $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($prodObj);
+                    }
+                    $firstFeature = isset($features[0]) ? $features[0] : null;
+                    if (!empty($firstFeature)) {
+                        $attrLable = $firstFeature->name ?? null;
+                        $attrValue = $firstFeature->choice->name ?? null;
+                    }
+
+                    $customHtmlAttributes = null;
+                    $productStatus = false;
+                    if (
+                        $reorderToggle && isset($orderItem
+                                ->getProductOptions()['info_buyRequest']) && !$orderItem->getMiraklOfferId()
+                    ) {
+                        $serializedProductData = $viewModel->serializeProductData($orderItem
+                            ->getProductOptions()['info_buyRequest']);
+                        $serializedProductJsonData = json_encode($serializedProductData['serializedProductData']);
+                        $customHtmlAttributes = 'product-instance="' .
+                            $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+                            $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) . '" product-status="1"';
+                        $productStatus = true;
+                        $productId = $orderItem->getProductId();
+                        $product = $viewModel->loadProductObj($productId);
+
+                        if ($product == false) {
+                            $customHtmlAttributes = 'product-instance="' .
+                                $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+                                $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+                                '" product-status="0"';
+                            $productStatus = false;
+                            $productCount++;
+                        }
+                    }
+                    $prodObj = $orderItem->getProduct();
+                    $newDocumentImage = $newDocumentApiImageToggle ? $newDocumentApiImageToggle : false;
+                    if ($prodObj) {
+                        $isCustomize = $viewModel->getProductCustomAttributeValue($prodObj->getId(), 'customizable');
+                        if ($prodObj->getData('pod2_0_editable') && ($isCustomize) || $newDocumentImage ){
+                            $newDocumentImage = true;
+                        }
+                    }
+                    ?>
+                    <tr class="expend-order"
+                        <?= /* @noEscape */$customHtmlAttributes ?>
+                        order-id="<?= $_order->getId(); ?>"
+                        order-increment-id="<?= $_order->getIncrementId(); ?>"
+                        item-id="<?= $orderItem->getId(); ?>"
+                        item-sku="<?= $orderItem->getSku() ?>"
+                        item-qty="<?= $orderItem->getQtyOrdered() ?>"
+                        data-broker-config-id="<?= $additionalData['supplierPartAuxiliaryID']; ?>"
+                        product-content-reference="<?= $previewUrl; ?>" newDocumentImage=<?= $newDocumentImage ? $newDocumentImage : false; ?>
+                        data-is-mirakl-offer="<?= $isMarketplaceProduct; ?>"
+                        data-3p-customizable="<?= $orderItem->getProduct()->getData("customizable_product"); ?>"
+                        >
+                        <?php if ($reorderToggle): ?>
+                            <td class="col reorder-checkbox-item">
+                                <label class="item-label
+									<?= (!$isReOrderable || !$productStatus ||
+                                    ($checkLegacyDocReorderSectionToggle &&
+                                                    $orderItemStatusLegacyDocument[$orderItem->getId()])) ?
+                                    'disable-checkbox' : ''; ?>">
+                                     <input <?= ($checkLegacyDocReorderSectionToggle && $orderItemStatusLegacyDocument[$orderItem->getId()])
+                                        ? 'disabled'
+                                        : (($isReOrderable && $productStatus)
+                                            ? $block->escapeHtmlAttr(__('enabled'))
+                                            : $block->escapeHtmlAttr(__('disabled'))); ?>
+                                        aria-label="reorder item"
+                                        class="checkbox-item checkbox-item-ls select-order-<?= $_order->getId(); ?>
+																	selected-order-item-<?= $orderItem->getId(); ?>"
+                                        type="checkbox"
+                                        data-testid="checkbox-item-<?= $index ?>"
+                                        data-is-OutSourced="<?= $isOutSourced ?>"
+                                        data-product-id="<?= $orderItem->getProductId(); ?>"
+                                        data-item-qty="<?= $orderItem->getQtyOrdered(); ?>"
+                                        data-order-id="<?= $_order->getId(); ?>"
+                                        data-item-id="<?= $orderItem->getId(); ?>"
+                                        data-is-mirakl-offer="<?= $isMarketplaceProduct; ?>"
+                                        data-offer-id="<?= $orderItem->getMiraklOfferId(); ?>"
+                                        data-order-increment-id="<?= $_order->getIncrementId(); ?>"
+                                        data-product-type="<?= $orderItem->getProductType() ?>"
+                                        data-broker-config-id="<?= $additionalData['supplierPartAuxiliaryID']; ?>"
+                                    />
+                                    <img tabindex="0"
+                                         src="<?php echo $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                         class="item-checked-icon checked-order-items-
+													  					<?= $_order->getId(); ?> checked-order-item-<?= $orderItem->getId(); ?>"
+                                         alt="Item Checked" />
+                                </label>
+                            </td>
+                        <?php endif; ?>
+                        <td class="col item">
+                            <div class="item-info">
+                                <?php if ($reorderToggle): ?>
+                                    <label class="reorder-item-label-check
+										<?= (!$isReOrderable || !$productStatus || ($checkLegacyDocReorderSectionToggle && $orderItemStatusLegacyDocument[$orderItem->getId()])) ? 'disable-checkbox' : ''; ?>">
+                                        <input <?= ($checkLegacyDocReorderSectionToggle && $orderItemStatusLegacyDocument[$orderItem->getId()])
+                                        ? 'disabled'
+                                        : (($isReOrderable && $productStatus)
+                                            ? $block->escapeHtmlAttr(__('enabled'))
+                                            : $block->escapeHtmlAttr(__('disabled'))); ?>
+                                            aria-label="reorder item" class="checkbox-item checkbox-item-ss select-order-<?= $_order->getId(); ?>
+														   				selected-order-item-<?= $orderItem->getId(); ?>"
+                                            type="checkbox"
+                                            data-is-OutSourced="<?= $isOutSourced ?>"
+                                            data-product-id="<?= $orderItem->getProductId(); ?>"
+                                            data-item-qty="<?= $orderItem->getQtyOrdered(); ?>"
+                                            data-order-id="<?= $_order->getId(); ?>"
+                                            data-item-id="<?= $orderItem->getId(); ?>"
+                                            data-is-mirakl-offer="<?= $isMarketplaceProduct; ?>"
+                                            data-order-increment-id="<?= $_order->getIncrementId(); ?>"
+                                            data-product-type="<?= $orderItem->getProductType() ?>"
+                                            data-offer-id="<?= $orderItem->getMiraklOfferId(); ?>"/>
+
+                                        <img tabindex="0"
+                                             src="<?php echo $this->getViewFileUrl($slectedCheckoboxIcon); ?>"
+                                             class="item-checked-icon checked-order-items-<?= $_order->getId(); ?>
+														   				checked-order-item-<?= $orderItem->getId(); ?>"
+                                             alt="Item Checked" />
+                                    </label>
+                                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                         class="product-engine-loader" alt="product image" aria-label="product-loader" style="display: none;"/>
+                                <?php endif; ?>
+                                <div class="item-img">
+                                    <?php if (!empty($previewUrl)): ?>
+                                        <span class="product-image-container prev-img-loader" >
+																	<div data-bind="if: productPreviewImg">
+																		<img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                                                             class="product-loader"
+                                                                             alt="product image"
+                                                                             aria-label="product-loader"
+                                                                        />
+																		<img class="preview-product-img"
+                                                                             id="content-reference-image-<?= $orderItem->getId(); ?>"
+                                                                             alt="product preview image"
+                                                                             aria-label="preview-product-img"
+                                                                             src="<?= $escaper->escapeUrl($previewUrl);?>" />
+																	</div>
+																	<div data-bind="ifnot: productPreviewImg">
+																		<img src="#" alt="Product Image"
+                                                                             class="product-empty-image" aria-label="product-empty-image" />
+																	</div>
+																</span>
+                                    <?php else: ?>
+                                        <span class="product-item-photo">
+																	<img alt="product item photo" src="<?= $thumbnailImgUrl; ?>"
+                                                                         class="product-thumbnail" />
+																</span>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="item-detail">
+                                    <p class="product-item-name">
+                                        <?php if (isset($additionalData['marketplace_name'])) : ?>
+                                            <?= $additionalData['marketplace_name']; ?>
+                                        <?php elseif (isset($additionalData['navitor_name'])) : ?>
+                                            <?= $additionalData['navitor_name']; ?>
+                                        <?php elseif (!empty($previewUrl) && isset($product_json['userProductName'])) : ?>
+                                            <?= $product_json['userProductName']; ?>
+                                        <?php elseif (!empty($previewUrl) && isset($product_json['fxo_product'])) : ?>
+                                            <?php $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? [];?>
+                                            <?= $fxoProduct ? $fxoProduct->name : $orderItem->getName();?>
+                                        <?php  else : ?>
+                                            <?= $block->escapeHtml($orderItem->getName()) ?>
+                                        <?php endif; ?>
+                                    </p>
+                                    <?php if ($attrLable && $attrValue): ?>
+                                        <p class="size-info">
+                                            <span><?= $attrLable . ' - '; ?></span><span class="paper-size"><?= $attrValue; ?></span>
+                                        </p>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        </td>
+                        <td data-th="<?= $block->escapeHtml(__('Status')) ?>"
+                            class="col item-status">
+													<span>
+														<?= $viewModel->orderLineItem3P($viewModel->getMiraklOrderStatus($_order->getIncrementId(), $orderItem->getSku(),$orderItem->getMiraklOfferId())) ?>
+													</span>
+                            <?php
+                            if (!$viewModel->isEssendantToggleEnabled()) :
+                                $shipments = $_order->getShipmentsCollection()->getItems();
+
+                                if ($shipments) {
+                                    $trackingNumber = $viewModel->getTrackingNumbersByOrderItem($orderItem, $shipments);
+                                    if ($trackingNumber):
+                                        echo '<span class="tracking-numbers">Tracking number(s)</span>';
+                                        echo $trackingNumber;
+                                    endif;
+                                }
+                             ?>
+                            <?php else: ?>
+                                <div class="tracking-numbers-container"></div>
+                            <?php endif; ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtml(__('Unit Price')) ?>" class="col unit-price">
+                            <?php $unitPrice = !empty($additionalData['unit_price']) ? $_order->formatPrice($additionalData['unit_price']) : $_order->formatPrice($orderItem->getPrice()) ?>
+                            <?= /* @noEscape */$unitPrice ?>
+                        </td>
+                        <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
+													<span class="item-qty">
+														<?php $quantity = !empty($additionalData['quantity']) ? $additionalData['quantity'] : $orderItem->getQtyOrdered() ?>
+                                                        <?= /* @noEscape */(int) $quantity ?>
+													</span>
+                        </td>
+                        <td data-th="<?= $block->escapeHtml(__('Total')) ?>" class="col total item-total-data">
+                            <?php $total = !empty($additionalData['total']) ? $_order->formatPrice($additionalData['total']) : $_order->formatPrice($orderItem->getRowTotal()) ?>
+                            <?= /* @noEscape */$total ?>
+                        </td>
+                    </tr>
+                    <?php if ($reorderToggle): ?>
+                    <tr class="product-details-row">
+                    <td colspan="6">
+                    <table>
+                    <tbody>
+                    <?php $additionalAttributesData = json_decode((string) $_order->getPayment()->getProductLineDetails());?>
+
+                    <?php if (!empty($additionalAttributesData) && !empty($product_json['features'])) : ?>
+                        <tr>
+                            <td>
+                                <div class="detail-toggle">
+                                    <a href="javascript:void(0)"
+                                       class="show-properties-view-order"
+                                       data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                                       id="show-hide-detail-<?=$block->escapeHtmlAttr($orderItem->getId()); ?>">
+                                                                <span>
+                                                                    <?= $block->escapeHtml(__('SHOW DETAILS')) ?>
+                                                                </span>
+                                    </a>
+                                    <a href="javascript:void(0)"
+                                       class="hide-properties-view-order"
+                                       data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                                       id="hide-show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>"
+                                       style="display:none;">
+                                                                <span>
+                                                                    <?= $block->escapeHtml(__('HIDE DETAILS')) ?>
+                                                                </span>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="retail-product-attributes"
+                            data-content-id="<?= $block->escapeHtml($orderItem->getId()); ?>" style="display:none">
+                            <td colspan="4">
+                                <table
+                                    class="extra-attributes extra-properties-view-order-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>">
+                                    <!-- Nested table -->
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" class="col item-sku">Sku</th>
+                                        <th scope="col" class="col item-base-price">Base Price</th>
+                                        <th scope="col" class="col item-qty">Qty</th>
+                                        <th scope="col" class="col item-discount">Discount</th>
+                                        <th scope="col" class="col item-total">Total</th>
+                                    </tr>
+                                    </thead>
+                                    <?php foreach ($additionalAttributesData as $additionalAttributes) :?>
+
+                                        <?php if($additionalAttributes->type!=="THIRD_PARTY" || $orderItem->getQuoteItemId() != $additionalAttributes->instanceId ){
+                                            continue;
+                                        }?>
+
+                                        <?php foreach ($additionalAttributes->productLineDetails as $key => $additionalAttribute) : ?>
+
+                                            <tr class="attribute-row">
+                                                <td data-th="<?= $block->escapeHtml(__('SKU')) ?>" class="col attribute-name item-sku" >
+																		<span class="attributes-item-name">
+																			<?= $block->escapeHtml($additionalAttribute->description); ?>
+																		</span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('BASE PRICE')) ?>" class="col attribute-base-price item-base-price">
+																		<span class="attribute-item-base-price">
+																		<?= /* @noEscape */$_order->formatPrice($additionalAttribute->detailPrice); ?>
+																		</span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('QTY')) ?>" class="col attribute-qty item-qty">
+																		<span class="attribute-item-qty ">
+																			<?= $block->escapeHtml($additionalAttribute->unitQuantity); ?>
+																		</span>
+                                                </td>
+
+                                                <td data-th="<?= $block->escapeHtml(__('DISCOUNT')) ?>" class="col attribute-discount item-discount">
+                                                                        <span class="attribute-item-discount">
+                                                                            <?php if ($additionalAttribute->detailDiscountPrice > 0): ?>
+                                                                                - <?= /* @noEscape */ $_order->formatPrice($additionalAttribute->detailDiscountPrice); ?>
+                                                                            <?php else: ?>
+                                                                                -
+                                                                            <?php endif; ?>
+                                                                        </span>
+                                                </td>
+
+
+                                                <td data-th="<?= $block->escapeHtml(__('TOTAL')) ?>" class="col attribute-total item-total">
+																		<span class="attribute-item-total">
+																		<?= /* @noEscape */$_order->formatPrice($additionalAttribute->detailPrice); ?>
+																		</span>
+                                                </td>
+                                            </tr>
+                                        <?php endforeach;?>
+                                    <?php endforeach; ?>
+                                    <tr class="additional details">
+                                        <td colspan="5">
+                                            <div class="configurater-product-attr"
+                                                 id="configurater-product-attr-bl<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                                <span class="title">ADDITIONAL DETAILS</span>
+                                                <ul class="additional-details"
+                                                    role="listbox" aria-labelledby="show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                                    <?php $opt = 1; ?>
+                                                    <?php foreach ($product_json['features'] as $configAttribute) : ?>
+                                                        <?php if (!empty($configAttribute->name)) : ?>
+                                                            <?= /* @noEscape */"<li tabindex='0' role='option'>"
+                                                            . $configAttribute->name . ": "
+                                                            . $configAttribute->choice->name . "</li>"; ?>
+                                                        <?php endif;?>
+                                                        <?php $opt++; endforeach;?>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    <?php endif;?>
+                    </tbody>
+                    </table>
+                    </td>
+                    </tr>
+                    <tr data-testid="reorder-items-not-available" class="reorder-items-not-available-row">
+                        <td colspan="5">
+                            <div class="reorder-items-not-available-msg-cantainer" style="display: none;">
+                                <img class="warning-mes-img"
+                                     alt="warning img" src="<?= $this->getViewFileUrl('images/order-history/warning-message.png'); ?>"/>
+                                <div class="reorder-items-not-available-content-wraper">
+                                    <div data-testid="reorder-items-not-available-title" class="reorder-items-not-available-title" title="Reorder is unavailable">
+                                        <span><?= $block->escapeHtml(__("Reorder is unavailable.")); ?></span>
+                                    </div>
+                                    <p data-testid="reorder-items-not-available-description" class="reorder-items-not-available-description">
+                                        <?= $block->escapeHtml(__("One or more of your previous product configurations is unavailable.")); ?>
+                                    </p>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+                    <?php $orderItemsCount++; endforeach; ?>
+            <?php endforeach;?>
+        <?php endif;?>
+
+        <tr data-testid="view-order-receipt-wrapper" class="view-receipt">
+            <?php if ($checkLegacyDocReorderSectionToggle &&
+                        $orderItemStatusLegacyDocument[$orderItem->getId()] || ($reorderToggle || $productCount == $orderItemsCount) ||
+                ($reorderToggle && !$isReOrderable || $productCount == $orderItemsCount)):?>
+                <td colspan="4" class="reorder-unavailable <?= "reorder-unavailable-" . $_order->getId(); ?>" style="display:none;">
+                    <img class="warning-mes-img"
+                         alt="warning img" src="<?= $this->getViewFileUrl('images/order-history/warning-message.png'); ?>" />
+                    <?= $block->escapeHtml(__("Reorder is unavailable.")); ?>
+                    <p>
+                        One or more of your previous product configurations is unavailable.
+                    </p>
+                </td>
+            <?php endif; ?>
+            <?php if ($reorderToggle) : ?>
+            <td colspan="6" class="view-action">
+                <?php elseif ($reorderToggle && !$isReOrderable || $checkLegacyDocReorderSectionToggle && $orderItemStatusLegacyDocument[$orderItem->getId()]) : ?>
+            <td colspan="2" class="view-action">
+                <?php else : ?>
+            <td colspan="4">
+                <?php endif; ?>
+
+
+
+                <?php if ($viewModel->isTokenizedUrlToggleEnabled()) : ?>
+                    <button
+                        onclick="location.href='<?= $block->escapeUrl($viewModel->getViewUrl($_order)) ?>'"
+                        data-testid="view-receipt-button"
+                        type="button" class="action view" data-id="<?= $_order->getId(); ?>">
+                        <span><?= $block->escapeHtml(__('View Details')) ?></span>
+                    </button>
+                <?php else : ?>
+                    <button
+                        onclick="location.href='<?= $block->escapeUrl($block->getViewUrl($_order)) ?>'"
+                        data-testid="view-receipt-button"
+                        type="button" class="action view" data-id="<?= $_order->getId(); ?>">
+                        <span><?= $block->escapeHtml(__('View Details')) ?></span>
+                    </button>
+                <?php endif; ?>
+
+
+            </td>
+        </tr>
+        </tbody>
+        </table>
+        </td>
+        </tr>
+    <?php endforeach; ?>
+    </tbody>
+    </table>
+    </div>
+    <?php if ($block->getPagerHtml()): ?>
+        <div class="order-products-toolbar toolbar bottom retail-orders" data-testid="order-products-toolbar"><?= $block->getPagerHtml() ?></div>
+    <?php endif ?>
+<?php else: ?>
+    <div class="message info empty" data-testid="empty-orders-message"><span><?= $block->escapeHtml($block->getEmptyOrdersMessage()) ?></span></div>
+<?php endif ?>
+
+<!--  B-900093 | code to sort collection by date -->
+<input type="hidden" id="sorturl" value="<?php echo $historyUrl; ?>"/>
+<script>
+    require(['jquery', 'fedex/storage'], function($, fxoStorage) {
+        $(document).ready(function() {
+            $(document).on('click', '.sort-order-table, .sort-order-table-heading', function(){
+                let orderBy = $(this).attr('orderby');
+                let sortBy = $(this).attr('sortby');
+                let previousRedirectUrl = $('#sorturl').val();
+                let previousSortBy = "<?php echo $sortBy; ?>";
+                let previousOrderBy = "<?php echo $orderBy; ?>";
+
+                let sortByUrl = previousRedirectUrl.toString().replace('sortby='+previousSortBy, 'sortby='+sortBy);
+                let redirectUrl = sortByUrl.toString().replace('orderby='+previousOrderBy, 'orderby='+orderBy);
+                window.location.href = redirectUrl;
+            });
+            <?php if ($reorderToggle): ?>
+            $(document).on('click', '.view-order-carrot-toggle', function() {
+                $(this).parents('tr.table-row').find('.orderExpand').trigger('click');
+            });
+            <?php endif; ?>
+
+            $(document).on('click', '.orderExpand', function () {
+                let orderId = $(this).attr('data-id'),
+                    orderRow = $('.order-id-' + orderId),
+                    orderExpand = $('#order-expand-' + orderId);
+                <?php if ($reorderToggle): ?>
+                if (orderRow.css('display') == 'contents') {
+                    orderRow.css('display', 'none');
+                    if ($(window).width() < 768) {
+                        orderExpand.prop('style', 'display: none !important;');
+                    }
+                    if (!orderRow.prev('tr').hasClass('reorder-disabled')) {
+                        orderRow.prev('tr').removeClass('row-active');
+                    }
+                    if (!$('.view-receipt').find('.reorder-unavailable-' + orderId).length) {
+                        $('.checkbox-order.selected-order-' + orderId).prop('disabled', false);
+                        $('.checkbox-order.selected-order-' + orderId).parents('.order-label').removeClass('disable-checkbox');
+                    }
+                } else if (orderRow.css('display') == 'none') {
+                    orderRow.css('display', 'contents');
+                    if ($(window).width() < 768) {
+                        orderExpand.prop('style', 'display: flex !important;');
+                    }
+                    if (!orderRow.prev('tr').hasClass('reorder-disabled')) {
+                        orderRow.prev('tr').addClass('row-active');
+                    }
+                }
+                <?php else: ?>
+                if (orderRow.css('display') == 'contents') {
+                    orderRow.css('display', 'none');
+                    if ($(window).width() < 768) {
+                        orderExpand.prop('style', 'display: none !important;');
+                    }
+                    orderRow.prev('tr').removeClass('row-active');
+                } else if (orderRow.css('display') == 'none') {
+                    $('.order-items-row').css('display', 'none');
+                    $('.order-items-row').prev('tr').removeClass('row-active');
+                    orderRow.css('display', 'contents');
+                    orderRow.prev('tr').addClass('row-active');
+                    if ($(window).width() < 768) {
+                        orderExpand.prop('style', 'display: flex !important;');
+                    }
+                } else {
+                    orderRow.css('display', 'none');
+                    orderRow.prev('tr').removeClass('row-active');
+                    if ($(window).width() < 768) {
+                        orderExpand.prop('style', 'display: none !important;');
+                    }
+                }
+                <?php endif; ?>
+            });
+            <?php if ($reorderToggle): ?>
+            $('.checkbox-order').on('change', function() {
+                let orderId = $(this).attr('data-order-id');
+                if ($(this).is(":checked")) {
+                    $('.selected-order-'+orderId).prop('checked', true);
+                    $('.selected-order-'+orderId).css("display", "none");
+                    $('.order-checked-'+orderId).css("display", "block");
+
+                    $('.select-order-'+orderId).each(function () {
+                        if (typeof($(this).attr("disabled")) == "undefined") {
+                            $(this).prop('checked', true).trigger('change');
+                            $(this).css("display", "none");
+                            $(this).next('.checked-order-items-'+orderId).css("display", "block");
+                        }
+                    });
+
+                    $('.checkbox-order').each(function() {
+                        if ($('input[type="checkbox"]:checked').length > 0 &&
+                            $('input.checkbox-item[type="checkbox"]:checked').length > 0) {
+                            $('.retail-reorder-btn').prop('disabled', false);
+                            $('.retail-reorder-btn').addClass('active');
+                        } else {
+                            $('.retail-reorder-btn').prop('disabled', true);
+                            $('.retail-reorder-btn').removeClass('active');
+                        }
+                    });
+                } else {
+                    $('.selected-order-'+orderId).prop('checked', false);
+                    $('.selected-order-'+orderId).css("display", "block");
+                    $('.select-order-'+orderId).prop('checked', false).trigger('change');
+                    $('.select-order-'+orderId).css("display", "block");
+                    $('.order-checked-'+orderId).css("display", "none");
+                    $('.checked-order-items-'+orderId).css("display", "none");
+                    $('.checkbox-order').each(function() {
+                        if ($('input[type="checkbox"]:checked').length > 0) {
+                            $('.retail-reorder-btn').prop('disabled', false);
+                            $('.retail-reorder-btn').addClass('active');
+                        } else {
+                            $('.retail-reorder-btn').prop('disabled', true);
+                            $('.retail-reorder-btn').removeClass('active');
+                        }
+                    });
+                }
+            });
+
+            $('.checkbox-item').on('change', function() {
+                let orderId = $(this).attr('data-order-id');
+                let orderItemId = $(this).attr('data-item-id');
+                if($(this).is(":checked")) {
+                    $('.selected-order-item-'+orderItemId).prop('checked', true);
+                    $('.selected-order-item-'+orderItemId).css("display", "none");
+                    $('.checked-order-item-'+orderItemId).css("display", "block");
+                    if ($('.select-order-'+orderId+':checked').length == $('.select-order-'+orderId).length) {
+                        $('.selected-order-'+orderId).prop('checked', true);
+                        $('.selected-order-'+orderId).css("display", "none");
+                        $('.order-checked-'+orderId).css("display", "block");
+                    }
+                    $('.checkbox-item').each(function() {
+                        if ($('input[type="checkbox"]:checked').length > 0) {
+                            $('.retail-reorder-btn').prop('disabled', false);
+                            $('.retail-reorder-btn').addClass('active');
+                        } else {
+                            $('.retail-reorder-btn').prop('disabled', true);
+                            $('.retail-reorder-btn').removeClass('active');
+                        }
+                    });
+                } else {
+                    $('.selected-order-item-'+orderItemId).prop('checked', false);
+                    $('.selected-order-item-'+orderItemId).css("display", "block");
+                    $('.checked-order-item-'+orderItemId).css("display", "none");
+                    $('.selected-order-'+orderId).prop('checked', false);
+                    $('.selected-order-'+orderId).css("display", "block");
+                    $('.order-checked-'+orderId).css("display", "none");
+                    $('.checkbox-item').each(function() {
+                        if ($('input[type="checkbox"]:checked').length > 0) {
+                            $('.retail-reorder-btn').prop('disabled', false);
+                            $('.retail-reorder-btn').addClass('active');
+                        } else {
+                            $('.retail-reorder-btn').prop('disabled', true);
+                            $('.retail-reorder-btn').removeClass('active');
+                        }
+                    });
+                }
+            });
+            <?php endif; ?>
+        });
+
+        $(window).on('resize', function () {
+            if ($(window).width() < 768) {
+                $('td.reorder-order-label-check').each(function() {
+                    if ($(this).parent().hasClass('row-active')) {
+                        $(this).prop('style', 'display: flex !important;');
+                    } else {
+                        $(this).prop('style', 'display: none !important;');
+                    }
+                });
+            } else {
+                $('td.reorder-order-label-check').prop('style', 'display: none !important;');
+            }
+        });
+
+        <?php if ($reorderToggle): ?>
+        //if checked for reorder on window load by default checked
+        $(window).on('load', function () {
+            let reorderItemData = window.e383157Toggle ? fxoStorage.get('reorder-items-data') : localStorage.getItem('reorder-items-data');
+            if (typeof(reorderItemData) == "undefined" ||
+                reorderItemData == null) {
+                if (window.e383157Toggle) {
+                    fxoStorage.set('reorder-items-data', "{}");
+                } else {
+                    localStorage.setItem('reorder-items-data', "{}");
+                }
+            } else if (reorderItemData.length > 0){
+                $.each(JSON.parse(reorderItemData), function( index, value ) {
+
+                    if ($(this).width > 767) {
+                        $('input.checkbox-item-ls[data-item-id="'+index+'"]').trigger('click').hide().next().show();
+                    } else {
+                        $('input.checkbox-item-ss[data-item-id="'+index+'"]').trigger('click').hide().next().show();
+                    }
+
+                    $('a[data-id="'+value['order_id']+'"]').trigger('click');
+                });
+            }
+        });
+
+        //on behalf of checked and unchecked store and remove data for persistent checked in local storage
+        $('.checkbox-item').on('change', function () {
+            //fetch data from local storage
+            let reorderItemData = window.e383157Toggle ? fxoStorage.get('reorder-items-data') : localStorage.getItem('reorder-items-data');
+            let storeReorderData = JSON.parse(reorderItemData);
+            //get order data from checkbox
+            let checkboxItem = $(this),
+                orderId = checkboxItem.attr('data-order-id'),
+                itemId = checkboxItem.attr('data-item-id'),
+                productId = checkboxItem.attr('data-product-id'),
+                itemQty = checkboxItem.attr('data-item-qty'),
+                isOutSourced = checkboxItem.attr('data-is-OutSourced'),
+                isMiraklOffer = checkboxItem.attr('data-is-mirakl-offer'),
+                offerId = checkboxItem.attr('data-offer-id'),
+                orderIncrementId = checkboxItem.attr('data-order-increment-id'),
+                itemProductType = checkboxItem.attr('data-product-type');
+
+            var reorderData = {};
+            if (checkboxItem.is(":checked")) {
+                if (reorderItemData.length > 0) {
+                    reorderData = storeReorderData;
+                    reorderData[itemId] = {
+                        order_id: orderId,
+                        product_id: productId,
+                        item_id: itemId,
+                        itemQty: itemQty,
+                        isOutSourced: isOutSourced,
+                        isMiraklOffer: isMiraklOffer,
+                        offerId: offerId,
+                        order_increment_id: orderIncrementId
+                    }
+                    if(itemProductType === 'bundle') {
+                        let children = [];
+                        $('tr.item-info-parent-' + itemId).each(function() {
+                            var itemId = $(this).attr('item-id');
+                            children.push(itemId);
+                        });
+                        reorderData[itemId]['children'] = children;
+                    }
+                }
+            } else {
+                reorderData = storeReorderData;
+                delete reorderData[itemId];
+            }
+            if (window.e383157Toggle) {
+                fxoStorage.set('reorder-items-data', JSON.stringify(reorderData));
+            } else {
+                localStorage.setItem('reorder-items-data', JSON.stringify(reorderData));
+            }
+        });
+        <?php endif; ?>
+    });
+</script>
+<?php if ($reorderToggle): ?>
+    <script>
+        require(['jquery'], function($) {
+            $(document).on('click', '.show-properties-view-order', function() {
+                $(this).parents('table.order-item .expend-order').addClass('active');
+                let itemId = $(this).attr('data-id');
+                $('tr[data-content-id="'+itemId+'"]').show();
+                $('a[data-id="'+itemId+'"]').show();
+                $('#show-hide-detail-'+itemId).hide();
+                $('#hideDetails-'+itemId).css('display','contents');
+                $('.show-details-hr-'+itemId).css('display','block');
+            });
+            $(document).on('click', '.hide-properties-view-order', function() {
+                $(this).parents('table.order-item .expend-order').removeClass('active');
+                let itemId = $(this).attr('data-id');
+                $('#show-hide-detail-'+itemId).show();
+                $('tr[data-content-id="'+itemId+'"]').hide();
+                $(this).hide();
+                $('#hideDetails-'+itemId).css('display','none');
+                $('.showDetails-'+itemId).css('display','block');
+                $('.show-details-hr-'+itemId).css('display','none');
+            });
+        });
+    </script>
+<?php endif; ?>
+<script>
+    require([
+        "jquery"
+    ], function($){
+        $(".checkbox-order, .order-checked-icon, .checkbox-item, .item-checked-icon").on("keypress", function(e) {
+            let _this = this;
+            if (e.which == 13) {
+                $(_this).trigger("click");
+            }
+        });
+    });
+</script>
+<?php if ($reorderToggle): ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "reorder_check_product": {
+                        "component": "Fedex_Orderhistory/js/view/reorder-product-engine-check-item-availbility"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

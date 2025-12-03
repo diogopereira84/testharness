@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+     <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AttributeSet">
+        <plugin name="fedex_catalog_mvp_attribute_set" type="Fedex\CatalogMvp\Plugin\AttributeSet" disabled="false" />
+    </type>
+
+    <preference for="Magento\Catalog\Model\Product\Copier" type="Fedex\CatalogMvp\Model\Duplicate" />
+
+    <!--B-1642066-->
+    <type name="Magento\Catalog\Controller\Adminhtml\Product\MassDelete">
+        <plugin name="fedex_catalog_mvp_mass_delete" type="Fedex\CatalogMvp\Plugin\MassDelete"  disabled="true" />
+    </type>
+
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories">
+        <plugin name="fedex_catalog_mvp_category_list" type="Fedex\CatalogMvp\Plugin\Categories" disabled="false"/>
+    </type>
+    <type name="Magento\Catalog\Ui\Component\Product\Form\Categories\Options">
+        <plugin name="fedex_catalog_mvp_new_category_list" type="Fedex\CatalogMvp\Plugin\NewCategoryOptions" disabled="false" />
+    </type>
+
+    <type name="Magento\Catalog\Model\Product">
+        <plugin name="fedex_catalog_mvp_disable_product_duplicate" type="Fedex\CatalogMvp\Plugin\DisableProductDuplicate" sortOrder="100" disabled="false"/>
+    </type>
+    <virtualType name="Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Pool">
+        <arguments>
+            <argument name="modifiers" xsi:type="array">
+                <item name="pod2_0_editable" xsi:type="array">
+                    <item name="class" xsi:type="string">Fedex\CatalogMvp\Ui\DataProvider\Product\Form\Modifier\Pod2Editable</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
+                </item>
+                <item name="published_toggle" xsi:type="array">
+                    <item name="class" xsi:type="string">Fedex\CatalogMvp\Ui\DataProvider\Product\Form\Modifier\PublishedToggle</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator">
+        <plugin name="product_url_generation" type="Fedex\CatalogMvp\Plugin\ProductUrlPathGeneratorPlugin"/>
+    </type>
+    <type name="Magento\Backend\Model\Url">
+        <plugin name="email_link_admin_redirect" type="Fedex\CatalogMvp\Plugin\AdminLoginRedirect" sortOrder="10" disabled="false"  />
+    </type>
+    <type name="Magento\SharedCatalog\Controller\Adminhtml\SharedCatalog\Configure\Save">
+        <plugin name="fedex_catalog_mvp_sharedCatalog_admin_product_assign" type="Fedex\CatalogMvp\Plugin\SharedCatalog\Controller\Adminhtml\SharedCatalog\Configure\SavePlugin" sortOrder="50" disabled="false"  />
+    </type>
+</config>

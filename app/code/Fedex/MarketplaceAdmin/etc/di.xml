@@ -1,0 +1,28 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Mirakl\Adminhtml\Block\Sales\Order\View\Items\Column\Mirakl" type="Fedex\MarketplaceAdmin\Block\Sales\Order\View\Items\Column\Mirakl" />
+    <preference for="Magento\Shipping\Block\Adminhtml\View\Form" type="Fedex\MarketplaceAdmin\Block\Adminhtml\View\Form" />
+    <preference for="Mirakl\Adminhtml\Ui\Component\Listing\Column\Order\Flag" type="Fedex\MarketplaceAdmin\Adminhtml\Ui\Component\Listing\Column\Order\Flag"/>
+    <type name="Fedex\SubmitOrderSidebar\Model\SubmitOrderApi">
+        <plugin name="update_order_origin"
+                type="Fedex\MarketplaceAdmin\Plugin\UpdateOrderOriginPlugin"
+                sortOrder="10"
+                disabled="false"/>
+    </type>
+    <type name="Mirakl\Adminhtml\Ui\Component\Listing\Column\Order\Flag">
+        <plugin sortOrder="1" name="fedexMarketplaceAdminFlag"
+                type="Fedex\MarketplaceAdmin\Plugin\Ui\Component\Listing\Column\Order\FlagPlugin"/>
+    </type>
+    <type name="Mirakl\Mcm\Helper\Product\Export\Product">
+        <plugin name="fedex_marketplaceadmin_mirakl_product_export_plugin"
+                type="Fedex\MarketplaceAdmin\Plugin\Mirakl\Mcm\Helper\Product\ProductPlugin" />
+    </type>
+    <type name="Magento\Sales\Block\Adminhtml\Order\View\Info">
+        <plugin name="fedex_marketplace_admin_order_view_info_plugin"
+                type="Fedex\MarketplaceAdmin\Plugin\AdminOrderViewInfoPlugin"
+                sortOrder="10" />
+    </type>
+    <type name="Magento\Sales\Ui\Component\Listing\Column\Address">
+        <plugin name="fedex_admin_grid_mirakl_shipping_override"
+                type="Fedex\MarketplaceAdmin\Plugin\AdminOrderGridShippingAddressPlugin"/>
+    </type>
+</config>

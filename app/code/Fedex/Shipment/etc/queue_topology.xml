@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="ready.pickup" type="topic" connection="amqp">
+        <binding id="readyForPickupEmailQueue" topic="readyForPickupEmailQueue" destinationType="queue"
+                 destination="readyForPickupEmailQueue"/>
+    </exchange>
+    <exchange name="update.order" type="topic" connection="amqp">
+        <binding id="updateOrderInformation" topic="updateOrderInformation" destinationType="queue"
+                 destination="updateOrderInformation"/>
+    </exchange>
+    <exchange name="send.order.email" type="topic" connection="amqp">
+        <binding id="sendOrderEmailQueue" topic="sendOrderEmailQueue" destinationType="queue"
+                 destination="sendOrderEmailQueue"/>
+    </exchange>
+    <exchange name="retry.shipmentCreation" type="topic" connection="amqp">
+        <binding id="retryShipmentCreation" topic="retryShipmentCreation" destinationType="queue"
+    		     destination="retryShipmentCreation"/>
+    </exchange>
+</config>

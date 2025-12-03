@@ -1,0 +1,486 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/** @var \Magento\Sales\Block\Order\Items $block */
+/** @var \Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement $viewModel */
+/** @var $escaper \Magento\Framework\Escaper */
+
+$_order = $block->getOrder();
+$discountClass = $_order->getDiscountAmount()>0 ? ' discount-added':'';
+$viewModel = $block->getData('order_enhancement_view_model');
+$isEnhancementEnabeled = $viewModel->isEnhancementEnabeled();
+$isEssendantToggleEnabled = $viewModel->isEssendantToggleEnabled();
+$isCBBToggleEnabled = $viewModel->isCBBToggleEnabled();
+$isReorderEnabled = $viewModel->isReorderEnabled();
+$eproClass = $viewModel->isModuleEnabled() ? ' epro-view-order' : '';
+$isModuleEnabled = $viewModel->isModuleEnabled();
+/** B-1149275 - View Order Receipt - Delivery */
+$isEnhancementEnabled = $viewModel->isEnhancementEnabeled();
+$isSdeStore = $viewModel->isSdeStore();
+$fedexItemsCount = $viewModel->getFedexItemsCount($_order);
+$miraklItemCount = $viewModel->getMiraklItemsCount($_order);
+$miraklItemsCountText = $miraklItemCount == 1 ? '1 Item' : $miraklItemCount.' Items';
+$fedexItemsCountText = $fedexItemsCount == 1 ? '1 Item' : $fedexItemsCount.' Items';
+$contactInformation = $viewModel->getContactAddressForRetail($_order);
+$isMixedDeliveryMethods = $fedexItemsCount > 0 && $miraklItemCount > 0;
+?>
+<div class="table-wrapper order-items enabled-marketplace-customer-toggle <?=/* @escapeNotVerified */$eproClass?>
+<?=/* @escapeNotVerified */$discountClass?>" data-bind="scope: 'check_reorderable_product'">
+    <table class="data table table-order-items"
+           id="my-orders-table"
+           summary="<?= $block->escapeHtml(__('Items Ordered')) ?>">
+        <?php if($isEnhancementEnabled):?>
+            <caption class="table-caption"><?= $block->escapeHtml(__('Cart Summary')) ?></caption>
+        <?php endif; ?>
+        <thead>
+        <?php if ($block->isPagerDisplayed()): ?>
+            <tr>
+                <td colspan="5" data-block="order-items-pager-top"
+                    class="order-pager-wrapper order-pager-wrapper-top">
+                    <?= $block->getPagerHtml() ?>
+                </td>
+            </tr>
+        <?php endif ?>
+        <tr>
+            <?php if($isEnhancementEnabled):?>
+                <th id= "" class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
+            <?php endif; ?>
+            <th id="" class="col qty"><?= $block->escapeHtml(__('Price')) ?></th>
+            <th id="" class="col qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+            <?php if($isEnhancementEnabled):?>
+                <th id="" class="col discount"><?= $block->escapeHtml(__('Discount')) ?></th>
+                <th id="" class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+            <?php endif; ?>
+        </tr>
+        </thead>
+        <?php $isPickUp = ($_order->getShippingMethod() == $viewModel::SHIPPING_TYPE_PICKUP) ? 1 : 0; ?>
+        <?php if ($fedexItemsCount > 0 ): ?>
+            <tbody class="seller-name">
+            <tr style="height: 80px; border: unset;">
+                <td colspan="5">
+                    <div class="fedex-delivery-method">
+                        <?php
+                        $shippingType = $isPickUp ? 'In-store pickup' : 'Shipping';
+                        $shippingImage = $block->getViewFileUrl('images/delivery.svg');
+                        $inStorePickupImage = $block->getViewFileUrl('images/purple-store.svg');
+                        $deliveryMethodImage = $isPickUp ? $inStorePickupImage : $shippingImage;
+                        ?>
+                        <img class="img-title" alt="Shipping method icon" src="<?php echo $deliveryMethodImage;?>" />
+                        <p><?= $shippingType ?></p>
+                    </div>
+                </td>
+            </tr>
+            <tr style="height: 40px; background: #FAFAFA; border: unset;" class="fedex-qty-items">
+                <td class="fedex-bold" colspan="5">
+                    FedEx Office (<?= $fedexItemsCountText ?>)
+                </td>
+            </tr>
+            </tbody>
+        <?php endif; ?>
+        <?php
+        $firstPartyItems = $viewModel->getFirstPartyItems($_order);
+        $index = 0;
+        $giftMessage = '';
+        foreach ($firstPartyItems as $item):?>
+            <tbody class="seller-products">
+            <?= $block->getItemHtml($item) ?>
+            <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)
+                    ->isMessagesAllowed('order_item', $item) &&
+                $item->getGiftMessageId()): ?>
+                <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)
+                    ->getGiftMessageForEntity($item); ?>
+                <tr>
+                    <td class="col options" colspan="5">
+                        <a href="#"
+                           id="order-item-gift-message-link-<?= (int) $item->getId() ?>"
+                           class="action show"
+                           aria-controls="order-item-gift-message-<?= (int) $item->getId() ?>"
+                           data-item-id="<?= (int) $item->getId() ?>">
+                            <?= $block->escapeHtml(__('Gift Message')) ?>
+                        </a>
+                        <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)
+                            ->getGiftMessageForEntity($item); ?>
+                        <div class="order-gift-message"
+                             id="order-item-gift-message-<?= (int) $item->getId() ?>"
+                             role="region" aria-expanded="false" tabindex="-1">
+                            <a href="#"
+                               title="<?= $block->escapeHtml(__('Close')) ?>"
+                               aria-controls="order-item-gift-message-<?= (int) $item->getId() ?>"
+                               data-item-id="<?= (int) $item->getId() ?>"
+                               class="action close">
+                                <?= $block->escapeHtml(__('Close')) ?>
+                            </a>
+                            <dl class="item-options">
+                                <dt class="item-sender">
+                                    <strong class="label"><?= $block->escapeHtml(__('From')) ?></strong>
+                                    <?= $block->escapeHtml($giftMessage->getSender()) ?>
+                                </dt>
+                                <dt class="item-recipient">
+                                    <strong class="label"><?= $block->escapeHtml(__('To')) ?></strong>
+                                    <?= $block->escapeHtml($giftMessage->getRecipient()) ?>
+                                </dt>
+                                <dd class="item-message">
+                                    <?= /* @noEscape */ $this->helper(\Magento\GiftMessage\Helper\Message::class)
+                                        ->getEscapedGiftMessage($item) ?>
+                                </dd>
+                            </dl>
+                        </div>
+                    </td>
+                </tr>
+            <?php endif ?>
+            <?php if($index + 1 <  $fedexItemsCount){ ?>
+                <tr class="item-partition">
+                    <td colspan="5" style="height: 1px; border-top: solid #E3E3E3 1px;"></td>
+                </tr>
+            <?php }?>
+            <?php
+            $index++;
+            ?>
+            </tbody>
+        <?php endforeach; ?>
+        <?php if ($fedexItemsCount > 0 && $_order->getShippingMethod() != $viewModel::SHIPPING_TYPE_PICKUP) :
+            $shippingMethodModified = str_replace('fedexshipping_', '_', (string) $_order->getShippingMethod());
+            $shippingTitle = "FedEx ". $shippingMethodModified;
+            $shippingDescription = $viewModel->getOrderShippingDescription($_order);
+            ?>
+            <tbody class="view-receipt-shipping-separator">
+            <tr>
+                <td colspan="5">
+                    <hr>
+                </td>
+            </tr>
+            </tbody>
+            <tbody class="view-receipt-shipping">
+            <tr>
+                <td colspan="5">
+                    <div class="wrapper">
+                        <div class="view-receipt-shipping-method">
+                            <p class="view-receipt-shipping-method-title">
+                                <?= $block->escapeHtml(__('Shipping Method: ')) ?>
+                                <span class="view-receipt-shipping-method-name">
+                                    <?= $viewModel->formatShippingMethodName($shippingTitle); ?>
+                                    <sup>®</sup>
+                                </span>
+                            </p>
+                                <?php $estimatedLabel = $block->escapeHtml(__('Expected Delivery:')) ?>
+                                <?php if ($isPickUp): ?>
+                                    <?php $estimatedLabel = 'Pickup date and time:' ?>
+                                <?php endif ?>
+                                <p class="view-receipt-shipping-method-title">
+                                    <?= $estimatedLabel ?>
+                                    <span class="view-receipt-shipping-method-name">
+                                                <?= $shippingDescription ?>
+                                            </span>
+                                </p>
+                        </div>
+                        <div colspan="1" class="view-receipt-shipping-method-price">
+                            <?php if($isEssendantToggleEnabled || $isCBBToggleEnabled): ?>
+                                <?php $class = $_order->getShippingAmount() === 0 ? 'fedex-bold weight-700 cl-green' : 'price';?>
+                                <span class="<?=$class?>">
+                                    <?php if ($_order->getShippingAmount() === 0):?>
+                                        FREE
+                                    <?php else:?>
+                                        <?= /* @noEscape */ $_order->getOrderCurrency()->formatPrecision($_order->getShippingAmount(), 2, [], false, false); ?>
+                                    <?php endif;?>
+                                </span>
+                            <?php else:?>
+                                <?= /* @noEscape */ $_order->formatPrice($_order->getShippingAmount()); ?>
+                            <?php endif;?>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        <?php endif; ?>
+        <?php $thirdPartySellers = $viewModel->getThirdPartySellers($_order);?>
+        <?php if (count($thirdPartySellers)>0):?>
+            <?php if ($isPickUp || $fedexItemsCount == 0): ?>
+                <tbody class="seller-name">
+                <tr style="height: 80px; border: unset;">
+                    <td colspan="5">
+                        <div class="fedex-delivery-method">
+                            <img class="img-title" alt="Shipping method icon"
+                                 src="<?= $block->getViewFileUrl('images/delivery.svg'); ?>"/>
+                            <p>Shipping</p>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            <?php endif; ?>
+            <?php foreach ($thirdPartySellers as $seller => $items):?>
+                <?php
+                $totalItems = count($items);
+                $miraklItemsCountText = $totalItems == 1 ? '1 Item' : $totalItems.' Items';
+                ?>
+                <tbody class="seller-name">
+                <tr style="height: 40px; background: #FAFAFA; border: unset;" class="fedex-qty-items">
+                    <td class="fedex-bold" colspan="5">
+                        <?= $escaper->escapeHtml($seller.' ('.$miraklItemsCountText.')') ?>
+                    </td>
+                </tr>
+                </tbody>
+                <?php
+                /** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+                $productInfoHandler = $block->getData('productinfo_handler_view_model');
+                $index = 0;
+                $maxDeliveryDateToDisplay = null;
+                foreach ($items as $item):
+                    $product_json = $productInfoHandler->getItemExternalProd($item);
+                    $isOutSourced = isset($product_json['isOutSourced']) ? $product_json['isOutSourced'] : false;
+                    $additionalData = (array)json_decode($item->getData('additional_data'));
+                    $product_json = $productInfoHandler->getItemExternalProd($item) ?? [];
+                    $marketplaceItemInfo = [];
+
+                    $miraklShippingAddress = $viewModel->getMiraklShipping($item->getOrder());
+
+                    if (!is_null($item->getAdditionalData())) {
+                        $marketplaceItemInfo = json_decode($item->getAdditionalData());
+                        if (isset($marketplaceItemInfo->isMarketplaceProduct) && isset($marketplaceItemInfo->features)) {
+                            $product_json['features'] = $marketplaceItemInfo->features;
+                        }
+                    }
+                    $previewUrl = $marketplaceItemInfo->image ?? null;
+                    if (empty($previewUrl)) {
+                        $prodObj = $item->getProduct();
+                        $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($prodObj);
+                    }
+                    $id = isset($product_json['id']) ? $product_json['id'] : '';
+                    $version = isset($product_json['version']) ? $product_json['version'] : '';
+                    $features = $product_json['features'] ?? [];
+                    $isOutSourced = isset($product_json['isOutSourced']) ? $product_json['isOutSourced'] : false;
+                    $firstFeature = isset($features[0]) ? $features[0] : null;
+
+                    $additionalAttributesData = json_decode((string)$_order->getPayment()->getProductLineDetails());
+                    $customHtmlAttributes = null;
+
+                    if ($isReorderEnabled && isset($item->getProductOptions()['info_buyRequest']) && !$item->getMiraklOfferId()) {
+                        $serializedProductData = $viewModel->serializeProductData(
+                            $item->getProductOptions()['info_buyRequest']
+                        );
+                        $serializedProductJsonData = json_encode($serializedProductData['serializedProductData']);
+                        $customHtmlAttributes = 'product-instance="' .
+                            $block->escapeHtmlAttr(__($serializedProductJsonData)) .
+                            '" product-preset-id="' .
+                            $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+                            '" product-status="1"';
+                        $productId = $item->getProductId();
+                        $product = $viewModel->loadProductObj($productId);
+                        if ($product == false) {
+                            $productStatus = false;
+                            $customHtmlAttributes = 'product-instance="' .
+                                $block->escapeHtmlAttr(__($serializedProductJsonData)) .
+                                '" product-preset-id="' .
+                                $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+                                '" product-status="0"';
+                        }
+                    }
+
+                    if ($item->getMiraklOfferId() && $additionalData) {
+                        $customHtmlAttributes = 'data-broker-config-id="' .
+                            $escaper->escapeHtmlAttr($additionalData['supplierPartAuxiliaryID']) .
+                            '"';
+                    }
+
+                    $maxDeliveryDate = $viewModel->getStrtotimeFromItem($item);
+                    if ($maxDeliveryDate > $maxDeliveryDateToDisplay) {
+                        $maxDeliveryDateToDisplay = $viewModel->getEstimatedDeliveryThirdParty($_order, $item);
+                    }
+                    ?>
+                    <tbody class="seller-products">
+                    <?= $block->getItemHtml($item) ?>
+
+                    <?php if ($index + 1 < count($items)) { ?>
+                        <tr class="item-partition">
+                            <td colspan="5" style="height: 1px; border-top: solid #E3E3E3 1px;"></td>
+                        </tr>
+                    <?php } ?>
+                    <?php $index++; ?>
+                    </tbody>
+                <?php endforeach; ?>
+                <?php
+                $miraklShippingAddress = $viewModel->getMiraklShipping($_order, $item);
+                $methodTitle = isset($miraklShippingAddress) ? $miraklShippingAddress['method_title'] : '';
+                $methodPrice = isset($miraklShippingAddress) ? $miraklShippingAddress['amount'] : ''; ?>
+                <tbody class="view-receipt-shipping-separator">
+                <tr>
+                    <td colspan="5">
+                        <hr>
+                    </td>
+                </tr>
+                </tbody>
+                <tbody class="view-receipt-shipping">
+                <tr>
+                    <td colspan="5">
+                        <div class="wrapper">
+                            <div class="view-receipt-shipping-method">
+                                <p class="view-receipt-shipping-method-title">
+                                    <?= $block->escapeHtml(__('Shipping Method: ')) ?>
+                                    <span class="view-receipt-shipping-method-name">
+                                                <?= $viewModel->formatShippingMethodName($methodTitle); ?>
+                                                <sup>®</sup>
+                                            </span>
+                                </p>
+                                    <p class="view-receipt-shipping-method-title">
+                                        <?= $block->escapeHtml(__('Expected Delivery:')) ?>
+                                        <span class="view-receipt-shipping-method-name">
+                                            <?= $maxDeliveryDateToDisplay ?? $viewModel->getEstimatedDeliveryThirdParty($_order) ?>
+                                        </span>
+                                    </p>
+                            </div>
+                            <div colspan="1" class="view-receipt-shipping-method-price">
+                                <?php if($isEssendantToggleEnabled || $isCBBToggleEnabled): ?>
+                                    <?php $class = $methodPrice === 0 ? 'fedex-bold weight-700 cl-green' : 'price';?>
+                                    <span class="<?=$class?>">
+                                        <?php if ($methodPrice === 0):?>
+                                            FREE
+                                        <?php else:?>
+                                            <?= /* @noEscape */ $_order->getOrderCurrency()->formatPrecision($methodPrice, 2, [], false, false); ?>
+                                        <?php endif;?>
+                                    </span>
+                                <?php else:?>
+                                    <?= /* @noEscape */ $_order->formatPrice($methodPrice); ?>
+                                <?php endif;?>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            <?php endforeach;?>
+        <?php endif;?>
+        <tfoot>
+        <?php if ($block->isPagerDisplayed()): ?>
+            <tr>
+                <td colspan="5" data-block="order-items-pager-bottom"
+                    class="order-pager-wrapper order-pager-wrapper-bottom">
+                    <?= $block->getPagerHtml() ?>
+                </td>
+            </tr>
+        <?php endif ?>
+        </tfoot>
+    </table>
+</div>
+<?php if($isEnhancementEnabled):?>
+    <div class="epro-order-view-bottom-div">
+        <div class="questions-contact">
+            <span class="questions">Questions about your order?</span><br>
+            <p class="contact">
+                Call
+                <span>
+                    <a href="tel:1.800.GoFedEx">1.800.GoFedEx</a>
+                </span>
+                or
+                <span>
+                    <a href="tel:1.800.463.3339">1.800.463.3339</a>
+                </span>
+            </p>
+        </div>
+        <div class="epro-order-view-subtotal">
+            <?= $block->getChildHtml('order_totals') ?>
+        </div>
+    </div>
+<?php endif; ?>
+<?php if ($giftMessage): ?>
+    <script type="text/x-magento-init">
+        {
+            "a.action.show, a.action.close": {
+                "giftMessage": {}
+            }
+        }
+    </script>
+<?php endif; ?>
+
+<?php
+$isReOrderable = 0;
+if ($viewModel->isReOrderable($_order->getId())):
+    $isReOrderable = 1;
+endif;
+
+$productEngineCall = 0;
+if ($isReorderEnabled) {
+    $productEngineCall = 1;
+}
+?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "check_reorderable_product": {
+                        "component": "Fedex_Orderhistory/js/view/reorder-item-availbility",
+                        "reorderable": <?= /* @noEscape */ $isReOrderable; ?>,
+                        "pageActionName": "<?= /* @noEscape */ $block->getRequest()->getFullActionName(); ?>",
+                        "productEngineCall": "<?= /* @noEscape */ $productEngineCall; ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<?php if ($isEnhancementEnabeled): ?>
+    <script>
+        require(['jquery'], function($) {
+            $(document).ready(function() {
+                $('ul.order-links li.item strong').text('Cart Summary');
+                $('div.order-title strong').text('Cart Summary');
+                $(".sales-order-print a.logo img").attr(
+                    "src","<?=$block->getViewFileUrl('images/order-history/fedexlogo.png');?>"
+                );
+            });
+            // for desktop and tab view
+            $(document).on('click', '.show-detail', function() {
+                var itemId = $(this).attr('data-item-id');
+                if ($('#configurater-product-attr-'+itemId).is(':visible') == false) {
+                    $('#configurater-product-attr-'+itemId).show();
+                } else {
+                    $('#configurater-product-attr-'+itemId).hide();
+                }
+            });
+            //for mobile view
+            $(document).on('click', '.show-detail-button', function() {
+                var itemId = $(this).attr('data-item-id');
+                if ($('#show-hide-detail-data-'+itemId).is(':visible') == false) {
+                    $('#show-hide-detail-data-'+itemId).show();
+                } else {
+                    $('#show-hide-detail-data-'+itemId).hide();
+                }
+            });
+        });
+    </script>
+<?php endif;?>
+<script>
+    require([
+        "jquery"
+    ], function ($) {
+        const allShowDetailButtons = $('.config-container .show-properties-view-order');
+        if (allShowDetailButtons && allShowDetailButtons.length > 0) {
+            allShowDetailButtons.each((index, element) => {
+                const button = $(element);
+                const productId = button.attr('data-item-id');
+                const detailsArea = $(`.product-details-${productId}`);
+                const buttonId = '#show-detail-'+ productId;
+
+                $(document).on('click', buttonId, function() {
+                    const buttonContent = button.text().toLowerCase().trim() === 'show details' ? 'Hide details'
+                        : 'Show details';
+
+                    button.text(buttonContent);
+
+                    if (buttonContent.toLowerCase().trim() === 'hide details' && !detailsArea.hasClass('show-details')) {
+                        button.addClass('hide-properties-view-order');
+                        detailsArea.addClass('show-details');
+                        return;
+                    }
+
+                    button.removeClass('hide-properties-view-order');
+                    detailsArea.removeClass('show-details');
+                })
+            });
+        }
+    })
+</script>

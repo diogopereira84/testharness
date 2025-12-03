@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<page layout="1column" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="checkout.cart.form">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">
+                    Fedex_MarketplaceCheckout::cart/form.phtml
+                </argument>
+            </action>
+            <arguments>
+                <argument name="marketplace_view_model" xsi:type="object">Fedex\MarketplaceCheckout\ViewModel\Cart</argument>
+                <argument name="viewModelForWarningMessage" xsi:type="object">Fedex\Cart\ViewModel\CheckoutConfig</argument>
+                <argument name="uploadtoquote_view_model" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.simple">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">
+                    Fedex_MarketplaceCheckout::cart/item/default.phtml
+                </argument>
+            </action>
+            <arguments>
+                <argument name="marketplace_view_model" xsi:type="object">Fedex\MarketplaceCheckout\ViewModel\Cart</argument>
+                <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                <argument name="toggle_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.commercial">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">
+                    Fedex_MarketplaceCheckout::cart/item/default.phtml
+                </argument>
+            </action>
+            <arguments>
+                <argument name="marketplace_view_model" xsi:type="object">Fedex\MarketplaceCheckout\ViewModel\Cart</argument>
+                <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                <argument name="toggle_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.configurable">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">
+                    Fedex_MarketplaceCheckout::cart/item/default.phtml
+                </argument>
+            </action>
+            <arguments>
+                <argument name="productEngineUrl_view_model" xsi:type="object">Fedex\ProductEngine\ViewModel\Data</argument>
+                <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                <argument name="toggle_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                <argument name="marketplace_view_model" xsi:type="object">Fedex\MarketplaceCheckout\ViewModel\Cart</argument>
+                <argument name="viewModelForWarningMessage" xsi:type="object">Fedex\Cart\ViewModel\CheckoutConfig</argument>
+                <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.configurable.actions.edit">
+            <arguments>
+                <argument name="tazTokenHelper" xsi:type="object">Fedex\Punchout\ViewModel\TazToken</argument>
+                <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                <argument name="marketplacePunchout" xsi:type="object">Fedex\MarketplacePunchout\ViewModel\Login</argument>
+                <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>
+

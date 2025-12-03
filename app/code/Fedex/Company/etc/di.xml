@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- B-1359540 : For Credit card configured in Magento Admin , expiration date should be validated -->
+<!-- D-113551 | The request is invalid while converting quote to order in ePro -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\Company\Api\Data\CustomBillingInvoicedInterface" type="Fedex\Company\Model\Company\Custom\Billing\Invoiced" />
+    <preference for="Fedex\Company\Api\Data\CustomBillingCreditCardInterface" type="Fedex\Company\Model\Company\Custom\Billing\CreditCard" />
+    <preference for="Fedex\Company\Api\Data\CustomBillingShippingInterface" type="Fedex\Company\Model\Company\Custom\Billing\Shipping" />
+    <preference for="Fedex\Company\Api\Data\AdditionalDataInterface" type="Fedex\Company\Model\AdditionalData" />
+    <preference for="Fedex\Company\Api\Data\ConfigInterface" type="Fedex\Company\Model\Config"/>
+    <preference for="Fedex\Catalog\Api\AttributeHandlerInterface" type="Fedex\Catalog\Model\AttributeHandler"/>
+    <preference for="Fedex\Company\Api\CreateCompanyEntitiesMessageInterface" type="Fedex\Company\Model\CreateCompanyEntitiesMessage"/>
+    <preference for="Magento\Company\Model\SaveValidator\RequiredFields" type="Fedex\Company\Model\SaveValidator\CustomRequiredFields"/>
+    <!-- Plugin to add additional company data-->
+    <type name="Magento\Company\Api\CompanyRepositoryInterface">
+        <plugin name="add_company_additional_data" type="Fedex\Company\Plugin\CompanyRepository" sortOrder="1"/>
+    </type>
+    <type name="Fedex\Company\Model\Company\Source\Mask\Collection">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="no_option" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\NoOption</item>
+                <item name="number" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\NumbersOnlyOption</item>
+                <item name="letters" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\LettersOnlyOption</item>
+                <item name="sixLetters" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\SixLetterWordOption</item>
+                <item name="digit" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\DigitNumberOption</item>
+                <item name="custom" xsi:type="object">Fedex\Company\Model\Company\Source\Mask\CustomOption</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="change_admin_grid_data_source" xsi:type="string">ChangeAdminGridCollection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="ChangeAdminGridCollection" type="Fedex\Company\Model\ResourceModel\Customer\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">customer_grid_flat</argument>
+            <argument name="resourceModel" xsi:type="string">Fedex\Company\Model\ResourceModel\Customer</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="updateAttributeOptions" xsi:type="object">Fedex\Company\Console\Command\UpdateAttributeOptions</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

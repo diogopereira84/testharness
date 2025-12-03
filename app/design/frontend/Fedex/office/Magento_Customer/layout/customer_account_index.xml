@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <link src="Magento_Customer::js/customer-action.js"/>
+        <title>My Account | FedEx Office</title>
+    </head>
+    <body>
+        <referenceBlock name="columns">
+            <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info_top" as="info_top" template="Magento_Customer::account/dashboard/info_top.phtml" before="-">
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">My Profile</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Checkout\Block\Cart\ValidationMessages" name="customer.account.validationmessages"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Customer\Block\Account\Dashboard\Info" name="customer_account_dashboard_info" as="info" template="Magento_Customer::account/dashboard/info.phtml" cacheable="false">
+                <container name="customer.account.dashboard.info.blocks" as="additional_blocks"/>
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="toggle_config" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="selfreg_helper" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                </arguments>
+
+            </block>
+
+            <block class="Magento\Customer\Block\Account\Dashboard\Address" name="customer_account_dashboard_address" as="address" template="Magento_Customer::account/dashboard/address.phtml" cacheable="false">
+                 <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+
+            <block class="Magento\Framework\View\Element\Template" name="customer_account_dashboard_login_security" as="loginsecurity" template="Magento_Customer::account/dashboard/login-security.phtml" cacheable="false">   
+                <arguments>        
+                    <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>        
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>   
+                    <argument name="is_improving_password_toggle" xsi:type="boolean">1</argument> 
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="category-sidebar" remove="true"/>
+        <move element="page.main.title" destination="customer_account_dashboard_info_top" as="page_main_title" before="-"/>
+    </body>
+</page>

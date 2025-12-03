@@ -1,0 +1,60 @@
+<?php
+
+/**@var Fedex\SSOC\ViewModel\SsoConfiguration $fclCheckoutLogin*/
+$fclCheckoutLogin = $block->getData('fcl_checkout_login');
+?>
+<div id="fcl-checkout-login-popup" class="pod-upload-warning login-top-popup" style="display: none;">
+    <div class="modal-body-content">
+        <h3 class="note-heading">
+            <?= $escaper->escapeHtml(
+                __($fclCheckoutLogin->getCheckoutLoginPopupConfig('checkout_login_popup_message_heading'))
+            ) ?>
+        </h3>
+        <p class="note-description">
+            <?= $escaper->escapeHtml(__($fclCheckoutLogin->getCheckoutLoginPopupConfig('checkout_login_popup_message')))
+            ?>
+        </p>
+        <div class="row-1">
+            <div class="btn-container-left">
+                <?php
+                    $redirectUrl = $fclCheckoutLogin->getCurrentUrl();
+                    $currentPath = $fclCheckoutLogin->getCurrentUrlPath($redirectUrl);
+                    $registerAdminURL = $fclCheckoutLogin->getGeneralConfig('register_url');
+                    $registerAdminQueryParam = $fclCheckoutLogin->getGeneralConfig('register_url_param');
+                    $registerURL = $registerAdminURL.$registerAdminQueryParam .$currentPath;
+                    $createUserButtonText = $fclCheckoutLogin->getCheckoutLoginPopupConfig(
+                        'checkout_create_user_button_text'
+                    );
+                    $homeUrl = $fclCheckoutLogin->getHomeUrl();
+
+                    $registerURL = $registerAdminURL.$registerAdminQueryParam. '/oauth/index/index/rc/'.base64_encode($fclCheckoutLogin->getCurrentUrl());
+                    $redirectUrl = $homeUrl . 'oauth/index/index/rc/'.base64_encode($fclCheckoutLogin->getCurrentUrl());
+                    ?>
+                <a href="<?= $block->escapeHtmlAttr($registerURL); ?>"
+                    class="btn-popup-create-user" trigger-data="checkout">
+                    <span class="span-popup-create-user">
+                        <?= $escaper->escapeHtml(__($createUserButtonText)) ?>
+                    <span>
+                </a>
+            </div>
+            <div class="btn-container-right">
+                <?php
+                    $loginButtonText = $fclCheckoutLogin->getCheckoutLoginPopupConfig('checkout_login_button_text');
+                    $guestActionText = $fclCheckoutLogin->getCheckoutLoginPopupConfig('checkout_guest_action_text');
+                    $wlgnLoginPageUrl = $fclCheckoutLogin->getGeneralConfig('wlgn_login_page_url');
+                    $queryParameter = $fclCheckoutLogin->getGeneralConfig('query_parameter');
+                    $registerLoginUrl = $wlgnLoginPageUrl.'?'.$queryParameter.'='.$redirectUrl;
+                ?>
+                <a href="<?= $block->escapeHtmlAttr($registerLoginUrl); ?>"
+                class="btn-popup-login" trigger-data="checkout">
+                    <span class="span-popup-login">
+                        <?= $block->escapeHtmlAttr($escaper->escapeHtml(__($loginButtonText))) ?>
+                    </span>
+                </a>
+            </div>
+            <h3 id="checkout-continue-guest" class="note-head" data-role="closeBtn">
+                <a href="#" ><?= $block->escapeHtmlAttr($escaper->escapeHtml(__($guestActionText))) ?></a>
+            </h3>
+        </div>
+    </div>
+</div>

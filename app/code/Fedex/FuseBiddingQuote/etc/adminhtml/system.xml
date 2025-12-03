@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="mazegeek_call_rate_quote_details_api" translate="label" type="select" sortOrder="385" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>B-2287460 - Mazegeek - Call RateQuote Details API</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable to call ratequote details API on fusebid quote approval from POD 2.O</comment>
+                </field>
+                <field id="mazegeek_send_source_retail_location_id" translate="label" type="select" sortOrder="386" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>B-2287459 - Mazegeek - Send sourceRetailLocationId</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Unblock checkout by sending "Send sourceRetailLocationId" in rateQuote request for fuse bidding quote</comment>
+                </field>
+                <field id="mazegeek_fuse_bid_checkout_enabled" translate="label" type="select" sortOrder="386" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>B-2287461 - MazeGeeks - Enable Online Checkout for Fusebidding Quote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this toggle to make quote linkable in fuse bid emails</comment>
+                </field>
+                <field id="mazegeek_d208767_d209651_enable" translate="label" type="select" sortOrder="387" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-208767/D-209651 - MazeGeeks - Fix the contact infromation adding in quote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this toggle to add the customer info in quote</comment>
+                </field>
+                <field id="mazegeek_b2388454_enable" translate="label" type="select" sortOrder="388" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>B-2388454 - MazeGeeks - GetAllQuotes API Response changes - Team Member info updates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d215974" translate="label" type="select" sortOrder="425" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-215974 - Tiger - JS Error: SecurityPolicyViolation: blockedURI = inline (https://www.office.fedex.com/default/checkout/cart/) (Rendering Tag)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this toggle to add the customer info in quote</comment>
+                </field>
+            </group>
+        </section>
+        <section id="fedex" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="transactional_email">
+                <!--Fuse Bidding Quote Ready For Review Email Configuration-->
+                <field id="fuse_quote_ready_for_review_email_enable" type="select" translate="label" sortOrder="56" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Fuse Bidding Quote Ready For Review Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Fuse Bidding Ready For Review Email</comment>
+                </field>
+                <field id="fuse_quote_ready_for_review_email_template" translate="label" type="select" sortOrder="57" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Fuse Bidding Quote Ready For Review Email Template</label>
+                    <comment>Select email template for Fuse Bidding Quote Ready for Review</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <!--Fuse Bidding Quote Ready For Review NBC Engagement Email Configuration-->
+                <field id="fuse_quote_ready_for_review_nbc_engagement_email_enable" type="select" translate="label" sortOrder="58" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Fuse Bidding Quote Ready For Review NBC Engagement Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Fuse Bidding Ready For Review NBC Engagement Email</comment>
+                </field>
+                <field id="fuse_quote_ready_for_review_nbc_engagement_email_template" translate="label" type="select" sortOrder="59" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Fuse Bidding Quote Ready For Review NBC Engagement Email Template</label>
+                    <comment>Select email template for Fuse Bidding Quote Ready for Review NBC Engagement</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <!--Fuse Bidding Quote Order Confirmation Email Configuration-->
+                <field id="fuse_quote_order_confirmation_email_enable" type="select" translate="label" sortOrder="79" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Fuse Bidding Quote Order Confirmation Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Fuse Bidding Quote Order Confirmation Email</comment>
+                </field>
+                <field id="fuse_quote_order_confirmation_email_template" translate="label" type="select" sortOrder="80" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Fuse Bidding Quote Order Confirmation Email Template</label>
+                    <comment>Select email template for Fuse Bidding Quote Order Confirmation</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                 <!--Fuse Bidding Quote Quote NBC Priced Email Configuration-->
+                <field id="fuse_quote_nbc_priced_email_enable" type="select" translate="label" sortOrder="81" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable Fuse Bidding Quote NBC Priced Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Fuse Bidding NBC Priced Email</comment>
+                </field>
+                <field id="fuse_quote_nbc_priced_email_template" translate="label" type="select" sortOrder="82" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>Fuse Bidding Quote NBC Priced Email Template</label>
+                    <comment>Select email template for Fuse Bidding Quote NBC Priced</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

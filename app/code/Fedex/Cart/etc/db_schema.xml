@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="quote_item_option" resource="checkout" engine="innodb" comment="Sales Flat Quote Item Option">
+        <column xsi:type="mediumtext" name="value" nullable="true" comment="Value"/>
+    </table>
+    <table name="quote" resource="checkout" engine="innodb" comment="Quote">
+        <column xsi:type="decimal" name="discount" nullable="true" scale="4" precision="20" comment="Discount"/>
+        <column xsi:type="decimal" name="shipping_cost" nullable="true" scale="4" precision="20" comment="Shipping Cost"/>
+        <column xsi:type="varchar" name="fedex_account_number" nullable="true" length="255" comment="FedEx account number"/>
+    </table>
+    <table name="quote_item" resource="checkout" engine="innodb" comment="Quote">
+        <column xsi:type="decimal" name="discount" nullable="true" scale="4" precision="20"  comment="Discount"/>
+    </table>
+    <table name="quote_integration" resource="checkout" engine="innodb" comment="Quote Fuse INtegration Data">
+        <column xsi:type="int" name="integration_id" unsigned="true" nullable="false" identity="true"
+                comment="Item ID"/>
+        <column xsi:type="int" name="quote_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Quote ID"/>
+        <column xsi:type="text" name="delivery_data" nullable="true" comment="Delivery Data"/>
+        <column xsi:type="varchar" name="location_id" nullable="true" length="255" comment="Location ID"/>
+        <column xsi:type="varchar" name="pickup_store_id" nullable="true" length="255" comment="Pickup Store ID"/>
+        <column xsi:type="varchar" name="pickup_location_id" nullable="true" length="255" comment="Pickup Location ID"/>
+        <column xsi:type="varchar" name="store_id" nullable="true" length="255" comment="Office Location ID"/>
+        <column xsi:type="timestamp" name="pickup_location_date" on_update="false" nullable="true" comment="Pickup Location Date"/>
+        <column xsi:type="varchar" name="retail_customer_id" nullable="true" length="255" comment="Retail Customer Id"/>
+        <column xsi:type="decimal" name="raq_net_amount" nullable="true" scale="4" precision="20" comment="Net amount from RAQ response"/>
+        <column xsi:type="smallint" name="retry_transaction_api" unsigned="false" nullable="false"
+                default="0" identity="false" comment="Yes/No Flag"/>
+        <column xsi:type="varchar" name="fjmp_rate_quote_id" nullable="true" length="255" comment="FJMP Rate Quote ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="integration_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="QUOTE_INTEGRATION_QUOTE_ID_QUOTE_ENTITY_ID" table="quote_integration"
+                    column="quote_id" referenceTable="quote" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="QUOTE_INTEGRATION_QUOTE_ID">
+            <column name="quote_id"/>
+        </constraint>
+    </table>
+    <table name="quote_integration_item" resource="checkout" engine="innodb" comment="Quote Item Fuse Integration Data">
+        <column xsi:type="int" name="integration_item_id" unsigned="true" nullable="false" identity="true"
+                comment="Item ID"/>
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Quote Item ID"/>
+        <column xsi:type="text" name="item_data" nullable="true" comment="Item Data"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="integration_item_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="QUOTE_INTEGRATION_ITEM_ID_QUOTE_ITEM_ENTITY_ID"
+                    table="quote_integration_item" column="item_id" referenceTable="quote_item"
+                    referenceColumn="item_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="QUOTE_INTEGRATION_ITEM_ID">
+            <column name="integration_item_id"/>
+        </constraint>
+    </table>
+    <table name="quote_integration_note" resource="default" engine="innodb" comment="Quote Integration Note">
+        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="true" />
+        <column xsi:type="int" name="parent_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Parent Quote ID"/>
+        <column xsi:type="text" name="note" nullable="true" comment="Quote Note"/>
+        <column xsi:type="timestamp" name="created_at" default="CURRENT_TIMESTAMP" />
+        <column xsi:type="timestamp" name="updated_at" default="CURRENT_TIMESTAMP" on_update="true" />
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="QUOTE_INTEGRATION_NOTE_PARENT_ID_QUOTE_ENTITY_ID" table="quote"
+            column="parent_id" referenceTable="quote" referenceColumn="entity_id"
+            onDelete="CASCADE"/>
+    </table>
+</schema>

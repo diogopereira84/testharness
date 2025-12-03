@@ -1,0 +1,17 @@
+<?php
+declare(strict_types=1);
+
+/** @var $block Fedex\ProductEngine\Block\Product\Attributes\Bundle */
+/** @var \Magento\Framework\Escaper $escaper */
+$productsAttributesList = $block->getVisibleAttributes();
+$productIds = json_encode($productsAttributesList);
+$productsIdsSku = json_encode($block->getIdsSkus());
+$peUrl = $block->getProductEngineUrl();
+?>
+
+<?= $block->getChildHtml('product.info.config.product_engine.error_messages') ?>
+<div id="bundle-product-attributes"
+     data-product-ids="<?= $escaper->escapeHtmlAttr($productIds) ?>"
+     data-product-ids-skus="<?= $escaper->escapeHtmlAttr($productsIdsSku) ?>"
+     data-product-engine-url="<?= $escaper->escapeUrl($peUrl) ?>"
+     data-bundle-add-to-cart-url="<?= $escaper->escapeUrl($block->getUrl('productbundle/cart/add')) ?>"></div>

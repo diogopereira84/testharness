@@ -1,0 +1,145 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit */
+?>
+<?php
+$helper = $this->helper('Fedex\Delivery\Helper\Data');
+/** @var $punchoutHelper \Fedex\Punchout\ViewModel\TazToken */
+$punchoutHelper = $block->getData('tazTokenHelper');
+$tazToken = $punchoutHelper->getTazToken();
+
+$siteName = $helper->getCompanySite();
+
+$productHelper = $this->helper('Fedex\Delivery\Helper\Data');
+$attributeSetId = $block->getItem()->getProduct()->getAttributeSetId();
+$sku = $block->getItem()->getProduct()->getSku();
+$isCustomize = $productHelper->getProductCustomAttributeValue($block->getItem()->getProduct()->getId(), 'customizable');
+$attribute_set_name = trim(strtolower($productHelper->getProductAttributeName($attributeSetId)));
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productInfoHandler');
+$product_json = $productInfoHandler->getItemExternalProd($block->getItem());
+$instanceId = isset($product_json['instanceId']) ? $product_json['instanceId'] : '';
+if (isset($product_json['fxo_product'])) {
+    $fxoProduct = json_decode($product_json['fxo_product'], true);
+    $instanceId = $fxoProduct['instanceId'] ?? $instanceId;
+}
+$designId = $productInfoHandler->getDesign($block->getItem());
+
+$item = $block->getItem();
+$itemJson = json_encode($item->getData());
+$isThirdParty = $item->getData('mirakl_offer_id');
+$punchout_enable = false;
+$punchout_url = '';
+if ($isThirdParty) {
+    /** @var $marketplacePunchout \Fedex\MarketplacePunchout\ViewModel\Login */
+    $marketplacePunchout = $block->getData('marketplacePunchout');
+    $punchoutInfo = $marketplacePunchout->getShopInfo($sku);
+    $punchout_enable = $punchoutInfo['punchout_enable'];
+    $punchout_url = $punchoutInfo['punchout_url'];
+}
+
+/** expired item feature start */
+$expiredItemViewModal = $block->getData('expiredItemViewModal');
+$productViewModel = $block->getData('product_availability_view_model');
+$dyesubViewModel = $block->getData('dyesub_view_model');
+
+$isExpired = ($expiredItemViewModal->isCustomerLoggedIn() &&
+            $expiredItemViewModal->isItemExpired($block->getItem())) ? true : false;
+/** expired item feature end */
+
+$additionalOption = $block->getItem()->getOptionByCode('info_buyRequest');
+$additionalOptions = $additionalOption->getValue();
+$productHelper->logger->info(
+    'itemInstanceID = ' . $instanceId .
+    ' $isProductVisibleInSiteVisibility = '. $block->isProductVisibleInSiteVisibility() .
+    ' $productType = ' . $block->getItem()->getProduct()->getName() .
+    ' $isCustomize = ' . $isCustomize .
+    ' $attribute_set_name = ' . $attribute_set_name
+);
+
+/** @var \Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$uploadToQuoteViewModel =  $block->getData('uploadToQuoteViewModal');
+$isNonStandardFile = $uploadToQuoteViewModel->isNonStandardFile($additionalOptions);
+if($isCustomize && $siteName == "")
+{
+    $instanceId = $block->getItem()->getId();
+}
+$getEproMigratedCustomDocToggle = $helper->getEproMigratedCustomDocToggle();
+// for epro migrated custom doc
+if($getEproMigratedCustomDocToggle) {
+    $data = json_decode($additionalOptions, true);
+    $instanceId = $data['external_prod'][0]['instanceId'];
+    if ($isCustomize && $siteName && $instanceId!=0)
+    {
+        $instanceId = $block->getItem()->getId();
+    }
+}
+$unavailableProduct=false;
+$product = $block->getItem()->getProduct();
+if($productViewModel->isE441563ToggleEnabled() && !$productViewModel->checkProductAvailable($product)) {
+    $unavailableProduct = true;
+}
+
+$itemAdditionalData = json_decode($item->getAdditionalData() ?? '', true);
+//If Punchout is false it'll not show Edit button, but if it's true for all other products aside from CBB Add to Cart.
+$punchoutEnabled = $itemAdditionalData['punchout_enabled'] ?? true;
+
+$shouldHideEdit = false;
+$dyeSubEditDisable = '';
+$isCustomerCanvas = false;
+if ($dyesubViewModel && $dyesubViewModel->isDyeSubEnabled()) {
+    $isCustomerCanvas = $productHelper->getProductCustomAttributeValue($block->getItem()->getProduct()->getId(), 'is_customer_canvas');
+    if ($isCustomerCanvas && $dyesubViewModel->isExpired($item)) {
+        $shouldHideEdit = true;
+    }
+    if ($isCustomerCanvas && $dyesubViewModel->isDyeSubEditEnabled()) {
+        $dyeSubEditDisable = 'edit-disabled';
+    }
+}
+?>
+<?php if (($attribute_set_name == 'fxoprintproducts' || $isCustomize) && $punchoutEnabled && $product->getTypeId() !== \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE): ?>
+    <?php if (!$isExpired && !$unavailableProduct): ?>
+        <?php if($isNonStandardFile):?>
+            <a href="#" class="action action-edit uploadtoquote-edit-link-disabled"
+                aria-label="<?= $block->escapeHtmlAttr(__('Edit product parameters')) ?>">
+                <span class="<?= $dyeSubEditDisable;?>"><?= $block->escapeHtml(__('Edit')) ?></span>
+            </a>
+        <?php else: ?>
+        <?php
+            if(!$shouldHideEdit):?>
+            <a href="#" class="action action-edit <?= $dyeSubEditDisable;?>"
+                <?= $dyeSubEditDisable ? 'tabindex="-1" aria-disabled="true"' : '' ?>
+                onclick="<?= $block->escapeHtmlAttr(
+                    'editCartItem.editItem("'.$instanceId.'", '.
+                    ($designId?'"'.$designId.'"':'false'). ',' .
+                    ($isThirdParty ? $itemJson : '""').
+                    ',"'.$sku.'",'.$isCustomize.')("' . $block->escapeJS($tazToken) . '")("' . $block->escapeJS($siteName) . '")()'
+                )?>"
+                aria-label="<?= $block->escapeHtmlAttr(__('Edit product parameters')) ?>">
+                <span><?= $block->escapeHtml(__('Edit')) ?></span>
+            </a>
+                <?php if ($dyesubViewModel->isDyeSubEnabled() && $dyesubViewModel->isDyeSubEditEnabled() && $isCustomerCanvas):?>
+                <span class="tooltip-area edit-tooltip d-inline-block fs-12 weight-300">
+                    <i tabindex="0" role="button" class="d-inline-block pointer valign-bottom" aria-describedby="edit-button-tooltip"></i>
+                    <span id="edit-button-tooltip" role="tooltip" class="tooltip absolute d-none fedex-light fs-16 lh-24 pt-8 pb-8 pl-12 pr-12">
+                        <?= $block->escapeHtml(__('Editing is currently unavailable.')) ?>
+                    </span>
+                </span>
+                <?php endif;?>
+              <?php endif ?>
+        <?php endif ?>
+    <?php endif ?>
+<?php endif ?>
+<script>
+    require(['product'], function(product) {
+        editCartItem = product;
+    });
+
+    itemInstanceID = '<?= /* @noEscape */ $instanceId ?>';
+
+</script>

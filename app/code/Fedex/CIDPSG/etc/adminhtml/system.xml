@@ -1,0 +1,102 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="cid_psg_configuration_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>CID/PSG Configuration</label>               
+                
+                 <!--PA Agreement Configuration-->
+                <field id="pa_agreement_email" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>PA Acceptance Email Notification</label>
+                    <comment>Enter multiple emails comma-separated</comment>
+                    <validate>validate-emails required-entry</validate>
+                </field>
+                <field id="pa_acceptance_email_template" translate="label" type="select" sortOrder="11" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>PA Email Template</label>
+                    <comment>Select email template for PA Acceptance</comment>        
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <!--Account Creation Configuration-->
+                <field id="support_team_email" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Account Creation Failure Notification</label>
+                    <comment>Enter multiple emails comma-separated</comment>
+                    <validate>validate-emails required-entry</validate>
+                </field>                
+                <field id="account_request_terms_condition" translate="label" type="editor" sortOrder="21" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Creation Terms and Condition</label>
+                    <frontend_model>Fedex\CIDPSG\Block\Adminhtml\System\Config\Editor</frontend_model>
+                    <comment>Enter text to display in Terms and Conditions for Account request Form of CID/PSG</comment>
+                </field>
+                <field id="confirmation_popup" translate="label" type="editor" sortOrder="23" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Account Creation Confirmation Message</label>
+                    <frontend_model>Fedex\CIDPSG\Block\Adminhtml\System\Config\Editor</frontend_model>
+                    <comment>Enter text to display in accepted confirmation popup of CID/PSG</comment>
+                    <validate>required-entry</validate>
+                </field>         
+                
+                <!--AU Form Configuration-->                
+                 <field id="authorized_user_email" type="text" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>AU Email Distribution</label>
+                    <comment>Enter multiple emails comma-separated</comment>
+                    <validate>validate-emails required-entry</validate>
+                </field>
+                 <field id="authorized_user_email_template" translate="label" type="select" sortOrder="31" showInDefault="1" showInStore="1" showInWebsite="1">
+                    <label>AU Email Template</label>
+                    <comment>Select email template for Authorized User</comment>        
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+                <field id="email_retry_count" type="text" translate="label" sortOrder="32" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>AU Email Retry</label>
+                    <comment>Enter integer value</comment>
+                    <validate>validate-digits required-entry</validate>
+                </field>
+                <field id="delete_authorized_excel_cron" type="text" translate="label" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>AU Cron Schedule - Excel Cache Cleanup</label>
+                    <comment>Enter cron schedule time. Default will be run cron every hour</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="authorized_user_popup" translate="label" type="editor" sortOrder="34" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AU Form Confirmation Message</label>
+                    <frontend_model>Fedex\CIDPSG\Block\Adminhtml\System\Config\Editor</frontend_model>
+                    <comment>Enter text to display in accepted authorized user popup of CID/PSG</comment>
+                    <validate>required-entry</validate>
+                </field>                                                             
+                
+                <!-- REST API Configuration Section -->
+                 <field id="pega_account_create_api_url" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>PEGA API Url</label>
+                    <comment>Enter url for PEGA API to create CID/PSG Account</comment>
+                </field>
+                <field id="pega_retry_count" type="text" translate="label" sortOrder="41" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>PEGA API Retry count</label>
+                    <validate>validate-digits required-entry validate-not-negative-number validate-digits-range digits-range-1-5</validate>
+                    <comment>Enter integer value for PEGA API retries in case of faliure.</comment>
+                </field>
+                <field id="enable_log" translate="label" type="select" sortOrder="42" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>PEGA API Enable Logging </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable logging by select yes option</comment>
+                </field>                
+                
+                <!-- General -->
+                <field id="from_email" type="text" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Email From</label>
+                    <comment>Enter from email address</comment>
+                    <validate>required-entry</validate>
+                </field>
+
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,139 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var Magento\Company\Block\Company\Management\Add $block */
+/** @var Magento\Company\ViewModel\Customer $viewModel */
+
+$viewModel = $block->getData('viewModel');
+$view_Model_For_Toggel = $block->getData('view_Model');
+$userGroupAndFolderLevelPermissionToggle = $view_Model_For_Toggel->toggleUserGroupAndFolderLevelPermissions();
+?>
+<form class="form form-add-user" method="POST" id="add-user-form">
+    <input type="hidden" name="target_id" />
+    <input type="hidden" class = "customer_id" name="customer_id" />
+    <fieldset class="fieldset info">
+        <legend></legend>
+        <div class="field field-name-firstname">
+            <label class="label firstname" for="firstname"><span><?= $block->escapeHtml(__('FIRST NAME')) ?></span></label>
+            <div class="control">
+                <input type="text" id="firstname" readonly name="firstname"value="" title="First Name"
+                class="input-text disabled-field required-entry validate-length minimum-length-1 maximum-length-255" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-first-name" aria-required="true" onfocus="this.blur();">
+            </div>
+        </div>
+            <div class="field field-name-lastname">
+            <label class="label lastname" for="lastname"><span><?= $block->escapeHtml(__('LAST NAME')) ?></span></label>
+            <div class="control">
+                <input type="text" id="lastname" readonly name="lastname" value="" title="Last Name"
+                class="input-text required-entry disabled-field validate-length minimum-length-1 maximum-length-255" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-last-name" aria-required="true" onfocus="this.blur();">
+            </div>
+        </div>
+        <div class="field email">
+            <label class="label email" for="email">
+                <span><?= $block->escapeHtml(__('EMAIL')) ?></span>
+            </label>
+            <div class="control">
+                <input type="email" name="email" readonly id="email" value=""
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                       data-role="email" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-email"
+                       class="input-text disabled-field" onfocus="this.blur();">
+            </div>
+        </div>
+        <?php if (!$userGroupAndFolderLevelPermissionToggle): ?> 
+            <div class="field role">
+                <label class="label role" for="jobtitle">
+                    <span><?= $block->escapeHtml(__('ROLE')) ?></span>
+                </label>
+                <div class="control">
+                    <?php $lastRoleName = '';?>
+                    <select data-role="role-select" name="role" id="role" readonly data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-role" class="disabled-field">
+                        <?php foreach ($block->getRoles() as $role) : ?>
+                            <option value="<?= (int) $role->getId() ?>" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-role-<?= (int) $role->getId() ?>">
+                                <?= $block->escapeHtml($role->getRoleName()) ?>
+                            </option>
+                            <?php $lastRoleName = $role->getRoleName();?>
+                        <?php endforeach; ?>
+                    </select>
+                    <div class="role_dropdown">
+                        <div class="custom_role disabled-field" onfocus="this.blur();">
+                            <button type="button" class="role-button">Default User</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+        <?php if ($userGroupAndFolderLevelPermissionToggle): ?> 
+            <div class="field user-group" data-usergroup-folderlevel-toggle="<?= /* @noEscape */
+                                          $userGroupAndFolderLevelPermissionToggle; ?>">
+                <label class="label user-group" for="usergroup">
+                    <span><?= $block->escapeHtml(__('User Group - Folder Permissions')) ?></span>
+                </label>
+                <div class="control">
+                    <input type="hidden" name="editedUserGroupId" id="editedUserGroupId">
+                    <input type="text" id="usergroup" readonly name="usergroup" value="" title="User Group"
+                    class="input-text required-entry disabled-field validate-length minimum-length-1 maximum-length-255" 
+                    data-test-id="manage-user-edit-modal-user-group" aria-required="true" onfocus="this.blur();">
+                    <a href="#" id="change-user-group-modal-link" 
+                                class="change-user-group-button no-underline fs-16 lh-24">Change User Group</a>
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="field status">
+                <label class="label status" for="status">
+                    <span><?= $block->escapeHtml(__('STATUS')) ?></span>
+                </label>
+                <div class="control">
+                    <label for="status-value-active" class="radio-label">
+                        <input type="radio" value="1" name="status"  id="status-value-active" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-status-active" class="status-select-active validate-one-required-by-name-status">
+                        <span class="label-text"><?= $block->escapeHtml(__('Active')) ?></span>
+                    </label>
+                    <label for="status-value-inactive" class="radio-label">
+                        <input type="radio" value="0" name="status" id="status-value-inactive" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-status-inactive" class="status-select-inactive validate-one-required-by-name-status">
+                        <span class="label-text"><?= $block->escapeHtml(__('Inactive')) ?></span>
+                    </label>
+                </div>
+            </div>
+            <?php 
+                if ($view_Model_For_Toggel->toggleCustomerRolesAndPermissions()) {
+                    echo $block->getChildHtml('manage_user_permission');
+                }
+            ?>
+            <div id="warning-message-selfreg-user-edit" class="mage-error-selfreg-user-edit" style="display:none;color: #e02b27;font-size: 16px;">Please choose atleast one status.</div>
+        <div class="field edit">
+            <button class="action cancel secondary" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-cancel" type="button" data-role="action"><span>CANCEL</span></button>
+            <button class="action save primary" id = "saveuser" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-edit-modal-save" type="button"  data-role="action">
+                <span>SAVE</span>
+            </button>
+        </div>
+    </fieldset>
+    <div id="additional_fields_create" data-role="create-additional-fields" class="_hidden additional-fields">
+        <?= $block->getChildHtml('customer_form_user_attributes_create') ?>
+    </div>
+    <div id="additional_fields_edit" data-role="edit-additional-fields" class="_hidden additional-fields">
+        <?= $block->getChildHtml('customer_form_user_attributes_edit') ?>
+    </div>
+</form>
+<script>
+require(['jquery'], function($){
+    $(document).ready( function() {
+        $(".disabled-field:focus").css("cursor","not-allowed");
+        $(".disabled-field").css("cursor","not-allowed");
+
+        if(!$('.account.my-account-nav-consistency').length) {
+            $('body.cms-sde-home #block-collapsible-nav ul.nav li:first-child').remove();
+        }
+    });
+    $(document).on("click",".action",function(){
+        $("#warning-message-selfreg-user-edit").hide();
+    });
+    $('.form-add-user input:checkbox, .form-add-user input:radio').keypress(function(e){
+        if((e.keyCode ? e.keyCode : e.which) == 13){
+            $(this).trigger('click');
+        }
+    });
+    
+});
+</script>

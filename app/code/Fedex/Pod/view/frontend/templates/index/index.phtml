@@ -1,0 +1,60 @@
+<?php
+declare(strict_types=1);
+/** @var Magento\Framework\View\Element\Template $block */
+
+const IFRAME = 'iframe';
+$dataMageInit = array(
+    IFRAME => new stdClass()
+);
+
+//Feeding fallback data in case PoD is initialized without previous data setup or with only product SKU query parameter
+if (isset($_GET["accessToken"])) {
+    $tazToken = $_GET["accessToken"];
+} else {
+    $deliveryHelper = $this->helper('Fedex\Delivery\Helper\Data');
+    $siteName = $deliveryHelper->getCompanySite();
+
+    $tazTokenHelper = $block->getData('tazTokenHelper');
+
+        if ($siteName) {
+            $tazToken = $tazTokenHelper->getTazToken(false);
+        }
+
+}
+    $dataMageInit[IFRAME]->fallbackAccessToken = $tazToken ?? '';
+
+$httpReferer = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null;
+
+if (!is_null($httpReferer)) {
+    $dataMageInit[IFRAME]->fallbackProductPageToGoBack = $httpReferer;
+}
+
+?>
+<?php
+/**@var Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper $fxoCmViewModel*/
+
+$fxocmViewModel = $block->getData('fxo_cm_view_model');
+$isIframeSdkEnable = is_null($fxocmViewModel) ? null : $fxocmViewModel->isIframeSdkEnable() ;
+?>
+<?php if (!$isIframeSdkEnable): ?>
+<div data-mage-init='<?= json_encode($dataMageInit, JSON_UNESCAPED_SLASHES) ?>' class="container">
+</div>
+
+<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+<?php else: ?>
+<?= $this->getLayout()
+    ->createBlock(
+        "Magento\Framework\View\Element\Template",
+        "fxo.cm.configurator",
+        [
+            'data' => [
+                'fxo_cm_vm' => $fxocmViewModel,
+                'bundle_product_handler' => $block->getData('bundleProductHandlerViewModel')
+            ]
+        ]
+    )
+    ->setTemplate("Fedex_FXOCMConfigurator::fxo_cm_configurator.phtml")
+    ->toHtml();
+?>
+<?php endif; ?>
+<?= $block->getChildHtml(); ?>

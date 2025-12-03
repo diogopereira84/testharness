@@ -1,0 +1,52 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel $orderApprovalB2bViewModel */
+$orderApprovalB2bViewModel = $block->getData('orderApprovalViewModal');
+?>
+<?php
+if ($orderApprovalB2bViewModel->isOrderApprovalB2bEnabled()): ?>
+<div id="order-decline-modal-popup" class="orderb2b-decline-modal-popup-content" style="display:none">
+    <div class="declne-warning-icon-container">
+        <img class="decline-warning-icon" alt="Decline Warning"
+        src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/commercial-order-approval/warning.png'));?>"/>
+    </div>
+    <h3 class="decline-title">
+        <?= $escaper->escapeHtml('Are you sure you want to decline this order?') ?>
+    </h3>
+    <div class="delcine-message">
+        <?= $escaper->escapeHtml('Confirmation of the declined order will be
+        emailed to you and the requester with any additional comments included.') ?>
+    </div>
+    <div class="decline-reason">
+        <label class="additional-comments" for="additional-comments">
+            <?= $escaper->escapeHtml(__('Reason For Declining (Optional)')) ?>
+        </label>
+        <textarea name="additional_comments" id="additional_comments"
+        class="decline-textarea" maxlength="350"></textarea>
+        <div class="character-left-container">
+            <span class="decline-additional-comment-character-count">
+                <?= $escaper->escapeHtml(__('350')) ?>
+            </span>
+            <?= $escaper->escapeHtml(__('characters left')) ?>
+        </div>
+    </div>
+    <div class="decline-popup-btn-container">
+        <button type="button" class="btn-decline-cancel">
+            <?= $escaper->escapeHtml(__('Cancel')) ?>
+        </button>
+        <button type="button" class="btn-decline-deny">
+            <?= $escaper->escapeHtml(__('Decline Order')) ?>
+        </button>
+        <input type="hidden" id="order_id" name="order_id" value="">
+    </div>
+</div>
+<script>
+    require(['declineModalPopup'], function(declineModalPopup) {
+    });
+</script>
+<?php endif; ?>

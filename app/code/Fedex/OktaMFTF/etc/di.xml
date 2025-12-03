@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type  name="Fedex\OKTA\Controller\Rewrite\Adminhtml\Backend\Auth\Login">
+        <plugin name="okta_auth_login" sortOrder="1"  disabled="false"
+                type="Fedex\OktaMFTF\Plugin\LoginValidation"/>
+    </type>
+    <type  name="Magento\Integration\Model\AdminTokenService">
+        <plugin name="okta_auth_login_webapi_auth" sortOrder="1"  disabled="false"
+                type="Fedex\OktaMFTF\Plugin\TokenGeneration"/>
+    </type>
+</config>

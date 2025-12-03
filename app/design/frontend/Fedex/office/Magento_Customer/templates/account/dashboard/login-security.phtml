@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+
+/** @var \Fedex\SSO\ViewModel\SsoConfiguration $fclLogin */
+$fclLogin = $block->getData('fcl_login');
+$improvingPasswordToggle = $fclLogin->isimprovingpasswordtoggle();
+
+/** @var \Fedex\Commercial\ViewModel\CommercialSsoConfiguration $sdeLogin */
+$sdeLogin = $block->getData('view_model');
+?>
+<?php if (!$fclLogin->isSSOlogin() && !$fclLogin->iseprocustomer() && $improvingPasswordToggle): ?>
+<div class="block block-dashboard-login-security">
+    <div class="block-title"><?= $block->escapeHtml(__('Login & Security')) ?></div>
+    <div class="block-content">
+        <div class="box box-login-security">
+            <strong class="box-title">
+                <span><?= $block->escapeHtml(__('Login Information')) ?></span>
+            </strong>
+            <div class="box-content"><?= $block->escapeHtml(__('Please note that your User ID and password can be managed at Fedex.com.')) ?></div>
+            <div class="box-actions">
+            <?php if ($fclLogin->isFclCustomer() || $sdeLogin->getIsRequestFromSdeStore()
+                    || $sdeLogin->getIsRequestFromSdeStoreFclLogin() || $sdeLogin->isSelfRegCustomerWithFclEnabled()):?>
+                    <a class="action edit" onclick="changeText(this);"
+                    data-url="<?= $block->escapeHtml($fclLogin->getFclMyProfileUrl()) ?>" href="javascript:void(0)"
+                    data-ui-id="default-login-security-edit-link">
+                    <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                    </a>
+            <?php endif; ?> 
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+
+<script>
+    window.isImprovingPasswordToggle = <?= $improvingPasswordToggle ? 'true' : 'false'; ?>;
+</script>
+

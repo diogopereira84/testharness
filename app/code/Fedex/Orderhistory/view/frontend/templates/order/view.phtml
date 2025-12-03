@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/** B-1047968 | Print Order Receipt **/
+$orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+$eproClass = $orderHistoryHelper->isModuleEnabled()?' epro-print-order':'';
+$isEnhancementEnabled = $orderHistoryHelper->isEnhancementEnabeled();
+$_order = $block->getOrder();
+$discountClass = $_order->getDiscountAmount()>0?' discount-added':'';
+?>
+<?php
+/** B-1136363 | Print Order Receipt - Delivery **/
+if($isEnhancementEnabled):?>
+<div class="confirm-email">
+    <span>
+        <?= $block->escapeHtml(__('Confirmation email has been delivered to ')) ?>
+    </span><strong><?php echo $_order->getCustomerEmail(); ?></strong></div>
+<?php endif; ?>
+<?php /** @var  $block \Magento\Sales\Block\Order\View*/?>
+<div class="order-details-items ordered <?=/* @escapeNotVerified */$eproClass?>
+ <?=/* @escapeNotVerified */$discountClass?>" data-bind="scope: 'check_reorderable_product'">
+    <div class="order-title">
+        <strong><?= $block->escapeHtml(__('Items Ordered')) ?></strong>
+        <?php if (!empty($_order->getTracksCollection()->getItems())): ?>
+            <?= $block->getChildHtml('tracking-info-link') ?>
+        <?php endif; ?>
+    </div>
+
+    <?= $block->getChildHtml('order_items') ?>
+
+    <?php if ($this->helper(\Magento\GiftMessage\Helper\Message::class)->isMessagesAllowed('order', $_order)
+        && $_order->getGiftMessageId()
+    ): ?>
+    <div class="block block-order-details-gift-message">
+        <div class="block-title"><strong><?= $block->escapeHtml(__('Gift Message for This Order')) ?></strong></div>
+        <?php
+        $_giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($_order);
+        ?>
+        <div class="block-content">
+            <dl class="item-options">
+                <dt class="item-sender">
+                    <strong class="label">
+                        <?= $block->escapeHtml(__('From')) ?>
+                    </strong>
+                    <?= $block->escapeHtml($_giftMessage->getSender()) ?>
+                </dt>
+                <dt class="item-recipient">
+                    <strong class="label">
+                        <?= $block->escapeHtml(__('To')) ?>
+                    </strong>
+                    <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
+                </dt>
+                <dd class="item-message">
+                    <?= /* @noEscape */
+                    $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($_order) ?>
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <?php endif; ?>
+
+    <div class="actions-toolbar">
+        <div class="secondary">
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $block->escapeHtml($block->getBackTitle()) ?></span>
+            </a>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Fedex\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<h1 class="toolbar-title">
+    <?= __('Showing %1 results for: \'%2\'', $block->getLoadedProductCollectionCount(),
+            $block->getSearchHelper()->getEscapedQueryText()) ?>
+</h1>
+<?php 
+    $spanToolStr = '<span class="toolbar-number">';
+    $spanTag = '</span>';
+?>
+<p class="toolbar-amount" id="toolbar-amount">
+    <?php if ($block->getLastPageNum() > 1):?>
+        
+        <?= $block->escapeHtml(
+            __(
+                '%1-%2 of %3',
+                $spanToolStr . $block->getFirstNum() . $spanTag,
+                $spanToolStr . $block->getLastNum() . $spanTag,
+                $spanToolStr . $block->getLoadedProductCollectionCount() . $spanTag
+            ),
+            ['span']
+        ) ?>
+    <?php elseif ($block->getLoadedProductCollectionCount() == 1):?>
+        <?= $block->escapeHtml(
+            __('%1 Item', $spanToolStr . $block->getLoadedProductCollectionCount() . $spanTag),
+            ['span']
+        ) ?>
+    <?php else:?>
+        <?= $block->escapeHtml(
+            __(
+                '%1-%2 of %3',
+                $spanToolStr . $block->getFirstNum() . $spanTag,
+                $spanToolStr . $block->getLastNum() . $spanTag,
+                $spanToolStr . $block->getLoadedProductCollectionCount() . $spanTag
+            ),
+            ['span']
+        ) ?>
+    <?php endif; ?>
+</p>

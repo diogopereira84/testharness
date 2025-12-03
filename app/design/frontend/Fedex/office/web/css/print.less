@@ -1,0 +1,495 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+@import 'source/lib/_lib.less'; // Global lib
+@import 'source/_theme.less'; // Theme overrides
+@import 'source/_variables.less'; // Local theme variables
+
+@baseDir: '../'; // Default
+@display-none: none;
+@discount-color: #008200;
+
+//  Magento/blank
+.page-print {
+    .logo {
+        display: block;
+        float: none;
+        text-align: left;
+    }
+}
+
+@media print {
+    .discount-breakdown {
+        .arrow-down:not(.up) {
+            transform: rotate(-180deg) !important;
+            -webkit-transform: rotate(-180deg) !important;
+        }
+        .discount_breakdown {
+            display: table-row !important;
+        }
+        .discount_breakdown_table td.amount {
+            color: @discount-color !important;
+        }
+        .discount_breakdown_table td.amount span.price {
+            color: @discount-color !important;
+        }        
+    }
+    * {
+        -webkit-filter: none !important; // Use in 41 Chrome
+        background: transparent !important;
+        color: @color-black !important;
+        filter: none !important;
+        text-shadow: none !important;
+    }
+    //  Black prints faster:h5bp.com/s
+    a,
+    a:visited {
+        text-decoration: underline !important;
+    }
+
+    //  Don't show links for images, or javascript/internal links
+    pre,
+    blockquote {
+        border: 1px solid @color-gray60;
+        page-break-inside: avoid;
+    }
+
+    thead {
+        display: table-header-group;
+    }
+
+    .table-wrapper table {
+        width: 100%;
+
+        td {
+            width: auto;
+        }
+
+        table-layout: fixed;
+
+        & > tfoot > tr:first-child {
+            border-top: 1px solid @color-gray60;
+        }
+    }
+
+    .box,
+    tr,
+    img {
+        page-break-inside: avoid;
+    }
+
+    img {
+        max-width: 100% !important;
+    }
+
+    @page {
+        margin-left: 1cm;
+        margin-right: 1cm;
+        margin-top: .3in !important;
+        margin-bottom: .3in !important;
+    }
+
+    .block-content,
+    p,
+    h2,
+    h3 {
+        orphans: 3;
+        widows: 3;
+    }
+
+    .block-content {
+        page-break-before: avoid;
+    }
+
+    .block-title,
+    h2,
+    h3 {
+        page-break-after: avoid;
+    }
+
+    .nav-toggle {
+        display: none !important;
+    }
+
+    .sidebar,
+    .nav-sections,
+    .header.content > *[class],
+    .panel.wrapper > *[class],
+    .footer.content > *[class] {
+        display: none;
+    }
+
+    .logo,
+    .footer .copyright {
+        display: block !important;
+        margin: 10px 0;
+    }
+
+    .order-details-items {
+        .order-items {
+            .order-gift-message {
+                &:not(.expanded-content) {
+                    height: auto;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+    .column.main {
+        float: none !important;
+        width: 100% !important;
+    }
+
+    .breadcrumbs {
+        margin: 0 auto;
+        text-align: right;
+    }
+
+    .footer.content {
+        padding: 0;
+    }
+
+    .hidden-print {
+        display: none !important;
+    }
+
+ 
+
+    .submitorder-index-ordersuccess {
+        .columns {
+            .column {
+                .order_outer_container.marketplace-checkout-order-confirmation {
+                    .order-cart-summary {
+                        .cart-table {
+                            table.product-line-details-table {
+                                thead {
+                                    >tr {
+                                        >th {
+                                            vertical-align: top;
+                                            padding-top: 0;
+                                        }
+                                        >td {
+                                            vertical-align: top;
+                                            padding-top: 0;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } 
+        .header-top {
+            display: none;
+        }
+        .footer-container {
+            display: none;
+        }
+        .copyright {
+            display: none;
+        }
+        .top-container {
+            display: none;
+        }
+        .promo_divider {
+            display: none;
+        }
+        .order-summary-step-info {
+            gap: 28px;
+            .step-info-box {
+                max-width: ~"calc(66.66% - 14px)";
+                flex: 0 0 ~"calc(66.66% - 14px)";
+                gap: 28px;
+                .step-data-info {
+                    max-width: ~"calc(50% - 14px)";
+                    flex: 0 0 ~"calc(50% - 14px)";
+                    box-sizing: border-box;
+                }
+            }
+            .step-data-info {
+                max-width: ~"calc(33.33% - 14px)";
+                flex: 0 0 ~"calc(33.33% - 14px)";
+            }
+        }
+        .cf-invite-wrapper {
+            display: none;
+        }
+    }
+    /** B-1047968 | Print Order Receipt **/
+    .sales-order-print {
+        .epro-print-order {
+            .table-caption{
+                display:none;
+            }
+            .block-content:not(.widget) .box{
+                clear: none;
+                float: left;
+                width: 25%;
+                min-height: 250px !important;
+            }
+            tfoot .amount{
+                text-align: right;
+            }
+            .box-title>span{
+                letter-spacing: 0.8px;
+            }
+        }
+    }
+    /* B-1163682-RT-ECVS- Ability to save/print order receipt on click of Print Receipt button - PDF for Mobile */
+    .sales-order-print {
+        .retail-print-order {
+            .table-caption{
+                display:none;
+            }
+            .block-content:not(.widget) .box{
+                clear: none;
+                float: left;
+                width: 25%;
+            }
+            tfoot .amount{
+                text-align: right;
+            }
+            .box-title>span{
+                letter-spacing: 0.8px;
+            }
+        }
+    }
+    .negotiable_quote-quote-print{
+        .block-content:not(.widget) .box{
+            clear: none;
+            float: left;
+            width: 25%;
+        }
+        .quote-details-items .quote-table {
+            padding: 0px !important;
+            border: 1px solid #e4e4e4 !important;
+            padding: 20px 20px 40px;
+        }
+        .quote-title {
+            margin: 15px 0 0 10px;
+        }
+        .quote-sales-rep {
+            position: relative;
+            right: 25px;
+            top: -90px;
+        }
+        #shopping-cart-table tbody tr{
+            height: 130px !important;
+        }    
+        #shopping-cart-table tbody td {
+            width: 14% !important;
+            display: table-cell;
+            padding: 11px 1px !important;
+        }
+        .quote-price-block{
+            page-break-inside: avoid !important;
+        }
+    }
+
+    /** B-1136363 | Print Order Receipt - Delivery **/
+    .sales-order-print {
+        .epro-order-history-enhancement ~ .page-wrapper {          
+            .block-content:not(.widget) .box{
+                clear: none;
+                float: left;
+                width: 25% !important;
+                min-height: 250px !important;
+            }
+            #my-orders-table{
+                table-layout:auto;
+            }            
+            caption {
+                border-bottom: none !important;
+                font-family: 'FedEx Sans Light' !important;
+                font-weight: 300 !important;
+            }
+            .order-title{
+                border-bottom: none !important;
+            }
+            .order-title strong{
+                font-family: 'FedEx Sans Light' !important;
+                font-weight: 300 !important;
+            }
+            .customtotal{
+                background: #F7F9FA !important;
+                -webkit-print-color-adjust: exact;                
+            }
+            .epro-order-view-subtotal{
+                float:right;
+            }          
+            .show-detail{
+                color: #0078B4 !important;
+            }
+            h1.page-title {
+                font-size: 23px !important;
+                color: #2F3F48 !important;                
+                font-family: 'FedEx Sans Light' !important;
+                font-weight: 300 !important;
+            }            
+            .questions-contact{
+                page-break-inside: avoid !important;
+            }
+            .customtotal{
+                page-break-inside: avoid !important;
+            }
+            .order-details-items{
+                margin-bottom: 0px !important;
+            }
+            .order-details-items .table-wrapper:not(:last-child){
+                margin-bottom: 0px !important;
+            }
+            .column.main {
+                margin-bottom: 0px !important;
+            }
+        }
+    }
+    /* B-1163682-RT-ECVS- Ability to save/print order receipt on click of Print Receipt button - PDF for Mobile */
+    .sales-order-print {
+        .retail-order-history-enhancement ~ .page-wrapper {          
+            .block-content:not(.widget) .box{
+                clear: none;
+                float: left;
+                width: 25% !important;
+            }
+            caption {
+                border-bottom: none !important;
+            }
+            .order-title{
+                border-bottom: none !important;
+            }
+            .customtotal{
+                background: #F7F9FA !important;
+                -webkit-print-color-adjust: exact;
+            }
+            .show-detail{
+                color: #0078B4 !important;
+            }
+            h1.page-title {
+                font-size: 23px !important;
+                color: #2F3F48 !important;                
+                font-family: 'FedEx Sans Light' !important;
+                font-weight: 300 !important;
+            }
+        }
+    }
+
+    /** B-1058846 - Print Quote Receipt */
+    .negotiable_quote-quote-print .columns .epro-print-order-enhancement ~ #items-quoted .quote-price-block{
+        background: #F7F9FA !important;
+        -webkit-print-color-adjust: exact;
+    }
+    .negotiable_quote-quote-print .epro-print-order-enhancement .quote-id-title {      
+      margin-top:-10px !important;
+    }
+    .negotiable_quote-quote-print .columns .epro-print-order-enhancement ~ .quote-shipping-info .block-title{
+        margin-top:-310px !important;
+    }
+    //D-97455
+    .negotiable_quote-quote-print .page-wrapper .footer-container .epro-footer-main{
+        display: none !important;
+    } 
+
+    /* B-1163682-RT-ECVS- Ability to save/print order receipt on click of Print Receipt button - PDF for Mobile */
+    .sales-order-print .order-retail-view .table > tbody > tr > td {
+        border-top: 1px solid #cccccc !important;
+    }
+    .retail-order-view-bottom-div .question_about_order_mobile {
+        display: none;
+    }
+    .retail-order-view-bottom-div .question_about_order {
+        display: block;
+    }
+    .sales-order-print .order-retail-view .table-wrapper {
+        border-bottom: 1px solid #cccccc !important;
+    }
+    .sales-order-print .retail-order-view-subtotal {
+        background-color: #F7F9FA !important;
+        -webkit-print-color-adjust: exact;
+        padding: 19px 32px 23px 32px;
+        width: 446px;
+    }
+    .retail-order-view-bottom-div {
+        display: flex;
+    }
+    .sales-order-print .retail-order-view-bottom-div {
+        width: 100%;
+    }
+    .retail-order-view-bottom-div .question_about_order {
+        width: 60%; 
+        height: 50%;
+        float: left;
+        padding-top: 10px;
+    }
+    .sales-order-print .retail-order-view-subtotal-view td {
+        font-family: 'FedEx Sans Light';
+        font-size: 16px;
+        line-height: 24px !important;
+        text-align: left;
+        color:  #2F4047;
+    }
+    .sales-order-print .retail-order-view-subtotal-view td .value {
+        font-family: 'FedEx Sans Light';
+        font-size: 16px;
+        line-height: 24px !important;
+        text-align: right;
+        color:  #2F4047;
+        font-weight: bold;
+    }
+    .sales-order-print .retail-order-view-subtotal-view tr:nth-child(3) {
+        border-bottom: 1px solid #CED5D9 !important;
+        width: 382px;
+    }
+    table.retail-order-view-subtotal-view td.value {
+        text-align: right;
+        padding-right: 0px;
+    }
+    .extra-attributes {
+        line-height: 16px;
+        font-family: 'FedEx Sans Regular';
+        background-color: #F7F9FA !important;
+        -webkit-print-color-adjust: exact;
+    }
+    .sales-order-print .retail-order-view-subtotal {
+        background-color: #F7F9FA;
+        -webkit-print-color-adjust: exact;
+        padding: 19px 32px 23px 32px;
+        width: 446px;
+    }
+    .print-item-partition {
+        display: block;
+        height: 50px;
+        page-break-before: always !important;
+        page-break-after: avoid !important;
+        page-break-inside: avoid !important;
+    }
+    .retail-order-view-bottom-div {
+        margin-top: 50px;
+        page-break-inside: avoid !important;
+    }
+    .retail-print-order .extra-attributes .hide-details-btn {
+        display: none;
+    }
+    .retail-print-order table.data.table.table-order-print-items > tbody > tr > td {
+        vertical-align: middle;
+    }
+    
+}
+/*B-1420930 fix content overlapping issue */
+
+.submitorder-index-ordersuccess {
+    .mobile-nav-bar {
+        .mobile-logo {
+            display: @display-none;
+        }
+    }
+    .page-wrapper {
+        .widget-promo-banner-container {
+            display: @display-none;
+        }
+    }
+}
+

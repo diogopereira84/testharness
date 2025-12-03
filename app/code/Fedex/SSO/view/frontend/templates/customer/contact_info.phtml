@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$customerInfo = $block->getFclCustomerInfo();
+if ($customerInfo) {
+    echo $block->escapeHtml($customerInfo->getFirstName()) .' ' .
+    $block->escapeHtml($customerInfo->getLastName()) . '<br>';
+
+    if ($customerInfo->getCustomAttribute('secondary_email')) {
+        echo $block->escapeHtml($customerInfo->getCustomAttribute('secondary_email')->getValue());
+
+    } else {
+        echo $block->escapeHtml($customerInfo->getEmail());
+        
+    }
+}
+?>

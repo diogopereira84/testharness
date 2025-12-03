@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="sales_shipment">
+        <column xsi:type="varchar" name="mirakl_shipping_id" nullable="true" length="255" comment="Mirakl Shipping ID"/>
+        <column xsi:type="varchar" name="mirakl_shipping_reference"
+                nullable="true" length="255" comment="Mirakl Shipping Reference"/>
+        <index referenceId="FEDEX_MARKETPLACE_WEBHOOK_MIRAKL_SHIPPING_REFERENCE_IDX" indexType="btree">
+            <column name="mirakl_shipping_reference"/>
+        </index>
+    </table>
+</schema>

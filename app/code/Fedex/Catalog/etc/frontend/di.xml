@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <arguments>
+            <argument name="galleryImagesConfig" xsi:type="array">
+                <item name="medium_image_new" xsi:type="array">
+                    <item name="image_id" xsi:type="string">product_page_image_medium_one_p</item>
+                    <item name="data_object_key" xsi:type="string">medium_image_url</item>
+                    <item name="json_object_key" xsi:type="string">img</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View\Gallery">
+        <plugin name="add_new_column_to_placeholder"
+                type="Fedex\Catalog\Plugin\Block\Product\View\GalleryPlugin" sortOrder="1" />
+    </type>
+    <type name="Magento\Catalog\Helper\Product\View">
+        <plugin name="page_title_for_first_third_instore_products" type="Fedex\Catalog\Plugin\Helper\Product\View" />
+    </type>
+</config>

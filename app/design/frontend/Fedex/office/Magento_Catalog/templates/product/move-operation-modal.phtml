@@ -1,0 +1,136 @@
+<?php
+
+$viewModel = $block->getData('product_list_view_model');
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$isCatalogBreakPointEnabled = $catalogMvpHelper->getCatalogBreakpointToggle();
+$subCategoryMvp = $catalogMvpHelper->getB2BcategoryCollection();
+$getCurrentCategoryId = $catalogMvpHelper->getCurrentCategoryId();
+$getCategoryRepository = $catalogMvpHelper->getCategoryRepository();
+
+?>
+
+<div id="custom-model-move-popup" class="custom-model-move-popup-form-container" style="display:none;">
+    <div class="custom-model-move-popup-form-header">
+    <span class="custom-model-move-popup-form-heading">
+        <?= $block->escapeHtml(__('Move to'));?>
+    </span>
+    </div>
+    <div class="field mvp-move-popup-folder-location-name">
+        <label class="folder-location" id = "mvp-move-popup-folder-location-label">
+            SELECT FOLDER LOCATION
+        </label>
+        <div class="control">
+            <input type="text" id="mvp-move-popup-folder-location-input" name="folder-location"
+                    value = "Shared Catalog" class="input-text-folder-location"
+                    aria-label="mvp-move-popup-folder-location-input"
+            />
+        </div>
+    </div>
+    <div class = "mvp-move-popup-content">
+        <form>
+            <div class="field mvp-move-search-input-field">
+                <div class="control" style="display:flex;">
+                    <input type="text" id="mvp-move-search-input" name="search_category_by_name"
+                            class="input-text-search" placeholder = "Search for folder..."/>
+                    <span class = "mvp-move-search-icon"></span>
+                </div>
+            </div>
+        </form>
+        <div class ="shared-catalog-lable sub-cat-div-name" id="move-<?php echo $getCurrentCategoryId ?>">
+        <span class="shared-catalog-folder">
+            <?= $block->escapeHtml( __('Shared Catalog'));?>
+        </span>
+        </div>
+        <div class ="mvp-catalog-move-popup-category-tree" tabindex="0" >
+            <ul class = "category-tree-level-0">
+                <?php
+                foreach ($subCategoryMvp as $childSubcategory) {
+                    $childofprintproduct_level0 = $childSubcategory->getName();
+                    ?>
+                    <li class="mvp-catalog-move-popup-category-l-0">
+                        <div class = "sub-category-container-level-0 level-0 sub-cat-div" id="move-<?php echo $childSubcategory->getId() ?>">
+                            <?php if ($childSubcategory->hasChildren()) { ?>
+                                <div class = "toggle-icon-level-0" id="<?php echo "toggle-".$childSubcategory->getId() ?>">
+                                    <div class="disclosere-icon-closed level-0 display"></div>
+                                    <div class="disclosere-icon-open level-0" style="display: none;"></div>
+                                </div>
+                            <?php }
+                            else { ?>
+                                <div class = "toggle-icon-level-0" id="<?php echo "toggle-".$childSubcategory->getId() ?>">
+                                    <div class="disclosere-icon-closed level-0 display" style="visibility: hidden;"></div>
+                                    <div class="disclosere-icon-open level-0" style="display: none;"></div>
+                                </div>
+                            <?php } ?>
+                            <div class="folder-img-icon"></div>
+                            <span class = "category-name-level-0 sub-cat-div-name">
+                            <?= /* @noEscape */ $childofprintproduct_level0 ?></span>
+                        </div>
+                        <?php
+                        if ($childSubcategory->hasChildren()) {
+                            $childCategoryObj = $getCategoryRepository->get($childSubcategory->getId());
+                            $childSubcategories = $childCategoryObj->getChildrenCategories();
+                            foreach ($childSubcategories as $childSubcategory_level1) {
+                                $childofprintproduct_level1 = $childSubcategory_level1->getName();
+                                ?>
+                                <ul class = "category-tree-level-1">
+                                    <li class="mvp-catalog-move-popup-category-l-1" style="display: none;">
+                                        <div class = "sub-category-container-level-1 sub-cat-div" id="move-<?php echo $childSubcategory_level1->getId() ?>">
+                                            <?php if ($childSubcategory_level1->hasChildren()) { ?>
+                                                <div class = "toggle-icon-level-1" id="<?php echo "toggle-".$childSubcategory_level1->getId() ?>">
+                                                    <div class="disclosere-icon-closed level-1 display"></div>
+                                                    <div class="disclosere-icon-open level-1" style="display: none;"></div>
+                                                </div>
+                                            <?php }
+                                            else { ?>
+                                                <div class = "toggle-icon-level-1" id="<?php echo "toggle-".$childSubcategory_level1->getId() ?>">
+                                                    <div class="disclosere-icon-closed level-1 display" style="visibility: hidden;"></div>
+                                                    <div class="disclosere-icon-open level-1" style="display: none;"></div>
+                                                </div>
+                                            <?php } ?>
+                                            <div class="folder-img-icon"></div>
+                                            <span class = "category-name-level-1 sub-cat-div-name">
+                                        <?= /* @noEscape */ $childofprintproduct_level1 ?></span>
+                                        </div>
+                                        <?php if ($isCatalogBreakPointEnabled) { ?>
+                                            <?php echo $catalogMvpHelper->getCategoryLevelone($childSubcategory_level1); ?>
+                                        <?php } else {
+                                            if ($childSubcategory_level1->hasChildren()) {
+                                                $childCategoryObj =
+                                                    $getCategoryRepository->get($childSubcategory_level1->getId());
+                                                $childSubcategoriess = $childCategoryObj->getChildrenCategories();
+                                                foreach ($childSubcategoriess as $childSubcategory_level2) {
+                                                    $childofprintproduct_level2 = $childSubcategory_level2->getName();
+                                                    ?>
+                                                    <ul class = "category-tree-level-2">
+                                                        <li class="mvp-catalog-move-popup-category-l-2" style="display: none;">
+                                                            <div class = "sub-category-container-level-2 sub-cat-div" id="move-<?php echo $childSubcategory_level2->getId() ?>">
+                                                                <div class="disclosere-icon-closed level-2" style="visibility: hidden;" ></div>
+                                                                <div class="disclosere-icon-open level-2"
+                                                                        style="display: none;" ></div>
+                                                                <div class="folder-img-icon"></div>
+                                                                <span class = "category-name-level-2 sub-cat-div-name">
+                                                    <?= /* @noEscape */ $childofprintproduct_level2 ?></span>
+                                                            </div>
+                                                        </li>
+                                                    </ul>
+                                                    <?php
+                                                }
+                                            }?>
+                                        <?php } ?>
+                                    </li>
+                                </ul>
+                                <?php
+                            }
+                        }?>
+                    </li>
+                    <?php
+                }
+                ?>
+            </ul>
+        </div>
+    </div>
+    <div class="actions">
+        <button class="action primary cancel-btn-move-popup">Cancel</button>
+        <button class="action primary move-action">Move</button>
+    </div>
+</div>

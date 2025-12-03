@@ -1,0 +1,35 @@
+<?php
+/**
+ * @category  Fedex
+ * @package   Fedex_AllPrintProducts
+ * @copyright Copyright (c) 2023 Fedex.
+ * @author    Pedro Basseto <pedro.basseto.osv@fedex.com>
+ */
+declare(strict_types=1);
+/** @var Fedex\AllPrintProducts\Block\AllPrintProducts $block*/
+$categoryData = $block->getCategoryAttributes(null, $block->getCurrentCategoryId());
+
+$keysToCheck = [
+    'product_listing_banner_icon',
+    'product_listing_banner_text',
+    'product_listing_heading',
+    'product_listing_sub_heading'
+];
+$hasEmptyCategoryData = array_filter($keysToCheck, fn($key) => empty($categoryData[$key]));
+?>
+
+<?php if (!$block->isMoveReferenceFromStoreToCategoryToggleEnabled() || !empty($hasEmptyCategoryData)) : ?>
+    <div class="allprintproducts">
+            <h1><?= $block->escapeHtml($block->getHeading()) ?></h1>
+            <h2><?= $block->escapeHtml($block->getSubHeading()) ?></h2>
+    </div>
+<?php else: ?>
+    <div class="plp-banner d-flex h-center v-center p-8">
+        <img class="plp-banner-icon d-none visible-m-l-xl mr-8" src="<?php echo $categoryData['product_listing_banner_icon'] ?>" alt="Shipping banner icon" />
+        <span class="plp-banner-text cl-green fs-16 fedex-bold lh-24 ls-1 text-center"><?php echo $categoryData['product_listing_banner_text'] ?> </span>
+    </div>
+    <div class="allprintproducts">
+        <h1><?= $block->escapeHtml($categoryData['product_listing_heading']) ?></h1>
+        <h2><?= $block->escapeHtml($categoryData['product_listing_sub_heading']) ?></h2>
+    </div>
+<?php endif; ?>

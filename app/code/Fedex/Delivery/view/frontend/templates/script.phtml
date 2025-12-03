@@ -1,0 +1,14 @@
+<?php
+$googleApiScript = <<<script
+    require([
+        "jquery",
+        "{$block->getApiKey()}&libraries=places,marker"
+    ], function ($) {
+        console.log("Google API Load Successfully With RequireJS");
+        $(document).trigger("google-maps-loaded");
+    });
+script;
+?>
+<?=
+$secureRenderer->renderTag('script', ['type' => 'text/javascript'], $googleApiScript, false);
+?>

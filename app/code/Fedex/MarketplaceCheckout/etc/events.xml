@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="controller_action_predispatch_checkout">
+        <observer name="mirakl_update_shipping_info" instance="Fedex\MarketplaceCheckout\Observer\UpdateShippingInfoObserver"/>
+    </event>
+    <event name="mirakl_connector_convert_order_after">
+        <observer name="mirakl_no_customer_payment_confirmation_workflow"
+                  instance="Fedex\MarketplaceCheckout\Observer\NoCustomerPaymentObserver"/>
+        <observer name="mirakl_marketplace_item_data"
+                  instance="Fedex\MarketplaceCheckout\Observer\CustomItemData"/>
+    </event>
+</config>

@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="fedex_sales_order_political_disclosure" resource="default" engine="innodb" comment="FedEx Sales Order Political Disclosure">
+        <column name="entity_id" xsi:type="int" identity="true" unsigned="true" nullable="false" comment="ID"/>
+        <column name="order_id" xsi:type="int" unsigned="true" nullable="true" comment="Order ID (nullable for EPro flow)"/>
+        <column name="quote_id" xsi:type="int" unsigned="true" nullable="true" comment="Quote ID (used before order creation)"/>
+        <column name="disclosure_status" xsi:type="smallint" unsigned="true" nullable="false" default="1"
+                comment="Disclosure Status (1 = Active, 0 = Inactive)"/>
+        <column name="description" xsi:type="text" nullable="false" comment="Candidate/PAC/Ballot Issue"/>
+        <column name="election_date" xsi:type="date" nullable="false" comment="Election Date"/>
+        <column name="election_state_id" xsi:type="int" unsigned="true" nullable="true" comment="Election Region/State ID"/>
+        <column name="sponsor" xsi:type="text" nullable="true" comment="Sponsoring Committee"/>
+        <column name="address_street_lines" xsi:type="text" nullable="false" comment="Address Street Lines"/>
+        <column name="city" xsi:type="text" nullable="false" comment="City"/>
+        <column name="region_id" xsi:type="int" unsigned="true" nullable="true" comment="Address Region/State ID"/>
+        <column name="zip_code" xsi:type="text" nullable="false" comment="ZIP Code"/>
+        <column name="email" xsi:type="varchar" length="255" nullable="true" comment="Email Address"/>
+        <column name="updated_at" xsi:type="timestamp" nullable="false"
+                default="CURRENT_TIMESTAMP" on_update="true" comment="Updated At"/>
+
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+
+        <constraint xsi:type="unique" referenceId="UNQ_FEDEX_PD_ORDER_QUOTE">
+            <column name="order_id"/>
+            <column name="quote_id"/>
+        </constraint>
+
+        <constraint xsi:type="foreign"
+                    referenceId="FK_FEDEX_PD_ORDER_ID"
+                    table="fedex_sales_order_political_disclosure"
+                    column="order_id"
+                    referenceTable="sales_order"
+                    referenceColumn="entity_id"
+                    onDelete="CASCADE"/>
+
+        <constraint xsi:type="foreign"
+                    referenceId="FK_FEDEX_PD_REGION_ID"
+                    column="region_id"
+                    referenceTable="directory_country_region"
+                    referenceColumn="region_id"/>
+
+        <constraint xsi:type="foreign"
+                    referenceId="FK_FEDEX_PD_ELECTION_STATE_ID"
+                    column="election_state_id"
+                    referenceTable="directory_country_region"
+                    referenceColumn="region_id"/>
+    </table>
+</schema>

@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$img = $block->getViewFileUrl('Fedex_SharedDetails::images/export-calender-icon.png');
+?>
+<div class="export-commercial-reporting-section" style="display:none;">
+    <form class="form" id="export-commercial-reporting-form" method="post" autocomplete="off">
+        <fieldset class="fieldset export-order-history-popup">
+            <h2 class="export-order-history-title"><?php echo __('Export Order History') ?></h2>
+            <div class="model-form-data">
+                <span class="action-close" data-role="closeBtn" tabindex="0">
+                    <span>Close</span>
+                </span>
+                <div class="field field-reprt-dates field-export-date-range">
+                    <label class="label" for="export-date-range"><?=$escaper->escapeHtml(__('Date Range')); ?></label>
+                    <div class="order-date-range-field">
+                        <input type="text" name="export-date-range" value="" placeholder="Select Date Range"
+                        class="date-range-filter-field" id="export-date-range-picker"/>
+                        <img src="<?= $block->escapeHtmlAttr($img) ?>" alt="date"
+                         height="40" id="export-date-range-picker-icon"/>
+                    </div>
+                    <span class="date-range-note">
+                        <?php echo __('In order to export, the date range needs to be within 31 days.') ?>
+                    </span>
+                </div>
+                <div class="field recipients-email">
+                    <label for="email-address" class="email-address-label">
+                        <span><?php echo __('EMAIL') ?></span>
+                    </label>
+                    <div class="recipients-email-address">
+                        <div class="all-mail"></div>
+                        <input type="email" name="email" id="email_address" class="email-input-text"
+                         placeholder="<?php echo __('Enter recipient email') ?>" multiple/>
+                    </div>
+                    <span class="email-address-note">
+                        <?php echo __('The email associated with your account will receive a copy of this report.
+                         If you would like to share it with additional recipients, enter them above.') ?>
+                    </span>
+                </div>
+                <div class="export-actions-toolbar">
+                    <button type="button" class="action cancel-export" title="<?php echo __('CANCEL') ?>">
+                        <span><?php echo __('CANCEL') ?></span>
+                    </button>
+                    <button type="button" class="action export-data" title="<?php echo __('EXPORT') ?>">
+                        <span><?php echo __('EXPORT') ?></span>
+                    </button>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>

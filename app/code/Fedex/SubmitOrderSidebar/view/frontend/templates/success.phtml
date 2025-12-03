@@ -1,0 +1,161 @@
+<div id="order-summary" data-bind="scope:'ordersummary'">
+<!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#order-summary": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "ordersummary": {
+                        "component": "Fedex_SubmitOrderSidebar/js/order-summary",
+                        "errorIconImageSrc": "<?=/* @noEscape */$block->getViewFileUrl('images/order-history/error-white.png'); ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<?php
+//check Forsta is enabled
+$viewModel = $block->getData('webanalytics_forsta_view_model');
+if ($viewModel->isEnabledForsta()): ?>
+    <script type="text/javascript">
+        require(['jquery'], function($) {
+            $(window).on('load', function() {
+                ConfirmitHelper.RunTransactionSurvey();
+            });
+        });
+    </script>
+<?php endif; ?>
+
+<?php
+/** @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer */
+/** @var $bundleViewModel \Fedex\ProductBundle\ViewModel\BundleProductHandler */
+$bundleViewModel = $block->getData('bundle_view_model');
+$items = json_encode($bundleViewModel->getBundleItemsSuccessPage());
+$scriptString = <<<script
+    window.bundleItems = {$items};
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?php
+$orderSuccessViewModel = $block->getData('orderSuccess_view_model');
+if ($orderSuccessViewModel->getIsUpsellitActive() && $orderSuccessViewModel->getIsRetail()) : ?>
+    <script type="text/javascript">
+        require(['jquery', 'underscore','fedex/storage'], function($, _, fxoStorage) {
+            $(window).on('load', function() {
+                let orderConfirmationResponse;
+                if(window.e383157Toggle){
+                    orderConfirmationResponse = fxoStorage.get("orderTransactionData");
+                    if(typeof orderConfirmationResponse === 'string'){
+                        orderConfirmationResponse = JSON.parse(orderConfirmationResponse);
+                    }
+                }else{
+                    orderConfirmationResponse = JSON.parse(JSON.parse(localStorage.getItem('orderTransactionData')));
+                }
+                let orderId = _.get(
+                    orderConfirmationResponse,
+                    [
+                        'output',
+                        'checkout',
+                        'lineItems',
+                        '0',
+                        'retailPrintOrderDetails',
+                        '0',
+                        'origin',
+                        'orderNumber'
+                    ],
+                    ''
+                );
+                let orderSubAmt = _.get(
+                    orderConfirmationResponse,
+                    [
+                        'output',
+                        'checkout',
+                        'transactionTotals',
+                        'netAmount'
+                    ],
+                    ''
+                );
+                let currency = _.get(
+                    orderConfirmationResponse,
+                    [
+                        'output',
+                        'checkout',
+                        'transactionTotals',
+                        'currency'
+                    ],
+                    ''
+                );
+                let upsellitScript = <?= $orderSuccessViewModel->getUpSellItTrackingScript() ?>;
+                if (orderId && orderSubAmt && currency){
+                    $('footer').append(upsellitScript);
+                }
+                window.dispatchEvent(new Event('flush_fedex_local_storage'));
+            });
+        });
+    </script>
+<?php endif; ?>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_SSO/js/fcllogin": {}
+        }
+    }
+</script>
+
+<?php if ($orderSuccessViewModel->isPopupEnabled()) : ?>
+<script type="text/javascript">
+    require(['jquery', 'fcl-login-modal', 'fedex/storage'], function($, loginModal, fxoStorage) {
+        $(document).ready($.proxy(function () {
+            var storagecustomerdata = JSON.parse(window.localStorage.getItem('mage-cache-storage'));
+
+            //Check if user is logged in
+            if(typeof storagecustomerdata.customer?.fullname ==='undefined')  {
+                $('#order-summary').on('click', function() {
+                });
+                loginModal.isInitialized.subscribe(function(isInitialized) {
+                if(isInitialized) {
+                        $('#login-register-popup').modal('openModal');
+                    }
+                });
+            }
+        }));
+
+         // Save the orderId to localStorage on click of login/register buttons
+                $(document).on('click', '.btn-popup-create-user, .btn-popup-login',function() {
+                        let orderConfirmationResponse;
+                if(window.e383157Toggle){
+                    orderConfirmationResponse = fxoStorage.get("orderTransactionData");
+                    if(typeof orderConfirmationResponse === 'string'){
+                        orderConfirmationResponse = JSON.parse(orderConfirmationResponse);
+                    }
+                }else{
+                    orderConfirmationResponse = JSON.parse(JSON.parse(localStorage.getItem('orderTransactionData')));
+                }
+                let orderId = _.get(
+                    orderConfirmationResponse,
+                    [
+                        'output',
+                        'checkout',
+                        'lineItems',
+                        '0',
+                        'retailPrintOrderDetails',
+                        '0',
+                        'origin',
+                        'orderNumber'
+                    ],
+                    ''
+                );
+
+
+                if (orderId) {
+                    //We cannot use the fxoStorage library to set local storage for this task because it clears all local storage data after an order is placed. However, we need to persist the guestOrderId even after the order placement. For this specific case, we are using localStorage.setItem to ensure the data remains available.
+                    localStorage.setItem('guestOrderId', orderId);
+                }
+                });
+    });
+</script>
+<?php endif; ?>

@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+/**@var Fedex\MarketplaceProduct\ViewModel\Product\Attribute $viewModel */
+/**@var Magento\Catalog\Block\Product\View $block */
+$viewModel = $block->getData('view_model');
+
+$additionalInstructions = $viewModel->getCategoryProductAdditionalInstructions();
+
+if (!empty($additionalInstructions)) { ?>
+    <p class="cl-green fedex-bold fs-16 lh-24 ls-1 text-center"><?= $additionalInstructions ?></p>
+<?php } ?>

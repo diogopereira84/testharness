@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$infoUrl = $this->getInfoWarningIcon();
+$isOrderConfirmationEmailEnabled = $this->getOrderConfirmationEmailEnabled();
+?>
+<li class="order-confirmation-content">
+    <h4 class="toggle-title"><?= $escaper->escapeHtml(__("ENABLE ORDER CONFIRMATION EMAIL")) ?></h4>
+    <div class="info-icon">
+      <span class="enhanced-profile-tooltip-bottom">
+        <img aria-describedby="info-order-confirmation" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+        <span id="info-order-confirmation" role="tooltip" class="tooltip-content alternate-tooltip-text">
+        <?= $escaper->escapeHtml(__("When enabled, users will receive an order confirmation email after placing an order on your site.")) ?>
+        </span>
+      </span>
+    </div>
+    <div class="enhanced-profile-toggle">
+      <label class="switch">
+        <input type="checkbox" aria-label="Success Email Toggle" name="is_success_email_enable" id="order-confirmation-email-toggle" <?= $isOrderConfirmationEmailEnabled ? 'checked':''; ?> />
+        <span class="custom-slider round"></span>
+        <span class="labels" data-on="ON" data-off="OFF"></span>
+      </label>
+    </div>
+</li>

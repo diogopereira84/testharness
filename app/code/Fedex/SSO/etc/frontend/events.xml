@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <!-- Redirect magento customer login page to home page-->
+    <event name="controller_action_predispatch_customer_account_login">
+        <observer name="visitor_init_customer_login" instance="Fedex\SSO\Observer\CustomerRedirect" />
+    </event>
+    <!-- Redirect magento customer create page to home page-->
+    <event name="controller_action_predispatch_customer_account_create">
+        <observer name="visitor_init_customer_create" instance="Fedex\SSO\Observer\CustomerRedirect" />
+    </event>
+    <!-- Redirect magento company create page to home page-->
+    <event name="controller_action_predispatch_company_account_create">
+        <observer name="visitor_init_company_create" instance="Fedex\SSO\Observer\CustomerRedirect" />
+    </event>
+    <!-- Redirect magento customer forgot password page to home page-->
+    <event name="controller_action_predispatch_customer_account_forgotpassword">
+        <observer name="visitor_init_customer_forgotpassword" instance="Fedex\SSO\Observer\CustomerRedirect" />
+    </event>
+    <event name="layout_load_before">
+        <observer name="custom_layout" instance="Fedex\SSO\Observer\CustomerLogin" />
+    </event>
+     <!-- Check customer session-->
+    <event name="controller_action_predispatch">
+        <observer name="fedex_sso_observer_frontend_controller_actionpredispatch_controller_action_predispatch" instance="Fedex\SSO\Observer\Frontend\Controller\ActionPredispatch"/>
+    </event>
+</config>

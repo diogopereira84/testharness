@@ -1,0 +1,158 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="expired_items_config" translate="label" sortOrder="1100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Handling Expired Items Configuration</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_OKTA::settings</resource>
+             <group id="general" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="expiry_item_threshold_time" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Threshold Time (Days)</label>
+                    <validate>required-entry validate-digits validate-not-negative-number validate-digits-range digits-range-1-365</validate>
+                    <comment>Expired Threshold Time value should be greater than Expiry Time</comment>
+                </field>
+                <field id="expiry_item_time" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiry Item Configuration Time</label>
+                    <validate>required-entry validate-digits validate-not-negative-number validate-digits-range digits-range-1-365</validate>
+                    <comment>Expiry Time value should be less than Expired Threshold Time</comment>
+                </field>
+            </group>
+            <group id="cart_message" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cart Summary Messages</label>
+                <field id="cart_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="cart_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring  Soon Message</label>
+                    <validate>required-entry</validate>
+                </field>
+               <field id="cart_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="cart_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="cart_item_message" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cart Summary Item Inline Message</label>
+                <field id="cart_item_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="cart_item_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Message</label>
+                </field>
+                <field id="cart_item_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="cart_item_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="cart_item_message_3p" type="text" translate="label" sortOrder="35" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cart Summary Item Inline Message for Third Party Products</label>
+                <field id="cart_item_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                </field>
+                <field id="cart_item_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Message</label>
+                </field>
+                <field id="cart_item_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                </field>
+                <field id="cart_item_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                </field>
+            </group>
+            <group id="minicart_message" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mini Cart Messages</label>
+                <field id="minicart_expiring_msg" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring  Soon Message</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="minicart_expired_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="popup_message" type="text" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Modal Popup Messages</label>
+                <field id="popup_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="popup_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Message</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="popup_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="popup_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="upload_to_quote_cart_message" type="text" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Quote Page Toast Expiration Messages</label>
+                <field id="upload_to_quote_cart_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="upload_to_quote_cart_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring  Soon Message</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="upload_to_quote_cart_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="upload_to_quote_cart_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="upload_to_quote_item_message" type="text" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Quote Page Item Inline Message</label>
+                <field id="upload_to_quote_item_expiring_title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="upload_to_quote_item_expiring_msg" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expiring Message</label>
+                </field>
+                <field id="upload_to_quote_item_expired_title" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Title</label>
+                    <validate>required-entry</validate>
+                </field>
+                  <field id="upload_to_quote_item_expired_msg" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" translate="label">
+            <group id="environment_toggle" translate="label">
+                <field id="tiger_d227527" translate="label" type="select" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team -  D-227527 Hide Expiry Messages in Cart for Non Customizable 3P Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

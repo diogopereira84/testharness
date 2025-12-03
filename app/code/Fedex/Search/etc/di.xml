@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+    Dependency Injection configuration for Fedex_Search module
+
+    This file:
+    - Overrides the Magento\Search\Block\Term class with a custom block
+    - Adds a plugin to conditionally disable search query tracking (popularity and results)
+      based on an admin configuration toggle
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <!-- Override the default search term block to customize frontend behavior -->
+    <preference for="Magento\Search\Block\Term" type="Fedex\Search\Block\Term" />
+
+    <!-- Plugin to disable saveIncrementalPopularity() and saveNumResults()
+         if admin toggle is enabled -->
+    <type name="Magento\Search\Model\ResourceModel\Query">
+        <plugin name="disable_search_query_tracking"
+                type="Fedex\Search\Plugin\SearchQueryPlugin"
+                sortOrder="10" />
+    </type>
+
+</config>

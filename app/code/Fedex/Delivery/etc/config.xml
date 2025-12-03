@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <carriers>
+            <fedexshipping>
+                <active>1</active>
+                <sallowspecific>0</sallowspecific>
+                <model>Fedex\Delivery\Model\Carrier\Shipping</model>
+                <title>Fedex Delivery Options</title>
+                <delivery_api>https://apidrt.idev.fedex.com/order/fedexoffice/v2/deliveryoptions</delivery_api>
+                <login_api>https://apidrt.idev.fedex.com/user/fedexoffice/v2/login</login_api>
+                <rate_api>https://apidrt.idev.fedex.com/user/fedexoffice/v2/rate</rate_api>
+                <google_maps_api>https://maps.googleapis.com/maps/api/js?client=gme-fedexcorporation1</google_maps_api>
+                <specificerrmsg>This shipping method is not available. To use this shipping method, please contact us.</specificerrmsg>
+                <handling_type>F</handling_type>
+            </fedexshipping>
+        </carriers>
+        <checkout>
+            <pickup_search_settings>
+                <pickup_search_error_message>The city or zip code you entered did not produce results. Please revisit your search criteria.</pickup_search_error_message>
+            </pickup_search_settings>
+        </checkout>
+        <checkout>
+            <checkout_messages>
+                <tech_titans_D_179675_ePro_message_dependent>Sorry, no quotes are available for this at this time.</tech_titans_D_179675_ePro_message_dependent>
+            </checkout_messages>
+        </checkout>
+        <fedex>
+            <marketplace_configuration>
+                <firstlastname_validation_error_message>Please enter between 2 and 30 characters.</firstlastname_validation_error_message>
+            </marketplace_configuration>
+        </fedex>
+        <environment_toggle_configuration>
+            <environment_toggle>
+                <xmen_shipping_methods_business_configurable>0</xmen_shipping_methods_business_configurable>
+                <tigerteam_e411396Toggle>0</tigerteam_e411396Toggle>
+                <tiger_E424573_optimizing_product_cards>1</tiger_E424573_optimizing_product_cards>
+                <tiger_d193772_fix>0</tiger_d193772_fix>
+                <tiger_d195836_fix_high_load_time_for_hero_banner>1</tiger_d195836_fix_high_load_time_for_hero_banner>
+                <hawks_d_195570_toggle>1</hawks_d_195570_toggle>
+                <hawks_d_195570_toggle_value>3600</hawks_d_195570_toggle_value>
+            </environment_toggle>
+        </environment_toggle_configuration>
+        <shipping>
+            <one_p_shipping_methods>
+                <allowed_delivery_options>FEDEX_HOME_DELIVERY,GROUND_US,LOCAL_DELIVERY_AM,LOCAL_DELIVERY_PM,EXPRESS_SAVER,TWO_DAY,STANDARD_OVERNIGHT,PRIORITY_OVERNIGHT,FIRST_OVERNIGHT</allowed_delivery_options>
+            </one_p_shipping_methods>
+        </shipping>
+    </default>
+</config>

@@ -1,0 +1,117 @@
+@green-box-color: @fx-green-100;
+@box-shadow-color : @fx-grey-1200;
+@background-color:@fx-white-100;
+@white-inner-box-color: @fx-white-100;
+@cross-icon-color: @fx-grey-500;
+@anchor-tag-color:#0078B4;
+@red-box-color: @fx-red-100;
+
+& when (@media-common = true) {
+    .add-to-cart-toast-container {
+        max-width: 90%;
+        padding: 0;
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break = (@screen__m - 1)) {
+    .add-to-cart-toast-msg {
+        max-width: 600px;
+
+        .success-toast-msg {
+            width: 528px;
+        }
+    }
+}
+
+.toast-msg-container,
+.toast-msg-container-error {
+    display: none;
+}
+
+    .toast-msg-container, .toast-msg-container-error {
+        display: none;
+        justify-content: center;
+        align-items: center;
+    }
+    .add-to-cart-toast-msg {
+        display: flex;
+        border: 1px solid @green-box-color;
+        height: 92px;
+        padding: 16px, 16px, 8px, 16px !important;
+        gap: 16px;
+
+        .error-toast-msg {
+            display: flex;
+            flex: 1;
+            justify-content: flex-start;
+            align-items: center;
+            p {
+                color: @red-box-color;
+                font-family: 'Fedex Sans Bold';
+                margin: 0;
+            }
+        }
+    }
+    .toast-msg-container-error .add-to-cart-toast-msg {
+        border: 1px solid @red-box-color;
+        height: 49px;
+
+        .add-to-cart-toast-box-inner {
+            height: 49px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    }
+    .add-to-cart-toast-box-inner {
+        background-color: @green-box-color;
+        min-width: 48px;
+        height: 92px;
+    }
+    .toast-msg-container-error .add-to-cart-toast-box-inner {
+        background-color: @red-box-color;
+    }
+    .add-to-cart-toast-msg .success-toast-msg {
+        height: 68px;
+        gap: 12px;
+    }
+
+    .add-to-cart-toast-box-inner img {
+        width: 26.66666603088379px;
+        height: 26.66666603088379px;
+        top: 6.6666259765625px;
+        left: 6.666656494140625px;
+        color: @white-inner-box-color;
+        margin: 31px 8px;
+    }
+    .success-toast-msg p {
+        margin-top: 17.5px;
+        margin-bottom: 14px;
+    }
+    .add-to-cart-toast-msg .close-icon {
+        margin-top: 7px;
+        margin-right: 8px;
+    }
+    .add-to-cart-toast-msg .close-icon img {
+        width: 24px;
+        height: 24px;
+        color: @cross-icon-color;
+    }
+    .add-to-cart-toast-msg .close-icon img:hover {
+        cursor: pointer;
+        color: @cross-icon-color;
+    }
+    .add-to-cart-toast-msg .view-cart {
+        width: 528px;
+        height: 32px;
+        gap: 10px;
+    }
+    .add-to-cart-toast-msg .view-cart a {
+        font-family: 'FedEx Sans Bold';
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0.75px;
+        text-align: left;
+        color: @anchor-tag-color;
+    }

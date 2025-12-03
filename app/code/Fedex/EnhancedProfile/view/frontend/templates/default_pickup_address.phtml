@@ -1,0 +1,118 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$block->setProfileSession();
+$profileInfo = $block->getLoggedInProfileInfo();
+
+$locationId = $block->getData("locationId");
+
+$preferredDeliveryAddress = $block->getPreferredDelivery($locationId, true);
+$jsonInfo = '';
+if (isset($preferredDeliveryAddress['address'])) {
+    $jsonInfo = json_decode($preferredDeliveryAddress['address']);
+}
+?>
+<?php
+if (isset($jsonInfo->Id)): ?>
+  <div class="preferred-store-header">
+    <div class="store-title">
+      <input type="hidden" class="pickup-location-id" name="locationid"
+      value="<?= $block->escapeHtmlAttr($locationId)?>" />
+      <span class="radio-label-name" id="location-title">
+      <?= $block->escapeHtml($jsonInfo->name) ?>
+    <span></span> </span> <span class="distance-map"></span> </div>
+    <div class="pickup-address">
+      <div>
+        <span class="fa fa-map-marker icon-grey"></span>
+        <?php if (isset($jsonInfo->address->address1)): ?>
+          <span class="pickup-location-street">
+            <?= $block->escapeHtml($jsonInfo->address->address1.', '.$jsonInfo->address->address2); ?>
+          </span>
+            <?php if (isset($jsonInfo->address->address2) && !empty($jsonInfo->address->address2)): ?>
+            <span>,</span>
+          <?php endif; ?>
+        <?php endif; ?>
+        <?php if (isset($jsonInfo->address->city)): ?>
+          <span class="pickup-location-city"><?= $block->escapeHtml($jsonInfo->address->city); ?></span> <span>,</span>
+        <?php endif; ?>
+        <?php if (isset($jsonInfo->address->stateOrProvinceCode)): ?>
+          <span class="pickup-location-state">
+            <?= $block->escapeHtml($jsonInfo->address->stateOrProvinceCode); ?>
+          </span><span>,</span>
+        <?php endif; ?>
+        <?php if (isset($jsonInfo->address->postalCode)): ?>
+          <span class="pickup-location-zipcode"><?= $block->escapeHtml($jsonInfo->address->postalCode); ?></span>
+        <?php endif; ?>
+      </div>
+    </div>
+    <?php
+    if ($jsonInfo->locationType == 'HOTEL_CONVENTION'):?>
+        <div class="hotel-convention-container">
+        <?php
+          $imgCloasIcone = $block->getViewFileUrl('images/enhanced-profile/hotel.png');
+        ?>
+        <img class="hotel-convention-icon" alt="" src="<?= $block->escapeHtmlAttr($imgCloasIcone); ?>">
+        <span class="hotel-convention-title">
+          <?= $block->escapeHtml(__("Hotel & Convention Location"))  ?></span>
+      </div>
+      <div class="hotel-convention-description">
+        <?= $block->escapeHtml(__("The location you have selected is within a hotel
+        or convention center. Higher rates may apply to products and services."))  ?>
+      </div>
+    <?php endif; ?>
+  </div>
+  <div class="center-details-main">
+    <div class="center-details">
+      <?php if (isset($jsonInfo->hoursOfOperation[0])): ?>
+        <div class="hours-of-opp-icon"> <span class="fa fa-clock-o icon-grey"></span>
+          <div class="hours-of-opp">
+            <?php
+            $openingHours = $block->getOpeningHours($jsonInfo->hoursOfOperation);
+            foreach ($openingHours as $openingHour):?>
+              <div class="shedule-container">
+                <?php $day = substr($openingHour['day'], 0, 3)  ?>
+                  <div class="day">
+                    <?= $block->escapeHtml(ucfirst(strtolower($day))); ?>
+                  </div>
+                  <div class="range-main">
+                    <?php if ($openingHour['schedule'] == "Open"): ?>
+                      <div class="range">
+                        <?= $block->escapeHtml($openingHour['openTime'].'-'.
+                            $block->escapeHtml($openingHour['closeTime'])); ?>
+                      </div>
+                    <?php else: ?>
+                      <div class="range">
+                        <?= $block->escapeHtml($openingHour['schedule']); ?>
+                      </div>
+                    <?php endif; ?>
+                  </div>
+              </div>
+                <?php
+            endforeach;
+            ?>
+          </div>
+        </div>
+      <?php endif; ?>
+      <?php if (isset($jsonInfo->phone)): ?>
+            <?php
+              $phone_number = $block->escapeHtml($jsonInfo->phone);
+              $phone_number = "(" .substr($phone_number, -10, -7) . ") "
+                              . substr($phone_number, -7, -4) . "-" . substr($phone_number, -4);
+            ?>
+        <div class="phone-number-block">
+            <span class="icon-grey"><img alt="Phone"
+            src="<?= $block->escapeHtmlAttr($block->getViewFileUrl('images/enhanced-profile/phone.png')); ?>" />
+            </span>
+            <span class="phone-number"><?= $block->escapeHtml($phone_number); ?></span> </div>
+      <?php endif; ?>
+    </div>
+    <div class="view-detail-btn">
+      <button class="button edit-prerred-store">
+        <?= $block->escapeHtml(__("Edit")); ?>
+      </button>
+    </div>
+  </div>
+<?php endif; ?>

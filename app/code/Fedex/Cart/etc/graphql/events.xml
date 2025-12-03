@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="checkout_cart_update_items_after">
+		<observer instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductUpdateAfter" name="graphql_cart_product_updaterates_after"/>
+	</event>
+	<event name="checkout_cart_product_add_after">
+		<observer instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductAddAfter" name="graphql_fedex_purchaseorder_observer_checkout_cart_product_add_after"/>
+	</event>
+	<event name="checkout_cart_add_product_complete">
+      <observer instance="Fedex\Cart\Observer\Frontend\Catalog\CartProductAddComplete" name="graphql_cart_add_product_complete" />
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="fedex_sales_quote_remove_item" instance="Fedex\Cart\Observer\Frontend\Catalog\RemoveQuoteItem" />
+    </event>
+</config>

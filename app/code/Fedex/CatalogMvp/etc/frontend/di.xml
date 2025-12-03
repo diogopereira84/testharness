@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="Fedex\CustomizedMegamenu\Block\Html\Topmenu">
+		<plugin name="addHomeLinkInTopMenu" type="Fedex\CatalogMvp\Plugin\Topmenu"/>
+	</type>
+	<type name="Magento\SharedCatalog\Model\Config">
+		<plugin name="disable_for_catalogmvp" type="Fedex\CatalogMvp\Plugin\SharedCatalog\Config"/>
+	</type>
+	<type name="Magento\Elasticsearch7\Model\Client\Elasticsearch">
+		<plugin name="extend_elasticsearch" type="Fedex\CatalogMvp\Plugin\Elasticsearch" sortOrder="1"/>
+	</type>
+	<type name="Magento\Checkout\CustomerData\Cart">
+		<plugin name="summart_count_plugin" type="Fedex\CatalogMvp\Plugin\SummaryCount" sortOrder="1"/>
+	</type>
+	<type name="Magento\CatalogInventory\Api\StockRegistryInterface">
+		<plugin name="adapt_update_product_stock_status_by_sku" disabled="true" />
+    <plugin name="adapt_update_product_stock_status_by_sku_fedex" type="Fedex\CatalogMvp\Plugin\AdaptUpdateStockStatusBySkuPlugin"/>
+    </type>
+	<type name="Magento\Catalog\Helper\Product\ProductList">
+		<plugin name="fedex_catalog_mvp_product_list_helper" type="Fedex\CatalogMvp\Plugin\ProductListHelper"  disabled="false" />
+	</type>
+	<preference for="Magento\Catalog\Block\Product\ListProduct" type="Fedex\CatalogMvp\Block\Product\ListProduct"/>
+	<preference for="MageWorx\SeoMarkup\Helper\Json\Category" type="Fedex\CatalogMvp\Helper\MageWorx\Json\Category"/>
+	<type name="Magento\Framework\App\ActionInterface">
+        <plugin name="redirect_plugin" type="Fedex\CatalogMvp\Plugin\RedirectPlugin"/>
+    </type>
+    <type name="Magento\Framework\Pricing\Render\PriceBox">
+        <plugin name="priceboxtags-plugin"
+                type="Fedex\CatalogMvp\Plugin\PriceBoxTagsPlugin"
+                sortOrder="999"/>
+    </type>
+	<type name="Magento\Catalog\Model\Product">
+        <plugin name="catalogmvpcache_product_plugin" 
+                type="Fedex\CatalogMvp\Plugin\ProductPluginCache" 
+                sortOrder="1"/>
+    </type>
+	<type name="Magento\Framework\App\Cache">
+        <plugin name="catalogmvp_cache_clean" type="Fedex\CatalogMvp\Plugin\CachePlugin" />
+    </type>
+</config>

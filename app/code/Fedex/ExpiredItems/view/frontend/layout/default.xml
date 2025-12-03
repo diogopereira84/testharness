@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block name="minicart.msg.js.init" template="Fedex_ExpiredItems::dafault/init_js.phtml">
+                 <arguments>
+                    <argument name="cart.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                </arguments>
+            </block>
+            <block name="notify.modal.popup" template="Fedex_ExpiredItems::dafault/modal_popup.phtml">
+                <arguments>
+                    <argument name="cart.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

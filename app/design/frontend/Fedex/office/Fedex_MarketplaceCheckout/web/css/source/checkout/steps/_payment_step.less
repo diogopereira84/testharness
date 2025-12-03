@@ -1,0 +1,347 @@
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+     // Class added by the module toggle
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+
+            .summary-pickup-delivery-method-wrapper ~ .summary-shipping-delivery-method-wrapper{
+                border-top: 1px solid #cccccc;
+            }
+            .no-disk {
+                padding-left: 0;
+                #step_code {
+                    >hr {
+                        margin-top: 40px;
+                    }
+                }
+            }
+
+            .payment-container {
+                .payment-forms-container {
+                    margin-top: 1rem;
+                    .title-container {
+                        margin-top: 0;
+                        .payment-title-text {
+                            margin-bottom: 8px;
+                        }
+
+                        .payment-title-subtext {
+                            margin-top: 16px;
+                            margin-bottom: -4px;
+                            padding-top: 14px;
+                        }
+                    }
+                }
+            }
+
+            .credit-card-dropdown {
+                margin-top: 16px;
+
+                .credit-card-label {
+                    font-family: 'Fedex Sans Bold';
+                    font-size: 12px;
+                    color: @fx-grey-1100;
+                }
+            }
+
+            .cvv-number-container {
+                margin-left: 16px;
+                position: relative;
+            }
+
+            .cvv-tooltip {
+                position: absolute;
+                top: 29px;
+                right: 10px;
+
+                &-top {
+                    .lib-tooltip(top);
+                }
+            }
+
+            .billing-address-heading {
+                margin-bottom: 16px;
+                margin-top: 16px;
+            }
+
+            .billing-address-form-container {
+                margin-bottom: unset;
+
+                .company-name-container {
+                    margin-top: unset;
+                }
+            }
+
+            .credit-card-review-button {
+                margin-top: 16px;
+            }
+        }
+    }
+    .sequence-numbers {
+        &.is-fcl-global {
+            .save-fedex-account-chk-container .alternate-check-container {
+                margin-left: 0;
+                top: 0;
+            }
+        }
+
+        &.promo-account {
+            .payment-forms-container {
+                width: auto;
+            }
+
+            .payment-title-text {
+                left: unset;
+            }
+        }
+        .additional-billing-info {
+            padding-bottom: 16px;
+            padding-top: 16px;
+        }
+        .fedex-account-number-review-button {
+            margin-top: 16px;
+            margin-left: 0;
+        }
+    }
+}
+
+// Mobile (styles-m.css)
+//  _____________________________________________
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media (min-width: 320px) and (max-width: 767px) {
+        body.checkout-index-index {
+            &.mkt-checkout-enabled {
+                 .expiration-month-container {
+                    width: 100%;
+                }
+
+                 .shipping-address {
+                     box-sizing: border-box;
+                     width: 100%;
+                    margin-bottom: 16px;
+                }
+
+                .expiration-year-container {
+                    width: 100%;
+                    margin-top: 16px;
+                }
+
+                &.promo-account .cvv-number-container {
+                    margin-top: 16px;
+                    margin-left: unset;
+                }
+
+                &.promo-account .selected-paymentype span.checkSymbol2,
+                &.promo-account .selected-paymentype span.checkSymbol1{
+                    top: -2px;
+                }
+
+                .city-state-container{
+                    flex-wrap: wrap;
+                }
+
+                .add-city-container{
+                    width: 100%;
+                }
+
+                .add-state-container{
+                    width: ~'calc(50% - 8px)';
+                    margin-right: 8px;
+                }
+
+                .add-zip-container{
+                    width: ~'calc(50% - 8px)';
+                    margin-left: 8px;
+                }
+
+                .additional-billing-info{
+                    padding-bottom: 16px;
+                    padding-top: 16px;
+                    width: 100% !important;
+                }
+                .fedex-account-number-review-button {
+                    width: 100%;
+                }
+                .recipient-read-only .edit.visible-xs{
+                    display: block;
+                    padding-top: 32px;
+                }
+
+                .step-content.review-order-step .recipient-read-only .edit.visible-xs {
+                    button,
+                    .quote-details-items .actions-toolbar > .action {
+                        margin: 0;
+                    }
+                }
+
+                .step-content.review-order-step hr{
+                    margin: 16px 0;
+                }
+            }
+        }
+        .sequence-numbers {
+            &.is-fcl-global {
+                .fedex-account-list-container {
+                    width: 100%;
+                }
+            }
+
+            .fedex-account-number-review-button{
+                width: 100%;
+            }
+        }
+    }
+}
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media (min-width: 768px) and (max-width: 1199px) {
+        body.checkout-index-index {
+            &.mkt-checkout-enabled {
+                &.promo-account {
+                    li#step_code {
+                        width: 100%;
+                    }
+
+                    .shipping-address{
+                        margin: 16px 0;
+                    }
+                }
+
+                .add-city-container {
+                    width: ~'calc(33% - 8px)';
+                    margin-right: 8px;
+                }
+
+                .add-state-container {
+                    width: ~'calc(33% - 16px)';
+                    margin-right: 8px;
+                    margin-left: 8px;
+                }
+
+                .add-zip-container {
+                    width: ~'calc(33% - 8px)';
+                    margin-left: 8px;
+                }
+
+                .recipient-read-only .edit.visible-xs{
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .sequence-numbers {
+        .fedex-account-form .additional-billing-info {
+            margin-left: 0;
+        }
+
+        .credit-card-dropdown .pre-select-card {
+            width: 100%;
+        }
+    }
+}
+
+//
+//  Tablet (styles-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+            // Class added by the module toggle
+            .recipient-read-only .edit.visible-xs {
+                display: none;
+            }
+        }
+    }
+
+    .sequence-numbers {
+        &.is-fcl-global {
+            .fedex-account-list-container {
+                width: 70%;
+            }
+
+            .save-fedex-account-chk-container,
+            .fedex-account-list-container {
+                margin-left: 0;
+            }
+
+            .account-num-container,
+            .account-num-with-list {
+                max-width: 100%;
+                margin-left: 0;
+            }
+        }
+
+        .fedex-account-form .additional-billing-info,
+        .payment-title-subtext,
+        .credit-card-dropdown .pre-select-card,
+        .cc-form-container,
+        body.checkout-index-index.mkt-checkout-enabled& .credit-card-dropdown .credit-card-label {
+            margin-left: 0;
+        }
+
+        .credit-card-dropdown .pre-select-card {
+            width: 70%;
+        }
+    }
+}
+
+//  Desktop (styles-m.css)
+//  _____________________________________________
+
+@media only screen and (min-width:1024px) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+
+            .credit-card-dropdown {
+                .credit-card-label {
+                    margin-left: 3.4rem;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+
+            .payment-title-text {
+                font-size: 24px;
+                line-height: 32px;
+            }
+        }
+    }
+}
+
+//  Desktop (styles-m.css)
+//  _____________________________________________
+
+@media only screen and (min-width:1200px) {
+    body.checkout-index-index {
+        &.mkt-checkout-enabled {
+
+            .payment-container {
+                .payment-forms-container {
+                    .title-container {
+                        .payment-title-subtext {
+                            margin-top: 2px;
+                            padding-top: 10px;
+                        }
+                    }
+                    .cc-form-container {
+                        .shipping-address {
+                            margin-top: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

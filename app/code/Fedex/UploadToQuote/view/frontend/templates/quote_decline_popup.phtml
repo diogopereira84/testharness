@@ -1,0 +1,62 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$quoteDetailsViewModel = $block->getData('quoteDetailsViewModel');
+
+$declinedTitle = $quoteDetailsViewModel->getQuoteDeclinedModalTitle();
+$declinedMessage = $quoteDetailsViewModel->getQuoteDeclinedMessage();
+$declinedReasons = $quoteDetailsViewModel->getQuoteDeclinedReason();
+
+?>
+
+<div id="decline-model-popup" class="decline-model-popup-content" style="display:none;">
+    <div class="declne-warning-icon-container decline-row">
+        <img class="decline-warning-icon" alt="Decline Warning"
+                src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/warning-icon.png'));?>"/>
+    </div>
+    <h1 class="decline-title decline-row">
+        <?= $block->escapeHtml($declinedTitle) ?> </h1>
+    <div class="delcine-message decline-row">
+        <?= $block->escapeHtml($declinedMessage) ?>
+    </div>
+    <div class="decline-row">
+        <label for="reason-for-declining"><?= $block->escapeHtml(__('Reason For Declining')) ?></label>
+        <input type="text" name="reason_for_declining" id="reason_for_declining"
+        class="decline-textbox cursor-alias" value="" placeholder="Select reason" readonly="readonly" tabindex="0"/>
+        <img class="decline-down-arrow" alt="Decline Down Arrow"
+                src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/decline-down-arrow.png'));?>"/>
+        <ul class="decline-reason-list decline-hide">
+            <?php foreach ($declinedReasons as $value): ?>
+                <li tabindex="0"><?= $block->escapeHtml($value['text_field']) ?></li>
+            <?php endforeach ?>
+            <li tabindex="0"><?= $block->escapeHtml(__("Other")) ?></li>
+        </ul>
+    </div>
+    <div class="decline-row">
+        <label class="additional-comments" for="additional-comments">
+            <?= $block->escapeHtml(__('Additional Comments')) ?>
+             <span class="decline-comment-opational"><?= $block->escapeHtml(__('(Optional)')) ?></span></label>
+        <textarea name="additional_comments" id="additional_comments"
+        class="decline-textarea" placeholder="Leave a comment" maxlength="400" readonly="readonly"/></textarea>
+        <div class="character-left-container">
+            <span class="decline-additional-comment-character-count">
+                <?= $block->escapeHtml(__('400')) ?></span>
+            <?= $block->escapeHtml(__('characters left')) ?>
+        </div>
+    </div>
+    <div class="decline-row decline-popup-btn-container">
+        <button type="button" class="btn-decline-cancel"><?= $block->escapeHtml(__('Cancel')) ?></button>
+        <button type="button" class="btn-decline-deny" disabled="disabled">
+            <?= $block->escapeHtml(__('Decline Quote')) ?></button>
+    </div>
+</div>
+<script>
+    require(['uploadToQuoteModelPopup', 'uploadToQuoteDecline'],
+        function(uploadToQuoteModelPopup, uploadToQuoteDecline){}
+    );
+</script>
+

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- Plugin to mask product thumbnail for SDE store-->
+    <type name="Magento\Checkout\CustomerData\AbstractItem">
+        <plugin name="mask_product_thumbnail_for_sde" type="Fedex\SDE\Plugin\Minicart\AbstractItem" sortOrder="1"/>
+    </type>
+    <!--  D-85079 : SDE: Cart is showing 0(zero) when logged in -->
+    <type name="Magento\Checkout\Model\Cart">
+        <plugin name="return_quote_from_session" type="Fedex\SDE\Plugin\Checkout\Model\Cart" sortOrder="1"/>
+    </type>
+     <!--  D-106794 -On closing the browser, the user session is not removed -->
+    <type name="Magento\Customer\Block\CustomerData">
+        <plugin name="change_cookie_expire_time" type="Fedex\SDE\Plugin\Customer\CustomerData" sortOrder="1"/>
+    </type>
+</config>

@@ -1,0 +1,254 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/** B-1047968 | Print Order Receipt **/
+/** @var $block \Magento\Sales\Block\Order\Info */
+
+// B-1501794
+$endIndString = 'ending in *';
+$_order = $block->getOrder();
+$viewModel = $block->getData('order_enhancement_view_model');
+$orderView = $block->getData('order_view_model');
+
+$eproClass = $viewModel->isModuleEnabled() ? 'epro-print-order' : '';
+$isSelfRegCompany = $viewModel->isSelfRegCompany();
+/** B-1078869 | Display Pick up address in order information for view order and print receipt **/
+$isModuleEnabled = $viewModel->isModuleEnabled();
+/** B-1149275 - View Order Receipt - Delivery */
+$isEnhancementEnabeled = $viewModel->isEnhancementEnabeled();
+
+$shippingAccountNumber = $orderView->getShippingAccountNumberFromOrder($_order);
+?>
+<div class="block block-order-details-view <?=/* @escapeNotVerified */$eproClass?>">
+
+    <div class="block-content d-flex">
+        <div class="box box-order-billing-address">
+            <strong class="box-title">
+                <?php if ($isEnhancementEnabeled): ?>
+                    <span><?=$block->escapeHtml(__('Contact Information'))?></span>
+                <?php endif;?>
+            </strong>
+            <div class="box-content">
+                <?php if ($isEnhancementEnabeled): ?>
+                    <strong><?=$block->escapeHtml(__('CONTACT PERSON'))?></strong>
+                    <?php
+                        $billingAddress = $viewModel->getContactAddress($_order);
+                        $telephone = $billingAddress['telephone'] ?? '';
+                        $telephone = substr_replace($telephone, '(', 0, 0);
+                        $telephone = substr_replace($telephone, ')', 4, 0);
+                        $telephone = substr_replace($telephone, ' ', 5, 0);
+                        $telephone = substr_replace($telephone, '-', 9, 0);
+                        ?>
+                    <div class="contact-info">
+                        <div>
+                            <span><?=$billingAddress['name'] ?? ''?></span>
+                        </div>
+                        <div>
+                            <span class="break-all"><?=$billingAddress['email'] ?? ''?></span>
+                        </div>
+                        <div>
+                            <span><?=$telephone;?></span>
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <address>
+                        <?=/* @noEscape */$block->getFormattedAddress($_order->getBillingAddress())?>
+                    </address>
+                <?php endif;?>
+                <?php if ($isEnhancementEnabeled && $_order->getShippingMethod() == 'fedexshipping_PICKUP'):
+                    $alternateAddress = $viewModel->getAlternateAddress($_order);
+
+                    $is_alternate_pickup = isset($alternateAddress['is_alternate_pickup']) ?
+                        $alternateAddress['is_alternate_pickup'] : '';
+                    $is_alternate = isset($alternateAddress['is_alternate']) ?
+                        $alternateAddress['is_alternate'] : '';
+                    if ($is_alternate || $is_alternate_pickup) {
+                        $name = isset($alternateAddress['name']) ? $alternateAddress['name'] : '';
+                        $email = isset($alternateAddress['email']) ? $alternateAddress['email'] : '';
+                        $telephone = isset($alternateAddress['telephone']) ? $alternateAddress['telephone'] : '';
+                        $telephone = substr_replace($telephone, '(', 0, 0);
+                        $telephone = substr_replace($telephone, ')', 4, 0);
+                        $telephone = substr_replace($telephone, ' ', 5, 0);
+                        $telephone = substr_replace($telephone, '-', 9, 0);
+                        ?>
+                        <?php if ($is_alternate_pickup): ?>
+                            <strong><?=$block->escapeHtml(__('ALTERNATE PICK UP PERSON'))?></strong>
+                        <?php else: ?>
+                            <strong><?=$block->escapeHtml(__('ALTERNATE PERSON'))?></strong>
+                        <?php endif;?>
+                        <div class="contact-info">
+                            <div>
+                                <span><?=$name;?></span>
+                            </div>
+                            <div>
+                                <span class="break-all"><?=$email;?></span>
+                            </div>
+                            <div>
+                                <span><?=$telephone;?></span>
+                            </div>
+                        </div>
+                    <?php } ?>
+                <?php else: ?>
+                    <?php
+                    $alternateAddress = $viewModel->getAlternateAddress($_order);
+                    if ((isset($alternateAddress['is_alternate_pickup']) &&
+                            $alternateAddress['is_alternate_pickup'] == "1") ||
+                        isset($alternateAddress['is_alternate']) &&
+                        $alternateAddress['is_alternate'] == "1"
+                    ): ?>
+                        <strong><?=$block->escapeHtml(__('ALTERNATE CONTACT PERSON'))?></strong>
+                        <div class="contact-info">
+                            <div>
+                            <span><?=$_order->getData('customer_firstname') . ' ' .
+                                $_order->getData('customer_lastname');?></span>
+                            </div>
+                            <div>
+                                <span class="break-all"><?=$_order->getData('customer_email');?></span>
+                            </div>
+                            <div>
+                                <span><?=$block->getContactPhone();?></span>
+                            </div>
+                        </div>
+                    <?php endif;?>
+                <?php endif;?>
+            </div>
+        </div>
+        <?php if (!$_order->getIsVirtual()): ?>
+            <div class="box box-order-shipping-address">
+                <strong class="box-title">
+                    <span>
+                        <?php if ($isEnhancementEnabeled): ?>
+                            <?php if ($_order->getShippingMethod() != 'fedexshipping_PICKUP'): ?>
+                                <?=$block->escapeHtml(__('Shipping information'))?>
+                            <?php else: ?>
+                                <?=$block->escapeHtml(__('Pickup location'))?>
+                            <?php endif;?>
+                        <?php endif;?>
+                    </span>
+                </strong>
+                <div class="box-content">
+                    <?php if ($isEnhancementEnabeled): ?>
+                        <?php if ($_order->getShippingMethod() != 'fedexshipping_PICKUP'): ?>
+                            <strong><?=$block->escapeHtml(__('ADDRESS'))?></strong>
+                        <?php else: ?>
+                            <strong><?=$block->escapeHtml(__('STORE LOCATION'))?></strong>
+                        <?php endif;?>
+                    <?php endif;?>
+                    <address>
+                        <?php $address = $viewModel->getCustomerShippingAddress($_order); ?>
+                        <div><?= $address['fullName'] ?></div>
+                        <div><?= $address['company'] ?></div>
+                        <div><?= $address['street1'] ?></div>
+                        <div><?= $address['street2'] ?></div>
+                        <div><?= $address['cityStateCountryPostCode'] ?></div>
+                        <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'): ?>
+                            <br/>
+                            <?=$block->escapeHtml(__('Estimated pick up time:'))?><br/>
+                            <?=$block->getEstimatedPickUpDateTime()?>
+                        <?php endif;?>
+
+                        <?php if ($shippingAccountNumber): ?>
+                            <br/>
+                            <br/>
+                            <strong><?=$block->escapeHtml(__('SHIPPING ACCOUNT NUMBER'))?></strong><br/>
+                            <i><?= /* @noEscape */ $block->escapeHtml(__($endIndString)).
+                            substr($shippingAccountNumber, -4) ?></i>
+                        <?php endif;?>
+                    </address>
+                </div>
+            </div>
+        <?php endif;?>
+        <div class="box box-order-billing-method">
+            <strong class="box-title">
+                <?php if ($isEnhancementEnabeled): ?>
+                    <span><?=$block->escapeHtml(__('Payment'))?></span>
+                <?php endif;?>
+            </strong>
+            <div class="box-content">
+                <strong>
+                    <?php if ($isSelfRegCompany): ?>
+                        <span><?=$block->escapeHtml(__('PAYMENT METHOD'))?></span>
+                    <?php else: ?>
+                        <span><?=$block->escapeHtml(__('ADDITIONAL BILLING INFORMATION'))?></span>
+                    <?php endif; ?>
+                </strong><br>
+                <?php if ($isEnhancementEnabeled && !$isSelfRegCompany): ?>
+                    <?php $poNumber = $viewModel->getPoNumber($_order->getQuoteId()); ?>
+                    <span><?=$block->escapeHtml(__('PO Number'))?></span><br>
+                    <span><?=/* @noEscape */$poNumber?></span><br>
+                    <br>
+                <?php endif;?>
+
+                <!-- B-1501794 -->
+                <?php if($isSelfRegCompany): ?>
+                    <?= $block->getPaymentInfoHtml() ?>
+                    <span class="payment-information">
+					<?php /* When only CC available */
+                    if (!empty($_order->getPayment()->getCcLast4()) &&
+                        empty($_order->getPayment()->getFedexAccountNumber())): ?>
+                        <span class="payment-details">
+							<?= /* @noEscape */ $block->escapeHtml(__($endIndString)).
+                            $_order->getPayment()->getCcLast4(); ?>
+						</span>
+                    <?php elseif (empty($_order->getPayment()->getCcLast4()) &&
+                        !empty($_order->getPayment()->getFedexAccountNumber())): ?>
+                        <span class="payment-details">
+							<?= /* @noEscape */ $block->escapeHtml(__($endIndString)).
+                            substr($_order->getPayment()->getFedexAccountNumber(), -4) ?>
+						</span>
+                    <?php elseif (!empty($_order->getPayment()->getCcLast4()) &&
+                        !empty($_order->getPayment()->getFedexAccountNumber())): ?>
+                        <span class="payment-details">
+							<?= /* @noEscape */ $block->escapeHtml(__($endIndString)).
+                            $_order->getPayment()->getCcLast4() ?>
+						</span></br>
+                    <?php endif; ?>
+				</span>
+                <?php endif; ?>
+            </div>
+            <?php if (!empty($_order->getPayment()->getFedexAccountNumber())): ?>
+                <div class="box-content">
+                    <strong>
+                    <span>
+                        <?= $block->escapeHtml(__('DISCOUNT ACCOUNT NUMBER')) ?>
+                    </span>
+                    </strong>
+                    <br>
+                    <span class="payment-informations">
+                    <span class="payment-details">
+                        <i><?= /* @noEscape */ $block->escapeHtml(__($endIndString)).
+                            substr($_order->getPayment()->getFedexAccountNumber(), -4) ?></i>
+                    </span>
+                </span>
+                </div>
+            <?php endif; ?>
+            <?php if ($isEnhancementEnabeled): ?>
+                <div class="box-content">
+                    <strong>
+                        <span><?=$block->escapeHtml(__('BILLING ADDRESS'))?></span>
+                    </strong>
+                    <address>
+                        <?php if ( !empty( $_order->getPayment()->getCcOwner() ) ): ?>
+                            <?= $_order->getPayment()->getCcOwner() ?>
+                        
+                        <?php else: ?>
+                            <?php $billingAddress = $_order->getBillingAddress() ?>
+                            <?= $billingAddress['firstname'] . " " . $billingAddress['lastname'] ?>
+                        
+                        <?php endif; ?>
+                        
+                        <br>
+                        
+                        <?=/* @noEscape */$block->getFormattedAddress($_order->getBillingAddress())?>
+                    </address>
+                </div>
+            <?php endif;?>
+        </div>
+    </div>
+</div>

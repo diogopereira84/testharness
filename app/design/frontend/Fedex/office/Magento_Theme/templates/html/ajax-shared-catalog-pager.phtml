@@ -1,0 +1,174 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * Pager template
+ *
+ * @see \Magento\Theme\Block\Html\Pager
+ */
+?>
+<?php
+$helper = $this->helper('Fedex\CatalogMvp\Helper\CatalogMvp');
+$currentCategory = $helper->getCurrentCategory();
+$currentCategoryId = $currentCategory->getId();
+?>
+<?php if ($block->getCollection()->getSize()): ?>
+
+    <?php if ($block->getUseContainer()): ?>
+    <div class="pager">
+    <?php endif ?>
+
+        <?php if ($block->getShowAmounts()): ?>
+        <p class="toolbar-amount">
+            <span class="toolbar-number">
+            <?php if ($block->getLastPageNum()>1): ?>
+                <?= /* @escapeNotVerified */ __('Items %1 to %2 of %3 total', $block->getFirstNum(), $block->getLastNum(), $block->getTotalNum()) ?>
+                <?php elseif ($block->getTotalNum() == 1): ?>
+                    <?= /* @escapeNotVerified */ __('%1 Item', $block->getTotalNum()) ?>
+            <?php else: ?>
+                <?= /* @escapeNotVerified */ __('%1 Item(s)', $block->getTotalNum()) ?>
+                <?php endif; ?>
+            </span>
+        </p>
+        <?php endif ?>
+        
+        <?php if ($block->getLastPageNum()>1): ?>
+            <div class="pages">
+            <p class="pages-subtitle"><?= /* @escapeNotVerified */ __('Showing page %1 of %2', $block->getCurrentPage(), $block->getLastPageNum()) ?></p>
+            <strong class="label pages-label"><?= /* @escapeNotVerified */ __('Page') ?></strong>
+            <ul class="items pages-items" aria-labelledby="paging-label-new">
+            <?php if (!$block->isFirstPage()): ?>
+                <li class="item pages-item-previous">
+                    <?php $text = $block->getAnchorTextForPrevious() ? $block->getAnchorTextForPrevious() : '';?>
+                    <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> previous" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getPreviousPageUrl() ?>')" href="#" title="<?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?>">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                        <span><?= /* @escapeNotVerified */ $text ? $text : __('Previous') ?></span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+            <?php if ($block->canShowFirst()): ?>
+                <li class="item num-mobile-hidden">
+                    <a class="page first" href="#" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getFirstPageUrl() ?>')">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                        <span>1</span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+            <?php if ($block->canShowPreviousJump()): ?>
+                <li class="item num-mobile-hidden">
+                    <a class="page previous jump" title="" href="#" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getPreviousJumpUrl() ?>')">
+                        <span>...</span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+            <?php foreach ($block->getFramePages() as $_page): ?>
+                <?php if ($block->isPageCurrent($_page)): ?>
+                    <li class="item current num-mobile-hidden">
+                        <strong class="page">
+                            <span class="label"><?= /* @escapeNotVerified */ __('You\'re currently reading page') ?></span>
+                            <span><?= /* @escapeNotVerified */ $_page ?></span>
+                        </strong>
+                    </li>
+                <?php else: ?>
+                    <li class="item num-mobile-hidden">
+                        <a href="#" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getPageUrl($_page) ?>')" class="page">
+                            <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                            <span><?= /* @escapeNotVerified */ $_page ?></span>
+                        </a>
+                    </li>
+                <?php endif;?>
+            <?php endforeach;?>
+
+            <?php if ($block->canShowNextJump()): ?>
+                <li class="item num-mobile-hidden">
+                    <a class="page next jump" title="" href="#" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getNextJumpUrl() ?>')">
+                        <span>...</span>
+                    </a>
+                </li>
+            <?php endif;?>
+
+            <?php if ($block->canShowLast()): ?>
+              <li class="item num-mobile-hidden">
+                  <a class="page last" href="#" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getLastPageUrl() ?>')">
+                      <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                      <span><?= /* @escapeNotVerified */ $block->getLastPageNum() ?></span>
+                  </a>
+              </li>
+            <?php endif;?>
+
+            <?php if (!$block->isLastPage()): ?>
+                <li class="item pages-item-next">
+                    <?php $text = $block->getAnchorTextForNext() ? $block->getAnchorTextForNext() : '';?>
+                    <a class="<?= /* @escapeNotVerified */ $text ? 'link ' : 'action ' ?> next" onclick="ajaxToolbar('<?= /* @escapeNotVerified */ $block->getNextPageUrl() ?>')" href="#" title="<?= /* @escapeNotVerified */ $text ? $text : __('Next') ?>">
+                        <span class="label"><?= /* @escapeNotVerified */ __('Page') ?></span>
+                        <span><?= /* @escapeNotVerified */ $text ? $text : __('Next') ?></span>
+                    </a>
+                </li>
+            <?php endif;?>
+            </ul>
+        </div>
+        <?php endif; ?>
+
+    <?php if ($block->isShowPerPage()): ?>
+        <div class="limiter">
+            <strong class="limiter-label"><?= /* @escapeNotVerified */ __('Show') ?></strong>
+            <select id="limiter" data-mage-init='{"redirectUrl": {"event":"change"}}' class="limiter-options" aria-label="Limiter options">
+                <?php foreach ($block->getAvailableLimit() as $_key => $_limit): ?>
+                    <option value="<?= /* @escapeNotVerified */ $block->getLimitUrl($_key) ?>"<?php if ($block->isLimitCurrent($_key)): ?>
+                        selected="selected"<?php endif ?>>
+                        <?= /* @escapeNotVerified */ $_limit ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <span class="limiter-text"><?= /* @escapeNotVerified */ __('per page') ?></span>
+        </div>
+    <?php endif ?>
+
+    <?php if ($block->getUseContainer()): ?>
+    </div>
+    <?php endif ?>
+
+<?php endif ?>
+
+
+<script type="text/javascript">
+    function ajaxToolbar(topmenuurl) {
+        jQuery.ajax({
+            url: topmenuurl,
+            type: 'get',
+            cache: false,
+            showLoader: true,
+            success: function (data){
+                if (data != ''){
+                    jQuery('.ajax-shared-catalog').html("");
+                    let htmlObject = jQuery('.ajax-shared-catalog').html(data);
+                    htmlObject.trigger('contentUpdated');
+                }
+                jQuery('.loading-mask-mvp').hide();
+                if (jQuery('.category-product-count-is-zero').val()) {
+                    jQuery(".product-items.customer-admin").css('display', 'none');
+                    jQuery(".product-items.customer-view").css('display', 'none');
+                    jQuery(".breadcrumbs mvp-breadcrumb-label").css('display', 'block');
+                    jQuery(".breadcrum-container-no-count .breadcrumbs").removeClass("mvp-breadcrumb-label");
+                    jQuery('.shared-catalog-cta-container').css('margin-top','50px');
+                }
+
+                if (jQuery('#product-items-zero').length) {
+                    if(!jQuery('body').hasClass('customer-admin')){
+                        jQuery('body').addClass('customer-admin');
+                    }
+                }
+            }
+        });
+    }
+</script>

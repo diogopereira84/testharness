@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="template" xsi:type="string">templates/form/collapsible</item>
+    </argument>
+    <settings>
+        <dataScope>data</dataScope>
+        <namespace>pagebuilder_base_form</namespace>
+        <buttons>
+            <button name="save" class="Magento\PageBuilder\Block\Adminhtml\ContentType\Edit\SaveButton"/>
+            <button name="close" class="Magento\PageBuilder\Block\Adminhtml\ContentType\Edit\ModalCloseButton"/>
+        </buttons>
+    </settings>
+    <fieldset name="advanced" sortOrder="90">
+        <settings>
+            <label translate="true">Advanced</label>
+            <collapsible>true</collapsible>
+            <opened>true</opened>
+        </settings>
+        <field name="css_classes" sortOrder="60" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <dataScope>css_classes</dataScope>
+                <label translate="true">CSS Classes</label>
+                <notice translate="true">Space separated list of classes.</notice>
+                <validation>
+                    <rule name="validate-css-class" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
+        </field>
+    </fieldset>
+</form>

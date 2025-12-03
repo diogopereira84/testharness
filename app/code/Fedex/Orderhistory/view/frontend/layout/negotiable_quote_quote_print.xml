@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * B-1058846 - Print Quote Receipt
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <!--B-1148619  - Print Quote Receipt .  -->
+        <referenceContainer name="page.main.title">
+            <block class="Fedex\Orderhistory\Block\Quote\Customerinfo" name="quote_view_id" before="quote.status"
+                   template="Fedex_Orderhistory::quote/quotetittle.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Fedex\Orderhistory\Block\Quote\Customerinfo" name="quote_view_customer_address"
+                   before="quote.view" template="Fedex_Orderhistory::quote/contact_info.phtml"/>
+
+            <block class="Magento\NegotiableQuote\Block\Quote\Items" name="quote_items" as="quote_items"
+                   template="Magento_NegotiableQuote::quote/print/items.phtml">
+                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers"
+                       as="renderer.list">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default"
+                           as="default" template="Fedex_Orderhistory::quote/item/default.phtml">
+                        <arguments>
+                            <argument name="productinfo_handler_view_model"
+                                      xsi:type="object">
+                                Fedex\Cart\ViewModel\ProductInfoHandler
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple"
+                           as="simple" template="Fedex_Orderhistory::quote/item/default.phtml">
+                        <arguments>
+                            <argument name="productinfo_handler_view_model"
+                                      xsi:type="object">
+                                Fedex\Cart\ViewModel\ProductInfoHandler
+                            </argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+            <block class="Magento\NegotiableQuote\Block\Quote\Info" name="quote_info"
+                   template="Fedex_Orderhistory::quote/print/info.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

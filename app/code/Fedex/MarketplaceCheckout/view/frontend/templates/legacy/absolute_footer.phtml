@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var Fedex\Delivery\Block\Footer $block
+ * @var Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?= /* @escapeNotVerified */ $block->getLayout()->createBlock(Magento\Framework\View\Element\Template::class)
+  ->setTemplate("Magento_Theme::html/footer.phtml")
+  ->toHtml();
+?>
+<?= /* @escapeNotVerified */ $block->getMiscellaneousHtml();?>
+<?php
+$absoluteFooterScript = <<<script
+    {
+        "*": {
+            "Fedex_MarketplaceCheckout/js/legacy/absolute-footer": {}
+        }
+    }
+    script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/x-magento-init'], $absoluteFooterScript, false); ?>
+<div id="marketplace-pickup-shipup-popup-modal" style="display: none;">
+    <div class="choose-container">
+      <div class="pickup-holder">
+        <img alt="Store pick up icon" class="pickup-img" src="<?= /* @noEscape */ $block->getMediaUrl('wysiwyg/PSmall.png') ?>" />
+        <button class="anchor-pickup">PICK UP AT STORE</button>
+      </div>
+      <div class="ship-holder">
+        <img alt="Ship to address icon" class="delivery-img" src="<?= /* @noEscape */ $block->getMediaUrl('wysiwyg/Dsmall.png') ?>" />
+        <button class="anchor-ship">SHIP TO ADDRESS</button>
+      </div>
+    </div>
+</div>

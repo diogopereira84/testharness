@@ -1,0 +1,137 @@
+& when (@media-common = true) {
+  .modals-wrapper {
+    .modal-popup {
+      &.fedex-ddt-modal {
+        .modal-inner-wrap {
+          padding: 32px 24px 24px 24px;
+          width: auto !important;
+          margin: 50px 16px 0;
+          display: block;
+          .modal-header {
+            &-icon {
+              display: flex;
+              justify-content: center;
+            }
+
+            .action-close {
+              right: 24px;
+              top: 24px;
+              &:before {
+                font-size: 16px;
+              }
+            }
+          }
+          .modal-title {
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-weight: 300;
+            line-height: 32px;
+            text-align: center;
+            margin-top: 16px;
+            margin-bottom: 16px;
+            border: 0;
+            padding: 0;
+            color: @fx-grey-1200;
+          }
+          .modal-body-content {
+            .description {
+              padding: 0;
+              font-family: 'FedEx Sans Light';
+              font-size: 16px;
+              font-weight: 300;
+              line-height: 24px;
+              text-align: center;
+              color: @fx-grey-1200;
+            }
+          }
+
+          .modal-footer {
+            padding: 0;
+            display: flex;
+            gap: 16px;
+            flex-direction: column;
+            margin-top: 16px;
+            button,a {
+              flex: 1;
+              min-height: 56px;
+              font-size: 19px;
+              font-family: 'FedEx Sans Bold';
+              font-weight: 700;
+              line-height: 24px;
+              letter-spacing: 1.1875px;
+              text-align: center;
+              border-radius: 0;
+              text-transform: uppercase;
+
+              &.primary-btn {
+                border: 2px solid #333333;
+                background-color: #fff;
+                color: #333333;
+              }
+
+              &.secondary-btn {
+                border: 0;
+                background-color: @fx-orange-500;
+                color: #fff;
+              }
+
+              &.continue-btn {
+                color: #0078B4;
+                background-color: transparent;
+                border: 0;
+                flex-basis: 100%;
+              }
+            }
+          }
+        }
+      }
+
+      &.no-icon {
+        .modal-inner-wrap {
+            .modal-title {
+                margin-top: 0 !important;
+            }
+        }
+      }
+    }
+  }
+}
+
+// Tablet and Desktop Viewports
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+  .modals-wrapper {
+    .modal-popup {
+      &.fedex-ddt-modal {
+        .modal-inner-wrap {
+          padding: 64px 48px 48px 48px;
+          width: 656px !important;  
+          margin: 50px auto 0;
+          .modal-header {
+            &-icon {
+              display: flex;
+              justify-content: center;
+            }
+          }
+
+          .modal-title {
+            margin-top: 24px;
+            border: 0;
+            padding: 0;
+          }
+
+          .modal-body-content {
+            .description {
+              font-size: 18px;
+            }
+          }
+      
+          .modal-footer {
+            flex-direction: row;
+            margin-top: 40px;
+            flex-wrap: wrap;
+          }
+        }
+      }
+    }
+  } 
+}

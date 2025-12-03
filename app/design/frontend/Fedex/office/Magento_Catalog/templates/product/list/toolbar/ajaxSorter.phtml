@@ -1,0 +1,144 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**
+ * Product list toolbar
+ *
+ * @var $block \Magento\Catalog\Block\Product\ProductList\Toolbar
+ */
+?>
+<?php $sde_helper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+ if(!$block->isMvpCatalogEnabled()):
+?>
+    <div class="toolbar-sorter sorter mvp-toggle-view">
+        <label class="sorter-label" for="sorter"><?= $block->escapeHtml(__('Sort By')) ?></label>
+        <select data-role="sorter" class="sorter-options" <?php if (
+                                                                            count($block->getAvailableOrders()) < 2 &&
+                                                                            $sde_helper->getIsSdeStore()
+                                                                        ) echo "disabled"; ?>>
+            <?php foreach ($block->getAvailableOrders() as $_key => $_order) : ?>
+                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                <?php if ($block->isOrderCurrent($_key)) : ?> selected="selected" <?php endif; ?>>
+                    <?= $block->escapeHtml(__($_order)) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+        <?php if ($block->getCurrentDirection() == 'desc') : ?>
+            <a title="<?= $block->escapeHtmlAttr(__('Set Ascending Direction')) ?>"
+            href="#" class="action sorter-action sort-desc" data-role="direction-switcher" data-value="asc">
+                <span><?= $block->escapeHtml(__('Set Ascending Direction')) ?></span>
+            </a>
+        <?php else : ?>
+            <a title="<?= $block->escapeHtmlAttr(__('Set Descending Direction')) ?>"
+            href="#" class="action sorter-action sort-asc" data-role="direction-switcher" data-value="desc">
+                <span><?= $block->escapeHtml(__('Set Descending Direction')) ?></span>
+            </a>
+        <?php endif; ?>
+    </div>
+    <?php else: ?>
+        <div class="breadcrum-container"><?= $this->getLayout()->getBlock('breadcrumbs')->toHtml() ?></div>
+<div class="mvp-sort-option">
+    <div class="toolbar-sorter ">
+        <label class="sorter-label" for="sorter"><?= $block->escapeHtml(__('Sort By: ')) ?></label>
+        <select aria-label="sorter" data-role="sorter" class="sorter-options">
+            <!-- B-1573026 -->
+            <?php foreach ($block->getAvailableOrders() as $_key => $_order) : ?>
+                <option value="<?= $block->escapeHtmlAttr($_key) ?>"
+                    <?php if ($block->isOrderCurrent($_key)) : ?>
+                        selected="selected"
+                    <?php endif; ?>>
+                    <?= $block->escapeHtml(__($_order)) ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="icon-list-grid-view">
+        <div class="icon-list-view active"></div>
+        <div class="icon-grid-view"></div>
+    </div>
+</div>
+ <?php endif; ?>
+ <script>
+require([
+     'jquery','select2'], function($) {
+        /* D-137046 */
+    <?php if($block->isMvpCatalogEnabled()){ ?>
+        $(document).ready(function(){
+            $('.sorter-options').select2({
+                minimumResultsForSearch: -1
+            });
+        });
+        <?php } ?>
+        currLoc = "<?php echo $this->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]); ?>";
+        var ajaxUrl = new URL(currLoc);
+        $(".icon-grid-view").click(function(){
+            ajaxUrl.searchParams.set('product_list_mode', 'grid');
+                if (!$(this).hasClass('active')) {
+                    ajaxUrl.searchParams.delete('product_list_limit');
+                }
+            ajaxViewMode(ajaxUrl);
+        });
+        $(".icon-list-view").click(function(){
+            // Tech Titans Toggle D-220270 List View Not working After Switching from Grid View
+            if (window?.checkout?.tech_titans_d220270) {
+                ajaxUrl.searchParams.set('product_list_mode', '');
+            } else {
+                ajaxUrl.searchParams.set('product_list_mode', 'list');
+            }
+
+            if (!$(this).hasClass('active')) {
+                    ajaxUrl.searchParams.delete('product_list_limit');
+                }
+            ajaxViewMode(ajaxUrl);
+        });
+        if(ajaxUrl.searchParams.get('product_list_mode') == 'grid') {
+            $('.icon-grid-view').addClass("active");
+            $('.icon-list-view').removeClass("active");
+        } else {
+            $('.icon-grid-view').removeClass("active");
+            $('.icon-list-view').addClass("active");
+        }
+        function ajaxViewMode(ajaxUrl) {
+            var mainUrl = new URL(ajaxUrl);
+            jQuery.ajax({
+                url: ajaxUrl,
+                type: 'get',
+                cache: false,
+                showLoader: true,
+                success: function (data){
+                    if (data != ''){
+                        jQuery('.ajax-shared-catalog').html("");
+                        let htmlObject = jQuery('.ajax-shared-catalog').html(data);
+                        htmlObject.trigger('contentUpdated');
+                    }
+                    if(mainUrl.searchParams.get('product_list_mode') == 'grid') {
+                        $('.icon-grid-view').addClass("active");
+                        $('.icon-list-view').removeClass("active");
+                    } else {
+                        $('.icon-grid-view').removeClass("active");
+                        $('.icon-list-view').addClass("active");
+                    }
+                    jQuery('.loading-mask-mvp').hide();
+                    if (jQuery('.category-product-count-is-zero').val()) {
+                        jQuery(".product-items.customer-admin").css('display', 'none');
+                        jQuery(".product-items.customer-view").css('display', 'none');
+                        jQuery(".breadcrumbs mvp-breadcrumb-label").css('display', 'block');
+                        jQuery(".breadcrum-container-no-count .breadcrumbs").removeClass("mvp-breadcrumb-label");
+                        jQuery('.shared-catalog-cta-container').css('margin-top','50px');
+                    }
+
+                    if (jQuery('#product-items-zero').length) {
+                        if(!jQuery('body').hasClass('customer-admin')){
+                            jQuery('body').addClass('customer-admin');
+                        }
+                    }
+                }
+            });
+        }
+});
+</script>

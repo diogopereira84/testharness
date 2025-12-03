@@ -1,0 +1,138 @@
+<?php
+$isDisplay = $block->displayBlock();
+define("BLOCKHIDE", "style='display:none;'");
+define("BLOCKSHOW", "style='display: block;'");
+?>
+<input data-form-part="company_form" class="admin__control-text" type="hidden" data-bind="
+        value: value,
+        hasFocus: focused,
+        attr: {
+            name: inputName,
+            placeholder: placeholder,
+            'aria-describedby': noticeId,
+            id: uid
+    }" value="1" name="authentication_rule[rule_load]" aria-describedby="notice-rule_load" id="rule_load" />
+<div class="admin__field-control  auth_rule extrinsic"
+    <?php
+        if (in_array('commercial_store_epro', $isDisplay)) {
+            if (in_array('extrinsic', $isDisplay)) { echo BLOCKSHOW; } else {echo BLOCKHIDE;}
+        } else {echo BLOCKHIDE;}
+    ?>>
+    <div class="error_msg _error"></div>
+    <div class="admin__control-table-wrapper">
+        <table id="modulename_tbl_data"
+        aria-describedby="authRuleExtrinsic"
+        class="admin__dynamic-rows admin__control-table"
+        style="border-collapse: collapse; border-spacing: 0;">
+            <?php if (in_array('extrinsic', $isDisplay)) {?>
+            <thead>
+                <tr class="header">
+                    <th class="_required">Extrinsic Authentication Code</th>
+                    <th></th>
+                </tr>
+            </thead><?php } ?>
+            <tbody><?php
+                $i=1;
+            if (in_array('extrinsic', $isDisplay)) {
+                foreach ($block->getRules('extrinsic') as $rules) {
+                     $j=$i-1;
+                    ?>
+                <tr class="data-row">
+                    <td class="dynElemRow _required"><input data-form-part="company_form" id="rule_<?php echo $j; ?>"
+                            name="authentication_rule[rule_code_e][<?php echo $j; ?>]"
+                            value="<?php echo $rules->getRuleCode();?>"
+                            class="_required input-text required-option admin__control-text dynrule" /></td>
+                    <td class="col-delete data-grid-actions-cell"><button
+                            onclick="javascript:jQuery(this).parent().parent().remove();"
+                            class="action- scalable delete delete-option action-delete" type="button"
+                            title="Remove"><span>Remove</span></button></td>
+                </tr>
+                    <?php
+                    $i++;
+
+                }
+            }
+            ?>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><button id="add_your_component" class="add" type="button" title="Add"><span>Add
+                                Rule</span></button></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<br />
+<div class="admin__field-control auth_rule contact"
+    <?php
+        if (in_array('commercial_store_epro', $isDisplay)) {
+            if (in_array('contact', $isDisplay)) { echo BLOCKSHOW; } else { echo BLOCKHIDE; }
+        } else {echo BLOCKHIDE;}
+    ?>>
+    <div class="admin__control-table-wrapper">
+        <table aria-describedby="authRuleContact"
+            id="contact_tbl_data" class="admin__dynamic-rows admin__control-table"
+            style="border-collapse: collapse; border-spacing: 0;">
+            <thead>
+                <tr class="header">
+                    <th class="_required">Contact Authentication Code</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="data-row">
+                    <td class="dynElemRow _required"><input readonly="readonly" data-form-part="company_form"
+                            id="crule_0" name="authentication_rule[rule_code_c][0]" value="Name"
+                            class="_required input-text required-option admin__control-text dyncrule" /></td>
+                    <td class="col-delete data-grid-actions-cell"></td>
+                </tr>
+                <tr class="data-row">
+                    <td class="dynElemRow _required"><input readonly="readonly" data-form-part="company_form"
+                            id="crule_1" name="authentication_rule[rule_code_c][1]" value="Email"
+                            class="_required input-text required-option admin__control-text dyncrule" /></td>
+                    <td class="col-delete data-grid-actions-cell"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+require([
+    "jquery"
+], function($) {
+    // Add dyn rows for extrinsic rules
+    $('#add_your_component').on('click', function() {
+        var i = $('input.dynrule').length + 1;
+        var j = i - 1;
+        var one = '<input data-form-part="company_form" id="rule_' + i +
+            '" name="authentication_rule[rule_code_e][' + j +
+            ']" value="" class="input-text required-option admin__control-text dynrule"/>';
+        var remove =
+            '<button onclick="javascript:jQuery(this).parent().parent().remove();'+
+            '"class="action- scalable delete delete-option action-delete"'+
+            ' type="button" title="Remove"><span>Remove</span></button>';
+        if (i == 1) {
+            var th =
+                '<thead><tr class="header">'+
+                '<th class="class="_required">Extrinsic Authentication Code</th><th></th></tr></thead>';
+            $('#modulename_tbl_data').append(th);
+        }
+        var tr = '<tr class="data-row"><td class="dynElemRow _required">' + one +
+            '</td><td class="col-delete data-grid-actions-cell">' + remove + '</td></tr>';
+        if (i <= 3) {
+            $('#modulename_tbl_data').append(tr);
+        } else {
+            $('.error_msg').html('<span>Max 3 extrinsic rules are allowed to add</span>');
+        }
+        i++;
+    });
+});
+</script>

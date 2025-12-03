@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="first-party-product-full-width"/>
+    <referenceContainer name="content">
+        <referenceContainer name="product.info.media">
+            <referenceBlock name="product.shipping.attribute" remove="true"/>
+            <block class="Magento\Catalog\Block\Product\View" name="toast.message.under.gallery"
+                   template="Magento_Catalog::product/view/toast-message-under-gallery.phtml"
+                   after="product.mob.overview"/>
+        </referenceContainer>
+
+        <referenceBlock name="page.main.title-first-party" remove="true"/>
+        <block class="Magento\Theme\Block\Html\Title" name="page.main.title-in-store"
+               template="Magento_Theme::html/title.phtml" before="content-wrapper"/>
+        <block class="Magento\Catalog\Block\Product\View" name="in-store-tag"
+               template="Magento_Catalog::product/view/tag.phtml" after="page.main.title-in-store"/>
+
+        <referenceContainer name="product.info.main">
+            <referenceBlock name="product.info.config" remove="true"/>
+            <referenceBlock name="product.info.overview" remove="true"/>
+            <referenceBlock name="product.info.fileupload" remove="true"/>
+            <referenceBlock name="product.shippingmodal" remove="true"/>
+
+            <block class="Magento\Catalog\Block\Product\View\Description" name="product.info.long.description"
+                   template="Magento_Catalog::product/view/attribute.phtml" group="detailed_info">
+                <arguments>
+                    <argument name="at_call" xsi:type="string">getDescription</argument>
+                    <argument name="at_code" xsi:type="string">description</argument>
+                    <argument name="css_class" xsi:type="string">in-store-layout long-description visible-l-xl</argument>
+                    <argument name="at_label" xsi:type="string">none</argument>
+                    <argument name="add_attribute" xsi:type="string">itemprop="description"</argument>
+                </arguments>
+            </block>
+
+            <block class="Magento\Catalog\Block\Product\View" name="product.info.order.form"
+                   template="Magento_Catalog::product/view/order-form.phtml" after="product.info.config"/>
+        </referenceContainer>
+    </referenceContainer>
+</layout>

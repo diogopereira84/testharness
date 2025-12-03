@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="web" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="pages_breadcrumb" translate="label" type="text" sortOrder="999" showInDefault="1"
+                   showInWebsite="1" showInStore="1">
+                <label>Pages Breadcrumb</label>
+                <field id="control" type="textarea" translate="label comment" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Pages Breadcrumb Control</label>
+                    <validate>validate-json</validate>
+                    <comment>This control is automatically maintained via html for pages using the Product Template.
+                        This configuration should only be directly edited in an emergency.
+                    </comment>
+                </field>
+            </group>
+        </section>
+        <section id="fedex">
+            <group id="one_p_product" sortOrder="1100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>1P Product Settings</label>
+                <field id="gallery" type="textarea" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Gallery Configuration</label>
+                    <validate>validate-json</validate>
+                    <comment>This field is maintained to configure the gallery settings for Product Detail Pages.
+                    </comment>
+                </field>
+                <field id="price_perception_disclaimer_text_1p" translate="label"
+                       type="editor" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Price Perception Disclaimer Text</label>
+                    <frontend_model>Fedex\Catalog\Block\Adminhtml\System\Config\Editor</frontend_model>
+                </field>
+            </group>
+            <group id="wysiwyg_editor" sortOrder="1200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Wysiwyg Editor Settings</label>
+                <field id="attribute_list" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0">
+                    <label>Attributes List</label>
+                    <comment>This field should contain attribute_code separated by comma to limit Wywisyg Editor for
+                        specified attributes.
+                    </comment>
+                </field>
+                <field id="toolbar_config" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0">
+                    <label>Toolbar Config</label>
+                    <comment>Determine which tools will show up in the toolbar. E.g: undo redo | bold italic underline |
+                        link
+                    </comment>
+                </field>
+                <field id="valid_elements" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0">
+                    <label>Valid Elements</label>
+                    <comment>Determine which html tags are allowed</comment>
+                </field>
+                <field id="extended_valid_elements" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0">
+                    <label>Extended Valid Elements</label>
+                    <comment>Determine which extra html tags are allowed</comment>
+                </field>
+                <field id="valid_styles" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0">
+                    <label>Valid Styles</label>
+                    <comment>Determine which style tags are allowed</comment>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration">
+            <group id="environment_toggle">
+                <field id="tiger_e422224dispaly_unit_cost_for_3p_and_1p_products" translate="label comment" type="select" sortOrder="430" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - E-422224 Display unit cost for 3p and 1p products</label>
+                    <comment><![CDATA[]]></comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_b_2315919" translate="label comment" type="select" sortOrder="435" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - B-2315919 RT-ECVS-Unpublish products from folders or without folders should not be visible in search dropdown and search page for shared catalog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d217169" translate="label comment" type="select" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-217169 Edit link showing up for a CBB Sample pack in mini cart when added via Reorder</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLoginActionGroup">
+        <remove keyForRemoval="fillUsername"/>
+        <remove keyForRemoval="fillPassword"/>
+        <remove keyForRemoval="clickLogin"/>
+        <amOnPage url="{{AdminLoginPage.url}}?client_id={{_ENV.MAGENTO_ADMIN_USERNAME}}&amp;client_secret={{_ENV.MAGENTO_ADMIN_PASSWORD}}" stepKey="navigateToAdmin"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <!-- Scedule cron once a day to add the shipment id in queue-->
+    <group id="fedex_shipment_crongroup">
+        <job name="ready_for_pickup_email_queue" instance="Fedex\Shipment\Cron\ReadyForPickupQueueProcessCron" method="execute">
+            <config_path>fedex/cron_configuration/ready_for_pickup_email_queue_cron</config_path>
+        </job>
+        <job name="oms_order_new_status_email" instance="Fedex\Shipment\Cron\OrderCollectionCron" method="getNewStatusOrderCollection">
+            <config_path>fedex/cron_configuration/oms_order_new_status_email_cron</config_path>
+        </job>
+     </group>
+</config>

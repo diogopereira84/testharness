@@ -1,0 +1,1802 @@
+//  variables
+@color-billing-heading: @fx-grey-1200;
+@color-po-reference-label: @fx-grey-1100;
+@color-white: @fx-white-100;
+@color-red: #DB002C;
+@edit-button-border: #6F7F87;
+@hco-message-color: #6F7F87;
+@fedex-sans-light-italic: 'FedEx Sans Light Italic';
+@font-style-italic: italic;
+.payment-container{
+    display: block;
+}
+
+.method-selection-container{
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 4rem;
+}
+
+.select-credit-card{
+    font-family: 'FedEX Sans Regular';
+    font-size: 16px;
+    width: 30%;
+    text-align: center;
+    border: 2px solid @fx-grey-1000;
+    margin-right: 2rem;
+}
+
+.select-fedex-acc{
+    font-family: 'FedEX Sans Regular';
+    font-size: 16px;
+    width: 30%;
+    text-align: center;
+    border: 2px solid @fx-grey-1000;
+}
+
+.selected-paymentype{
+    border: 3px solid @fx-purple-500;
+}
+.credit-card-text{
+    font-size: 16px;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.fedex-account-text{
+    font-size: 16px;
+    margin-top: 2.5rem;
+    margin-bottom: 2.5rem;
+}
+
+.payment-forms-container{
+    display: block;
+    margin-top: 4rem;
+}
+
+.credit-card-form{
+    display: flex;
+    flex-direction: column;
+}
+
+.payment-title-text{
+    font-size: 32px;
+    font-family: 'FedEX Sans Light';
+    font-weight: 300;
+}
+
+.payment-title-subtext{
+    font-size: 16px;
+    font-family: 'FedEx Sans Light Italic';
+    font-style: italic; // Needed to render on Safari Browser
+    margin-left: 3.4rem;
+}
+
+.title-container{
+    margin-top: 2rem;
+}
+
+.checkSymbol1,.checkSymbol2 {
+    width: 100%;
+    float: right;
+    text-align: right !important;
+
+}
+
+.blue-checkmark{
+    background: @fx-purple-500;
+    color: @fx-white-100;
+    font-size: 2.5rem;
+    width: 3rem;
+    height: 3rem;
+}
+
+.cc-form-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 3.4rem;
+}
+.name-card-container{
+    width: 70%;
+    margin-top: 2rem;
+}
+.name-card-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+input.name-card{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+input.name-card::placeholder,
+input.card-number::placeholder,
+input.cvv-number::placeholder {
+    color: #E8E8E8;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.expiration-month.selected,
+.expiration-year.selected,
+.expiration-year option,
+.expiration-month option {
+    color: #000000;
+}
+
+.expiration-month,
+.expiration-year,
+.expiration-year option:first-child,
+.expiration-month option:first-child {
+    color: #E8E8E8;
+}
+
+.card-number-container{
+    width: 70%;
+    margin-top: 2rem;
+    position: relative;
+}
+
+.card-number-container img {
+    position: absolute;
+    left: 0;
+    top: 22px;
+    padding: 9px 12px;
+    font-size: 2.4rem;
+    height: 2.5rem;
+    // color: #AAB9BF;
+}
+.card-number-container input[type="text"] {
+    box-sizing: border-box;
+    padding-left: 5%;
+}
+.card-number-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.card-number{
+    height: 48px;
+    font-size: 16px;
+    // color: #AAB9BF;
+    font-family: 'FedEx Sans Regular';
+}
+.expiration-cvv-container{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    margin-top: 2rem;
+}
+
+.expiration-month-container{
+    width: 50%;
+}
+
+.expiration-month-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+.expiration-month-label:after {
+    content:" *";
+    color: red;
+}
+
+select.expiration-month{
+    height: 48px;
+    font-size: 16px;
+    // color: #AAB9BF;
+    font-family: 'FedEx Sans Regular';
+}
+
+.expiration-year-container{
+    width: 30%;
+    margin-top: 2rem;
+}
+
+.expiration-year-label{
+    display: none;
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+.expiration-year-label:after {
+    content:" *";
+    color: red;
+}
+
+select.expiration-year{
+    height: 48px;
+    font-size: 16px;
+    // color: #AAB9BF;
+    font-family: 'FedEx Sans Regular';
+}
+
+.cvv-number-container{
+    width: 20%;
+    margin-left: 10%;
+}
+.cvv-number-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+.cvv-number-label:after {
+    content:" *";
+    color: red;
+}
+
+input.cvv-number{
+    height: 48px;
+    font-size: 16px;
+    // color: #AAB9BF;
+    font-family: 'FedEx Sans Regular';
+}
+
+.fedex-account-checkbox-container{
+    margin-top: 2rem;
+    display: flex;
+}
+
+.fedex-account-checkbox{
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 0;
+    user-select: none;
+}
+
+.fedex-account-checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    border: 1px solid #6F7F87
+  }
+
+  /* On mouse-over, add a grey background color */
+  .fedex-account-checkbox:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .fedex-account-checkbox input:checked ~ .checkmark {
+    background-color: @fx-purple-500;
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  .fedex-account-checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .fedex-account-checkbox .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid @fx-white-100;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+  }
+
+.fedex-acc-text{
+    font-family: 'Fedex Sans Regular';
+    padding: 0.5rem 0.5rem 0.5rem 0rem;
+    color: @fx-grey-1200;
+    font-size: 14px;
+}
+
+.account-number-input-container{
+    display: flex;
+}
+.account-number-container{
+    width: 50%;
+    margin-top: 2rem;
+}
+.account-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+.account-label:after {
+    content:" *";
+    color: red;
+}
+
+input.account-number{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+input.account-number-field{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.apply-account{
+    background: @fx-white-100;
+    margin-top: 4rem;
+    color: #1979C3;
+    height: 48px;
+    font-size: 16px;
+    border-radius: 0;
+    font-family: 'FedEx Sans Bold';
+    width: 18%;
+    border: 2px solid #1979C3
+}
+
+.apply-account:hover{
+    background-color: @fx-white-100;
+    color: #1979c3;
+}
+
+.billing-address-checkbox-container{
+    display: flex;
+}
+
+.billing-address-checkbox,
+.checkout-checkbox {
+    display: block;
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    letter-spacing: 0;
+    user-select: none;
+}
+
+.billing-address-checkbox,
+.checkout-checkbox {
+    input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+}
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    border: 1px solid #6F7F87
+  }
+
+  /* On mouse-over, add a grey background color */
+  .billing-address-checkbox,
+  .checkout-checkbox {
+        &:hover input~.checkmark {
+            background-color: #ccc;
+        }
+   }
+
+  /* When the checkbox is checked, add a blue background */
+  .billing-address-checkbox,
+  .checkout-checkbox {
+        input:checked~.checkmark {
+            background-color: @fx-purple-500;
+        }
+   }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  .billing-address-checkbox,
+  .checkout-checkbox {
+        input:checked~.checkmark:after {
+            display: block;
+        }
+  }
+
+  /* Style the checkmark/indicator */
+  .billing-address-checkbox,
+  .checkout-checkbox {
+        .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid @fx-white-100;
+            border-width: 0 3px 3px 0;
+            transform: rotate(45deg);
+        }
+   }
+
+.billing-add-text{
+    font-family: 'Fedex Sans Regular';
+    padding: 6px 16px 16px 4px;
+    color: @fx-grey-1200;
+    font-size: 14px;
+}
+.billing-address-heading{
+    font-family: 'Fedex Sans Light';
+    margin-top: 2rem;
+    font-size: 20px;
+    color: @fx-grey-1200;
+}
+
+.company-name-container{
+    width: 70%;
+    margin-top: 1rem;
+}
+.company-name-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.company-name{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+
+.address-one-container{
+    width: 70%;
+    margin-top: 2rem;
+}
+.address-one-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.address-one{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.address-two-container{
+    width: 70%;
+    margin-top: 2rem;
+}
+.address-two-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.address-two{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.city-state-container{
+    display: flex;
+    flex-direction: row;
+    width: 70%;
+    justify-content: space-between;
+}
+
+.add-city-container{
+    width: 40%;
+    margin-top: 2rem;
+}
+.add-city-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.add-city{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.add-state-container{
+    width: 22%;
+    margin-top: 2rem;
+}
+.add-state-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+.add-state{
+    height: 48px;
+    font-size: 16px;
+    // color: #AAB9BF;
+    font-family: 'FedEx Sans Regular';
+}
+
+.add-zip-container{
+    width: 22%;
+    margin-top: 2rem;
+}
+.add-zip-label{
+    font-family: 'Fedex Sans Bold';
+    font-size: 12px;
+    color:@fx-grey-1100;
+}
+
+input.add-zip{
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.card-number-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+
+}
+
+.cvv-card-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.exp-date-error{
+    color: red;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.invalid-account-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.name-card-error{
+    color: red;
+    display: flex;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.address-one-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.address-two-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+.add-city-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.exp-year-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+.add-state-error {
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.add-zip-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.credit-card-review-button{
+    font-family: 'Fedex Sans Bold';
+    font-size: 19px;
+    color: @fx-white-100;
+    background: @fx-orange-500;
+    width: fit-content;
+    border-radius: 0;
+    padding: 16px 24px;
+    border: 0;
+    line-height: 24px;
+}
+
+.credit-card-review-button:hover{
+    background: #FF5400;
+    color: @fx-white-100;
+    border: 0;
+}
+
+.fedex-account-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.cc-form-container{
+    display: flex;
+    flex-direction: column;
+    margin-left: 3.4rem;
+}
+
+.account-num-container {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    margin-left: 3.4rem;
+    margin-top: 2rem;
+}
+
+.account-number-label {
+  height: 16px;
+  color: @fx-grey-1100;
+  font-family: "Fedex Sans Bold";
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.field-error {
+  color: @fx-red-100;
+  font-family: "FedEx Sans Regular";
+  font-size: 12px;
+  letter-spacing: 0;
+  line-height: 16px;
+}
+
+.required-field::after {
+  content: "*";
+  color: #E02B27;
+  font-family: "FedEx Sans Medium";
+  margin-left: 2px;
+}
+
+input.fedex-account-number {
+    height: 48px;
+    font-size: 16px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+}
+
+.fedex-account-number-error{
+    color: red;
+    display: none;
+    font-size: 1.2rem;
+    font-family: 'FedEx Sans Regular';
+    margin-top: 0.5rem;
+}
+
+.fedex-icon-error {
+    background: url(../images/icon-error.png) no-repeat;
+    width: 20px;
+}
+
+.fedex-account-number-review-button {
+    font-family: 'Fedex Sans Bold';
+    font-size: 19px;
+    color: @fx-white-100;
+    background: @fx-orange-500;
+    border-radius: 0;
+    margin-top: 4rem;
+    margin-left: 3.4rem;
+    padding: 16px 24px;
+    line-height: 24px;
+    border: 0;
+    width: fit-content;
+}
+
+.fedex-account-number-review-button:hover{
+    background: @fx-orange-500;
+    color: @fx-white-100;
+    border: 0;
+}
+
+.credit-card-review-button-disabled{
+    background: gray;
+}
+
+.fedex-account-number-review-button-disabled {
+    background-color: @fx-white-200 !important;
+    color: #8e828e !important;
+}
+
+.shipping-address{
+    display: flex;
+    flex-direction: column;
+    padding: 2rem;
+    border: solid 1px #CED5D9;
+    width: 40%;
+    margin-top: 1rem;
+}
+
+.shipping-city{
+    font-size: 16px;
+    font-family: 'Fedex Sans Light';
+}
+
+.shipping-state{
+    font-size: 16px;
+    font-family: 'Fedex Sans Light';
+}
+
+.shipping-postal{
+    font-size: 16px;
+    font-family: 'Fedex Sans Light';
+}
+
+.shipping-address-line-one{
+    font-size: 16px;
+    font-family: 'Fedex Sans Light';
+}
+.shipping-name{
+    font-size: 16px;
+    font-family: 'Fedex Sans Light';
+}
+
+.applied-fedex-container{
+    margin-top: 4.7rem;
+    margin-left: 1rem;
+}
+
+.applied-fedex-text{
+    margin-bottom: 0;
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+}
+
+.applied-fedex-value{
+    font-size: 14px;
+    font-family: 'FedEx Sans Light Italic';
+    margin-bottom: 0;
+}
+.fedex-acc-remove-button{
+    margin-top: 0rem;
+    font-family: 'FedEx Sans Light';
+    margin-left: 0.4rem;
+    font-size: 15px;
+    color: #0078B4;
+    text-decoration:underline;
+    cursor: pointer;
+}
+
+.remove-button-container{
+    display: flex;
+}
+
+.green-check{
+    height: 3rem;
+    margin-right: 1rem;
+    margin-left: 2.5rem;
+}
+
+@media screen and (min-width: 320px){
+    .payment-title-subtext{
+        margin-left: 0rem
+    }
+
+    .cc-form-container{
+        margin-left:0rem;
+    }
+
+    .name-card-container{
+        width: 90%;
+    }
+
+    .card-number-container{
+        width: 90%;
+    }
+
+    .expiration-cvv-container {
+        width: 90%;
+    }
+
+    .cvv-number-container{
+        margin-left: 0;
+    }
+
+    .apply-account{
+        width: 30%;
+    }
+
+    .select-credit-card{
+        width: 40%;
+    }
+
+    .select-fedex-acc{
+        width: 40%;
+    }
+
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 20%;
+    }
+
+    .company-name-container{
+        width: 90%;
+    }
+
+    .address-one-container{
+        width: 90%;
+    }
+
+    .address-two-container{
+        width: 90%;
+    }
+
+    .city-state-container{
+        width: 90%;
+    }
+
+    .add-city-container{
+        width: 25%;
+    }
+
+    .add-state-container{
+        width: 30%;
+    }
+
+    .add-zip-container{
+        width: 25%;
+    }
+
+    .account-num-container {
+        width: 90%;
+        margin-left:0rem;
+    }
+
+    .fedex-account-number-review-button {
+        margin-left:0rem;
+    }
+}
+
+@media screen and (min-width: 375px){
+    .payment-title-subtext{
+        margin-left: 0rem
+    }
+
+    .cc-form-container{
+        margin-left:0rem;
+    }
+
+    .name-card-container{
+        width: 90%;
+    }
+
+    .card-number-container{
+        width: 90%;
+    }
+
+    .expiration-cvv-container {
+        width: 90%;
+    }
+
+    .cvv-number-container{
+        margin-left: 0;
+    }
+
+    .apply-account{
+        width: 30%;
+    }
+
+    .select-credit-card{
+        width: 40%;
+    }
+
+    .select-fedex-acc{
+        width: 40%;
+    }
+
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 18%;
+    }
+
+    .company-name-container{
+        width: 90%;
+    }
+
+    .address-one-container{
+        width: 90%;
+    }
+
+    .address-two-container{
+        width: 90%;
+    }
+
+    .city-state-container{
+        width: 90%;
+    }
+
+    .add-city-container{
+        width: 25%;
+    }
+
+    .add-state-container{
+        width: 30%;
+    }
+
+    .add-zip-container{
+        width: 25%;
+    }
+
+    .account-num-container {
+        width: 90%;
+        margin-left:0rem;
+    }
+
+    .fedex-account-number-review-button {
+        margin-left:0rem;
+    }
+}
+
+@media screen and (min-width: 425px){
+    .payment-title-subtext{
+        margin-left: 0rem
+    }
+
+    .cc-form-container{
+        margin-left:0rem;
+    }
+
+    .name-card-container{
+        width: 90%;
+    }
+
+    .card-number-container{
+        width: 90%;
+    }
+
+    .expiration-cvv-container {
+        width: 90%;
+    }
+
+    .cvv-number-container{
+        margin-left: 0;
+    }
+
+    .apply-account{
+        width: 30%;
+    }
+
+    .select-credit-card{
+        width: 40%;
+    }
+
+    .select-fedex-acc{
+        width: 40%;
+    }
+
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 18%;
+    }
+
+    .company-name-container{
+        width: 90%;
+    }
+
+    .address-one-container{
+        width: 90%;
+    }
+
+    .address-two-container{
+        width: 90%;
+    }
+
+    .city-state-container{
+        width: 90%;
+    }
+
+    .add-city-container{
+        width: 25%;
+    }
+
+    .add-state-container{
+        width: 30%;
+    }
+
+    .add-zip-container{
+        width: 25%;
+    }
+
+    .account-num-container {
+        width: 90%;
+        margin-left:0rem;
+    }
+
+    .fedex-account-number-review-button {
+        margin-left:0rem;
+    }
+
+}
+
+@media screen and (min-width: 768px){
+    .payment-title-subtext{
+        margin-left: 0rem
+    }
+
+    .cc-form-container{
+        margin-left:0rem;
+    }
+
+    .name-card-container{
+        width: 90%;
+    }
+
+    .card-number-container{
+        width: 90%;
+    }
+
+    .expiration-cvv-container {
+        width: 90%;
+    }
+
+    .cvv-number-container{
+        margin-left: 0;
+    }
+
+    .apply-account{
+        width: 30%;
+    }
+    .select-credit-card{
+        width: 40%;
+    }
+
+    .select-fedex-acc{
+        width: 40%;
+    }
+
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 15%;
+    }
+
+    .company-name-container{
+        width: 90%;
+    }
+
+    .address-one-container{
+        width: 90%;
+    }
+
+    .address-two-container{
+        width: 90%;
+    }
+
+    .city-state-container{
+        width: 90%;
+    }
+
+    .add-city-container{
+        width: 25%;
+    }
+
+    .add-state-container{
+        width: 30%;
+    }
+
+    .add-zip-container{
+        width: 25%;
+    }
+
+    .account-num-container {
+        width: 90%;
+        margin-left:0rem;
+    }
+
+    .fedex-account-number-review-button {
+        margin-left:0rem;
+    }
+}
+
+@media screen and (min-width: 1024px){
+    .payment-title-subtext{
+        margin-left: 3.4rem
+    }
+
+    .cc-form-container{
+        margin-left:3.4rem;
+    }
+
+    .name-card-container{
+        width: 70%;
+    }
+
+    .card-number-container{
+        width: 70%;
+    }
+
+    .expiration-cvv-container {
+        width: 70%;
+    }
+
+    .cvv-number-container{
+        margin-left: 10%;
+    }
+    .apply-account{
+        width: 16%;
+    }
+
+    .select-credit-card{
+        width: 40%;
+    }
+
+    .select-fedex-acc{
+        width: 40%;
+    }
+
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 15%;
+    }
+
+    .company-name-container{
+        width: 70%;
+    }
+
+    .address-one-container{
+        width: 70%;
+    }
+
+    .address-two-container{
+        width: 70%;
+    }
+
+    .city-state-container{
+        width: 70%;
+    }
+
+    .add-city-container{
+        width: 50%;
+    }
+
+    .add-state-container{
+        width: 22%;
+    }
+
+    .add-zip-container{
+        width: 22%;
+    }
+
+    .account-num-container {
+        width: 70%;
+        margin-left: 3.4rem;
+
+        .sequence-numbers & {
+            margin-left: 0;
+        }
+    }
+
+    .fedex-account-number-review-button {
+        margin-left: 3.4rem;
+    }
+}
+
+@media screen and (min-width: 1440px){
+    .card-number-container input[type="text"] {
+        box-sizing: border-box;
+        padding-left: 13%;
+    }
+}
+
+
+/* Review Order Screen Start */
+.review-heading {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 56px;
+}
+
+.review-cancellation-message {
+    color: @fx-purple-500;
+    font-family: "FedEx Sans Bold";
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 0;
+}
+
+.review-order-read-only {
+    display: flex;
+    align-items: center;
+}
+
+.review-order-read-only .line {
+    margin-bottom: 0px !important;
+}
+
+.review-order-read-only .header-section {
+    display: flex;
+    align-items: center;
+}
+
+.review-order-read-only .icon {
+    height: 6rem;
+    width: 6rem;
+    color: @fx-green-100;
+    font-size: 50px !important;
+}
+
+.review-order-read-only .header-section {
+    display: flex;
+    align-items: center;
+}
+
+.review-order-read-only .heading {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+}
+
+.review-order-read-only .edit {
+    margin-left: auto;
+    color: @fx-grey-1200;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 24px;
+    text-align: center;
+    padding: 1rem 2rem;
+}
+.recipient-read-only,
+.review-order-read-only {
+    .edit_buttton {
+        box-sizing: border-box;
+        border: 1px solid #6F7F87;
+        background-color: @fx-white-100;
+        font-family: "FedEx Sans Bold";
+        border-radius: 0px;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 1px;
+        font-size: 14px;
+        align-content: center;
+        padding: 10px 4px 6px 4px;
+        width: 65px;
+    }
+}
+
+.recipient-read-only {
+    margin-left: 7rem;
+    color: @fx-grey-1200;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0;
+    font-family: "FedEx Sans Light";
+    .estimated-pickup-time-title {
+        margin-top: 24px !important;
+    }
+}
+
+.recipient-read-only .mb-4 {
+   margin-bottom: 4px;
+}
+
+.recipient-read-only .heading {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+}
+
+.recipient-read-only .body-heading {
+    margin-top: 1rem;
+    color: @fx-grey-1200;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: .09375rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-family: "FedEx Sans Bold";
+}
+
+.recipient-read-only .review-order-method {
+    margin-bottom: 20px;
+}
+
+.recipient-read-only .credit-card {
+    display: flex;
+    align-items: center;
+}
+
+.recipient-read-only .card-heading {
+    line-height: 24px;
+}
+
+.recipient-read-only .icon {
+    // font-size: 20px;
+    height: 2.5rem;
+}
+
+.recipient-read-only .card-number-ending {
+    margin-left: 3px;
+    color: #6F7F87;
+    font-style: italic;
+    line-height: 24px;
+    font-family: "FedEx Sans Light Italic";
+
+}
+
+.recipient-read-only .ml-30 {
+   margin-left: 50px;
+}
+
+.recipient-read-only .ml-0 {
+    margin-left: 0;
+ }
+
+/* End */
+/**
+Custom Start
+**/
+.recipient-read-only .review-order-method .review-order-read-only .header-section {
+    display: flex;
+    align-items: center;
+}
+
+.recipient-read-only .review-order-method .review-order-read-only .heading {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+}
+
+
+
+.recipient-read-only .review-order-method .review-order-read-only .edit {
+    margin-left: auto;
+    color: @fx-grey-1200;
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    line-height: 24px;
+    text-align: center;
+    padding: 1rem 2rem;
+}
+
+.recipient-read-only .review-order-method .review-order-read-only .edit_buttton {
+    box-sizing: border-box;
+    border: 1px solid #6F7F87;
+    background-color: @fx-white-100;
+    font-family: "FedEx Sans Bold";
+    border-radius: 0px;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 1px;
+    font-size: 14px;
+    align-content: center;
+    padding: 10px 4px 6px 4px;
+    width: 65px;
+}
+
+/**
+Custom End
+**/
+
+.recipient-read-only {
+    margin-left: 7rem;
+    color: @fx-grey-1200;
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0;
+    font-family: "FedEx Sans Light";
+}
+
+.recipient-read-only .mb-4 {
+   margin-bottom: 4px;
+}
+
+.recipient-read-only .heading {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 20px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+}
+
+.recipient-read-only .body-heading {
+    margin-top: 1rem;
+    color: @fx-grey-1200;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: .09375rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-family: "FedEx Sans Bold";
+}
+
+.recipient-read-only .review-order-method {
+    margin-bottom: 20px;
+}
+
+.recipient-read-only .credit-card {
+    display: flex;
+    align-items: center;
+}
+
+.recipient-read-only .card-heading {
+    line-height: 24px;
+}
+
+.recipient-read-only .icon {
+    font-size: 20px;
+}
+
+.recipient-read-only .card-number-ending {
+    margin-left: 3px;
+    color: #6F7F87;
+    font-style: italic;
+    line-height: 24px;
+    font-family: "FedEx Sans Light Italic";
+
+}
+
+.recipient-read-only .ml-0 {
+    margin-left: 0;
+ }
+
+/* End */
+
+.my-tooltip {
+    .lib-tooltip(top);
+}
+/* Additional Billing Info */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .fedex-account-form {
+        .additional-billing-info {
+            margin-left: 0 !important;
+        }
+    }
+    .additional-billing-info {
+        width: 90% !important;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .fedex-account-form {
+        .additional-billing-info {
+            margin-left: 0 !important;
+        }
+    }
+}
+@media only screen and (max-width: 767px) {
+    .promo-account {
+        .expiration-cvv-container {
+            flex-wrap: wrap;
+        }
+        .credit-card-text, .fedex-account-text {
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        .credit-card-review-button{
+            width: 100%;
+        }
+        .selected-paymentype {
+            position: relative;
+            span.checkSymbol2, span.checkSymbol1 {
+                position: absolute;
+                i.fa.fa-check.blue-checkmark {
+                    &:before {
+                        left: -5px;
+                        position: relative;
+                        top: 4px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.fedex-account-form {
+    .additional-billing-info {
+        margin-left: 3.4rem;
+    }
+}
+.additional-billing-info {
+    padding-bottom: 73px;
+    padding-top: 44px;
+    width: 70%;
+    .aditional-billing-heading {
+        color: @color-billing-heading;
+        font-family: 'FedEx Sans Light';
+        font-size: 20px;
+        font-weight: 300;
+        height: 32px;
+        letter-spacing: 0;
+        line-height: 32px;
+        margin-bottom: 0;
+    }
+    .po-reference-label {
+        color: @color-po-reference-label;
+        font-family: 'FedEx Sans Bold';
+        font-size: 12px;
+        font-weight: bold;
+        height: 16px;
+        line-height: 16px;
+        margin-bottom: 6px;
+        padding-top: 15px;
+    }
+    .po-reference-id {
+        height: 48px !important;
+    }
+    .custom-billing-fields-container {
+        .custom-billing-fields {
+            label {
+                display: inline-block;
+                color: @color-po-reference-label;
+                font-family: 'FedEx Sans Bold';
+                font-size: 12px;
+                font-weight: bold;
+                height: 16px;
+                line-height: 16px;
+                margin-bottom: 6px;
+                padding-top: 15px;
+                text-transform: uppercase;
+            };
+            input {
+                height: 48px;
+            }
+            .error-highlight {
+                border: 1px solid @color-red;
+                color: @color-red;
+            }
+            .error-message {
+                display: flex;
+                color: @color-red;
+                font-size: 1.2rem;
+                font-family: 'FedEx Sans Regular';
+                margin-top: 0.5rem
+            }
+        }
+    }
+}
+
+/* End */
+/* B-1241748 Design HCO For Review Order Page */
+.is-fcl-global.checkout-index-index {
+    .columns {
+        .column.main {
+            .checkout-container {
+                .recipient-read-only {
+                    .hco-location-message {
+                        color: @hco-message-color;
+                        display: inline-block;
+                        font-family: @fedex-sans-light-italic;
+                        font-size: 16px;
+                        font-style: @font-style-italic;
+                        font-weight: 300;
+                        height: auto;
+                        letter-spacing: 0;
+                        line-height: 21px;
+                        margin-bottom: 7px;
+                        margin-top: 4px;
+                        width: 565px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1439px) {
+    .is-fcl-global.checkout-index-index {
+        .columns {
+            .column.main {
+                .checkout-container {
+                    .recipient-read-only {
+                        .hco-location-message {
+                            width: 454px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .is-fcl-global.checkout-index-index {
+        .columns {
+            .column.main {
+                .checkout-container {
+                    .recipient-read-only {
+                        .hco-location-message {
+                            margin-top: 8px;
+                            width: 221px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+/*B-1241748 End of the Design HCO For Review Order Page*/
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .is-fcl-global.checkout-index-index {
+        .step-content.review-order-step {
+            hr {
+                margin: 0;
+            }
+            .review-order-read-only {
+                .edit.hidden-xs {
+                    display: none;
+                }
+                .heading {
+                    margin-bottom: 23px;
+                    margin-top: 22.5px;
+                }
+            }
+            .recipient-read-only {
+                margin-left: 56px;
+                .edit.visible-xs {
+                    display: block;
+                    button {
+                        align-content: center;
+                        background-color: @color-white;
+                        border: 1px solid @edit-button-border;
+                        border-radius: 0;
+                        box-sizing: border-box;
+                        font-family: 'FedEx Sans Bold';
+                        font-size: 14px;
+                        letter-spacing: 1px;
+                        margin-top: 24px;
+                        padding: 10px 4px 6px 4px;
+                        text-align: center;
+                        text-transform: uppercase;
+                        width: 65px;
+                    }
+                }
+                .body-heading {
+                    margin-top: 24px;
+                }
+            }
+            .review-heading {
+                font-size: 32px;
+                line-height: 40px;
+                margin-bottom: 15.5px;
+            }
+            .green-check {
+                margin-left: 8px;
+                margin-right: 16px;
+            }
+        }
+    }
+}
+/*D-101496 End of Fix UI of 320 PX Checkout */
+
+@media screen and (max-width: 770px){
+    .opc-summary-wrapper {
+        .modal-inner-wrap {
+            padding-top: 0;
+        }
+    }
+}
+
+.table-totals {
+    .toggle-discount {
+        cursor: pointer;
+        .arrow {
+            border: solid black;
+            border-width: 0 1px 1px 0;
+            display: inline-block;
+            padding: 4px;
+            margin-left: 8px;
+            margin-bottom: 2px;
+        }
+        .down {
+          transform: rotate(45deg);
+          -webkit-transform: rotate(45deg);
+        }
+        .up {
+            margin-bottom: -1.5px;
+           transform: rotate(-135deg);
+           -webkit-transform: rotate(-135deg);
+        }
+    }
+    .discount_breakdown{
+        display:none;
+        td{
+            border-top:none;
+            padding-right: 0px !important;
+            padding-left: 0px !important;
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .step-content.review-order-step{
+        .review-order-payment-step {
+            hr {
+                margin-top: 45px !important;
+            }
+        }
+    }
+    .checkout-agreements.fieldset{
+        margin-top: 43px;
+    }
+    .marketing-opt-in.fieldset {
+        margin-top: 24px;
+    }
+    .payment-forms-container {
+        .credit-card-review-button{
+            width: 100%;
+        }
+    }
+    .review-order-read-only .edit {
+        display: none;
+    }
+}

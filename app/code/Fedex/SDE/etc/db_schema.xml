@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="store" engine="innodb" comment="Stores">
+        <column xsi:type="int" name="login_enabled" unsigned="true" nullable="true" comment="SSO login url" disabled="true"/>
+        <column xsi:type="varchar" name="login_url" nullable="true" length="200" comment="SSO login url" disabled="true"/>
+        <column xsi:type="varchar" name="logout_url" nullable="true" length="200" comment="SSO logout url" disabled="true"/>
+    </table>
+
+    <table name="quote" resource="default" engine="innodb">
+        <column xsi:type="decimal" name="volume_discount" nullable="true" scale="2" precision="10" comment="Volumne Discount"/>
+        <column xsi:type="decimal" name="bundle_discount" nullable="true" scale="2" precision="10" comment="Bundle Discount"/>
+        <column xsi:type="decimal" name="promo_discount" nullable="true" scale="2" precision="10" comment="Promo Discount"/>
+        <column xsi:type="decimal" name="account_discount" nullable="true" scale="2" precision="10" comment="Account Discount"/>
+        <column xsi:type="decimal" name="shipping_discount" nullable="true" scale="2" precision="10" comment="Shipping Discount"/>
+    </table>
+
+    <table name="quote_item" resource="default" engine="innodb">
+        <column xsi:type="decimal" name="volume_discount" nullable="true" scale="2" precision="10" comment="Volume Discount"/>
+        <column xsi:type="decimal" name="bundle_discount" nullable="true" scale="2" precision="10" comment="Bundle Discount"/>
+    </table>
+
+    <table name="sales_order" resource="default" engine="innodb">
+        <column xsi:type="decimal" name="volume_discount" nullable="true" scale="2" precision="10" comment="Volumne Discount"/>
+        <column xsi:type="decimal" name="bundle_discount" nullable="true" scale="2" precision="10" comment="Bundle Discount"/>
+        <column xsi:type="decimal" name="promo_discount" nullable="true" scale="2" precision="10" comment="Promo Discount"/>
+        <column xsi:type="decimal" name="account_discount" nullable="true" scale="2" precision="10" comment="Account Discount"/>
+        <column xsi:type="decimal" name="shipping_discount" nullable="true" scale="2" precision="10" comment="Shipping Discount"/>
+    </table>
+
+</schema>

@@ -1,0 +1,81 @@
+<?php
+$quote = $block->getQuote();
+$billingAddress = $quote->getBillingAddress();
+$shippingAddress = $quote->getShippingAddress();
+$shippingeMethod = $billingAddress->getShippingMethod();
+$shippingeDescription = $billingAddress->getShippingDescription();
+$eproClassEnhancement = $block->isEnhancementEnabledForPrint() ? 'epro-print-order-enhancement' : '';
+?>
+<!-- B-1148619 Print Quote Receipt -->
+<div class="contact-info-contanier <?=/* @escapeNotVerified */$eproClassEnhancement?>">
+    <?php if ($shippingeMethod == "fedexshipping_PICKUP"): ?>
+        <div class="contact-info-title">
+            <span class="contact-info-text">
+                <?=$block->escapeHtml(__('Contact Information'));?>
+            </span>
+        </div>
+        <div class="contact-text">
+            <span><?=$block->escapeHtml(__('CONTACT PERSON'))?></span>
+        </div>
+        <div class="contact-info">
+            <div>
+                <span><?=$quote->getData('customer_firstname') . ' ' . $quote->getData('customer_lastname');?></span>
+            </div>
+            <div>
+                <span><?=$quote->getData('customer_email');?></span>
+            </div>
+            <div>
+                <span><?=$block->getFormattedPhone($quote->getData('customer_telephone'));?></span>
+            </div>
+        </div>
+        <?php if($quote->getData('is_alternate_pickup') || $quote->getData('is_alternate')) :?>
+            <div class="contact-text">
+                <span><?=$block->escapeHtml(__('ALTERNATE PICK UP PERSON'))?></span>
+            </div>
+            <div class="contact-info">
+                <div>
+                    <span><?=$billingAddress->getData('firstname') . ' ' .$billingAddress->getData('lastname');?></span>
+                </div>
+                <div>
+                    <span><?=$billingAddress->getData('email');?></span>
+                </div>
+                <div>
+                    <span><?=$block->getFormattedPhone($billingAddress->getData('telephone'));?></span>
+                </div>
+            </div>
+        <?php endif;?>
+    <?php else: ?>
+        <div class="contact-info-title">
+            <span class="contact-info-text">
+                <?=$block->escapeHtml(__('Delivery Method'));?>
+            </span>
+        </div>
+        <div class="contact-text">
+            <span><?=$block->getDeliveryMethodName($shippingeMethod, $shippingeDescription)?></span>
+        </div>
+        <div class="contact-info">
+            <div>
+                <span><?=$block->escapeHtml(__('Estimated Delivery'));?></span>
+            </div>
+            <div>
+                <span><?=$block->getEstimatedShippingDelivery($shippingeDescription)?></span>
+            </div>
+        </div>
+        <?php if($quote->getData('is_alternate_pickup') || $quote->getData('is_alternate')) :?>
+            <div class="contact-text">
+                <span><?=$block->escapeHtml(__('ALTERNATE CONTACT PERSON'))?></span>
+            </div>
+            <div class="contact-info">
+            <div>
+                <span><?=$quote->getData('customer_firstname') . ' ' . $quote->getData('customer_lastname');?></span>
+            </div>
+            <div>
+                <span><?=$quote->getData('customer_email');?></span>
+            </div>
+            <div>
+                <span><?=$block->getFormattedPhone($quote->getData('customer_telephone'));?></span>
+            </div>
+            </div>
+        <?php endif;?>
+    <?php endif;?>
+</div>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex_okta" translate="label" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>OKTA</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_OKTA::settings</resource>
+            <group id="backend" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Admin Users OKTA integration</label>
+                <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b_1949452_okta_enhanced_logging" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Enable OKTA Enhanced Logging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="client_id" type="obscure" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="client_secret" type="obscure" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Client Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="domain" type="text" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Base Domain</label>
+                </field>
+                <field id="redirect_uri" type="text" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Redirect URI</label>
+                    <comment><![CDATA[URI value up until GET parameter values Default: oauth2/code/okta/]]></comment>
+                </field>
+                <field id="scope" type="text" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Scope</label>
+                    <comment><![CDATA[Authorize request scope parameter Default values: openid profile email groups]]></comment>
+                </field>
+                <field id="state" type="text" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>State</label>
+                    <comment>Authorize request state parameter. Default value: okta_sso</comment>
+                </field>
+                <field id="response_mode" type="text" translate="label" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Response Mode</label>
+                    <comment>Authorize request response mode parameter. Default value: form_post</comment>
+                </field>
+                <field id="response_type" type="text" translate="label" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Response Type</label>
+                    <comment>Authorize request response mode parameter. Default value: code</comment>
+                </field>
+                <field id="roles" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Roles</label>
+                    <frontend_model>Fedex\OKTA\Block\Adminhtml\Form\Field\Role</frontend_model>
+                    <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
+

@@ -1,0 +1,219 @@
+<?php
+
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$fxocmViewModel = $block->getData("fxo_cm_view_model");
+$isIframeSdkEnable = $fxocmViewModel == null ? null : $fxocmViewModel->isIframeSdkEnable();
+$FXOCMBaseUrl = $fxocmViewModel->getBaseUrl();
+$FXOCMClientId = $fxocmViewModel->getClientId();
+$fedexAccountNumber = $fxocmViewModel->getFedexAccountNumber();
+$redirectUrl = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+$itemData = [];
+$newProduct = "";
+$configuratorType = "VISUALIZE";
+$eproUnableToAddInBranchProductToCartToggle = $fxocmViewModel->eproUnableToAddInBranchProductToCartToggle();
+?>
+<div class="iframe_popup_preview_catalog" id="iframe_popup_preview_catalog" style="display:none">
+    <div class="container-page">
+        <div id="iframe_container_preview_catalog">
+            <div class="loading">
+                <div class="lds-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <h3 class="iframe_text"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'Fedex_FXOCMConfigurator/js/configuratorscript'
+    ], function($, configuratorFunction) {
+        $(document).ready(function() {
+
+            $(document).on('click', '.action_kebab_right_item_preview', function() {
+                var selectedProductSku = false;
+                $('.product-item-checkbox:checked').each(function() {
+                    selectedProductSku = $(this).attr('data-item-sku');
+                });
+                if (selectedProductSku) {
+                    initiatePreview(selectedProductSku, true);
+                }
+            });
+            $(document).on('click', '.preview-image-container', function() {
+                if ($(this).parents('.isPendingReview').length > 0) {
+                    return;
+                }
+                var itemSku = $(this).attr('datasku');
+                var datashowpreview = $(this).attr('datashowpreview');
+                if($(this).hasClass("preview-livesearch")) {
+                    itemSku = $(this).attr('data-sku');
+                    datashowpreview = $(this).attr('data-showpreview');
+                    var btnAddtoCartLabel = $(this).parents('a').find('.btn-product-cta').html();
+                    if(btnAddtoCartLabel != "" && (btnAddtoCartLabel.toLowerCase() == "add to cart" || btnAddtoCartLabel.toLowerCase() == "customize"))
+                    {
+                        datashowpreview = "1";
+                    }
+                }
+                initiatePreview(itemSku, datashowpreview);
+            });
+
+            function initiatePreview(itemSku, datashowpreview) {
+                if (itemSku && datashowpreview) {
+                    $('#iframe_container_preview_catalog iframe').remove();
+                    var postUrl = "<?php echo $block->getUrl() . 'catalogmvp/index/rightPanel?itemsku=' ?>" + itemSku;
+                    var eproUnableToAddInBranchProductToCartToggle = "<?php echo $eproUnableToAddInBranchProductToCartToggle; ?>"
+                    $.ajax({
+                        url: postUrl,
+                        type: 'GET',
+                        showLoader: true,
+                        dataType: 'json',
+                        complete: function(response) {
+                            if (response.responseText !== undefined) {
+                                var responseObj = JSON.parse(response.responseText);
+                                var externalProd = JSON.parse(responseObj.external_prod);
+                                var contentAssociation = externalProd.contentAssociations;
+                                if (eproUnableToAddInBranchProductToCartToggle == 1) {
+                                    if (contentAssociation.length > 0 ) {
+                                        $(".loading-mask").hide();
+                                        if (responseObj && responseObj.external_prod !== undefined) {
+                                            var productJson = JSON.parse(responseObj.external_prod);
+                                            var addTOCartText = "ADD TO CART";
+                                            var redirectUrl = "";
+                                            var catalogDescription = responseObj.catalog_description;
+                                            var catalogTags = JSON.parse(responseObj.related_keywords);
+                                            if(responseObj.customizable == "1") {
+                                                addTOCartText = "CUSTOMIZE";
+                                                redirectUrl = "<?php echo $block->getUrl() . 'catalogmvp/configurator/index?sku=' ?>" + itemSku + "&configurationType=customize";
+                                            }
+                                            
+                                            var configData = {
+                                                "FXOCMBaseUrl": "<?= $block->escapeUrl($FXOCMBaseUrl) ?>",
+                                                "FXOCMClientId": "<?= $block->escapeJs($FXOCMClientId) ?>",
+                                                "sku": itemSku,
+                                                "configuratorType": "<?= $block->escapeJs($configuratorType) ?>",
+                                                "product": productJson,
+                                                "uploadToQuoteData": {},
+                                                "fedexAccountNumber": "<?= $block->escapeJs($fedexAccountNumber) ?>",
+                                                "newProduct": "false",
+                                                "enableUploadToQuote": "false",
+                                                "redirectUrl": redirectUrl,
+                                                "fromCatalogPreview": "true",
+                                                "useNewDocumentApi": "true",
+                                                "addToCartCTAText": addTOCartText,
+                                                'catalogDescription' : catalogDescription,
+                                                'catalogTags': catalogTags,
+                                                'isPreviewVISUALIZE': "true"
+                                            };
+                                            $("#iframe_container_preview_catalog").css("display", "block");
+                                            var modalOptions = {
+                                                type: 'popup',
+                                                responsive: false,
+                                                innerScroll: false,
+                                                buttons: [],
+                                                modalClass: 'preview-model-class'
+                                            };
+
+                                            // Open modal popup
+                                            $('#iframe_popup_preview_catalog').modal(modalOptions, $('#iframe_popup_preview_catalog')).modal('openModal');
+                                            $(".modals-wrapper .preview-model-class .modal-inner-wrap").css("width", "95% !important;");
+                                            $(".modals-wrapper .preview-model-class .modal-inner-wrap").css("height", "auto");
+
+                                            // Call configurator js with specific config for the item
+                                            configuratorFunction(configData);
+                                        }
+                                    }
+                                } else {
+                                    $(".loading-mask").hide();
+                                    if (responseObj && responseObj.external_prod !== undefined) {
+                                            var productJson = JSON.parse(responseObj.external_prod);
+                                            var addTOCartText = "ADD TO CART";
+                                            var redirectUrl = "";
+                                            var catalogDescription = responseObj.catalog_description;
+                                            var catalogTags = JSON.parse(responseObj.related_keywords);
+                                            if(responseObj.customizable == "1") {
+                                                addTOCartText = "CUSTOMIZE";
+                                                redirectUrl = "<?php echo $block->getUrl() . 'catalogmvp/configurator/index?sku=' ?>" + itemSku + "&configurationType=customize";
+                                            }
+                                            
+                                            var configData = {
+                                                "FXOCMBaseUrl": "<?= $block->escapeUrl($FXOCMBaseUrl) ?>",
+                                                "FXOCMClientId": "<?= $block->escapeJs($FXOCMClientId) ?>",
+                                                "sku": itemSku,
+                                                "configuratorType": "<?= $block->escapeJs($configuratorType) ?>",
+                                                "product": productJson,
+                                                "uploadToQuoteData": {},
+                                                "fedexAccountNumber": "<?= $block->escapeJs($fedexAccountNumber) ?>",
+                                                "newProduct": "false",
+                                                "enableUploadToQuote": "false",
+                                                "redirectUrl": redirectUrl,
+                                                "fromCatalogPreview": "true",
+                                                "useNewDocumentApi": "true",
+                                                "addToCartCTAText": addTOCartText,
+                                                'catalogDescription' : catalogDescription,
+                                                'catalogTags': catalogTags,
+                                                'isPreviewVISUALIZE': "true"
+                                            };
+                                            $("#iframe_container_preview_catalog").css("display", "block");
+                                            var modalOptions = {
+                                                type: 'popup',
+                                                responsive: false,
+                                                innerScroll: false,
+                                                buttons: [],
+                                                modalClass: 'preview-model-class'
+                                            };
+
+                                            // Open modal popup
+                                            $('#iframe_popup_preview_catalog').modal(modalOptions, $('#iframe_popup_preview_catalog')).modal('openModal');
+                                            $(".modals-wrapper .preview-model-class .modal-inner-wrap").css("width", "95% !important;");
+                                            $(".modals-wrapper .preview-model-class .modal-inner-wrap").css("height", "auto");
+
+                                            // Call configurator js with specific config for the item
+                                            configuratorFunction(configData);
+                                        }
+                                }
+                            }
+                        },
+                        error: function(xhr, status, errorThrown) {
+                            console.log('Error happens. Try again.');
+                            $(".loading-mask").hide();
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+<style>
+    .preview-image-container {
+        cursor: pointer;
+    }
+    .modals-wrapper .preview-model-class .action-close{
+        z-index: 1000;
+    }
+    .grid.checkox-section-td a.preview-image-container {
+        padding: 0px !important;
+        margin: 0px !important;
+    }
+    .modals-wrapper .preview-model-class .modal-inner-wrap {
+        width:95% !important;
+    }
+    @media only screen and (min-width: 1200px) {
+        .modals-wrapper .preview-model-class .modal-inner-wrap {
+            width:95% !important;
+        }
+    }
+    
+</style>

@@ -1,0 +1,192 @@
+<?php
+
+/**
+ * Custom Configure Product Popup
+ *
+ * @var \Magento\Framework\View\Element\Template $block
+ * @var \Vendor\CatalogMvp\ViewModel\MvpHelper $mvpHelper
+ * @var \Magento\Framework\Escaper $escaper
+ */
+$fxocmViewModel = $block->getData('mvphelper_setting_popup');
+$isE475721ToggleEnabled = $fxocmViewModel->isToggleEnabledForProductAdminCTCE475721();
+
+$productTags = [];
+$noEndDate = '';
+?>
+
+<div id="configure-popup" class="shared-catalog-admin-setting-form-container" style="display:none;">
+    <div class="shared-catalog-form-sub-title">
+        <span class="shared-catalog-form-sub-heading">
+            <?= $escaper->escapeHtml(__('Provide the information you would like to publish to the shared catalog.')); ?>
+        </span>
+    </div>
+
+    <form id="product-config-setting" action="" method="post">
+        <div class="form-div">
+            <div class="field shared-catalog-admin-setting-dropdown">
+                <label for="shared-catalog-admin-setting-dropdown"
+                    class="label"><?= $escaper->escapeHtml(__('Shared Catalog')); ?></label>
+                <div class="control">
+                    <input type="text" id="shared-catalog-input" name="shared-catalog" class="shared-catalog-input"
+                        autocomplete="off"
+                        placeholder="<?= $escaper->escapeHtmlAttr(__('Please select shared catalog')); ?>"
+                        data-validate='{"required":true}' />
+                    <div id="shared-catalog-dropdown"></div>
+                </div>
+            </div>
+
+            <div class="field shared-catalog-admin-setting-name">
+                <label for="shared-catalog-admin-setting-name"
+                    class="label"><?= $escaper->escapeHtml(__('Name')); ?></label>
+                <div class="control">
+                    <input type="text" id="shared-catalog-admin-setting-name" name="name" value=""
+                        class="shared-catalog-input"
+                        placeholder="<?= $escaper->escapeHtmlAttr(__('Please Enter Product Name')); ?>"
+                        data-validate='{"required":true}' disabled />
+                </div>
+            </div>
+
+            <div class="start-end-date">
+                <div class="field shared-catalog-admin-setting-start-date">
+                    <label for="start-date" class="label"><?= $escaper->escapeHtml(__('Start Date')); ?></label>
+                    <div class="control">
+                        <input type="text" id="start-date" name="start-date" value="" class="start-date-input"
+                            placeholder="MM/DD/YYYY 00:00 AM" />
+                    </div>
+                </div>
+
+
+                <div class="field shared-catalog-admin-setting-end-date" style="padding-top: 3px;">
+                    <label for="end-date" class="label"><?= $escaper->escapeHtml(__('End Date')); ?></label>
+                    <div class="control">
+                        <input type="text" id="end-date" name="end-date" value="" class="end-date-input"
+                            placeholder="--" style="margin-top:3px;" disabled />
+                        <div class="control no-end-date"
+                            style="display: flex; justify-content: start; gap:2px; padding-left: 3px;">
+                            <input type="checkbox" id="no-end-date" class="no-end-date-input" name="no-end-date"
+                                checked />
+                            <label for="no-end-date" style="margin-left: 3px;">
+                                <?= $escaper->escapeHtml(__('No End Date')); ?>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="field shared-catalog-admin-setting-description">
+                <label for="description"
+                    class="label"><?= $escaper->escapeHtml(__('Description (Optional)')); ?></label>
+                <div class="control">
+                    <textarea placeholder="Text input" id="description" name="description" rows="4"
+                        class="description-input" maxlength="500"></textarea>
+                    <div id="description-caption">500 characters left </div>
+                </div>
+            </div>
+
+            <div class="field shared-catalog-setting-tag">
+                <label for="name" class="label">Tags (Optional)</label>
+                <div class="control">
+                    <div class="tags-wrapper" id="catalogSettingTagWrapper">
+                        <?php
+                        if (is_array($productTags)) {
+                            foreach ($productTags as $productTag) { ?>
+                                <div class="chips">
+                                    <div class="tag-button">
+                                        <div class="tag-label"><?= $escaper->escapeUrl($productTag); ?></div>
+                                    </div>
+                                </div>
+                            <?php }
+                        }
+                        ?>
+                        <?php if ($productTags): ?>
+                            <input type="text" id="shared-catalog-setting-tag" name="tag"
+                                class="input-text mvp-input-field" />
+                        <?php else: ?>
+                            <input type="text" id="shared-catalog-setting-tag" name="tag" class="input-text mvp-input-field"
+                                placeholder="Text input" />
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="actions">
+                <button type="button"
+                    class="action primary cancel-setting"><?= $escaper->escapeHtml(__('Cancel')); ?></button>
+                <button type="button"
+                    class="action primary continue-setting"><?= $escaper->escapeHtml(__('continue')); ?></button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- fetch folders and select Folder Modal -->
+<div id="folder-popup" class="folder-popup" style="display:none;">
+    <div class="popup-header">
+        <h2><?= $escaper->escapeHtml(__('Add to')) ?></h2>
+    </div>
+    <div class="folder-location-title"><?= $escaper->escapeHtml(__('Folder Location')) ?></div>
+    <div class="field selected-folder">
+        <input type="text" id="selected-folder" class="input-text"
+            placeholder="<?= $escaper->escapeHtml(__('Shared Catalog')) ?>" readonly />
+
+        <div class="popup-content">
+            <div class="field">
+                <input type="text" id="folder-search" class="input-text"
+                    placeholder="<?= $escaper->escapeHtml(__('Search folders...')) ?>" />
+            </div>
+            <div class="select-folder-tree">
+                <div class="shared-catalog-title"><?= $escaper->escapeHtml(__('Shared Catalog')) ?></div>
+                <div id="folder-tree" class="folder-tree">
+                    <!-- Folder hierarchy will be rendered here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="folder-actions">
+        <button type="button" id="create-folder"><?= $escaper->escapeHtml(__('+ Create New Folder')) ?></button>
+        <button type="button" id="folder-cancel"
+            class="action-secondary"><?= $escaper->escapeHtml(__('Cancel')) ?></button>
+        <button type="button" id="folder-save" class="action-primary"><?= $escaper->escapeHtml(__('Save')) ?></button>
+    </div>
+</div>
+
+<!-- Create New Folder Modal -->
+<div id="create-folder-modal" class="folder-popup" style="display:none;">
+    <div class="popup-header">
+        <h2><?= $escaper->escapeHtml(__('Create New Folder')) ?></h2>
+    </div>
+    <div class="folder-location-title"><?= $escaper->escapeHtml(__('Folder Name')) ?></div>
+    <div class="field create-folder-main">
+        <input type="text" id="new-folder-name" class="input-text"
+            placeholder="<?= $escaper->escapeHtml(__('Enter folder name')) ?>" />
+        <div class="popup-content">
+            <div class="field">
+                <label><?= $escaper->escapeHtml(__('Folder Location')) ?></label><br />
+                <input type="text" id="parent-folder-selected" class="input-text"
+                    placeholder="<?= $escaper->escapeHtml(__('Shared Catalog')) ?>" readonly />
+            </div>
+            <div class="shared-catalog-title"><?= $escaper->escapeHtml(__('Shared Catalog')) ?></div>
+
+            <div id="parent-folder-tree" class="folder-tree">
+                <!-- Folder hierarchy for parent selection (no search) -->
+            </div>
+        </div>
+
+    </div>
+    <div class="folder-actions">
+        <button type="button" id="create-folder-cancel"
+            class="action-secondary"><?= $escaper->escapeHtml(__('Cancel')) ?></button>
+        <button type="button" id="create-folder-confirm" class="action-primary"
+            disabled><?= $escaper->escapeHtml(__('Create Folder')) ?></button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    window.sharedCatalogsUrl = "<?= $block->getUrl('catalogmvp/catalog/getsharedcatalogs', ['type' => 'catalogs']) ?>";
+    window.discountNumberUrl = "<?= $block->getUrl('catalogmvp/catalog/getsharedcatalogs', ['type' => 'discountNumber']) ?>";
+    window.categoriesUrl = "<?= $block->getUrl('catalogmvp/catalog/getsharedcatalogs', ['type' => 'categories']) ?>";
+    window.createCategoriesUrl = "<?= $block->getUrl('catalogmvp/catalog/getsharedcatalogs', ['type' => 'create_categories']) ?>";
+    window.isE475721ToggleEnabled = <?= $isE475721ToggleEnabled ? 'true' : 'false' ?>;
+</script>

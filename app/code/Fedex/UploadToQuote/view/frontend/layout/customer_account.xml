@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="columns">
+            <block name="upload_to_quote_customer_account" template="Fedex_UploadToQuote::upload_to_quote_customer_account_script.phtml" />
+        </referenceContainer>
+        <referenceBlock name="customer-account-navigation-quotes-link">
+            <arguments>
+                <argument name="path" xsi:type="helper" helper="Fedex\UploadToQuote\ViewModel\QuoteHistory::myQuotesAccountNavigationUrl"></argument>
+                <argument name="label" xsi:type="string" translate="true">My Quotes</argument>
+                <argument name="sortOrder" xsi:type="number">201</argument>
+                <argument name="attributes" xsi:type="array">
+                <item name="class" xsi:type="string">my-quotes-epro-sidebar</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="account-and-credit-cards-link">
+            <arguments>
+                <argument name="attributes" xsi:type="array">
+                    <item name="class" xsi:type="string">profile-accounts-and-credit-cards-link</item>
+                </argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

@@ -1,0 +1,342 @@
+<!-- B-1473302 -->
+<ul class="no-disk">
+    <li id="payment" class="checkout-payment-method" data-bind="fadeVisible: isVisible()">
+        <div role="dialog" class="api-error-hide error-container checkout-error absolute bg-cl-white d-flex mx-auto hide">
+            <div class="icon d-flex d-no-shrink v-center">
+                <img alt="Error icon" data-bind="attr: { src: crossUrl}"></img>
+            </div>
+            <div tabindex="0" class="error-response fs-14 lh-24">
+                <div class="error-title cl-error fedex-bold"></div>
+                <div class="error-details cl-stonegray"></div>
+                <div class="error-transaction cl-stonegray"></div>
+            </div>
+            <div class="ml-auto d-no-shrink">
+                <button class="img-close-pop mt-15 p-0" aria-label="Close error message"
+                        data-testid="checkout-review-and-submit-button-close-icon">
+                    <img class="close-image" data-bind="attr: { src: crossIcon}" alt="Close icon"></img>
+                </button>
+            </div>
+        </div>
+        <div id="checkout-step-payment" class="step-content review-order-step" data-role="content" role="tabpanel"
+             aria-hidden="false">
+            <!-- ko if: (quoteIsVirtual) -->
+            <!-- ko foreach: getRegion('customer-email') -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+            <!--/ko-->
+            <!--/ko-->
+
+            <h1 class="review-heading">Review and submit</h1>
+            <!-- ko if: isExpectedDeliveryDateEnabled() && !onlyNonCustomizableCart() -->
+            <p class="review-cancellation-message" data-bind="text: cancellationMessage()"></p>
+            <!-- /ko -->
+            <hr class="line">
+
+            <!--- Delivery Step Start-->
+            <!-- ko if: isDelivery() -->
+            <div class="review-order-read-only">
+                <div class="header-section">
+                    <img alt="Green success checkmark" data-bind="attr: {src: greenCheckUrl}" class="green-check"/>
+                </div>
+                <div class="header-section">
+                    <h2 class="heading">Contact information</h2>
+                </div>
+                <div class="header-section edit hidden-xs">
+                    <button
+                            class="edit_buttton edit_pickup"
+                            data-bind="click: onEditContactInformation"
+                            data-testid="checkout-review-and-submit-button-edit-pickup-contact-if-delivery-hidden-xs"
+                    >
+                        Edit
+                    </button>
+                </div>
+            </div>
+
+            <div class="recipient-read-only">
+                <!-- ko if: isXmenD177346Fix() -->
+                <!-- ko ifnot: isAlternateFlag() -->
+                <h3 class="body-heading">Contact person</h3>
+                <div data-bind="text: contactInformation().contact_fname +' '+ contactInformation().contact_lname"></div>
+                <div data-bind="text: contactInformation().contact_email"></div>
+                <div data-bind="text: contactInformation().contact_number  + ' ' + contactInformation().contact_ext"></div>
+                <!--/ko-->
+
+                <!-- ko if: isAlternateFlag()-->
+                <div class="contact-alternate">
+                    <h3 class="body-heading">Contact person</h3>
+                    <div data-bind="text: contactInformation().alternate_fname +' '+ contactInformation().alternate_lname">
+                    </div>
+                    <div data-bind="text: contactInformation().alternate_email"></div>
+                    <div>
+                        <span data-bind="text: contactInformation().alternate_number + ' ' + contactInformation().alternate_ext"></span>
+                    </div>
+                </div>
+                <!--/ko-->
+                <!--/ko-->
+
+                <!-- ko ifnot: isXmenD177346Fix() -->
+                <!-- ko ifnot: contactInformation().isAlternatePerson -->
+                <h3 class="body-heading">Contact person</h3>
+                <div data-bind="text: contactInformation().contact_fname +' '+ contactInformation().contact_lname"></div>
+                <div data-bind="text: contactInformation().contact_email"></div>
+                <div data-bind="text: contactInformation().contact_number  + ' ' + contactInformation().contact_ext"></div>
+                <!--/ko-->
+
+                <!-- ko if: contactInformation().isAlternatePerson -->
+                <div class="contact-alternate">
+                    <h3 class="body-heading">Contact person</h3>
+                    <div data-bind="text: contactInformation().alternate_fname +' '+ contactInformation().alternate_lname">
+                    </div>
+                    <div data-bind="text: contactInformation().alternate_email"></div>
+                    <div>
+                        <span data-bind="text: contactInformation().alternate_number + ' ' + contactInformation().alternate_ext"></span>
+                    </div>
+                </div>
+                <!--/ko-->
+                <!--/ko-->
+
+                <div class="edit visible-xs">
+                    <button
+                            aria-label="Edit pickup contact"
+                            class="edit_buttton edit_pickup"
+                            data-bind="click: onEditContactInformation"
+                            data-testid="checkout-review-and-submit-button-edit-pickup-contact-if-delivery-visible-xs"
+                    >
+                        Edit
+                    </button>
+                </div>
+            </div>
+            <div data-bind="visible: isDelivery()" class="review-order-shipping-step">
+                <div class="review-order-read-only">
+                    <div class="header-section">
+                        <img alt="Green success checkmark" data-bind="attr: { src: greenCheckUrl}" class="green-check"/>
+                    </div>
+                    <div class="header-section">
+                        <h2 class="heading">Shipping information</h2>
+                    </div>
+                    <div class="header-section edit payment_edit_buttton hidden-xs">
+                        <button class="edit_buttton" aria-label="Edit shipping address"
+                                data-bind="click: onEditShipping"
+                                data-testid="checkout-review-and-submit-button-edit-shipping-address-hidden-xs">Edit
+                        </button>
+                    </div>
+                </div>
+                <!-- ko if: shippingAddress() -->
+                <div class="recipient-read-only">
+                    <h3 class="body-heading">Address</h3>
+                    <div>
+                        <span data-bind="text: shippingAddress().street[0] + ', ' "></span>
+                        <!-- ko if: Boolean(shippingAddress().street[1]) -->
+                        <span data-bind="text: shippingAddress().street[1] + ', ' "></span>
+                        <!-- /ko -->
+                        <span data-bind="text: shippingAddress().city + ', ' + stateOrProvinceCode() + ', ' + shippingAddress().postcode"></span>
+                    </div>
+
+                    <!-- ko if: shippingAddress().customAttributes.length == 1 -->
+                    <div data-bind="text: shippingAddress().telephone"></div>
+                    <!-- /ko -->
+
+                    <h3 class="body-heading">Recipient</h3>
+                    <div data-bind="text: shippingAddress().firstname +' '+ shippingAddress().lastname"></div>
+                    <div data-bind="text: shippingAddress().customAttributes[0].value"></div>
+                    <div data-bind="text: shippingAddress().telephone + ' ' + shippingAddress().ext_attribute.value"></div>
+
+                    <div class="edit payment_edit_buttton visible-xs">
+                        <button class="edit_buttton" aria-label="Edit shipping address"
+                                data-bind="click: onEditShipping"
+                                data-testid="checkout-review-and-submit-button-edit-shipping-address-visible-xs">Edit
+                        </button>
+                    </div>
+                </div>
+                <!--/ko-->
+            </div>
+            <!--/ko-->
+
+            <!--- Delivery Step End -->
+
+
+            <!--- Pickup Step Start -->
+
+
+            <!-- ko if: !isDelivery() -->
+            <div data-bind="visible: !isDelivery()">
+                <div class="review-order-read-only">
+                    <div class="header-section">
+                        <img alt="Green success checkmark" data-bind="attr: { src: greenCheckUrl}" class="green-check"/>
+                    </div>
+                    <div class="header-section">
+                        <h2 class="heading">Contact information</h2>
+                    </div>
+                    <div class="header-section edit hidden-xs">
+                        <button class="edit_buttton edit_pickup" data-bind="click: goToPickupBreadcrumb"
+                                data-testid="checkout-review-and-submit-button-edit-pickup-contact-hidden-xs">Edit
+                        </button>
+                    </div>
+                </div>
+                <!-- ko if: pickupContactInformation() -->
+                <div class="recipient-read-only">
+                    <h3 class="body-heading">Contact Person</h3>
+                    <div
+                            data-bind="text: pickupContactInformation().contact_fname +' '+ pickupContactInformation().contact_lname">
+                    </div>
+                    <div data-bind="text: pickupContactInformation().contact_email"></div>
+                    <div>
+                        <span data-bind="text: maskTelephoneUsaFormat(pickupContactInformation().contact_number_pickup) + ' ' + pickupContactInformation().contact_ext"></span>
+                    </div>
+                    <div class="contact-alternate">
+                        <!-- ko if: pickupContactInformation().isAlternatePerson -->
+                        <h3 class="body-heading estimated-pickup-time-title">Alternate Pickup Person</h3>
+                        <div data-bind="text: pickupContactInformation().alternate_fname +' '+ pickupContactInformation().alternate_lname">
+                        </div>
+                        <div data-bind="text: pickupContactInformation().alternate_email"></div>
+                        <div data-bind="text: maskTelephoneUsaFormat(pickupContactInformation().alternate_number) + ' ' + pickupContactInformation().alternate_ext"></div>
+                        <!--/ko-->
+                    </div>
+                    <div class="edit visible-xs">
+                        <button class="edit_buttton edit_pickup" data-bind="click: goToPickupBreadcrumb"
+                                data-testid="checkout-review-and-submit-button-edit-pickup-contact-visible-xs">Edit
+                        </button>
+                    </div>
+                </div>
+                <!-- ko if: pickupAddressInformation() -->
+                <div class="review-order-method">
+                    <div class="review-order-read-only">
+                        <div class="header-section">
+                            <img alt="Green success checkmark" data-bind="attr: { src: greenCheckUrl}"
+                                 class="green-check"/>
+                        </div>
+                        <div class="header-section">
+                            <h2 class="heading">Pickup location</h2>
+                        </div>
+                        <div class="header-section edit hidden-xs">
+                            <button aria-label="Edit pickup location" class="edit_buttton edit_pickup_location"
+                                    data-bind="click: goToPickupBreadcrumb"
+                                    data-testid="checkout-review-and-submit-button-edit-pickup-location-hidden-xs">Edit
+                            </button>
+                        </div>
+                    </div>
+                    <div class="recipient-read-only">
+                        <h3 class="body-heading">FedEx Office Print & ship</h3>
+                        <div
+                                data-bind="text: pickupAddressInformation().pickup_location_street +', '+ pickupAddressInformation().pickup_location_city +', '+ pickupAddressInformation().pickup_location_state+', '+ pickupAddressInformation().pickup_location_zipcode">
+                        </div>
+                        <!-- ko if: hcoLocationSelect() -->
+                        <div class="hco-location-message">The location you have selected is within a hotel or convention
+                            center. Higher rates may apply to products and services.
+                        </div>
+                        <!--/ko-->
+                        <h3 class="body-heading estimated-pickup-time-title">Estimated pickup time</h3>
+                        <div data-bind="text: pickupDateTime()" class="pickup-date-time"></div>
+
+                        <div class="edit visible-xs">
+                            <button
+                                    class="edit_buttton edit_pickup_location"
+                                    data-bind="click: goToPickupBreadcrumb"
+                                    data-testid="checkout-review-and-submit-button-edit-pickup-location-visible-xs"
+                            >
+                                Edit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--/ko-->
+                <!--/ko-->
+            </div>
+            <!--/ko-->
+
+            <!--- Pickup Step End -->
+
+            <!--- Payment Step Start -->
+
+            <hr class="line">
+
+            <div class="review-order-payment-step">
+                <div class="review-order-read-only">
+                    <div class="header-section">
+                        <img alt="Green success checkmark" data-bind="attr: { src: greenCheckUrl}" class="green-check"/>
+                    </div>
+                    <div class="header-section">
+                        <h2 class="heading">Payment</h2>
+                    </div>
+                    <div class="header-section edit hidden-xs">
+                        <button aria-label="Edit payment" class="edit_buttton"
+                                data-bind="click: onEditPayment"
+                                data-testid="checkout-review-and-submit-button-edit-payment-hidden-xs">Edit
+                        </button>
+                    </div>
+                </div>
+                <div class="recipient-read-only" data-bind="visible: paymentStepData()">
+                    <h3 class="body-heading">Payment Method</h3>
+                    <!-- ko if: isCreditCardSelected() -->
+                    <div class="pay-by-card-container">
+                        <div class="card-heading">Pay by credit card</div>
+                        <div class="credit-card">
+                            <img alt="Credit card icon" data-bind="attr: { src: cardIcon}" class="icon"/>
+                            <div class="card-number-ending">ending in</div>
+                            <span class="card-number-ending ml-30" data-bind="text: creditCardNumber()"></span>
+                        </div>
+                        <div class="credit-card-info"></div>
+                        <br>
+                        <!-- ko if: paymentStepData() -->
+                        <h3 class="body-heading">Billing Address</h3>
+                        <!-- ko if: isBillingAddress() -->
+                        <!-- ko if: !isSiteCreditCardUsed()-->
+                        <div data-bind="text: paymentStepData().nameOnCard"></div>
+                        <!-- /ko -->
+                        <div data-bind="text: paymentStepData().billingAddress.company"></div>
+                        <div data-bind="text: paymentStepData().billingAddress.address"></div>
+                        <div data-bind="text: paymentStepData().billingAddress.addressTwo"></div>
+                        <div
+                                data-bind="text: paymentStepData().billingAddress.city +', '+ paymentStepData().billingAddress.state +' '+ paymentStepData().billingAddress.zip">
+                        </div>
+                        <!-- /ko -->
+
+                        <!-- ko if: !isBillingAddress() -->
+                        <div
+                                data-bind="text: paymentStepData().billingAddress.firstname + ' ' + paymentStepData().billingAddress.lastname">
+                        </div>
+                        <div data-bind="text: paymentStepData().billingAddress.street[0]"></div>
+                        <div data-bind="text: paymentStepData().billingAddress.street[1]"></div>
+                        <div
+                                data-bind="text: paymentStepData().billingAddress.city +', '+ stateOrProvinceCode() +' '+ paymentStepData().billingAddress.postcode">
+                        </div>
+                        <!-- ko if: paymentStepData().billingAddress.countryId === 'US' -->
+                        <div data-bind="i18n: 'United States of America'"></div>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+
+                    <!-- ko if: !isCreditCardSelected() -->
+                    <div class="pay-by-account-container">
+                        <div class="card-heading">Pay by FedEx Office Print Account</div>
+                        <div class="card-number-ending ml-0" data-bind="text: fedexAccountNumber()"></div>
+                    </div>
+                    <!-- /ko -->
+                    <div class="edit visible-xs">
+                        <button
+                                aria-label="Edit payment"
+                                class="edit_buttton"
+                                data-bind="click: onEditPayment"
+                                data-testid="checkout-review-and-submit-button-edit-payment-no-credit-card-selected-hidden-xs"
+                        >
+                            Edit
+                        </button>
+                    </div>
+                </div>
+                <!--  Payment Step End-->
+
+                <hr class="line">
+            </div>
+
+            <!-- Campaign Ad Review Start -->
+
+            <!-- ko foreach: getRegion('campaign-ad-review') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+
+            <!-- Campaign Ad Review End -->
+        </div>
+    </li>
+</ul>

@@ -1,0 +1,40 @@
+<script type="text/javascript">
+    require(['jquery', 'mage/url', 'Magento_Customer/js/customer-data',
+        window.d198297_toggle ? 'Fedex_Base/js/localstorage-compress' : 'domReady!'
+    ], function($, url, customerData, tmp) {
+
+        if (
+            window.d198297_toggle &&
+            typeof(tmp) == 'undefined'
+        ){
+            require(['Fedex_Base/js/localstorage-compress'], function(localStorageCompress) {
+                localStorageCompress.initialize()
+            });
+        }
+
+        $(document).ready(function() {
+            let guestOrderId = localStorage.getItem('guestOrderId');
+            const mageCacheStorage = window.localStorage.getItem('mage-cache-storage');
+            if (
+                !mageCacheStorage ||
+                mageCacheStorage.charAt(0) !== '{'
+            ) {
+                return;
+            }
+            var storagecustomerdata = JSON.parse(mageCacheStorage);
+            if ((typeof storagecustomerdata.customer?.fullname === 'undefined') && guestOrderId) {
+                $.ajax({
+                    url: url.build('fcl/order/Associate'),
+                    type: 'POST',
+                    data: { orderId: guestOrderId },
+                    success: function(response) {
+                        if (response.success) {
+                            localStorage.removeItem('guestOrderId');
+                            window.location.href = url.build('sales/order/history');
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

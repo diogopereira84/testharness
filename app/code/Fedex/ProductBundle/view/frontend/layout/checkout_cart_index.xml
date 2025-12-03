@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="top.container">
+            <block class="Magento\Framework\View\Element\Template" name="checkout.cart.order.bundle.success"
+                   template="Fedex_ProductBundle::cart/order/bundle-setup-completed-toast.phtml"
+                   ifconfig="environment_toggle_configuration/environment_toggle/tiger_e468338">
+                <arguments>
+                    <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+
+        <referenceBlock name="checkout.cart.order.actions">
+            <block class="Magento\Framework\View\Element\Template" name="checkout.cart.order.bundle.modal"
+                   template="Fedex_ProductBundle::cart/order/bundle-instructions-modal.phtml">
+                <arguments>
+                    <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="cart.summary.actions">
+            <arguments>
+                <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.simple">
+            <arguments>
+                <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.default.actions.remove">
+            <arguments>
+                <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="checkout.cart.item.renderers.simple.actions.remove">
+            <arguments>
+                <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+            </arguments>
+        </referenceBlock>
+    </body>
+</page>

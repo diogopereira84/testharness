@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <!-- B-1136363 | Print Order Receipt - Delivery  -->
+            <block class="Magento\Sales\Block\Order\PrintShipment"
+                name="sales.order.print"
+                template="Fedex_Orderhistory::order/view.phtml"
+                cacheable="false">
+                <arguments>
+                    <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                </arguments>
+                <block class="Magento\Sales\Block\Order\Items" name="order_items" template="Fedex_Orderhistory::order/items.phtml">
+                    <arguments>
+                        <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                    </arguments>
+                    <block class="Magento\Framework\View\Element\RendererList" name="sales.order.print.renderers" as="renderer.list" />
+                    <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Fedex_Orderhistory::order/totals.phtml">
+                        <arguments>
+                            <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                            <argument name="order_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderView</argument>
+                            <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
+                            <argument name="value_properties" xsi:type="string">class="amount"</argument>
+                        </arguments>
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml">
+                            <action method="setIsPlaneMode">
+                                <argument name="value" xsi:type="string">1</argument>
+                            </action>
+                        </block>
+                    </block>
+                </block>
+            </block>
+            <block class="Fedex\Orderhistory\Block\Order\RetailPrintShipment" as="sales.order.print.retail" name="sales.order.print.retail">
+                <arguments>
+                    <argument name="productinfo_handler_view_model"
+                              xsi:type="object">
+                        Fedex\Cart\ViewModel\ProductInfoHandler
+                    </argument>
+                    <argument name="order_enhancement_view_model"
+                            xsi:type="object">
+                        Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement
+			        </argument>
+                    <!-- B-1316868 : Fix the estimated total and estimated Shipping total on Order  history and print order screens -->
+                    <argument name="orderview_view_model"
+                              xsi:type="object">
+                        Fedex\Orderhistory\ViewModel\OrderView
+                    </argument>
+                </arguments>
+            </block>
+            <block class="Magento\Sales\Block\Order\Info" as="sales.order.print.info" name="sales.order.print.info" template="Fedex_Orderhistory::order/info.phtml">
+                <arguments>
+                    <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                    <argument name="order_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderView</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

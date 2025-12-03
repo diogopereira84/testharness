@@ -1,0 +1,24 @@
+<?php
+
+/**
+ * Copyright © FedEx. All rights reserved.
+ */
+/** @var \Fedex\MarketplacePunchout\ViewModel\Notification $notification */
+$notification = $block->getData('view_model');
+
+?>
+
+<script type="text/x-magento-init">
+    {
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "seller-notification-scope": {
+                    "component": "Fedex_MarketplacePunchout/js/mkt-seller-notification",
+                    "toast_message": "<?= $notification->getMarketplaceMessage() ?>"
+                }
+            }
+        }
+    }
+}
+</script>

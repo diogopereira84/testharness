@@ -1,0 +1,176 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var  $block \Magento\NegotiableQuote\Block\Quote\Comments */
+?>
+<?php
+$disable = !$block->canEdit() ? ' _disabled' : '';
+
+$msgChanged = $escaper->escapeHtmlAttr(__('The information in this tab has been changed.'));
+$msgError = $escaper->escapeHtmlAttr(__('This tab contains invalid data. Please resolve this before saving.'));
+$msgLoader = $escaper->escapeHtmlAttr(__('Loading...'));
+
+?>
+<section class="admin__page-section quote-view-shipping">
+    <div class="admin__page-section-content">
+        <div class="admin__page-section-item admin-quote-comments-history">
+            <div class="product data items quote-details-items" data-mage-init='{"tabs":{}}'>
+                <ul class="tabs-horiz">
+                    <li>
+                        <a href="#specialInstructions" id="grid_tab_new_special_instructions"
+                            title="<?= $escaper->escapeHtmlAttr(__('Special Instructions')) ?>"
+                            class="ui-tabs-anchor" data-tab-type="">
+                            <span>
+                                <span class="changed" title="<?= /* @noEscape */ $msgChanged ?>"></span>
+                                <span class="error" title="<?= /* @noEscape */ $msgError ?>"></span>
+                                <span class="loader" title="<?= /* @noEscape */ $msgLoader ?>"></span>
+                                <?= $escaper->escapeHtml(__('Special Instructions')) ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#comment" id="grid_tab_new_comments"
+                            title="<?= $escaper->escapeHtmlAttr(__('Comments')) ?>"
+                            class="ui-tabs-anchor" data-tab-type="">
+                            <span>
+                                <span class="changed" title="<?= /* @noEscape */ $msgChanged ?>"></span>
+                                <span class="error" title="<?= /* @noEscape */ $msgError ?>"></span>
+                                <span class="loader" title="<?= /* @noEscape */ $msgLoader ?>"></span>
+                                <?= $escaper->escapeHtml(__('Comments')) ?>
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#history" id="grid_tab_new_history"
+                            title="<?= $escaper->escapeHtmlAttr(__('History Log')) ?>"
+                            class="ui-tabs-anchor" data-tab-type="">
+                            <span>
+                                <span class="changed" title="<?= /* @noEscape */ $msgChanged ?>"></span>
+                                <span class="error" title="<?= /* @noEscape */ $msgError ?>"></span>
+                                <span class="loader" title="<?= /* @noEscape */ $msgLoader ?>"></span>
+                                <?= $escaper->escapeHtml(__('History Log')) ?>
+                            </span>
+                        </a>
+                    </li>
+                </ul>
+                <!-- Render Special Instructions Block -->
+                <div class="special-instructions-section">
+                    <?= $block->getChildHtml('special.instructions.block') ?>
+                </div>
+                <div id="comment" class="admin-quote-comment no-display">
+                    <div class="quote-comments-block">
+                        <div class="comments-block-list">
+                            <?php foreach ($block->getQuoteComments() as $comment): ?>
+                                <?php /** @var $comment \Magento\NegotiableQuote\Model\Comment */ ?>
+                                <div class="comments-block-item">
+                                    <span class="comments-block-item-date-time">
+                                        <?= /* @noEscape */ $block->formatDate(
+                                            $comment->getCreatedAt(),
+                                            \IntlDateFormatter::MEDIUM,
+                                            true
+                                        ) ?>
+                                        <?= $escaper->escapeHtml($block->getCommentCreator($comment)) ?>
+                                    </span>
+                                    <div class="comments-block-item-comment">
+                                        <?php if ($comment->getIsDecline()): ?>
+                                            <b class="comments-request-declined">
+                                                <?= $escaper->escapeHtml(__('Request Declined. Reason: ')) ?>
+                                            </b>
+                                        <?php endif ?>
+                                        <?= /* @noEscape */ nl2br($escaper->escapeHtml($comment->getComment())) ?>
+                                    </div>
+                                    <?php $attachments = $block->getCommentAttachments($comment->getEntityId()) ?>
+                                    <?php if ($attachments->count() > 0): ?>
+                                        <div class="attachments-list">
+                                            <?php foreach ($attachments as $file): ?>
+                                                <?php
+                                                /** @var $file \Magento\NegotiableQuote\Model\CommentAttachment */
+                                                ?>
+                                                <span class="attachments-item">
+                                                    <a href="
+                                                    <?= $escaper->escapeUrl(
+                                                        $block->getAttachmentUrl($file->getAttachmentId())
+                                                    ) ?>"
+                                                        title="<?= $escaper->escapeHtmlAttr($file->getFileName()) ?>">
+                                                        <?= $escaper->escapeHtml($file->getFileName()) ?>
+                                                    </a>
+                                                </span>
+                                            <?php endforeach ?>
+                                        </div>
+                                    <?php endif ?>
+                                </div>
+                            <?php endforeach ?>
+                        </div>
+                        <div class="comments-field field-row" data-role="attach-wrapper">
+                            <form action="" data-action="comment-form">
+                                <label class="comments-field-label"
+                                    for="negotiation_comment">
+                                    <?= $escaper->escapeHtml(__('Add your comment')) ?>
+                                </label>
+                                <div class="comments-field-control">
+                                    <textarea name="comment"
+                                        class="negotiation-control-textarea<?= /* @noEscape */ $disable ?>"
+                                        rows="3"
+                                        <?= /* @noEscape */ !$block->canEdit() ? 'disabled' : '' ?>
+                                        cols="5" id="negotiation_comment"><?php
+                                        if ($block->getDraftComment() !== null):
+                                            echo $escaper->escapeHtml($block->getDraftComment()->getComment());
+                                                                            endif ?></textarea>
+                                </div>
+                                <div data-mage-init='{"Magento_NegotiableQuote/js/quote/add-files": {
+                                        "maxSizeB" : "<?= $escaper->escapeJs($block->getMaxFileSize()) ?>",
+                                        "maxSizeMb" : "<?= $escaper->escapeJs($block->getMaxFileSizeMb()) ?>",
+                                        "extensions" : "<?= $escaper->escapeJs($block->getAllowedExtensions()) ?>",
+                                        "modal" : "true"
+                                    }}'
+                                    class="field-attachment<?= /* @noEscape */ $disable ?>"
+                                    data-role="send-files">
+                                    <label data-role="wrap-file"
+                                        data-mage-init='{"Magento_NegotiableQuote/js/quote/add-file": {}}'
+                                        for="add-file-0"
+                                        <?= /* @noEscape */ $block->canEdit() ? 'tabindex="0"' : '' ?>>
+                                        <input name="files[0]"
+                                            data-role="add-file"
+                                            id="add-file-0"
+                                            type="file">
+                                        <?= $escaper->escapeHtml(__('Attach file')) ?>
+                                    </label>
+
+                                </div>
+                                <?= $block->getBlockHtml('formkey') ?>
+                            </form>
+                            <div class="attachments-list" data-role="added-files"></div>
+                            <?php if ($block->getDraftComment()): ?>
+                                <?php $attachments = $block->getCommentAttachments(
+                                    $block->getDraftComment()->getEntityId()
+                                ) ?>
+                                <div class="attachments-list" data-role="history-added-files">
+                                    <?php foreach ($attachments as $file): ?>
+                                        <div class="attachments-item" data-role="attached-item">
+                                            <span><?= $escaper->escapeHtml($file->getFileName()) ?></span>
+                                            <button type="button"
+                                                class="action-delete"
+                                                data-role="delete-button"
+                                                data-action="delete-file"
+                                                data-mage-init='{
+                                                    "Magento_NegotiableQuote/quote/actions/delete-item": {
+                                                        "attachmentId" : "<?= (int) $file->getAttachmentId(); ?>"}}'>
+                                                <span>Delete</span>
+                                            </button>
+                                        </div>
+                                    <?php endforeach ?>
+                                </div>
+                            <?php endif ?>
+                        </div>
+                    </div>
+                </div>
+                <div id="history" class="no-display">
+                    <?= $block->getChildHtml('quote_history') ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

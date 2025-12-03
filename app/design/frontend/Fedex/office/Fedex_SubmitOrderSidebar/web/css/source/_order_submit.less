@@ -1,0 +1,68 @@
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/* B-1415208 : Make terms and conditions mandatory */
+.checkout-index-index {
+    .checkout-agreements {
+        #terms-and-conditions-error {
+            float: left;
+            margin-left: 17px;
+
+            span {
+                &:before {
+                    content: url(../images/icon-error.png);
+                    display: inline-block;
+                    position: relative;
+                    top: 2px;
+                    width: 20px;
+                }
+            }
+        }
+
+        .label.checkout-checkbox {
+            display: inline-block;
+
+            input[type="checkbox"] {
+                top: 0;
+                margin-top: 0;
+            }
+            .checkmark:after {
+                top: 3px;
+                left: 7px;
+            } 
+        }
+        .terms-text-emails {
+            display: flex;
+            flex-direction: column;
+        }
+        .terms-text {
+            font-size: 14px;
+            text-transform: none;
+            position: relative;
+            top: 0;
+        }
+        .checkmark {
+            top: -1px;
+            height: 22px;
+            width: 22px;
+        }
+        .checkout-agreement.field.choice.required {
+            margin: 0px;
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .checkout-index-index {
+        .checkout-agreements {
+            #terms-and-conditions-error {
+                margin-left: 7px;
+            }
+            .checkout-agreement.field.choice.required {
+                margin: 0;
+            }
+        }
+    }
+}

@@ -1,0 +1,4999 @@
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+@import '_retail_history.less';
+@import '_print.less';
+@import '_epro_quote_view_print.less';
+
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    .my-orders-search-advanced {
+        div.mage-error {
+            display: block;
+        }
+    }
+}
+
+.breadcrumbs strong {
+    color:#000;
+}
+.epro-my-orders-search-advanced .fieldset.info .search-sku .control{
+    position: relative;
+    display: inline;
+}
+.epro-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"]{
+    height: 45px;
+    width: 45px;
+    right: 0;
+    border-left: 1px solid #6F7F87;
+}
+.epro-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn,#filter-close-btn){
+    font-family: 'FedEx Sans Bold';
+    border-color: rgb(111, 127, 135);
+    border-radius: 0px;
+    background: rgb(255, 255, 255);
+    text-transform: uppercase;
+    height: 45px;
+    font-size: 19px;
+    padding: 0 25px;
+    letter-spacing: 1.188px;
+}
+.epro-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn,#filter-close-btn) img{
+    width: 20px;
+    vertical-align: bottom;
+    margin-right: 5px;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search {
+    background: #F7F9FA;
+    padding: 30px;
+    margin-top: 15px;//D-93805
+}
+.epro-order-history-reorder.sales-order-history.page-layout-1column .epro-my-orders-search-advanced .filter-summary {
+    display: none !important;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+    display: flex;
+    justify-content: space-between;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div{
+    width: 31%;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field .label{
+    font-weight: 700;
+    font-size: 12px;
+    color: @fx-grey-500;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+
+.epro-my-orders-search-advanced .control input.input-text {
+    font-size: 15px !important;
+    height: 45px !important;
+    width: 100%;
+}
+/* B-1130641 */
+.epro-my-orders-search-advanced .control #product-name-sku{
+  width: 65% !important;
+  float:left; //D-98256 Error message is not coming correctly on every environment
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary{
+    background: @fx-white-100;
+    border-color: #0078B4;
+    border-radius: 0;
+    height: 45px;
+    padding: 0 30px;
+    text-transform: uppercase;
+    color: #0078B4;
+    font-size: 16px;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary-retail{
+    background: @fx-orange-500;
+    border-color: @fx-orange-500;
+    padding: 0 30px;
+    height: 45px;
+    font-size: 16px;
+    margin-left: 15px !important;
+    color: @fx-white-100;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.primary{
+  background: #0078B4;
+  border-color: #0078B4;
+  padding: 0 30px;
+  height: 45px;
+  font-size: 16px;
+  margin-left: 10px !important;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar{
+    margin-right: 0;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field #order-status{
+    height: 45px;
+    border-color: #6F7F87;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field .range.fields{
+    position: relative;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field .range.fields img{
+    position: absolute;
+    width: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    cursor: pointer;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .range.fields.d-flex{
+    justify-content: space-between;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .control .sub-label{
+    margin: 0 10px 0 0;
+    text-transform: uppercase;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .field-order-total{
+    width: 47%;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .control{
+    align-items: center;
+}
+.epro-my-orders-search-advanced{
+    margin-bottom: 30px;
+}
+.epro-my-orders-search-advanced .filter-summary ul{
+    border-bottom: 1px solid #cccccc;
+}
+.epro-order-history ~ .page-wrapper .column.main{
+    width: 100% !important;
+}
+.epro-order-history-reorder.sales-order-history.page-layout-1column .sidebar.sidebar-main {
+    display: none !important;
+}
+.epro-order-history-reorder.sales-order-history.page-layout-2columns-left .sidebar.sidebar-main {
+    display: block !important;
+}
+.account.epro-order-history-reorder.sales-order-history.page-layout-2columns-left .sidebar-main {
+    padding-left: 0px !important;
+}
+
+.cms-sde-home {
+    .block-order-details-view {
+        .cart-block-content {
+            h2 {
+                margin-left:7px;
+            }
+        }
+    }
+    .box-content {
+        span.payment-information {
+            position:unset !important;
+        }
+    }
+}
+.sales-order-view .box-retail-order-view .box-content span.payment-information{
+  position:unset !important;
+}
+/* B-1060632 - RT-ECVS- View Order Details */
+.epro-order-history ~ .page-wrapper .page-main .columns .order-links {
+    list-style-type: none;
+    margin-left: -15px !important;
+    margin-bottom: 1px !important;
+    font-family: 'FedEx Sans Light';
+    font-size: 18px;
+  }
+.epro-order-history ~ .page-wrapper .page-title-wrapper .order-references{
+    display: none;
+  }
+.epro-order-history ~ .page-wrapper .page-title-wrapper .order-status{
+    margin-top: 23px !important;
+}
+
+.epro-order-history ~ .page-wrapper .page-title-wrapper .negotiable-quote-order-information{
+
+    border-top: 2px solid #e4e4e4;
+    padding-top: 18px;
+}
+.epro-order-history ~ .page-wrapper .page-title-wrapper .negotiable-quote-order-information .order-date{
+
+    font-family: 'FedEx Sans Light' !important;
+    font-size: 16px !important;
+}
+.epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view{
+    margin-top: 40px;
+}
+
+.epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view .box-content{
+    font-family: 'FedEx Sans Light';
+    font-size: 16px;
+    padding-right: 5px;
+}
+
+.sales-order-view {
+    .epro-view-order.discount-added{
+        .table tfoot > tr.totals-tax{
+                transform: translateY(39px);
+        }
+        .table tfoot > tr.shipping{
+                transform: translateY(-44px);
+        }
+    }
+
+
+.epro-view-order {
+    .table tfoot td{
+        background:#F7F9FA;
+    }
+    .table tfoot{
+        background:#F7F9FA;
+    }
+    table th {
+        font-size: 16px;
+        letter-spacing: 0;
+        line-height: 24px;
+        color: @fx-grey-1200;
+        font-family: 'FedEx Sans Bold';
+    }
+    .table .col.name{
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .table td.col.sku{
+        font-size: 16px;
+        font-family: 'FedEx Sans Light';
+        line-height: 24px;
+    }
+    .table .col.price .price-excluding-tax{
+        color: @fx-grey-1200;
+        font-family: 'FedEx Sans Light';
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .table .col.subtotal .price-excluding-tax{
+        color: @fx-grey-1200;
+        font-family: 'FedEx Sans Bold';
+        font-size: 16px;
+        line-height: 24px;
+    }
+    .table td.col.qty{
+        font-size: 16px;
+        font-family: 'FedEx Sans Light';
+        line-height: 24px;
+    }
+    .table tfoot > tr th{
+        font-family: 'FedEx Sans Light';
+    }
+    .table tfoot > tr.grand_total th{
+        font-family: 'FedEx Sans Bold';
+    }
+    .table tfoot > tr.grand_total{
+        font-family: 'FedEx Sans Bold';
+    }
+    .table-order-items tbody+tbody{
+        border-top:none;
+    }
+}
+}
+
+.epro-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar {
+    margin-top: -38px;
+    margin-bottom: 75px;
+}
+
+/* B-1053021 - Sanchit Bhatia - RT-ECVS - ePro - Search Capability for Quotes */
+/* B-1130641 */
+.epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search{
+    width: 31%;
+  }
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search .epro-quote-search-bar{
+    border-color: #6F7F87;
+    font-size: 15px;
+    height: 45px;
+  }
+
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search .epro-search-button{
+    position: absolute;
+    background: transparent;
+    height: 45px;
+    width: 45px;
+    border-radius: 0px;
+    border-color: #6F7F87;
+    margin-left: -45px;
+    border-left: 1px solid #6F7F87;
+  }
+
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search .mage-error {
+    color: #e02b27;
+    font-size: 1.2rem;
+    margin-top: 7px;
+}
+
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #6F7F87;
+    opacity: 1;
+    font-family: 'FedEx Sans Light';
+    /* Firefox */
+  }
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search input:-ms-input-placeholder {
+    /* Internet Explorer 10-11 */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+  }
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search input::-ms-input-placeholder {
+    /* Microsoft Edge */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+  }
+  .epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-search button[type='submit']:after {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      font-size: 16px;
+      line-height: 32px;
+      color: #757575;
+      content: '\e615';
+      font-family: 'luma-icons';
+      margin: 0;
+      vertical-align: top;
+      display: inline-block;
+      font-weight: normal;
+      overflow: hidden;
+      text-align: center;
+    }
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap{
+      margin-top: 60px;
+    }
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap .table td.epro_quote_list_column_quote_name{
+      font-family: 'FedEx Sans Regular';
+    }
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap .table td.epro_quote_list_column_quote_name{
+      font-family: 'FedEx Sans Regular';
+      color: @fx-grey-1200;
+    }
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap .table td.epro_quote_list_column_created_at{
+      font-family: 'FedEx Sans Regular';
+      color: @fx-grey-1200;
+    }
+
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap .table td.epro_quote_list_column_status{
+      font-family: 'FedEx Sans Bold';
+      color: @fx-grey-1200;
+    }
+
+    .epro-order-history ~ .page-wrapper .page-main .columns .admin__data-grid-outer-wrap .table td.epro_quote_list_column_base_grand_total{
+      font-family: 'FedEx Sans Bold';
+      color: @fx-grey-1200;
+    }
+
+  /* end */
+
+.page-wrapper .page-main .columns #my-orders-search-advanced-form .reset-btn {
+    margin-right: 10px !important;
+    margin-left: 0 !important;
+}
+
+  /* B-1092709- Reset button on order view and Quote page */
+.epro-order-history ~ .page-wrapper .page-main .columns .epro-quote-reset .reset-btn {
+  border-color: #6f7f87;
+  border-radius: 0px;
+  background: @fx-white-100;
+  text-transform: uppercase;
+  height: 45px;
+  font-size: 16px;
+  float: right;
+  margin-top: -51px;
+  width: 151px;
+
+}
+
+.page-wrapper .page-main .columns #my-orders-search-advanced-form .reset-btn {
+  border-color: #6f7f87;
+  border-radius: 0px;
+  background: @fx-white-100;
+  text-transform: uppercase;
+  height: 45px;
+  font-size: 16px;
+  padding-top: 9px;
+  width: 135px;
+  margin-right: 10px;
+}
+/* end */
+
+
+.epro-my-orders-search-advanced input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #6F7F87;
+    opacity: 1; /* Firefox */
+    font-family: 'FedEx Sans Light';
+  }
+
+.epro-my-orders-search-advanced input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+  }
+
+.epro-my-orders-search-advanced input::-ms-input-placeholder { /* Microsoft Edge */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+  }
+
+.epro-my-orders-search-advanced .field-order-total .mage-error[generated]{
+    position: absolute;
+    top: 45px;
+    width: 50%;
+}
+
+.epro-sales-order-history{
+    #my-orders-table{
+        tr{
+            th{
+                text-transform: uppercase;
+                font-family: 'FedEx Sans Bold';
+                color: #57676e;
+                letter-spacing: 1px;
+                width: 18%;
+            }
+
+            th.col.active{
+                color: @fx-purple-500;
+
+                .sort-order-table{
+                    margin-left:5px;
+                    font-size: 12px;
+                    cursor: pointer;
+                }
+            }
+
+            td.status{
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            td.status,
+            td.total{
+                //font-family: 'FedEx Sans Bold';
+                color: #36464d;
+            }
+        }
+    }
+}
+/** B-1047968 | Print Order Receipt **/
+.sales-order-print {
+    .epro-print-order.discount-added{
+        .table tfoot > tr.totals-tax{
+                transform: translateY(39px);
+        }
+        .table tfoot > tr.shipping{
+                transform: translateY(-44px);
+        }
+    }
+    .epro-print-order {
+        .order-status{
+            padding: 12px 18px;
+            margin-top: 21px;
+            border: 1px solid #cccccc;
+            border-radius: 0px;
+        }
+        .table tfoot td{
+            background:#F7F9FA;
+        }
+        .table tfoot{
+            background:#F7F9FA;
+        }
+        h1.page-title{
+            font-size: 24px;
+            font-family: 'FedEx Sans Regular';
+            margin-right: 18px !important;
+        }
+        .block-title{
+            max-width: none !important;
+        }
+        .order-date{
+            font-family: 'FedEx Sans Light';
+        }
+        .order-date strong{
+            font-family: 'FedEx Sans Bold';
+        }
+        table > caption {
+            border-bottom: 1px solid #cccccc;
+            width: 100%;
+            text-align: left;
+            font-size: 24px;
+            color: @fx-grey-1200;
+            letter-spacing: 0;
+            line-height: 32px;
+            clip: inherit;
+            height: inherit;
+            margin: inherit;
+            overflow: inherit;
+            padding: inherit;
+            position: inherit;
+        }
+        table th {
+            font-size: 16px;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+        }
+        .table .col.name{
+            font-size: 16px;
+        }
+        .table td.col.sku{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+        }
+        .table .col.price .price-excluding-tax{
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+        }
+        .table .col.subtotal .price-excluding-tax{
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+        }
+        .table td.col.qty{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+        }
+        .table tfoot > tr th{
+            font-family: 'FedEx Sans Light';
+        }
+        .table tfoot > tr.grand_total th{
+            font-family: 'FedEx Sans Bold';
+        }
+        .table tfoot > tr.grand_total{
+            font-family: 'FedEx Sans Bold';
+        }
+        .box-content {
+            font-family: 'FedEx Sans Light';
+            font-size: 16px;
+            padding-right: 5px;
+        }
+        .box-title>span{
+            letter-spacing: 0.8px;
+        }
+    }
+}
+.negotiable_quote-quote-index .epro-order-history ~ .page-wrapper #maincontent .data-grid th {
+  width: 23% !important;
+  text-transform: uppercase;
+  font-family: 'FedEx Sans Bold';
+  color: #57676e;
+  letter-spacing: 1px;
+}
+.epro_quote_list_column_status,
+.epro_quote_list_column_base_grand_total {
+  font-weight: bold;
+  text-transform: uppercase;
+  font-family: 'FedEx Sans Bold';
+  color: #36464d;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-date .quote-date-created,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-date .quote-date-expired {
+  font-size: 15px;
+  font-weight: 300;
+  color: #647176;
+  margin-bottom: 10px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-date .quote-date-created b,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-date .quote-date-expired b {
+  margin-right: 40px;
+  width: 7ch;
+  display: inline-block;
+   font-family: 'FedEx Sans Light' !important;
+   color: @fx-grey-500;
+   font-size:16px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-sales-rep {
+  font-size: 12px;
+  color: #717C81;
+  margin-top:40px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-sales-rep b {
+  font-weight: 400;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper {
+  position: relative;
+}
+
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-status,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar a.action.close,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar a.action.delete,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .data.item.title.quote-comments,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .data.item.title.quote-history-log,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items #items-quoted #shopping-cart-table-totals .proposed_shipping,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items #items-quoted #shopping-cart-table tbody:not(.cart.item),
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items #items-quoted #shopping-cart-table tbody .col.delete,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-shipping-info .box-actions,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .block.block-comments,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-view-buttons,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty .field.qty .label,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.delete,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .item-actions,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals .catalog_price_table .collapsible-table{
+  display: none;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-references {
+  margin: 0 !important;
+  padding: 20px 0 5px;
+  font-size: 15px;
+  border-top: 0;
+  display:none;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-references .quote-reference-content strong {
+  display: inline-block;
+  vertical-align: middle;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-references .quote-reference-content strong span {
+  width: calc(14ch);
+  overflow: hidden;
+  display: inline-block;
+  white-space: nowrap;
+  margin-right: 30px;
+  font-family: 'FedEx Sans Light' !important;
+  color: @fx-grey-500;
+  font-size:16px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-references .quote-reference-content a {
+  vertical-align: text-bottom;
+  color: #4DA1CB;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-date,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper W{
+  margin: 0px 0;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-shipping-info .block-title,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-shipping-info .box-content .box-title {
+      color: @fx-grey-500;
+    font-family: "FedEx Sans Regular";
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-shipping-info .box-content .box-content,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-shipping-info .box-content .box-content a {
+  font-size: 15px !important;
+  color: @fx-grey-500 !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .page-title{
+  display: block;
+  border-bottom: 1px solid #e4e4e4;
+  margin: 20px 0px 0px 0px !important;
+  padding-bottom: 15px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .data.item.title.quote-title .data.switch{
+  color: @fx-grey-500;
+    font-size: 18px;
+    font-family: 'FedEx Sans Light';
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col{
+  text-align: left;
+  font-size: 15px !important;
+  color: @fx-grey-500 !important;
+  padding: 18px 15px;
+  font-family: 'FedEx Sans Light';
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col.price .price-excluding-tax .price{
+  font-size: 15px;
+  font-weight: 800;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty input {
+  border: 0;
+  padding: 0;
+  height: auto !important;
+  font-weight: 500;
+  margin: 1px 0 0 5px;
+  opacity: 1;
+  text-align: left;
+  color: @fx-grey-1200;
+  position: absolute;
+  width: 30px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty .control.qty::before{
+  content: 'Ordered:';
+  font-weight: lighter;
+  display: inline-block;
+  vertical-align: top;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted{
+  border: 1px solid #e4e4e4;
+  padding: 20px 20px 40px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .item-info .product-item-name,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col .price-excluding-tax .price{
+  font-size: 15px;
+  font-weight:800;
+  color: #000 !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col.price,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col.stock{
+  font-weight: 800;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap{
+  background: #F7F9FA;
+  margin-top: 30px;
+  padding: 10px 15px 0;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .toggle-action .toggle::after{
+  content: unset;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .catalog_price td .price{
+  color: #747676;
+  font-weight: 500;
+  float: right;
+  padding-right: 0px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .proposed_quote_price th {
+  border-top: 2px solid #DBDCDC;
+  border-bottom: 2px solid #DBDCDC;
+  color: #747676;
+  font-size: 12px;
+  padding: 20px 10px 30px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .proposed_quote_price td{
+  border-top: 2px solid #DBDCDC;
+  border-bottom: 2px solid #DBDCDC;
+  color: #747676;
+  padding: 20px 10px 30px;
+  padding-right: 25px;
+  text-align: right;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote_tax th{
+  color: #747676;
+  font-size: 12px;
+  padding: 25px 10px 10px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote_tax td{
+  padding-right: 25px;
+  text-align: right;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .grand_total td{
+  padding: 25px 10px 10px;
+  color: #747676;
+  padding-right: 25px;
+  text-align: right;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-table-totals-wrap .catalog_price_table td[data-th="Catalog Total Price (Excl. Tax)"]{
+  padding-bottom: 15px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .quote-details-items .col.subtotal{
+  text-align: right;
+  padding: 18px 25px
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-title {
+  display: none;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot > tr:first-child.catalog_price_table th,
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot > tr:first-child td{
+ border: 0px !important;
+ padding-top: 10px !important;
+ font-weight: 400;
+ padding-left: 1px;
+ padding-right: 2px;
+
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot{
+  background: #F7F9FA !important;
+
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th.item {
+  width: 20% !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th.sku {
+  width: 20% !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th.price {
+  width: 20% !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th.stock {
+  width: 20% !important;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th.qty {
+  width: 20% !important;
+}
+/* B-1112160 - View Quote Details.-----START---- */
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted{
+  border: 0px;
+  padding: 0px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote_tax th {
+  padding: 7px 0px 14px;
+  color: @fx-grey-1200;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+  font-family: 'FedEx Sans Light';
+
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote_tax td {
+  padding: 25px 10px 10px;
+  padding-top: 8px;
+  float: right;
+  padding-right: 3px;
+  color: @fx-grey-1200;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote_tax{
+  border-bottom: 1px solid  #CED5D9 !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .grand_total th{
+  padding: 50px 0px 14px;
+  color: @fx-grey-1200;
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+  font-family: 'FedEx Sans Light';
+}
+//D-100734
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .grand_total th strong{
+  font-weight: 300;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .grand_total td{
+  padding: 48px 10px 10px;
+  padding-top: 50px;
+  float: right;
+  padding-right: 1px;
+  color: @fx-grey-1200;
+  font-size: 18px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .quote-shipping-info .block-title .query-order{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  line-height: 45px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .quote-shipping-info .block-title .cc-no{
+  color: #2B3E47;
+  font-family: 'FedEx Sans Light';
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .quote-shipping-info .block-title{
+  border: 0px !important;
+  margin-top: -45px;
+  margin-left: 8px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-title {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 21px;
+  letter-spacing: 0;
+  line-height: 60px;
+  margin-left: 0px;
+  display: block !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-title strong {
+  font-weight: 300 !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .proposed_quote_price td{
+  padding-top: 18px;
+  border: 0px !important;
+  float: right;
+  padding-right: 3px;
+  color: @fx-grey-1200;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 9px;
+}
+.negotiable-quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .quote-table-totals tfoot {
+  background: none !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted{
+  border-bottom: 0px !important;
+  overflow-x: unset !important;
+  margin-bottom: 400px !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .proposed_quote_price th {
+  padding: 16px 0px 0px;
+  border: 0px !important;
+  color: @fx-grey-1200;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 12px;
+  font-family: 'FedEx Sans Light';
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .catalog_price_table td[data-th="Catalog Total Price (Excl. Tax)"]{
+  padding-bottom: 0px;
+}
+.negotiable_quote-quote-index .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper {
+    background:@fx-white-100;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .page-title{
+  display: none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty input {
+  border: 0;
+  padding: 0;
+  height: auto !important;
+  font-weight: 500;
+  margin: 3px 0 0 5px;
+  opacity: 1;
+  text-align: left;
+  color: @fx-grey-1200;
+  position:absolute;
+  width :65px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty .control.qty::before{
+  content: 'Ordered';
+  font-weight: lighter;
+  display: inline-block;
+  vertical-align: top;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap{
+  background: #F7F9FA;
+  margin-top: 30px;
+  width: 476px;
+  float: right;
+  height: 281px;
+  padding-left: 35px;
+  padding-right: 35px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-table-totals-wrap .catalog_price td .price{
+  color: @fx-grey-1200;
+  font-weight: bold;
+  padding-left: 40px;
+  font-size: 15px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot{
+  background: #F7F9FA !important;
+
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tbody > tr.catalog_price_table .toggle-action tr.catalog_price td{
+  padding-left: 1px !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot > tr:first-child.catalog_price_table th,
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot > tr:first-child td{
+ border: 0px !important;
+ padding-top: 10px !important;
+
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals tfoot > tr:first-child.catalog_price_table th{
+  color: @fx-grey-1200;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+  font-family: 'FedEx Sans Light';
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper .quote-view-links{
+    margin: 24px 0;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_button:hover{
+    text-decoration:none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_button {
+  height: 48px;
+  width: 240px;
+  box-sizing: border-box;
+  border: 2px solid #FF6102;
+  background-color: @fx-white-100;
+  padding: 20px 35px 15px;
+  display:inline;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_button .epro_print {
+  text-decoration: none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_text {
+  color: #FF6102;
+  font-family: 'FedEX Sans Regular';
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.delete,
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item .col.qty .field.qty .label,
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .item-actions,
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-totals-wrap .table.quote-table-totals .catalog_price_table .collapsible-table,
+.negotiable_quote-quote-view .epro-order-history-enhancement~.page-wrapper #maincontent .quote-table-totals-wrap .proposed_shipping,
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .quote-shipping-info .block-content{
+  display: none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar {
+  margin-left: 0px;
+  padding-bottom: 20px;
+  width: 100%;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.item {
+  width: 40% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 24px;
+  text-transform: uppercase;
+  padding-left: 8px;
+
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.sku {
+  width: 20% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.sku {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.sku-catalog {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  padding-top: 35px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.price {
+  width: 14% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.price .price-excluding-tax .price {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  font-weight: lighter !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.stock {
+  width: 13% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.stock {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.qty {
+  width: 13% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.qty {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.subtotal {
+  width: 12% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td.subtotal .price-excluding-tax .price {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  font-weight: lighter !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table thead th.delete {
+ padding-left: 0px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info {
+  border-bottom: 1px solid #CED5D9;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .product-item-photo .product-image-container {
+  width: 55px !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .product-item-photo .product-image-container .product-image-wrapper{
+  width: 55px !important;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper .quote-id-title{
+  margin-top: -5px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper .quote-id-text{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-right: 4px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper .quote-id{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .print::before{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 16px;
+  color: inherit;
+  margin: 0 4px 0 0;
+  vertical-align: middle;
+  display: inline-block;
+  font-weight: normal;
+  overflow: hidden;
+  speak: none;
+  text-align: center;
+}
+
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent #shopping-cart-table tbody td{
+  border:none;
+  padding-bottom: 45px;
+  vertical-align: middle;
+}
+/* B-1112160 - View Quote Details. ------START-----*/
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-details-items .data.item.title.quote-title .data.switch{
+  color: @fx-grey-500;
+    font-size: 18px;
+    font-family: 'FedEx Sans Light';
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .quote-sales-rep {
+  display: none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .print {
+  float: left !important;
+  padding-left: 0px !important;
+  text-decoration: none;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .contact-info-contanier{
+  box-sizing: border-box;
+  height: 352px;
+  width: 600px;
+  border: 1px solid #CED5D9;
+  background-color: @fx-white-100;
+  padding: 40px;
+  margin-top: 0px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .contact-info-title{
+  color: @fx-grey-1200;
+    font-family: 'FedEx Sans Light';
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+    padding-bottom: 10px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .contact-text{
+  padding-top: 10px;
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 24px;
+  padding-bottom: 10px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main .contact-info{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+/** B-1234552- Validate all new component follow ADA compliance Order/Quote History **/
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .custom-print-item{
+  margin-top: 10px;
+  margin-left: 12px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .custom-print-item .product-image-container{
+  margin-top: 9px;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .product-item-details .product-item-name{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 22px
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .column.main #items-quoted .quote-table-items .cart.item tr.item-info .product-item-details .product-name-quote-epro{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 20px;
+}
+/** B-1234552- Validate all new component follow ADA compliance Order/Quote History **/v
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_button:hover{
+    text-decoration:none;
+}
+/** B-1234552- Validate all new component follow ADA compliance Order/Quote History **/
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_button {
+  height: 48px;
+  width: 240px;
+  box-sizing: border-box;
+  border: 2px solid #FF6102;
+  background-color: @fx-white-100;
+  padding: 20px 35px 15px;
+  display:inline;
+}
+.negotiable_quote-quote-view .epro-order-history-enhancement ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .epro_print_text {
+  color: #FF6102;
+  font-family: 'FedEX Sans Regular';
+  font-size: 19px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 24px;
+}
+/* B-1112160 - View Quote Details. -----END----------- */
+
+/* B-1112160 - View Quote Details.-----END---- */
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .quote-actions-toolbar .print::before{
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 16px;
+    line-height: 16px;
+    color: inherit;
+    content: '\e624';
+    font-family: 'luma-icons';
+    margin: 0 4px 0 0;
+    vertical-align: middle;
+    display: inline-block;
+    font-weight: normal;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent .page-title-wrapper .product-item-name>a, .product.name a>a{
+    color: @fx-grey-500;
+    text-decoration: none;
+    font-family: "FedEx Sans Regular";
+    font-weight: 400;
+    font-size: 1.8rem;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent td.subtotal .price{
+    font-family:'FedEx Sans Regular';
+}
+
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table th{
+    letter-spacing: 0;
+    line-height: 24px;
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Bold';
+    font-size: 16px;
+}
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table tbody td{
+    border:none;
+}
+
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #shopping-cart-table thead th{
+    border-bottom:1px solid #cccccc;
+}
+.sales-order-history .epro-order-history ~ .page-wrapper #maincontent #order-status option[value=delivered]{
+  display: none;
+}
+
+.negotiable_quote-quote-view .epro-order-history ~ .page-wrapper #maincontent #messages{
+  display: none;
+}
+
+/* B-1148619- Print Quote Receipt Enhancement ----Start---- */
+.negotiable_quote-quote-print .page-wrapper #maincontent .epro-print-order-enhancement .page-title,
+.negotiable_quote-quote-print .page-wrapper #maincontent .epro-print-order-enhancement .quote-sales-rep,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item .col.delete,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item .col.qty .field.qty .label,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .item-actions,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-totals-wrap .table.quote-table-totals .catalog_price_table .collapsible-table,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table-totals .proposed_shipping,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ .quote-shipping-info .block-content,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .quote-block-title,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .quote-table-totals .subtotal,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .quote-table-totals .subtotalTax,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .quote-table-totals .discount,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .quote-table-totals .tax,
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.delete {
+  display: none !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table{
+    table-layout:auto;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement .quote-id-title {
+  border-bottom: 1px solid #CED5D9;
+  padding-bottom: 5px;
+  margin-top:-25px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement .quote-id-text {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 24px;
+  margin-right: 4px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement .quote-id {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 24px;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .page-wrapper #maincontent .column.main .contact-info-contanier.epro-print-order-enhancement {
+  box-sizing: border-box;
+  height: 352px;
+  width: 600px;
+  border: 1px solid #CED5D9;
+  background-color: @fx-white-100;
+  padding: 40px;
+  margin-top: -12px;
+}
+.negotiable_quote-quote-print .page-wrapper #maincontent .column.main .epro-print-order-enhancement .contact-info-title {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 22px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 32px;
+  padding-bottom: 10px;
+}
+.negotiable_quote-quote-print .page-wrapper #maincontent .column.main .epro-print-order-enhancement .contact-text {
+  padding-top: 10px;
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0;
+  line-height: 24px;
+  padding-bottom: 10px;
+}
+.negotiable_quote-quote-print .page-wrapper #maincontent .column.main .epro-print-order-enhancement .contact-info {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 15px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-title {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 21px;
+  letter-spacing: 0;
+  line-height: 60px;
+  display: block !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-title strong {
+  font-weight: 300 !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block {
+  background: #F7F9FA;
+  margin-top: 30px;
+  width: 465px;
+  float: right;
+  height: 260px;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-top: 20px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ .table-wrapper#items-quoted {
+  border-bottom: 0px !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ .quote-shipping-info .block-title .query-order {
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 18px;
+  font-weight: 300;
+  letter-spacing: -0.5px;
+  line-height: 45px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ .quote-shipping-info .block-title .cc-no {
+  color: #2B3E47;
+  font-family: 'FedEx Sans Light';
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ .quote-shipping-info .block-title {
+  border: 0px !important;
+  margin-top: -330px;
+  margin-left: 8px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.item {
+  width: 40% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  line-height: 24px;
+  text-transform: uppercase;
+  padding-left: 8px;
+
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.sku {
+  width: 20% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.sku {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.sku-catalog {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  padding-top: 35px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.price {
+  width: 14% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.price .price-excluding-tax .price {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  font-weight: lighter !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.stock {
+  width: 13% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.stock {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.qty {
+  width: 13% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.qty {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Regular';
+  font-size: 14px;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th.subtotal {
+  width: 12% !important;
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td.subtotal .price-excluding-tax .price {
+  color: @fx-grey-1100;
+  font-family: 'FedEx Sans Bold';
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  font-weight: lighter !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item .col.qty .control.qty::before{
+  content: 'Ordered';
+  font-weight: lighter;
+  display: inline-block;
+  vertical-align: top;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item .col.qty input {
+  border: 0;
+  padding: 0;
+  height: auto !important;
+  font-weight: 500;
+  margin: 3px 0 0 5px;
+  opacity: 1;
+  text-align: left;
+  color: @fx-grey-1200;
+  position:absolute;
+  width :65px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item tr.item-info {
+  border-bottom: 1px solid #CED5D9;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item tr.item-info .product-item-photo .product-image-container {
+  width: 55px !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item tr.item-info .product-item-photo .product-image-container .product-image-wrapper{
+  width: 55px !important;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table tbody td{
+  border:none;
+  padding-bottom: 45px;
+  vertical-align: middle;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted #shopping-cart-table thead th{
+  border-bottom:1px solid #cccccc;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item tr.item-info .product-item-details .product-item-name{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 22px
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-table-items .cart.item tr.item-info .product-item-details .product-name-quote-epro{
+  color: @fx-grey-1200;
+  font-family: 'FedEx Sans Light';
+  font-size: 13px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 20px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals th {
+  color: @fx-grey-1200;
+  font-size: 16px;
+  font-weight: 300;
+  letter-spacing: 0;
+  line-height: 24px;
+  font-family: 'FedEx Sans Light';
+  border: 0px !important;
+  padding-left: 0px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block td {
+  color: @fx-grey-1200;
+  font-weight: bold;
+  padding-left: 40px;
+  font-size: 15px;
+  line-height: 24px;
+  border: 0px !important;
+  float: right;
+  padding-right: 0px;
+
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals tr.grand_total{
+  border-top: 1px solid  #CED5D9 !important;
+}
+/** B-1234552- Validate all new component follow ADA compliance Order/Quote History **/
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals tr.grand_total th{
+  font-weight:300;//D-100734
+  padding-top: 55px;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals tr.grand_total th strong {
+  visibility: hidden;
+  position: relative;
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals tr.grand_total th strong:after {
+  visibility: visible;
+  position: absolute;
+  top: 0;
+  left: 0;
+  content: "Quote Grand Total";
+}
+.negotiable_quote-quote-print .epro-print-order-enhancement ~ #items-quoted .quote-price-block .table.quote-table-totals tr.grand_total td{
+  padding-top: 55px;
+}
+/* B-1148619- Print Quote Receipt  ----END---- */
+
+/** B-1058846 - Print Quote Receipt */
+.negotiable_quote-quote-print{
+  .epro-print-order{
+      #quote-status-field{
+          display:none;
+      }
+      .page-title{
+          display: block !important;
+          border-bottom: 1px solid #e4e4e4;
+          margin: 20px 0px 0px 0px !important;
+          padding-bottom: 15px;
+      }
+      .quote-date {
+          margin: 0px 0 20px 0;
+      }
+      .quote-sales-rep {
+          float: right;
+          font-size: 12px;
+          color: #717C81;
+          margin-top: 40px;
+      }
+      .quote-price-block {
+          background: #F7F9FA;
+          margin-top: 30px;
+          padding: 10px 15px 0;
+      }
+      .quote-block-title {
+          display:none;
+      }
+      .quote-references {
+          display:none;
+      }
+      .quote-table-totals tr.subtotal{
+          display:none;
+      }
+      .quote-table-totals tr.tax{
+          display:none;
+      }
+      .quote-table-totals tr th{
+          text-align:left;
+          border-top: none;
+      }
+      .quote-comments-block{
+          display:none;
+      }
+      .quote-date-created, .quote-date-expired {
+        font-size: 15px;
+        font-weight: 300;
+        color: #647176;
+        margin-bottom: 10px;
+      }
+      .quote-date-created b, .quote-date-expired b {
+        margin-right: 40px;
+        width: 7ch;
+        display: inline-block;
+        font-family: 'FedEx Sans Light' !important;
+        color: @fx-grey-500;
+        font-size:16px;
+      }
+      .table > tbody > tr > td{
+          border:none;
+      }
+      .table > thead th {
+          border-bottom: 1px solid #cccccc;
+      }
+      .quote-title strong {
+          color: @fx-grey-500;
+          font-size: 18px;
+          font-family: 'FedEx Sans Light';
+          font-weight: 400;
+          margin-left: 10px;
+      }
+      #shopping-cart-table th {
+          letter-spacing: 0;
+          line-height: 24px;
+          color: @fx-grey-500;
+          font-family: 'FedEx Sans Bold';
+          font-size: 15px;
+          text-align:left;
+      }
+      #shopping-cart-table thead th, #shopping-cart-table tbody td {
+          width: 20% !important;
+          display: table-cell;
+      }
+      #shopping-cart-table .col {
+          text-align: left;
+          font-size: 15px !important;
+          color: @fx-grey-500 !important;
+          padding: 18px 15px;
+          font-family: 'FedEx Sans Light';
+      }
+      #shopping-cart-table .col.delete{
+          display:none;
+      }
+      #shopping-cart-table .col.qty .control.qty::before {
+          content: 'Ordered:';
+          font-weight: lighter;
+          display: inline-block;
+          vertical-align: top;
+      }
+      #shopping-cart-table .col.qty input {
+          border: 0;
+          padding: 0;
+          height: auto !important;
+          font-weight: 500;
+          margin: 0px 0 0 5px;
+          opacity: 1;
+          text-align: left;
+          color: @fx-grey-1200;
+      }
+      .quote-table-totals .proposed_quote_price th {
+          border-top: 2px solid #DBDCDC;
+          border-bottom: 2px solid #DBDCDC;
+          color: #747676;
+          font-size: 12px;
+          padding: 20px 10px 30px;
+      }
+      .quote-table-totals .quote_tax th {
+          color: #747676;
+          font-size: 12px;
+          padding: 25px 10px 10px;
+      }
+      .quote-table-totals .proposed_quote_price td {
+          border-top: 2px solid #DBDCDC;
+          border-bottom: 2px solid #DBDCDC;
+          color: #747676;
+          padding: 20px 10px 30px;
+      }
+      #shopping-cart-table .item-info .product-item-name {
+          font-size: 15px;
+          font-weight: 800;
+          color: #000 !important;
+      }
+      .table-wrapper {
+          overflow-x: inherit !important;
+      }
+  }
+  .custom-print-item {
+        .product-item-details {
+            display: block;
+            float: left;
+        }
+        img {
+            display: block;
+        }
+    }
+    .quote-sales-rep {
+        margin-left: 150px;
+    }
+}
+
+// B-1096684 | Display text 'Showing page' in the pagination bar of My Quotes page
+.negotiable_quote-quote-index{
+	.epro-order-history ~ .page-wrapper{
+		.quotes-grid-toolbar.toolbar.bottom{
+			.pages-subtitle{
+				width: 100%;
+				display: inline-block;
+				margin-bottom: 10px;
+			}
+		}
+	}
+}
+//D-96750
+.customer-account-index .epro-order-history-enhancement ~ .page-wrapper .page-main .title-format .page-title span.base{
+  margin-left: 0px !important;//D-104787
+}
+.epro-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+    position: absolute;
+    z-index: 9;
+    right: 3px;//D-93805
+    top: 0;
+    bottom: 0;
+}
+.epro-my-orders-search-advanced .fieldset.info .search-sku .control {
+  width: 100%; //D-93805
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+    flex-wrap: wrap;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+    padding-bottom: 20px;
+}
+.epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+    padding-top: 27px;
+}
+
+@media (max-width:991px) {
+    .epro-my-orders-search-advanced .control #product-name-sku {
+        width: 70% !important;
+        float:left; //D-98256 Error message is not coming correctly on every environment
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 48%;
+        padding-bottom: 15px;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 27px;
+    }
+}
+@media (max-width:767px) {
+    .my-orders-search-advanced {
+        .fieldset {
+            .search-sku {
+                width: 100% !important;
+            }
+            .control {
+                #product-name-sku {
+                    width: 100% !important;
+                }
+            }
+            .reset-btn {
+                padding-top: 0px !important;
+                width: 140px !important;
+                margin-top: 15px;
+            }
+        }
+    }
+    .epro-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn, #filter-close-btn) {
+        margin-top: 15px;
+    }
+    .data-class {
+        float: right;
+    }
+    .orders-history .col {
+        text-transform: uppercase;
+    }
+    .orders-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        border-bottom: 1px solid #cccccc;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: block;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search {
+        padding: 20px;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        margin-bottom: 0px;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .range.fields.d-flex {
+        display: block;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .field-order-total {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .my-orders-search-advanced .fieldset .reset-btn {
+        padding-top: 10px !important;
+    }
+    .epro-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+        position: absolute;
+        right: 0px;
+    }
+    .epro-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 0px;
+    }
+}
+
+// B-900127 - Expand Order Details
+.sales-order-history {
+  .epro-order-history-enhancement ~ .page-wrapper {
+    tr.row-active {
+      background: #f7f7f7;
+    }
+    .page-title{
+        background:@fx-white-100;
+    }
+    .order-items-row {
+      display: none;
+      .order-items-table {
+        padding: 0;
+        table {
+          width: 100%;
+          padding: 0;
+          border-left: 1px solid #ccc;
+          border-right: 1px solid #ccc;
+          tr {
+            th {
+				width: 8% !important;
+				font-size: 12px;
+				line-height: 16px;
+
+				&:first-of-type {
+					width: 72% !important;
+				}
+
+				&:nth-of-type(2) {
+					width: 11% !important;
+				}
+            }
+            td {
+              font-size: 14px;
+              line-height: 24px;
+
+              .item-img {
+                max-width: 140px;
+                float: left;
+                margin-right: 15px;
+
+                img {
+                  width: 100%;
+                  max-height: 160px;
+                }
+              }
+
+              .item-detail {
+                width: 70%;
+                float: left;
+
+                p.product-item-name {
+                  font-size: 14px;
+                  margin-bottom: 20px;
+                  font-weight: normal;
+                  font-family: "FedEx Sans Light";
+                  line-height: 24px;
+                  color: @fx-grey-1200;
+                  margin-top: 0px;
+                }
+
+                p.size-info {
+                  font-size: 10px;
+                  line-height: 24px;
+                  color: @fx-grey-1200;
+                  margin-top: 0px;
+                  font-family: 'FedEx Sans Light';
+                }
+              }
+
+				button {
+					float: right;
+					color: #1979c3;
+					border: 1px solid #1979c3;
+					border-radius: 0;
+					background: transparent;
+					padding: 9px 20px 5px;
+					cursor: pointer;
+
+					span{
+						text-transform: uppercase;
+						letter-spacing: 0.75px;
+						font-size: 14px;
+						line-height: 24px;
+						font-family: 'FedEx Sans Bold';
+					}
+				}
+            }
+
+            td.total {
+              font-family: "FedEx Sans Medium" !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// B-1149275 - View Order Receipt - Delivery
+.sales-order-view {
+    .epro-order-history-enhancement ~ .page-wrapper {
+        .column.main{
+            display:flex;
+            flex-direction:column;
+        }
+        .page-title-wrapper{
+            order:1;
+        }
+        .order-links{
+            order:3;
+        }
+        .order-details-items{
+            order:4;
+        }
+        .block-order-details-view{
+            order:2;
+            margin-bottom:10px;
+        }
+        .order-status{
+            display:none;
+        }
+        .negotiable-quote-order-information{
+            display:none;
+        }
+        h1.page-title{
+            font-size:24px;
+            color:#2F3F48;
+            margin-top: 0px !important;
+            background:@fx-white-100;
+        }
+        .confirm-email~.actions{
+            margin-top:48px;
+        }
+        .action.print:before{
+            content:none;
+        }
+        .action.print:hover{
+            text-decoration: none;
+        }
+        .order-links .item strong{
+            padding:0px !important;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box{
+            width: 32%;
+            border: 1px solid #CED5D9;
+            padding: 35px 30px;
+            min-height: 330px;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box:nth-child(2) {
+            margin-left: 20px;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box:nth-child(3) {
+            margin-left: 20px;
+        }
+        .box-title > span {
+            font-size: 22px;
+            font-family: 'FedEx Sans Light';
+            font-weight: 100;
+        }
+        .box-content strong {
+            font-size: 12px;
+            font-weight: bold;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+        }
+        .box-content address {
+            font-size: 16px;
+            margin: 7px 0;
+        }
+        .box-content .contact-info {
+            margin: 7px 0;
+        }
+        .order-links .item strong {
+            border:none;
+            font-size:22px;
+        }
+        .order-details-items{
+            border:none !important;
+        }
+        .epro-view-order table th{
+            font-size: 12px !important;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: @fx-grey-1100 !important;
+            font-family: 'FedEx Sans Bold';
+            text-transform: uppercase;
+        }
+        .order-details-items .items-qty .item span.title {
+            display: none;
+        }
+        .product-name-image-info{
+            display:inline;
+        }
+        .item-img{
+            float:left;
+            margin-right: 30px;
+        }
+        .product-item-photo img{
+            width:80px;
+            height:62px;
+        }
+        .product-image-container{
+            width:80px;
+            height:80px;
+        }
+        .config-container{
+            display: inline-block;
+            position: relative;
+            top: 12px;
+            left: -120px;
+        }
+        .order-details-items .table-order-items .product-item-name{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+            font-weight: 600;
+        }
+        p.size-info {
+            font-size: 14px;
+            font-family: 'FedEx Sans Light';
+        }
+        .show-detail {
+            position: relative;
+            text-transform: uppercase;
+            color: #0078B4;
+            font-size: 14px;
+            font-weight:bold;
+        }
+        .show-detail:after{
+            content: '';
+            border: solid #0078B4;
+            border-width: 0 2px 2px 0;
+            padding: 4px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            position: absolute;
+            top: -2px;
+            right: -18px;
+        }
+        .show-detail.icon-arrow:after{
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            top: 5px;
+        }
+        .table .col.name{
+            width:60%;
+        }
+        .table td.col.qty{
+            width:15%;
+        }
+        .table td.col.discount{
+            width:10%;
+        }
+        .table thead tr {
+            border-bottom: 1px solid #cccccc;
+        }
+        .table tbody tr {
+            border-bottom: 1px solid #cccccc;
+        }
+        .order-details-items .table-wrapper .data.table > thead > tr > th{
+            border:none;
+        }
+        .cart.table-wrapper .col.price, .cart.table-wrapper .col.discount, .order-items.table-wrapper .col.price, .cart.table-wrapper .col.qty, .order-items.table-wrapper .col.qty, .cart.table-wrapper .col.subtotal, .order-items.table-wrapper .col.subtotal, .cart.table-wrapper .col.msrp, .order-items.table-wrapper .col.msrp{
+            text-align:center;
+        }
+        .customtotal{
+            width: 35%;
+            float: right;
+            text-align: right;
+            background: #F7F9FA;
+            margin-top: 30px;
+        }
+        table.customtotal th {
+            font-size: 16px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+            padding: 12px;
+            text-transform: none !important;
+            font-weight: lighter;
+        }
+        table.customtotal span.price {
+            font-family: 'FedEx Sans Bold';
+            font-size: 14px;
+        }
+        .table td.col.qty{
+            font-size: 15px !important;
+            font-family: 'FedEx Sans Regular';
+            line-height: 24px;
+        }
+        table.customtotal tr.grand_total{
+             border-top: 1px solid #CED5D9;
+        }
+        .table-wrapper{
+            border-bottom:none;
+        }
+        .questions-contact{
+            float: left;
+            width: 65%;
+            margin-top: 30px;
+        }
+        .questions-contact .questions{
+            font-size:20px;
+            font-family: 'FedEx Sans Light';
+            color:@fx-grey-1200
+        }
+        .questions-contact .contact{
+            font-size:16px;
+            font-family: 'FedEx Sans Light';
+            color:@fx-grey-1200
+        }
+        .configurater-product-attr ul li {
+            font-size: 14px;
+            font-family: 'FedEx Sans Light';
+        }
+        .order-details-items {
+            .discount td {
+                font-weight: bold;
+            }
+            .discount_breakdown {
+                border-bottom: 1px solid #CED5D9;
+                .discount_breakdown_table tbody td{
+                    font-weight: bold;
+                }
+            }
+            tbody td {
+            padding-bottom: 14px;
+            padding-top: 14px;
+        }
+        }
+        .order-details-items{
+            padding:0px !important;
+        }
+        .order-details-items .col.name {
+            padding: 15px;
+        }
+        div.breadcrumbs li.item.myoreder a{
+            color:#0078B4;
+            background:@fx-white-100;
+        }
+        li.item.orderid strong{
+            background:@fx-white-100;
+        }
+        div.breadcrumbs li.item.myoreder:after{
+            color:#0078B4;
+        }
+        .product-image-container img.preview-product-img{
+            width: 80px;
+            height: 62px;
+        }
+        .order-details-items .items-qty .item:nth-child(2){
+            display:none;
+        }
+        .order-details-items .items-qty .item:nth-child(3){
+            display:none;
+        }
+        .table-order-items tbody{
+            height:132px;
+        }
+    }
+}
+/** B-1136363 | Print Order Receipt - Delivery **/
+.sales-order-print {
+    .epro-order-history-enhancement ~ .page-wrapper {
+        .column.main{
+            display:flex;
+            flex-direction:column;
+        }
+        .page-title-wrapper{
+            order:1;
+        }
+        .order-links{
+            order:3;
+        }
+        .order-details-items{
+            order:4;
+        }
+        .block-order-details-view{
+            order:2;
+            margin-top: 25px !important;
+        }
+        .order-status{
+            display:none;
+        }
+        .order-date{
+            display:none;
+        }
+        h1.page-title{
+            font-size:24px;
+            color:#2F3F48;
+            margin-top: -10px !important;
+            font-family: 'FedEx Sans Light';
+        }
+        .page-title-wrapper .order-actions-toolbar {
+            margin:0px !important;
+            margin-top: -25px !important;
+        }
+        .confirm-email~.actions{
+            margin-top:48px;
+        }
+        .confirm-email{
+            margin-top:-25px;
+            border-bottom: 1px solid #CED5D9;
+            padding-bottom: 15px;
+        }
+        .action.print{
+            width: 240px;
+            height: 48px;
+            border: 2px solid #FF6102;
+            padding: 20px 40px;
+            color: #FF6102;
+            float: none;
+            display: inline;
+        }
+        .order-links .item strong{
+            padding:0px !important;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box{
+            width: 32%;
+            border: 1px solid #CED5D9;
+            padding: 35px 30px;
+            min-height: 330px;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box:nth-child(2) {
+            margin-left: 20px;
+        }
+        .block.block-order-details-view .block-content:not(.widget) .box:nth-child(3) {
+            margin-left: 20px;
+        }
+        .box-title > span {
+            font-size: 22px;
+            font-family: 'FedEx Sans Light';
+            font-weight: 100;
+        }
+        .box-content strong {
+            font-size: 12px;
+            font-weight: bold;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+        }
+        .box-content address {
+            font-size: 16px;
+            background:@fx-white-100;
+        }
+        .order-links .item strong {
+            border:none;
+            font-size:22px;
+        }
+        .order-details-items{
+            border:none !important;
+        }
+        .epro-view-order table th{
+            font-size: 12px !important;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: @fx-grey-1100 !important;
+            font-family: 'FedEx Sans Bold';
+            text-transform: uppercase;
+        }
+        .order-details-items .items-qty .item span.title {
+            display: none;
+        }
+        .product-name-image-info{
+            display:inline;
+        }
+        .item-img{
+            float:left;
+            margin-right: 30px;
+        }
+        .product-item-photo img{
+            width:80px;
+            height:62px;
+        }
+        .product-image-container{
+            width:80px;
+            height:80px;
+        }
+        .config-container{
+            display: inline-block;
+            position: relative;
+            top: 12px;
+            left: -120px;
+        }
+        .order-details-items .table-order-items .product-item-name{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+            font-weight: 600;
+        }
+        p.size-info {
+            font-size: 14px;
+            font-family: 'FedEx Sans Light';
+        }
+        .show-detail {
+            position: relative;
+            text-transform: uppercase;
+            color: #0078B4;
+            font-size: 14px;
+            font-weight:bold;
+        }
+        .show-detail:after{
+            content: '';
+            border: solid #0078B4;
+            border-width: 0 2px 2px 0;
+            padding: 4px;
+            transform: rotate(45deg);
+            -webkit-transform: rotate(45deg);
+            position: absolute;
+            top: -2px;
+            right: -18px;
+        }
+        .show-detail.icon-arrow:after{
+            transform: rotate(-135deg);
+            -webkit-transform: rotate(-135deg);
+            top: 5px;
+        }
+        .table .col.name{
+            width:60%;
+        }
+        .table td.col.qty{
+            width:15%;
+        }
+        .table td.col.discount{
+            width:10%;
+        }
+        .table thead tr {
+            border-bottom: 1px solid #cccccc;
+        }
+        .table tbody tr {
+            border-bottom: 1px solid #cccccc;
+        }
+        .order-details-items .table-wrapper .data.table > thead > tr > th{
+            border:none;
+        }
+        .cart.table-wrapper .col.price, .cart.table-wrapper .col.discount, .order-items.table-wrapper .col.price, .cart.table-wrapper .col.qty, .order-items.table-wrapper .col.qty, .cart.table-wrapper .col.subtotal, .order-items.table-wrapper .col.subtotal, .cart.table-wrapper .col.msrp, .order-items.table-wrapper .col.msrp{
+            text-align:center;
+        }
+
+        table.customtotal th {
+            font-size: 16px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+            padding: 12px;
+            text-transform: none !important;
+            font-weight: lighter;
+        }
+        table.customtotal span.price {
+            font-family: 'FedEx Sans Bold';
+            font-size: 14px;
+        }
+
+        table.customtotal tr.grand_total{
+             border-top: 1px solid #CED5D9;
+        }
+        .table-wrapper{
+            border-bottom:none;
+        }
+        .epro-order-view-bottom-div{
+            width:100%;
+            display:flex;
+        }
+        .questions-contact{
+            float: left;
+            width: 65%;
+            height:50%;
+            padding-top: 20px;
+        }
+        .epro-order-view-subtotal{
+            background-color: #F7F9FA;
+            padding: 10px;
+            width: 446px;
+            margin-top: 20px;
+            text-align: right;
+        }
+        .questions-contact .questions{
+            font-size:20px;
+            font-family: 'FedEx Sans Light';
+            color:@fx-grey-1200
+        }
+        .questions-contact .contact{
+            font-size:16px;
+            font-family: 'FedEx Sans Light';
+            color:@fx-grey-1200
+        }
+        .configurater-product-attr ul li {
+            font-size: 14px;
+            font-family: 'FedEx Sans Light';
+        }
+        table > caption {
+            border-bottom:none !important;
+            font-family: 'FedEx Sans Light';
+        }
+        .order-details-items {
+            .discount td {
+                font-weight: bold;
+            }
+            .discount_breakdown {
+                border-bottom: 1px solid #CED5D9;
+                .discount_breakdown_table tbody td{
+                    font-weight: bold;
+                }
+            }
+            tbody td {
+            padding-bottom: 14px;
+            padding-top: 14px;
+            }
+        }
+        .order-details-items{
+            padding:0px !important;
+        }
+        .order-details-items .col.name {
+            padding: 15px;
+        }
+        .product-image-container img.preview-product-img{
+            width: 80px;
+            height: 62px;
+        }
+        .order-details-items .items-qty .item:nth-child(2){
+            display:none;
+        }
+        .order-details-items .items-qty .item:nth-child(3){
+            display:none;
+        }
+        .table-order-items tbody{
+            height:132px;
+        }
+    }
+}
+
+//D-143310
+.page-print.commercial-store-home:not(.epro-store) .extra-attributes .col.qty {
+    text-align: left !important;
+}
+
+//D-93805
+//D-98256 Error message is not coming correctly on every environment
+.epro-my-orders-search-advanced #product-name-sku-error.mage-error[generated]{
+	width: 65%;
+    float: left;
+}
+
+//D-95987
+.customer-account-index .page-wrapper .breadcrumbs .items{
+  margin-left: 0px !important;//D-104787
+}
+
+@media only screen and (min-width: 990px) and (max-width: 1200px) {
+  .customer-account-index .page-wrapper .breadcrumbs .items{
+    margin-left: 80px !important;
+  }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1440px) {
+  .customer-account-index .page-wrapper .breadcrumbs .items{
+    margin-left: 0px !important;//D-104787
+  }
+}
+
+@media only screen and (min-width: 1441px) and (max-width: 1900px) {
+  .customer-account-index .page-wrapper .breadcrumbs .items{
+    margin-left: 0px !important;//D-104787
+  }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+  .customer-account-index .page-wrapper .breadcrumbs .items{
+    margin-left: 83px !important;
+  }
+}
+
+@media (max-width:767px) {
+  .customer-account-index .page-wrapper .breadcrumbs .items{
+    margin-left: 0px !important;
+  }
+  .epro-store.sales-order-history tr.order-items-row .order-item>thead>tr {
+    display: none;
+  }
+  .epro-store.sales-order-history .table-order-items > tbody td.col.actions {
+    padding-bottom: 25px !important;
+  }
+  .epro-store.sales-order-history .table-order-items td.order-items-table {
+    padding: 0 !important;
+  }
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item > tbody tr:last-child > td {
+    text-align: right;
+  }
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item > tbody tr:last-child > td.reorder-unavailable {
+    text-align: left !important;
+  }
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item > tbody tr:last-child > td > button {
+    float: none;
+  }
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item td.col.item .item-info {
+    display: flex;
+  }
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item td.col.unit-price > span,
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item td.col.qty > span,
+  .epro-store.sales-order-history .order-items-row .order-items-table .table.order-item td.col.total > span
+   {
+    float: right;
+  }
+}
+/** D-96012 **/
+.customer-address-form{
+    .epro-order-history-enhancement ~ .page-wrapper {
+        .fieldset > .field{
+            width:80%;
+        }
+        .fieldset > .legend{
+            width:80%;
+            float:none;
+            margin:0 auto 20px;
+        }
+        .page-title-wrapper{
+            width:90.5%;
+            margin:0 auto;
+        }
+    }
+}
+.customer-address-index {
+    .epro-order-history-enhancement ~ .page-wrapper {
+        .column.main {
+            width: 90% !important;
+            margin: 0 auto;
+        }
+        .actions-toolbar{
+            max-width: 100%;
+        }
+    }
+}
+
+// D-103391 - The footer on My Quote screen is close to pagination text
+
+.negotiable_quote-quote-index {
+  .epro-order-history~.page-wrapper {
+    .column.main {
+      display: inline-block;
+
+      .admin__data-grid-outer-wrap {
+        .quotes-grid-toolbar.toolbar.bottom {
+          margin-bottom: 50px
+        }
+      }
+    }
+  }
+}
+// D-105473  - Regression-UI for Error message is breaking on My Order Page
+.sales-order-history {
+	.my-orders-search-advanced {
+		.field-order-total {
+			#order-total-min-error,  div#order-total-max-error {
+				position: absolute;
+				top: 45px;
+				width: 50%;
+			}
+			#order-total-max-error {
+				position: absolute;
+				top: 45px;
+				width: 50%;
+			}
+		}
+		#product-name-sku-error {
+			position: absolute;
+			top: 45px;
+			width: 200px;
+			display: block;
+		}
+	}
+}
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+	.sales-order-history {
+		.my-orders-search-advanced {
+			.fieldset {
+				.reset-btn {
+					margin-top: 25px;
+				}
+				#filter-close-btn {
+					margin-top: 25px !important;
+				}
+				#filter-show-btn {
+					margin-top: 25px !important;
+				}
+				#order-total-max {
+					margin-top: 35px;
+				}
+			}
+			.field-order-total {
+				div#order-total-min-error,  div#order-total-max-error {
+					width: 100%;
+                    max-width: 200px;
+                    position: static;
+				}
+			}
+		}
+	}
+}
+
+// Start Epro Reorder CSS
+@media (min-width: 240px) and (max-width: 767px) {
+    .sales-order-history .epro-sales-order-history  {
+        border-bottom: none;
+    }
+    .sales-order-history .epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options .field.field-action {
+        padding-bottom: 0px;
+    }
+    .sales-order-history .epro-sales-order-history .table-order-items tr.table-row {
+        border-bottom: 1px solid #cccccc;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .field .action.epro-reorder-btn {
+        width: 138px;
+        height: 45px;
+        font-size: 19px;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid #cccccc;
+        background: #cccccc;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: none;
+        margin-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .field .action.epro-reorder-btn.active {
+        width: 138px;
+        height: 45px;
+        font-size: 19px;
+        font-weight: bold;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid @fx-orange-500;
+        background: @fx-orange-500;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: unset;
+        margin-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .fieldset.info.extra-order-search .actions-toolbar .primary button.primary {
+        width: 100% !important;
+        background: @fx-white-100;
+        border-color: @fx-grey-1200;
+        padding: 0 30px;
+        height: 50px;
+        font-size: 19px;
+        color: @fx-grey-1200;
+        line-height: 46px;
+        letter-spacing: 1.19px;
+        margin-left: 0px !important;
+        font-family: 'FedEx Sans Bold';
+        margin-bottom: 20px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .reset-btn {
+        width: 118px !important;
+        height: 50px !important;
+        font-size: 19px !important;
+        letter-spacing: 1.19px !important;
+        line-height: 24px !important;
+        font-family: 'FedEx Sans Bold';
+        margin-bottom: 15px;
+        margin-right: 20px;
+        margin-left: 0% !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .action-close-div {
+        text-align: right;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder-button .filter-close {
+        border: 0;
+        border-radius: 0;
+        background: none;
+        padding: 0px;
+        margin-top: 0px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr td.total .data-class {
+        float: right;
+        padding-right: 0px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table .order-items-row .order-items-table {
+        border-bottom: 0;
+    }
+    .epro-order-history-reorder .table-wrapper.epro-sales-order-history.epro-reorder {
+        border: 0 !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 8px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+      display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+        display: inline-block;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td .item-img img {
+        padding-left: 10px;
+        width: 65px;
+        height: 65px;
+        max-width: 65px;
+        max-height: 65px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .reorder-item-label-check .item-checked-icon {
+        width: 24px !important;
+        height: 24px !important;
+        max-width: none;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .col.reorder-item-label-check {
+          background: @fx-white-100;
+          position: relative;
+          border-color: lightgray;
+          padding-left: 10px;
+          padding-top: 15px !important;
+          border-top: 1px solid #ccc !important;
+          border-left: 1px solid #ccc !important;
+          border-right: 1px solid #ccc !important;
+          border-bottom: 0 !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-label-items {
+        width: 24px;
+        height: 24px;
+        display: block;
+        position: relative;
+        margin-left: 5px;
+        margin-top: 7px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-label-items.disable-checkbox {
+        background-color: @fx-grey-900;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-label {
+        padding-left: 0px;
+    }
+    .epro-order-history-reorder .item-label-text {
+        padding-top: 5px;
+        padding-left: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-label-text {
+        padding-top: 10px;
+        padding-left: 10px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .reorder-item-label-check {
+        display: block !important;
+        width: 24px;
+        height: 24px;
+        margin-top: 20px;
+        margin-left: 5px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .reorder-item-label-check.disable-checkbox {
+        background-color: @fx-grey-900;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder td.col.reorder-order-label-check {
+        display: none;
+        background: @fx-white-100;
+        position: relative;
+        border-color: lightgray;
+        padding-left: 10px;
+        padding-top: 15px !important;
+        border-top: 1px solid #ccc !important;
+        border-left: 1px solid #ccc !important;
+        border-right: 1px solid #ccc !important;
+        border-bottom: 0 !important;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder tr.table-row {
+        border-top: 1px solid #ccc !important;
+        border-bottom: 0 !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order td.unit-price {
+        padding-left: 15px;
+        padding-top: 5px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order td.qty {
+        padding-left: 15px;
+        padding-top: 5px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.total {
+        padding-left: 15px;
+        padding-top: 5px;
+        padding-bottom: 7px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table tr td .item-detail {
+        padding-top: 7px;
+    }
+    .epro-order-history-reorder .epro-order-history ~ .page-wrapper .page-main .columns .epro-my-orders-search-advanced.epro-reorder-button .reset-btn {
+        width: 100% !important;
+        height: 50px !important;
+        font-size: 19px !important;
+        letter-spacing: 1.19px !important;
+        line-height: 24px !important;
+        font-family: 'FedEx Sans Bold';
+        margin-bottom: 0;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.reorder-order-label-check {
+        padding-top: 5px !important;
+        padding-bottom: 8px !important;
+    }
+
+    .epro-order-history-reorder .order-actions-toolbar .actions {
+        display: flex;
+        flex-direction: column;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action {
+        float: left;
+        color: @fx-white-100;
+        border-radius: 0;
+        background: @fx-orange-500;
+        padding: 10px 40px;
+        cursor: pointer;
+        margin-top: 25px;
+        margin-left: 0px;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        text-align: center;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action .reorder-btn-view {
+        background: @fx-orange-500;
+        border: 1px solid @fx-orange-500;
+        color:@fx-white-100;
+        font-size: 19px;
+        font-weight: bold;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action.disable-link {
+        pointer-events: none;
+        float: left;
+        color: @fx-white-100;
+        border: 0;
+        border-radius: 0;
+        background: #cccccc;
+        padding: 10px 40px;
+        margin-top: 13px;
+        margin-left: 0px;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        width: 209px;
+        text-align: center;
+        opacity: .5;
+    }
+    //Product Configuration not available style
+    .epro-order-history-reorder .reorder-items-not-available-msg-cantainer img.warning-mes-img {
+        top: 4px;
+        padding-right: 5px;
+        left: 0px;
+    }
+    .epro-order-history-reorder .reorder-items-not-available-msg-cantainer {
+        padding-left: 10px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-items-row .order-items-table table tr td .action.view {
+        color: #007AB7;
+        border: 2px solid #007AB7;
+        border-radius: 40px;
+        background: @fx-white-100;
+        cursor: pointer;
+        padding: 0px;
+        height: 40px;
+        width: 90%
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-items-row .order-items-table table tr td .action.view span {
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 1px;
+        text-align: center;
+        color: #007AB7;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .view-receipt .view-action {
+        padding-bottom: 32px;
+        padding-top: 15px;
+        padding-right: 10px;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-label, .sales-order-history .epro-reorder .item-label {
+        display: block;
+        width: 24px;
+        height: 24px;
+        padding-left: 55px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .checkbox-order, .sales-order-history .epro-reorder .checkbox-item {
+        box-shadow: none;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        top: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+        padding: 0;
+        top: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+    }
+    .epro-order-history-reorder .epro-orders .pages {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table tr td .item-img {
+        padding-left: 0px;
+        max-width: 80px !important;
+        padding-top: 10px;
+        margin-right: 10px;
+    }
+    .epro-order-history-reorder .reorder-success {
+        width: 90% !important;
+        top: 105px !important;
+        height: auto !important;
+        .reorder-success-box-inner {
+            width: 48px;
+        }
+        .reorder-success-msg {
+            width: 180px !important;
+        }
+        .reorder-close-icon {
+            text-align: left;
+            padding-right: 8px;
+        }
+    }
+    .epro-order-history-reorder .reorder-error {
+        width: 100%;
+        top: -15px;
+        height: auto;
+        .reorder-error-box-inner {
+            width: 48px;
+        }
+        .reorder-error-msg {
+            width: 180px;
+        }
+    }
+}
+
+//Small laptop Screen
+@media (min-width: 767px) and (max-width:1024px) {
+    .epro-order-history-reorder .reorder-success {
+        top: 60px;
+    }
+    .epro-order-history-reorder .reorder-error {
+        top: -43px;
+    }
+}
+
+@media (min-width: 767px) and (max-width: 991px) {
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 0px !important;
+    }
+    .cms-sde-home.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        padding-left: 0px;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .cms-sde-home.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        padding-left: 0px;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .reset-btn {
+        margin-right: 20px;
+        margin-left: 0% !important;
+        width: 146px !important;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset .filters-collapse .filters-collapse {
+        margin-left: 0;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .control #product-name-sku {
+        width: 80% !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 4px !important;
+        padding: 0;
+    }
+    .epro-order-history-reorder .epro-order-history ~ .page-wrapper .page-main .columns .epro-my-orders-search-advanced.epro-reorder-button .reset-btn {
+        margin-right: 20px;
+        margin-left: 0% !important;
+        width: 146px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table tr td .item-detail {
+        float: none;
+    }
+    .epro-order-history-reorder .reorder-item-label-check {
+        display: none;
+    }
+    .epro-order-history-reorder .reorder-checkbox-item {
+        display: block;
+    }
+    .epro-order-history-reorder .col.reorder-checkbox-item {
+        border: none;
+    }
+    .epro-order-history-reorder .col.reorder-checkbox {
+        border-bottom: 1px solid #ccc !important;
+    }
+    .epro-order-history-reorder td.col.reorder-order-label-check {
+        display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search .field .range.fields.d-flex{
+        position: relative;
+        display: block;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search .field.order-total .field-order-total {
+        width: 100%;
+        display: flex;
+        margin-bottom: 15px;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search .field.order-total .control {
+        display: contents;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search .field.order-total .control .sub-label {
+        padding-top: 13px;
+    }
+}
+@media (min-width: 767px) {
+    .cms-sde-home.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        padding-left: 23px;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search {
+        padding-top: 10px;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .actions-toolbar div.primary {
+        display: flex;
+        height: 0;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .actions-toolbar .primary button.primary {
+        font-size: 16px !important;
+        line-height: 45px !important;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 28px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced.epro-reorder-button .action-close-div {
+        text-align: right;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced.epro-reorder-button .filter-close {
+        border: 0;
+        border-radius: 0;
+        background: none;
+        padding: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced.epro-reorder-button .field .action.epro-reorder-btn {
+        width: 145px;
+        height: 45px;
+        font-size: 19px;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid #cccccc;
+        background: #cccccc;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: none;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced.epro-reorder-button .field .action.epro-reorder-btn.active {
+        width: 145px;
+        height: 45px;
+        font-size: 19px;
+        font-weight: bold;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid @fx-orange-500;
+        background: @fx-orange-500;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: unset;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.reorder-checkbox {
+        width: 5% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.order-item {
+        width: 55% !important;
+        vertical-align: middle;
+        text-align: initial;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder.commercial-reorder #my-orders-table tr th.order-item {
+        padding-left: 30px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.item-unit-price {
+        width: 20% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.item-qty {
+        width: 20% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.item-total {
+        width: 20% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr.view-receipt .reorder-unavailable {
+        padding-left: 60px;
+        padding-top: 20px !important;
+        text-align: left;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+        width: 5% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td {
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td.reorder-unavailable {
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td.col.item {
+        text-align: left;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder.commercial-reorder .order-items-row .order-items-table table tr td.col.item {
+        text-align: left;
+        padding-left: 30px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-label {
+        display: block;
+        width: 24px;
+        height: 24px;
+        padding-left: 35px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-label.disable-checkbox {
+        padding-left: 0px;
+        margin-left: 35px;
+        background-color: @fx-grey-900;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-label {
+        display: block;
+        width: 24px;
+        height: 24px;
+        padding-left: 35px;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-label {
+        padding-left: 0px;
+        margin-left: 35px;
+        background-color: @fx-grey-900;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .checkbox-order, .sales-order-history .epro-reorder .checkbox-item {
+        box-shadow: none;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        top: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+        padding: 0;
+        top: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .item-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-items-row .order-items-table table tr td .action.view {
+        float: right;
+        color: #007AB7;
+        border: 2px solid #007AB7;
+        border-radius: 40px;
+        background: @fx-white-100;
+        cursor: pointer;
+        padding: 0px;
+        width: 168px;
+        height: 50px;
+        margin: 22px 0 23px 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-items-row .order-items-table table tr td .action.view span {
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 1px;
+        text-align: center;
+        color: #007AB7;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .view-receipt .view-action {
+        padding-bottom: 5px;
+        padding-top: 5px;
+        padding-right: 15px;
+    }
+    .epro-order-history-reorder .epro-reorder th.col.actions, .epro-reorder .view-order-action {
+        display: none;
+    }
+    .epro-order-history-reorder .epro-reorder th[sortby="ext_order_id"] {
+        padding-left: 52px;
+    }
+    .epro-order-history-reorder .page-wrapper .epro-reorder th.col.sort-order-table-heading.id[sortby="ext_order_id"] {
+        padding-left: 45px;
+    }
+    .epro-order-history-reorder .page-wrapper .epro-reorder .view-order-carrot-toggle {
+        vertical-align: middle;
+    }
+    .epro-order-history-reorder .epro-reorder a.view-order-carrot-toggle:hover {
+        text-decoration: none;
+    }
+    .epro-order-history-reorder .epro-reorder a.view-order-carrot-toggle:before {
+        color: @fx-grey-1200;
+        content: '\e904';
+        font-family: 'FedEx Icons';
+        font-size: 20px;
+    }
+    //Product Configuration not available style
+    .epro-order-history-reorder tr.reorder-items-not-available-row {
+        border-bottom: 1px solid #cccccc;
+    }
+    .epro-order-history-reorder .epro-reorder th.col.actions, .epro-reorder .view-order-action {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td {
+        vertical-align: middle;
+    }
+    .epro-order-history-reorder .epro-reorder th.col.actions, .epro-reorder .view-order-action {
+        display: none;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-item-unavailablity {
+        padding-top: 5px !important;
+        padding-bottom: 15px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-items-not-available-title {
+        color: @fx-red-100;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        padding-left: 15px;
+        padding-top: 0px;
+        text-align: left;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-items-not-available-description {
+        color: @fx-red-100;
+        font-family: 'FedEx Sans Light Italic';
+        font-size: 12px;
+        line-height: 15px;
+        text-align: left;
+        padding-left: 35px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-items-not-available-msg-cantainer {
+        display: flex;
+        padding-left: 45px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-items-not-available-msg-cantainer .warning-msg-heading {
+        text-align: left;
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder .reorder-items-not-available-msg-cantainer img.warning-mes-img {
+        height: 16px;
+        top: 4px;
+        left: 0px;
+    }
+    .epro-order-history-reorder tr.reorder-items-not-available-row td {
+        border-width: 0 !important;
+    }
+    .epro-order-history-reorder img.product-engine-loader {
+        left: 0;
+        margin: 0px auto;
+        position: absolute;
+        right: 0;
+    }
+    .epro-order-history-reorder img.products-engine-loader {
+        left: 0;
+        margin: 0px auto;
+        position: absolute;
+        right: 0;
+    }
+    .epro-order-history-reorder td.order-items-table .table.order-item {
+        position: relative;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action {
+        float: left;
+        color: @fx-white-100;
+        border-radius: 0;
+        background: @fx-orange-500;
+        padding: 0;
+        margin-left: 0px;
+        cursor: pointer;
+        font-size: 19px;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        font-weight: bold;
+        width: 240px;
+        height: 60px;
+        text-align: center;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action.disable-link {
+        pointer-events: none;
+        float: left;
+        color: @fx-white-100;
+        border-radius: 0;
+        background: #cccccc;
+        margin-left: 0px;
+        padding: 0;
+        font-size: 19px;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        font-weight: bold;
+        width: 250px;
+        height: 51px;
+        text-align: center;
+        opacity: .5;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom-width: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order tr {
+        border-bottom-width: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table.table.order-item.active tr.expend-order + tr > td {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .control #product-name-sku  {
+        width: 75% !important;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.total a {
+        padding-right: 40px;
+    }
+    .epro-order-history-reorder .epro-order-history ~ .page-wrapper .page-main .columns .epro-my-orders-search-advanced.epro-reorder-button .reset-btn {
+        margin-right: 20px;
+        margin-left: 0% !important;
+        width: 135px !important;
+        font-size: 16px !important;
+        letter-spacing: .75px !important;
+        line-height: 24px !important;
+        font-family: 'FedEx Sans Bold';
+    }
+    .epro-order-history-reorder .reorder-item-label-check {
+        display: none;
+    }
+    .epro-order-history-reorder .reorder-checkbox-item {
+      display: block;
+    }
+    .epro-order-history-reorder .col.reorder-checkbox-item {
+      border: none;
+    }
+    .epro-order-history-reorder .col.reorder-checkbox {
+      border-bottom: 1px solid #ccc !important;
+    }
+    .epro-order-history-reorder td.col.reorder-order-label-check {
+      display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom: 1px solid #ccc;
+        border-top: 1px solid #ccc;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .order-items-row .order-items-table table tr td .item-img img {
+        width: 65px;
+        height: 65px;
+        max-width: 65px;
+        max-height: 65px;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.id {
+        width: 23%;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.purchase-order-number {
+        width: 23%;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.date {
+        width: 18%;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.status {
+        width: 18%;
+    }
+    .epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.total {
+        width: 18%;
+        text-align: right;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        margin-top: 0 !important;
+        margin-bottom: 20px !important;
+    }
+    .epro-order-history-reorder.sales-order-history {
+        .epro-order-history-enhancement ~ .page-wrapper {
+            tr.reorder-disabled {
+                background: #f5f7f7;
+            }
+        }
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action.disable-link .reorder-btn-view {
+        pointer-events: none;
+        border: 0;
+        background: #cccccc;
+        color: @fx-white-100;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        opacity: unset;
+        padding-top: 20px;
+    }
+    .epro-order-history-reorder .order-actions-toolbar .epro-reorder-action .reorder-btn-view {
+        border: 0;
+        background: @fx-orange-500;
+        color: @fx-white-100;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        padding-top: 22px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .epro-actions .action.print {
+        width: 240px;
+        height: 44px;
+        border: 2px solid #FF6102;
+        padding: 0;
+        margin-top: 0;
+        color: #FF6102;
+        float: none;
+        display: block;
+        text-align: center;
+    }
+    .epro-order-history-reorder.negotiable_quote-quote-view.page-layout-1column .sidebar.sidebar-main {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-actions-toolbar .epro-actions .print span {
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEX Sans Regular';
+        letter-spacing: 1px;
+        line-height: 24px;
+        top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-view .order-actions-toolbar .actions.epro-actions {
+        display: flex;
+    }
+    .epro-order-history-reorder .reorder-success {
+        width: 646px;
+        height: 83px;
+        background: @fx-white-100;
+        border: 1px solid @fx-green-100;
+        display: -webkit-inline-box;
+        position: absolute;
+        z-index: 999;
+        margin: 0px auto;
+        left: 0;
+        right: 0;
+        top: 130px;
+        box-shadow: 0 2px 6px #00001945;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-box-inner {
+        background-color: @fx-green-100;
+        width: 48px;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-box-inner img {
+        transform: translate3d(-50%,-50%,0);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        height: 28px;
+        width: 28px;
+        z-index: 999;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-msg {
+        width: 532px;
+        padding-left: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-msg a {
+        font-size: 14px;
+        margin: 0px;
+        font-family: 'FedEx Sans Bold';
+        color: #0078B4;
+        line-height: 24px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-close-icon {
+        width: 36px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 999;
+        position: static;
+        padding-top: 10px;
+        padding-left: 16px;
+        float: right;
+        text-align: end;
+    }
+    .epro-order-history-reorder .reorder-success .container {
+        width: 90%;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-close-icon:before {
+        color: @fx-grey-1200;
+        content: "\e616";
+        font-family: "luma-icons";
+    }
+    .epro-order-history-reorder .reorder-error {
+        width: 646px;
+        height: 83px;
+        background: @fx-white-100;
+        border: 1px solid @fx-red-100;
+        display: -webkit-inline-box;
+        position: absolute;
+        z-index: 999;
+        margin: 0px auto;
+        left: 0;
+        right: 0;
+        top: 130px;
+        box-shadow: 0 2px 6px #00001945;
+    }
+    .epro-order-history-reorder .reorder-error .reorder-error-box-inner {
+        background-color: @fx-red-100;
+        width: 48px;
+    }
+    .epro-order-history-reorder .reorder-error .reorder-error-box-inner img {
+        transform: translate3d(-50%,-50%,0);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        height: 40px;
+        width: 40px;
+        z-index: 999;
+    }
+    .epro-order-history-reorder .reorder-error .reorder-error-msg {
+        width: 532px;
+        padding-left: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .epro-order-history-reorder .reorder-error .reorder-error-close-icon {
+        width: 36px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 999;
+        position: static;
+        padding-top: 10px;
+        padding-left: 16px;
+    }
+    .epro-order-history-reorder .reorder-error .reorder-error-close-icon:before {
+        color: @fx-grey-1200;
+        content: "\e616";
+        font-family: "luma-icons";
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .confirm-email ~ .actions {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .action.print {
+        width: 240px;
+        height: 60px;
+        border: 2px solid #FF6102;
+        padding: 0;
+        margin-top: 0;
+        color: #FF6102;
+        float: none;
+        display: flex;
+        align-items: center;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-actions-toolbar .print span {
+        padding-left: 44px;
+    }
+    .epro-order-history-reorder.sales-order-history .block-collapsible-nav .item.current {
+        height: 48px;
+    }
+    .epro-order-history-reorder.sales-order-history .block-collapsible-nav .item.current > strong {
+        line-height: 28px;
+        height: 28px;
+        padding: 12px 0 12px 9px;
+    }
+    .epro-order-history-reorder.sales-order-history .page-main .columns {
+        padding-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table-order-items tbody {
+        height: 0px !important;
+    }
+}
+// End Epro Reorder Css
+
+// Start Code EPRO Order listing page responsive
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-order-history-reorder.sales-order-history .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: -27px;
+        width: 738px;
+    }
+    .epro-company-user.epro-store.sales-order-history#html-body #maincontent .sidebar.sidebar-main .block.block-collapsible-nav {
+        display:block !important;
+    }
+    .epro-order-history-reorder.sales-order-history .account .title.block-collapsible-nav-title strong {
+        font-size: 16px;
+    }
+    .epro-order-history-reorder.sales-order-history .page-main .columns .page-title-wrapper {
+        padding-top: 30px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced .search-sku {
+        width: 442px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced .fieldset:first-of-type {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.id {
+        width: 25%;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.purchase-order-number {
+        width: 27%;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.date {
+        width: 20%;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.status {
+        width: 18%;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr th.col.total {
+        width: 10%;
+    }
+    .epro-order-history-reorder.sales-order-history .view-receipt .reorder-unavailable p {
+        padding-right: 0px;
+    }
+    .sales-order-history .my-orders-search-advanced .field-order-total #order-total-min-error {
+        width: 100%;
+    }
+    .sales-order-history #my-orders-search-advanced-form .fieldset.info.extra-order-search .field.order-total .range.fields {
+        display: flex;
+        gap: 30px 0;
+    }
+    .epro-order-history-reorder.sales-order-history #block-collapsible-nav ul.nav.items, .epro-order-history-reorder.sales-order-history .block-collapsible-nav .content{
+        padding: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+        z-index: 8;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar-main .block-collapsible-nav .block-collapsible-nav-content .nav li:nth-child(3) {
+        display: block !important;
+    }
+    .epro-order-history-reorder .epro-my-orders-search-advanced.epro-reorder-button .fieldset.info.extra-order-search {
+        padding-bottom: 5px;
+    }
+}
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+    .epro-order-history-reorder.sales-order-history #maincontent .columns {
+        display: flex;
+    }
+    .epro-company-user.epro-store.sales-order-history#html-body #maincontent .sidebar.sidebar-main .block.block-collapsible-nav {
+        display:block !important;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar-main .block-collapsible-nav .title {
+        border: 1px solid #6F7F87;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar-main .block-collapsible-nav {
+        width: 90.5%;
+        padding-left: 15px;
+        top: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        padding-top: 50px;
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .sales-order-history .sidebar-main {
+        margin-bottom: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .my-orders-search-advanced .fieldset #filter-close-btn {
+        margin-top: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+        z-index: 4;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar-main .block-collapsible-nav .block-collapsible-nav-content .nav li:nth-child(3) {
+        display: block !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-my-orders-search-advanced .fieldset.info.extra-order-search {
+        height: 690px;
+    }
+    .epro-order-history-reorder.sales-order-history .my-orders-search-advanced .fieldset #filter-close-btn {
+        margin-top: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .my-orders-search-advanced .fieldset #order-total-max {
+        margin-top: 30px;
+    }
+    .sales-order-history .my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .order-filter-max {
+        padding-bottom: 0px;
+    }
+    epro-order-history-reorder.epro-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options .order-total {
+        padding-bottom: 0px;
+    }
+    .epro-order-history-reorder .epro-order-history ~ .page-wrapper .page-main .columns .epro-my-orders-search-advanced.epro-reorder-button .reset-btn {
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history .table-order-items tr.table-row {
+        border-bottom: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .order-items-row .order-items-table .table.order-item td.col.item .item-info {
+        border-top: 1px solid #ccc;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.col.item {
+        padding-left: 10px;
+    }
+    .sales-order-history .epro-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td .item-detail p.product-item-name {
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        border-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) tbody > .reorder-items-not-available-row .reorder-item-unavailablity {
+        padding-top: 5px;
+        padding-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody .view-receipt {
+        text-align: center;
+        padding-top: 0px;
+        border-top: 1px solid #ccc !important;
+        border-bottom: 1px solid #ccc !important;
+        margin-bottom: 15px;
+    }
+    .epro-order-history-reorder.sales-order-history .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody .view-receipt .view-action {
+        text-align: center;
+    }
+    .epro-order-history-reorder.sales-order-history .view-receipt .reorder-unavailable {
+        text-align: left;
+        padding-top: 15px !important;
+        padding-bottom: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .view-receipt .reorder-unavailable img {
+        width: 16px;
+        height: 16px;
+        padding-right: 4px;
+        margin-bottom: -4px;
+        padding-left: 10px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .reorder-items-not-available-msg-cantainer .warning-msg-heading {
+        margin-bottom: 4px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .reorder-items-not-available-description {
+        padding-left: 25px;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr td.total {
+        display: none;
+    }
+    .epro-order-history-reorder .reorder-success {
+        width: auto;
+        height: 83px;
+        background: @fx-white-100;
+        border: 1px solid @fx-green-100;
+        display: -webkit-inline-box;
+        position: absolute;
+        z-index: 999;
+        margin: 0px auto;
+        left: 0;
+        right: 0;
+        top: 130px;
+        box-shadow: 0 2px 6px #00001945;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-box-inner {
+        background-color: @fx-green-100;
+        width: 48px;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-box-inner img {
+        transform: translate3d(-50%,-50%,0);
+        position: relative;
+        top: 50%;
+        left: 50%;
+        height: 28px;
+        width: 28px;
+        z-index: 999;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-msg {
+        width: 532px;
+        padding-left: 16px;
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-success-msg a {
+        font-size: 14px;
+        margin: 0px;
+        font-family: 'FedEx Sans Bold';
+        color: #0078B4;
+        line-height: 24px;
+        text-transform: uppercase;
+        text-align: left;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-close-icon {
+        width: 36px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 999;
+        position: static;
+        float: right;
+        text-align: end;
+        height: 20px;
+        padding-left: 0px;
+        padding-right: 30px;
+        padding-top: 5px;
+    }
+    .epro-order-history-reorder .reorder-success .container {
+        width: 90%;
+    }
+    .epro-order-history-reorder .reorder-success .reorder-close-icon:before {
+        color: @fx-grey-1200;
+        content: "\e616";
+        font-family: "luma-icons";
+    }
+}
+// End Code EPRO Order listing page responsive
+
+// Start Code for Epro Responsive for Order View Page
+
+// For Mobile
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+    .epro-order-history-reorder.sales-order-view .order-actions-toolbar .actions .print {
+        padding-right: 61px !important;
+        padding-left: 61px !important;
+    }
+    .epro-order-history-reorder.sales-order-view .order-actions-toolbar .epro-reorder-action.disable-link button.reorder-btn-view {
+        pointer-events: none;
+        border: 0;
+        background: #cccccc;
+        color: @fx-white-100;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        opacity: unset;
+    }
+    .epro-order-history-reorder.sales-order-view .order-actions-toolbar .epro-reorder-action.disable-link {
+        margin-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box {
+        min-height: 0px;
+        width: auto !important;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box.box-order-billing-address {
+        margin-left: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box.box-order-billing-method {
+        margin-left: 0px;
+        padding-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view {
+        margin-top: 20px;
+    }
+    .epro-order-history-reorder.sales-order-view .order-details-items .order-title {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-view .show-detail {
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-details-items .col.name {
+        display: table-cell;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table td.col.qty {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table td.col.discount {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-items.table-wrapper .col.subtotal {
+        width: 130px;
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table-order-items tbody {
+        display: contents !important;
+    }
+    .epro-order-history-reorder.sales-order-view th.col.subtotal {
+        display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-view table.table-order-items td.col.discount .price {
+        padding-left: 160px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-view-order .table .col.subtotal .price-excluding-tax {
+        padding-left: 160px;
+        font-size: 15px;
+    }
+    .epro-order-history-reorder.sales-order-view .order-details-items .items-qty {
+        padding-left: 215px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-details-items .table-wrapper .data.table > thead > tr > th {
+        padding-left: 0px;
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table tbody tr.epro-order-items-rows > td {
+        padding-left: 0px;
+        padding-top: 5px;
+        padding-bottom: 5px !important;
+    }
+    .epro-order-history-reorder.sales-order-view .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr td.col.name[data-th]:before {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .customtotal {
+        width: 100%;
+        margin-top: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        width: 100%;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .table-wrapper {
+        margin-bottom: 20px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .item-img {
+        margin-right: 15px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .item-img {
+        height: 74px;
+        width: 77px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .product-image-container {
+        width: 77px;
+        height: 74px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .product-image-container img.preview-product-img {
+        width: 77px;
+        height: 74px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .order-details-items .table-order-items .product-item-name {
+        padding-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .config-container {
+        display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail {
+        display: block;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail .show-hide-detail-button {
+        display: block;
+        text-transform: uppercase;
+        color: #0078B4;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .show-hide-detail .show-hide-detail-button:after {
+        content: '';
+        border: solid #0078B4;
+        border-width: 0 2px 2px 0;
+        padding: 4px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        position: absolute;
+        top: -2px;
+        right: -18px;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail .show-hide-detail-data {
+        background: @fx-white-100;
+        z-index: 9;
+        display: block;
+        padding-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail .show-hide-detail-data ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail .show-hide-detail-data ul li {
+        font-size: 14px;
+        font-family: 'FedEx Sans Light';
+        margin-bottom: 6px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        order: 2;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .epro-order-view-subtotal {
+        order: 1;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-view-bottom-div {
+        display: inline-grid;
+        padding-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-view td.show-hide-detail span.show-detail-button {
+        position: relative;
+        text-transform: uppercase;
+        color: #0078B4;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .epro-order-history-reorder.sales-order-view td.show-hide-detail span.show-detail-button .show-down-icon {
+        width: 18px;
+        padding-left: 2px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+        padding-top: 10px;
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+        margin-bottom: 0px;
+    }
+}
+
+// For Tab
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-order-history-reorder.sales-order-view .block-content {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box {
+        width: 50%;
+        display: unset;
+        margin-bottom: 15px;
+        padding: 30px 9px;
+        min-height: auto;
+        margin-right: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view .block-order-details-view .block-content .box {
+        margin-bottom: 30px;
+        border: 1px solid #CED5D9;
+        padding: 31px 42px;
+        margin-right: 14px;
+        min-height: 268px;
+        font-family: FedEx Sans Light;
+        font-size: 16px;
+        line-height: 24px;
+        flex: 3;
+        width: auto;
+    }
+    .epro-order-history-reorder.sales-order-view .order-details-items .order-title {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .customtotal {
+        width: 50%;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        width: 50%;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .confirm-email ~ .actions {
+        margin-top: 30px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .action.print {
+        height: 48px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view {
+        margin-top: 40px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .config-container {
+        display: block;
+    }
+    .epro-order-history-reorder.sales-order-view .show-hide-detail {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .show-detail {
+        cursor: pointer;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+        padding-top: 10px;
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+        margin-bottom: 0px;
+    }
+}
+
+// For Desktop
+.epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .config-container {
+    display: block;
+}
+.epro-order-history-reorder.sales-order-view .show-hide-detail {
+    display: none;
+}
+.epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .show-detail {
+    cursor: pointer;
+}
+.epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+    padding-top: 10px;
+    padding-left: 110px;
+}
+.epro-order-history-reorder.sales-order-view .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+    margin-bottom: 0px;
+}
+// End Code for Epro Responsive for Order View Page
+
+// Start Code for Epro Responsive for Order Print Page
+
+// For Mobile
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+    .epro-order-history-reorder.sales-order-print .order-actions-toolbar .actions .print {
+        padding-right: 66px !important;
+        padding-left: 67px !important;
+    }
+    .epro-order-history-reorder.sales-order-print .order-actions-toolbar .epro-reorder-action.disable-link button.reorder-btn-view {
+        pointer-events: none;
+        border: 0;
+        background: #cccccc;
+        color: @fx-white-100;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        opacity: unset;
+    }
+    .epro-order-history-reorder.sales-order-print .order-actions-toolbar .epro-reorder-action.disable-link {
+        margin-top: 25px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box {
+        min-height: 0px;
+        width: auto !important;
+        margin-bottom: 10px;
+        margin-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box.box-order-billing-address {
+        margin-left: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box.box-order-billing-method {
+        margin-left: 0px;
+        padding-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view {
+        margin-top: 20px;
+    }
+    .epro-order-history-reorder.sales-order-print .order-details-items .order-title {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-print .show-detail {
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .order-details-items .col.name {
+        display: table-cell;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table td.col.qty {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table td.col.discount {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .order-items.table-wrapper .col.subtotal {
+        width: 130px;
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table-order-items tbody {
+        display: contents !important;
+    }
+    .epro-order-history-reorder.sales-order-print th.col.subtotal {
+        display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-print table.table-order-items td.col.discount .price {
+        padding-left: 160px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-view-order .table .col.subtotal .price-excluding-tax {
+        padding-left: 160px;
+        font-size: 15px;
+    }
+    .epro-order-history-reorder.sales-order-print .order-details-items .items-qty {
+        padding-left: 215px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .order-details-items .table-wrapper .data.table > thead > tr > th {
+        padding-left: 0px;
+        padding-bottom: 5px;
+        padding-top: 5px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table tbody tr.epro-order-items-rows > td {
+        padding-left: 0px;
+        padding-top: 5px;
+        padding-bottom: 5px !important;
+    }
+    .epro-order-history-reorder.sales-order-print .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr td.col.name[data-th]:before {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .customtotal {
+        width: 100%;
+        margin-top: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        width: 100%;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table-wrapper {
+        margin-bottom: 20px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .item-img {
+        height: 74px;
+        width: 77px;
+        margin-right: 15px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .product-image-container {
+        width: 77px;
+        height: 74px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .product-image-container img.preview-product-img {
+        width: 77px;
+        height: 74px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .order-details-items .table-order-items .product-item-name {
+        padding-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .config-container {
+        display: none !important;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+        display: none !important;
+        padding-top: 10px;
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail {
+        display: block;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-button {
+        display: block;
+        text-transform: uppercase;
+        color: #0078B4;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .show-hide-detail .show-hide-detail-button:after {
+        content: '';
+        border: solid #0078B4;
+        border-width: 0 2px 2px 0;
+        padding: 4px;
+        transform: rotate(45deg);
+        -webkit-transform: rotate(45deg);
+        position: absolute;
+        top: -2px;
+        right: -18px;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-data {
+        background: @fx-white-100;
+        z-index: 9;
+        display: block !important;
+        padding-top: 10px;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-data ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-data ul li {
+        font-size: 14px;
+        font-family: 'FedEx Sans Light';
+        margin-bottom: 6px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        order: 2;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .epro-order-view-subtotal {
+        order: 1;
+        padding: 0px;
+        width: 100%;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-view-bottom-div {
+        width: 100%;
+        display: inline-grid !important;
+        padding-top: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print td.show-hide-detail span.show-detail-button {
+        position: relative;
+        text-transform: uppercase;
+        color: #0078B4;
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .epro-order-history-reorder.sales-order-print td.show-hide-detail span.show-detail-button .show-down-icon {
+        width: 18px;
+        padding-left: 2px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table.table-order-items > caption {
+        position: absolute;
+        padding-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .table thead tr {
+        padding-top: 50px !important;
+    }
+}
+
+// For Tab
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-order-history-reorder.sales-order-print .block-content {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .block.block-order-details-view .block-content:not(.widget) .box {
+        width: 50%;
+        display: block;
+        margin-bottom: 15px;
+        padding: 30px 40px;
+        min-height: auto;
+        margin-right: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .block-order-details-view .block-content .box {
+        margin-bottom: 30px;
+        border: 1px solid #CED5D9;
+        padding: 31px 42px;
+        margin-right: 14px;
+        min-height: 268px;
+        font-family: FedEx Sans Light;
+        font-size: 16px;
+        line-height: 24px;
+        flex: 3;
+        width: auto;
+    }
+    .epro-order-history-reorder.sales-order-print .box.box-order-billing-method .box-content {
+        width: 50%;
+        display: table-cell;
+    }
+    .epro-order-history-reorder.sales-order-print .box-order-billing-method .box-content:last-child {
+        padding-left: 120px;
+    }
+    .epro-order-history-reorder.sales-order-print .box.box-order-billing-method {
+        margin-left: 0px !important;
+    }
+    .epro-order-history-reorder.sales-order-print .order-details-items .order-title {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .customtotal {
+        width: 100%;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .questions-contact {
+        width: 50%;
+        margin-top: 15px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .confirm-email ~ .actions {
+        margin-top: 30px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .action.print {
+        height: 48px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history ~ .page-wrapper .page-main .columns .block-order-details-view {
+        margin-top: 40px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .config-container {
+        display: block;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+        display: block !important;
+        padding-top: 10px;
+        padding-left: 110px;
+    }
+    .epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+        margin-bottom: 0px;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-data {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-print a.logo {
+        margin-left: 0px;
+    }
+}
+
+// For Desktop
+.epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .config-container {
+    display: block;
+}
+.epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr {
+    display: block !important;
+    padding-top: 10px;
+    padding-left: 110px;
+}
+.epro-order-history-reorder.sales-order-print .epro-order-history-enhancement ~ .page-wrapper .configurater-product-attr ul {
+    margin-bottom: 0px;
+}
+.epro-order-history-reorder.sales-order-print .show-hide-detail {
+    display: none;
+}
+.epro-order-history-reorder.sales-order-print .show-hide-detail .show-hide-detail-data {
+    display: none;
+}
+.epro-order-history-reorder .epro-sales-order-history.epro-reorder #my-orders-table tr td.total {
+    text-align: right;
+}
+// D-106066
+.negotiable_quote-quote-index {
+    .epro-order-history-enhancement~.page-wrapper {
+        #maincontent {
+            .quotes-grid-toolbar.toolbar.bottom {
+                .pages {
+
+                    .action.previous,
+                    .action.next,
+                    a.page {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Responsive Header Footer with Reorder toggle On.
+
+/*
+Order Listing Page
+*/
+// Tab view.
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-order-history-reorder.sales-order-history.commercial-store-home .wlgn-enable-page-header .header.content .logo img {
+        width: auto;
+    }
+    .epro-order-history-reorder.sales-order-history.commercial-store-home .nav-sections .navigation .ui-widget-content {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-history.commercial-store-home .nav-sections nav.navigation ul li.level0.nav-1.category-item.first.parent.ui-menu-item {
+        border: 0px;
+    }
+    .epro-order-history-reorder.sales-order-history.commercial-store-home .page-wrapper .nav-sections nav.navigation {
+        background: @fx-white-100;
+    }
+    .epro-order-history-reorder.sales-order-history.account.page-layout-2columns-left .column.main {
+        width: auto !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        margin-top: 20px !important;
+    }
+}
+
+// Mobile View
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+    .nav-before-open.nav-open .epro-order-history-reorder.sales-order-history.commercial-store-home .page-wrapper .nav-sections {
+        height: 390px;
+        width: auto;
+    }
+    .nav-before-open.nav-open .epro-order-history-reorder.sales-order-history.commercial-store-home .page-wrapper .header.content .nav-toggle::before {
+        font-size: 30px;
+    }
+}
+
+/*
+Order View Page
+*/
+// Tab view.
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .epro-order-history-reorder.sales-order-view.commercial-store-home .wlgn-enable-page-header .header.content .logo img {
+        width: auto;
+    }
+    .epro-order-history-reorder.sales-order-view.commercial-store-home .nav-sections .navigation .ui-widget-content {
+        display: flex;
+    }
+    .epro-order-history-reorder.sales-order-view.commercial-store-home .nav-sections nav.navigation ul li.level0.nav-1.category-item.first.parent.ui-menu-item {
+        border: 0px;
+    }
+    .epro-order-history-reorder.sales-order-view.commercial-store-home .page-wrapper .nav-sections nav.navigation {
+        background: @fx-white-100;
+    }
+}
+
+// Mobile View
+@media only screen and (min-width: 240px) and (max-width: 767px) {
+    .nav-before-open.nav-open .epro-order-history-reorder.sales-order-view.commercial-store-home .page-wrapper .nav-sections {
+        height: 390px;
+        width: auto;
+    }
+    .nav-before-open.nav-open .epro-order-history-reorder.sales-order-view.commercial-store-home .page-wrapper .header.content .nav-toggle::before {
+        font-size: 30px;
+    }
+
+    .discount-breakdown {
+        .customtotal {
+            padding: 11px 7px !important;
+            .up {
+                margin-left: 5px !important;
+            }
+            td.amount {
+                padding: 11px 2px !important;
+            }
+        }
+    }
+}
+
+//Responsive Fix
+
+@media only screen and (min-width: 240px) and (max-width: 281px) {
+    .commercial-store-home .wlgn-enable-page-header{
+        display: none;
+    }
+    .commercial-store-home .wlgn-enable-page-header .header.content {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar-main .block-collapsible-nav .title {
+        height: 18px !important;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        padding-top: 0px !important;
+    }
+    .epro-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn, #filter-close-btn) {
+        display: flex;
+        padding-top: 13px;
+        padding-left: 10px;
+    }
+    .epro-my-orders-search-advanced .field.field-50.filters-collapse {
+        display: inline-flex;
+    }
+}
+@media only screen and (min-width: 1020px) and (max-width: 1025px) {
+    .account.epro-order-history-reorder.sales-order-history.page-layout-2columns-left .sidebar-main {
+        top: -31px;
+    }
+    .epro-order-history-reorder.sales-order-history .page-main .columns .page-title-wrapper {
+        display: none;
+    }
+    .epro-order-history-reorder.sales-order-history .sidebar.sidebar-main .block.block-collapsible-nav {
+        padding-left: 30px;
+    }
+    .epro-company-user.epro-store.sales-order-history#html-body #maincontent .sidebar.sidebar-main .block.block-collapsible-nav {
+        display:block !important;
+    }
+
+}
+
+//B-1501794
+.sales-order-print.selfreg-store,
+.sales-order-view.selfreg-store{
+	.epro-order-history-enhancement ~ .page-wrapper{
+		.box-order-billing-method{
+			.box-content {
+				margin-bottom: 15px;
+			}
+
+			dl.payment-method{
+				margin-bottom: 0;
+
+				dt, dd{
+					margin-bottom: 0;
+				}
+			}
+		}
+	}
+}
+
+.discount-breakdown {
+    .customtotal {
+
+        display: block;
+        padding: 11px 20px;
+
+        tr > th{
+            width:100%;
+        }
+        .arrow-down {
+            transform: rotate(-180deg);
+           -webkit-transform: rotate(-180deg);
+        }
+        tr.totals-tax {
+            border-bottom: 1px solid #CED5D9;
+        }
+        tr.grand_total th.total-discount strong{
+            font-weight: 100;
+        }
+        tr.grand_total {
+            border-top:none !important;
+        }
+        .up {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            display: inline-block;
+            border-bottom: 10px solid black;
+            border-top:0px;
+            margin-left: 10px;
+        }
+        .discount_breakdown_table th {
+            font-family: @discountfontFamilyLight;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            color: @summaryTotalColor;
+        }
+        .discount_breakdown_table td.amount {
+            padding-right:0px;
+            color: @discountGreenColor;
+        }
+        .total-disc th span#discdrop {
+            font-family: @discountfontFamilyLight !important;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            color: @summaryTotalColor;
+        }
+    }
+}
+body.cms-sde-home.sales-order-view {
+    .page-wrapper {
+        .show-hide-detail {
+            border-bottom: none !important;
+        }
+    }
+}
+.cms-sde-home.sales-order-view {
+    .block-order-details-view {
+        .retail-product-attributes {
+            td.col.attribute-discount {
+                line-height: 16px;
+            }
+        }
+    }
+}
+.cms-sde-home.sales-order-print {
+    .order-retail-view {
+        .block.block-order-details-view.retail-print-order {
+            .table-order-print-items {
+                >tbody {
+                    >tr {
+                        >td.qty {
+                            padding-right: 20px !important;
+                        }
+                        >td.discount {
+                            padding-right: 36px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.is-fcl-global.sales-order-print {
+    .block-order-details-view {
+        .retail-product-attributes {
+            th.col.qty.attribute-style-qty {
+                text-align: left !important;
+            }
+        }
+    }
+    .order-retail-view {
+        .block.block-order-details-view.retail-print-order {
+            .table-order-print-items {
+                >tbody {
+                    >tr {
+                        >td.qty {
+                            padding-right: 20px !important;
+                        }
+                        >td.discount {
+                            padding-right: 36px !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.commercial-store-home {
+    .order-min-label {
+        width: 60%;
+    }
+    .order-max-label {
+        width: 33%;
+        margin-left: -5px;
+    }
+    .range.fields.group.group-2.d-flex .min-max-amt {
+        width: 200px;
+    }
+    .field.order-total .range.fields.d-flex {
+        gap: 17px !important;
+    }
+}
+
+.selfreg-store {
+    #order-total-min {
+        padding: 0px 6px;
+    }
+    #order-total-max {
+        padding: 0px 6px;
+    }
+}
+
+.epro-store {
+    .order-max-label {
+        width: 35%;
+    }
+    #order-total-min {
+        padding: 0px 6px;
+    }
+    #order-total-max {
+        padding: 0px 6px;
+    }
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .commercial-store-home {
+        .order-min-label {
+            width: 30%;
+        }
+        .order-max-label {
+            width: 34%;
+        }
+        #order-total-min {
+            padding: 0px 4px;
+        }
+        #order-total-max {
+            padding: 0px 4px;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .commercial-store-home  {
+        .order-min-label {
+            width: 29%;
+        }
+        .order-max-label {
+            width: 33%;
+            margin-left: -6px;
+        }
+        #order-total-min {
+            padding: 0px 4px;
+        }
+        #order-total-max {
+            padding: 0px 4px;
+        }
+}
+    .selfreg-store {
+        .range.fields.d-flex {
+            gap: 20px !important;
+            .min-max-amt {
+                width: 98px !important;
+            }
+            .order-min-label {
+                width: 36%;
+            }
+            .order-max-label {
+                width: 36%;
+            }
+        }
+    }
+    .epro-store {
+        .range.fields.group.group-2.d-flex .min-max-amt {
+            width: 71%;
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .commercial-store-home {
+        .order-min-label {
+            width: 20%;
+        }
+        .order-max-label {
+            width: 20%;
+            margin-left: 0px;
+        }
+        #order-total-min {
+            padding: 0px 9px;
+        }
+        #order-total-max {
+            padding: 0px 9px;
+        }
+        .range.fields.d-flex {
+            #order-total-max {
+                margin-top: 0px;
+            }
+        }
+    }
+    .selfreg-store {
+        .order-min-label {
+            width: 20%;
+        }
+        .order-max-label {
+            width: 20%;
+        }
+        .range.fields.d-flex {
+            #order-total-max {
+                margin-top: 0px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .cms-sde-home.sales-order-view {
+        .order-retail-view {
+            .block-order-details-view {
+                table.table-order-print-items {
+                    tr.product-item-detail {
+                        td.col {
+                            margin-bottom: -18px !important;
+                        }
+                    }
+                }
+            }
+            .block.block-order-details-view.retail-print-order {
+                table.data.table.table-order-print-items {
+                    >tbody {
+                        >tr {
+                            >td.total {
+                                text-align: right !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .order-retail-view.enabled-marketplace-customer-toggle {
+            .block.block-order-details-view.retail-print-order {
+                .cart-block-content {
+                    .order-items.retail-print-order {
+                        .table-order-print-items {
+                            .product-item-detail {
+                                height: 214px !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .cms-sde-home.sales-order-print {
+        .order-retail-view {
+            .block.block-order-details-view.retail-print-order {
+                .table-wrapper {
+                    .table {
+                        >tbody {
+                            >tr {
+                                td {
+                                    width: 100%;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .is-fcl-global.sales-order-print {
+        .order-retail-view {
+            .block.block-order-details-view.retail-print-order {
+                .table-order-print-items {
+                    >tbody {
+                        >tr {
+                            >td.discount {
+                                padding-right: 0px !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .epro-order-history-reorder.sales-order-history .epro-reorder .order-items-row .order-items-table table tr td .action.view {
+        margin: 0;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder .view-receipt .view-action {
+        padding: 24px;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 760px) {
+    .commercial-store-home.sales-order-history {
+        .configurater-product-attr {
+            .additional-details {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
+
+.actions-toolbar.order-actions-toolbar{
+    margin:0;
+}
+
+.sales-order-history {
+    .my-orders-search-advanced {
+        .field-order-total {
+            div#order-total-min-error, div#order-total-max-error {
+                @media only screen and (min-width: 768px) and (max-width: 1199px) {
+                    max-width: 50%;
+                }
+            }
+        }
+    }
+}
+div#authenticationPopup + div.page-title-wrapper {
+    display: none;
+}
+
+//  D-1939292
+.sales-order-history {
+    .my-orders-search-advanced .filter-summary {
+        position: relative;
+        top: 16px;
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .sales-order-history {
+        .my-orders-search-advanced {
+            #product-name-sku-error {
+                top: 32px;
+            }
+        }
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .sales-order-history {
+        .my-orders-search-advanced {
+            .filter-summary {
+                top: 0;
+            }
+            .filters-collapse {
+                margin-top: 12px;
+            }
+        }
+    }
+}

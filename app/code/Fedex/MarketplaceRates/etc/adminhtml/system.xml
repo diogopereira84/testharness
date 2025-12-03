@@ -1,0 +1,56 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="fedex" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<group id="fedex_rate_quotes" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Marketplace Fedex Shipping Rates</label>
+				<field id="enable" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Enable</label>
+					<comment/>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+                <field id="token_url" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Token URL</label>
+                    <comment/>
+                </field>
+                <field id="shipping_rates_url" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Shipping rates URL</label>
+                    <comment/>
+                </field>
+				<field id="client_id" type="obscure" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Client Id</label>
+					<comment/>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<config_path>fedex/fedex_rate_quotes/client_id</config_path>
+				</field>
+				<field id="client_secret" type="obscure" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Client Secret</label>
+					<comment/>
+					<backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+					<config_path>fedex/fedex_rate_quotes/client_secret</config_path>
+				</field>
+				<field id="prefix_shipping_method_name" type="text" sortOrder="900" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Shipping Method Prefix</label>
+                    <comment>This is responsible for adding a prefix to 3P Shipping Method names. E.g: (Prefix) Home Delivery</comment>
+                    <config_path>fedex/fedex_rate_quotes/prefix_shipping_method_name</config_path>
+				</field>
+			</group>
+
+			<group id="fedex_freight_rate_quotes" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+				<label>Marketplace Fedex Freight Shipping Rates</label>
+				<field id="shipping_rates_enabled" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+					<label>Enabled</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
+				<field id="shipping_rates_url" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Freight Shipping Rates URL</label>
+					<comment/>
+				</field>
+				<field id="surcharge_text" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+					<label>Surcharge Text</label>
+					<comment/>
+				</field>
+			</group>
+		</section>
+	</system>
+</config>

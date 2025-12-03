@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <widget class="Fedex\WebAnalytics\Block\Widget\ConversionTracking" id="conversion_tracking_widget">
+        <label>Conversion Tracking</label>
+        <description>This widget will allow the the manipulation of URLs with dynamic values or static values.</description>
+        <parameters>
+            <parameter name="enabled" xsi:type="select" visible="true" required="true" sort_order="10" source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label>Enabled</label>
+                <description>This will determine if the Script will be rendered in the page or not.</description>
+                <options>
+                    <option name="yes" value="1" selected="true">
+                        <label translate="true">Yes</label>
+                    </option>
+                    <option name="no" value="0">
+                        <label translate="true">No</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="selector_class" xsi:type="text" visible="true" required="true" sort_order="20">
+                <label>Class</label>
+                <description>Class that will be added to the Page and will identify the HREF to be manipulated. Default Class: conversion_tracking.</description>
+                <value>conversion_tracking</value>
+            </parameter>
+            <parameter name="display_type" xsi:type="select" visible="true" required="true" sort_order="30">
+                <label translate="true">Select Setup</label>
+                <options>
+                    <option name="from_request" value="from_request" selected="true">
+                        <label translate="true">Request URL</label>
+                    </option>
+                    <option name="static_value" value="static_value">
+                        <label translate="true">Static Value</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="tracking_parameters_from_url" xsi:type="block" visible="true" required="true" sort_order="40">
+                <label translate="true">Tracking Parameters</label>
+                <depends>
+                    <parameter name="display_type" value="from_request"/>
+                </depends>
+                <block class="Fedex\WebAnalytics\Block\Adminhtml\DynamicRowsFromUrl"/>
+            </parameter>
+            <parameter name="tracking_parameters_static_value" xsi:type="block" visible="true" required="true" sort_order="50">
+                <label translate="true">Tracking Parameters</label>
+                <depends>
+                    <parameter name="display_type" value="static_value"/>
+                </depends>
+                <block class="Fedex\WebAnalytics\Block\Adminhtml\DynamicRowsStaticValue"/>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

@@ -1,0 +1,247 @@
+<?php
+/**
+ * Copyright © Fedex, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**@var Fedex\SelfReg\ViewModel\CompanyUser $companyUser */
+$companyUserViewModel = $block->getData('company_user_view_model');
+$userGroupAndFolderLevelPermissionToggle = $companyUserViewModel->toggleUserGroupAndFolderLevelPermissions();
+
+$isShowEmailNotificationSection = $block->isShowEmailSendingSection();
+$isSdeStore = $block->isSdeStore();
+$reviewOrderDivName = "";
+?>
+<form class="form form-edit-users" method="POST" id="edit-users-form">
+    <input type="hidden" class="" name="customer_ids" value="" id="selected_users_id">
+    <fieldset class="fieldset edit-users-permission-fieldset">
+        <div class="field field-name field-name-users">
+            <label class="label users field-name" for="users"><span>Users</span></label>
+            <div class="control users-list" id="selected-users-container">
+            </div>
+            <div class="users-list-gradient"></div>
+            <div class="edit_users-datalist-wrapper"><div id="edit_users_search_dropdown">&nbsp;</div></div>
+        </div>
+        <div class="error-msg bulk-edit-error-msg">Please select user(s) to modify</div>
+        <div class="expand-more-custom-class"></div>
+        <?php if ($userGroupAndFolderLevelPermissionToggle): ?> 
+            <div class="field user-group">
+                <label class="label user-group" for="usergroup">
+                    <span><?= $block->escapeHtml(__('User Group - Folder Permissions')) ?></span>
+                </label>
+                <div class="control">
+                    <input type="hidden" name="editedBulkGroupId" id="editedBulkGroupId">
+                    <input type="text" id="bulk_edit_usergroup" readonly name="bulk-edit-usergroup" value="" title="User Group"
+                        class="input-text required-entry disabled-field validate-length minimum-length-1 maximum-length-255" 
+                        data-test-id="manage-user-edit-modal-user-group" aria-required="true" onfocus="this.blur();">
+                    <a href="#" id="bulk_edit_usergroup_change-user-group-modal-link" 
+                                class="change-user-group-button no-underline fs-16 lh-24">Change User Group</a>
+                </div>
+            </div>
+        <?php endif; ?>
+        <div class="field status">
+            <label class="label status field-name" for="status">
+                <span>STATUS</span>
+            </label>
+            <div class="control" style="position:relative">
+                <input type="radio" value="1" name="status" class="radion-button" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-status-active" aria-label="active-button" id="edit_users_status-value-permission-active"> <label class="value-label" for="status-value-permission-active">Active</label>
+            </div>
+            <div class="control" style="position:relative">
+                <input type="radio" value="0" name="status" class="radion-button" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-status-inactive" aria-label="inactive-button" id="edit_users_status-value-permission-inactive"> <label class="value-label" for="status-value-permission-inactive">Inactive</label>
+            </div>
+        </div>
+        <div class="field admin-permission">
+            <label class="field-name" for="admin-permission">
+                <span>Admin Permissions</span>
+            </label>
+            <?php 
+                $permissions = $block->getAllRolePermission();
+                $count = 0;
+                $_columnCount = 2;
+                $internalCount  = 1;
+            ?>
+            <?php $_collectionSize = $permissions->count() ?>
+            <?php foreach($permissions as $permission) :?>
+            <?php if($permission->getSortOrder() > 0) :?>
+            <?php if ($count++%$_columnCount==0): ?>
+            <?php $sectionControl = ($internalCount != 1) ? "second" : "first";?>
+            <div class="control <?= $sectionControl?>-section">
+            <?php endif ?>
+                <?php 
+                    $permissionLabel = $permission->getLabel();
+                    $permissionLabel = explode("::",$permissionLabel);
+                    $label = $permissionLabel[0] ?? "";
+                    $code = $permissionLabel[1] ?? "";
+                    $toolTip = $permission->getTooltip();
+                    if ($isSdeStore && $code== "review_orders") {
+                        $reviewOrderDivName = 'review-order-sde';
+                    }
+                ?>
+                <div class="<?= $code ?> admin-permission-option-section <?= $reviewOrderDivName ?>">
+                    <input type="checkbox" class="edit_bulk_role_permissions" id="edit_users_<?= $code?>" aria-label="user_permissions" name="<?= $code?>" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-role-<?= $code?>" value="<?= $permission->getId() ?>">
+                    <label for="<?= $code?>" ><?= $label?></label>
+                    <button type="button" class="tooltip-button" aria-label="tooltip" data-test-id="E-404291-B-2010881-tool-tip-<?= $code?>">
+                        <svg class="<?= $code?>-tooltip" xmlns="http://www.w3.org/2000/svg" width="29" height="29" viewBox="0 0 29 29" fill="none">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M14.5 24.1667C9.16125 24.1667 4.83334 19.8388 4.83334 14.5C4.83334 9.16129 9.16125 4.83337 14.5 4.83337C19.8388 4.83337 24.1667 9.16129 24.1667 14.5C24.1667 19.8388 19.8388 24.1667 14.5 24.1667ZM14.5 22.9584C19.1714 22.9584 22.9583 19.1714 22.9583 14.5C22.9583 9.82863 19.1714 6.04171 14.5 6.04171C9.82859 6.04171 6.04167 9.82863 6.04167 14.5C6.04167 19.1714 9.82859 22.9584 14.5 22.9584ZM16.6146 18.7292H14.8021H12.9896C12.6559 18.7292 12.3854 18.4587 12.3854 18.125C12.3854 17.7914 12.6559 17.5209 12.9896 17.5209H14.1979V13.5938H13.5938C13.2601 13.5938 12.9896 13.3233 12.9896 12.9896C12.9896 12.656 13.2601 12.3855 13.5938 12.3855H14.8021C15.1358 12.3855 15.4063 12.656 15.4063 12.9896V17.5209H16.6146C16.9483 17.5209 17.2188 17.7914 17.2188 18.125C17.2188 18.4587 16.9483 18.7292 16.6146 18.7292ZM13.5938 9.96879C13.5938 9.47035 13.9979 9.06254 14.5 9.06254C14.9984 9.06254 15.4063 9.47035 15.4063 9.96879C15.4063 10.4709 14.9984 10.875 14.5 10.875C13.9979 10.875 13.5938 10.4709 13.5938 9.96879Z" fill="#4D148C"></path>
+                        </svg>
+                    </button>
+                    <div class="<?= $code?>-tooltip-message tooltip-message" style="display: none;"><?= $toolTip ?>
+                    </div>
+                </div>
+            <?php $internalCount++; if ($count%$_columnCount==0 || $count==$_collectionSize): ?>
+            </div>
+            <?php endif; ?>
+            <?php endif; ?>
+            <?php endforeach;?>
+        </div>
+        <?php if($isShowEmailNotificationSection) :?>
+        <div class="field email-approval-section" style="display: none;">
+            <label class="email-approval-message">Would you like this user to receive site access approval emails?</label>
+            <div class="email-approval-selection">
+                <div>
+                    <input type="radio" id="edit_users_email-approval-yes" aria-label="email-yes" name="email-approval"  data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-email-yes" value="<?= $block->getManageruserEmailAllow($permissions)?>">
+                    <label for="email-approval-yes">Yes</label>
+                </div>
+                <div>
+                    <input type="radio" id="edit_users_email-approval-no" aria-label="email-no" name="email-approval" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-email-no" value="<?= $block->getManageruserEmailDeny($permissions)?>">
+                    <label for="email-approval-no">No</label>
+                </div>
+            </div>
+        </div>
+        <?php endif;?>
+        <div class="field edit">
+            <button class="action cancel secondary" type="button" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-cancel" data-role="action"><span>CANCEL</span></button>
+            <button class="action save primary" id="edit_users_saveuser" data-test-id="E-404291-B-2010871-TK-3436912-manage-user-bulk-edit-modal-save" type="button" data-role="action">
+                <span>SAVE</span>
+            </button>
+        </div>
+    </fieldset>
+</form>
+
+<script>
+            require(['jquery'], function($) {
+                var isShowEmailNotificationSection = '<?= $isShowEmailNotificationSection ?>';
+                $('#edit-users-form input:checkbox, #edit-users-form input:radio').keypress(function(e){
+                    if((e.keyCode ? e.keyCode : e.which) == 13){
+                        $(this).trigger('click');
+                    }
+                });
+                $(".admin-permission .tooltip-button").focus(function(){
+                    $(this).parent(".admin-permission-option-section").find(".tooltip-message").show();
+                });
+                $(".admin-permission .tooltip-button").focusout(function(){
+                    $(this).parent(".admin-permission-option-section").find(".tooltip-message").hide();
+                });
+
+                /*Display tooltip for shared order*/
+                $("#edit-users-form .shared_orders-tooltip").hover(function() {
+                    $("#edit-users-form .shared_orders-tooltip-message").show();
+                }, function() {
+                    $("#edit-users-form .shared_orders-tooltip-message").hide();
+                });
+
+                /*Display tooltip for credit card*/
+                $("#edit-users-form .shared_credit_cards-tooltip").hover(function() {
+                    $("#edit-users-form .shared_credit_cards-tooltip-message").show();
+                }, function() {
+                    $("#edit-users-form .shared_credit_cards-tooltip-message").hide();
+                });
+
+                /*Display tooltip for manage user*/
+                $("#edit-users-form .manage_users-tooltip").hover(function() {
+                    $("#edit-users-form .manage_users-tooltip-message").show();
+                }, function() {
+                    $("#edit-users-form .manage_users-tooltip-message").hide();
+                });
+
+                /*Display tooltip for manage catalog*/
+                $("#edit-users-form .manage_catalog-tooltip").hover(function() {
+                    $("#edit-users-form .tooltip-message").hide();
+                    $("#edit-users-form .manage_catalog-tooltip-message").show();
+                }, function() {
+                    $("#edit-users-form .manage_catalog-tooltip-message").hide();
+                });
+
+                /** Display tooltip for site settings **/
+                $("#add-user-form .site_settings-tooltip").hover(function() {
+                    $("#add-user-form .tooltip-message").hide();
+                    $("#add-user-form .site_settings-tooltip-message").show();
+                }, function() {
+                    $("#add-user-form .site_settings-tooltip-message").hide();
+                });
+
+                /*Display tooltip for review orders*/
+                $("#edit-users-form .review_orders-tooltip").hover(function() {
+                    $("#edit-users-form .tooltip-message").hide();
+                    $("#edit-users-form .review_orders-tooltip-message").show();
+                }, function() {
+                    $("#edit-users-form .review_orders-tooltip-message").hide();
+                });
+                if (isShowEmailNotificationSection) {
+                    /*Enable manage user email section*/
+                    $(document).on("click", "#edit-users-form #edit_users_manage_users", function() {
+                        if ($(this).is(":checked")) {
+                            $("#edit-users-form .email-approval-section").show();
+                            if ($("#manage_users-hidden").val() != 1) {
+                                $("#edit-users-form #edit_users_saveuser").prop('disabled', true);
+                                $("#edit-users-form #edit_users_saveuser").addClass("disable-save-user");
+                            }
+                        } else {
+                            $("#edit-users-form .email-approval-section").hide();
+                            if ($("#manage_users-hidden").val() != 1) {
+                                $("#edit-users-form #edit_users_saveuser").prop('disabled', false);
+                                $("#edit-users-form #edit_users_saveuser").removeClass("disable-save-user");
+                                $('#edit-users-form input[name="email-approval"]').prop('checked', false);
+                            }
+                        }
+                    });
+                }
+
+                /*Enable validation for save button*/
+                $(document).on("click", "#edit-users-form input[name='email-approval']", function() {
+                    $("#edit-users-form #edit_users_saveuser").prop('disabled', false);
+                    $("#edit-users-form #edit_users_saveuser").removeClass("disable-save-user");
+                });
+            });
+        </script>
+    <script>
+require(['jquery', 'mage/url'], function($, urlBuilder) {
+    $(document).on("click", "#role_permission_bulk_edit_model .form-edit-users #edit_users_saveuser", function() {
+        if($("#selected-users-container .users-tag-container").length > 0) {
+            $(".bulk-edit-error-msg").hide();
+            var bulkSaveRequestUrl =  urlBuilder.build('selfreg/customer/bulksave');
+            var customerIds = $('#selected_users_id').val();
+            var rolePermissions = {};
+            $('#edit-users-form .edit_bulk_role_permissions:checked').each(function () {
+                rolePermissions[$(this).attr("id")] = $(this).val();
+            });
+            var emailApproval = "";
+            var cstatus = $('input[name="status"]:checked').val();
+            emailApproval = $('#edit-users-form input[name="email-approval"]:checked').val();
+            let bulkEditedGroupId = $('#editedBulkGroupId').val();
+            $.ajax(bulkSaveRequestUrl, {
+                type: 'POST',
+                showLoader: true,
+                data: {
+                    customerIds:customerIds,
+                    status:cstatus,
+                    rolePermissions,
+                    emailApproval: emailApproval,
+                    group:bulkEditedGroupId
+                },
+                dataType: 'json',
+                success: function (response) {
+                    localStorage.setItem('message', response.message);
+                    localStorage.setItem('type', response.status);
+                    location.reload();                  
+                }
+            });
+        } else {
+            $(".bulk-edit-error-msg").show();
+        }
+    });
+});
+</script>
+
+

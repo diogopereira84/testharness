@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <fedex>
+            <taz>
+                <service_tokens_api_url>https://api.test.office.fedex.com/application/fedexoffice/v2/servicetokens</service_tokens_api_url>
+            </taz>
+        </fedex>
+        <fedex>
+            <general>
+                <track_order_url>https://wwwtest.fedex.com/fedextrack/?trknbr=</track_order_url>
+                <legacy_track_order_url>https://printtracking6.dmz.fedex.com/trackOrder.do?gtns=</legacy_track_order_url>
+                <order_detail_xapi_url>https://api.test.office.fedex.com/order/fedexoffice/v2/orderdetails</order_detail_xapi_url>
+            </general>
+            <cron_configuration>
+                <expired_fuse_token_cleanup_cron>0 * * * *</expired_fuse_token_cleanup_cron>
+                <optimize_quotes_orders_cron>*/5 * * * *</optimize_quotes_orders_cron>
+                <optimize_orders_items_cron>*/5 * * * *</optimize_orders_items_cron>
+                <upload_quote_expired_cron>45 23 * * *</upload_quote_expired_cron>
+                <orders_pending_status_cron>0 4 * * *</orders_pending_status_cron>
+                <ready_for_pickup_email_queue_cron>0 0 * * *</ready_for_pickup_email_queue_cron>
+                <oms_order_new_status_email_cron>0 * * * *</oms_order_new_status_email_cron>
+                <catalog_sync_queue_cron>0 0 * * *</catalog_sync_queue_cron>
+                <catalog_sync_queue_process_cron>*/5 * * * *</catalog_sync_queue_process_cron>
+                <catalog_sync_queue_complete_cron>*/5 * * * *</catalog_sync_queue_complete_cron>
+                <catalog_sync_remove_data_cron>0 4 * * *</catalog_sync_remove_data_cron>
+                <catalog_sync_queue_delete_item_cron>0 0 * * *</catalog_sync_queue_delete_item_cron>
+                <catalog_sync_queue_cleanup_process_cron>0 4 * * *</catalog_sync_queue_cleanup_process_cron>
+                <remove_old_orders_cron>0 5 * * *</remove_old_orders_cron>
+            </cron_configuration>
+        </fedex>
+        <environment_toggle_configuration>
+            <environment_toggle>
+                <tigerteam_e383157Toggle>0</tigerteam_e383157Toggle>
+            </environment_toggle>
+        </environment_toggle_configuration>
+    </default>
+</config>

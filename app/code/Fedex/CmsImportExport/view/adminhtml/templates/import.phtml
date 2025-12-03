@@ -1,0 +1,59 @@
+<!--
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ -->
+<form id="edit_form" action="<?= /* @noEscape */ $block->getUrl('*/*/save'); ?>" method="post"
+enctype="multipart/form-data" novalidate="novalidate" data-mage-init='{"validation": {}}'>
+        <div>
+                <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey();?>">
+        </div>
+	<input class="validate_csv" id="validate_csv" name="validate_csv" type="hidden"
+        value="<?= /* @noEscape */ $block->getUrl('*/*/validatecsv');?>">
+        <fieldset class="fieldset admin__fieldset " id="base_fieldset">
+        <legend></legend>
+                <div class="admin__field field field-import_file  with-addon required _required"
+                data-ui-id="import-container-form-fieldset-element-form-field-import-file">
+                        <label class="label admin__field-label" for="import_file"
+                        data-ui-id="import-container-form-fieldset-element-file-import-file-label"
+                        style="width:40%;"><span>Select File</span></label>
+                        <div class="admin__field-control control">
+                                <div class="admin__field">
+                                        <label class="addbefore" for="import_file">
+                                                <input type="button" value="Browse Local File" style="padding:8px 42px;"
+                                                id="browse-file" aria-required="true">
+                                                <span class="upload-filename"></span>
+                                        </label>
+                                        <input id="import_file" name="import_file"
+                                        data-ui-id="import-container-form-fieldset-element-file-import-file"
+                                        value="" title="Select File" class="input-file required-entry _required"
+                                        type="file" formelementhookid="elemIdSyZD23oLOT" aria-required="true">
+                                </div>
+                        </div>
+                </div>
+        </fieldset>
+	<div class="loader_import" id="loader_import">
+        <img alt="loader" src="<?= /* @noEscape */
+        $block->getViewFileUrl('images/cms-import-export/loader_import.gif'); ?>" />
+        </div>
+        <fieldset class="fieldset admin__fieldset " id="base_fieldset_validate">
+        <legend></legend>
+                <input type="submit" value="VALIDATE DATA" class="validate-button" id="validate-button">
+        </fieldset>
+        <fieldset class="fieldset admin__fieldset " id="base_fieldset_validate_message">
+        <legend></legend>
+                <div class="messages">
+                </div>
+        </fieldset>
+        <fieldset class="fieldset admin__fieldset " id="base_fieldset_import">
+        <legend></legend>
+                <input type="submit" value="IMPORT" class="import-button" id="import-button" style="display:none;">
+        </fieldset>
+</form>
+<script type="text/x-magento-init">
+{
+        "*": {
+                "Fedex_CmsImportExport/js/cmsimport": {
+                }
+        }
+}
+</script>

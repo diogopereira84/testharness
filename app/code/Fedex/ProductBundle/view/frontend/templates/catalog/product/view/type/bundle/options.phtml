@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php /** @var $block Magento\Bundle\Block\Catalog\Product\View\Type\Bundle */ ?>
+<?php
+$product = $block->getProduct();
+$stripSelection = $product->getConfigureMode() ? true : false;
+$options = $block->decorateArray($block->getOptions($stripSelection));
+?>
+<?php if ($product->isSaleable()) :?>
+    <div class="hidden-bundle-option" id="bundle-option-container" style="display:none">
+        <?php if (count($options)) : ?>
+            <?php foreach ($options as $option) : ?>
+                <?php
+                if (!$option->getSelections()) {
+                    continue;
+                } else {
+                    echo $block->getOptionHtml($option);
+                }
+                ?>
+            <?php endforeach; ?>
+        <?php else : ?>
+            <p class="empty"><?= $block->escapeHtml(__('No options of this product are available.')) ?></p>
+        <?php endif; ?>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "#product_addtocart_form": {
+                "catalogAddToCart": {
+                    "optionConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                    "controlContainer": ".field.option",
+                    "processStop": "processStop",
+                    "processStart": "processStart",
+                    "bindSubmit": false,
+                    "submitOnLoad": <?= $block->getData('submitOnLoad') ?? 0; ?>
+                },
+                "priceBundle": {
+                    "optionConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
+                    "controlContainer": ".field.option"
+                }
+            }
+        }
+    </script>
+<?php endif;?>

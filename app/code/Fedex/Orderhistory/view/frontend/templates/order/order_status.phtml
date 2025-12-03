@@ -1,0 +1,10 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php /** @var $block \Magento\Sales\Block\Order\Info */ ?>
+<?php if (!$block->isPrintReceiptRetail()): ?>
+    <span class="order-status"><?= $block->escapeHtml($block->getOrder()->getStatusLabel()) ?></span>
+<?php endif; ?>

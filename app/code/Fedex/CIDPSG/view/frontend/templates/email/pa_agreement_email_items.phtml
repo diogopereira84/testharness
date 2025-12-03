@@ -1,0 +1,19 @@
+<?php
+    $paAgreementItems = $block->getItems();
+    $count = 1;
+?>
+<table width='580' style='margin-left:25px'>
+    <?php foreach ($paAgreementItems as $key => $value): ?>
+        <tr <?=($count % 2) != 0 ? "bgcolor='#F2F2F2'" : "";?>>
+            <td style='border:1px solid white;border-bottom:1px solid #333333;border-collapse:collapse;padding:7px 0 7px 8px;
+            <?=($count % 2) != 0 ? "border-right:1px solid #F2F2F2;" : "";?>'>
+            <strong><?= $block->escapeHtml(ucwords(str_replace("_", " ", $key)))?></strong></td>
+            <td style='border:1px solid white;border-bottom:1px solid #333333;border-collapse:collapse;padding:7px 52px 7px 0;
+            <?=($count % 2) != 0 ? "border-right:1px solid #F2F2F2;" : "";?>' align='right'>
+            <?= $block->escapeHtml($value)?></td>
+        </tr>
+        <?php
+        $count++;
+    endforeach;
+    ?>
+</table>

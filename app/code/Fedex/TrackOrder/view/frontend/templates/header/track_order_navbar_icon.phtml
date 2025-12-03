@@ -1,0 +1,12 @@
+<?php
+    $trackOrderViewModel = $block->getData('track_order_home_view_model');
+    $trackOrderToggle = $trackOrderViewModel->isTrackOrderActive();
+    $isCommercialCustomer = $trackOrderViewModel->isCommercialCustomer();
+?>
+
+<?php if ($trackOrderToggle && !$isCommercialCustomer): ?>
+        <a href="<?=/* @noEscape */$block->getUrl('track'); ?>" class="track-order-nav-link">Track Order<span class="track-order-nav-img">
+            <img src="<?= /* @noEscape */ $block->getViewFileUrl('Fedex_TrackOrder::images/track-order.png'); ?>" 
+            alt="Track order icon" /></span>
+        </a>
+<?php endif; ?>

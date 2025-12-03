@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="right.top.header.links">
+            <block class="Magento\Framework\View\Element\Template" ttl="0" name="header.top.commercial.login" template="Fedex_Commercial::header/login_info.phtml">
+                <arguments>
+                    <argument name="commercial_login" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+                    <argument name="upload_to_quote_viewmodel" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                    <argument name="upload_to_quote_history_viewmodel" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteHistory</argument>
+                    <argument name="unfinished_project_viewmodel" xsi:type="object">Fedex\Cart\ViewModel\UnfinishedProjectNotification</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="top.container">
+        <block class="Magento\Framework\View\Element\Template" name="add.to.cart.tost.msg" after="-" template="Fedex_Commercial::header/add.to.cart.success.phtml">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Framework\View\Element\Template" name="add.to.cart.inbrancherror.msg" after="-" template="Fedex_InBranch::add.to.cart.inbrancherror.phtml" />
+    </referenceContainer>
+        <referenceBlock name="store.menu">
+            <block class="Magento\Framework\View\Element\Template" name="top.commerical.search.mobile" template="Fedex_Commercial::header/form.mini.commercial.phtml" before="-">
+                <arguments>
+                    <argument name="configProvider" xsi:type="object">Magento\Search\ViewModel\ConfigProvider</argument>
+                    <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+                    <argument name="mobile-only" xsi:type="boolean">true</argument>
+                </arguments>
+            </block>
+            <block name="commerical.search.toggle" template="Fedex_Commercial::header/search.toggle.phtml" after="-">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\Commercial\ViewModel\CommercialSsoConfiguration</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

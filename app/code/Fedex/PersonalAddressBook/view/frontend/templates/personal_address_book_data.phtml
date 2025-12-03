@@ -1,0 +1,134 @@
+<?php
+$addressBookData = $block->addressBookData();
+?>
+<div class="selected-delete-container" style="display: none;">
+    <span class="selected-count">0 Selected</span>
+    <button class="bulk-delete-button">DELETE</button>
+</div>
+<div class="data-grid-wrap table-wrapper" data-role="grid-wrapper">
+<table class="data-grid data table personal_address_book_table" data-role="grid">
+<thead>
+    <tr>
+        <th tabindex="0" class="data-grid-multicheck-cell firstCell">
+            <div class="action-multicheck-wrap">
+                <input aria-label="header-checkbox" class="admin__control-checkbox custom_header_checkbox" type="checkbox">
+            </div>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content first-sort" data-th="lastName">LAST NAME</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content" data-th="firstName">FIRST NAME</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content" data-th="companyName">COMPANY</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable address-data">
+            <span class="data-grid-cell-content" data-th="personal_address_address">ADDRESS</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content" data-th="personal_address_city">CITY</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content" data-th="personal_address_state">STATE</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th _sortable _draggable">
+            <span class="data-grid-cell-content" data-th="personal_address_zip">ZIP</span>
+        </th>
+
+        <th tabindex="0" class="data-grid-th">
+            <span class="data-grid-cell-content personal_address_action">ACTIONS</span>
+        </th>
+    </tr>
+</thead>
+<tbody class="searchaddressbookdata">
+    <?php if (!empty($addressBookData)): ?>
+    <?php foreach ($addressBookData as $addressBook): ?>
+    <tr class="data-row disabled">
+        <td tabindex="0" class="data-grid-checkbox-cell">
+            <label class="data-grid-checkbox-cell-inner">
+            <input aria-label="custom_row_checkbox" class="admin__control-checkbox custom_row_checkbox" type="checkbox" data-action="select-row"  id="idscheck<?=$addressBook['contactID']??''; ?>" value="<?=$addressBook['contactID']??''; ?>">
+            <input id="contactID" type="hidden" name="contactIDs[]" value="<?=$addressBook['contactID']??''; ?>">
+            </label>
+        </td>
+        <td class="long-text-field" data-th="LAST NAME">
+            <div class="data-grid-cell-content"><?=$addressBook['lastName']??''; ?></div>
+        </td>
+        <td class="long-text-field" data-th="FIRST NAME">
+            <div class="data-grid-cell-content"><?=$addressBook['firstName']??''; ?></div>
+        </td>
+        <td class="long-text-field" data-th="COMPANY">
+            <?=$addressBook['companyName']??'';?>
+        </td>
+        <td data-th="ADDRESS">
+            <div class="data-grid-cell-content"><?=$addressBook['address']['streetLines'][0]??''; ?></div>
+        </td>
+        <td data-th="CITY">
+            <div class="data-grid-cell-content"> <?=$addressBook['address']['city']??''; ?></div>
+        </td>
+        <td class="long-text-field" data-th="STATE">
+            <div class="data-grid-cell-content"><?=$addressBook['address']['stateOrProvinceCode']??''; ?></div>
+        </td>
+        <td class="long-text-field" data-th="ZIP">
+            <div class="data-grid-cell-content"><?=$addressBook['address']['postalCode']??''; ?></div>
+        </td>
+        <td class="data-grid-actions-cell col actions" data-th="ACTIONS">
+          <div aria-label="edit-contact-dropdown" class="manageusers-dropdown edit-contact-dropdown">
+            <div indextab="0">
+                <a aria-label="Manage Contact Actions" class="kebab-image category-list" href="javascript:void(0)"></a>
+            </div>
+            <div class="manageusers-dropdown-content edit-contact-dropdown-content">
+                <a tabindex="0" class="action edit-contact">Edit</a>
+                <a tabindex="0" class="action delete-contact">Delete</a>
+            </div>
+          </div>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+           <td colspan="9">No Record Found.</td> 
+        </tr>
+    <?php endif; ?>
+    <div class="loaderData" data-role="image" style="display:none;">
+        <img alt="Loading..." src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+        <p>Please wait...</p>
+    </div>
+</tbody>
+</table>
+<div class="quotes-grid-toolbar toolbar bottom">
+    <div class="pager">
+        <p class="toolbar-amount">
+            <span></span>
+        </p>
+    </div>
+
+    <div class="pages">
+        <div class="page-title"></div>
+        <div id="pagination"></div>
+    </div>
+
+    <div class="limiter">
+        <span class="label">Show</span>
+        <div id="pagesize control" style="display: inline-block;">
+            <select aria-label="pagesize-option" class="pagesize-options limiter-options">
+                <option value="10">10</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        </div>
+        <label class="limiter-text">per page</label>
+    </div>
+</div>
+<script type="text/javascript">
+    window.totalRecords = <?=$block->totalRecords()?>;
+    window.allRecords = <?=$block->totalRecords()?>;
+</script>

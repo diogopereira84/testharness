@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
+		<!--Create column is_bid as a flag to check whether bid or U2Q-->
+		<column name="is_bid" xsi:type="boolean" default="false" nullable="false" comment="Is Bid flag"/>
+		<!--Create column nbc_required as a flag to check whether opted out of NBC support-->
+		<column name="nbc_required" xsi:type="boolean" default="false" nullable="false" comment="NBC Required flag"/>
+	</table>
+	 <table name="customer_entity" resource="default" engine="innodb" comment="Customer Entity Table">
+        <!--Create column retail_customer_id for saving retail customer received from fuse-->
+		<column xsi:type="varchar" name="retail_customer_id" nullable="true" length="255" comment="Retail Customer Id"/>
+        <index referenceId="CUSTOMER_ENTITY_CUSTOMER_RETAIL_ID" indexType="btree" disabled="true">
+            <column name="retail_customer_id"/>
+        </index>
+		<constraint xsi:type="unique" referenceId="CUSTOMER_ENTITY_RETAIL_CUSTOMER_ID_UNIQUE">
+            <column name="retail_customer_id"/>
+        </constraint>
+    </table>
+</schema>

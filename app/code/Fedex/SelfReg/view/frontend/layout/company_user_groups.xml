@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <body>
+        <attribute name="class" value="manage-user-groups-module"/>
+        <move element="page.main.title" destination="columns" before="-" />
+        <move element="sidebar.main" destination="customer.left.nav" before="-" />
+        <move element="customer.left.nav" destination="columns" after="page.main.title" />
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+
+            </container>
+        </referenceContainer>
+        <referenceBlock name="page.main.title" remove="true" />
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="manage_user_groups_page"
+                   template="Fedex_SelfReg::manage_user_groups_page.phtml" >
+            </block>
+            <uiComponent name="manage_user_groups_listing"/>
+            <block name="new_user_group_modal" template="Fedex_SelfReg::new_user_group_modal.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument> 
+                </arguments>
+            </block>
+            <block name="validate_user_group_modal"
+                template="Fedex_SelfReg::validate_user_group_modal.phtml">
+                <arguments>
+                    <argument name="view_model"
+                        xsi:type="object">Fedex\SelfReg\ViewModel\CompanyUser</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

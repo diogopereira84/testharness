@@ -1,0 +1,59 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$fuseBidViewModel = $block->getData('fusebidQuoteViewModal');
+$loginErrorPopup = $fuseBidViewModel->displayPopupForLoginError();
+$redirectUrl = $fuseBidViewModel->getGeneralConfig('wlgn_login_page_url');
+?>
+<?php
+if ($fuseBidViewModel->isFuseBidToggleEnabled()): ?>
+    <div id="retail-go-back-to-login-modal-popup" class="retail-go-back-to-login-modal-popup-content" style="display:none">
+        <div class="warning-icon-container">
+            <img class="warning-icon" alt="Warning"
+            src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/commercial-order-approval/warning.png'));?>"/>
+        </div>
+        <h3 class="back-to-login-popup-title">
+            <?= $escaper->escapeHtml(__('This email address cannot access your quote.')) ?>
+        </h3>
+        <div class="back-to-login-popup-message">
+            <?= $escaper->escapeHtml(__('Please enter the email address where your quote was sent. If no account is associated with this email, please create one to access this quote.')) ?>
+        </div>
+        <div class="back-to-login-popup-popup-btn-container">
+            <?php
+                $cancelRedirectUrl = $block->getUrl();
+                $wlgnLogoutPageUrl = $fuseBidViewModel->getGeneralConfig('fcl_logout_url');
+                $queryParameter = $fuseBidViewModel->getGeneralConfig('fcl_logout_query_param');
+                $wlgnLogoutUrl = $wlgnLogoutPageUrl . '?' . $queryParameter . '=' . $cancelRedirectUrl;
+            ?>
+            <button type="button" class="btn-back-to-login-popup-cancel log-out wlgn-logout fxo-logout">
+                <a href="javascript:void(0)" data-url="<?= $block->escapeHtml($wlgnLogoutUrl) ?>" style="color:black;text-decoration:none">
+                    <?= $escaper->escapeHtml(__('Cancel')) ?>
+                </a>
+            </button>
+
+            <button type="button" class="btn-go-back-to-login">
+                <?= $escaper->escapeHtml(__('Go Back To Login')) ?>
+            </button>
+        </div>
+    </div>
+    <?php if($fuseBidViewModel->isToggleD215974Enabled()): ?>
+        <?php
+        $goBackToLoginModalPopup = <<<script
+            require(['goBackToLoginModalPopup'], function(goBackToLoginModalPopup) {});
+            window.loginErrorPopup = "$loginErrorPopup"
+            window.redirectUrl = "$redirectUrl"
+        script;
+        ?>
+        <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $goBackToLoginModalPopup, false); ?>
+    <?php else: ?>
+        <script>
+            require(['goBackToLoginModalPopup'], function(goBackToLoginModalPopup) {});
+            window.loginErrorPopup = "<?= /* @noEscape */ $loginErrorPopup ?>"
+            window.redirectUrl = "<?= /* @noEscape */ $redirectUrl ?>"
+        </script>
+    <?php endif; ?>
+<?php endif; ?>

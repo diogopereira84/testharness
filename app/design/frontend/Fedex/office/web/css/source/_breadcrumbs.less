@@ -1,0 +1,90 @@
+& when (@media-common = true) {
+    .breadcrumbs {
+        .lib-breadcrumbs(
+            @_breadcrumbs-link-color: #0079B4,
+            @_breadcrumbs-container-margin: 15px 0,
+            @_icon-font-color: #333,
+            @_icon-font-size: 7px,
+            @_icon-font-line-height: 20px,
+            @_icon-font-margin: 0 5px
+        );
+        .item {
+            font-family: 'FedEx Sans Regular';
+		    line-height: 20px;
+            a {
+                font-weight: bold;
+            }
+            strong {
+                color: #333;
+            }
+            &:last-child {
+                display: inline;
+            }
+        }
+    }
+    .page-layout-first-party-product-full-width,
+    .page-layout-in-store-product-full-width {
+        .breadcrumbs {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            .item {
+                font-family: 'FedEx Sans Regular';
+                line-height: 24px;
+                a {
+                    color: #0078B4;
+                    font-weight: normal;
+                }
+                &:not(:last-child):after {
+                    color: @fx-grey-1200;
+                    font-size: 14px;
+                    line-height: 24px;
+                    margin: 0 7px;
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m + 1)) {
+    .breadcrumbs {
+        .item {
+            line-height: 24px;
+            &:not(:last-child):after {
+                color: #0079B4;
+                font-size: 14px;
+                line-height: 24px;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+    .page-layout-first-party-product-full-width,
+    .page-layout-in-store-product-full-width {
+        .breadcrumbs {
+            margin-bottom: 24px;
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .breadcrumbs {
+        .item {
+            a {
+                max-width: 120px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                display: inline-block;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .breadcrumbs {
+        margin-top: 10px;
+    }
+    .page-layout-first-party-product-full-width,
+    .page-layout-in-store-product-full-width {
+        .breadcrumbs {
+            margin-top: 0;
+        }
+    }
+}

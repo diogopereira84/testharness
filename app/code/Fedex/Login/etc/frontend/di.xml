@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<type name="Magento\Store\Model\Store">
+		<plugin name="store_get_base_url" type="Fedex\Login\Plugin\Store" sortOrder="100000"/>
+	</type>
+	<type name="Magento\LoginAsCustomerFrontendUi\Controller\Login\Index">
+        <plugin name="impersonator_login_as_customer_after" type="Fedex\Login\Plugin\LoginAsCustomerAfterPlugin" />
+    </type>
+</config>

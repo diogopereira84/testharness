@@ -1,0 +1,343 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/**
+ * @var \Magento\Orderhistory\Block\Order\History $block
+ * @var \Magento\Framework\Escaper $escaper
+ */
+
+use Magento\Catalog\Model\Product\Type;
+
+$orderItem = $block->getOrderItem();
+$order = $orderItem->getOrder();
+$slectedCheckoboxIcon = 'images/order-history/selected-checkbox.png';
+$orders = $block->getOrders();
+/** @var \Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement $viewModel */
+$viewModel = $block->getData('order_enhancement_view_model');
+$checkLegacyDocReorderSectionToggle = $viewModel->checkLegacyDocReorderSectionToggle();
+$reorderToggle = $viewModel->isRetailOrderHistoryReorderEnabled();
+$isReorderEnabled = $viewModel->isReorderEnabled();
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productinfo_handler_view_model');
+
+// Millionaires - E-398131 : Adoption of New Document Platform toggle value
+$newDocumentApiImageToggle = $viewModel->isNewDocumentImageToggleEnabled();
+
+// B-900093 | code to sort collection by date
+$orderBy = $this->getRequest()->getParam('orderby') ? $this->getRequest()->getParam('orderby') : 'DESC';
+$sortBy = $this->getRequest()->getParam('sortby') ? $this->getRequest()->getParam('sortby') : 'created_at';
+$queryParam = $this->getRequest()->getParams();
+if ($orderBy == 'DESC') {
+    $queryParam['orderby'] = 'ASC';
+    $queryParam['sortby'] = $sortBy;
+} else {
+    $queryParam['orderby'] = 'DESC';
+    $queryParam['sortby'] = $sortBy;
+}
+$historyUrl = $this->getUrl(
+    'sales/order/history',
+    ['_current' => true, '_use_rewrite' => true, '_query' => $queryParam]
+);
+?>
+<?php
+$miraklItemCount = $viewModel->getMiraklItemsCount($order);
+$fedexItemsCount = $order->getTotalItemCount() - $miraklItemCount;
+$miraklItemsCountText = $miraklItemCount == 1 ? '1 item' : $miraklItemCount . ' items';
+$fedexItemsCountText = $fedexItemsCount == 1 ? '1 item' : $fedexItemsCount . ' items';
+$isReOrderable = false;
+$orderItemStatusLegacyDocument = false;
+$isReOrderable = $viewModel->isReOrderable($order->getId());
+$statusLabel = $viewModel->orderStatusLabel($order->getStatusLabel());
+$orderItemStatusLegacyDocument = $viewModel->checkLegacyDocumentForReorder($order->getId());
+// Count total items and legacy items
+$totalItems = is_array($orderItemStatusLegacyDocument) ? count($orderItemStatusLegacyDocument) : 0;
+$legacyItemCount = is_array($orderItemStatusLegacyDocument)
+    ? count(array_filter($orderItemStatusLegacyDocument, fn($value) => $value))
+    : 0;
+
+// If all items are legacy, disable the entire order
+$isEntireOrderLegacy = ($totalItems > 0 && $totalItems === $legacyItemCount) ? true : false;
+?>
+<?php
+$attrLable = null;
+$attrValue = null;
+$thumbnailImgUrl = null;
+$orderItems = $viewModel->getItemsByOrderId($order->getId());
+$orderItemsCount = 0;
+$productCount = 0;
+
+$_1PItemStatus = $viewModel->getShipmentStatus1P($order);
+
+$product_json = $productInfoHandler->getItemExternalProd($orderItem) ?? [];
+
+$id = isset($product_json['id']) ? $product_json['id'] : '';
+$version = isset($product_json['version']) ? $product_json['version'] : '';
+$features = $product_json['features'] ?? [];
+$previewUrl = $product_json['preview_url'] ?? null;
+$isOutSourced = isset($product_json['isOutSourced']) ? $product_json['isOutSourced'] : false;
+if (count($features)) {
+    $attrLable = $features[0]['name'] ?? null;
+    $attrValue = $features[0]['choice']['name'] ?? null;
+}
+
+if (empty($previewUrl)) {
+    $prodObj = $orderItem->getProduct();
+    $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($prodObj);
+}
+
+$customHtmlAttributes = null;
+
+if (
+    $reorderToggle && isset($orderItem
+            ->getProductOptions()['info_buyRequest'])
+) {
+    $serializedProductData = $viewModel->serializeProductData($orderItem
+        ->getProductOptions()['info_buyRequest']);
+    $serializedProductJsonData = json_encode($serializedProductData['serializedProductData']);
+    $customHtmlAttributes = 'product-instance="' .
+        $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+        $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) . '" product-status="1"';
+    $productStatus = true;
+    $productId = $orderItem->getProductId();
+    $product = $viewModel->loadProductObj($productId);
+
+    if ($product == false) {
+        $customHtmlAttributes = 'product-instance="' .
+            $block->escapeHtmlAttr(__($serializedProductJsonData)) . '" product-preset-id="' .
+            $block->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+            '" product-status="0"';
+        $productStatus = false;
+        $productCount++;
+    }
+}
+
+$prodObj = $orderItem->getProduct();
+$newDocumentImage = $newDocumentApiImageToggle ? $newDocumentApiImageToggle : false;
+if ($prodObj) {
+    $isCustomize = $viewModel->getProductCustomAttributeValue($prodObj->getId(), 'customizable');
+    if ($prodObj->getData('pod2_0_editable') && ($isCustomize) || $newDocumentImage) {
+        $newDocumentImage = true;
+    }
+}
+?>
+    <tr class="expend-order bundle-child item-info item-info-parent-<?= $orderItem->getParentItemId() ?>"
+        <?= /* @noEscape */
+        $customHtmlAttributes ?>
+        order-id="<?= $order->getId(); ?>"
+        order-increment-id="<?= $order->getIncrementId(); ?>"
+        item-id="<?= $orderItem->getId(); ?>"
+        item-sku="<?= $orderItem->getSku() ?>"
+        item-qty="<?= $orderItem->getQtyOrdered() ?>"
+        item-product-type="<?= $orderItem->getProductType() ?>"
+        parent-item-id="<?= $orderItem->getParentItemId() ?? 0 ?>"
+        product-content-reference="<?= $previewUrl; ?>"
+        newDocumentImage=<?= $newDocumentImage ? $newDocumentImage : false; ?>>
+        <td class="col desktop"></td>
+        <td colspan="2" class="col item">
+            <div class="item-info">
+                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                     class="product-engine-loader" alt="product image"
+                     aria-label="product-loader" style="display: none;"/>
+
+                <div class="item-img">
+                    <?php if (!empty($previewUrl)): ?>
+                        <span class="product-image-container prev-img-loader">
+                            <div data-bind="if: productPreviewImg">
+                                <img
+                                    src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                    class="product-loader"
+                                    alt="product image"
+                                    aria-label="product-loader"
+                                />
+                                <img class="preview-product-img"
+                                     id="content-reference-image-<?= $orderItem->getId(); ?>"
+                                     alt="product preview image"
+                                     aria-label="preview-product-img"
+                                     src="#"/>
+                            </div>
+                            <div data-bind="ifnot: productPreviewImg">
+                                <img src="#" alt="Product Image"
+                                     class="product-empty-image"
+                                     aria-label="product-empty-image"/>
+                            </div>
+                        </span>
+                    <?php else: ?>
+                        <span class="product-item-photo">
+                            <img src="<?= $thumbnailImgUrl; ?>"
+                                 class="product-thumbnail"/>
+                        </span>
+                    <?php endif; ?>
+                </div>
+
+                <div class="item-detail">
+                    <p class="product-item-name">
+                        <?php if (!empty($previewUrl) && isset($product_json['userProductName'])) { ?>
+                            <?php echo $product_json['userProductName']; ?>
+                        <?php } else if (!empty($previewUrl) && isset($product_json['fxo_product'])) { ?>
+                            <?php
+                            $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? [];
+                            echo $fxoProduct ? $fxoProduct->name : $orderItem->getName();
+                            ?>
+                        <?php } else { ?>
+                            <?= $block->escapeHtml($orderItem->getName()) ?>
+                        <?php } ?>
+                    </p>
+
+                    <?php if ($attrLable && $attrValue): ?>
+                        <p class="size-info">
+                            <span><?= $attrLable . ' - '; ?></span><span
+                                class="paper-size"><?= $attrValue; ?></span>
+                        </p>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </td>
+
+        <td data-th="<?= $block->escapeHtml(__('Unit Price')) ?>"
+            class="col unit-price"><?= $order->formatPrice($orderItem->getPrice()) ?>
+        </td>
+        <td data-th="<?= $block->escapeHtml(__('Qty')) ?>" class="col qty">
+            <span class="item-qty"><?= /* @noEscape */
+                (int)$orderItem->getQtyOrdered(); ?></span></td>
+        <td data-th="<?= $block->escapeHtml(__('Total')) ?>" class="col total item-total-data">
+            <?= /* @noEscape */
+            $order->formatPrice($orderItem->getRowTotal()-$orderItem->getDiscountAmount()) ?></td>
+    </tr>
+<?php if ($orderItem->getProductType() !== Type::TYPE_BUNDLE): ?>
+    <tr class="product-details-row">
+        <td colspan="6">
+            <table>
+                <tbody>
+                <?php
+                $additionalAttributesData = json_decode((string)$order->getPayment()->getProductLineDetails());
+                if (!empty($additionalAttributesData) && !empty($product_json['id'])) :?>
+                    <?php
+                    $productId = $product_json['id'];
+                    $qty = $product_json['qty']; ?>
+                    <tr>
+                        <td class="detail-toggle">
+                            <a href="javascript:void(0)"
+                               class="show-properties-view-order"
+                               data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                               id="show-hide-detail-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>">
+                                                <span>
+                                                    <?= $block->escapeHtml(__('SHOW DETAILS')) ?>
+                                                </span>
+                            </a>
+                            <a href="javascript:void(0)"
+                               class="hide-properties-view-order"
+                               data-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                               id="hide-show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>"
+                               style="display:none;">
+                                                <span>
+                                                    <?= $block->escapeHtml(__('HIDE DETAILS')) ?>
+                                                </span>
+                            </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr class="retail-product-attributes"
+                        data-content-id="<?= $block->escapeHtml($orderItem->getId()); ?>"
+                        style="display:none">
+                        <td>
+                            <table
+                                class="extra-attributes extra-properties-view-order-<?= $block->escapeHtmlAttr($orderItem->getId()); ?>">
+                                <!-- Nested table -->
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="col item-sku">Sku</th>
+                                    <th scope="col" class="col item-base-price">Base Price</th>
+                                    <th scope="col" class="col item-qty">Qty</th>
+                                    <th scope="col" class="col item-discount">Discount</th>
+                                    <th scope="col" class="col item-total">Total</th>
+                                </tr>
+                                </thead>
+                                <?php
+                                foreach ($additionalAttributesData as $additionalAttributes) {
+
+                                    if ($productId == $additionalAttributes->productId && $qty == $additionalAttributes->unitQuantity) {
+                                        foreach ($additionalAttributes->productLineDetails as $key => $additionalAttribute) { ?>
+
+                                            <tr class="attribute-row">
+                                                <td data-th="<?= $block->escapeHtml(__('SKU')) ?>"
+                                                    class="col attribute-name item-sku">
+                                                                    <span class="attributes-item-name">
+                                                                        <?= $block->escapeHtml($additionalAttribute->description); ?>
+                                                                    </span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('BASE PRICE')) ?>"
+                                                    class="col attribute-base-price item-base-price">
+                                                                    <span
+                                                                        class="attribute-item-base-price">
+                                                                    <?= /* @noEscape */
+                                                                    $order->formatPrice($additionalAttribute->detailPrice); ?>
+                                                                    </span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('QTY')) ?>"
+                                                    class="col attribute-qty item-qty">
+                                                                    <span class="attribute-item-qty ">
+                                                                        <?= $block->escapeHtml($additionalAttribute->unitQuantity); ?>
+                                                                    </span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('DISCOUNT')) ?>"
+                                                    class="col attribute-discount item-discount">
+                                                                    <span
+                                                                        class="attribute-item-discount">
+                                                                        <?php if ($additionalAttribute->detailDiscountPrice > 0): ?>
+                                                                            - <?= /* @noEscape */
+                                                                            $order->formatPrice($additionalAttribute->detailDiscountPrice); ?>
+                                                                        <?php else: ?>
+                                                                            -
+                                                                        <?php endif; ?>
+                                                                    </span>
+                                                </td>
+                                                <td data-th="<?= $block->escapeHtml(__('TOTAL')) ?>"
+                                                    class="col attribute-total item-total">
+                                                                    <span class="attribute-item-total">
+                                                                    <?= /* @noEscape */
+                                                                    $order->formatPrice($additionalAttribute->detailPrice); ?>
+                                                                    </span>
+                                                </td>
+                                            </tr>
+                                        <?php }
+                                        break;
+                                    }
+                                } ?>
+                                <tr class="additional details">
+                                    <td colspan="5">
+                                        <div class="configurater-product-attr"
+                                             id="configurater-product-attr-<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                            <span class="title">ADDITIONAL DETAILS</span>
+                                            <ul class="additional-details"
+                                                role="listbox"
+                                                aria-labelledby="show-detail-<?= $block->escapeHtmlAttr($orderItem->getId()) ?>">
+                                                <?php
+                                                if (!empty($product_json['features'])) {
+                                                    foreach ($product_json['features'] as $configAttribute) {
+                                                        if (!empty($configAttribute['name'])) {
+
+                                                            echo "<li tabindex='0' role='option'>" . $configAttribute['name'] .
+                                                                ": " . $configAttribute['choice']['name'] . "</li>";
+
+                                                        }
+                                                    }
+                                                }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                <?php endif; ?>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+<?php endif; ?>
+<?php $orderItemsCount++; ?>

@@ -1,0 +1,85 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Customer\Block\Account\Dashboard\Address $block */
+?>
+<?php
+    /** @var \Fedex\SSO\ViewModel\SsoConfiguration $fclLogin */
+    $fclLogin = $block->getData('fcl_login');
+
+    /** @var \Fedex\Commercial\ViewModel\CommercialSsoConfiguration $sdeLogin */
+    $sdeLogin = $block->getData('view_model');
+
+?>
+<?php if(!$fclLogin->isSSOlogin()): ?>
+<div class="block block-dashboard-addresses">
+        <?php if (!($fclLogin->isFclCustomer() || $sdeLogin->getIsRequestFromSdeStore()
+                || $sdeLogin->getIsRequestFromSdeStoreFclLogin() || $sdeLogin->isSelfRegCustomerWithFclEnabled())): ?>
+                <div class="block-title">
+                    <strong><?= $block->escapeHtml(__('Address Book')) ?></strong>
+                </div>
+        <?php endif; ?>
+    <div class="block-content">
+        <div class="box box-shipping-address">
+        <?php if (!$fclLogin->isFclCustomer() || !$sdeLogin->getIsRequestFromSdeStore()):?>
+            <strong class="box-title">
+                <span><?= $block->escapeHtml(__('Default Shipping Address')) ?></span>
+            </strong>
+        <?php endif; ?>
+            <div class="box-content">
+                <?php if ($fclLogin->isFclCustomer()
+                    || $sdeLogin->getIsRequestFromSdeStoreFclLogin() || $sdeLogin->isSelfRegCustomerWithFclEnabled())
+                { ?>
+                    <address id="defaule_shipping_address" data-bind="scope: 'customer_info'">
+
+                    </address>
+                <?php } else { ?>
+                    <address>
+                        <?= $block->getPrimaryShippingAddressHtml() ?>
+                    </address>
+                <?php } ?>
+            </div>
+            <div class="box-actions">
+                <?php if ($fclLogin->isFclCustomer() || $sdeLogin->getIsRequestFromSdeStore()
+                    || $sdeLogin->getIsRequestFromSdeStoreFclLogin() || $sdeLogin->isSelfRegCustomerWithFclEnabled()):?>
+                    <a class="action edit" onclick="changeText(this);"
+                    data-url="<?= $block->escapeHtml($fclLogin->getContactInformationProfileUrl()) ?>" href="javascript:void(0)"
+                    data-ui-id="default-shipping-edit-link">
+                    <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                    </a>
+                <?php else: ?>
+                    <a class="action edit"
+                    href="<?= $block->escapeUrl($block->getPrimaryShippingAddressEditUrl()) ?>"
+                        data-ui-id="default-shipping-edit-link">
+                        <span>
+                            <?= $block->escapeHtml(__('Edit Default Shipping Address')) ?>
+                        </span>
+                    </a>
+                <?php endif; ?> 
+            </div>
+        </div>
+    </div>
+</div>
+
+    <?php if ($fclLogin->isFclCustomer()
+        || $sdeLogin->getIsRequestFromSdeStoreFclLogin()
+        || $sdeLogin->isSelfRegCustomerWithFclEnabled()
+    ) : ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "customer_header": {
+                       "component": "Fedex_SSO/js/view/customerinfo"
+                    }
+                }
+            }
+        }
+    }
+    </script>
+    <?php endif; ?>
+<?php endif; ?>

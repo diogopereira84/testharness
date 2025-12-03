@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * B-1257375 - Add configuration for site access (use access flow- all registered users, users from specific domain and admin approval)
+ * 
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="styles"/>   
+    <head>
+        <css src="Fedex_SelfReg::css/selfreg_company.css"/>
+    </head> 
+    <body>        
+        <referenceContainer name="admin.scope.col.wrap" />
+        <referenceContainer name="content">
+            <uiComponent ifconfig="environment_toggle_configuration/environment_toggle/mazegeeks_selfreg_wlgn_login" name="selfreg_company_form"/>
+        </referenceContainer>
+    </body>
+</page>

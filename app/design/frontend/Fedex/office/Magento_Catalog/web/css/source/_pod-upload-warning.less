@@ -1,0 +1,79 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .pod-upload-warning {
+        .warning-icon {
+            text-align: center;
+            display: block;
+            &::before {
+                content: '\e972';
+                font-family: 'FedEx Icons';
+                font-size: 85px;
+                vertical-align: middle;
+                color: @fx-yellow-100;
+            }
+        }
+        .note-title,
+        .note-description {
+            color: @fx-grey-1200;
+            font-family: "FedEx Sans Light";
+            letter-spacing: 0;
+            text-align: center;
+        }
+        .note-title {
+            line-height: 40px;
+        }
+        .note-description {
+            line-height: 32px;
+            margin: 15px auto 35px;
+        }
+        .note-action {
+            background-color: #0078B4;
+            text-transform: uppercase;
+            margin: 0 auto 35px;
+            padding: 16px 34px;
+            font-size: 16px;
+            border-radius: 0;
+            width: auto;
+            display: block;
+        }
+    }
+}
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .pod-upload-warning {
+        padding: 15px 25px;
+
+        .note-title {
+            font-size: 26px;
+        }
+
+        .note-description {
+            font-size: 18px;
+        }
+    }
+}
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .pod-upload-warning {
+        padding: 15px 95px 35px;
+
+        .note-title {
+            font-size: 32px;
+        }
+
+        .note-description {
+            font-size: 20px;
+        }
+    }
+}

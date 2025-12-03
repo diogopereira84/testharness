@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\Recaptcha\Api\Data\ConfigInterface" type="Fedex\Recaptcha\Model\Config"/>
+    <preference for="Fedex\Recaptcha\Api\ValidatorInterface" type="Fedex\Recaptcha\Model\Validator"/>
+
+    <virtualType name="Fedex\Recaptcha\Model\OptionSource\Type" type="Magento\ReCaptchaAdminUi\Model\OptionSource">
+        <arguments>
+            <argument name="options" xsi:type="array">
+                <item name="default" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">No</item>
+                    <item name="value" xsi:type="null"/>
+                </item>
+                <item name="recaptcha_v3" xsi:type="array">
+                    <item name="label" xsi:type="string" translate="true">reCAPTCHA v3 Invisible</item>
+                    <item name="value" xsi:type="string">recaptcha_v3</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Fedex\Recaptcha\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Fedex\Recaptcha\Logger\RecaptchaLogger">
+        <arguments>
+            <argument name="name" xsi:type="string">recaptchaLogHandler</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Fedex\Recaptcha\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ReCaptchaUi\Model\ValidationConfigResolver">
+        <arguments>
+            <argument name="validationConfigProviders" xsi:type="array">
+                <item name="recaptcha_v3" xsi:type="object">Fedex\Recaptcha\Model\Frontend\ValidationConfigProvider\Proxy</item>
+                <item name="frontend_recaptcha_v3" xsi:type="object">Fedex\Recaptcha\Model\Frontend\ValidationConfigProvider\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\ReCaptchaUi\Model\CaptchaTypeResolver">
+        <arguments>
+            <argument name="resolvers" xsi:type="array">
+                <item name="frontend" xsi:type="object">Fedex\Recaptcha\Model\CaptchaTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

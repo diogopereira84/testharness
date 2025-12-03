@@ -1,0 +1,343 @@
+.search.results {
+    color: @fx-grey-1200;
+}
+.retail-session.toolbar {
+    text-align: left;
+    .sorter-action {
+        display: none;
+    }
+    &-title {
+        font-family: "FedEx Sans Light";
+        font-size: 26px;
+        line-height: 34px;
+        letter-spacing: 0;
+        @media only screen and (min-width: 767px) {
+            margin-bottom: 54px;
+        }
+    }
+    &-amount {
+        float: left;
+        font-family: "FedEx Sans Light";
+        line-height: 24px;
+        margin-top: 50px;
+    }
+    .pages {
+        max-width: 300px;
+        margin: 0 auto;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-align: center;
+        -webkit-align-items: center;
+            -ms-flex-align: center;
+                align-items: center;
+        &-subtitle {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 14px;
+            line-height: 24px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+        }
+        .items.pages-items {
+            padding: 0 40px 0;
+            .item {
+                &.current {
+                    .page {
+                        background-color: @fx-purple-500;
+                        color: @fx-white-100;
+                    }
+                }
+                &.pages-item-next,
+                &.pages-item-previous {
+                    .action {
+                        -webkit-box-shadow: unset;
+                        box-shadow: unset;
+                        border: none;
+                        border-radius: 0;
+                        background-color: @fx-white-100;
+                        color: @fx-grey-1200;
+                        width: 32px;
+                        height: 32px;
+                        padding: 0;
+                        &::before {
+                            color: @fx-grey-1200;
+                        }
+                        &:hover {
+                            color: @fx-grey-1200;
+                            background-color: @fx-white-100;
+                        }
+                    }
+
+                }
+                .page {
+                    color: @fx-grey-1200;
+                    border-radius: 50%;
+                    padding: 1px 12px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+}
+.products.wrapper ~ .toolbar-products .pages {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    display: -webkit-flex;
+    float: unset;
+}
+.products.wrapper ~ .toolbar .toolbar-title {
+    display: none;
+}
+.page-products {
+    .columns {
+        padding-top: 0;
+    }
+    .sorter {
+        margin-top: 20px;
+        position: static;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        display: -webkit-flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -webkit-flex-direction: column;
+            -ms-flex-direction: column;
+                flex-direction: column;
+        -webkit-box-align: start;
+            -ms-flex-align: start;
+                align-items: flex-start;
+        &-label {
+            color: @fx-grey-1100;
+            font-family: "FedEx Sans Bold";
+            font-size: 12px;
+            font-weight: bold;
+            letter-spacing: 0.75px;
+            line-height: 16px;
+            padding-bottom: 8px;
+            text-transform: uppercase;
+        }
+        &-options {
+            margin: 0;
+            background-color: #fff;
+            height: 48px;
+            padding: 12px 45px 12px 12px;
+            border-radius: 0;
+            font-family: "FedEx Sans Light";
+            font-size: 16px;
+        }
+    }
+}
+
+.products-grid.retail-session {
+    .product-item {
+        font-family: 'FedEx Sans Light';
+        color: @fx-grey-1200;
+        font-size: 16px;
+        line-height: 26px;
+        width: 100%;
+        margin-left: 0;
+        margin-bottom: 30px;
+        .product-item-info {
+            width: 100%;
+            .product-item-details {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: baseline;
+                .price-box {
+                    margin: 0 5px 0;
+                    .price {
+                        font-family: 'FedEx Sans Regular';
+                        font-size: 16px;
+                        font-weight: normal;
+                    }
+                }
+                .product-item-name {
+                    font-family: 'FedEx Sans Regular';
+                    font-size: 20px;
+                    width: 100%;
+                }
+            }
+            .product-item-photo {
+                .product-image-container {
+                    width: 84px;
+                    .product-image-wrapper {
+                        padding-bottom: 125%;
+                    }
+                }
+            }
+        }
+    }
+}
+// Removing product tile hover state
+@media only screen and (min-width: 640px) {
+    .products-grid.retail-session .product-item-inner {
+        box-shadow: none;
+        border: none;
+        z-index: unset;
+        position: unset;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+    .products-grid.retail-session .product-item-info:hover,
+    .products-grid.retail-session .product-item-info.active {
+        z-index: unset;
+        position: unset;
+        box-shadow: none;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+    }
+    .page-products.page-layout-1column .products-grid.retail-session .product-item {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .search {
+        .toolbar {
+            &-products {
+                position: unset;
+            }
+            &-title {
+                margin-top: 0;
+                margin-bottom: 25px;
+                height: 56px;
+            }
+            &-amount {
+                margin-top: 0;
+            }
+            &-sorter {
+                margin-top: 0;
+                flex-direction: initial;
+                align-items: baseline;
+                .sorter-label {
+                    padding-right: 10px;
+                }
+            }
+        }
+        .product-item .product {
+            &-item-info {
+                width: 340px;
+                max-width: 340px;
+            }
+            &-image-container {
+                width: 340px !important;
+            }
+            &-image-photo {
+                width: 340px;
+            }
+        }
+        .toolbar-title {
+            font-size: 32px;
+            line-height: 40px;
+        }
+    }
+    .products.wrapper ~ .toolbar-products .pages {
+        float: unset;
+    }
+    .products.wrapper ~ .toolbar .limiter {
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .page-products.page-layout-1column .products-grid.retail-session .product-item {
+        width: 25%;
+    }
+    .search .product-item .product {
+        &-item-info {
+            max-width: 244px;
+        }
+    }
+}
+@media only screen and (min-width: 1339px) {
+    .search .product-item .product {
+        &-item-info {
+            max-width: 300px;
+        }
+    }
+}
+
+/* Style fixes for ePro User | Catalog and Catalog Search page */
+
+/* Style fixes for ePro User | Catalog and Catalog Search page */
+
+@media(min-width: 640px){
+	.catalogsearch-result-index{
+		.products-grid.ero-session{
+			.product-item {
+				width: calc((100% - 9%)/5);
+				margin-left: 2%;
+				
+				.product-item-info {
+					max-width: 245px !important;
+				}
+			}
+			
+			.product-item:nth-child(3n + 1) {
+				margin-left: 2% !important;
+			}
+			
+			.product-item:nth-child(5n + 1) {
+				margin-left: 0 !important;
+			}
+		}
+	}
+
+	.toolbar.ero-session{
+		.toolbar-title{
+			text-align: left;
+		}
+		
+		.toolbar-sorter.sorter{
+			display: inline-block;
+			margin-top: 0px;
+		}
+		
+		.toolbar-amount {
+			margin-top: 0px;
+		}
+		
+		.pages {
+			float: left !important;
+			
+			.pages-subtitle{
+				display:none;
+			}
+		}
+	}
+
+	.filter.block {
+		margin-bottom: 0px;
+	}
+
+	.ero-session.products-grid{
+		margin-bottom: 55px;
+		
+		.product-image-container{
+			span.product-image-wrapper {
+				padding-bottom: 125% !important;
+			}
+		}
+		.product-item {
+			padding: 3px;
+		}
+	}
+}
+@media screen and (min-width: 768px) {
+    .catalog-update-enabled{    
+    .ero-session.products-grid{
+    .product-image-container{
+        span.product-image-wrapper {
+            margin-right: -15px;
+        }
+      }
+    }
+}}

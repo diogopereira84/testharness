@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$viewModel = $block->getData('viewModelInfinishedProject');
+$isUnfinishedPopupAllowed = $viewModel->isCartPageUnfinisedPopupEnable();
+if($isUnfinishedPopupAllowed) {
+?>
+<div class="cart-alertbox unfinished-project-popup"  tabindex = '0' >
+    <div class="cart-warning-box-inner">
+        <img src="<?=$this->getViewFileUrl('images/expired-items/alert.png');?>" alt="Warning Icon">
+    </div>
+    <div class="cart-alert-warning-msg">
+        <p class="attention-title">
+            <strong>
+                <?= $block->escapeHtmlAttr(__("You have unfinished projects")) ?>
+            </strong>
+        </p>
+        <p class="notification-msg">
+            <i><?= $block->escapeHtmlAttr(__("Any projects not in your cart upon
+            Checkout will be lost. ")) ?></i>
+            <?= $block->escapeHtmlAttr(__('To see any FedEx Office projects that currently meet
+            this criteria, please go to  "View My Projects".')) ?>
+        </p>
+        <a class="my-projects-link" href="<?= $block->escapeUrl('/configurator/index/index?viewproject=true') ?>">
+            <?= $block->escapeHtmlAttr(__("VIEW MY PROJECTS")) ?>
+        </a>
+    </div>
+    <span id='unfinishedPopupClose' class="close-icon"  tabindex='0'></span>
+</div>
+<?php
+}
+?>

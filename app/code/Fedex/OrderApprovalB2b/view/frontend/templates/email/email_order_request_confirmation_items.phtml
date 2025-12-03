@@ -1,0 +1,320 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$items = $block->getItems();
+$data  = $block->getOrderdetail();
+$orderPlacedDate = $block->getOrderPlacedDate();
+$count = $escaper->escapeHtml(__($items['count']));
+$i = 1;
+?>
+<table class="quote-items" style="width:100%;border-collapse:collapse;">
+    <tr style="background-color:#f2f2f2;">
+        <th class="fedex-ofc-items" style="border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;width:75%;text-align:left;padding-top:8px;padding-right:20px;padding-left:8px;padding-bottom:8px;">
+            <table>
+                <tr>
+                    <td>
+                        <img src="<?=$block->getViewFileUrl('images/b2b-order/store.png');?>" alt="Store Icon" />
+                    </td>
+                 <td>
+                    <?php $counter = $items['count'] ?>
+                    <?php $counterMessage = '('.$counter.' '.($counter > 1 ? __('items') : __('item')).')' ?>
+                    <span><?= $escaper->escapeHtml(__('FedEx Office'.' '.$counterMessage)) ?></span>
+                 </td>
+                </tr>
+            </table>
+        </th>
+        <th class="fedex-ofc" style="border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;padding-left:20px;padding-right:20px;padding-top:8px;padding-bottom:8px;text-align:right;">
+            <?= $escaper->escapeHtml(__('Qty')) ?>
+        </th>
+        <th class="fedex-ofc-price" style="border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;padding-left:20px;padding-right:8px;text-align:right;padding-top:8px;padding-bottom:8px;">
+            <?=$escaper->escapeHtml(__('Price'))?>
+        </th>
+    </tr>
+    <?php foreach ($items as $key => $value): ?>
+        <?php if (is_int($key)): ?>
+            <?php $flagBorder = $count != $i && $value['AdditionalPrintInstruction']=='' ? true : false; ?>
+            <?php $flagSi = $count != $i ? true : false; ?>
+            <?php if ($flagBorder):?>
+                <tr class="item-shipping-tr">
+                <td style="border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;padding-left:8px;padding-right:20px;text-align:left;">
+                    <?= $escaper->escapeHtml($value['item'])?>
+                </td>
+                <td style="border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;text-align:right;padding-left:20px;padding-right:20px;">
+                    <?= $escaper->escapeHtml($value['qty']) ?>
+                </td>
+                <td class="quote-price" style="border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;text-align:right;padding-left:20px;padding-right:8px;">
+                    <?= $escaper->escapeHtml(strip_tags($value['price'])) ?>
+                </td>
+            <?php else:?>
+                <tr class="item-shipping-tr">
+                <td style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;padding-left:8px;padding-right:20px;text-align:left;">
+                    <?= $escaper->escapeHtml($value['item'])?>
+                </td>
+                <td style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;text-align:right;padding-left:20px;padding-right:20px;">
+                    <?= $escaper->escapeHtml($value['qty']) ?>
+                </td>
+                <td class="quote-price" style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding:16px;text-align:right;padding-left:20px;padding-right:8px;">
+                    <?= $escaper->escapeHtml(strip_tags($value['price'])) ?>
+                </td>
+            <?php endif;?>
+            </tr>
+            <?php if ($value['AdditionalPrintInstruction']):?>
+                <?php if ($flagSi):?>
+                    <tr>
+                    <td colspan="3" class="print-int" style="border:1px;border-style:solid;border-color:white;border-bottom:1px;border-bottom-style:dashed;border-bottom-color:#8e8e8e;font-size:12px;line-height:16px;font-weight:400;color:#333;font-style:italic;padding-bottom:16px;padding-left:8px;padding-right:8px;">
+                        <?=$escaper->escapeHtml(__('Additional Print Instructions'))?><br>
+                        <p style="font-size:12px;line-height:16px;font-weight:400;color:#333;font-style:italic;margin:0;">
+                            <i><?=$escaper->escapeHtml(__($value['AdditionalPrintInstruction']))?></i>
+                        </p>
+                    </td>
+                <?php else:?>
+                    <tr style="font-size:12px;line-height:16px;font-weight:400;color:#333;font-style:italic;">
+                    <td colspan="3" class="print-int" style="padding-bottom:16px;padding-left:8px;padding-right:8px;">
+                        <?=$escaper->escapeHtml(__('Additional Print Instructions'))?><br>
+                        <p style="font-size:12px;line-height:16px;font-weight:400;color:#333;font-style:italic;margin:0;">
+                            <i><?=$escaper->escapeHtml(__($value['AdditionalPrintInstruction']))?></i>
+                        </p>
+                    </td>
+                <?php endif;?>
+                </tr>
+            <?php endif;?>
+        <?php endif;?>
+        <?php $i++;
+    endforeach;?>
+    <?php if (isset($items['shipping_label']) && isset($items['shipping_total'])): ?>
+        <tr class="item-shipping-tr" >
+            <td style="border-top:1px;border-top-style:solid;border-top-color:#8E8E8E;border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;" class="item-shipping-td" colspan="2">
+                <p class="product-name" style="font-size:14px;line-height:24px;font-weight:500;color:#333;padding:16px;margin:0;padding-left:8px;padding-right:20px;text-align:left;">
+                    <strong><?=  $escaper->escapeHtml(__("Delivery method: ")) ?></strong>
+                    <?=$escaper->escapeHtml(__($items['shipping_label']))?>
+                    <?php if (isset($items['is_shipping']) && $items['is_shipping']): ?><sup>®</sup><?php endif; ?>
+                </p>
+            </td>
+            <td class="item-shipping-tr" style="font-size:14px;line-height:24px;font-weight:400;color:#333;border-top:1px;border-top-style:solid;border-top-color:#8E8E8E;border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;padding:16px;margin:0;padding-right:8px;padding-left:20px;text-align:right;">
+                <span class="price"><?=$escaper->escapeHtml(strip_tags($items['shipping_total']))?></span>
+            </td>
+        </tr>
+    <?php endif; ?>
+    <tr>
+        <td class="total-section" colspan="2" style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding-bottom:8px;text-align:right;padding-right:20px;padding-top:16px;">
+            <?=$escaper->escapeHtml('Items ('.$items['count'].')')?>
+        </td>
+        <td class="total-section" style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding-bottom:8px;padding-right:8px;padding-left:20px;text-align:right;padding-top:16px;">
+            <?= $escaper->escapeHtml(strip_tags($items['subTotal'])) ?></td>
+    </tr>
+    <?php if (isset($items['is_shipping']) && $items['is_shipping']): ?>
+        <tr>
+            <td class="total-section" colspan="2" style="font-size:14px;line-height:24px;font-weight:400;color:#333;padding-bottom:8px;text-align:right;padding-right:20px;">
+                <?=$escaper->escapeHtml(__('Shipping'))?></td>
+            <td class="total-section" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;padding-bottom:8px;padding-right:8px;padding-left:20px;text-align:right;">
+                <?=$escaper->escapeHtml(strip_tags($items['shipping_total']))?></td>
+        </tr>
+    <?php endif; ?>
+    <?php if (isset($items['is_discount']) && $items['is_discount']): ?>
+        <tr>
+            <td class="total-section" colspan="2" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;padding-bottom:8px;text-align:right;padding-right:20px;">
+                <?=$escaper->escapeHtml(__('Discount'))?></td>
+            <td class="total-section" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;padding-bottom:8px;padding-right:8px;padding-left:20px;text-align:right;">
+                <?=$escaper->escapeHtml(strip_tags($items['discount']))?></td>
+        </tr>
+    <?php endif; ?>
+    <tr>
+        <td class="total-section" colspan="2" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;padding-bottom:8px;text-align:right;padding-right:20px;">
+            <?=$escaper->escapeHtml(__('Tax'))?></td>
+        <td class="total-section" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;padding-bottom:8px;padding-right:8px;padding-left:20px;text-align:right;">
+            <?=$escaper->escapeHtml(strip_tags($items['tax']))?></td>
+    </tr>
+    <tr>
+        <td class="total-section" colspan="2" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;text-align:right;padding-right:20px;padding-bottom:16px;">
+            <?=$escaper->escapeHtml(__('Total'))?></td>
+        <td class="total-section" style="font-size:14px;line-height:24px;font-weight:400;color:#333;font-style:normal;border-bottom:1px;border-bottom-style:solid;border-bottom-color:#8E8E8E;padding-right:8px;padding-left:20px;text-align:right;padding-bottom:16px;">
+            <?= $escaper->escapeHtml(strip_tags($items['total'])) ?></td>
+    </tr>
+    <tr>
+        <td colspan="4" style="text-align:left;padding-left:8px;padding-right:8px;padding-top:16px;padding-bottom:48px;">
+            Order Placed On:  <?= $escaper->escapeHtml(__($orderPlacedDate)) ?>
+        </td>
+    </tr>
+</table>
+<table class="order-details" style="border-collapse:collapse;width:100%;">
+    <tr>
+        <?php if ($data["showCustomerInfo"]): ?>
+            <td valign="top" class='customer-details' style="width:33.32%;padding-right:1.5%;">
+                <h3 class="customer-detail-header" style="color:#333;font-size:16px;font-style:normal;font-weight:700;line-height:24px;margin:0;">
+                    <?= $escaper->escapeHtml(__('Customer Information')) ?>
+                </h3>
+                <p class='customer-details-p' style="text-decoration:none;color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;padding-top:8px;">
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_email"]) ?></span></a><br>
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_phone"]) ?></span></a>
+                </p>
+            </td>
+        <?php endif; ?>
+        <?php if ($data["isPickup"]): ?>
+            <td valign="top" class='shipping-details' style="width:33.32%;padding-right:1.5%;">
+                <h3 class="customer-detail-header" style="color:#333;font-size:16px;font-style:normal;font-weight:700;line-height:24px;margin:0;">
+                    <?=  $escaper->escapeHtml(__('Pickup Information')) ?>
+                </h3>
+                <p class='customer-details-p' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;padding-top:8px;">
+                    <?=  $escaper->escapeHtml(__('FedEx Office Print & Ship')) ?> <br>
+                    <?=  $escaper->escapeHtml($data["pickup_address"]) ?>
+                </p>
+                <?php if ($data["has_alternate_contact"] && isset($data["alternate_contact"])): ?>
+                    <br>
+                    <h3 class="customer-detail-header" style="color:#333;font-size:16px;font-style:normal;font-weight:700;line-height:24px;margin:0;">
+                        <?=  $escaper->escapeHtml(__('Alternate Contact Person')) ?>
+                    </h3>
+                    <p class='customer-details-p' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;">
+                        <?=  $escaper->escapeHtml($data["alternate_contact"]["name"]) ?><br/>
+                        <?php if (isset($data["alternate_contact"]["company"]) &&
+                            $data["alternate_contact"]["company"]): ?>
+                            <?=  $escaper->escapeHtml($data["alternate_contact"]["company"]) ?><br/>
+                        <?php endif; ?>
+                        <?=  $escaper->escapeHtml($data["alternate_contact"]["address"]) ?>
+                    </p>
+                <?php endif; ?>
+                <br>
+                <p class='customer-details-p' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;">
+                    <span class='no-link' style="text-decoration:none">
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_email"]) ?></span></a><br>
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_phone"]) ?></span></a>
+                    </span>
+                </p>
+            </td>
+        <?php endif; ?>
+        <?php if ($data["isShipping"]): ?>
+            <td valign="top" class='shipping-details' style="width:33.32%;padding-right:1.5%;">
+                <h3 class="customer-detail-header" style="color:#333;font-size:16px;font-style:normal;font-weight:700;line-height:24px;margin:0;">
+                    <?=  $escaper->escapeHtml(__('Shipping Information')) ?>
+                </h3>
+                <p class='customer-details-p' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;padding-top:8px;">
+                    <?=  $escaper->escapeHtml($data["shipping_address"]["name"]) ?><br/>
+                    <?php if (isset($data["shipping_address"]["company"]) &&
+                        $data["shipping_address"]["company"]): ?>
+                        <?=  $escaper->escapeHtml($data["shipping_address"]["company"]) ?><br/>
+                    <?php endif; ?>
+                    <?=  $escaper->escapeHtml($data["shipping_address"]["address"]) ?>
+                </p>
+                <br>
+                <p class='customer-details-p' style="margin:0;">
+                    <span class="no-link" style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;">
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_email"]) ?></span></a><br>
+                    <a href="#" class="no-link"><span style="color:#333;text-decoration:none;"><?=  $escaper->escapeHtml($data["customer_phone"]) ?></span></a>
+                    </span>
+                </p>
+            </td>
+        <?php endif; ?>
+        <td valign="top" class='payment-details' style="width:33.32%;">
+            <h3 class="customer-detail-header" style="color:#333;font-size:16px;font-style:normal;font-weight:700;line-height:24px;margin:0;">
+                <?=  $escaper->escapeHtml(__('Payment')) ?>
+            </h3>
+            <p class='customer-details-p' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;margin:0;padding-top:8px;">
+                <?=  $escaper->escapeHtml($data["billing_name"]) ?><br>
+                <?=  $escaper->escapeHtml($data["billing_address"]) ?>
+            </p>
+            <br>
+            <p class='customer-details-p' style="margin:0;">
+                <span class='no-link' style="color:#333;font-size:16px;font-style:normal;font-weight:400;line-height:24px;">
+                    <?=  $escaper->escapeHtml(__('Payment by: %1', $data["payment_type"])) ?></span> <i>
+                    <?php if (($data["payment_type"] !== 'FedEx Account'
+                        && $data["cc_last_4"]) || $data["account_number"]): ?>
+                        <br>
+                        <?=  $escaper->escapeHtml(__('ending in *%1', $data["payment_type"] ==
+                        'FedEx Account' ? $data["account_number"] : $data["cc_last_4"])) ?></i>
+                <?php endif; ?>
+            </p>
+        </td>
+    </tr>
+</table>
+<style>
+    .fedex-ofc-items,.fedex-ofc,.fedex-ofc-price {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        padding-top:8px;
+        padding-bottom:8px;
+    }
+    th.fedex-ofc-items {
+        padding-right: 20px;
+        padding-left: 8px;
+    }
+    th.fedex-ofc {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    tr.item-shipping-tr, .item-shipping-tr .price {
+        color: #333;
+        font-family: "FedEx Sans Regular";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    td.total-section {
+        color: #333;
+        font-family: "FedEx Sans Regular";
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    h3.customer-detail-header {
+        font-family: "FedEx Sans Regular";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px
+    }
+    p.customer-details-p {
+        color: #333;
+        font-family: "FedEx Sans Regular";
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    .fedex-td {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+    }
+    .prinnt-int {
+        color: #333;
+        font-family: 'FedEx Sans Regular';
+        font-size: 12px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 16px;
+    }
+    th.fedex-ofc-items {
+        width: 70% !important;
+    }
+    table.quote-items {
+        width: 100%;
+    }
+    th.fedex-ofc-price {
+        padding-top: 8px;
+        padding-bottom: 8px;
+        text-align: right;
+        font-size: 16px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 24px;
+        padding-left: 20px;
+        padding-right: 8px;
+    }
+    .link-small > u {
+        color: #006bb4;
+    }
+    .customer-details-p .no-link {
+        text-decoration:none !important;
+    }
+</style>

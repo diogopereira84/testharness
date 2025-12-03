@@ -1,0 +1,296 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\OrderHistorySearch\Block\Filters $block
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+$previousDate = date("m/d/Y", strtotime(' - 1 days'));
+$datePlaceHolder = $previousDate." - ".date("m/d/Y");
+$datePlaceHolderValue = '';
+$viewModel = $block->getData('order_enhancement_view_model');
+$isReorderEnabled = $viewModel->isReorderEnabled();
+$reorderToggle = $viewModel->isRetailOrderHistoryReorderEnabled();
+$historyurl =  $block->getBaseUrl().'sales/order/history/';
+$dateChoosen = $block->getRequest()->getParam('order-date');
+if ($dateChoosen != "" && $dateChoosen != null) {
+    $datePlaceHolderValue = $dateChoosen;
+}
+$helperImageClass = '\Magento\Cms\Helper\Wysiwyg\Images';
+?>
+<form data-mage-init='{"myOrdersFilter": {}, "validation": {}}'
+      class="form search retail-my-orders-search-advanced my-orders-search-advanced
+       <?= $reorderToggle ? $block->escapeHtmlAttr(__('retail-reorder-button')) : $block->escapeHtmlAttr(__(''));?>"
+      action="<?=$escaper->escapeUrl($block->getSearchPostUrl()); ?>"
+      method="get"
+      id="my-orders-search-advanced-form">
+    <input type="hidden" id="advanced-filtering" name="advanced-filtering" value="" />
+    <fieldset class="fieldset info">
+        <div class="field search-sku retails-sku field-50"
+             data-filter-label="<?=$escaper->escapeHtmlAttr(__('Product Name')); ?>">
+            <div class="control">
+                <input type="text" name="product-name-sku" id="product-name-sku"
+                    value="<?=$escaper->escapeHtmlAttr($block->prepareInputValue('product-name-sku')); ?>"
+                    minlength="<?=(int)$block->getMinInputLength(); ?>"
+                    placeholder="<?=$escaper->escapeHtmlAttr(__('Search by Product Name')); ?>"
+                     class="input-text order-filter-field"/>
+                <button type="submit" aria-label="Search"></button>
+            </div>
+        </div>
+        <?php if($reorderToggle) { ?>
+            <div class="field field-50 filters-collapse">
+                <button id="filter-show-btn" class="action secondary" type="button">
+                    <img src="<?=$this->helper($helperImageClass)
+                        ->getBaseUrl().'wysiwyg/filter.png';?>"
+                        alt="filter-show-btn" height="40" />
+                    <?=$escaper->escapeHtml(__('Filter')); ?>
+                </button>
+                
+                    <?php if($isReorderEnabled) { ?>
+                        <span data-bind="scope: 'reorder_section'">
+                            <button id="reorder-btn" class="action retail-reorder-btn"
+                            data-bind="click: submitReorder" type="button" disabled="disabled">
+                                <?=$escaper->escapeHtml(__('REORDER')); ?>
+                            </button>
+                        </span>
+                    <?php } ?>
+                
+            </div>
+        <?php } else { ?>
+        <div class="field field-50 filters-collapse">
+             <!-- B-1092709- Reset button on order view and Quote page -->
+            <button class="reset-btn"
+                    type="button" disabled="disabled"
+                    data-role="action"
+                    title="<?=$escaper->escapeHtmlAttr(__('Reset')); ?>">
+                <span><?=$escaper->escapeHtml(__('Reset')); ?></span>
+            </button>
+            <button id="filter-show-btn" class="action secondary" type="button">
+                <img src="<?=$this->helper($helperImageClass)
+                    ->getBaseUrl().'wysiwyg/filter.png';?>"
+                    alt="filter-show-btn" height="40" />
+                <?=$escaper->escapeHtml(__('Filter')); ?>
+            </button>
+            <button id="filter-close-btn" aria-label="close-btn" class="action secondary filter-close" type="button">
+                <img src="<?=$this->helper($helperImageClass)
+                    ->getBaseUrl().'wysiwyg/close.png';?>"
+                    alt="filter-close-btn" height="40" />
+                <?=$escaper->escapeHtml(__('Close')); ?>
+            </button>
+        </div>
+        <?php } ?>
+    </fieldset>
+    <fieldset class="fieldset info extra-order-search" id="extra-order-search-filters">
+        <?php if($reorderToggle) { ?>
+            <div class="action-close-div">
+                <button id="filter-close-btn" aria-label="close-btn"
+                 class="action filter-close" type="button"><span class="action-close"></span>
+                </button>
+            </div>
+        <?php } ?>
+        <div class="upper-container-options">
+            <div class="field field-order-number">
+                <label class="label" for="order-number"><?=$escaper->escapeHtml(__('Order Number')); ?></label>
+                <div class="control">
+                    <input type="text" name="order-number" id="order-number"
+                        value="<?=$escaper->escapeHtmlAttr($block->prepareInputValue('order-number')); ?>"
+                        placeholder="<?=$escaper->escapeHtmlAttr(__('Enter Full or Partial Number')); ?>"
+                        minlength="<?=(int)$block->getMinInputLength(); ?>" class="input-text order-filter-field"/>
+                </div>
+            </div>
+            <?php
+                $datePlaceholder = $block->getLocaleDateFormat();
+                $dateAdditionalAttr = implode(' ', [
+                    "placeholder='{$datePlaceholder}'",
+                    "data-validate='{"
+                    . "\"validate-formatted-date\": {\"dateFormat\": \"{$datePlaceholder}\"}, "
+                    . "\"validate-formatted-date-range\": {\"dateFormat\":\"{$datePlaceholder}\"}"
+                    . "}'"
+                ]);
+            ?>
+            <div class="field field-dates">
+                <label class="label" for="order-date-from"><?=$escaper->escapeHtml(__('Order Date')); ?></label>
+                <div class="control">
+                    <div class="range fields group group-2 d-flex">
+                        <input type="text" name="order-date" value="<?=$datePlaceHolderValue; ?>"
+                        placeholder="<?=$datePlaceHolder?>"
+                         class="input-text order-filter-field" id="date-range-picker"/>
+                        <a href="javascript:void(0)" id="date-range-picker-icon">
+                            <img src="<?=$this->helper($helperImageClass)->getBaseUrl().
+                            'wysiwyg/calender.png';?>"
+                            alt="filter-date-range" height="40" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="field field-invoice-number">
+                <label class="label" for="invoice-number">
+                    <?=$escaper->escapeHtml(__('Purchase Order Number')); ?>
+                </label>
+                <div class="control">
+                    <input type="text" name="invoice-number" id="invoice-number"
+                        value="<?=$escaper->escapeHtmlAttr($block->prepareInputValue('invoice-number')); ?>"
+                        placeholder="<?=$escaper->escapeHtmlAttr(__('Enter Full or Partial Number')); ?>"
+                        minlength="<?=(int)$block->getMinInputLength(); ?>" class="input-text order-filter-field"/>
+                </div>
+            </div>
+            <div class="field field-order-status">
+                <label class="label" for="order-status"><?=$escaper->escapeHtmlAttr(__('Order Status')); ?></label>
+                <div class="control">
+                    <?=$block->getOrderStatusSelectElementHtml(); ?>
+                </div>
+            </div>
+            <div class="field field-order-totals order-total">
+                <label class="label" for="order-total-min"><?=$escaper->escapeHtml(__('Order total')); ?></label>
+                <div class="control">
+                    <div class="range fields group group-2 d-flex">
+                        <div class="field field-order-total">
+                            <div class="control d-flex">
+                                <span class="sub-label"><?=$escaper->escapeHtml(__('Min')); ?>:</span>
+                                <input
+                                    type="text"
+                                    name="order-total-min"
+                                    id="order-total-min"
+                                    value="<?= $escaper->escapeHtmlAttr(
+                                        $block->prepareInputIntegerValue('order-total-min')
+                                    ); ?>"
+                                    data-validate="{'less-than-equals-to': '#order-total-max', 'digits': true}"
+                                    data-msg-less-than-equals-to="<?= $escaper->escapeHtmlAttr(__(
+                                        "The 'Min' value must be lower than the 'Max' value."
+                                    )) ?>"
+                                    data-msg-digits="<?= $escaper->escapeHtmlAttr(__(
+                                        'Please enter a valid number in this field. ' .
+                                        'Enter only digits (0-9).'
+                                    )) ?>"
+                                    placeholder="<?=$escaper->escapeHtmlAttr(__('Enter Amt')); ?>"
+                                    class="input-text order-filter-field"/>
+                            </div>
+                        </div>
+                        <div class="field field-order-total order-filter-max">
+                            <div class="control d-flex">
+                                <span class="sub-label"><?=$escaper->escapeHtml(__('Max')); ?>:</span>
+                                <input type="text"
+                                name="order-total-max"
+                                id="order-total-max"
+                                value="<?=$escaper->escapeHtmlAttr(
+                                    $block->prepareInputIntegerValue('order-total-max')
+                                ); ?>"
+                                data-validate="{'digits': true}"
+                                data-msg-digits="<?= $escaper->escapeHtmlAttr(__(
+                                    'Please enter a valid number in this field. ' .
+                                    'Enter only digits (0-9).'
+                                )) ?>"
+                                placeholder="<?=$escaper->escapeHtmlAttr(__('Enter Amt')); ?>"
+                                class="input-text order-filter-field"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="field field-action">
+                <div class="actions-toolbar">
+                    <div class="primary">
+                        <!-- B-1092709- Reset button on order view and Quote page -->
+                        <?php if($reorderToggle) { ?>
+                            <button class="reset-btn" type="button"
+                             disabled="disabled" data-role="action"
+                              title="<?=$escaper->escapeHtmlAttr(__('Reset')); ?>">
+                            <span><?=$escaper->escapeHtml(__('Reset')); ?></span>
+                            </button>
+                        <?php } ?>
+                        <button type="submit" class="action secondary-retail"
+                         title="<?=$escaper->escapeHtmlAttr(__('Apply')); ?>">
+                            <span><?=$escaper->escapeHtml(__('Apply')); ?></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+</form>
+<script type="text/javascript">
+require([
+    "jquery",
+    "dateRangePicker"
+], function($,dateRangePicker){
+     var end = new Date();
+    $('#date-range-picker').daterangepicker({
+        opens: 'left',
+        maxDate: end,
+        autoUpdateInput: false,
+        autoApply: true
+    }, function(start, end, label) {
+
+    });
+
+    $('#date-range-picker').on('apply.daterangepicker', function(ev, picker) {
+        $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+    });
+
+    $('#date-range-picker').on('cancel.daterangepicker', function(ev, picker) {
+        $(this).val('');
+    });
+
+    $('#date-range-picker-icon').on('click', function(){
+        $('#date-range-picker').trigger('click');
+    });
+
+    /*B-1092709- Reset button on order view and Quote page */
+    $(document).ready(function() {
+        setInterval(function() {
+            if($('#date-range-picker').val().length !=0) {
+                $('.reset-btn').attr('disabled', false);
+            }
+        }, 1000);
+
+        handleResetDisable();
+
+        $('.order-filter-field').on("keyup", function () {
+                handleResetDisable();
+        });
+        $('#order-status').on('change', function() {
+            handleResetDisable();
+        });
+        $('.reset-btn').on('click', function() {
+            finalUrl =  '<?= $historyurl; ?>';
+            window.location.replace(finalUrl);
+        });
+        function handleResetDisable() {
+            var filterValueEmpty = true;
+            $('.order-filter-field').each(function() {
+                if ($(this).val() != "") {
+                    filterValueEmpty = false;
+                }
+            });
+
+            if (!filterValueEmpty) {
+                $('.reset-btn').prop('disabled', false);
+            } else if ($('#order-status').val() == '') {
+                $('.reset-btn').prop('disabled', true);
+            }
+            else {
+                $('.reset-btn').prop('disabled', false);
+            }
+        }
+    });
+});
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "reorder_section": {
+                    "component": "Fedex_Orderhistory/js/view/reorder"
+                    }
+                }
+            }
+        }
+    }
+</script>

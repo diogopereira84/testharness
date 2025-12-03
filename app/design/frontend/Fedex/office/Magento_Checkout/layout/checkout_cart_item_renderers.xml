@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="checkout_item_price_renderers"/>
+    <body>
+        <referenceBlock name="checkout.cart.item.renderers">
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default" as="default" template="Magento_Checkout::cart/item/default.phtml">
+                <arguments>
+     <argument name="productEngineUrl_view_model" xsi:type="object">Fedex\ProductEngine\ViewModel\Data</argument>
+     <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                    <argument name="toggleConfig" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                    <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                </arguments>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.default.actions" as="actions">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.default.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml">
+                        <arguments>
+                            <argument name="tazTokenHelper" xsi:type="object">Fedex\Punchout\ViewModel\TazToken</argument>
+                            <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                            <argument name="marketplacePunchout" xsi:type="object">Fedex\MarketplacePunchout\ViewModel\Login</argument>
+                            <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                            <argument name="dyesub_view_model" xsi:type="object">Fedex\CustomerCanvas\ViewModel\CanvasParams</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.default.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml" />
+                </block>
+            </block>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple" as="simple" template="Magento_Checkout::cart/item/default.phtml">
+                <arguments>
+     <argument name="productEngineUrl_view_model" xsi:type="object">Fedex\ProductEngine\ViewModel\Data</argument>
+                    <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                    <argument name="toggleConfig" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                    <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                </arguments>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions" name="checkout.cart.item.renderers.simple.actions" as="actions">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" name="checkout.cart.item.renderers.simple.actions.edit" template="Magento_Checkout::cart/item/renderer/actions/edit.phtml">
+                        <arguments>
+                            <argument name="tazTokenHelper" xsi:type="object">Fedex\Punchout\ViewModel\TazToken</argument>
+                            <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                            <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                            <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                            <argument name="marketplacePunchout" xsi:type="object">Fedex\MarketplacePunchout\ViewModel\Login</argument>
+                            <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                            <argument name="dyesub_view_model" xsi:type="object">Fedex\CustomerCanvas\ViewModel\CanvasParams</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove" name="checkout.cart.item.renderers.simple.actions.remove" template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>
+                </block>
+            </block>
+            <block class="Magento\Checkout\Block\Cart\Item\Renderer"
+                   name="checkout.cart.item.renderers.commercial"
+                   as="commercial"
+                   template="Magento_Checkout::cart/item/default.phtml">
+                <arguments>
+                    <argument name="productEngineUrl_view_model" xsi:type="object">Fedex\ProductEngine\ViewModel\Data</argument>
+                    <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                    <argument name="toggleConfig" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                    <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                </arguments>
+                <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions"
+                       name="checkout.cart.item.renderers.commercial.actions"
+                       as="actions">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit"
+                           name="checkout.cart.item.renderers.commercial.actions.edit"
+                           template="Magento_Checkout::cart/item/renderer/actions/edit.phtml">
+                        <arguments>
+                            <argument name="tazTokenHelper" xsi:type="object">Fedex\Punchout\ViewModel\TazToken</argument>
+                            <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                            <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                            <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                            <argument name="marketplacePunchout" xsi:type="object">Fedex\MarketplacePunchout\ViewModel\Login</argument>
+                            <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove"
+                           name="checkout.cart.item.renderers.commercial.actions.remove"
+                           template="Magento_Checkout::cart/item/renderer/actions/remove.phtml"/>
+                    </block>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

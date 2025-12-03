@@ -1,0 +1,44 @@
+<div class="review-order-payment-step" data-bind="visible: shouldDisplayQuestionnaireInReviewPage()">
+    <div class="review-order-read-only">
+        <div class="header-section">
+            <img alt="Green success checkmark" data-bind="attr: { src: sectionIcon }" class="green-check"/>
+        </div>
+        <div class="header-section">
+            <h2 class="heading">Political Campaign Disclosure</h2>
+        </div>
+        <div class="header-section edit hidden-xs">
+            <button aria-label="Edit political campaign ad" class="edit_buttton"
+                    data-bind="click: openModal">
+                    Edit
+            </button>
+        </div>
+    </div>
+    <div class="recipient-read-only">
+        <h3 class="body-heading">Political Campaign</h3>
+        <!-- Only show if the user selected "Yes" -->
+        <!-- ko if: isCampaignAd() === true && disclosureModel.isCampaignAdDisclosureComplete() -->
+        <div>Yes this is related to a political campaign</div>
+        <div data-bind="text: disclosureModel.candidatePacBallotIssue"></div>
+        <div data-bind="text: disclosureModel.electionDate"></div>
+        <h3 class="body-heading">Customer Address</h3>
+        <div data-bind="text: customerName"></div>
+        <div data-bind="text: disclosureModel.addressLine1"></div>
+        <!-- ko if: disclosureModel.addressLine2().trim().length > 0 -->
+        <div data-bind="text: disclosureModel.addressLine2"></div>
+        <!-- /ko -->
+        <!-- /ko -->
+        
+        <!-- Only show if the user selected "No" -->
+        <!-- ko if: isCampaignAd() === false && disclosureModel.isCampaignAdDisclosureComplete() -->
+        <div>No this is not related to a political campaign</div>
+        <!-- /ko -->
+        
+        <!-- Only show if the user didn't select any option or the user has not filled the informations correctly -->
+        <!-- ko if: !disclosureModel.isCampaignAdDisclosureComplete()  -->
+        <div class="d-flex">
+            <img class="icon mr-10" data-bind="attr: { src: attentionIconUrl }" />
+            <span class="fedex-italic">This is a required field.</span>
+        </div>
+        <!-- /ko -->
+    </div>
+</div>

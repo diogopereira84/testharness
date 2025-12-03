@@ -1,0 +1,30 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ */
+$viewModel = $block->getData('viewModelForWarningMessage');
+$warningMesaageFlag = $viewModel->getWarningMessage();
+?>
+<div id="warning-message" data-bind="scope:'warningmessage'" class="warningmesage">
+    <!-- ko template: getTemplate() --><!-- /ko -->
+</div>
+<script type="text/x-magento-init">
+    {
+        "#warning-message": {
+            "Magento_Ui/js/core/app": {
+               "components": {
+                    "warningmessage": {
+                        "component": "Fedex_Cart/js/view/summary/promo_account/promo-account-warning-message",
+                        "combinedWarningMessageEnable": "<?= (bool) $warningMesaageFlag; ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<?php $viewModel->unSetWarningMessage(); ?>

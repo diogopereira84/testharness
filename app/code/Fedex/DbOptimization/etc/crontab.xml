@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+  <group id="compression_crongroup">
+    <!--- Job to make 'value' column NULL of quote_item_options table, every 30 minutes and put in sync queue -->
+    <job name="quote_item_options_compression_job" instance="Fedex\DbOptimization\Cron\QuoteItemOptionsCron" method="execute">
+        <schedule>0 23 * * *</schedule>
+    </job>
+   
+    <!--- Job to make 'product_options' column NULL of sales_order_item table, every 30 minutes and put in sync queue -->
+    <job name="sales_order_item_compression_job" instance="Fedex\DbOptimization\Cron\SalesOrderItemCron" method="execute">
+        <schedule>0 23 * * *</schedule>
+    </job>
+  </group> 
+</config> 

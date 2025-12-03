@@ -1,0 +1,162 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .selfreg-hero-banner-wrapper {
+        .foreground-img {
+            display: none;
+        }
+        .pagebuilder-button-primary {
+            background: @fx-orange-500;
+            border-color: @fx-orange-500;
+            border-radius: 0;
+            font-size: 19px;
+            font-family: 'FedEx Sans Bold';
+            font-weight: 700;
+            padding: 13px 19px 11px;
+            text-transform: uppercase;
+            min-width: 128px;
+            margin-top: 16px;
+            &:hover,
+            &:active,
+            &:focus {
+                background: @fx-orange-500;
+                border-color: @fx-orange-500;
+            }
+        }
+        .hero-banner-desktop-message,
+        .hero-banner-laptop-message,
+        .hero-banner-tablet-message,
+        .hero-banner-mobile-message {
+            p, h1 {
+                
+                color: @fx-white-100;
+                font-weight: 300;
+                font-size: 32px;
+                line-height: 40px;
+                font-family: 'Fedex Sans Light';
+            }
+
+        }
+        .hero-banner-mobile-message {
+            p, h1 {
+                color: @fx-grey-500;
+            }
+        }
+        .hero-banner-desktop-message,
+        .hero-banner-laptop-message {
+            max-width: 335px;
+        }
+        .hero-banner-tablet-message {
+            max-width: 288px;
+        }
+        .pagebuilder-slider {
+            position: relative;
+        }
+        .pagebuilder-overlay {
+            position: relative;
+            z-index: 3;
+        }
+        .foreground-img {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+        }
+        .slick-prev,
+        .slick-next {
+            &::before {
+                font-size: 50px;
+                font-weight: bold;
+                color: @fx-grey-500;
+            }
+            &:active,
+            &:focus,
+            &:not(.primary) {
+                background: transparent;
+                width: auto;
+            }
+        }
+        .slick-dots {
+            position: absolute;
+            li {
+                width: 8px;
+                margin: 0 6px;
+                button {
+                    width: 8px;
+                    height: 8px;
+                    margin: 0;
+                    background: @fx-white-200;
+                    border: 0;
+                }
+                &.slick-active {
+                    button {
+                        background: @fx-purple-500;
+                    }
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__s) {
+    .selfreg-hero-banner-wrapper {
+        max-width: 100%;
+        max-width: 592px;
+        margin-left: auto;
+        margin-right: auto;
+        .slick-prev {
+            margin-left: -70px;
+        }
+        .slick-next {
+            margin-right: -70px;
+        }
+        .foreground-img {
+            height: 238px;
+            &.foreground_mobile_medium_image {
+                display: block;
+            }
+        }
+        .pagebuilder-slide-wrapper {
+            height: 238px;
+            .pagebuilder-overlay.pagebuilder-poster-overlay {
+                height: 100%;
+                padding-left: 48px;
+                p {
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum ='min') and (@break = @screen__m) {
+    .selfreg-hero-banner-wrapper {
+        max-width: 992px;
+        margin-bottom: 150px;
+    }
+}
+.media-width(@extremum, @break) when (@extremum ='min') and (@break = @screen__l) {
+    .selfreg-hero-banner-wrapper {
+        max-width: 100%;
+        .foreground-img {
+            &.foreground_mobile_medium_image {
+                display: none;
+            }
+            &.foreground_desktop_medium_image {
+                display: block;
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__xl) {
+    .selfreg-hero-banner-wrapper {
+        .foreground-img {
+            &.foreground_mobile_medium_image,
+            &.foreground_desktop_medium_image {
+                display: none;
+            }
+            &.foreground_desktop_image {
+                display: block;
+            }
+        }
+    }
+}

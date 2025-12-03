@@ -1,0 +1,48 @@
+& when (@media-common = true) {
+  .image-slider-block {
+    .slick-prev {
+      left: 0;
+    }
+    .slick-next {
+      right: 0;
+    }
+    .slick-disabled {
+      display: none !important;
+    }
+    .pagebuilder-column-line {
+      margin-top: 16px;
+    }
+    .pagebuilder-column {
+      margin: 0;
+    }
+
+    figure {
+      display: flex;
+      flex-direction: column;
+      img {
+        width: 100%;
+      }
+      figcaption {
+        font-family: 'FedEx Sans Light';
+        font-size: 20px;
+        font-weight: 300;
+        line-height: 32px;
+        letter-spacing: 0px;
+        text-align: left;
+        margin-top: 8px;
+      }
+    }
+  }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__s)) {
+  .image-slider-block {
+    .slick-slide {
+      padding: 0 16px;
+    }
+  
+    .slick-list {
+      margin: 0 -16px;
+    }
+  }
+}

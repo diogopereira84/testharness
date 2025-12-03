@@ -1,0 +1,31 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\MarketplacePunchout\ViewModel\Login $viewModel */
+/** @var \Magento\Framework\Escaper $escaper */
+$viewModel = $block->getViewModel();
+$data = $viewModel->getCustomData();
+
+if ($data['success']) :?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_MarketplacePunchout/js/punchout": {
+                    "payload": {
+                        "product_config_data" : <?= json_encode($data['product_config_data']) ?>,
+                        "configuration_data" : <?= json_encode($data['configuration_data']) ?>,
+                        "form_key" : "<?= $data['form_key'] ?>",
+                        "source": "LOGIN"
+                    },
+                    "form_action": "<?= $escaper->escapeUrl($data['request_url']) ?>",
+                    "error_url":"<?= $escaper->escapeUrl($data['error_url']) ?>"
+                }
+            }
+        }
+    </script>
+<?php else : ?>
+    <?php
+    // phpcs:ignore Magento2.Functions.DiscouragedFunction
+    header("Location:{$data['error_url']}");
+    // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
+    exit; ?>
+<?php endif; ?>

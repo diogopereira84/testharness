@@ -1,0 +1,584 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$endingIn = 'ending in *';
+$_order = $block->getOrder();
+$discountClass = $_order->getDiscountAmount() > 0 ? 'discount-added':'';
+
+/** @var Fedex\Cart\ViewModel\OrderHistoryEnhacement $viewModel */
+$viewModel = $block->getData('order_enhancement_view_model');
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productinfo_handler_view_model');
+
+$isSdeStore = $viewModel->isSdeStore();
+
+// B-1316868 : Fix the estimated total and estimated Shipping total on Order  history and print order screens
+$orderViewModel = $block->getData('orderview_view_model');
+$shippingAccountNumber = $orderViewModel->getShippingAccountNumberFromOrder($_order);
+$itemCount = $_order->getTotalItemCount();
+
+$isDiscountAvailable =  ($_order->getAccountDiscount() > 0
+|| $_order->getVolumeDiscount() > 0 || $_order->getPromoDiscount() > 0 || $_order->getShippingDiscount() > 0)
+? true:false;
+
+$discountBreakdownData = [
+                             ['label'=>"Account Discount",'price'=>$_order->getAccountDiscount()],
+                             ['label'=>"Volume Discount",'price'=>$_order->getVolumeDiscount()],
+                             ['label'=>"Promo Discount",'price'=>$_order->getPromoDiscount()],
+                             ['label'=>"Shipping Discount",'price'=>$_order->getShippingDiscount()]
+                         ];
+$sortedDiscounts = $orderViewModel->getSortedDiscounts($discountBreakdownData);
+?>
+<?php /** @var  $block \Magento\Sales\Block\Order\View*/?>
+<div class="order-retail-view">
+    <div class="block block-order-details-views retail-print-order">
+        <div class="block-content">
+            <?php if (!$_order->getIsVirtual()): ?>
+                <div class="box-retail-order-view box-order-shipping-address">
+                    <strong class="box-title">
+                        <span>
+                            <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'): ?>
+                                <?= $block->escapeHtml(__('Pickup Location')) ?>
+                            <?php else: ?>
+                                <?= $block->escapeHtml(__('Shipping Address')) ?>
+                            <?php endif; ?>
+                        </span>
+                    </strong>
+                    <div class="box-content">
+                        <span class="sub-heading-order-view">
+                            <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'): ?>
+                                <b> <?= $block->escapeHtml(__("STORE LOCATION")); ?> </b>
+                            <?php else: ?>
+                                <b> <?= $block->escapeHtml(__("RECIPIENT")); ?> </b>
+                            <?php endif; ?>
+                        </span>
+                        <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()); ?>
+                            <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'):
+                                $shipmentId = $_order->getShipmentsCollection()->getFirstItem()->getId();
+                                ?>
+                                </br>
+                                <span class="pickup-time">
+                                    <?= $block->escapeHtml(__("Estimated pick up time:")); ?>
+                                </span>
+                                </br>
+                                <?= /* @noEscape */ $viewModel->shipmentOrderCompletionDate($shipmentId); ?>
+                            <?php endif; ?>
+                        </address>
+                    </div>
+                </div>
+                <?php if ($_order->getShippingAddress()) { ?>
+                    <div class="box-retail-order-view box-order-shipping-method">
+                        <strong class="box-title">
+                            <span>
+                                <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'): ?>
+                                    <?= $block->escapeHtml(__('Contact Information')) ?>
+                                <?php else: ?>
+                                    <?= $block->escapeHtml(__('Delivery Method')) ?>
+                                <?php endif; ?>
+                            </span>
+                        </strong>
+                        <div class="box-content">
+                            <?php if ($_order->getShippingMethod() == 'fedexshipping_PICKUP'): ?>
+                                <span class="sub-heading-order-view" >
+                                    <b><?= $block->escapeHtml(__('CONTACT PERSON')) ?></b>
+                                </span>
+                            <?php else: ?>
+                                <span class="sub-heading-order-view" >
+                                    <?php
+                                    $shippingName = $viewModel->getSelectedShippingMethodName(
+                                        $block->escapeHtml($_order->getShippingDescription())
+                                        ); ?>
+                                    <strong><?= $block->escapeHtml($shippingName) ?></strong>
+                                </span>
+                            <?php endif; ?>
+                            <?php if ($_order->getShippingMethod() != 'fedexshipping_PICKUP') { ?>
+                                Estimated Delivery<br/>
+                                <?= $viewModel->getSelectedShippingMethodDate(
+                                    $block->escapeHtml($_order->getShippingDescription())
+                                    ); ?> <br>
+                                <?php
+                            } else {
+                                $contactInformation = $viewModel->getContactAddressForRetail($_order);
+                                $telephone = $contactInformation['telephone'] ?? '';
+                                $telephone = substr_replace($telephone, '(', 0, 0);
+                                $telephone = substr_replace($telephone, ')', 4, 0);
+                                $telephone = substr_replace($telephone, ' ', 5, 0);
+                                $telephone = substr_replace($telephone, '-', 9, 0);
+                                ?>
+                                <div class="contact-info">
+                                    <div>
+                                        <span>
+                                            <?= /* @noEscape */ $contactInformation['name'] ?? '' ?>
+                                        </span>
+                                    </div>
+                                    <div>
+                                        <span><?= /* @noEscape */ $contactInformation['email'] ?? '' ?></span>
+                                    </div>
+                                    <div>
+                                        <span><?= /* @noEscape */ $telephone; ?></span>
+                                    </div>
+                                </div>
+                            <?php }
+                            $alternateAddress = $viewModel->getAlternateShippingAddress($_order);
+                            $is_alternate_pickup = isset($alternateAddress['is_alternate_pickup']) ?
+                             $alternateAddress['is_alternate_pickup']:'';
+                            $is_alternate = isset($alternateAddress['is_alternate']) ?
+                             $alternateAddress['is_alternate']:'';
+                            if ($is_alternate || $is_alternate_pickup) {
+                                $name = isset($alternateAddress['name']) ? $alternateAddress['name']:'';
+                                $email = isset($alternateAddress['email']) ? $alternateAddress['email']:'';
+                                $telephone = isset($alternateAddress['telephone']) ? $alternateAddress['telephone']:'';
+                                $telephone = substr_replace($telephone, '(', 0, 0);
+                                $telephone = substr_replace($telephone, ')', 4, 0);
+                                $telephone = substr_replace($telephone, ' ', 5, 0);
+                                $telephone = substr_replace($telephone, '-', 9, 0);
+                                ?>
+                                    <br/>
+                                    <span class="sub-heading-order-view" >
+                                        <?php $alternateLabel = $is_alternate ? 'Alternate Contact Person' :
+                                            'Alternate Pick Up Person'; ?>
+                                        <b><?= $block->escapeHtml(__($alternateLabel)) ?></b>
+                                    </span>
+                                    <div class="contact-info">
+                                        <div>
+                                            <span><?= /* @noEscape */ $name; ?></span>
+                                        </div>
+                                        <div>
+                                            <span><?= /* @noEscape */ $email; ?></span>
+                                        </div>
+                                        <div>
+                                            <span><?= /* @noEscape */ $telephone; ?></span>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+
+                        </div>
+                    </div>
+                <?php } else { ?>
+                          <?= $block->escapeHtml(__('No Shipping Information Available')) ?>
+                        <?php } ?>
+            <?php endif; ?>
+            <div class="box-retail-order-view box-order-billing-method">
+                <strong class="box-title">
+                    <span>
+                        <?= $block->escapeHtml(__('Payment')) ?>
+                    </span>
+                </strong>
+                <div class="box-content">
+                    <span class="sub-heading-order-view" >
+                        <b><?= $block->escapeHtml(__('Payment Method')) ?></b><br/>
+                    </span>
+                    <?= $block->getPaymentInfoHtml() ?>
+                    <span class="payment-information">
+                        <?php /* When only CC available */
+                        if (!empty($_order->getPayment()->getCcLast4()) &&
+                         empty($_order->getPayment()->getFedexAccountNumber())) { ?>
+                            <span class="payment-details">
+                                <?= /* @noEscape */ $block->escapeHtml(__($endingIn)).
+                                $_order->getPayment()->getCcLast4(); ?>
+                            </span>
+                        <?php } elseif (empty($_order->getPayment()->getCcLast4()) &&
+                         !empty($_order->getPayment()->getFedexAccountNumber())) { ?>
+                            <span class="payment-details">
+                                <?= /* @noEscape */ $block->escapeHtml(__($endingIn)).
+                                substr($_order->getPayment()->getFedexAccountNumber(), -4) ?>
+                            </span>
+                        <?php } elseif (!empty($_order->getPayment()->getCcLast4()) &&
+                         !empty($_order->getPayment()->getFedexAccountNumber())) { ?>
+                            <span class="payment-details">
+                                <?= /* @noEscape */ $block->escapeHtml(__($endingIn)).
+                                $_order->getPayment()->getCcLast4() ?>
+                            </span></br>
+                            <span class="sub-heading-order-view">
+                                <b><?= $block->escapeHtml(__('Discount Account Number')) ?></b><br/>
+                            </span>
+                            <span class="payment-details">
+                                <?= /* @noEscape */ $block->escapeHtml(__($endingIn)).
+                                substr($_order->getPayment()->getFedexAccountNumber(), -4) ?>
+                            </span>
+                        <?php } ?>
+                    </span>
+                </div>
+                <div class="box-content billing-address">
+                    <span class="sub-heading-order-view">
+                        <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                    </span>
+                    <?php
+                        $billingAddress = $_order->getBillingAddress();
+			if (
+                            !$isSdeStore &&
+                            !empty($_order->getPayment()->getData('cc_owner')) &&
+                            $_order->getPayment()->getData('cc_owner') != 'undefined'
+                            ) {
+                            $ccOwner = explode(" ", $_order->getPayment()->getData('cc_owner'));
+                            $billingAddress->setData('firstname', $ccOwner[0]);
+                            if (!empty($ccOwner[1])) {
+                                $billingAddress->setData('lastname', $ccOwner[1]);
+                            } else {
+                                $billingAddress->setData('lastname', '');
+                            }
+                        }
+                        $telephone = $billingAddress->getData('telephone');
+                        $telephone = substr_replace($telephone, '(', 0, 0);
+                        $telephone = substr_replace($telephone, ')', 4, 0);
+                        $telephone = substr_replace($telephone, ' ', 5, 0);
+                        $telephone = substr_replace($telephone, '-', 9, 0);
+                    ?>
+                    <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()); ?></address>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="block block-order-details-view retail-print-order">
+        <div class="cart-block-content">
+            <h2>Cart Summary</h2>
+            <div class="table-wrapper order-items retail-print-order <?= /* @noEscape */ $discountClass ?>">
+                <table class="data table table-order-print-items" id="my-orders-table"
+                 summary="<?= $block->escapeHtml(__('Items Ordered')); ?>">
+                    <thead>
+                        <tr>
+                            <th class="col name"><?= $block->escapeHtml(__('ITEM DESCRIPTION')) ?></th>
+                            <th class="col qty righttext"><?= $block->escapeHtml(__('QTY')) ?></th>
+                            <th class="col qty righttext"><?= $block->escapeHtml(__('DISCOUNT')) ?></th>
+                            <th class="col subtotal righttext" colspan="2"><?= $block->escapeHtml(__('TOTAL')) ?></th>
+                        </tr>
+                    </thead>
+                    <span class="items-description"><?= $block->escapeHtml(__('ITEM DESCRIPTION'));?></span>
+                    <?php
+                    $items = $_order->getItems();
+                    $i = 1;
+                    foreach ($items as $item):
+                        $product_json = $productInfoHandler->getItemExternalProd($item) ?? [];
+                        $previewUrl = $product_json['preview_url'] ?? null;
+                        if (empty($previewUrl)) {
+                            $prodObj = $item->getProduct();
+                            $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($prodObj);
+                        }
+                        ?>
+                        <tr class="product-item-detail">
+                            <td class="col options">
+                            <?php //B-1311179: Mask Preview image for sde in print order screen?>
+                                <?php if ($isSdeStore): ?>
+                                    <span class="product-image-container">
+                                            <img aria-label="Preview product image" class="preview-product-img"
+                                            src="<?=/* @noEscape */$viewModel->getSdeMaskSecureImagePath()?>" />
+                                    </span>
+                                <?php else: ?>
+                                    <?php if (!empty($previewUrl)): ?>
+                                        <span class="product-image-container prev-img-loader" >
+                                            <img src="<?= $block->escapeUrl($block
+                                            ->getViewFileUrl('images/loader-2.gif')) ?>"
+                                             class="product-loader" />
+                                            <img class="preview-product-img"
+                                              aria-label="preview-product-img"
+                                               data-bind="attr:{onload: productPreviewImg.getPreviewImg('<?=
+                                                $block->escapeHtml($previewUrl); ?>', $element)}" />
+                                        </span>
+                                    <?php else: ?>
+                                        <span class="product-item-photo">
+                                            <img src="<?= $block->escapeHtml($thumbnailImgUrl); ?>"
+                                             class="product-thumbnail" />
+                                        </span>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+                                <span class="retail-order-item-name"><?= $block->escapeHtml($item->getName()); ?></span>
+                            </td>
+                            <td data-th="<?= $block->escapeHtml(__('QTY')) ?>" class="col qty">
+                                <span class="item-qty">
+                                    <?= (int)$item->getQtyOrdered(); ?>
+                                </span>
+                            </td>
+                            <td data-th="<?= $block->escapeHtml(__('DISCOUNT')) ?>" class="col discount">
+                                <span class="item-discount">
+                                    <?= $_order->formatPrice($item->getDiscountAmount()) ?
+                                     /* @noEscape */ $_order->formatPrice($item->getDiscountAmount()) :'-'; ?>
+                                </span>
+                            </td>
+                            <td data-th="<?= $block->escapeHtml(__('TOTAL')) ?>" class="col total" colspan="2">
+                                <span class="item-total">
+                                    <?= /* @noEscape */ $_order->formatPrice(
+                                        $item->getRowTotal()-$item->getDiscountAmount()
+                                        ); ?>
+                                <span>
+                            </td>
+                        </tr>
+                        <?php
+                        $additionalAttributesData = json_decode($_order->getPayment()->getProductLineDetails());
+                        if (!empty($additionalAttributesData)) {
+                            $productId = $product_json['id'];
+                            $qty = $product_json['qty']; ?>
+                                <tr class="show-hide-detail"
+                                 id="show-hide-detail-<?= $block->escapeHtml($item->getId()); ?>">
+                                    <td colspan="4">
+                                        <?php $showDownArrowImage = $block->escapeHtmlAttr($block
+                                        ->getViewFileUrl('images/order-history/show-down-arrow.png'));?>
+                                        <a href="javascript:void(0)" class="show-properties-view-order"
+                                        data-id="<?= $block->escapeHtml($item->getId()); ?>"
+                                        id="show-properties-view-order-<?= $block->escapeHtml($item->getId()); ?>"
+                                        style="background-image: url('<?=  $showDownArrowImage?>')">
+                                            <span><?= $block->escapeHtml(__('SHOW DETAILS')) ?></span>
+                                        </a>
+                                    </td>
+                                </tr>
+                                <tr class="retail-product-attributes"
+                                 data-content-id="<?= $block->escapeHtml($item->getId()); ?>">
+                                <td colspan="5">
+                                    <table class="extra-attributes extra-properties-view-order-<?=
+                                     $block->escapeHtml($item->getId()); ?>">
+                                        <tr class="attribute-heading">
+                                            <th class="col attribute-name attribute-style-name"></th>
+                                            <th class="col base-price attribute-style"><?=
+                                             $block->escapeHtml(__('BASE PRICE')) ?></th>
+                                            <th class="col qty attribute-style-qty"><?=
+                                             $block->escapeHtml(__('QTY')) ?></th>
+                                            <th class="col discount attribute-style"><?=
+                                             $block->escapeHtml(__('DISCOUNT')) ?></th>
+                                            <th class="col total"><?= $block->escapeHtml(__('TOTAL')) ?></th>
+                                        </tr>
+                                        <?php
+                                        foreach ($additionalAttributesData as $additionalAttributes) {
+                                            if ($productId==$additionalAttributes->productId &&
+                                             $qty == $additionalAttributes->unitQuantity) {
+                                                $productLineDetailsData = $additionalAttributes->productLineDetails;
+                                                foreach ($productLineDetailsData as $key => $additionalAttribute) { ?>
+                                                    <tr class="attribute-row">
+                                                        <td class="col attribute-name" >
+                                                            <span class="attributes-item-name">
+                                                            <?= $block->escapeHtml($additionalAttribute->description);
+                                                            ?>
+                                                            </span>
+                                                        </td>
+                                                        <td data-th="<?= $block->escapeHtml(__('BASE PRICE')) ?>"
+                                                         class="col attribute-base-price">
+                                                            <span class="attribute-item-base-price">
+                                                            <?= /* @noEscape */ 
+                                                            $_order->formatPrice($additionalAttribute->detailPrice);
+                                                            ?>
+                                                            </span>
+                                                        </td>
+                                                        <td data-th="<?= $block->escapeHtml(__('QTY')) ?>"
+                                                         class="col attribute-qty">
+                                                            <span class="attribute-item-qty">
+                                                            <?= $block->escapeHtml($additionalAttribute->unitQuantity);
+                                                            ?>
+                                                            </span>
+                                                        </td>
+                                                        <td data-th="<?= $block->escapeHtml(__('DISCOUNT')) ?>"
+                                                         class="col attribute-discount">
+                                                            <span class="attribute-item-discount">
+                                                            <?= /* @noEscape */ 
+                                                            $_order->formatPrice(
+                                                                $additionalAttribute->detailDiscountPrice
+                                                            );
+                                                            ?>
+                                                            </span>
+                                                        </td>
+                                                        <td data-th="<?= $block->escapeHtml(__('TOTAL')) ?>"
+                                                         class="col attribute-total">
+                                                            <span class="attribute-item-total">
+                                                            <?= /* @noEscape */ 
+                                                            $_order->formatPrice(
+                                                                $additionalAttribute->detailPrice
+                                                            ); ?>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                        <?php } break; } } ?>
+                                        <tr class="hide-details-btn">
+                                            <td colspan="4" class="hide-show-button">
+                                                <?php $hideTopArrowImage = $block->escapeHtmlAttr($block
+                                                ->getViewFileUrl('images/order-history/hide-top-arrow.png')); ?>
+                                                <a href="javascript:void(0)" class="hide-properties-view-order"
+                                                data-id="<?= $block->escapeHtml($item->getId()); ?>"
+                                                id="hide-properties-view-order-<?=
+                                                 $block->escapeHtml($item->getId()); ?>"
+                                                style="background-image: url('<?= $hideTopArrowImage ?>')">
+                                                    <span><?= $block->escapeHtml(__('HIDE DETAILS')) ?></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                        <tr class="item-partition"></tr>
+                        <?php $i++;
+                        if ($i == 4 || $i == 8) { ?>
+                        <tr class="print-item-partition"></tr>
+                        <?php } ?>
+                    <?php endforeach; ?>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="retail-order-view-bottom-div">
+        <div class="question_about_order">
+            <p>Questions about your order?</p>
+            <p>Call <span><a href="tel:1.800.GoFedEx">1.800.GoFedEx</a>
+        </span> or <span><a href="tel:1.800.463.3339">1.800.463.3339</a></span></p>
+        </div>
+        <div class="retail-order-view-subtotal">
+        <?php 
+        // B-1316868 : Fix the estimated total and estimated Shipping total on Order  history and print order screens
+        if ($shippingAccountNumber): ?>
+            <table class="retail-order-view-subtotal-view">
+                <tr>
+                    <td class="label subtotal"><?= $block->escapeHtml("Items (".$itemCount.")")?></td>
+                    <td class="value price-subtotal">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getSubTotal()); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label tax"><?= $block->escapeHtml("Tax") ?></td>
+                    <td class="value price-tax">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getTaxAmount()); ?>
+                    </td>
+                </tr>
+                <tr><td></td></tr>
+                <tr>
+
+                <?php if($isDiscountAvailable): ?>
+                    <td class="label total-discount toggle-discount"><span id="discdrop" tabindex="0"><?= $block->escapeHtml("Total Discount(s)") ?></span><span id="discbreak" class="drop up"></span></td>
+                     <?php else: ?>
+                    <td class="label total-discount"><?= $block->escapeHtml("Total Discount(s)") ?></td>
+                    <?php endif; ?>
+                    <td class="value price-total-discount">
+                        <?= /* @noEscape */ '-'; ?>
+                        <?= /* @noEscape */ ($_order->getDiscountAmount()>0)?$_order->formatPrice($_order->getDiscountAmount()):''; ?>
+                    </td>
+                </tr>
+                <?php if($isDiscountAvailable): ?>
+                <tr class="discount_breakdown total-disc-dropdown">
+                        <td colspan="2">
+                            <table class="discount_breakdown_table">
+                                <tbody>
+                                <?php foreach($sortedDiscounts  as $discount): ?>
+                                <?php if(isset($discount['price']) && $discount['price']!='' && $discount['price']!=0): ?>                     
+                                <tr class="discount">
+                                    <th class="label discount"><?= $block->escapeHtml($discount['label']) ?></th>
+                                    <td class="amount">
+                                         <?= /* @noEscape */ '-'.$_order->formatPrice($discount['price']); ?>
+                                    </td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php endforeach; ?>                             
+                                </tbody>
+                            </table>
+                        </td>
+                </tr>
+                <?php endif; ?>
+                <tr>
+                    <td class="label estimated-total"><?= $block->escapeHtml("Total") ?></td>
+                    <td class="value price-estimated-total">
+                        <?= /* @noEscape */ $_order->formatPrice(
+                            $_order->getGrandTotal()-$_order->getShippingAmount()
+                        ); ?>
+                    </td>
+                </tr>
+                <tr class="estimated-shipping-total">
+                    <td class="label shipping">
+                        <?= $block->escapeHtml("Estimated Shipping Charges") ?></td>
+                    <td class="value price-shipping">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getShippingAmount()); ?>
+                    </td>
+                </tr>
+            </table>
+            <?php else: ?>
+                <table class="retail-order-view-subtotal-view">
+                <tr>
+                    <td class="label subtotal"><?= $block->escapeHtml("Items (".$itemCount.")")?></td>
+                    <td class="value price-subtotal">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getSubTotal()); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label shipping"><?= $block->escapeHtml("Shipping") ?></td>
+                    <td class="value price-shipping">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getShippingAmount()); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="label tax"><?= $block->escapeHtml("Tax") ?></td>
+                    <td class="value price-tax">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getTaxAmount()); ?>
+                    </td>
+                </tr>
+                <tr><td></td></tr>
+                <tr>
+                    <?php if($isDiscountAvailable): ?>
+                    <td class="label total-discount toggle-discount"><span id="discdrop" tabindex="0"><?= $block->escapeHtml("Total Discount(s)") ?></span><span id="discbreak" class="drop up"></span></td>
+                    <?php else: ?>
+                    <td class="label total-discount">
+                        <?= $block->escapeHtml("Total Discount") ?>
+                    </td>
+                    <?php endif; ?>
+                    <td class="value price-total-discount">
+                        <?= /* @noEscape */ '-'; ?>
+                        <?= /* @noEscape */ ($_order->getDiscountAmount()>0)?$_order->formatPrice($_order->getDiscountAmount()):''; ?>
+                    </td>
+                </tr>
+                <?php if($isDiscountAvailable): ?>
+                <tr class="discount_breakdown total-disc-dropdown">
+                        <td colspan="2">
+                            <table class="discount_breakdown_table">
+                                <tbody>
+                                <?php foreach($sortedDiscounts  as $discount): ?>
+                                <?php if(isset($discount['price']) && $discount['price']!='' && $discount['price']!=0): ?>                     
+                                <tr class="discount">
+                                    <th class="label discount"><?= $block->escapeHtml($discount['label']) ?></th>
+                                    <td class="amount">
+                                         <?= /* @noEscape */ '-'.$_order->formatPrice($discount['price']); ?>
+                                    </td>
+                                </tr>
+                                <?php endif; ?>
+                                <?php endforeach; ?>                             
+                                </tbody>
+                            </table>
+                        </td>
+                </tr>
+                <?php endif; ?>
+                <tr>
+                    <td class="label estimated-total"><?= $block->escapeHtml("Total") ?></td>
+                    <td class="value price-estimated-total">
+                        <?= /* @noEscape */ $_order->formatPrice($_order->getGrandTotal()); ?>
+                    </td>
+                </tr>
+            </table>
+            <?php endif; ?>
+        </div>
+        <div class="question_about_order_mobile">
+            <p>Questions about your order?</p>
+            <p>Call <span>1.800.GoFedEx</span> or <span>1.800.463.3339</span></p>
+        </div>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'uiComponent',
+        'mage/url',
+        'mage/storage',
+        'Magento_Customer/js/customer-data',
+        'domReady!'
+    ], function($, Component, urlBuilder, storage, customerData) {
+        <?php if($isDiscountAvailable): ?>
+            $(document).on('click', '.toggle-discount', function() {
+                $('.toggle-discount .drop').toggleClass("arrow-down");
+                $('.discount_breakdown').slideToggle(100);
+            });
+            
+            $(document).on("keypress",'#discdrop', function(event) {
+                if (event.keyCode === 13) {
+                    $('.toggle-discount .drop').toggleClass("arrow-down");
+                    $('.discount_breakdown').slideToggle(100);
+                }
+                event.stopImmediatePropagation();
+            });
+        <?php endif; ?>
+    });
+</script>

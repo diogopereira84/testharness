@@ -1,0 +1,149 @@
+library 'reference-pipeline'
+library 'AppServiceAccount'
+
+pipeline{
+	agent any
+
+	environment {
+        ENVIRONMENT = "$params.ENVIRONMENT"
+        OPERATION = "$params.OPERATION"
+		APP_CM_EMP_IDS = "888072,5034118,4575838,752264"
+		
+		MAGENTO_HOST = "ssh.us-a1.magento.cloud"
+		
+		PRODUCTION_LOGIN = "1.ent-gpwctvftssfie-production-vohbr3y"			
+		STAGING_LOGIN = "1.ent-gpwctvftssfie-staging-5em2ouy"
+		STAGING2_LOGIN = "1.ent-gpwctvftssfie-staging2-5zxmgzy"		
+		STAGING3_LOGIN = "1.ent-gpwctvftssfie-staging3-nf5kgsq"
+		
+		SSH_CMD = "ssh -o StrictHostKeyChecking=no"
+		ENABLE_MAINTENANCE_CMD = "bin/magento maintenance:enable"
+		DISABLE_MAINTENANCE_CMD = "bin/magento maintenance:disable"
+		ENABLE_CRON_JOBS_CMD = "./vendor/bin/ece-tools cron:enable"
+		DISABLE_CRON_JOBS_CMD = "./vendor/bin/ece-tools cron:disable"
+	}
+	
+	stages{	
+        stage('info') {
+			steps {
+				println "Executing $OPERATION in $ENVIRONMENT"
+			}
+		}
+		
+		stage('confirmation') {
+			agent none
+			when {
+				anyOf {
+					environment name: 'ENVIRONMENT', value: 'PRODUCTION'
+				}
+			}
+			options {
+				timeout(time: 5, unit: 'MINUTES')
+			}
+			steps {
+				script {
+					input(
+						message: "Do you want to perform $OPERATION in $ENVIRONMENT?",
+						//list of employee numbers who can approve this request
+						submitter: "$APP_CM_EMP_IDS"
+					)
+					echo ("Confirmation Accepted")
+				}
+			}
+		}
+		
+		stage('execution') {
+			
+			steps {
+				script {			
+					sshagent (credentials: ['MAINTENANCE_MODE_SSH_KEY']) {
+						
+						if (env.ENVIRONMENT == 'STAGING3') {
+							
+							if (env.OPERATION == 'TEST_CONNECTION') {
+								sh 'echo Testing Connection in ${ENVIRONMENT}'
+								sh '${SSH_CMD} -T ${STAGING3_LOGIN}@${MAGENTO_HOST}'
+							} else if (env.OPERATION == 'ENABLE_MAINTENANCE_MODE') {
+								sh 'echo Enabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING3_LOGIN}@${MAGENTO_HOST} ${ENABLE_MAINTENANCE_CMD}'								
+							} else if (env.OPERATION == 'DISABLE_MAINTENANCE_MODE') {
+								sh 'echo Disabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING3_LOGIN}@${MAGENTO_HOST} ${DISABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'ENABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING3_LOGIN}@${MAGENTO_HOST} ${ENABLE_CRON_JOBS_CMD}'
+							} else if (env.OPERATION == 'DISABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING3_LOGIN}@${MAGENTO_HOST} ${DISABLE_CRON_JOBS_CMD}'
+							} else {
+								error('Aborting Stage. Unknown Operation encountered: ${OPERATION}')
+							}							
+						} else if (env.ENVIRONMENT == 'STAGING2') {
+							
+							if (env.OPERATION == 'TEST_CONNECTION') {
+								sh 'echo Testing Connection in ${ENVIRONMENT}'
+								sh '${SSH_CMD} -T ${STAGING2_LOGIN}@${MAGENTO_HOST}'
+							} else if (env.OPERATION == 'ENABLE_MAINTENANCE_MODE') {
+								sh 'echo Enabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING2_LOGIN}@${MAGENTO_HOST} ${ENABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'DISABLE_MAINTENANCE_MODE') {
+								sh 'echo Disabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING2_LOGIN}@${MAGENTO_HOST} ${DISABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'ENABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING2_LOGIN}@${MAGENTO_HOST} ${ENABLE_CRON_JOBS_CMD}'
+							} else if (env.OPERATION == 'DISABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING2_LOGIN}@${MAGENTO_HOST} ${DISABLE_CRON_JOBS_CMD}'
+							} else {
+								error('Aborting Stage. Unknown Operation encountered: ${OPERATION}')
+							}
+						} else if (env.ENVIRONMENT == 'STAGING') {
+							
+							if (env.OPERATION == 'TEST_CONNECTION') {
+								sh 'echo Testing Connection in ${ENVIRONMENT}'
+								sh '${SSH_CMD} -T ${STAGING_LOGIN}@${MAGENTO_HOST}'
+							} else if (env.OPERATION == 'ENABLE_MAINTENANCE_MODE') {
+								sh 'echo Enabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING_LOGIN}@${MAGENTO_HOST} ${ENABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'DISABLE_MAINTENANCE_MODE') {
+								sh 'echo Disabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING_LOGIN}@${MAGENTO_HOST} ${DISABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'ENABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING_LOGIN}@${MAGENTO_HOST} ${ENABLE_CRON_JOBS_CMD}'
+							} else if (env.OPERATION == 'DISABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${STAGING_LOGIN}@${MAGENTO_HOST} ${DISABLE_CRON_JOBS_CMD}'
+							} else {
+								error('Aborting Stage. Unknown Operation encountered: ${OPERATION}')
+							}
+						} else if (env.ENVIRONMENT == 'PRODUCTION') {
+						
+							if (env.OPERATION == 'TEST_CONNECTION') {			
+								sh 'echo Testing Connection in ${ENVIRONMENT}'
+								sh '${SSH_CMD} -T ${PRODUCTION_LOGIN}@${MAGENTO_HOST}'
+							} else if (env.OPERATION == 'ENABLE_MAINTENANCE_MODE') {
+								sh 'echo Enabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${PRODUCTION_LOGIN}@${MAGENTO_HOST} ${ENABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'DISABLE_MAINTENANCE_MODE') {
+								sh 'echo Disabling Maintenance Mode in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${PRODUCTION_LOGIN}@${MAGENTO_HOST} ${DISABLE_MAINTENANCE_CMD}'
+							} else if (env.OPERATION == 'ENABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${PRODUCTION_LOGIN}@${MAGENTO_HOST} ${ENABLE_CRON_JOBS_CMD}'
+							} else if (env.OPERATION == 'DISABLE_CRON_JOBS') {
+								sh 'echo Enabling Cron Jobs in ${ENVIRONMENT}'
+								sh '${SSH_CMD} ${PRODUCTION_LOGIN}@${MAGENTO_HOST} ${DISABLE_CRON_JOBS_CMD}' 
+							} else {
+								error('Aborting Stage. Unknown Operation encountered: ${OPERATION}')
+							}
+						} else {
+							error('Aborting Stage. Unknown environment encountered: ${ENVIRONMENT}')
+						}
+					}
+				}
+			}
+		}
+    }
+}

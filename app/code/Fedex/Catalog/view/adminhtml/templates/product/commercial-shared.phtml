@@ -1,0 +1,103 @@
+<?php 
+    if ($productType = $block->getProductType()): 
+        
+    /** @var $viewModel Fedex\Catalog\ViewModel\CategoryCatalog  */
+    $viewModel = $block->getViewModel();
+    $categorySortingEnabled = $viewModel->getToggleValueForCategorySorting();
+?>
+<script>
+    window.currentProductType = '<?= $block->escapeJs($productType) ?>';
+    window.categorySortingEnabled = <?= json_encode((bool) $categorySortingEnabled) ?>;
+</script>
+<?php endif; ?>
+
+<script type="text/javascript">
+    require([
+        'jquery',
+        'uiRegistry',
+        'Magento_Ui/js/lib/view/utils/dom-observer'
+    ], function ($, uiRegistry, $dom) {
+        'use strict';
+
+        function makeSharedCatalogRequired() {
+            const sharedCatalogComponent = uiRegistry.get('product_form.product_form.shared_catalog.shared_catalog');
+            const productAttrSetSelector = uiRegistry.get('product_form.product_form.product-details.attribute_set_id'); 
+            if (!sharedCatalogComponent || !productAttrSetSelector) {
+                return;
+            }
+
+            let selectedAttributeId = typeof productAttrSetSelector.value() === "string"
+                ? productAttrSetSelector.value()
+                : productAttrSetSelector.value().toString();
+
+            let isPrintOnDemand = productAttrSetSelector.cacheOptions.plain.some(option =>
+                option.label === 'PrintOnDemand' && option.value === selectedAttributeId
+            );
+
+            let isCommercial = window.currentProductType === 'commercial';
+
+            if (isPrintOnDemand && isCommercial) {
+                sharedCatalogComponent.validation['required-entry'] = true;
+                sharedCatalogComponent.required(true);
+            } else {
+                delete sharedCatalogComponent.validation['required-entry'];
+                sharedCatalogComponent.required(false);
+            }
+
+            sharedCatalogComponent.validate();
+        }
+
+    function sortSharedCatalogOptionsAlphabetically() {
+        uiRegistry.async('product_form.product_form.shared_catalog.shared_catalog')(function (sharedCatalogComponent) {
+            uiRegistry.async('product_form.product_form.product-details.attribute_set_id')(function (productAttrSetSelector) {
+                let selectedAttributeId = typeof productAttrSetSelector.value() === "string"
+                    ? productAttrSetSelector.value()
+                    : productAttrSetSelector.value().toString();
+
+                let isPrintOnDemand = productAttrSetSelector.cacheOptions.plain.some(option =>
+                    option.label === 'PrintOnDemand' && option.value === selectedAttributeId
+                );
+
+                let isCommercial = window.currentProductType === 'commercial';
+
+                if (isPrintOnDemand && isCommercial) {
+                    // Sort options before subscribing to avoid infinite loop
+                    const currentOptions = sharedCatalogComponent.options();
+                    if (currentOptions && Array.isArray(currentOptions) && currentOptions.length > 0) {
+                        currentOptions.sort((a, b) => a.label.localeCompare(b.label));
+                        sharedCatalogComponent.options(currentOptions);
+                    }
+
+                    // Subscribe to options change
+                    sharedCatalogComponent.options.subscribe(function (newOptions) {
+                        if (newOptions && Array.isArray(newOptions) && newOptions.length > 0) {
+                            const sortedOptions = [...newOptions].sort((a, b) => a.label.localeCompare(b.label));
+
+                            // Update the options only if they have been modified
+                            if (JSON.stringify(sortedOptions) !== JSON.stringify(newOptions)) {
+                                sharedCatalogComponent.options(sortedOptions);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    uiRegistry.async('product_form.product_form.product-details.attribute_set_id')(function (attributeSetComponent) {
+        uiRegistry.async('product_form.product_form.shared_catalog.shared_catalog')(function (sharedCatalogComponent) {
+                makeSharedCatalogRequired();
+                if(window.categorySortingEnabled) {
+                    sortSharedCatalogOptionsAlphabetically();
+                }
+
+                attributeSetComponent.on('value', function () {
+                    makeSharedCatalogRequired();
+                    if(window.categorySortingEnabled) {
+                        sortSharedCatalogOptionsAlphabetically();
+                    }
+                });
+            });
+        });
+    });
+</script>

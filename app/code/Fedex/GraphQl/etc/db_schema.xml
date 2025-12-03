@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_GraphQl
+ * @copyright    Copyright (c) 2022 Fedex
+ * @author       Eduardo Diogo Dias <edias@mcfadyen.com>
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="oauth_token" resource="default" engine="innodb" comment="OAuth Tokens">
+        <column xsi:type="smallint" name="is_fuse" unsigned="false" nullable="false"
+                default="0" identity="false" comment="Yes/No Flag"/>
+        <column xsi:type="timestamp" name="expires_at" on_update="false" nullable="true" comment="Expires At"/>
+    </table>
+</schema>

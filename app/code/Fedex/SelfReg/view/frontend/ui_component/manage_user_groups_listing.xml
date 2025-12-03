@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" 
+                xsi:type="string">manage_user_groups_listing.selfreg_users_manageusergroups_listing_data_source</item>
+        </item>
+    </argument>
+    <settings>
+        <spinner>manage_user_groups_listing_columns</spinner>
+        <deps>
+            <dep>manage_user_groups_listing.selfreg_users_manageusergroups_listing_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="selfreg_users_manageusergroups_listing_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+        <settings>
+            <storageConfig>
+                <param name="cacheRequests" xsi:type="boolean">false</param>
+            </storageConfig>
+            <updateUrl path="company/ui/render"/>
+        </settings>
+       <dataProvider name="selfreg_users_manageusergroups_listing_data_source"
+            class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+            <settings>
+                <requestFieldName>id</requestFieldName>
+                <primaryFieldName>id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <columns name="manage_user_groups_listing_columns" component="uiB2bListing">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="table_css_class" xsi:type="string">data table manage-user-group-table</item>
+            </item>
+        </argument>
+        <settings>
+            <childDefaults>
+                <param name="storageConfig" xsi:type="array">
+                    <item name="provider" xsi:type="string">manage_user_groups_listing.manage_user_groups_listing.listing_top.bookmarks</item>
+                    <item name="root" xsi:type="string">columns.${ $.index }</item>
+                    <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
+                </param>
+            </childDefaults>
+            <storageConfig>
+                <namespace>current</namespace>
+                <provider>manage_user_groups_listing.manage_user_groups_listing.listing_top.bookmarks</provider>
+            </storageConfig>
+        </settings>
+        <column name="id" sortOrder="10">
+            <settings>
+                <label translate="true">ID</label>
+                <visible>false</visible>
+                <sortable>false</sortable>
+                <dataType>text</dataType>
+            </settings>
+        </column>
+        <column name="group_name" sortOrder="20">
+            <settings>
+                <label translate="true">GROUP NAME</label>
+                <sortable>true</sortable>
+                <fieldClass>
+                    <class name="manage-user-group-name">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <column name="group_type" sortOrder="30"
+            class="Fedex\SelfReg\Ui\Component\Listing\Column\GroupType">
+            <settings>
+                <label translate="true">GROUP TYPE</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="users" sortOrder="40">
+            <settings>
+                <label translate="true">USERS</label>
+                <sortable>true</sortable>
+            </settings>
+        </column>
+        <column name="created_at" sortOrder="50"
+            class="Fedex\SelfReg\Ui\Component\Listing\Column\AddedDate">
+            <settings>
+                <label translate="true">DATE ADDED</label>
+                <sortable>true</sortable>
+                <fieldClass>
+                    <class name="long-text-field date_added">true</class>
+                </fieldClass>
+            </settings>
+        </column>
+        <actionsColumn name="actions" sortOrder="60"
+            class="Fedex\SelfReg\Ui\Component\Listing\Column\ManageUserGroupActions"
+            component="Fedex_SelfReg/js/users/grid/columns/manageUserGroupActions">
+            <settings>
+                <fieldClass>
+                    <class name="col actions">true</class>
+                </fieldClass>
+                <label>ACTIONS</label>
+                <resizeEnabled>false</resizeEnabled>
+                <resizeDefaultWidth>107</resizeDefaultWidth>
+                <indexField>id</indexField>
+            </settings>
+        </actionsColumn>
+    </columns>
+    <container name="listing_top">
+        <paging name="listing_paging" component="uiB2bPaging">
+            <settings>
+                <storageConfig>
+                    <namespace>current.paging</namespace>
+                    <provider>manage_user_groups_listing.manage_user_groups_listing.listing_top.bookmarks</provider>
+                </storageConfig>
+            </settings>
+        </paging>
+    </container>
+</listing>

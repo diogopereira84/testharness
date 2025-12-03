@@ -1,0 +1,936 @@
+<?php
+/** @var Fedex\EnhancedProfile\ViewModel\EnhancedProfile $enhancedProfile */
+$enhancedProfile = $block->getData('enhanced_profile');
+$companyPaymentData = $block->getData('company_payment_data');
+$validateFdxLogin = $enhancedProfile->validateFdxLogin();
+if(!$enhancedProfile->isEproLogin()) {
+    $enhancedProfile->setProfileSession();
+}
+$enhancedProfile->setDefaultShippingMethod();
+$profileInfo = $enhancedProfile->getLoggedInProfileInfo();
+$preferredPaymentMethod = '';
+$mediaUrl = $enhancedProfile->getMediaUrl();
+$creditCardList = [];
+$ccJsonData = '';
+
+if (isset($profileInfo->output->profile->payment->preferredPaymentMethod)) {
+    $preferredPaymentMethod = $profileInfo->output->profile->payment->preferredPaymentMethod;
+}
+
+// Site level credit Card Details
+if (!empty($companyPaymentData->getCompanyCcData())) {
+    $creditCardList = $companyPaymentData->getCompanyCcData();
+    $ccJsonData = json_encode($creditCardList);
+}
+
+$tooltipText = $enhancedProfile->getTooltipMessage();
+
+$companyId = '';
+if ($companyPaymentData->getCompanyId() !== '') {
+    $companyId = $companyPaymentData->getCompanyId();
+}
+
+$isNonEditableCC = false;
+if ($companyPaymentData->getIsNonEditablePaymentMethod()) {
+    $isNonEditableCC = $companyPaymentData->getIsNonEditablePaymentMethod();
+}
+$isB2BApprovalEnabled = $enhancedProfile->getB2BApprovalToggle()??false;
+
+if ($enhancedProfile->isCompanySettingToggleEnabled()) {
+    $fedexPrintShipAccounts = $companyPaymentData->getFedexPrintShipAccounts();
+    $accountsList = [];
+    if (isset($profileInfo->output->profile->accounts)) {
+        $accountsList = $profileInfo->output->profile->accounts;
+    }
+    $companyPaymentOptions = json_decode($companyPaymentData->getCompanyDataById()->getCompanyPaymentOptions());
+?>
+
+<form name="cc-form" id="cc-form" class="cc-form" method="post" autocomplete="off">
+    <input type="hidden" name="remove_credit_card" id="remove_credit_card" value="0" />
+    <input type="hidden" name="remove_ship_account" id="remove_ship_account" value="0" />
+    <input type="hidden" name="remove_print_account" id="remove_print_account" value="0" />
+    <div class="site-level-payments-credit-card-container" id="shared-credit-card-block">
+        <div class="company-settings-save-section">
+            <h3 class="save-changes-title">
+                <?= $escaper->escapeHtml(__("Please save any changes made to any of the sections below.")) ?>
+            </h3>
+            <button tabindex="0" type="submit" class="save-changes-btn" id="save-site-level-payment">
+            <?= $escaper->escapeHtml(__("SAVE CHANGES")) ?>
+            </button>
+        </div>
+        <div class="block shared-credit-card-block credit-card-container-feature" style="display: <?= !$isB2BApprovalEnabled ? 'block;' : 'none;' ?>">
+            <div class="block-title stored-credit-cards">
+                <h3><?= $escaper->escapeHtml(__('Credit Card'))?></h3>
+            </div>
+            <div class="credit-card-container">
+                <div class="account-credit-cards-toggle cc-toggle-enable">
+                    <label class="toggle-title cc-toogle-title-mobile">
+                        <?= $escaper->escapeHtml(__("Enable Credit Card as payment Method")) ?></label>
+                    <div class="enhanced-profile-toggle switch-credit-cards-toggle">
+                        <label class="switch">
+                            <input aria-label="Enable Credit Card as payment Method" tabindex="0" type="checkbox" id="enable-credit-card-toggle"
+                                name="enable_credit_card_toggle"
+                                value="<?= in_array('creditcard',$companyPaymentOptions) ? 1 : 0;?>"
+                                <?= in_array('creditcard',$companyPaymentOptions) ? 'checked': '';?>
+                            />
+                            <span class="custom-slider round"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="info-icon">
+                        <span class="my-tooltip">
+                        <img tabindex="0" aria-describedby="credit-card-payment-info"
+                                src="<?= $block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');?>"
+                                class="tooltip-toggle tooltip-icon toggle-icon-tooltip-img"
+                                alt="Enable Credit Card as payment Method" />
+                            <span id="credit-card-payment-info-1" role="tooltip"
+                                class="tooltip-content alternate-tooltip-text credit-card-payment-info">
+                                <?= $escaper->escapeHtml(__("Enable Credit Card as payment Method")) ?>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="block-content credit-card-container-section credit-card-container-section-toggle store-credit-card payment-method-container"
+                style="display: <?= in_array('creditcard',$companyPaymentOptions) ? 'block;' : 'none;' ?>">
+                <?php if (!empty($creditCardList["data"])): ?>
+                    <?php
+                    $isPrimary = true;
+                    $isTokenExpiry =
+                        $enhancedProfile->getTokenIsExpired($creditCardList["data"]["tokenExpirationDate"]);
+                    ?>
+                    <div class="credit-cart-content" data="<?= $escaper->escapeHtmlAttr($ccJsonData); ?>">
+                        <div class="credit-card-head">
+                            <div class="head-left">
+                                <div class="left">
+                                    <?php $cardIcon =
+                                        str_replace(' ', '_', strtolower($creditCardList["data"]["ccType"])).'.png' ?>
+                                    <img src="<?= $block->getViewFileUrl('Fedex_EnhancedProfile::images/'.$cardIcon) ?>"
+                                        alt="<?= $escaper->escapeHtmlAttr($creditCardList["data"]["ccType"]) ?>" />
+                                </div>
+                                <div class="right">
+                                    <div class="card-type">
+                                        <span><?= $escaper->escapeHtml($creditCardList["data"]["ccType"]) ?></span>
+                                    </div>
+                                    <div class="card-number">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('ending in ')) ?>
+                                    <?= /* @noEscape */ '*'.substr($creditCardList["data"]["ccNumber"], -4) ?>
+                                </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="head-mid">
+                                <?php if ($isTokenExpiry): ?>
+                                    <div class="card-expired">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Expired')) ?>
+                                </span>
+                                    </div>
+                                <?php else: ?>
+                                    <div class="card-expires">
+                                <span>
+                                    <?= $escaper->escapeHtml(__('Expires ')) ?>
+                                    <?= /* @noEscape */
+                                    $creditCardList["data"]["ccExpiryMonth"] . '/' . substr($creditCardList["data"]["ccExpiryYear"], -2) ?>
+                                </span>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div class="credit-card-body">
+                            <div class="credit-card-name">
+                                <div class="name-content">
+                                    <div class="name-title">
+                                        <span><?= $escaper->escapeHtml(__('Name on card')) ?></span>
+                                    </div>
+                                    <div class="name">
+                                        <span><?= $escaper->escapeHtml($creditCardList["data"]['nameOnCard']) ?></span>
+                                    </div>
+                                </div>
+                                <div class="action">
+                                <div class="action-edit site-level-credit-card-edit" tabindex="0" >
+                                <span class="edit credit-card-edit" data-primary="<?= /* @noEscape */ $isPrimary ?>">
+                                    <?= $escaper->escapeHtml(__('Edit')) ?>
+                                </span>
+                                </div>
+                                </div>
+                            </div>
+                            <div class="credit-card-address">
+                                <div class="address-content">
+                                    <div class="address-title">
+                                        <?= $escaper->escapeHtml(__('Billing Address')) ?>
+                                    </div>
+                                    <div class="content">
+                                        <div class="name">
+                                            <?= $escaper->escapeHtml($creditCardList["data"]["nameOnCard"]) ?>
+                                        </div>
+                                        <span class="name">
+                                <?php
+                                $companyName = '';
+                                $countryName = '';
+                                $stateTitle = '';
+                                if (isset($creditCardList["data"]['company'])) {
+                                    $companyName = $creditCardList["data"]['company'];
+                                }
+                                if ($creditCardList["data"]["country"] == 'US') {
+                                    $countryName = "United States of America";
+                                } else {
+                                    $countryName = $creditCardList["data"]['state'];
+                                }
+                                foreach ($enhancedProfile->getRegionsOfCountry('us') as $state) {
+                                    if ($creditCardList["data"]["state"] == $state['label']) {
+                                        $stateTitle = $state['title'];
+                                    }
+                                } ?>
+                                            <?= /* @noEscape */ implode(' ', [$creditCardList["data"]["addressLine1"], $creditCardList["data"]["addressLine2"]]) ?>,
+                                    <?= $escaper->escapeHtml($companyName) ?>
+                                            <?= $escaper->escapeHtml($creditCardList["data"]["city"]) ?>
+                                            <?= $escaper->escapeHtml($stateTitle) ?>
+                                            <?= $escaper->escapeHtml($creditCardList["data"]["zipCode"]) ?>
+                                            <?= $escaper->escapeHtml($countryName) ?>
+                                </span>
+                                    </div>
+                                    <div class="mobile-edit" tabindex="0">
+                                        <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
+                                    </div>
+                                </div>
+                                <div class="action">
+                                    <span tabindex="0" class="remove-site-level-click remove remove-site-level-credit-card">
+                                        <?= $escaper->escapeHtml(__('Remove')) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="box-add-new-card box-add-new-credit-card" style="display: <?= empty($creditCardList["data"]) ? 'block;' : 'none;' ?>">
+                    <span class="box-title">
+                        <a tabindex="0" class="box-title-content" href="">
+                            <img aria-describedby="left-plus-icon"
+                                src="<?= $block->getViewFileUrl('images/enhanced-profile/left-icon.png');?>"
+                                class="left-plus-icon"
+                                alt="Left Plus icon" />
+                            <span class="box-title-content-text"><?= $escaper->escapeHtml(__('Add New Card')) ?></span></a>
+                    </span>
+                </div>
+                <div class="block-content credit-card-form-container shared-credit-card-form-container"
+                    style="display: none;">
+                    <div class="box-credit-card-form-container">
+                        <h4 class="credit-card-inforimation"><?= $escaper->escapeHtml("Credit Card Information") ?></h4>
+                        <div class="input-container">
+                            <label class="input-label" for="name_card"><?= $escaper->escapeHtml("CARDHOLDER NAME") ?></label>
+                            <input tabindex="0" class="input-textbox" type="text" placeholder="Cardholder Name" name="name_card" id="name_card"
+                                maxlength="40" placeholder="<?= $escaper->escapeHtmlAttr("Cardholder name")?>">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <div class="input-container">
+                            <label class="input-label" for="card_number"><?= $escaper->escapeHtml("Card Number") ?></label>
+                            <input tabindex="0" class="input-textbox card-number" type="text" name="card_number"
+                                id="card_number" placeholder="<?= $escaper->escapeHtmlAttr("Card Number")?>" maxlength="19">
+                            <?php $imgBlankCard = $block->getViewFileUrl('Fedex_EnhancedProfile::images/Generic.png'); ?>
+                            <p class="account-credit-card-error error"></p>
+                            <img class="img-card" alt="card" src="<?= $escaper->escapeHtmlAttr($imgBlankCard) ?>">
+                            <em class="fa fa-check check-icon" style="display:none;"></em>
+                        </div>
+                        <div class="expiration-date-container">
+                            <label class="input-label" for="expiration_month">
+                                <?= $escaper->escapeHtml(__("expiration date")) ?></label>
+                            <div class="expiration-month-container">
+                                <select tabindex="0" class="expiration-month" name="expiration_month" id="expiration_month">
+                                    <option value="" disabled="disabled" selected="selected">
+                                        <?= $escaper->escapeHtml(__("Month")) ?></option>
+                                    <option value="01"><?= $escaper->escapeHtml(__("1 - January")) ?></option>
+                                    <option value="02"><?= $escaper->escapeHtml(__("2 - February")) ?></option>
+                                    <option value="03"><?= $escaper->escapeHtml(__("3 - March")) ?></option>
+                                    <option value="04"><?= $escaper->escapeHtml(__("4 - April")) ?></option>
+                                    <option value="05"><?= $escaper->escapeHtml(__("5 - May")) ?></option>
+                                    <option value="06"><?= $escaper->escapeHtml(__("6 - June")) ?></option>
+                                    <option value="07"><?= $escaper->escapeHtml(__("7 - July")) ?></option>
+                                    <option value="08"><?= $escaper->escapeHtml(__("8 - August")) ?></option>
+                                    <option value="09"><?= $escaper->escapeHtml(__("9 - September")) ?></option>
+                                    <option value="10"><?= $escaper->escapeHtml(__("10 - October")) ?></option>
+                                    <option value="11"><?= $escaper->escapeHtml(__("11 - November")) ?></option>
+                                    <option value="12"><?= $escaper->escapeHtml(__("12 - December")) ?></option>
+                                </select>
+                                <p class="account-credit-card-error error"></p>
+                            </div>
+                            <div class="expiration-year-container">
+                                <select tabindex="0" class="expiration-year" id="expiration_year" aria-label="expiration year dropdown">
+                                    <option value="">Year</option>
+                                    <?php  foreach (range(date("Y"), date('Y') + 10) as $year): ?>
+                                        <option value="<?= $escaper->escapeHtmlAttr($year); ?>">
+                                            <?= $escaper->escapeHtml($year) ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="cvv-container">
+                            <label class="input-label" for="cvv">
+                                <?= $escaper->escapeHtml("CVV") ?>
+                            </label>
+                            <input tabindex="0" class="input-textbox" type="text" name="cvv" id="cvv"
+                                placeholder="<?= $escaper->escapeHtmlAttr("CVV")?>" maxlength="5">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <h4 class="billing-address-heading"><?= $escaper->escapeHtml("Billing Address") ?></h4>
+                        <div class="input-container">
+                            <label class="input-label" for="company_name">
+                                <?= $escaper->escapeHtml("Company (Optional)") ?>
+                            </label>
+                            <input tabindex="0" class="input-textbox" type="text" name="company_name" id="company_name"
+                                placeholder="<?= $escaper->escapeHtmlAttr('Enter company name')?>" maxlength="40">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <div class="input-container">
+                            <label class="input-label" for="country"><?= $escaper->escapeHtml("Country")?></label>
+                            <select tabindex="0" class="input-textbox"name="country" id="country">
+                                <option value="US" selected="selected">
+                                    <?= $escaper->escapeHtml("United States of America")?></option>
+                            </select>
+                        </div>
+                        <div class="input-container">
+                            <label class="input-label" for="address_line_one">
+                                <?= $escaper->escapeHtml("Address Line 1") ?></label>
+                            <input tabindex="0" class="input-textbox" type="text" name="address_line_one" id="address_line_one"
+                                placeholder="<?= $escaper->escapeHtmlAttr('Enter your address')?>" maxlength="50">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <div class="input-container input-container-toogle">
+                            <label class="input-label" for="address_line_two">
+                                <?= $escaper->escapeHtml("ADDRESS LINE 2 (OPTIONAL)") ?></label>
+                            <input tabindex="0" class="input-textbox" type="text" name="address_line_two"
+                                id="address_line_two" maxlength="50">
+                        </div>
+                        <div class="zipcode-container">
+                            <label class="input-label" for="zipcode"><?= $escaper->escapeHtml("Zip code") ?></label>
+                            <input tabindex="0" class="input-textbox" type="text" name="zipcode" id="zipcode" maxlength="10" placeholder="Zip Code">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <div class="city-container">
+                            <label class="input-label" for="city">
+                                <?= $escaper->escapeHtml("City") ?></label>
+                            <input tabindex="0" class="input-textbox" type="text" name="city" id="city" placeholder="City">
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <?php $states = $enhancedProfile->getRegionsOfCountry('us'); ?>
+                        <div class="state-container">
+                            <label class="input-label" for="state"><?= $escaper->escapeHtml("State") ?></label>
+                            <select tabindex="0" class="input-textbox"name="state" id="state">
+                                <option value=""></option>
+                                <?php foreach ($states as $state) { ?>
+                                    <option value="<?= $escaper->escapeHtmlAttr($state['label']); ?>">
+                                        <?= $escaper->escapeHtml($state['label']); ?>
+                                    </option>
+                                <?php } ?>
+                            </select>
+                            <p class="account-credit-card-error error"></p>
+                        </div>
+                        <div class="checkmark-container credit-card-container credit-card-editable-for-mobile">
+                                <div class="account-credit-cards-toggle">
+                                    <input type="hidden" id="company_id" name="company_id" value="<?=$companyId;?>"/>
+                                    <label class="toggle-title">
+                                        <?= $escaper->escapeHtml(__("Set credit card as non-editable payment method.")) ?></label>
+                                    <div class="enhanced-profile-toggle">
+                                        <label class="switch">
+                                            <input tabindex="0" type="checkbox" id="non-editable-cc-payment"
+                                                class="payment-type credit-cards-radio-button"
+                                                name="non-editable-cc-payment" value="0" aria-label=" Shared Credit Card Payment"<?php if ($isNonEditableCC): echo 'checked';endif;?>/>
+                                            <span class="custom-slider round"></span>
+                                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                                        </label>
+                                    </div>
+                                <div class="info-icon editable-info-icon">
+                                    <span class="my-tooltip">
+                                        <img tabindex="0"
+                                             aria-describedby="non-editable-toggle-field"
+                                             src="<?=$block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');?>"
+                                             class="tooltip-toggle tooltip-icon toggle-icon-tooltip-img"
+                                             alt="Credit card information icon" />
+                                        <span id="non-editable-toggle-field" role="tooltip"
+                                                class="tooltip-content alternate-tooltip-text">
+                                            <?= $escaper->escapeHtml(__($tooltipText)) ?>
+                                        </span>
+                                    </span>
+                                </div>
+                                </div>
+                                <div class="info-icon editable-info-icon-outside" style="display: none;">
+                                    <span class="my-tooltip">
+                                        <img tabindex="0"
+                                             aria-describedby="non-editable-toggle-field"
+                                             src="<?=$block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');?>"
+                                             class="tooltip-toggle tooltip-icon toggle-icon-tooltip-img"
+                                             alt="Credit card information icon" />
+                                        <span id="non-editable-toggle-field-mobile" role="tooltip"
+                                              class="tooltip-content alternate-tooltip-text">
+                                            <?= $escaper->escapeHtml(__($tooltipText)) ?>
+                                        </span>
+                                    </span>
+                                </div>
+                        </div>
+                        <div class="checkmark-terms-condition-container">
+                            <div class="alternate-check-container">
+                                <label tabindex="0" class="alternate-checkbox-container" for="is_term_and_conditions">
+                                    <input type="checkbox" name="is_term_and_conditions" id="is_term_and_conditions"
+                                        aria-label="terms and condition" value="0">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <div class="terms-condition-text">
+                                    <?= $escaper->escapeHtml(__("I accept the terms and conditions")) ?>
+                                </div>
+                                <input type="hidden" name="edit_status" id="edit_status" value="1" />
+                                <input type="hidden" name="save_status" id="save_status" value="" />
+                                <input type="hidden" name="profile_credit_card_id" id="profile_credit_card_id" value="" />
+                            </div>
+                        </div>
+                        <p class="account-credit-card-error error set-default is-term-and-conditions-error"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="block shared-credit-card-block credit-card-container-feature fedex-account-container-feature">
+            <div class="block-title stored-credit-cards">
+                <h3><?= $escaper->escapeHtml(__('Print Account'))?></h3>
+            </div>
+            <div class="credit-card-container">
+                <div class="account-credit-cards-toggle cc-toggle-enable">
+                    <label class="toggle-title print-account-title-label">
+                        <?= $escaper->escapeHtml(__("Enable print account as a payment method")) ?></label>
+                    <div class="enhanced-profile-toggle switch-credit-cards-toggle">
+                        <label class="switch">
+                            <input aria-label="Enable print account as a payment method" tabindex="0" type="checkbox" id="enable-fedex-account-toggle"
+                                name="enable_fedex_account_toggle"
+                                value="<?= in_array('fedexaccountnumber',$companyPaymentOptions) ? 1 : 0;?>"
+                                <?= in_array('fedexaccountnumber',$companyPaymentOptions) ? 'checked': '';?>
+                            />
+                            <span class="custom-slider round"></span>
+                            <span class="labels" data-on="ON" data-off="OFF"></span>
+                        </label>
+                    </div>
+                    <div class="info-icon">
+                        <span class="my-tooltip">
+                        <img tabindex="0"
+                             aria-describedby="credit-card-payment-info"
+                             src="<?=$block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');?>"
+                             class="tooltip-toggle tooltip-icon toggle-icon-tooltip-img"
+                             alt="Enable Credit Card as payment Method" />
+                            <span id="credit-card-payment-info-2" role="tooltip"
+                                class="tooltip-content alternate-tooltip-text credit-card-payment-info">
+                                <?= $escaper->escapeHtml(__("Enable print account as a payment method")) ?>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="block-content credit-card-container-section fedex-account-container-section store-credit-card payment-method-container">
+                <div class="block-title stored-credit-cards fedex-account-title">
+                    <h2><?= $escaper->escapeHtml(__('FedEx Accounts'))?></h2>
+                </div>
+                <div class="fedex-new-account-container">
+                    <div class="block-title stored-credit-cards fedex-new-account-title">
+                        <h3><?= $escaper->escapeHtml(__($enhancedProfile->isTigerE486666Enabled() ? 'Add New Print Account' : 'Add New Print or Ship Account'))?></h3>
+                    </div>
+                    <div class="fedex-new-account-container-form">
+                        <div class="input-container">
+                            <label class="input-label" for="fedex_account_number"><?= $escaper->escapeHtml("Fedex account number") ?></label>
+                            <input type="hidden" id="account_type" name="account_type" value=""/>
+                            <input tabindex="0" class="input-textbox" type="text" placeholder="Enter Fedex Account Number" name="fedex_account_number"
+                                id="fedex_account_number"
+                                placeholder="<?= $escaper->escapeHtmlAttr("Fedex account number")?>">
+                            <p class="new-fedex-account-error"></p>
+                        </div>
+                        <div class="fedex-new-account-add-button">
+                            <button tabindex="0" type="button" class="add-new-account-button">
+                                <?= $escaper->escapeHtml(__("Add")) ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="fedex-account-shipping-container">
+                    <div class="shipping-description-container">
+                                <?php
+                                $addShippingAccountUrl = $enhancedProfile->getConfigValue(
+                                    'fedex/enhanced_profile_group/add_shipping_account_url'
+                                );
+                                ?>
+                                <?= $escaper->escapeHtml(__('A shipping account allows you to receive discounts on shipping and access tools like address book, online billing, reporting and more.')) ?>
+                                <a tabindex="0" href="<?= $escaper->escapeHtmlAttr($addShippingAccountUrl) ?>"
+                                target="_blank" class="add-shipping-account">
+                                    <?= $escaper->escapeHtml(__('Sign up for one today.')) ?>
+                                </a>
+                    </div>
+                    <div class="faq-description-container">
+                        <?php
+                        $faqurl = $enhancedProfile->getConfigValue(
+                            'fedex/enhanced_profile_group/faq_url'
+                        );
+                        ?>
+                        <?= $escaper->escapeHtml(
+                            __('To learn more about the different account types, please see what we offer in the')
+                        ) ?>
+                        <a tabindex="0" href="<?= $escaper->escapeHtmlAttr($faqurl) ?>" target="_blank"
+                        class="online-printing-faqs"><?= $escaper->escapeHtml(__("Online Printing FAQs.")) ?></a>
+                    </div>
+                </div>
+                <?php $companyAccountNumbers = $companyPaymentData->getCompanyAccountNumbers(); ?>
+                <div class="fedex-account-list-container"  style="display: <?= !empty($companyAccountNumbers) ? 'block;' : 'none;' ?>">
+                    <div class="block-title stored-credit-cards fedex-account-list-title">
+                        <h3><?= $escaper->escapeHtml(__('FedEx Accounts'))?></h3>
+                    </div>
+                    <div class="fedex-account-lists-section">
+                        <?php
+                        $i = 0;
+                        foreach ($companyAccountNumbers as $account):
+                            if (isset($account['type'])):?>
+                                <?php
+                                $accountSummary = $enhancedProfile->getAccountSummary($account['account_number']);
+                                $accountLabel = $accountSummary['account_type'] == 'DISCOUNT'?'Discount':'Payment';
+                                ?>
+                                <div class="payment-account-list" id="payment_account_list_<?= strtolower($account['type']); ?>">
+                                    <div class="payment-account-top">
+                                        <div class="shipping-account-container">
+                                            <h3><?= $escaper->escapeHtml($account['label']) ?></h3>
+                                            <div class="mask-account"><?= $escaper->escapeHtml(__('ending in ')) ?>
+                                                <?= $escaper->escapeHtml($account['maskednumber']); ?></div>
+                                        </div>
+                                        <div class="default-container">
+                                        <?php if (strtolower($account['type']) === 'print') : ?>
+                                            <span tabindex="0" class="print-text"><?= $escaper->escapeHtml("Print"); ?></span>
+                                            <input type="hidden" name="print_account_number" id="print_account_number" value="<?= $account['account_number']; ?>" />
+                                        <?php else: ?>
+                                            <span tabindex="0" class="ship-text"><?= $escaper->escapeHtml("Ship"); ?></span>
+                                            <input type="hidden" name="ship_account_number" id="ship_account_number" value="<?= $account['account_number']; ?>" />
+                                        <?php endif; ?>
+                                        </div>
+                                    </div>
+                                    <div class="payment-account-info-container">
+                                        <div class="payment-account-info-container-top">
+                                            <div class="status-container">
+                                                <h4><?= $escaper->escapeHtml(__('Status')) ?></h4>
+                                                <?php if ($accountSummary): ?>
+                                                    <?php if ($accountSummary['account_status']): ?>
+                                                        <p><i class="fa fa-circle"></i>
+                                                            <?= $escaper->escapeHtml(
+                                                                ucfirst(strtolower($accountSummary['account_status']))
+                                                            ) ?>
+                                                        </p>
+                                                    <?php else: ?>
+                                                        <span><?= $escaper->escapeHtml(__('NA')) ?></span>
+                                                    <?php endif; ?>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="eligible-for-container">
+                                                <h4><?= $escaper->escapeHtml(__('Eligible For')) ?></h4>
+                                                <?php if ($accountSummary): ?>
+                                                <p><?php $img = $block->getViewFileUrl('images/enhanced-profile/site-amount.png'); ?>
+                                                <img src="<?= $escaper->escapeHtmlAttr($img) ?>" class="dollar-icon" alt="dollor
+                                                <?= $escaper->escapeHtmlAttr($account['label']) ?>">
+                                                <?= $escaper->escapeHtml($accountLabel) ?>
+                                                </p>
+                                                <?php endif; ?>
+                                            </div>
+                                            <div class="action-container">
+                                            <div class="action-remove">
+                                                <span tabindex="0" class="remove-site-level-click remove-link remove-account-link"
+                                                    data-account-type="<?= $escaper->escapeHtmlAttr($account['type']) ?>"
+                                                    data-remove-id="payment_account_list_<?= strtolower($account['type']); ?>" >
+                                                    <?= $escaper->escapeHtml(__('Remove')) ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="payment-account-info-container-bottom credit-card-container">
+                                            <div class="account-credit-cards-toggle cc-toggle-enable">
+                                                <label class="toggle-title">
+                                                <?= $escaper->escapeHtml(__("Account Number Editable")) ?></label>
+                                                <div class="info-icon">
+                                                <span class="my-tooltip">
+                                                <img tabindex="0" aria-describedby="credit-card-payment-info"
+                                                        src="<?=$block->getViewFileUrl('Fedex_EnhancedProfile::images/information-icon.png');?>"
+                                                        class="tooltip-toggle tooltip-icon"
+                                                        alt="Enable Credit Card as payment Method" />
+                                                    <span id="credit-card-payment-info-3" role="tooltip"
+                                                        class="tooltip-content alternate-tooltip-text credit-card-payment-info">
+                                                        <?= $escaper->escapeHtml(__("When toggled on, users will be able to remove and add their own account number")) ?>
+                                                    </span>
+                                                </span>
+                                                </div>
+                                                <div class="enhanced-profile-toggle switch-credit-cards-toggle">
+                                                    <label class="switch">
+                                                       <input tabindex="0" aria-label="Account number editable" type="checkbox" id="<?= strtolower($account['type']).'_account_number_editable' ?>"
+                                                              name="<?= strtolower($account['type']).'_account_number_editable' ?>"
+                                                              <?= $account['editable']?'checked':'' ?> value="<?=$account['editable']?>" />
+                                                       <span class="custom-slider round"></span>
+                                                       <span class="labels" data-on="ON" data-off="OFF"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php
+                                $i++;
+                            endif; ?>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!---------Add Account Popup Start ----------------------------->
+        <div id="modal-content-fedex-account" class="modal-content-fedex-account-form-container" style="display:none;">
+            <div class="fedex-account-model-warning-icon">
+                <img src="<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Fedex_EnhancedProfile::images/warning-sitelevel-account.png')
+                ) ?>"
+                    alt="fedex-account-model-warning-icon">
+            </div>
+            <div class="modal-content-fedex-account-form-sub-title">
+                    <span class="modal-content-fedex-account-form-sub-heading">
+                        <?= $block->escapeHtml(__('Adding a new print account will replace the existing print account on file.')); ?>
+                    </span>
+            </div>
+            <span class="fedex-account-description">
+                    <?= $block->escapeHtml(__("Changes have not been saved, and will be lost.")); ?>
+                </span>
+            <div class="actions">
+                <button class="fedex-account-cancel">DON'T SAVE</button>
+                <button class="fedex-account-save" id="fedex-account-popup-save">SAVE</button>
+            </div>
+        </div>
+        <!---------Add Account Popup End ----------------------------->
+    </div>
+</form>
+<?php } else { ?>
+<div class="block shared-credit-card-block" id="shared-credit-card-block">
+    <div class="block-title stored-credit-cards"><h3><?= $escaper->escapeHtml(__('Shared Credit Cards'))?></h3></div>
+    <div class="store-credit-card payment-method-container" style="display: <?=(!empty($creditCardList["data"])) && (!empty($creditCardList["data"]["ccNumber"])) ? 'block;' : 'none;'?>">
+        <div class="custom-radio-btn">
+                <input type="checkbox" id="non-editable-cc-payment" class="payment-type credit-cards-radio-button"
+                name="non-editable-cc-payment" value="1" aria-label=" Shared Credit Card Payment"<?php if ($isNonEditableCC): echo 'checked';endif;?>/>
+                <input type="hidden" id="company_id" name="company_id" value="<?=$companyId;?>"/>
+                <label class="credit-card-save" for="credit-cards-option">
+                    <?= $escaper->escapeHtml(__("Set credit card as non-editable payment method")) ?>
+                </label>
+                <span class="tooltip">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g id="Info">
+                            <path id="Union" fill-rule="evenodd" clip-rule="evenodd" d="M24 40C15.1634 40 8 32.8366 8 24C8 15.1634 15.1634 8 24 8C32.8366 8 40 15.1634 40 24C40 32.8366 32.8366 40 24 40ZM24 38C31.732 38 38 31.732 38 24C38 16.268 31.732 10 24 10C16.268 10 10 16.268 10 24C10 31.732 16.268 38 24 38ZM27.5 31H24.5H21.5C20.9477 31 20.5 30.5523 20.5 30C20.5 29.4477 20.9477 29 21.5 29H23.5V22.5H22.5C21.9477 22.5 21.5 22.0523 21.5 21.5C21.5 20.9477 21.9477 20.5 22.5 20.5H24.5C25.0523 20.5 25.5 20.9477 25.5 21.5V29H27.5C28.0523 29 28.5 29.4477 28.5 30C28.5 30.5523 28.0523 31 27.5 31ZM22.5 16.5C22.5 15.675 23.169 15 24 15C24.825 15 25.5 15.675 25.5 16.5C25.5 17.331 24.825 18 24 18C23.169 18 22.5 17.331 22.5 16.5Z" fill="#333333"></path>
+                        </g>
+                    </svg>
+                <span class="tooltiptext"><?= $escaper->escapeHtml(__($tooltipText)) ?></span>
+                </span>
+        </div>
+        <div class="msg-non-editable-payment-method" style="display:none"></div>
+        <div class="save-credit-card-changes save-changes-container">
+            <button type="button" class="btn-submit non-editable-payment-method-save ceditcard">
+                <?= $escaper->escapeHtml(__("save changes")) ?>
+            </button>
+        </div>
+        <?php if (!empty($creditCardList["data"])) { ?>
+        <?php
+            $isPrimary = true;
+            $isTokenExpiry =
+            $enhancedProfile->getTokenIsExpired($creditCardList["data"]["tokenExpirationDate"]);
+        ?>
+        <div class="credit-cart-content" data="<?= $escaper->escapeHtmlAttr($ccJsonData); ?>">
+            <div class="credit-card-head">
+                <div class="head-left">
+                    <div class="left">
+                        <?php $cardIcon =
+                        str_replace(' ', '_', strtolower($creditCardList["data"]["ccType"])).'.png' ?>
+                        <img src="<?= $block->getViewFileUrl('Fedex_EnhancedProfile::images/'.$cardIcon) ?>"
+                        alt="<?= $escaper->escapeHtmlAttr($creditCardList["data"]["ccType"]) ?>" />
+                    </div>
+                    <div class="right">
+                        <div class="card-type">
+                            <span><?= $escaper->escapeHtml($creditCardList["data"]["ccType"]) ?></span>
+                        </div>
+                        <div class="card-number">
+                            <span>
+                                <?= $escaper->escapeHtml(__('ending in ')) ?>
+                                <?= /* @noEscape */ '*'.substr($creditCardList["data"]["ccNumber"], -4) ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="head-mid">
+                    <?php if ($isTokenExpiry): ?>
+                        <div class="card-expired">
+                            <span>
+                                <?= $escaper->escapeHtml(__('Expired')) ?>
+                            </span>
+                        </div>
+                    <?php else: ?>
+                        <div class="card-expires">
+                            <span>
+                                <?= $escaper->escapeHtml(__('Expires ')) ?>
+                                <?= /* @noEscape */
+                            $creditCardList["data"]["ccExpiryMonth"] . '/' . substr($creditCardList["data"]["ccExpiryYear"], -2) ?>
+                            </span>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                <div class="head-right">
+                    <?php if (!$isTokenExpiry): ?>
+                        <?php if ($isPrimary): ?>
+                            <div class="cart-status-default-content">
+                                <div class="cart-status-default">
+                                    <span class="default"><?= $escaper->escapeHtml(__('Default')) ?></span>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="cart-status-make-content">
+                                <div class="cart-status-make">
+                                    <span class="default">
+                                        <?= $escaper->escapeHtml(__(' Make Default')) ?>
+                                    </span>
+                                </div>
+                            </div>
+                        <?php endif; ?>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <div class="credit-card-body">
+                <div class="credit-card-name">
+                    <div class="name-content">
+                        <div class="name-title">
+                            <span><?= $escaper->escapeHtml(__('Name on card')) ?></span>
+                        </div>
+                        <div class="name">
+                            <span><?= $escaper->escapeHtml($creditCardList["data"]['nameOnCard']) ?></span>
+                        </div>
+                    </div>
+                    <div class="action">
+                        <div class="action-edit">
+                            <span class="edit" data-primary="<?= /* @noEscape */ $isPrimary ?>">
+                                <?= $escaper->escapeHtml(__('Edit')) ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="credit-card-address">
+                    <div class="address-content">
+                        <div class="address-title">
+                            <span><?= $escaper->escapeHtml(__('Billing Address')) ?></span>
+                        </div>
+                        <div class="content">
+                            <div class="name">
+                                <?= $escaper->escapeHtml($creditCardList["data"]["nameOnCard"]) ?>
+                            </div>
+                            <span>
+                            <?php
+                            $companyName = '';
+                            $countryName = '';
+                            $stateTitle = '';
+                            if (isset($creditCardList["data"]['company'])) {
+                                $companyName = $creditCardList["data"]['company'];
+                            }
+                            if ($creditCardList["data"]["country"] == 'US') {
+                                $countryName = "United States of America";
+                            } else {
+                                $countryName = $creditCardList["data"]['state'];
+                            }
+                            foreach ($enhancedProfile->getRegionsOfCountry('us') as $state) {
+                                if ($creditCardList["data"]["state"] == $state['label']) {
+                                    $stateTitle = $state['title'];
+                                }
+                            } ?>
+                                <?= /* @noEscape */ implode(' ', [$creditCardList["data"]["addressLine1"], $creditCardList["data"]["addressLine2"]]) ?>,
+                                <?= $escaper->escapeHtml($companyName) ?>
+                                <?= $escaper->escapeHtml($creditCardList["data"]["city"]) ?>
+                                <?= $escaper->escapeHtml($stateTitle) ?>
+                                <?= $escaper->escapeHtml($creditCardList["data"]["zipCode"]) ?>
+                                <?= $escaper->escapeHtml($countryName) ?>
+                            </span>
+                        </div>
+                        <div class="mobile-edit" tabindex="0">
+                            <span><?= $escaper->escapeHtml(__('Edit')) ?></span>
+                        </div>
+                    </div>
+                    <div class="action">
+                        <span class="remove remove-shared-credit-card">
+                            <?= $escaper->escapeHtml(__('Remove')) ?>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+    <div class="block-content credit-card-form-container shared-credit-card-form-container" style="display: <?= empty($creditCardList["data"]) ? 'block;' : 'none;' ?>">
+        <div class="box-credit-card-form-container">
+            <form name="cc-form" id="cc-form" class="cc-form" method="post" autocomplete="off">
+                <h4 class="credit-card-inforimation"><?= $escaper->escapeHtml("Credit Card Information") ?></h4>
+                <div class="input-container">
+                    <label class="input-label" for="name_card"><?= $escaper->escapeHtml("CARDHOLDER NAME") ?></label>
+                    <input class="input-textbox" type="text" placeholder="Cardholder Name" name="name_card" id="name_card"
+                    maxlength="40" placeholder="<?= $escaper->escapeHtmlAttr("Cardholder name")?>">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="card_number"><?= $escaper->escapeHtml("Card Number") ?></label>
+                    <input class="input-textbox card-number" type="text" name="card_number"
+                    id="card_number" placeholder="<?= $escaper->escapeHtmlAttr("Card Number")?>" maxlength="19">
+                    <?php $imgBlankCard = $block->getViewFileUrl('Fedex_EnhancedProfile::images/Generic.png'); ?>
+                    <p class="account-credit-card-error error"></p>
+                    <img class="img-card" alt="card" src="<?= $escaper->escapeHtmlAttr($imgBlankCard) ?>">
+                    <em class="fa fa-check check-icon" style="display:none;"></em>
+                </div>
+                <div class="expiration-date-container">
+                    <label class="input-label" for="expiration_month">
+                        <?= $escaper->escapeHtml(__("expiration date")) ?></label>
+                    <div class="expiration-month-container">
+                        <select class="expiration-month" name="expiration_month" id="expiration_month">
+                            <option value="" disabled="disabled" selected="selected">
+                            <?= $escaper->escapeHtml(__("Month")) ?></option>
+                            <option value="01"><?= $escaper->escapeHtml(__("1 - January")) ?></option>
+                            <option value="02"><?= $escaper->escapeHtml(__("2 - February")) ?></option>
+                            <option value="03"><?= $escaper->escapeHtml(__("3 - March")) ?></option>
+                            <option value="04"><?= $escaper->escapeHtml(__("4 - April")) ?></option>
+                            <option value="05"><?= $escaper->escapeHtml(__("5 - May")) ?></option>
+                            <option value="06"><?= $escaper->escapeHtml(__("6 - June")) ?></option>
+                            <option value="07"><?= $escaper->escapeHtml(__("7 - July")) ?></option>
+                            <option value="08"><?= $escaper->escapeHtml(__("8 - August")) ?></option>
+                            <option value="09"><?= $escaper->escapeHtml(__("9 - September")) ?></option>
+                            <option value="10"><?= $escaper->escapeHtml(__("10 - October")) ?></option>
+                            <option value="11"><?= $escaper->escapeHtml(__("11 - November")) ?></option>
+                            <option value="12"><?= $escaper->escapeHtml(__("12 - December")) ?></option>
+                        </select>
+                        <p class="account-credit-card-error error"></p>
+                    </div>
+                    <div class="expiration-year-container">
+                        <select class="expiration-year" id="expiration_year" aria-label="expiration year dropdown">
+                            <option value="">Year</option>
+                            <?php  foreach (range(date("Y"), date('Y') + 10) as $year): ?>
+                                <option value="<?= $escaper->escapeHtmlAttr($year); ?>">
+                                <?= $escaper->escapeHtml($year) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="cvv-container">
+                    <label class="input-label" for="cvv">
+                        <?= $escaper->escapeHtml("CVV") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="cvv" id="cvv"
+                    placeholder="<?= $escaper->escapeHtmlAttr("CVV")?>" maxlength="5">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="nick_name">
+                        <?= $escaper->escapeHtml("Nickname (Optional)") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="nick_name" id="nick_name"
+                    placeholder="<?= $escaper->escapeHtmlAttr('e.g. Primary Card') ?>" maxlength="40">
+                    <p class="account-credit-card-error error nick-name"></p>
+                </div>
+                <h4 class="billing-address-heading"><?= $escaper->escapeHtml("Billing Address") ?></h4>
+                <div class="input-container">
+                    <label class="input-label" for="company_name">
+                        <?= $escaper->escapeHtml("Company (Optional)") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="company_name" id="company_name"
+                    placeholder="<?= $escaper->escapeHtmlAttr('Enter company name')?>" maxlength="40">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="country"><?= $escaper->escapeHtml("Country")?></label>
+                    <select class="input-textbox"name="country" id="country">
+                        <option value="US" selected="selected">
+                        <?= $escaper->escapeHtml("United States of America")?></option>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="address_line_one">
+                        <?= $escaper->escapeHtml("Address Line 1") ?></label>
+                    <input class="input-textbox" type="text" name="address_line_one" id="address_line_one"
+                    placeholder="<?= $escaper->escapeHtmlAttr('Enter your address')?>" maxlength="50">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="second-address-line-link">
+                    <strong class="box-title">
+                        <a href="" class="add-address-line-two">
+                            <span class="plus-sign"><?= $escaper->escapeHtml(__('+')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Add a Second Address Line')) ?></span></a>
+                    </strong>
+                </div>
+                <div class="input-container input-container-toogle" style="display:none;">
+                    <label class="input-label" for="address_line_two">
+                        <?= $escaper->escapeHtml("ADDRESS LINE 2 (OPTIONAL)") ?></label>
+                    <input class="input-textbox" type="text" name="address_line_two"
+                    id="address_line_two" maxlength="50">
+                </div>
+                <div class="zipcode-container">
+                    <label class="input-label" for="zipcode"><?= $escaper->escapeHtml("Zip code") ?></label>
+                    <input class="input-textbox" type="text" name="zipcode" id="zipcode" maxlength="10" placeholder="Zip Code">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="city-container">
+                    <label class="input-label" for="city">
+                        <?= $escaper->escapeHtml("City") ?></label>
+                    <input class="input-textbox" type="text" name="city" id="city" placeholder="City">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <?php $states = $enhancedProfile->getRegionsOfCountry('us'); ?>
+                <div class="state-container">
+                    <label class="input-label" for="state"><?= $escaper->escapeHtml("State") ?></label>
+                    <select class="input-textbox"name="state" id="state">
+                        <option value=""></option>
+                        <?php foreach ($states as $state) { ?>
+                            <option value="<?= $escaper->escapeHtmlAttr($state['label']); ?>">
+                                <?= $escaper->escapeHtml($state['label']); ?>
+                            </option>
+                        <?php } ?>
+                    </select>
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="checkmark-terms-condition-container">
+                    <div class="alternate-check-container">
+                        <label class="alternate-checkbox-container" for="is_term_and_conditions">
+                            <input type="checkbox" name="is_term_and_conditions" id="is_term_and_conditions"
+                            aria-label="terms and condition" value="1">
+                            <span class="checkmark"></span>
+                        </label>
+                        <div class="set-as-default">
+                            <?php $termsAndConditionsUrl = $enhancedProfile->getConfigValue(
+                                'fedex/enhanced_profile_group/terms_and_condition_url'
+                            ); ?>
+                            I accept the <a href="<?= $escaper->escapeHtmlAttr($termsAndConditionsUrl) ?>"
+                            target="_blank" class="terms-and-conditions">terms and conditions</a>
+                        </div>
+                        <input type="hidden" name="edit_status" id="edit_status" value="1" />
+                        <input type="hidden" name="save_status" id="save_status" value="" />
+                        <input type="hidden" name="profile_credit_card_id" id="profile_credit_card_id" value="" />
+                    </div>
+                </div>
+                <p class="account-credit-card-error error set-default"></p>
+                <div class="btns-container">
+                    <div class="btn-submit-container">
+                        <button type="button" class="btn-submit"
+                        disabled="disabled"><?= $escaper->escapeHtml(__('save changes')) ?></button></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php } ?>
+<script>
+    require(['sharedcreditcards', "Fedex_Recaptcha/js/reCaptcha"], function(sharedcreditcards, reCaptcha) {
+        reCaptcha.renderReCaptcha('shared-credit-card-block');
+    });
+    window.mediaPath = "<?= $mediaUrl .'wysiwyg/'; ?>";
+    <?php if (isset($profileInfo->output->profile->userProfileId)) { ?>
+        window.userProfileId  = "<?= $escaper->escapeHtml($profileInfo->output->profile->userProfileId) ?>";
+    <?php } ?>
+    <?php if ($enhancedProfile->isCompanySettingToggleEnabled()) { ?>
+    window.fedexPrintAccount = "<?= $block->escapeHtml($fedexPrintShipAccounts['print_account']) ?>";
+    window.fedexShipAccount = "<?= $block->escapeHtml($fedexPrintShipAccounts['ship_account']) ?>";
+    window.explorersCompanySettingsCustomerAdmin = 1;
+    window.companyId = "<?= $block->escapeHtml($companyId) ?>";
+    <?php } ?>
+    require(['preferences'], function(references) {});
+    <?php if (!$validateFdxLogin): ?>
+        window.validateFdxLogin  = "<?= $escaper->escapeHtml($validateFdxLogin) ?>";
+    <?php endif; ?>
+    window.tiger_e486666 = <?= $enhancedProfile->isTigerE486666Enabled() ? 1 : 0 ?>;
+</script>

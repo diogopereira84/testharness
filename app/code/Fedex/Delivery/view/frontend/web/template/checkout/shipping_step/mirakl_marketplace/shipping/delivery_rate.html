@@ -1,0 +1,11 @@
+<td class="col col-price">
+    <!-- ko if: (method.price_incl_tax > 0) -->
+        <!-- ko foreach: $parents[2].getRegion('price') -->
+            <!-- ko template: getTemplate() -->
+            <!-- /ko -->
+        <!-- /ko -->
+    <!-- /ko -->
+    <!-- ko if: (method.price_incl_tax == 0) -->
+        <span class="price"><span class="fedex-bold weight-700 cl-green" data-bind="i18n: 'FREE'"></span></span>
+    <!-- /ko -->
+</td>

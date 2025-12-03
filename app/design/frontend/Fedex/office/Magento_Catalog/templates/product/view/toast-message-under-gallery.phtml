@@ -1,0 +1,21 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+$helper = $this->helper('Magento\Catalog\Helper\Output');
+$product = $block->getProduct();
+?>
+<?php if ($shippingEstimatorContentAlert = $helper->productAttribute($product, $product->getData('shipping_estimator_content_alert_new'), 'shipping_estimator_content_alert_new')): ?>
+    <div class="shipping-attributes">
+            <div class="message-block message-info d-flex">
+                    <div class="icon d-no-shrink self-center">
+                            <img alt="Alert icon" class="valign-middle" src="<?php echo $this->getViewFileUrl('images/information.png');?>">
+                    </div>
+                    <div class="message-text">
+                            <?= $shippingEstimatorContentAlert ?>
+                    </div>
+                    <div class="ml-auto">
+                            <button type="button" class="close-message" aria-label="Close error message">
+                            </button>
+                    </div>
+            </div>
+    </div>
+<?php endif; ?>

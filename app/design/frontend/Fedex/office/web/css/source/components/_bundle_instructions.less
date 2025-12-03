@@ -1,0 +1,243 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    .bundle-modal-body {
+        padding: 64px 48px 0;
+    }
+
+    .bundle-modal.modal-popup .modal-footer {
+        padding: 40px 48px 48px;
+    }
+
+    // Instructions Title
+    .instructions-title {
+        gap: 24px;
+        margin-bottom: 40px;
+    }
+
+    // Step Item
+    .step-item {
+        gap: 30px;
+        align-items: flex-start;
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            flex-direction: column;
+            gap: 4px;
+            min-width: 73px;
+        }
+
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border: 1px solid @fx-grey-100;
+            border-radius: 50%;
+
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-weight: 600;
+
+            transition: all 0.3s ease;
+
+            &::before {
+                content: "1";
+            }
+        }
+
+        &:nth-child(2) .step-circle::before {
+            content: "2";
+        }
+
+        &:nth-child(3) .step-circle::before {
+            content: "3";
+        }
+
+        .step-name {
+            white-space: nowrap;
+        }
+
+        .step-vertical-divider {
+            width: 4px;
+            height: 48px;
+            margin-top: 16px;
+            margin-bottom: 18px;
+
+            background-color: @fx-grey-100;
+
+            &.mobile {
+                display: none;
+            }
+        }
+    }
+
+    // Step Animations
+    .bundle-modal._show {
+        .step-item:nth-child(1) .step-circle {
+            animation: step1Circle 6s infinite;
+
+            &::before {
+                animation: step1CircleContent 6s infinite;
+            }
+        }
+
+        .step-item:nth-child(2) .step-circle {
+            animation: step2Circle 6s infinite;
+
+            &::before {
+                animation: step2CircleContent 6s infinite;
+            }
+        }
+
+        .step-item:nth-child(2) .step-name,
+        .step-item:nth-child(2) .step-content {
+            animation: step2Content 6s infinite;
+        }
+
+        .step-item:nth-child(3) .step-circle {
+            animation: step3Circle 6s infinite;
+
+            &::before {
+                animation: step3CircleContent 6s infinite;
+            }
+        }
+
+        .step-item:nth-child(3) .step-name,
+        .step-item:nth-child(3) .step-content {
+            animation: step3Content 6s infinite;
+        }
+    }
+
+    // Keyframes
+    @keyframes step1Circle {
+        0%, 25% {
+            border-color: @fx-purple-300;
+            color: @fx-purple-300;
+        }
+        25.01%, 100% {
+            border-color: @fx-green-200;
+            color: @fx-green-200;
+        }
+    }
+
+    @keyframes step1CircleContent {
+        0%, 25% {
+            content: "1";
+        }
+        25.01%, 100% {
+            content: "✓";
+        }
+    }
+
+    @keyframes step2Circle {
+        0%, 25% {
+            border-color: @fx-grey-100;
+            color: @fx-grey-100;
+        }
+        25.01%, 50% {
+            border-color: @fx-purple-300;
+            color: @fx-purple-300;
+        }
+        50.01%, 100% {
+            border-color: @fx-green-200;
+            color: @fx-green-200;
+        }
+    }
+
+    @keyframes step2Content {
+        0%, 25% {
+            color: @fx-grey-100;
+        }
+        25.01%, 100% {
+            color: @fx-grey-500;
+        }
+    }
+
+    @keyframes step2CircleContent {
+        0%, 50% {
+            content: "2";
+        }
+        50.01%, 100% {
+            content: "✓";
+        }
+    }
+
+    @keyframes step3Circle {
+        0%, 50% {
+            border-color: @fx-grey-100;
+            color: @fx-grey-100;
+        }
+        50.01%, 75% {
+            border-color: @fx-purple-300;
+            color: @fx-purple-300;
+        }
+        75.01%, 100% {
+            border-color: @fx-green-200;
+            color: @fx-green-200;
+        }
+    }
+
+    @keyframes step3Content {
+        0%, 50% {
+            color: @fx-grey-100;
+        }
+        50.01%, 100% {
+            color: @fx-grey-500;
+        }
+    }
+
+    @keyframes step3CircleContent {
+        0%, 75% {
+            content: "3";
+        }
+        75.01%, 100% {
+            content: "✓";
+        }
+    }
+}
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
+    .bundle-modal-body {
+        padding: 32px 24px 0;
+    }
+
+    .bundle-modal.modal-popup .modal-footer {
+        padding: 24px;
+    }
+
+    .bundle-icon img {
+        width: 48px;
+    }
+
+    .instructions-title {
+        margin-bottom: 24px;
+    }
+
+    .step-item {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+
+        .step-number {
+            flex-direction: row;
+            gap: 8px;
+        }
+
+        .step-vertical-divider {
+            &.mobile {
+                display: block;
+                margin-right: auto;
+                margin-left: auto;
+            }
+
+            &.desktop {
+                display: none;
+            }
+        }
+    }
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <title>Review Orders</title>
+    </head>
+    <body>
+        <move element="page.main.title" destination="columns" before="-" />
+        <move element="sidebar.main" destination="customer.left.nav" before="-" />
+        <move element="customer.left.nav" destination="columns" after="page.main.title" />
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main order-approval-review-orders" after="main">
+            </container>
+        </referenceContainer>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Review Orders</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Fedex\OrderApprovalB2b\Block\ReviewOrder" name="reveiew-order-history" template="Fedex_OrderApprovalB2b::review_history.phtml">
+                <arguments>
+                    <argument name="reviewOrderViewModel" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\ReviewOrderViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="decline-modal-popup" template="Fedex_OrderApprovalB2b::decline_modal_popup.phtml">
+                <arguments>
+                    <argument name="orderApprovalViewModal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="approve-modal-popup" template="Fedex_OrderApprovalB2b::approve_modal_popup.phtml">
+                <arguments>
+                    <argument name="orderApprovalViewModal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

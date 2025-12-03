@@ -1,0 +1,37 @@
+<?php 
+/** @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+$isBundleProductsSetupCompleted = $bundleProductHandler->isBundleProductSetupCompleted();
+$hasBundleProductInCart = $bundleProductHandler->hasBundleProductInCart();
+?>
+
+<div class="toast absolute w-100 add-to-cart-toast-container" id="bundle-setup-completed-toast" data-bind="scope: 'bundle-setup-completed'">
+  <div class="add-to-cart-toast-msg mx-auto box-shadow-2" id="bundle-setup-completed-toast-msg-main" role="dialog">
+      <div class="add-to-cart-toast-box-inner">
+          <span>
+              <img class="sucess-icon" src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Success Icon')) ?>">
+          </span>
+      </div>
+      <div class="flex-grow-1 d-flex v-center" id="bundle-setup-completed-toast-msg-main">
+        <p class="d-flex flex-col m-0">
+            <strong class="fedex-bold">Product bundle complete</strong>
+            <span class="mt-8">You've successfully added the files needed for your product bundle.</span>
+        </p>
+      </div>
+      <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+      </span>
+  </div>
+</div>
+
+<script type="text/x-magento-init">
+{
+    "#bundle-setup-completed-toast": {
+        "Fedex_ProductBundle/js/bundle-setup-completed": {
+            "message": "<?= $escaper->escapeHtml(__('Bundle setup completed. You can proceed.')) ?>",
+            "storageKey": "hasDisplayedBundleSetupCompletedToast",
+            "isBundleProductsSetupCompleted": "<?= $isBundleProductsSetupCompleted ?>",
+            "hasBundleProductInCart": "<?= $hasBundleProductInCart ?>"
+        }
+    }
+}
+</script>

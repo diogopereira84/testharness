@@ -1,0 +1,48 @@
+<header class="page-header wlgn-enable-page-header remove-role" style="margin-top:20px;border-bottom:1px solid #dce2e6">
+    <div class="header content">
+        <a class="logo" href="<?= $block->getBaseUrl()?>" title="<?= $block->getLogoAlt()?>" aria-label="store logo">
+            <img src="<?= $block->getLogoSrc()?>" title="<?= $block->getLogoAlt()?>"
+            alt="<?= $block->getLogoAlt()?>" width="170">
+        </a>
+    </div>
+</header>
+<?php if ($block->getStoreConfigData("wiremock_service/selfreg_wiremock_group/fcl_login_api_wiremock_enable")) : ?>
+<form name="mockUuid" class="mockcontainer" method="get" id="mockUuid" class="form"
+      action="<?php echo $this->getUrl().'oauth/'; ?>"
+      data-mage-init='{"validation":{}}'>
+    <div class="field name required">
+        <label class="label" for="title"><span><?= $block->
+            escapeHtmlAttr(__('Enter UUID')) ?></span></label>
+        <div class="control">
+            <input name="uuid" id="uuid" title="UUID" value="" data-test-id="B-2005398-TK-3523479-mock-uuid" class="input-text" type="text" data-validate="{required:true}">
+        </div>
+    </div>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action submit primary"  data-test-id="B-2005398-TK-3523479-mock-login" title="Save"><span><?= $block->
+                escapeHtmlAttr(__('Login')) ?></span></button>
+        </div>
+    </div>
+</form>
+<?php else : ?>
+<div class="mockcontainer">
+    <h2 class="page-not-found">Page Not Found</h2>
+</div>
+<?php endif; ?>
+<style>
+.mockcontainer {
+    text-align: center;
+    padding: 2% 20% 2% 20%;
+}
+.mockcontainer .label {
+    font-family: 'FedEx Sans Bold';
+    font-size: 16px;
+}
+.mockcontainer .actions-toolbar {
+    padding: 2% 0 0 0;
+    display: inline-block;
+}
+.mockcontainer .actions-toolbar .primary {
+    text-align: center;
+}
+</style>

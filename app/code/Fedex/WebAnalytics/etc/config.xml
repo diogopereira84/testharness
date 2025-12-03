@@ -1,0 +1,38 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+	<default>
+		<web>
+			<contentsquare>
+                <contentsquare_active>0</contentsquare_active>
+				<script_code/>
+			</contentsquare>
+            <gdl>
+                <gdl_active/>
+                <subdomain_prefix>office</subdomain_prefix>
+                <script_code>
+                    <![CDATA[<script> window.FDXPAGEID = '%1$s'; window.FDX = window.FDX || {}; window.FDX.GDL = window.FDX.GDL || []; window.FDX.GDL.push([ 'event:publish', [ 'page', 'pageinfo', {pageId: '%1$s'} ] ]); </script> <script src="https://www.fedex.com/gdl/gdl-fedex.js" async></script> ]]>
+                </script_code>
+            </gdl>
+            <nuance>
+                <nuance_active>1</nuance_active>
+                <script_code><![CDATA[<script type="text/javascript" charset="utf-8" src="https://ts-demo01.ndep.ode.ent.nuance.com/chatskins/launch/inqChatLaunch10006050.js"> </script>]]></script_code>
+            </nuance>
+		</web>
+	</default>
+    <stores>
+        <ondemand>
+            <web>
+                <nuance>
+                    <nuance_active>0</nuance_active>
+                </nuance>
+            </web>
+        </ondemand>
+        <IN_STORE_RETAIL_STORE_VIEW>
+            <web>
+                <nuance>
+                    <nuance_active>0</nuance_active>
+                </nuance>
+            </web>
+        </IN_STORE_RETAIL_STORE_VIEW>
+    </stores>
+</config>

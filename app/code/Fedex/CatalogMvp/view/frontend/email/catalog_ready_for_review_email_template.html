@@ -1,0 +1,43 @@
+<!--@subject Catalog Item Pending for Review Email Template @-->
+<!--@vars {
+"var admin_name":"Admin Name",
+"var document_name":"Document Name",
+"var site_name":"Site Name",
+"var item_name":"Item Name",
+"var folder_path":"Folder Path",
+"var added_by":"Customer Admin Name",
+"var special_instruction":"Special Instruction",
+"var login_url":"Product Link",
+"var customer_email":"Customer Email"
+} @-->
+
+<div class="email-container">
+	<div class="content-section">
+        
+        <p>Hi {{var admin_name}},</p>
+		<div>
+            <p>A catalog item <span>&quot;</span>{{var document_name}}<span>&quot;</span> needs review.</p>
+            <ul>
+                <li>
+                    Company Catalog: {{var site_name}}
+                </li>
+                <li>
+                    Item Name: {{var item_name}}
+                </li>
+                <li>
+                    Folder Path: {{var folder_path}}
+                </li>
+                <li>
+                    Added By: {{var added_by}}
+                </li>
+                <li>
+                    {{var customer_email}}
+                </li>
+            </ul>
+        </div>
+        <div>
+            <p>Customer entered additional print instruction: {{var special_instruction}}</p>
+            <p><a href="{{var login_url}}" target="_blank">{{trans 'Log in to review'}}</a></p>
+        </div>
+	</div>
+</div>

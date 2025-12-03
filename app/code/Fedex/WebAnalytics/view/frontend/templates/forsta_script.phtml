@@ -1,0 +1,9 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\WebAnalytics\ViewModel\Data $viewModel */
+$viewModel = $block->getData('forsta_view_model');
+//check forsta is enabled
+?>
+<?php if ($viewModel->isEnabledForsta()): ?>
+    <?= $viewModel->getMidflowScript() ?>
+<?php endif; ?>

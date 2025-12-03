@@ -1,0 +1,331 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+$sharedEnhancementViewModel = $block->getData('commercial-reporting-enhancement');
+$isSharedOrderEnhancementToggle = $sharedEnhancementViewModel->isCustomerReportingEnhancementToggleEnabled();
+$userMaxEmailAddressAllowLimit = $sharedEnhancementViewModel->getUserEmailsAllowLimit();
+$companySettingToggle = $sharedEnhancementViewModel->isCompanySettingsToggleEnabled();
+?>
+<div class="search_filter_section_manage_users <?php if ($isSharedOrderEnhancementToggle) { echo "export-user-listing"; } ?>">
+<?php
+$commercialHelper=$this->helper('\Fedex\Commercial\Helper\CommercialHelper');
+$has_manage_user_permission = false;
+if ($commercialHelper->isRolePermissionToggleEnable()) {
+    $has_manage_user_permission=$commercialHelper->getDeliveryDataHelper()->checkPermission('manage_users');
+}
+if ($this->helper('\Fedex\Commercial\Helper\CommercialHelper')->isSelfRegAdminUpdates()
+ || $has_manage_user_permission) {
+    $divClass = "search-user";
+    if ($this->helper('\Fedex\SDE\Helper\SdeHelper')->getIsSdeStore() == true) {
+        $divClass = "search-user-sde";
+    }
+    $search = $this->getRequest()->getParam('search');
+    $userurl = $block->getBaseUrl() . 'company/users/';
+    ?>
+<div class="field <?php echo $divClass;?>">
+    <div class="control search_control">
+        <input type="text" name="company-user-search"
+        value="<?=$search;?>"
+        id="keyword"
+        minlength="3"
+        data-test-id="E-404291-B-2010873-TK-3436949-manage-user-search-field"
+        placeholder="<?=$escaper->escapeHtmlAttr(__('Search for users')); ?>"
+            class="input-text user-search-field"/>
+        <div class="clear-all">
+            <a href="javascript:void(0);" id="manager_user_clear_all" style="display:none;">Clear All</a>
+        </div>
+        <button type="submit" class="user-search-button" aria-label="User Search"
+         data-test-id="E-404291-B-2010873-TK-3436949-manage-user-search-button" id="user-search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+            <rect opacity="0.01" width="32" height="32" fill="white"/>
+            <path fill-rule="evenodd" clip-rule="evenodd"
+             d="M18.026 18.9688C16.7543 20.0289 15.1182 20.6667 13.3333 20.6667C9.28348 20.6667 6 17.3832 6 13.3333C6 9.28292 9.2832 6 13.3333 6C17.3835 6 20.6667 9.28292 20.6667 13.3333C20.6667 15.1182 20.0289 16.7543 18.9688 18.026L25.8047 24.8619C26.0651 25.1223 26.0651 25.5444 25.8047 25.8047C25.5444 26.0651 25.1223 26.0651 24.8619 25.8047L18.026 18.9688ZM19.3333 13.3333C19.3333 10.0193 16.6471 7.33333 13.3333 7.33333C10.0196 7.33333 7.33333 10.0193 7.33333 13.3333C7.33333 16.6468 10.0199 19.3333 13.3333 19.3333C16.6468 19.3333 19.3333 16.6468 19.3333 13.3333Z" fill="#333333"/>
+            </svg>
+        </button>
+    </div>
+    <div id="warning-message-selfreg-user" class="mage-error-selfreg-user"></div>
+</div>
+
+<script>
+require(['jquery', 'reloadGrid'
+],function($,reloadGrid,errorProcessor,urlBuilder){
+    var minLength = 3;
+    $(document).ready(function() {
+        var searchValue = '<?php echo $search; ?>';
+        if (!searchValue) {
+            $('#keyword').val('');
+        }
+        $('#user-search').on('click', function() {
+            var searchStr = $('#keyword').val();
+            if (searchStr.length > 2) {
+                $('#warning-message-selfreg-user').hide();
+                reloadGrid.reloadUIComponent("company_users_listing.company_users_listing_data_source",searchStr);
+            } else {
+                $('#warning-message-selfreg-user').html("Please enter at least 3 characters.");
+                $('#warning-message-selfreg-user').show();
+            }
+        });
+        $('.user-search-field').keypress(function(e){
+            if(e.which == 13){//Enter key pressed
+                $('#user-search').click();//Trigger search button click event
+            }
+        });
+        $('.user-filter-status-checkbox').keypress(function(e){
+            if(e.which == 13){
+                $(this).prop('checked', !$(this).prop('checked'));
+            }
+        });
+        $('.validate-one-required-by-name-status').keypress(function(e){
+            if(e.which == 13){
+                $(this).prop('checked', !$(this).prop('checked'));
+            }
+        });
+        $('.user-permisison-status-checkbox').keypress(function(e){
+            if(e.which == 13){
+                $(this).prop('checked', !$(this).prop('checked'));
+            }
+        });
+    });
+});
+</script>
+<?php } ?>
+
+<?php
+$helperImageClass = '\Magento\Cms\Helper\Wysiwyg\Images';
+if ($this->helper('\Fedex\Commercial\Helper\CommercialHelper')->isSelfRegAdminUpdates() == true
+ || $has_manage_user_permission) {
+    $divClass = "search-filter";
+    if ($this->helper('\Fedex\SDE\Helper\SdeHelper')->getIsSdeStore() == true) {
+        $divClass = "search-filter-sde";
+    }
+    ?>
+    <div class="field <?php echo $divClass;?> filters-collapse">
+        <button id="filter-show-btn" class="action secondary"
+        data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-button" type="button">
+            <div class="user-filter-image"></div>
+            <div class="user-filter-image-text"><?=$escaper->escapeHtml(__('Filter')); ?></div>
+        </button>
+        <?php if ($isSharedOrderEnhancementToggle) { ?>
+            <span data-bind="scope: 'export-user-listing'">
+                <button id="export-user-list-btn" class="export-user-list-btn"
+                    data-bind="click: exportUserListingPopupModel" type="button">
+                    <?= $escaper->escapeHtml(__('Export'));?>
+                </button>
+            </span>
+        <?php } ?>
+        <div class="user-filter-options">
+            <div class="user-filter-main-div">
+                <div class="user-filter-heading">
+                    <span class="user-filter-heading-text"><?=$escaper->escapeHtml(__('Status')); ?></span>
+                </div>
+                <ul class="user-filter-list">
+                    <li class="user-filter-status-options">
+                        <input type="checkbox" name="user-filter-status"
+                         data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-status-active"
+                          aria-label="Active" class="user-filter-status-checkbox"
+                           id="user-filter-status-checkbox" value="1" />
+                        <span class="user-filter-heading-text"><?=$escaper->escapeHtml(__('Active')); ?></span>
+                    </li>
+                    <li class="user-filter-status-options">
+                        <input type="checkbox" name="user-filter-status"
+                         data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-status-inactive"
+                          aria-label="Inactive" class="user-filter-status-checkbox"
+                           id="user-filter-status-checkbox" value="0" />
+                            <span class="user-filter-heading-text"><?=$escaper->escapeHtml(__('Inactive')); ?></span>
+                    </li>
+                    <li class="user-filter-status-options">
+                        <input type="checkbox" name="user-filter-status"
+                         data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-status-pending"
+                          aria-label="Pending Approval" class="user-filter-status-checkbox"
+                           id="user-filter-status-checkbox" value="2" />
+                            <span class="user-filter-heading-text">
+                                <?=$escaper->escapeHtml(__('Pending Approval')); ?>
+                            </span>
+                    </li>
+                </ul>
+                <?php if ($this->helper('\Fedex\Commercial\Helper\CommercialHelper')->isRolePermissionToggleEnable() == true) : ?>
+                    <div class="user-permisison-heading">
+                        <span class="user-permisison-heading-text">
+                            <?=$escaper->escapeHtml(__('Admin Permissions')); ?>
+                        </span>
+                    </div>
+                    <ul class="user-permisison-list">
+                        <?php $permissions = $block->getRolePermission();?>
+                        <?php foreach($permissions as $permission) :?>
+                            <?php
+                                $permisisonLabel = $permission->getLabel();
+                                $permisisonLabel = explode("::",$permisisonLabel);
+                                $label = $permisisonLabel[0] ?? "";
+                                $permissionCode = $permisisonLabel[1] ?? "";
+                                if (empty($companySettingToggle)) {
+                                    if ($permissionCode == 'site_settings'){
+                                        continue;
+                                    }
+                                    if ($permissionCode == 'shared_credit_cards') {
+                                        $label = 'Shared Credit Cards';
+                                    }
+                                }
+                            ?>
+                            <li class="user-permisison-status-options">
+                                <input type="checkbox"
+                                 name="user-permisison-status"
+                                 data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-permision-<?= $permissionCode?>"
+                                 data-code="<?= $permissionCode ?>"
+                                  aria-label="<?= $label?>" class="user-permisison-status-checkbox"
+                                  value="<?= $permission->getId()?>" />
+                                <span class="user-permisison-option-text"><?=$escaper->escapeHtml(__($label)); ?></span>
+                            </li>
+                        <?php endforeach;?>
+                    </ul>
+                <?php endif;?>
+                <input type="hidden" name="filter_apply"
+                 data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-apply-hidden"
+                  id="user_filter_apply" value="0" />
+                <button class="btn-primary user-filter-save-button"
+                 data-test-id="E-404291-B-2010873-TK-3436949-manage-user-filter-apply-button"
+                  type="button"><?=$escaper->escapeHtml(__('Save')); ?></button>
+            </div>
+        </div>
+    </div>
+    <script>
+    require(['jquery', 'reloadGrid'
+    ],function($, reloadGrid, errorProcessor){
+        $(document).ready(function() {
+            $(document).on("submit","#edit-users-form",function(){
+                return false;
+            });
+            $('#manager_user_clear_all').on('click', function(e) {
+                window.location.reload();
+            });
+            $("#user-search").on('click', function(e) {
+                if($(".user-search-field").val().length > 2){
+                    $('#manager_user_clear_all').show();
+                }
+            });
+            $('#filter-show-btn').on('click', function(e) {
+                var dim = $('.user-filter-options').is(":visible");
+                if (dim == true) {
+                    $('.user-filter-options').hide();
+                } else {
+                    $('.user-filter-options').show();
+                }
+                e.stopPropagation();
+            });
+            $('.user-filter-save-button').on('click', function(e) {
+                var statusArray = [];
+                $('.admin__control-checkbox.custom_row_checkbox').each(function () {
+                  if($(this)[0]!=undefined && $(this)[0].checked){
+	        	      $(this).trigger('click');
+                    }
+	            })
+                $("input:checkbox[name=user-filter-status]:checked").each(function(){
+                    statusArray.push($(this).val());
+                });
+                
+                var permissionArray = {};
+                var isRolePermission = window.checkout.user_roles_permission;
+                if (isRolePermission) {
+                    $("input:checkbox[name=user-permisison-status]:checked").each(function() {
+                        permissionArray[$(this).attr("data-code")] = $(this).attr("data-code");
+                    });
+                }
+
+                if (typeof statusArray !== 'undefined'
+                 && statusArray.length > 0 || (isRolePermission
+                  && typeof permissionArray !== 'undefined'
+                   && JSON.stringify(permissionArray) !== '{}')) {
+                    $("#user_filter_apply").val("1");
+                    separator = ',';
+                    statusfilterstr = statusArray.join(separator);
+                    reloadGrid.reloadFilterUIComponent(
+                        "company_users_listing.company_users_listing_data_source",
+                        statusfilterstr,
+                        permissionArray
+                    );
+                } else {
+                    if($("#user_filter_apply").val() == "1") {
+                        $("#user_filter_apply").val("0");
+                        statusfilterstr = "";
+                        reloadGrid.reloadFilterUIComponent(
+                            "company_users_listing.company_users_listing_data_source",
+                            statusfilterstr
+                        );
+                    }
+                }
+                $(".user-filter-options").hide();
+            });
+            $("body").on('DOMSubtreeModified', ".data-grid-wrap.table-wrapper", function() {
+                if($(".custom_row_checkbox:checked").length > 1) {
+                    $(".selected-number .item-count").html($(".custom_row_checkbox:checked").length);
+                } else {
+                    $(".selected-number").hide();
+                }
+                console.clear();
+                console.log('changed');
+            });
+            
+            $('body').click(function() {
+                $(".user-filter-options").hide();
+            });
+            $('.user-filter-options').click(function(e) {
+                e.stopPropagation();
+            });
+        });
+    });
+    </script>
+<?php } ?>
+</div>
+
+<div class="export-user-listing-section" style="display:none;">
+    <form class="form" id="export-user-listing-form" method="post" autocomplete="off">
+        <h2 class="export-user-listing-title"><?=$escaper->escapeHtml(__('Export User List')); ?></h2>
+        <div class="model-form-data">
+            <span class="action-close" data-role="closeBtn" tabindex="0">
+                <span><?=$escaper->escapeHtml(__('Close')); ?></span>
+            </span>
+            <div class="field recipients-email">
+                <label for="email-address" class="email-address-label">
+                    <span><?=$escaper->escapeHtml(__('EMAIL')); ?></span>
+                </label>
+                <div class="additional-recipients-email-address">
+                    <div class="all-mail"></div>
+                    <input type="email" name="email" id="recipient_email_address" class="email-input-text"
+                        placeholder="<?=$escaper->escapeHtml(__('Enter recipient email')); ?>"
+                         aria-label="Enter recipient email" multiple/>
+                    <input type="hidden" name="selected_users" id="selected_users" value="" />
+                </div>
+                <span class="email-address-note">
+                    <?=$escaper->escapeHtml(__('The email associated with your account will receive a copy of
+                     this report. If you would like to share it with additional recipients, enter them above.')); ?>
+                </span>
+            </div>
+            <div class="export-actions-toolbar">
+                <button type="button" class="action cancel-export" title="<?=$escaper->escapeHtml(__('CANCEL')); ?>">
+                    <span><?=$escaper->escapeHtml(__('CANCEL')); ?></span>
+                </button>
+                <button type="button" class="action export-data" title="<?=$escaper->escapeHtml(__('EXPORT')); ?>">
+                    <span><?=$escaper->escapeHtml(__('EXPORT')); ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "export-user-listing": {
+                        "component": "Fedex_SelfReg/js/export-user-listing",
+                        "userEmailAddressLimit": "<?= /* @noEscape */ $userMaxEmailAddressAllowLimit; ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>

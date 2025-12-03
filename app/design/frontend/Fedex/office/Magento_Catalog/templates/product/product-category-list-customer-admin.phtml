@@ -1,0 +1,2747 @@
+<?php
+
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// B-1149167 : RT-ECVS-SDE-SDK changes for File upload
+/** @var $viewModel ProductList */
+$viewModel = $block->getData('product_list_view_model');
+$viewModelMvphelper= $block->getData('view_model_mvphelper');
+$eProClass = $viewModel->getWrapperClass();
+$isCommercialCustomer = $viewModel->isCommercialCustomer();
+$catalogHelper = $viewModel->getCatalogDocumentUserSettingsHelper();
+$helper = $viewModel->getDeliveryDataHelper();
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$catalogMvpToggle = $catalogMvpHelper->isMvpSharedCatalogEnable();
+$catalogUpdateMessages = $catalogMvpHelper->isCataloUpdateMessagesEnabled();
+$subCategoryMvp = $catalogMvpHelper->getB2BcategoryCollection();
+$getCategoryRepository = $catalogMvpHelper->getCategoryRepository();
+$addEditFolderAccess = $viewModelMvphelper->getAddEditFolderAccess();
+$getCurrentCategoryId = $catalogMvpHelper->getCurrentCategoryId();
+$getCurrentSubCategoryId = $catalogMvpHelper->getCurrentSubCategoryId();
+$getCurrentSubCategoryName = $catalogMvpHelper->getCurrentSubCategoryName();
+$getCurrentCategoryPath = $catalogMvpHelper->getCurrentCategoryPath();
+$downloadAjaxurl = $block->getUrl('catalogmvp/catalog/download');
+$nonStandardCatalogToggle = $viewModelMvphelper->isNonStandardCatalogToggleEnabled();
+$isCatalogExpiryToggle = $viewModelMvphelper->isCatalogExpiryNotificationToggle();
+$isCustomDocEnabled = $catalogMvpHelper->customDocumentToggle();
+$eproUnableToAddInBranchProductToCartToggle = $viewModelMvphelper->eproUnableToAddInBranchProductToCartToggle();
+$tooltipHeading = 'THIS CATALOG ITEM CONTAINS ADDITIONAL PRINT INSTRUCTIONS.';
+$tooltipContent = 'Catalog item(s) with additional print instructions must be reviewed by a FedEx
+ Office Team Member before they can be published to the shared catalog. You will receive an email
+ once the project has been reviewed and configured.';
+
+$addToCartRedirectStop = $viewModelMvphelper->isEnableStopRedirectMvpAddToCart();
+
+$catalogEllipsisEnable = 0;
+$char100Enable =0 ;
+if($block->getMode() == 'grid'){
+    $catalogEllipsisEnable = $viewModel->isCatalogEllipsisControlEnabled();
+    $char100Enable = $viewModel->getCharLimitToggle();
+}
+$minChar = $viewModel->getCatalogEllipsisControlTotalCharacters();
+$minChar = !empty($minChar)?$minChar:56;
+$ellipsisStartChar = $viewModel->getCatalogEllipsisControlStartCharacters();
+$ellipsisStartChar = !empty($ellipsisStartChar)?$ellipsisStartChar:36;
+$ellipsisEndChar = $viewModel->getCatalogEllipsisControlEndCharacters();
+$ellipsisEndChar = !empty($ellipsisEndChar)?$ellipsisEndChar:20;
+$isD206810ToggleEnabled = $viewModel->isD206810ToggleEnabled();
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
+$subcategories = $catalogMvpHelper->getSubCategories(1);
+
+$fixedQtyHandlerToggle = $viewModelMvphelper->getFixedQtyHandlerToggle() ?? 0;
+
+// B-1569586 start
+if ($isCommercialCustomer) { ?>
+    <div class='commercial-toolbar-top'>
+        <?= $block->getToolbarHtml() ?>
+    </div>
+    <?= $block->getAdditionalHtml() ?>
+<?php }
+if ( !$_productCollection->count() && !$viewModelMvphelper->getChildCategoryCount()) {?>
+    <div class="breadcrum-container-no-count"><?= $this->getLayout()->getBlock('breadcrumbs')->toHtml() ?></div>
+    <div class="message info empty mvp-catalog-product-an-category">
+        <div><?= $escaper->escapeHtml(__('We can\'t find products and folder matching the selection.')) ?></div>
+    </div>
+    <input type="hidden" class="category-product-count-is-zero" value="1">
+    <div class="products wrapper list products-list <?php echo $eProClass; ?>">
+        <ol id="product-items-zero" class="products list items product-items customer-admin">
+            <li class="item product product-item heading">
+                <!-- B-1569586 start -->
+                <?php if ($catalogMvpToggle) { ?>
+                    <input class="check-box-check-all  list-checkbox" type="checkbox" onClick="selects(this)" aria-label="checkbox-check-all"/>
+                    <div class="Check-box-title"><?= $escaper->escapeHtml(__('CHECK ALL')) ?></div>
+                <?php } ?>
+                <!-- B-1569586 end -->
+                <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                <!-- B-1569586 start -->
+                <?php if ($catalogMvpToggle) { ?>
+                    <div class="modified-info-title"><?= $escaper->escapeHtml(__('MODIFIED')) ?></div>
+                <?php }else { ?>
+                    <div class="modified-info-title"><?= $escaper->escapeHtml(__('LAST MODIFIED')) ?></div>
+                <?php } ?>
+                <!-- B-1569586 end -->
+                <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                <div class="published-title"><?= $escaper->escapeHtml(__('PUBLISHED')) ?></div>
+                <div class="action-title"><?= $escaper->escapeHtml(__('ACTIONS')) ?></div>
+            </li>
+        </ol>
+    </div>
+<?php } else {
+    if ($catalogMvpToggle) { ?>
+
+        <div class="selected-number <?= $block->getMode() ?>">
+            <div class="left-section">
+                <span class="item-count"></span>
+                <span class="spacing">&nbsp;</span>
+                <span class="count-text"><?= $escaper->escapeHtml(__(' Items selected')) ?></span>
+            </div>
+            <div class="right-section">
+                <a href="Javascript:void(0)" class="cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+                <button class="bulk-move-to" style="display: none;">
+                    <?= $escaper->escapeHtml(__('Move')) ?>
+                </button>
+                <button class="bulk-delete" >
+                    <?= $escaper->escapeHtml(__('Delete')) ?>
+                </button>
+                <button class="bulk-add-to-cart" style="display: none;">
+                    <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                </button>
+            </div>
+        </div>
+    <?php } ?>
+    <!--B-1569586 end -->
+
+
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        
+        $imageDisplayArea = 'category_page_grid_custom';
+        
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <div class="loading-mask" style="display: none;" data-role="loader">
+        <div class="loader"><img alt="Loading..."
+                                 src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+            <p>Please wait...</p></div></div>
+    <?php if ($catalogMvpToggle) { ?>
+        <div class="loading-mask-mvp"  data-role="loader">
+            <div class="loader-mvp"><img alt="Loading..."
+                                         src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+                <p>Please wait...</p>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="products wrapper <?php echo $eProClass; ?>
+        <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+
+        <ol class="products list items product-items customer-admin">
+            <?php if($isCommercialCustomer): ?>
+                <li class="item product product-item heading">
+                    <!-- B-1569586 start -->
+                    <?php if ($catalogMvpToggle) { ?>
+                        <input class="check-box-check-all  list-checkbox" type="checkbox" onClick="selects(this)" aria-label="checkbox-check-all"/>
+                        <div class="Check-box-title"><?= $escaper->escapeHtml(__('CHECK ALL')) ?></div>
+                    <?php } ?>
+                    <!-- B-1569586 end -->
+                    <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                    <!-- B-1569586 start -->
+                    <?php if ($catalogMvpToggle) { ?>
+                        <div class="modified-info-title"><?= $escaper->escapeHtml(__('MODIFIED')) ?></div>
+                    <?php }else { ?>
+                        <div class="modified-info-title"><?= $escaper->escapeHtml(__('LAST MODIFIED')) ?></div>
+                    <?php } ?>
+                    <!-- B-1569586 end -->
+                    <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                    <div class="published-title"><?= $escaper->escapeHtml(__('PUBLISHED')) ?></div>
+                    <div class="action-title"><?= $escaper->escapeHtml(__('ACTIONS')) ?></div>
+
+                </li>
+            <?php endif; ?>
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <!-- B-1569586 -->
+            <?php if ($subcategories && $this->getRequest()->getParam('p') < '2') {
+                foreach ($subcategories as $subcategorie) { ?>
+                    <li class="item product product-item sub-category droppable"
+                        id="sub-cat-<?= /* @noEscape */ $subcategorie->getId() ?>">
+                        <div class="product-item-info">
+                            <!-- Added check for drag frop for list view -->
+                            <?php if ($viewMode == 'list') { ?>
+                                <div class="drag-drop catalog-folder-move">
+                                    <div class="drag-drop-img"></div>
+                                </div>
+
+                            <?php } ?>
+                            <input class="category-item-checkbox list-checkbox" type="checkbox"
+                                   id="<?= /* @noEscape */ $subcategorie->getName() ?>"
+                                   name="<?= /* @noEscape */ $subcategorie->getName() ?>" value="<?= $subcategorie->getId()?>"
+                                   aria-label="checkbox-<?= $subcategorie->getId()?>"
+                            />
+                            <?php if ($viewMode == 'grid') { ?>
+                                <div class="kebab">
+                                    <div class="kebab-image category-grid"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label action_kebab_folder_delete">
+                                                <a href="javascript:void(0);"
+                                                   data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Move cat-move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label action_kebab_folder_rename">
+                                                <a href="javascript:void(0);" data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if ($addEditFolderAccess): ?>
+                                            <div class="menu-item-label action_kebab_folder_access">
+                                            <a href="javascript:void(0);" class="edit-folder-access-action" data-folder-id="<?= $subcategorie->getId() ?>">
+                                            <?= $escaper->escapeHtml(__("Edit Folder Access")) ?>
+                                            </a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                               aria-label="sub category links">
+                            <span class="product-image-container">
+                                <span class="product-image-wrapper" style="padding-bottom: 100%;">
+                                    <div class="sub-categorty-img"></div>
+                                </span>
+                            </span>
+                            </a>
+                            <div class = "product-name-list">
+                                <span class = "sub-category name product-item-name"
+                                      id="product-folder-<?= $subcategorie->getId() ?>">
+                                    <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                       aria-label="sub category links" alt="<?= /* @noEscape */ $subcategorie->getName() ?>">
+                                        <?= /* @noEscape */ $subcategorie->getName() ?>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="modified-info">
+                                <?php
+                                $sec = strtotime($subcategorie->getUpdatedAt());
+                                $modifiedDate = date("m/d/Y", $sec);
+                                ?>
+                                <span><?= /* @noEscape */ $modifiedDate ?></span>
+                            </div>
+                            <!-- publish code code start -->
+                            <?php if ($viewMode == 'list') { ?>
+                                <div class="product details product-item-details empty"></div>
+
+                                <div class="published">
+                                    <label class="switch">
+                                        <?php if ($subcategorie->getIsPublish()) { ?>
+                                            <input class="<?= /* @noEscape */ $subcategorie->getIsPublish() ?>"
+                                                   id="cat-<?= /* @noEscape */ $subcategorie->getId() ?>"
+                                                   type="checkbox" checked
+                                                   aria-label="publish-<?= $subcategorie->getId()?>">
+                                        <?php } else { ?>
+                                            <input class="<?= /* @noEscape */ $subcategorie->getIsPublish() ?>"
+                                                   id="cat-<?= /* @noEscape */ $subcategorie->getId() ?>"
+                                                   type="checkbox" aria-label="publish-<?= $subcategorie->getId()?>">
+                                        <?php } ?>
+                                        <span class="custom-slider round"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="kebab">
+                                    <div class="kebab-image category-list"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label action_kebab_folder_delete">
+                                                <a href="javascript:void(0);"
+                                                   data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Move cat-move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label action_kebab_folder_rename">
+                                                <a href="javascript:void(0);" data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if ($addEditFolderAccess): ?>
+                                            <div class="menu-item-label action_kebab_folder_access">
+                                            <a href="javascript:void(0);" class="edit-folder-access-action" data-folder-id="<?= $subcategorie->getId() ?>">
+                                            <?= $escaper->escapeHtml(__("Edit Folder Access")) ?>
+                                            </a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <!-- code end -->
+                        </div>
+                    </li>
+                <?php }
+            }
+            ?>
+            <?php foreach ($_productCollection as $_product):?>
+                <?php
+                $attributeSetId = $_product->getAttributeSetId();
+                $attribute_set_name = $helper->getProductAttributeName($attributeSetId);
+                $custmizable = (bool)$_product->getData('customizable');
+                $isPendingReview = $_product->getIsPendingReview() == 1 ? (bool)$_product->getIsPendingReview() : false;
+
+                if($attribute_set_name == 'PrintOnDemand'
+                    && $_product->getData('external_prod') !== null) {
+                    $externalProdData=$_product->getData('external_prod');
+                    $externalProdData=json_decode($externalProdData,true);
+
+                    $catalogProductId=(isset($externalProdData['catalogReference']['catalogProductId'])) ?
+                        $externalProdData['catalogReference']['catalogProductId'] : "";
+                }
+                $customizableClass = $custmizable ? 'customizable' : '';
+                $isPendingReviewClass = $isPendingReview ? ' isPendingReview' : '';
+                ?>
+
+                <li class="item product product-item category-product<?php echo $isPendingReviewClass; ?>" id="product-list-<?= /* @noEscape */ $_product->getId() ?>">
+                    <div class="product-item-info"
+                         id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                         data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                        <!-- B-1569586 -->
+                        <?php
+                        if ($viewMode == 'list') {
+                            ?>
+                            <div class="drag-drop catalog-item-move" id="<?= /* @noEscape */ $_product->getSku() ?>">
+                                <div class="drag-drop-img"></div>
+                            </div>
+                        <?php } ?>
+
+                        <input class="product-item-checkbox list-checkbox <?php echo $customizableClass; echo $isPendingReviewClass; ?>" type="checkbox"
+                               id="product-item-checkbox_<?= /* @noEscape */ $_product->getId() ?>"
+                               name="<?= /* @noEscape */ $_product->getId() ?>"
+                               value="product-name<?= /* @noEscape */ $_product->getId() ?>"
+                               data-item-sku="<?= /* @noEscape */ $_product->getSku() ?>"
+                               aria-label="checkbox-<?= $_product->getId()?>"
+                        />
+
+                        <?php if ($viewMode == 'grid') {
+                            if (
+                                $nonStandardCatalogToggle &&
+                                $_product->getData('is_pending_review') != 1
+                            ) {?>
+                                <div class="kebab">
+                                    <div class="kebab-image product-grid"></div>
+                                </div>
+                            <?php } elseif (
+                                !$nonStandardCatalogToggle
+                            ) {?>
+                                <div class="kebab">
+                                    <div class="kebab-image product-grid"></div>
+                                </div>
+                            <?php } ?>
+                            <div class="kebab-options">
+                                <div class="dropdown-menu-list">
+                                    <div class="menu-item">
+                                        <div class="menu-item-label">
+                                            <?php if($isCustomDocEnabled && $custmizable): ?>
+                                                <a class="action-customize-product" data-item-id="<?= $_product->getId() ?>" data-item-sku="<?= $_product->getSku() ?> " href="javascript:void(0);"><?= $escaper->escapeHtml(__("Customize")) ?></a>
+                                            <?php else: ?>
+                                                <a class="action-kebab-add-to-cart" data-item-id="<?= $_product->getId() ?>" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Add to Cart")) ?></a>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php
+                                        $extProd = $_product->getExternalProd();
+                                        $prodata = !empty($extProd) ? json_decode($extProd, true) : [];
+                                        if ($nonStandardCatalogToggle && isset($prodata['externalSkus']) && !empty($prodata['externalSkus'])) {
+                                            ?>
+                                            <div class="menu-item-label changerequest" id="change-request-product">
+                                                <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-request-product" href="javascript:void(0)"><?= $escaper->escapeHtml(__("Request Change")) ?>
+                                                </a>
+                                            </div>
+                                        <?php } else {?>
+                                            <div class="menu-item-label">
+                                                <a class="edit-product" href="<?= $block->getUrl('catalogmvp/configurator/index/')."sku/".$_product->getSku()?>"><?= $escaper->escapeHtml(__("Edit")) ?>
+                                                </a>
+                                            </div>
+                                        <?php }?>
+                                        <?php if($isCatalogExpiryToggle && $viewModelMvphelper->getIsExpiryDocument($_product->getId())) :?>
+                                            <div class="menu-item-label renew action_kebab_right_item_renew" id="renew">
+                                                <a prodid="<?= $_product->getId() ?>" prodname="<?= $_product->getName() ?>" class="action_kebab_right_item_renew" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Renew")) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif;?>
+                                        <div class="menu-item-label Delete">
+                                            <a href="#"><?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                        </div>
+                                        <div class="menu-item-label Download menu-item-label-download">
+                                            <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>"><?= $escaper->escapeHtml(__("Download File(s)")) ?></a>
+                                        </div>
+                                        <?php if(!$isD206810ToggleEnabled): ?>
+                                            <div class="menu-item-label Duplicate">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Duplicate")) ?></a>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="menu-item-label Move">
+                                            <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                        </div>
+                                        
+                                            <?php if ($eproUnableToAddInBranchProductToCartToggle) {
+                                                if (isset($prodata['contentAssociations']) &&
+                                                    !empty($prodata['contentAssociations'])) { ?>
+                                                        <div class="menu-item-label Preview">
+                                                            <a href="javascript:void(0);" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                        </div>
+                                                <?php }
+                                            } else { ?>
+                                                <div class="menu-item-label Preview">
+                                                    <a href="javascript:void(0);" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                </div>
+                                            <?php }
+                                            ?>
+                                        
+                                        <div class="menu-item-label action_kebab_item_rename">
+                                            <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                        </div>
+                                        <?php if ($nonStandardCatalogToggle) :?>
+                                            <div class="menu-item-label settings change-settings-product" id="change-settings-product">
+                                                <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-settings-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Settings")) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <?php
+                        $productImage = $block->getImage($_product, $imageDisplayArea);
+                        if ($pos != null) {
+                            $position = 'left:' . $productImage->getWidth() . 'px;'
+                                . 'top:' . $productImage->getHeight() . 'px;';
+                        }
+                        ?>
+                        <?php // Product Image ?>
+                        <!-- Atul | D-64087 | Removed item link for Epro -->
+                        <?php if($isCommercialCustomer) :?>
+                            <a href="javascript:void(0);"
+                               class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">
+                                <?= $productImage->toHtml() ?>
+                            </a>
+                        <?php elseif($isCommercialCustomer): ?>
+                            <?= $productImage->toHtml() ?>
+                        <?php else: ?>
+                            <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                               class="product photo product-item-photo"
+                               tabindex="-1">
+                                <?= $productImage->toHtml() ?>
+                            </a>
+                        <?php endif; ?>
+                        <?php
+                        $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                        $length = 50;
+                        if($isCommercialCustomer && strlen($proName) > $length) {
+                            $proName = wordwrap($proName, $length);
+                            $proNameArray = explode("\n", $proName, 2);
+                            $proName = $proNameArray[0] . ' ...';
+                        }
+                        ?>
+                        <!-- Atul | D-64087 | Removed item link for Epro -->
+                        <?php if($isCustomDocEnabled && $custmizable): ?>
+                            <div class="wrench-icon"style="width: 19.5px;height: 24.75px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25" fill="none">
+                                    <rect x="0.25" y="0.25" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M1 1V19.75H14.5V1H1Z" fill="#F2F2F2"/>
+                                    <rect x="2.5" y="2.5" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M3.25 3.25V22H16.75V3.25H3.25Z" fill="#F2F2F2"/>
+                                    <rect x="4.75" y="4.75" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M5.5 5.5V24.25H19V5.5H5.5Z" fill="#F2F2F2"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.6674 12.6053L17.1686 11.1092C17.3744 10.9041 17.7203 10.9588 17.8527 11.2174C18.5629 12.605 18.3085 14.3119 17.1896 15.431C16.1475 16.4728 14.5981 16.7641 13.269 16.2248L8.65688 20.8362C8.10578 21.3878 7.21322 21.3878 6.66271 20.8368C6.11087 20.2866 6.11327 19.3924 6.6649 18.8417L11.2824 14.2296C10.7454 12.9036 11.0436 11.3538 12.0878 10.31C13.2063 9.19238 14.9292 8.93701 16.3172 9.64665C16.5742 9.77806 16.6304 10.1208 16.4289 10.3274L14.9642 11.8292V12.6053H15.6674ZM17.3067 12.1816L16.147 13.3374C16.0667 13.4175 15.9579 13.4624 15.8445 13.4624H14.5357C14.299 13.4624 14.1071 13.2706 14.1071 13.0339V11.6548C14.1071 11.543 14.1508 11.4356 14.2289 11.3556L15.3606 10.1952C14.4268 9.9547 13.4002 10.2103 12.6937 10.9162C11.8369 11.7727 11.6375 13.0733 12.1772 14.1273C12.262 14.2929 12.2302 14.4943 12.0986 14.6258L7.27055 19.4482C7.05356 19.6648 7.05262 20.0152 7.26848 20.2304C7.48479 20.4469 7.83422 20.4469 8.05069 20.2303L12.8732 15.4084C13.0047 15.277 13.2059 15.2453 13.3714 15.33C14.4305 15.8717 15.7302 15.678 16.5835 14.825C17.2883 14.1201 17.5437 13.1088 17.3067 12.1816Z" fill="#333333"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <div class="product-name-list">
+                            <?php if($isCommercialCustomer): ?>
+                                <strong class="product name product-item-name dbclick-item-rename product-item-link-nolinks"
+                                        id="product-item-<?= $_product->getId() ?>" data-item-id="<?= $_product->getId() ?>">
+                                    <a class="product-item-link" alt="<?= /* @noEscape */ $proName ?>">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                                </strong>
+                            <?php else: ?>
+                                <strong class="product name product-item-name dbclick-item-rename"
+                                        id="product-item-<?= $_product->getId() ?>" data-item-id="<?= $_product->getId() ?>">
+                                    <a class="product-item-link"
+                                       href="<?= $escaper->escapeUrl($_product->getProductUrl()); ?>">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                                </strong>
+                            <?php endif; ?>
+                        </div>
+                        <div class="modified-info">
+                            <!-- B-1569586 -->
+                            <span> <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?></span>
+                        </div>
+                        <?php if (
+                            $nonStandardCatalogToggle &&
+                            !empty($_product->getData('is_pending_review')) &&
+                            (strtolower($_product->getData('is_pending_review')) == "yes" ||
+                                $_product->getData('is_pending_review') == 1)
+                        ) { ?>
+                            <div class="product details product-item-details empty pending-review">
+                            </div>
+                            <div class="catalog-pending-review-status">
+                            <span class="review-message">
+                                <?= $escaper->escapeHtml(__('Pending Review')) ?>
+                            </span>
+                                <span class="tooltip">
+                                <img class="info-icon" alt="gallery" src="<?= $block->getViewFileUrl('images/pending_info.png');?>">
+                                <span class="tooltiptext">
+                                    <span class="tooltip-heading"><?= $block->escapeHtml(__($tooltipHeading)) ?></span>
+                                    </br>
+                                    <span class="tooltip-content"><?= $block->escapeHtml(__($tooltipContent)) ?></span>
+                                </span>
+                            </span>
+                            </div>
+                        <?php } else {?>
+                            <div class="product details product-item-details">
+                                <!-- get product price -->
+                                <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                                <div class="product-item-inner">
+                                    <div class="product actions product-item-actions">
+                                        <?= strpos((string)$pos, $viewMode . '-primary') ?
+                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                $position,
+                                                'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                            ) : '' ?>
+                                        <div data-role="add-to-links" class="actions-secondary">
+                                            <?php if ($addToBlock = $block->getChildBlock('addto')):?>
+                                                <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?= strpos((string)$pos, $viewMode . '-secondary') ?
+                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                $position,
+                                                'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                            ) : '' ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- publish code start -->
+                            <?php if ($viewMode == 'list') { ?>
+                                <div class="published">
+                                    <label class="switch">
+                                        <?php if ($_product->getPublished()) { ?>
+                                            <input type="checkbox" id="product-<?= /* @noEscape */ $_product->getId() ?>" checked
+                                                   aria-label="product-publish-<?= $_product->getId()?>"
+                                            >
+                                        <?php } else { ?>
+                                            <input type="checkbox" id="product-<?= /* @noEscape */ $_product->getId() ?>"
+                                                   aria-label="product-publish-<?= $_product->getId()?>"
+                                            >
+                                        <?php } ?>
+                                        <span class="custom-slider round"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="kebab">
+                                    <div class="kebab-image product-list"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label">
+                                                <?php if($isCustomDocEnabled && $custmizable): ?>
+                                                    <a class="action-customize-product" data-item-id="<?= $_product->getId() ?>" data-item-sku="<?= $_product->getSku() ?> " href="javascript:void(0);"><?= $escaper->escapeHtml(__("Customize")) ?></a>
+                                                <?php else: ?>
+                                                    <a class="action-kebab-add-to-cart" data-item-id="<?= $_product->getId() ?>" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Add to Cart")) ?></a>
+                                                <?php endif; ?>
+                                            </div>
+                                            <?php
+                                            $extProd = $_product->getExternalProd();
+                                            $prodata = !empty($extProd) ? json_decode($extProd, true) : [];
+                                            if ($nonStandardCatalogToggle && isset($prodata['externalSkus']) && !empty($prodata['externalSkus'])) {
+                                                ?>
+                                                <div class="menu-item-label changerequest" id="change-request-product">
+                                                    <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-request-product" href="javascript:void(0)"><?= $escaper->escapeHtml(__("Request Change")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php } else {?>
+                                                <div class="menu-item-label">
+                                                    <a class="edit-product" href="<?= $block->getUrl('catalogmvp/configurator/index/')."sku/".$_product->getSku()?>"><?= $escaper->escapeHtml(__("Edit")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php }?>
+                                            <div class="menu-item-label Delete">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Download menu-item-label-download">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>"><?= $escaper->escapeHtml(__("Download File(s)")) ?></a>
+                                            </div>
+                                            <?php if(!$isD206810ToggleEnabled): ?>
+                                                <div class="menu-item-label Duplicate">
+                                                    <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                        <?= $escaper->escapeHtml(__("Duplicate")) ?></a>
+                                                </div>
+                                            <?php endif; ?>
+                                            <div class="menu-item-label Move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            
+                                                <?php if ($eproUnableToAddInBranchProductToCartToggle) {
+                                                if (isset($prodata['contentAssociations']) &&
+                                                    !empty($prodata['contentAssociations'])) { ?>
+                                                        <div class="menu-item-label Preview">
+                                                            <a href="javascript:void(0);" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                        </div>
+                                                <?php }
+                                            } else { ?>
+                                                <div class="menu-item-label Preview">
+                                                    <a href="javascript:void(0);" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                </div>
+                                            <?php }
+                                            ?>
+                                            
+                                            <div class="menu-item-label action_kebab_item_rename">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if($isCatalogExpiryToggle && $viewModelMvphelper->getIsExpiryDocument($_product->getId())) :?>
+                                                <div class="menu-item-label renew action_kebab_right_item_renew" id="renew">
+                                                    <a prodid="<?= $_product->getId() ?>" prodname="<?= $_product->getName() ?>" class="action_kebab_right_item_renew" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Renew")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php endif;?>
+                                            <?php if ($nonStandardCatalogToggle) :?>
+                                                <div class="menu-item-label settings change-settings-product" id="change-settings-product">
+                                                    <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-settings-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Settings")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        <?php } ?>
+                        <!-- code end -->
+                    </div>
+                    <?= strpos((string)$pos, $viewMode . '-actions') ?
+                        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            $position,
+                            'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                        ) : '' ?>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <!-- B-1569586 -->
+    <?php if ($catalogMvpToggle) { ?>
+
+        <?php
+        /*B-1611718*/
+        $panelTabs = [
+            "Print Properties",
+            "Description",
+            "Tags"
+        ];
+
+        
+            $panelTabs[] = "Last Modified";
+        
+        $panelTabs[] = "Quantity";
+
+        $descTags = [
+            "Print Properties",
+            "Description",
+            "Tags"
+        ];
+
+        
+            $descTags[] = "Last Modified";
+        
+        $tags = [
+            "Tag ABC",
+            "Tag ABC"
+        ];
+        
+            $menuitems = [
+                "Edit",
+                "Delete",
+                "Download File(s)",
+                "Duplicate",
+                "Move",
+                "Preview",
+                "Rename"
+            ];
+        
+        if($isD206810ToggleEnabled) {
+            array_splice($menuitems, 3, 1);
+        }
+        if( $viewModelMvphelper->isCatalogExpiryNotificationToggle() ) {
+            $menuitems[] = "Renew";
+        }
+        if($nonStandardCatalogToggle) {
+            $menuitems[] = "Settings";
+            $menuitems[] = "Request Change";
+        }
+        ?>
+
+        <!--B-1611718-->
+        <div class="right-pannel">
+            <div id="accordion" class="panel-container" data-mage-init='{"accordion":{
+        "active": [1],
+        "collapsible": true,
+        "openedState": "active",
+        "multipleCollapsible": true
+        }}' aria-busy="true">
+                <div class="panel-top">
+                    <div class="item-panel-new">
+                        <div class="panel-top-content">
+                            <div class="item-title" id="right-panel-item-title"></div>
+                            <?php if($isCustomDocEnabled): ?>
+                                <div class="item-custom-doc-box">
+                                    <div class="item-custom-option"></div>
+                                    <div class="item-status"></div>
+                                </div>
+                            <?php else: ?>
+                                <div class="item-status"></div>
+                            <?php endif; ?>
+                        </div>
+                        <div class="panel-top-actions" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                                <path fill-rule="evenodd" clip-rule="evenodd"
+                                      d="M24 33C25.656 33 27 34.344 27 36C27 37.656 25.656 39 24 39C22.344 39 21 37.656 21 36C21 34.344 22.344 33 24 33ZM24 21C25.656 21 27 22.344 27 24C27 25.656 25.656 27 24 27C22.344 27 21 25.656 21 24C21 22.344 22.344 21 24 21ZM27 12C27 10.344 25.656 9 24 9C22.344 9 21 10.344 21 12C21 13.656 22.344 15 24 15C25.656 15 27 13.656 27 12Z" fill="#333333"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <?php foreach ($panelTabs as $panelTab): ?>
+                    <?php if($panelTab != "Quantity"): ?>
+                        <div class="panel-tab <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="collapsible">
+                            <div data-role="trigger">
+                                <div class="tab-wrapper">
+                                    <div class="tab-title">
+                                        <?= $escaper->escapeHtml(__($panelTab)) ?>
+                                    </div>
+                                    <div class="tab-icon"></div>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                    <div class="panel-content <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="content">
+                        <?php if ($panelTab == "Print Properties"): ?>
+                            <div class="content-wrapper-print-properties">
+                                <div class="gallery-media" >
+                                    
+                                        <img alt="gallery" class="preview-image-container" datashowpreview="1" datasku="" src="<?= $block->getViewFileUrl('images/gallery.png');?>">
+                                    
+                                </div>
+                                <div class="print-properties"></div>
+                            </div>
+                        <?php elseif ($panelTab == "Tags"): ?>
+                            <div class="content-wrapper <?php if ($panelTab == "Tags"): ?> tags <?php endif; ?>">
+                                <div class="content-title">Tag(s)</div>
+                                <div class="tags-wrapper"></div>
+                            </div>
+                        <?php elseif ($panelTab == "Last Modified"): ?>
+                            <div class="content-wrapper <?php if ($panelTab == "Last Modified"): ?> last modified <?php endif; ?>">
+                                <div class="content-title">Last Modified</div>
+                                <div class="last-modified-wrapper"></div>
+                            </div>
+                        <?php elseif ($panelTab == "Quantity"): ?>
+                            <div class="content-wrapper" style="padding: 17px 20px 30px 11px">
+                                <div class="content-title"><?= $panelTab ?></div>
+                                <div class="quantity-wrapper">
+                                    <div class="qty-box-label">
+                                        <div class="field-box-qty">
+                                            <input class="qty-box-value" value="50"
+                                                   tabindex="-1" aria-label="qty-box-value">
+                                            <select class="qty-dropbox-value" aria-label="qty-box-value" ></select>
+                                        </div>
+                                    </div>
+                                    <div class="cart-chip-wrapper">
+                                        <div class="cart-chip">
+                                            <div class="cart-chip-label">
+                                                <?= $escaper->escapeHtml(__('Add to cart')) ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php else: ?>
+                            <div class="content-wrapper">
+                                <div class="content-title"><?= __('Description'); ?></div>
+                                <div class="content-desc"><?= __(''); ?></div>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            <!--B-1611718-->
+            <div class="dropdown-menu" style="display: none">
+                <?php foreach ($menuitems as $menuitem): ?>
+                    <div class="menu-item">
+                        <div class="menu-item-label <?php echo $menuitem; ?> <?= 'action_kebab_right_item_'.strtolower($menuitem)?>"><?= $menuitem; ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+        <!-- B-1646916-Delete-Modal-popup -->
+        <div id="custom-model-delete-popup" class="custom-model-delete-popup-form-container" style="display:none;">
+            <div class="custom-model-delete-popup-form-header">
+                <div class="custom-model-delete-icon">
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/mvp-delete-popup-icon.png'))?>"
+                         alt="mvp-delete-popup-icon">
+                </div>
+            </div>
+            <div class="custom-model-delete-popup-form-sub-title">
+            <span class="custom-model-delete-popup-form-sub-heading">
+                <?= $block->escapeHtml(__('Are you sure you want to delete?'));?>
+            </span>
+            </div>
+            <div class="actions">
+                <button class="action primary cancel-btn-delete">Cancel</button>
+                <button class="action primary delete-action">Delete</button>
+                <button class="action primary bulk-delete-action" style="display: none;">Delete</button>
+                <button class="action primary kebab-delete-action" style="display: none;">Delete</button>
+            </div>
+        </div>
+        
+        <!-- B-1651686-Create move to modal to move the folder and catalog item -->
+        <div id="custom-model-move-popup" class="custom-model-move-popup-form-container" style="display:none;">
+            <div class="custom-model-move-popup-form-header">
+            <span class="custom-model-move-popup-form-heading">
+                <?= $block->escapeHtml(__('Move to'));?>
+            </span>
+            </div>
+            <div class="field mvp-move-popup-folder-location-name">
+                <label class="folder-location" id = "mvp-move-popup-folder-location-label">
+                    SELECT FOLDER LOCATION
+                </label>
+                <div class="control">
+                    <input type="text" id="mvp-move-popup-folder-location-input" name="folder-location"
+                           value = "Shared Catalog" class="input-text-folder-location"
+                           aria-label="mvp-move-popup-folder-location-input"
+                    />
+                </div>
+            </div>
+            <div class = "mvp-move-popup-content">
+                <form>
+                    <div class="field mvp-move-search-input-field">
+                        <div class="control" style="display:flex;">
+                            <input type="text" id="mvp-move-search-input" name="search_category_by_name"
+                                   class="input-text-search" placeholder = "Search for folder..."/>
+                            <span class = "mvp-move-search-icon"></span>
+                        </div>
+                    </div>
+                </form>
+                <div class ="shared-catalog-lable sub-cat-div-name" id="move-<?php echo $getCurrentCategoryId ?>">
+                <span class="shared-catalog-folder">
+                    <?= $block->escapeHtml( __('Shared Catalog'));?>
+                </span>
+                </div>
+                <div class ="mvp-catalog-move-popup-category-tree">
+                    <ul class = "category-tree-level-0">
+                        <?php
+                        foreach ($subCategoryMvp as $childSubcategory) {
+                            $childofprintproduct_level0 = $childSubcategory->getName();
+                            ?>
+                            <li class="mvp-catalog-move-popup-category-l-0">
+                                <div class = "sub-category-container-level-0 level-0 sub-cat-div" id="move-<?php echo $childSubcategory->getId() ?>">
+                                    <?php if ($childSubcategory->hasChildren()) { ?>
+                                        <div class = "toggle-icon-level-0" id="<?php echo "toggle-".$childSubcategory->getId() ?>">
+                                            <div class="disclosere-icon-closed level-0 display"></div>
+                                            <div class="disclosere-icon-open level-0" style="display: none;"></div>
+                                        </div>
+                                    <?php }
+                                    else { ?>
+                                        <div class = "toggle-icon-level-0" id="<?php echo "toggle-".$childSubcategory->getId() ?>">
+                                            <div class="disclosere-icon-closed level-0 display" style="visibility: hidden;"></div>
+                                            <div class="disclosere-icon-open level-0" style="display: none;"></div>
+                                        </div>
+                                    <?php } ?>
+                                    <div class="folder-img-icon"></div>
+                                    <span class = "category-name-level-0 sub-cat-div-name">
+                                    <?= /* @noEscape */ $childofprintproduct_level0 ?></span>
+                                </div>
+                                <?php
+                                if ($childSubcategory->hasChildren()) {
+                                    $childCategoryObj = $getCategoryRepository->get($childSubcategory->getId());
+                                    $childSubcategories = $childCategoryObj->getChildrenCategories();
+                                    foreach ($childSubcategories as $childSubcategory_level1) {
+                                        $childofprintproduct_level1 = $childSubcategory_level1->getName();
+                                        ?>
+                                        <ul class = "category-tree-level-1">
+                                            <li class="mvp-catalog-move-popup-category-l-1" style="display: none;">
+                                                <div class = "sub-category-container-level-1 sub-cat-div" id="move-<?php echo $childSubcategory_level1->getId() ?>">
+                                                    <?php if ($childSubcategory_level1->hasChildren()) { ?>
+                                                        <div class = "toggle-icon-level-1" id="<?php echo "toggle-".$childSubcategory_level1->getId() ?>">
+                                                            <div class="disclosere-icon-closed level-1 display"></div>
+                                                            <div class="disclosere-icon-open level-1" style="display: none;"></div>
+                                                        </div>
+                                                    <?php }
+                                                    else { ?>
+                                                        <div class = "toggle-icon-level-1" id="<?php echo "toggle-".$childSubcategory_level1->getId() ?>">
+                                                            <div class="disclosere-icon-closed level-1 display" style="visibility: hidden;"></div>
+                                                            <div class="disclosere-icon-open level-1" style="display: none;"></div>
+                                                        </div>
+                                                    <?php } ?>
+                                                    <div class="folder-img-icon"></div>
+                                                    <span class = "category-name-level-1 sub-cat-div-name">
+                                                <?= /* @noEscape */ $childofprintproduct_level1 ?></span>
+                                                </div>
+                                                <?php
+                                                if ($childSubcategory_level1->hasChildren()) {
+                                                    $childCategoryObj =
+                                                        $getCategoryRepository->get($childSubcategory_level1->getId());
+                                                    $childSubcategoriess = $childCategoryObj->getChildrenCategories();
+                                                    foreach ($childSubcategoriess as $childSubcategory_level2) {
+                                                        $childofprintproduct_level2 = $childSubcategory_level2->getName();
+                                                        ?>
+                                                        <ul class = "category-tree-level-2">
+                                                            <li class="mvp-catalog-move-popup-category-l-2" style="display: none;">
+                                                                <div class = "sub-category-container-level-2 sub-cat-div" id="move-<?php echo $childSubcategory_level2->getId() ?>">
+                                                                    <div class="disclosere-icon-closed level-2" style="visibility: hidden;" ></div>
+                                                                    <div class="disclosere-icon-open level-2"
+                                                                         style="display: none;" ></div>
+                                                                    <div class="folder-img-icon"></div>
+                                                                    <span class = "category-name-level-2 sub-cat-div-name">
+                                                        <?= /* @noEscape */ $childofprintproduct_level2 ?></span>
+                                                                </div>
+                                                            </li>
+                                                        </ul>
+                                                        <?php
+                                                    }
+                                                }?>
+                                            </li>
+                                        </ul>
+                                        <?php
+                                    }
+                                }?>
+                            </li>
+                            <?php
+                        }
+                        ?>
+                    </ul>
+                </div>
+            </div>
+            <div class="actions">
+                <button class="action primary cancel-btn-move-popup">Cancel</button>
+                <button class="action primary move-action">Move</button>
+            </div>
+        </div>
+        <!--------- Change Request Action added --------------->
+        <div id="modal-content-change-request" class="modal-content-change-request-form-container" style="display:none;">
+            <div class="modal-content-change-request-form-header">
+            </div>
+            <div class="modal-content-change-request-form-sub-title">
+                <div class="custom-model-edit-icon">
+                    <img src="<?= $escaper->escapeUrl(
+                        $block->getViewFileUrl('Fedex_CatalogMvp::images/edit-banner-icon.png'))?>"
+                         alt="edit-banner-icon-popup-icon">
+                </div>
+                <span class="modal-content-change-request-form-sub-heading">
+                <h3><?= $block->escapeHtml(__('Requesting Change for '));?><span class="product_name"></span><h3>
+            </span>
+            </div>
+            <p class="change-request-description">
+                <?= $block->escapeHtml(__('Requesting a change for any item will send the custom product back to a FedEx Office team member and may result in a new price.
+                This catalog item  will not be available in your catalog while its under review.'));?></p>
+            <div class="print-instruction">
+                <p class="change-request-label"><label for="change-request">PRINT INSTRUCTIONS</label></p>
+                <textarea id="print_instruction" name="print_instruction" placeholder="Leave a comment"
+                          rows="5" cols="10">
+            </textarea>
+                <div id="char_left" class="char_left"><?= $block->escapeHtml(__('400 characters left.'));?></div>
+                <p class="print_error"></p>
+            </div>
+            <div class="actions">
+                <button class="action primary request-change-cancel">CANCEL</button>
+                <button class="action primary request-change" disabled>REQUEST CHANGE</button>
+            </div>
+        </div>
+        <div class="settings_sku"></div>
+        <!--------- Change Request Action added End --------------->
+
+        <!---------Renew Action start ----------------------------->
+        <div id="modal-content-renew" class="modal-content-renew-form-container" style="display:none;">
+            <div class="modal-content-renew-form-sub-title">
+            <span class="modal-content-renew-form-sub-heading">
+                <?= $block->escapeHtml(__('Renew Catalog Item'));?>
+            </span>
+            </div>
+            <div class="custom-model-refresh-icon">
+                <img src="<?= $escaper->escapeUrl(
+                    $block->getViewFileUrl('Fedex_CatalogMvp::images/refresh.png'))?>"
+                     alt="refresh-icon-popup-icon">
+            </div>
+            <span class="renew-description">
+            <?= $block->escapeHtml(__("Renewing this catalog item will extend the availability for one year."));?>
+        </span>
+            <div class="actions">
+                <button class="action primary renew-cancel">CANCEL</button>
+                <button class="action primary renew" id="renew-popup-container">RENEW</button>
+            </div>
+        </div>
+        <!---------Renew Action end ----------------------------->
+
+        <!---------------Catalog Renew Success Message------------------------->
+        <div class="renew-success" style='display: none;'>
+            <div class="renew-success-box-inner">
+                <img src="<?=/* @noEscape */$block->getViewFileUrl('images/order-history/correct-circle-icon.png'); ?>"
+                     alt="Success Icon">
+            </div>
+            <div class = "container">
+                <div class="renew-close-icon" tabindex="0"></div>
+                <div class="renew-success-msg"></div>
+            </div>
+        </div>
+        <?php if ($isCommercialCustomer) { ?>
+            <div class="commercial-toolbar-bottom">
+                <?= $block->getToolbarHtml() ?>
+            </div>
+        <?php }
+    }
+    ?>
+    <script type="text/javascript">
+
+        window.b2034092Toggle = '<?= $catalogUpdateMessages; ?>' === '1'
+
+        function selects(checkBox) {
+            get = document.getElementsByClassName('product-item-checkbox');
+            for(var i=0; i<get.length; i++) {
+                get[i].checked = checkBox.checked;
+            }
+
+            categoryCheck = document.getElementsByClassName('category-item-checkbox');
+            for(var i=0; i<categoryCheck.length; i++) {
+                categoryCheck[i].checked = checkBox.checked;
+            }
+        };
+
+        /*B-1611718*/
+
+        function showPanel() {
+            jQuery('body').removeClass('page-layout-2columns-left');
+            jQuery('body').addClass('page-layout-3columns');
+
+            jQuery( ".panel-top-actions" ).on( "click", function() {
+                jQuery(".dropdown-menu").show();
+            });
+
+            jQuery(document).on( "mouseup", function() {
+                jQuery(".dropdown-menu").hide();
+            });
+            jQuery(".panel-container").addClass("active");
+
+            /* D-138269 */
+            if(screen.width >= 1280 && screen.width <= 1440) {
+                jQuery(".commercial-toolbar-bottom") . css("width", "135%");
+            }
+            setTimeout(function() {
+                var mainContentEl = jQuery('#maincontent');
+                var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                var rightPanelEl = jQuery('#accordion');
+                var mainContentElHeight = mainContentEl.height();
+                var rightPanelElHeight = rightPanelEl.height();
+                var columnMainEl = jQuery('.column.main');
+                var columnMainElHeight = columnMainEl.height()- 60;
+                var fraction = 50;
+                if(columnMainElHeight < rightPanelElHeight){
+                    var newRightPanelHeight = rightPanelElHeight + fraction;
+                    mainContentEl.height(newRightPanelHeight);
+                    var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                    bootomToolbarEl.css('top',toolbarTop);
+                    bootomToolbarEl.css('position','relative');
+                    bootomToolbarEl.css('margin-top','50px');
+                }
+            }, 500);
+
+        }
+        /*B-1611718*/
+        function hidePanel() {
+            jQuery('body').addClass('page-layout-2columns-left');
+            jQuery('body').removeClass('page-layout-3columns');
+
+            jQuery(".panel-container").removeClass("active");
+
+            /* D-138269 */
+            if(screen.width >= 1280 && screen.width <= 1440) {
+                jQuery(".commercial-toolbar-bottom") . css("width", "100%");
+            }
+
+            var mainContentEl = jQuery('#maincontent');
+            var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+            var columnMainEl = jQuery('.column.main');
+            var columnMainElHeight = columnMainEl.height();
+
+            mainContentEl.height(columnMainElHeight);
+            bootomToolbarEl.css('position','inherit');
+            bootomToolbarEl.css('margin-top','unset');
+        }
+
+        function getPrintProperties(externalProd, printingCost = null){
+            var json = externalProd.replace('/\\/g', '');
+            const obj = JSON.parse(json);
+            const printProperties = {};
+            var printPropertiesTab = [];
+            var printPropertiesContent = [];
+
+            if(!obj){
+                return false;
+            }else{
+                Object.entries(obj.features).forEach(([key, value]) => {
+                    printPropertiesTab.push(value.name);
+                    if(value.name != 'Orientation' ){
+                        printPropertiesContent.push(value.choice.name );
+                    }else{
+                        var valueTransform = value.choice.properties[0].value;
+                        var finalValue = valueTransform.split(' ').map(function(word, index){
+                            return word.charAt(0) + word.slice(1).toLowerCase();
+                        }).join('-');
+                        printPropertiesContent.push(finalValue);
+                    }
+                });
+                Object.entries(obj.contentAssociations)
+                    .forEach(([key, value]) => {
+                        Object.entries(value).forEach(([k, v]) => {
+                            if(k == "fileName"){
+                                printPropertiesTab.push(k);
+                                printPropertiesContent.push(v);
+                            }
+                        });
+                    });
+                if(printingCost) {
+                    const formatter = new Intl.NumberFormat('en-US', {
+                        style: 'currency',
+                        currency: 'USD',
+                    });
+                    printPropertiesTab.push("Printing Cost");
+                    printPropertiesContent.push(formatter.format(printingCost));
+                }
+
+
+                printPropertiesTab.forEach((key, idx) => printProperties[key] = printPropertiesContent[idx]);
+
+                return printProperties;
+            }
+        }
+
+        function propertiesHtml(properties){
+            var printPropertiesContent = '';
+
+            if(properties){
+                for (const [key, value] of Object.entries(properties)) {
+                    if(key !== 'fileName' && value !== "None"){
+                        printPropertiesContent += '<div class="property-wrapper">'
+                            + '<div class="property-label">' + key + '</div>'
+                            + '<div class="property">' + value + '</div>'
+                            + '</div>';
+                    }
+                }
+            }else{
+                printPropertiesContent = properties;
+            }
+            return printPropertiesContent;
+        }
+        function mvpMoveSearch(){
+            jQuery('.commercial-store-home .toggle-icon-level-0').on('click', function(event){
+                var link = jQuery(this);
+                var closest_li = link.closest('li');
+                var closest_ul = closest_li.children('ul');
+                var open_li = closest_ul.children('li');
+                open_li.slideToggle("slow");
+                if (event.target.className === 'disclosere-icon-closed level-0 display') {
+                    jQuery(this).find('.disclosere-icon-closed').hide().removeClass('display');
+                    jQuery(this).find('.disclosere-icon-open').show().addClass('display');
+                } else{
+                    jQuery(this).find('.disclosere-icon-closed').show().addClass('display');
+                    jQuery(this).find('.disclosere-icon-open').hide().removeClass('display');
+                }
+            });
+            jQuery('.commercial-store-home .toggle-icon-level-0').on('click', function(event){
+                jQuery('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                    jQuery(this).attr('id', '');
+                });
+                jQuery('.mvp-catalog-move-popup-category-tree>ul>li').each(function(index){
+                    jQuery(this).attr('id', '');
+                    jQuery(this).css('display', 'block');
+                });
+                // Fix issue for 10 folder showing when you move
+                if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                    setTimeout(function() {
+                        jQuery('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                            jQuery(this).attr('id', index + 1);
+                            jQuery('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                                if (jQuery(this).attr('id') > 10){
+                                    jQuery(this).hide();
+                                }
+                            });
+                        });
+                    }, 1000);
+                }
+            });
+            jQuery('.commercial-store-home .toggle-icon-level-1').on('click', function(event){
+                jQuery('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                    jQuery(this).attr('id', '');
+                });
+                jQuery('.mvp-catalog-move-popup-category-tree>ul>li').each(function(index){
+                    jQuery(this).attr('id', '');
+                    jQuery(this).css('display', 'block');
+                });
+                // Fix issue for 10 folder showing when you move
+                if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                    setTimeout(function() {
+                        jQuery('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                            jQuery(this).attr('id', index + 1);
+                            jQuery('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                                if (jQuery(this).attr('id') > 10){
+                                    jQuery(this).hide();
+                                }
+                            });
+                        });
+                    }, 1000);
+                }
+            });
+            jQuery('.cancel-btn-move-popup').click(function() {
+                jQuery('button.action-close').trigger('click');
+            });
+            jQuery('.commercial-store-home .toggle-icon-level-1').on('click', function(event){
+                var link = jQuery(this);
+                var closest_li = link.closest('li');
+                var closest_ul = closest_li.children('ul');
+                var open_li = closest_ul.children('li');
+                open_li.slideToggle("slow");
+                if (event.target.className === 'disclosere-icon-closed level-1 display') {
+                    jQuery(this).find('.disclosere-icon-closed').hide().removeClass('display');
+                    jQuery(this).find('.disclosere-icon-open').show().addClass('display');
+                } else{
+                    jQuery(this).find('.disclosere-icon-closed').show().addClass('display');
+                    jQuery(this).find('.disclosere-icon-open').hide().removeClass('display');
+                }
+            });
+            // Fix issue for 10 folder showing when you move
+            if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                jQuery('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                    jQuery(this).attr('id', index + 1);
+                    if (jQuery(this).attr('id') > 10){
+                        jQuery(this).hide();
+                    }
+                });
+            }
+            jQuery(".sub-cat-div-name").on('click',function(event){
+                var currentSubCatId = "<?php echo $getCurrentSubCategoryId; ?>";
+                var currentSubCatName = "<?php echo $getCurrentSubCategoryName; ?>";
+                if(jQuery(this).hasClass('shared-catalog-lable')){
+                    var sharedDivid = jQuery(this).attr('id');
+                    sharedDivid = sharedDivid.replace('move-','');
+                    if(sharedDivid != currentSubCatId)
+                    {
+                        var catName = "Shared Catalog";
+                        var catTrim = jQuery.trim(catName);
+                        jQuery(".selected").removeClass("selected");
+                        jQuery(this).addClass('selected');
+                        jQuery("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                        jQuery("#mvp-move-popup-folder-location-input").val(catTrim);
+                        jQuery('.move-action').removeAttr("disabled");
+                        jQuery(".move-action").addClass("active");
+                    }
+                }else{
+                    var subCatDiv = jQuery(this).closest('.sub-cat-div');
+                    var subCatDivid = jQuery(subCatDiv).attr('id');
+                    subCatDivid = subCatDivid.replace('move-','');
+                    if(currentSubCatId != subCatDivid)
+                    {
+                        if(jQuery(".move-action").hasClass('single-cat-move')){
+                            var mainCatDivId = jQuery(".move-action").attr('id');
+                            if(subCatDivid != mainCatDivId)
+                            {
+                                var catName = jQuery(this).text();
+                                var catTrim = jQuery.trim(catName);
+                                if(subCatDiv.hasClass('selected')) {
+                                    jQuery(".selected").removeClass("selected");
+                                    jQuery("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                                    jQuery("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                                    jQuery('.move-action').prop('disabled', true);
+                                    jQuery(".move-action").removeClass("active");
+                                }else{
+                                    jQuery(".selected").removeClass("selected");
+                                    subCatDiv.addClass('selected');
+                                    jQuery("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                                    jQuery("#mvp-move-popup-folder-location-input").val(catTrim);
+                                    jQuery('.move-action').removeAttr("disabled");
+                                    jQuery(".move-action").addClass("active");
+                                }
+                            }
+                        }else{
+                            var catName = jQuery(this).text();
+                            var catTrim = jQuery.trim(catName);
+                            if(subCatDiv.hasClass('selected')) {
+                                jQuery(".selected").removeClass("selected");
+                                jQuery("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                                jQuery("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                                jQuery('.move-action').prop('disabled', true);
+                                jQuery(".move-action").removeClass("active");
+                            }else{
+                                jQuery(".selected").removeClass("selected");
+                                subCatDiv.addClass('selected');
+                                jQuery("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                                jQuery("#mvp-move-popup-folder-location-input").val(catTrim);
+                                jQuery('.move-action').removeAttr("disabled");
+                                jQuery(".move-action").addClass("active");
+                            }
+                        }
+                    }
+                }
+            });
+            jQuery('.move-action').click(function() {
+                if(jQuery(this).hasClass('bulk-move-action')){
+                    var arr = [];
+                    jQuery('.product-item-checkbox.list-checkbox').each(function () {
+                        var self = jQuery(this);
+                        if (self.is(':checked')) {
+                            arr.push(self.attr("name"));
+                        }
+                    });
+                    var catId = jQuery(".selected").attr('id');
+                    catId = catId.replace('move-','');
+                    var url = "<?php echo $this->getUrl('catalogmvp/index/bulkMoveProduct')?>";
+                    jQuery.ajax({
+                        type: "post",
+                        url: url,
+                        dataType: 'JSON',
+                        showLoader: true,
+                        data: { id: arr, cat_id: catId},
+                        success: function(response) {
+                            if(response.status) {
+                                $(document).trigger("toast_message_fired",response.message);
+                                jQuery('button.action-close').trigger('click');
+                                hidePanel();
+                                location.replace(response.url);
+                            }
+                        }
+                    });
+                }else if(jQuery(this).hasClass('single-cat-move')){
+                    var pid = jQuery(this).attr('id');
+                    var catId = jQuery(".selected").attr('id');
+                    catId = catId.replace('move-','');
+                    var url = "<?php echo $this->getUrl('catalogmvp/index/moveFolder')?>";
+                    jQuery.ajax({
+                        type: "post",
+                        url: url,
+                        showLoader: true,
+                        data: { id: pid, cat_id: catId},
+                        success: function(response) {
+                            if(response.status) {
+                                $(document).trigger("toast_message_fired",response.message);
+                                jQuery('button.action-close').trigger('click');
+                                hidePanel();
+                                location.replace(response.url);
+                            }
+                        }
+                    });
+                }else{
+                    var pid = jQuery(this).attr('id');
+                    var catId = jQuery(".selected").attr('id');
+                    catId = catId.replace('move-','');
+                    var url = "<?php echo $this->getUrl('catalogmvp/index/moveProduct')?>";
+                    jQuery.ajax({
+                        type: "post",
+                        url: url,
+                        showLoader: true,
+                        data: { id: pid, cat_id: catId},
+                        success: function(response) {
+                            if(response.status) {
+                                $(document).trigger("toast_message_fired",response.message);
+                                jQuery('button.action-close').trigger('click');
+                                hidePanel();
+                                location.replace(response.url);
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function openMvpTogleIcon(currentSubCatId){
+            var currentCatPath = JSON.parse('<?php echo json_encode($getCurrentCategoryPath); ?>');
+            jQuery.each( currentCatPath, function( i, val ) {
+                if(currentSubCatId != val)
+                {
+                    if(jQuery("#toggle-"+val).hasClass('opened') == false)
+                    {
+                        jQuery("#toggle-"+val).click();
+                        jQuery("#toggle-"+val).addClass('opened');
+
+                    }
+                }
+            });
+
+        }
+
+     function patternFlyTruncationCatalog(
+            text,
+            minimumCharacters = <?= $minChar ?>,
+            firstPartNumChars = <?= $ellipsisStartChar ?>,
+            lastPartNumChars = <?= $ellipsisEndChar ?>
+        ) {
+            let isTruncated = false;
+            if (text?.length > minimumCharacters) {
+                isTruncated = true;
+                return [`${text.slice(0, firstPartNumChars)}...${text.slice(-lastPartNumChars)}`, isTruncated];
+            }
+
+            return [text, isTruncated];
+        }
+
+        require(['jquery', 'jquery/ui','Magento_Ui/js/modal/modal','fedex/storage','inBranchWarning'],
+            function($,ui,modal,fxoStorage,inBranchWarning){
+
+                if ("<?= $catalogEllipsisEnable?>" == "1" && "<?= $char100Enable ?>" == "1" ) {
+                    $('.product-items .product-item-name a').each(function() {
+                        $(this).attr('aria-label', $(this).text().trim());
+                        const [truncatedText, isTruncated] = patternFlyTruncationCatalog($(this).text().trim());
+
+                        if (isTruncated) {
+                            $(this).attr("title",jQuery(this).attr("alt"));
+                            $(this).html(truncatedText);
+                            $(this).addClass("break-all")
+                        }
+                    });
+                }
+
+
+            if(window.e383157Toggle){
+                fxoStorage.set("configurator_json",'');
+                fxoStorage.set("configurator_customizedata","");
+            }else{
+                window.localStorage.setItem("configurator_json",'');
+                window.localStorage.setItem("configurator_customizedata","");
+            }
+            $(document).ready(function() {
+                $('.loading-mask-mvp').hide();
+                if(window.e383157Toggle){
+                    fxoStorage.set("cancelurl", window.location.href);
+                    $('.edit-product').on('click', function() {
+                        fxoStorage.set("cancelurl", window.location.href);
+                    });
+                }else{
+                    localStorage.setItem("cancelurl", window.location.href);
+                    $('.edit-product').on('click', function() {
+                        localStorage.setItem("cancelurl", window.location.href);
+                    });
+                }
+                var isCustomerAdmin = $("ol.products.list").hasClass("customer-admin");
+                if(isCustomerAdmin){
+                   $("body").addClass("customer-admin");
+                }
+                $(".product-item-checkbox").on('click', function(){
+                    $(".selected-number").addClass("show");
+                    if ($(".check-box-check-all").is(":checked")) {
+                        $('.check-box-check-all').attr('checked', false);
+                    }
+                    if ($('.product-item-info').find('.product-item-checkbox.list-checkbox').is(":checked")) {
+                        $('.product-item-info').find('.review-message').css('margin-left', '-25px');
+                    } else {
+                        $('.product-item-info').find('.review-message').css('margin-left', '0px');
+                    }
+
+                    });
+                    /* B-1646916-Delete-pop-up-modal */
+                    var options = {
+                        type: 'popup',
+                        responsive: true,
+                        modalClass: 'mvp-delete-modal',
+                        innerScroll: true,
+                        buttons: [],
+                        close: [],
+                    };
+
+                    $(".product-item-info .menu-item-label.Delete").on('click',function(event){
+                        var pid = $(this).closest('.product-item-info').find('.product-item-checkbox').attr('name');
+                        $(".delete-action"). attr('id','delete-'+pid);
+                        $('#custom-model-delete-popup').modal(options, $('#custom-model-delete-popup')).modal('openModal');
+                    });
+                    $(".right-pannel .menu-item-label.Delete").on('click',function(event){
+                        $('#custom-model-delete-popup').modal(options, $('#custom-model-delete-popup')).modal('openModal');
+                    });
+
+                    $('.action_kebab_folder_delete a').click(function() {
+                        var folderId = $(this).attr("data-folder-id");
+                        $(".kebab-delete-action").attr('id', 'delete-'+folderId);
+                        $('#custom-model-delete-popup').modal(options, $('#custom-model-delete-popup')).modal('openModal');
+                        $("#custom-model-delete-popup action")
+                        $(".kebab-delete-action").show();
+                        $(".delete-action").hide();
+                        $(".bulk-delete-action").hide();
+                    });
+
+                    /* B-1651686-Create move to modal to move the folder and catalog item */
+                    var moveoptions = {
+                        type: 'popup',
+                        responsive: true,
+                        modalClass: 'mvp-move-modal',
+                        innerScroll: true,
+                        buttons: [],
+                        close: [],
+                    };
+                    $(".menu-item-label.Move").on('click',function(event){
+                        var currentSubCatId = "<?php echo $getCurrentSubCategoryId; ?>";
+                        var currentSubCatName = "<?php echo $getCurrentSubCategoryName; ?>";
+                        if($(this).hasClass('cat-move')){
+                            var pid = $(this).closest('.product-item-info').find('.category-item-checkbox').attr('value');
+                            $(".move-action"). attr('id', pid);
+                            $('.move-action').prop('disabled', true);
+                            $(".move-action").removeClass("bulk-move-action");
+                            $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                            openMvpTogleIcon(currentSubCatId);
+                            $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                            $(".move-action").addClass("single-cat-move");
+                            $(".move-action").removeClass("active");
+                            $(".selected").removeClass("selected");
+                            $('#custom-model-move-popup').modal(moveoptions, $('#custom-model-move-popup')).modal('openModal');
+                        }else if($(this).hasClass('action_kebab_right_item_move')){
+                            var selectedProductId;
+                            $('.product-item-checkbox:checked').each(function() {
+                                selectedProductId = $(this).attr('name');
+                            });
+                            $(".move-action"). attr('id', selectedProductId);
+                            $('.move-action').prop('disabled', true);
+                            $(".move-action").removeClass("bulk-move-action");
+                            $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                            openMvpTogleIcon(currentSubCatId);
+                            $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                            $(".move-action").removeClass("single-cat-move");
+                            $(".move-action").removeClass("active");
+                            $(".selected").removeClass("selected");
+                            $('#custom-model-move-popup').modal(moveoptions, $('#custom-model-move-popup')).modal('openModal');
+                        }else{
+                            var pid = $(this).closest('.product-item-info').find('.product-item-checkbox').attr('name');
+                            $(".move-action"). attr('id', pid);
+                            $('.move-action').prop('disabled', true);
+                            $(".move-action").removeClass("bulk-move-action");
+                            $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                            openMvpTogleIcon(currentSubCatId);
+                            $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                            $(".move-action").removeClass("single-cat-move");
+                            $(".move-action").removeClass("active");
+                            $(".selected").removeClass("selected");
+                            $('#custom-model-move-popup').modal(moveoptions, $('#custom-model-move-popup')).modal('openModal');
+                        }
+                    });
+
+                    $(".bulk-move-to").on('click',function(event){
+                        var currentSubCatId = "<?php echo $getCurrentSubCategoryId; ?>";
+                        var currentSubCatName = "<?php echo $getCurrentSubCategoryName; ?>";
+                        $('.move-action').prop('disabled', true);
+                        $(".move-action").removeClass("active");
+                        $(".move-action").removeClass("single-cat-move");
+                        $(".move-action").addClass("bulk-move-action");
+                        $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                        openMvpTogleIcon(currentSubCatId);
+                        $(".selected").removeClass("selected");
+                        $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                        $('#custom-model-move-popup').modal(moveoptions, $('#custom-model-move-popup')).modal('openModal');
+                    });
+
+                    $(".sub-cat-div-name").on('click',function(event){
+                        var currentSubCatId = "<?php echo $getCurrentSubCategoryId; ?>";
+                        var currentSubCatName = "<?php echo $getCurrentSubCategoryName; ?>";
+                        if($(this).hasClass('shared-catalog-lable')){
+                            var sharedDivid = $(this).attr('id');
+                            sharedDivid = sharedDivid.replace('move-','');
+                            if(sharedDivid != currentSubCatId)
+                            {
+                                var catName = "Shared Catalog";
+                                var catTrim = $.trim(catName);
+                                if($(this).hasClass('selected')) {
+                                    $(".selected").removeClass("selected");
+                                    $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                                    $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                                    $('.move-action').prop('disabled', true);
+                                    $(".move-action").removeClass("active");
+                                }else{
+                                    $(".selected").removeClass("selected");
+                                    $(this).addClass('selected');
+                                    $("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                                    $("#mvp-move-popup-folder-location-input").val(catTrim);
+                                    $('.move-action').removeAttr("disabled");
+                                    $(".move-action").addClass("active");
+                                }
+                            }
+                        }else{
+                            var subCatDiv = $(this).closest('.sub-cat-div');
+                            var subCatDivid = $(subCatDiv).attr('id');
+                            subCatDivid = subCatDivid.replace('move-','');
+                            if(currentSubCatId != subCatDivid)
+                            {
+                                if($(".move-action").hasClass('single-cat-move')){
+                                    var mainCatDivId = $(".move-action").attr('id');
+                                    if(subCatDivid != mainCatDivId)
+                                    {
+                                        var catName = $(this).text();
+                                        var catTrim = $.trim(catName);
+                                        if(subCatDiv.hasClass('selected')) {
+                                            $(".selected").removeClass("selected");
+                                            $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                                            $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                                            $('.move-action').prop('disabled', true);
+                                            $(".move-action").removeClass("active");
+                                        }else{
+                                            $(".selected").removeClass("selected");
+                                            subCatDiv.addClass('selected');
+                                            $("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                                            $("#mvp-move-popup-folder-location-input").val(catTrim);
+                                            $('.move-action').removeAttr("disabled");
+                                            $(".move-action").addClass("active");
+                                        }
+                                    }
+                                }else{
+                                    var catName = $(this).text();
+                                    var catTrim = $.trim(catName);
+                                    if(subCatDiv.hasClass('selected')) {
+                                        $(".selected").removeClass("selected");
+                                        $("#mvp-move-popup-folder-location-input").val(currentSubCatName);
+                                        $("#move-"+currentSubCatId).addClass("shared-catalog-label-active");
+                                        $('.move-action').prop('disabled', true);
+                                        $(".move-action").removeClass("active");
+                                    }else{
+                                        $(".selected").removeClass("selected");
+                                        subCatDiv.addClass('selected');
+                                        $("#move-"+currentSubCatId).removeClass("shared-catalog-label-active");
+                                        $("#mvp-move-popup-folder-location-input").val(catTrim);
+                                        $('.move-action').removeAttr("disabled");
+                                        $(".move-action").addClass("active");
+                                    }
+                                }
+                            }
+
+                        }
+                    });
+
+                    $('.move-action').click(function() {
+                        if($(this).hasClass('bulk-move-action'))
+                        {
+                            var arr = [];
+                            $('.product-item-checkbox.list-checkbox').each(function () {
+                                var self = $(this);
+                                if (self.is(':checked')) {
+                                    arr.push(self.attr("name"));
+                                }
+                            });
+                            var catId = $(".selected").attr('id');
+                            catId = catId.replace('move-','');
+                            var url = "<?php echo $this->getUrl('catalogmvp/index/bulkMoveProduct')?>";
+                            $.ajax({
+                                type: "post",
+                                url: url,
+                                dataType: 'JSON',
+                                showLoader: true,
+                                data: { id: arr, cat_id: catId},
+                                success: function(response) {
+                                    if(response.status) {
+                                        $(document).trigger("toast_message_fired",response.message);
+                                        $('button.action-close').trigger('click');
+                                        hidePanel();
+                                        location.replace(response.url);
+                                    }
+                                }
+                            });
+                        }else if($(this).hasClass('single-cat-move')){
+                            var pid = $(this).attr('id');
+                            var catId = $(".selected").attr('id');
+                            catId = catId.replace('move-','');
+                            var url = "<?php echo $this->getUrl('catalogmvp/index/moveFolder')?>";
+                            $.ajax({
+                                type: "post",
+                                url: url,
+                                showLoader: true,
+                                data: { id: pid, cat_id: catId},
+                                success: function(response) {
+                                    if(response.status) {
+                                        $(document).trigger("toast_message_fired",response.message);
+                                        $('button.action-close').trigger('click');
+                                        hidePanel();
+                                        location.replace(response.url);
+                                    }
+                                }
+                            });
+                        }else{
+                            var pid = $(this).attr('id');
+                            var catId = $(".selected").attr('id');
+                            catId = catId.replace('move-','');
+                            var url = "<?php echo $this->getUrl('catalogmvp/index/moveProduct')?>";
+                            $.ajax({
+                                type: "post",
+                                url: url,
+                                showLoader: true,
+                                data: { id: pid, cat_id: catId},
+                                success: function(response) {
+                                    if(response.status) {
+                                        $(document).trigger("toast_message_fired",response.message);
+                                        $('button.action-close').trigger('click');
+                                        hidePanel();
+                                        location.replace(response.url);
+                                    }
+                                }
+                            });
+                        }
+                    });
+
+                    $('.commercial-store-home .toggle-icon-level-0').on('click', function(event){
+                        var link = $(this);
+                        var closest_li = link.closest('li');
+                        var closest_ul = closest_li.children('ul');
+                        var open_li = closest_ul.children('li');
+                        open_li.slideToggle("slow");
+                        var ul_level_2 = open_li.children('ul');
+                        var li_level_2 = ul_level_2.children('li');
+                        li_level_2.slideUp("slow");
+                        $(this).find('.disclosere-icon-closed .level-1').show().removeClass('display');
+                        $(this).find('.disclosere-icon-open .level-1').hide().addClass('display');
+                        if (event.target.className === 'disclosere-icon-closed level-0 display') {
+                            $(this).find('.disclosere-icon-closed').hide().removeClass('display');
+                            $(this).find('.disclosere-icon-open').show().addClass('display');
+                        } else{
+                            $(this).find('.disclosere-icon-closed').show().addClass('display');
+                            $(this).find('.disclosere-icon-open').hide().removeClass('display');
+                        }
+                    });
+                    $('.commercial-store-home .toggle-icon-level-0').on('click', function(event){
+                        $('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                            $(this).attr('id', '');
+                        });
+                        $('.mvp-catalog-move-popup-category-tree>ul>li').each(function(index){
+                            $(this).attr('id', '');
+                            $(this).css('display', 'block');
+                        });
+                        // Fix issue for 10 folder showing when you move
+                        if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                            setTimeout(function() {
+                                $('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                                    $(this).attr('id', index + 1);
+                                    $('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                                        if ($(this).attr('id') > 10){
+                                            $(this).hide();
+                                        }
+                                    });
+                                });
+                            }, 1000);
+                        }
+                    });
+                    $('.commercial-store-home .toggle-icon-level-1').on('click', function(event){
+                        $('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                            $(this).attr('id', '');
+                        });
+                        $('.mvp-catalog-move-popup-category-tree>ul>li').each(function(index){
+                            $(this).attr('id', '');
+                            $(this).css('display', 'block');
+                        });
+                        // Fix issue for 10 folder showing when you move
+                        if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                            setTimeout(function() {
+                                $('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                                    $(this).attr('id', index + 1);
+                                    $('.mvp-catalog-move-popup-category-tree ul li').each(function(index){
+                                        if ($(this).attr('id') > 10){
+                                            $(this).hide();
+                                        }
+                                    });
+                                });
+                            }, 1000);
+                        }
+                    });
+                    $('.cancel-btn-move-popup').click(function() {
+                        jQuery('button.action-close').trigger('click');
+                    });
+                    $('.commercial-store-home .toggle-icon-level-1').on('click', function(event){
+                        var link = $(this);
+                        var closest_li = link.closest('li');
+                        var closest_ul = closest_li.children('ul');
+                        var open_li = closest_ul.children('li');
+                        open_li.slideToggle("slow");
+                        if (event.target.className === 'disclosere-icon-closed level-1 display') {
+                            $(this).find('.disclosere-icon-closed').hide().removeClass('display');
+                            $(this).find('.disclosere-icon-open').show().addClass('display');
+                        } else{
+                            $(this).find('.disclosere-icon-closed').show().addClass('display');
+                            $(this).find('.disclosere-icon-open').hide().removeClass('display');
+                        }
+                    });
+                    // Fix issue for 10 folder showing when you move
+                    if (!window?.checkout?.is_ten_categories_fix_toggle_enable) {
+                        $('.mvp-catalog-move-popup-category-tree ul li:not([style*="display: none"])').each(function(index){
+                            $(this).attr('id', index + 1);
+                            if ($(this).attr('id') > 10){
+                                $(this).hide();
+                            }
+                        });
+                    }
+                    /* B-1694113-Implement search folder functionality in Move To modal */
+                    $(".mvp-move-search-input-field .mvp-move-search-icon").on('click',function(event){
+                        var search_category_by_name = $('#mvp-move-search-input').val();
+                        var searchurl = "<?= $this->getUrl('catalogmvp/index/searchcategorybyname')?>";
+                        var currentCategoryId = "<?= $getCurrentCategoryId ?>";
+                        $.ajax({
+                            url: searchurl,
+                            type: 'post',
+                            data: {
+                                search_category_by_name: search_category_by_name,
+                                currentCategoryId: currentCategoryId
+                            },
+                            showLoader: true,
+                            success: function (data){
+                                if (data != ''){
+                                    $('.category-tree-level-0').html(data);
+                                    mvpMoveSearch();
+                                    $(".selected").removeClass("selected");
+                                    $(".shared-catalog-label-active").removeClass("shared-catalog-label-active");
+                                    $('.move-action').prop('disabled', true);
+                                    $(".move-action").removeClass("active");
+                                }
+                            }
+                        });
+                    });
+
+                    var $checkboxes = $('.product-item-checkbox.list-checkbox');
+                    var $categoryCheckboxes = $('.category-item-checkbox.list-checkbox');
+                    var $listCheckBox = $('.list-checkbox');
+
+                    $listCheckBox.change(function(){
+                        var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+                        var checkboxes = $checkboxes.filter(':checked').length;
+                        var categoryCheckboxCount = $categoryCheckboxes.filter(':checked').length;
+                        var allcheckbox = $listCheckBox.filter(':checked').length;
+                        var isCustomizableCheckboxSelected = $checkboxes.filter('.customizable:checked').length > 0;
+                        var isPendingReviewCheckboxSelected = $checkboxes.filter('.isPendingReview:checked').length > 0;
+                        var isCustomDocEnabled = <?php echo json_encode(boolval($isCustomDocEnabled)); ?>;
+                        let totalCount;
+                        if(window.e383157Toggle){
+                            totalCount = fxoStorage.get("totalCount");
+                        }else{
+                            totalCount = localStorage.getItem("totalCount");
+                        }
+                        if ((allcheckbox-1) < totalCount) {
+                            $('.check-box-check-all').prop('checked', false);
+                            $('.item-count').text(allcheckbox-1);
+                            $('.item-count').val(allcheckbox-1);
+                        }
+                        if(allcheckbox==1 && categoryCheckboxCount==1){
+                            $(".selected-number").removeClass("show");
+                            return;
+                        }
+                        if(isCustomDocEnabled && isCustomizableCheckboxSelected){
+                            $(".bulk-add-to-cart").hide();
+                            $(".bulk-move-to").show();
+                        } else if (checkboxes && categoryCheckboxCount == 0) {
+                            if (isPendingReviewCheckboxSelected) {
+                                $(".bulk-add-to-cart").hide();
+                            } else {
+                                $(".bulk-add-to-cart").show();
+                            }
+                            $(".bulk-move-to").show();
+                        } else {
+                            $(".bulk-add-to-cart").hide();
+                            $(".bulk-move-to").hide();
+                        }
+                        if (allcheckbox) {
+                            if ($(".check-box-check-all").is(":checked") == false) {
+                                $(".selected-number").addClass("show");
+                                let totalCount;
+                                if(window.e383157Toggle){
+                                    totalCount = fxoStorage.get("totalCount");
+                                }else{
+                                    totalCount = localStorage.getItem("totalCount");
+                                }
+                                if ((allcheckbox-1) < totalCount) {
+                                    $('.check-box-check-all').prop('checked', false);
+                                    $('.item-count').text(allcheckbox-1);
+                                    $('.item-count').val(allcheckbox-1);
+                                    if(window.e383157Toggle){
+                                        fxoStorage.set('totalCount', '');
+                                    }else{
+                                        localStorage.setItem("totalCount",'');
+                                    }
+                                } else {
+                                    $('.item-count').text(allcheckbox);
+                                    $('.item-count').val(allcheckbox);
+                                }
+                            }
+                            /*B-1611718*/
+                            if(allcheckbox < 2){
+                                /*B-1651604*/
+                                if ($checkboxes.is(":checked")) {
+                                    $(window).scrollTop(0);
+                                    var itemId = $checkboxes.filter(':checked').attr("id").split("_");
+                                    var url = "<?= $this->getUrl('catalogmvp/index/rightpanel')?>";
+                                    var isCustomDocEnabled = '<?= $isCustomDocEnabled ?>';
+                                    $(".delete-action"). attr('id', parseInt(itemId[1]));
+                                    $(".action_kebab_right_item_settings").html('');
+                                    $(".action_kebab_right_item_request").html('');
+                                    $.ajax({
+                                        url: url,
+                                        type: 'get',
+                                        dataType: 'JSON',
+                                        data: {
+                                            item_id: parseInt(itemId[1])
+                                        },
+                                        showLoader: true,
+                                        success: function (response){
+                                            if (response.previewLinkDisplay == 'false' && jQuery('.menu-item-label:contains("Preview")').length) {
+                                                jQuery('.menu-item-label:contains("Preview")').closest('.menu-item').remove();
+                                            }
+                                            var itemTitle = response.name?response.name: "Catalog Item";
+                                            var itemStatus = (response.published == 1)?"Published":"Unpublished";
+                                            var itemThumbnail = response.small_image_url;
+                                            var printProperties = {};
+                                            var printingCost = response.price ? response.price: null;
+                                            var itemDesc = response.catalog_description?response.catalog_description: false;
+                                            var itemMetaKeyword = response.related_keywords?response.related_keywords: false;
+                                            var productQty = (response.quantity_and_stock_status.qty)
+                                                ?response.quantity_and_stock_status.qty:1;
+                                            var isCustomizeProduct = response.customizable;
+                                            var isProductPendingReview = response.is_pending_review ? response.is_pending_review: null;
+                                            var isCatalogUpdates = <?php echo json_encode(boolval(true)); ?>;
+                                            if(response.external_prod != null
+                                                && Object.keys(response.external_prod).length > 2){
+                                                var obj = JSON.parse(response.external_prod);
+
+                                                productQty = (obj.qty)?obj.qty:1;
+
+                                                if(obj.name !== "Legacy Catalog"
+                                                    && obj.instanceId !== 0)
+                                                {
+                                                    productQty = (obj.qty)
+                                                        ?obj.qty:1;
+                                                    printProperties = getPrintProperties(response.external_prod, printingCost);
+                                                }
+                                            }
+                                            let catalogExpiryToggle = '<?= $viewModelMvphelper->isCatalogExpiryNotificationToggle() ?>';
+                                            if (catalogExpiryToggle) {
+                                                if (!response.renewLink) {
+                                                    $(".action_kebab_right_item_renew").parent('.menu-item').hide();
+                                                } else {
+                                                    $(".action_kebab_right_item_renew").parent('.menu-item').show();
+                                                }
+                                            }
+                                            $(".panel-top-actions svg path").show();
+                                            let nonStandardToggle = '<?= $viewModelMvphelper->isNonStandardCatalogToggleEnabled() ?>';
+                                            if (nonStandardToggle && response.is_pending_review == '1') {
+                                                $(".panel-top-actions svg path").hide();
+                                                $("#accordion .panel-top .item-panel-new").css('pointer-events','none');
+                                            } else {
+                                                $("#accordion .panel-top .item-panel-new").css('pointer-events','auto');
+                                            }
+                                            if (nonStandardToggle && response.settingsLink == true) {
+                                                $(".action_kebab_right_item_settings").html('<a prodid="'+response.sku+'" prodname="'+response.name+'" class="change-settings-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Settings")) ?>
+                                                    </a>');
+                                            }
+                                            if (nonStandardToggle && response.requestChange == true) {
+                                                $(".action_kebab_right_item_edit").hide();
+                                                $(".action_kebab_right_item_request").html('<a prodid="'+response.sku+'" prodname="'+response.name+'" class="change-request-product" id="change-request-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Request Change")) ?>
+                                                    </a>');
+                                                $(".action_kebab_right_item_request").appendTo($(".action_kebab_right_item_edit").closest('.menu-item'));
+                                            }
+                                            $('.item-title').text(itemTitle);
+                                            $('.item-status').text(itemStatus);
+
+                                            if (isProductPendingReview == 1) {
+                                                $(".right-pannel .content-wrapper-print-properties").addClass("isPendingReview");
+                                            } else {
+                                                $(".right-pannel .content-wrapper-print-properties").removeClass("isPendingReview");
+                                            }
+                                            if(isCustomizeProduct == 1 && isCustomDocEnabled == 1) {
+                                                $('.cart-chip-label').text('Customize');
+                                                $('.item-custom-option').text('Customizable Document');
+                                                $('.cart-chip-wrapper').addClass('action-customize-product');
+                                            } else {
+                                                $('.cart-chip-label').text('Add to cart');
+                                                $('.item-custom-option').text('');
+                                                $('.cart-chip-wrapper').removeClass('action-customize-product');
+                                            }
+
+                                            //hiding the Buttons if status pending review
+                                            <?php if ($nonStandardCatalogToggle): ?>
+                                            if (response.is_pending_review == 1) {
+                                                $('.panel-content').hide();
+                                            }
+                                            <?php endif;?>
+
+                                            $('.gallery-media img').attr('src', itemThumbnail);
+                                            $('.gallery-media img').attr('datasku', response.sku);
+                                            var propertiesDivEl = $('.print-properties');
+
+                                            var propertiesEl = '';
+                                            if(Object.keys(printProperties).length !== 0){
+                                                propertiesEl = propertiesHtml(printProperties);
+                                                propertiesDivEl.html(propertiesEl);
+
+                                            }else{
+                                                propertiesEl = propertiesHtml(printProperties);
+                                                propertiesDivEl.html(propertiesEl);
+                                            }
+
+
+                                            $('.content-desc').html(itemDesc);
+
+                                            if(itemDesc){
+                                                $('.panel-tab.description').show();
+                                                $('.panel-content.description').show();
+                                            }else{
+
+                                                $('.panel-tab.description').show();
+                                                $('.panel-content.description').hide();
+                                                $('.panel-tab.description').removeClass('active');
+                                            }
+
+                                            var chipsEl = '';
+                                            if(itemMetaKeyword){
+                                                var tags = itemMetaKeyword.split(',');
+
+                                                $.each(tags, function( index, tag ) {
+                                                    chipsEl += '<div class="chips">'
+                                                        +'<div class="tag-button">'
+                                                        +'<div class="tag-label">'
+                                                        +  tag
+                                                        + '</div>'
+                                                        +'</div></div>';
+                                                });
+                                            }
+
+                                            $('.tags-wrapper').html(chipsEl);
+
+                                            if (isCatalogUpdates) {
+                                                var lastModifiedContent = '<div class="last-modified-content"'+
+                                                    '<p><span class="label">User</span> <span class="user">' + response.modified_by + '</span></p>' +
+                                                    '<p><span class="label">Date</span> <span class="date">' + response.last_modified_date + '</span></p>' +
+                                                    '<p><span class="label">Time</span> <span class="time">' + response.last_modified_time + '</span></p>' +
+                                                    '</div>';
+                                                $('.last-modified-wrapper').html(lastModifiedContent);
+                                            }
+
+                                            // Allowed qty for catalogMvp
+                                            var fixedQtyHandlerToggle = <?= /* @escapeNotVerified */ $fixedQtyHandlerToggle?: 0 ?>;
+
+                                            if (fixedQtyHandlerToggle) {
+                                                var productQtyArray = '';
+                                                if (response.external_prod != null
+                                                    && Object.keys(response.external_prod).length > 2) {
+                                                    var obj = JSON.parse(response.external_prod);
+                                                    productQtyArray = obj.quantityChoices ? obj.quantityChoices : 0;
+                                                }
+
+                                                if (productQtyArray.length > 1) {
+                                                    var options = '';
+                                                    jQuery.each( productQtyArray, function( key, value ) {
+                                                        var isSelected = (value == productQty)? 'selected="selected"': '';
+                                                        options += '<option value="'+value+'" '
+                                                            + isSelected + '>'+value+'</option>';
+                                                    });
+                                                    jQuery('.qty-box-value').hide();
+                                                    jQuery('.qty-dropbox-value').html(options);
+                                                    jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+                                            } else if (productQty > 1) {
+                                                var options = '';
+                                                for (let i = 1; i <= 5; i++) {
+                                                    var result = i * productQty;
+                                                    var isSelected = (result == productQty)? 'selected="selected"': '';
+                                                        options += '<option value="'+result+'" '
+                                                                    + isSelected + '>'+result+'</option>';
+                                                }
+
+                                                jQuery('.qty-box-value').hide();
+                                                jQuery('.qty-dropbox-value').html(options);
+
+                                                jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+
+                                            } else {
+                                                jQuery('.qty-dropbox-value').next(".select2-container").hide();
+                                                jQuery('.qty-dropbox-value').hide();
+                                                jQuery('.qty-box-value').show();
+                                                $('.qty-box-value').val(productQty);
+                                            }
+                                        }
+                                        else {
+                                            if(productQty > 1){
+                                                var options = '';
+                                                for(let i = 1; i <= 5; i++) {
+                                                var result = i * productQty;
+                                                    var isSelected = (result == productQty)? 'selected="selected"': '';
+                                                    options += '<option value="'+result+'" '
+                                                    + isSelected + '>'+result+'</option>';
+                                                }
+
+                                                jQuery('.qty-box-value').hide();
+                                                jQuery('.qty-dropbox-value').html(options);
+
+                                                jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+
+                                            }else{
+                                                jQuery('.qty-dropbox-value').next(".select2-container").hide();
+                                                jQuery('.qty-dropbox-value').hide();
+                                                jQuery('.qty-box-value').show();
+                                                $('.qty-box-value').val(productQty);
+                                            }
+                                        }
+                                    }
+                                });
+                                showPanel();
+                            }
+                        }else{
+                            /*B-1611718*/
+                            hidePanel();
+                        }
+                    } else {
+                        $(".selected-number").removeClass("show");
+                        /*B-1611718*/
+                        hidePanel();
+                    }
+                });
+
+                // check all functionality
+                $(".check-box-check-all").on('click', function(){
+                    if ($(".check-box-check-all").is(":checked")) {
+                        $(".selected-number").addClass("show");
+                    } else {
+                        $(".selected-number").removeClass("show");
+                    }
+                    $checkboxes.parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+                    $categoryCheckboxes.parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+                    var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+                    var catgeoyCheckboxCount = $categoryCheckboxes.filter(':checked').length;
+                    var totalCount = countCheckedCheckboxes + catgeoyCheckboxCount;
+                    if(window.e383157Toggle){
+                        fxoStorage.set('totalCount', totalCount);
+                    }else{
+                        localStorage.setItem("totalCount",totalCount);
+                    }
+                    if (totalCount) {
+                        $('.item-count').text(totalCount);
+                        $('.item-count').val(totalCount);
+                    }
+                });
+
+                let bodyCls = $('body').attr('class'),
+                isSharedCatalog = "browse-catalog";
+
+                if(bodyCls.indexOf(isSharedCatalog) !== -1){
+                    $('body').addClass('catalog-mvp-shared-catalog');
+                }
+
+                $(".bulk-delete").on('click',function(event){
+                    $('#custom-model-delete-popup').modal(options, $('#custom-model-delete-popup')).modal('openModal');
+                    $("#custom-model-delete-popup action")
+                    $(".bulk-delete-action").show();
+                    $(".delete-action").hide();
+                    $(".kebab-delete-action").hide();
+
+                    var categoryID = [];
+                    $('.sub-category.checked').each(function() {
+                        catid = $(this).attr('id')
+                        catid = catid.replace('sub-cat-','');
+                        categoryID.push(catid);
+                    });
+                    if(window.e383157Toggle){
+                        fxoStorage.set("categoryID",categoryID);
+                    }else{
+                        localStorage.setItem("categoryID",categoryID);
+                    }
+                    var productID = [];
+                    $('.category-product.checked').each(function() {
+                        pid = $(this).attr('id');
+                        pid = pid.replace('product-list-','');
+                        productID.push(pid);
+                    });
+                    if (window.e383157Toggle) {
+                        fxoStorage.set("productID", productID);
+                    } else {
+                        localStorage.setItem("productID", productID);
+                    }
+                });
+            });
+
+            $(document).on("change", ".product-item-checkbox.list-checkbox", function () {
+                $(this).parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+            });
+
+            $(document).on("change", ".category-item-checkbox.list-checkbox", function () {
+                $(this).parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+            });
+
+            $(".cancel-all").on('click', function(){
+                $(".selected-number").removeClass("show");
+                $(".product-item-checkbox.list-checkbox").prop("checked", false);
+                $(".product-item-checkbox.list-checkbox").parent().parent().removeClass("checked");
+                $(".category-item-checkbox.list-checkbox").prop("checked", false);
+                $(".category-item-checkbox.list-checkbox").parent().parent().removeClass("checked");
+                $(".check-box-check-all").prop("checked", false);
+
+                /*B-1611718*/
+                hidePanel();
+            });
+
+            $(".right-section .bulk-add-to-cart").on('click', function(event){
+                var arr = [];
+                $('.product-item-checkbox.list-checkbox').each(function () {
+                    var self = $(this);
+                    if (self.is(':checked')) {
+                        arr.push(self.attr("name"));
+                    }
+                });
+                var url = "<?php echo $this->getUrl('catalogmvp/index/addtocart')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: arr },
+                    success: function(response) {
+                        if (response) {
+                               if(response.isInBranchProductExist == true)
+                                {
+                                    inBranchWarning.inBranchWarningPopup();
+                                }else {
+                                    if ('<?= $addToCartRedirectStop ?>' == '1') {
+                                        $(".cancel-all").trigger("click");
+                                        $("#add-to-cart-toast-message").show();
+                                        $("#add-to-cart-toast-message .success-toast-msg p").text(response + ' item has been added to your cart.');
+                                        $('html, body').animate({
+                                            scrollTop: $(".header-top").offset().top
+                                        }, 500);
+                                    } else {
+                                        $(location).prop('href', '<?php echo $this->getUrl('checkout/cart')?>');
+                                    }
+                                }
+                        }
+                    },
+                    complete: function () {
+                        $(document).trigger("mvp_add_to_cart_end");
+                    }
+                });
+            });
+
+            // Category publish toggle update category
+            $('.sub-category .published input[type="checkbox"]').change(function() {
+                var catid = $(this).attr('id');
+                catid = catid.replace('cat-','');
+                var currentStatus = $(this).prop('checked');
+                currentStatus = (currentStatus) ? "1" : "0";
+
+                var url = "<?php echo $this->getUrl('catalogmvp/index/updatecategory')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: catid, status: currentStatus },
+                    success: function(response) {
+                    }
+                });
+            });
+
+            $('.category-product .published input[type="checkbox"]').change(function() {
+                var pid = $(this).attr('id');
+                pid = pid.replace('product-','');
+                var url = "<?php echo $this->getUrl('catalogmvp/index/updateproduct')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: pid},
+                    success: function(response) {
+                    }
+                });
+            });
+            $(".kebab .kebab-image" ).on("keypress", function(e) {
+                if (e.keyCode == 13) {
+                    e.stopPropagation();
+                    $(this).parent().next().show();
+                    var clickedItem = $($(this).parent().next());
+                    var otherItems = $(".kebab-options").not(clickedItem);
+                    otherItems.hide();
+                }
+            } );
+            //On click of kebab show options
+            $(".kebab").click(function(e) {
+                e.stopPropagation();
+                $(this).next().show();
+                var clickedItem = $($(this).next());
+                var otherItems = $(".kebab-options").not(clickedItem);
+                otherItems.hide();
+            });
+
+            $("body").click(function() {
+                $(".kebab-options").hide();
+            });
+
+            $('.delete-action').click(function() {
+                var pid = $(this).attr('id');
+                pid = pid.replace('delete-','');
+                var url = "<?php echo $this->getUrl('catalogmvp/index/deleteproduct')?>";
+                var cuurentUrl = "<?php echo $this->getCurrentUrl()?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: pid},
+                    success: function(response) {
+                        if(response.delete) {
+                            $(document).trigger("toast_message_fired",response.message);
+                            $('button.action-close').trigger('click');
+                            $("#product-item-info_" + pid).parent().hide();
+                            hidePanel();
+                            $(".selected-number.show").hide();
+                            location.replace(cuurentUrl);
+                        }
+                    }
+                });
+            });
+            $('.cancel-btn-delete').click(function() {
+                jQuery('button.action-close').trigger('click');
+            });
+
+            $(".action-kebab-add-to-cart").on('click', function(event){
+                var selectedProductId = $(this).attr("data-item-id");
+                var url = "<?php echo $this->getUrl('catalogmvp/index/addtocartsingle')?>";
+                var qty = 0;
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: selectedProductId, qty:qty },
+                    success: function(response) {
+                        if (response) {
+                                if(response.isInBranchProductExist == true)
+                                {
+                                    inBranchWarning.inBranchWarningPopup();
+                                }else{
+                                    if ('<?= $addToCartRedirectStop ?>' == '1') {
+                                        $("#add-to-cart-toast-message").show();
+                                        $("#add-to-cart-toast-message .success-toast-msg p").text('1 Item has been added to your cart.');
+                                        $('html, body').animate({
+                                            scrollTop: $(".header-top").offset().top
+                                        }, 500);
+                                    } else {
+                                        $(location).prop('href', '<?php echo $this->getUrl('checkout/cart')?>');
+                                    }
+                                }
+                        }
+                    },
+                    complete: function () {
+                        $(document).trigger("mvp_add_to_cart_end");
+                    }
+                });
+            });
+
+            function customizeProduct(sku) {
+                if (sku == null) {
+                    $('.product-item-checkbox.list-checkbox').each(function () {
+                        var self = $(this);
+                        if (self.is(':checked')) {
+                            sku = self.attr("data-item-sku");
+                        }
+                    });
+                }
+                if (sku) {
+                    var customizeUrl = "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>" + '?sku=' + sku + '&configurationType=customize';
+                    window.location.href = customizeUrl;
+                }
+            }
+
+            function customizeProductWithQty(sku,qty) {
+                if (sku == null) {
+                    $('.product-item-checkbox.list-checkbox').each(function () {
+                        var self = $(this);
+                        if (self.is(':checked')) {
+                            sku = self.attr("data-item-sku");
+                        }
+                    });
+                }
+                if (sku) {
+                    var customizeUrl = "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>" + '?sku=' + sku + '&configurationType=customize&qty=' + qty ;
+                    window.location.href = customizeUrl;
+                }
+            }
+
+            $(document).on("click",".action-customize-product",function() {
+                let sku = $(this).attr("data-item-sku");
+                if($(".quantity-wrapper").is(':visible')) {
+                    if($('.qty-dropbox-value').is(':visible')) {
+                        $(".qty-box-value").val($(".qty-dropbox-value").val());
+                    }
+                    var qty = $(".qty-box-value").val();
+                    customizeProductWithQty(sku,qty);
+                }else{
+                    customizeProduct(sku);
+                }
+            });
+
+            $(".cart-chip-wrapper").on('click', function(event){
+                if ($(".cart-chip-wrapper").hasClass('action-customize-product')) {
+                    return;
+                }
+                if($('.qty-dropbox-value').is(':visible')) {
+                    $(".qty-box-value").val($(".qty-dropbox-value").val());
+                }
+                var id = 0;
+                $('.product-item-checkbox.list-checkbox').each(function () {
+                    var self = $(this);
+                    if (self.is(':checked')) {
+                        id =self.attr("name");
+                    }
+                });
+                var url = "<?php echo $this->getUrl('catalogmvp/index/addtocartsingle')?>";
+                var qyt = $(".qty-box-value").val();
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: id, qty:qyt },
+                    success: function(response) {
+                        if (response) {
+                            if ('<?= $addToCartRedirectStop ?>' == '1') {
+                                $("#add-to-cart-toast-message").show();
+                                $("#add-to-cart-toast-message .success-toast-msg p").text('1 Item has been added to your cart.');
+                                $('html, body').animate({
+                                    scrollTop: $(".header-top").offset().top
+                                }, 500);
+                            } else {
+                                $(location).prop('href', '<?php echo $this->getUrl('checkout/cart')?>');
+                            }
+                        }
+                    },
+                    complete: function () {
+                        $(document).trigger("mvp_add_to_cart_end");
+                    }
+                });
+            });
+
+            $('.bulk-delete-action').click(function() {
+                var url = "<?php echo $this->getUrl('catalogmvp/index/bulkdelete')?>";
+                var currentUrl = "<?php echo $this->getCurrentUrl()?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: {
+                        cid:window.e383157Toggle ? fxoStorage.get('categoryID') : localStorage.getItem("categoryID"),
+                        pid:window.e383157Toggle ? fxoStorage.get('productID') : localStorage.getItem("productID")
+                    },
+                    success: function(response) {
+                        if(response.delete) {
+                            $(document).trigger("toast_message_fired",response.message);
+                            location.replace(currentUrl);
+                        }
+                    }
+                });
+            });
+
+            $(".kebab-delete-action").click(function() {
+                var cid = $(this).attr('id');
+                $("kebab-delete-action").hide();
+                cid = cid.replace('delete-','');
+                var url = "<?php echo $this->getUrl('catalogmvp/index/deletecategory')?>";
+                var currentUrl = "<?php echo $this->getCurrentUrl()?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: {
+                        cid:cid
+                    },
+                    success: function(response) {
+                        if(response.delete) {
+                            $(document).trigger("toast_message_fired",response.message);
+                            location.replace(currentUrl);
+                        }
+                    }
+                });
+            });
+
+            $(".menu-item-label.Duplicate a").click(function() {
+                var selectedProductId = $(this).attr("data-item-id");
+                var url = "<?php echo $this->getUrl('catalogmvp/index/duplicateproduct')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: {
+                        pid:selectedProductId,
+                        viewMode: '<?= $viewMode ?>'
+                    },
+                    success: function(response) {
+                        if(window.b2034092Toggle) {
+                            if(response.duplicate) {
+                                $(document).trigger("toast_message_fired",response.message);
+                            }
+                        }
+                        if(response.html) {
+                            $(response.html).insertBefore(".category-product:first");
+                            $(".duplicate .rename-editable").focus();
+                        }
+                    }
+                });
+            });
+
+            $(".action_kebab_right_item_duplicate").click(function() {
+                var selectedProductId;
+                $('.product-item-checkbox:checked').each(function() {
+                    selectedProductId = $(this).attr('name');
+                });
+                var url = "<?php echo $this->getUrl('catalogmvp/index/duplicateproduct')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: {
+                        pid:selectedProductId,
+                        viewMode: '<?= $viewMode ?>'
+                    },
+                    success: function(response) {
+                        if(response.html) {
+                            $(response.html).insertBefore(".category-product:first");
+                            $(".duplicate .rename-editable").focus();
+                        }
+                    }
+                });
+            });
+
+            $(".panel-tab").click(function() {
+                setTimeout(function() {
+                    var mainContentEl = jQuery('#maincontent');
+                    var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                    var rightPanelEl = jQuery('#accordion');
+                    var mainContentElHeight = mainContentEl.height();
+                    var rightPanelElHeight = rightPanelEl.height();
+                    var columnMainEl = jQuery('.column.main');
+                    var columnMainElHeight = columnMainEl.height()- 60;
+                    var fraction = 50;
+                    if(columnMainElHeight < rightPanelElHeight){
+                        var newRightPanelHeight = rightPanelElHeight + fraction;
+                        mainContentEl.height(newRightPanelHeight);
+                        var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                        bootomToolbarEl.css('top',toolbarTop);
+                        bootomToolbarEl.css('position','relative');
+                        bootomToolbarEl.css('margin-top','50px');
+                    }
+                    else {
+                        bootomToolbarEl.css('top','0px');
+                    }
+                }, 50);
+            });
+            $(document).ajaxStop(function() {
+                $('.kebab-image').attr('tabindex',0);
+                setTimeout(function() {
+                var mainContentEl = jQuery('#maincontent');
+                var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                var rightPanelEl = jQuery('#accordion');
+                var mainContentElHeight = mainContentEl.height();
+                var rightPanelElHeight = rightPanelEl.height();
+                var columnMainEl = jQuery('.column.main');
+                var columnMainElHeight = columnMainEl.height()- 60;
+                var fraction = 50;
+                    if(columnMainElHeight < rightPanelElHeight){
+                        var newRightPanelHeight = rightPanelElHeight + fraction;
+                        mainContentEl.height(newRightPanelHeight);
+                        var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                        bootomToolbarEl.css('top',toolbarTop);
+                        bootomToolbarEl.css('position','relative');
+                        bootomToolbarEl.css('margin-top','50px');
+                    }
+                    else {
+                        bootomToolbarEl.css('top','0px');
+                    }
+                }, 100);
+            });
+            // Request change button implementation
+            let requestOptions = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false,
+                clickableOverlay: false,
+                modalClass: 'mvp-change-request-modal',
+                title: '',
+                buttons: []
+            };
+            let settingModalPopupOptions = {
+                type: 'popup',
+                responsive: true,
+                modalClass: 'shared-catalog-setting-modal',
+                innerScroll: true,
+                buttons: [],
+                close: [],
+            };
+            // Renew popup start
+            let renewOptions = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: false,
+                clickableOverlay: false,
+                modalClass: 'mvp-change-request-modal renew-mvp-change-request-modal',
+                title: '',
+                buttons: []
+            };
+            $(document).on('click', '.action_kebab_right_item_renew' , function() {
+                $('#modal-content-renew').modal(
+                    renewOptions,
+                    $('#modal-content-renew')).modal('openModal');
+            });
+            $(document).on('click', '.renew-cancel' , function() {
+                $('#modal-content-renew').modal(
+                    renewOptions,
+                    $('#modal-content-renew')).modal('closeModal');
+            });
+
+            $(document).on('click', '#renew-popup-container' , function() {
+                var selectedProductId;
+                $('.product-item-checkbox:checked').each(function() {
+                    selectedProductId = $(this).attr('name');
+                });
+                let url = "<?php echo $this->getUrl('catalogmvp/index/UpdateCatalogExpiryDate')?>";
+                jQuery.ajax({
+                dataType: 'json',
+                type: "POST",
+                url: url,
+                showLoader: true,
+                data: { id: selectedProductId},
+                    success: function(data) {
+                        if(data.status == 'success') {
+                        $('#modal-content-renew').modal('closeModal');
+                        $('.renew-success-msg').html('');
+                        $('.renew-success-msg').append('<p>Catalog item has been renewed.</p>');
+                        $('.renew-success').show();
+                        }
+                    }
+                });
+            });
+
+            $('.renew-close-icon').on('click', function () {
+                $('.renew-success').hide();
+            });
+
+            // Renew model popup end
+            $(document).on('click', '#change-request-product' , function() {
+                $('#modal-content-change-request').modal(
+                    requestOptions,
+                    $('#modal-content-change-request')).modal('openModal');
+                    $('#modal-content-change-request').show();
+                    $('#print_instruction').attr('prodid', $(this).find("a").attr('prodid'));
+                    $('.product_name').text($(this).find("a").attr('prodname'));
+                    $('#print_instruction').val('');
+                    $('#char_left').text('400 characters left').css('color','#3333');
+            });
+            let max = 400;
+            $(document).on('keyup', '#print_instruction' , function(e) {
+                let len = $(this).val().length;
+                if (len > 0) {
+                    $(".request-change").prop('disabled', false);
+                } else {
+                    $(".request-change").prop('disabled', true);
+                }
+                if (len >= max) {
+                    $('#char_left').text('you have reached the limit').css('color','red');
+                    e.preventDefault();
+                    $(this).val($(this).val().substring(0, max));
+                } else {
+                    var ch = max - len;
+                    $('#char_left').text(ch + ' characters left').css('color','#3333');
+                }
+            });
+            $(document).on('click', '.request-change-cancel', function(event){
+                event.stopPropagation()
+                $('#modal-content-change-request').modal(requestOptions,
+                $('#modal-content-change-request')).modal('closeModal');
+            });
+
+            // Setting model popup start
+            $('.settings_sku').html('');
+            $(document).on('click', '#change-settings-product, .action_kebab_right_item_settings', function(event){
+                let url = "<?php echo $this->getUrl('catalogmvp/index/ChangeSettings')?>";
+                jQuery.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { sku: $(this).find("a").attr('prodid')},
+                    success: function(response) {
+                        if(response.status) {
+                            $('.shared-catalog-setting-modal').remove();
+                            $('.settings_sku').html(response.output);
+                            $('#setting-formp-popup').modal(
+                                settingModalPopupOptions, $('#setting-formp-popup')
+                            ).modal('openModal');
+                        }
+                    }
+                });
+            });
+            // Setting model popup end
+            $(document).on('click', '.request-change' , function() {
+                let id = $('#print_instruction').attr("prodid");
+                let specialInstruction = $('#print_instruction').val();
+                if (!$.trim(specialInstruction).length) {
+                    $(".print_error").text('This is required').css('color','red').fadeIn(3000);
+                    return false;
+                }
+                let url = "<?php echo $this->getUrl('catalogmvp/index/ChangeRequest')?>";
+                jQuery.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: id, specialInstruction: specialInstruction},
+                    success: function(response) {
+                        if(response.status) {
+                            $('#modal-content-change-request').modal(requestOptions,
+                            $('#modal-content-change-request')).modal('closeModal');
+                            location.reload();
+                        } else {
+                            $(".print_error").text(response.message).css('color','red').fadeOut(3000);
+                        }
+                    }
+                });
+            });
+        });
+        require(['jquery','fedex/storage'], function($,fxoStorage){
+            $(document).on("toast_message_fired",function(event,message) {
+                if(window.e383157Toggle){
+                    fxoStorage.set("mvp_toast_message",message);
+                }else{
+                    localStorage.setItem("mvp_toast_message",message);
+                }
+            })
+        });
+    </script>
+<?php } ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "download": {
+                "downloadAjaxUrl": "<?php echo $downloadAjaxurl; ?>"
+            },
+            "Magento_Catalog/js/product/categories_move_list_handler": {}
+        }
+    }
+</script>

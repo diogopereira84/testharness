@@ -1,0 +1,31 @@
+<?php
+/**
+ * @author Fedex
+ * @package Fedex_Company
+ */
+?>
+<div class="admin__field-label">
+    <label>
+        <span><?= $block->escapeHtml(__('Upload CSV')); ?></span>
+    </label>
+</div>
+<div class="admin__field-control">
+    <input class="admin__control-text user-preference-input" style="width: 250px;     padding-top: 1px;" type="text" readonly />
+    <button class="user-preference-browse-btn" style="margin-left: 10px;">
+        <span><?= $block->escapeHtml(__('Browse')); ?></span>
+    </button>
+    <button class="user-preference-confirm-btn primary" style="display: none">
+        <span><?= $block->escapeHtml(__('Confirm')); ?></span>
+    </button>
+    <input class="admin__control-file user-preference-browse-file" type="file" style="display: none;"/>
+</div>
+<?php echo $this->getBlockHtml('formkey'); ?>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "userPreferenceFieldsDataHandler"
+    ], function($, userPreferenceFieldsDataHandler){
+        let userPreferenceImportRequestUrl = '<?= $block->getUrl('company/userpreference/import') ?>';
+        userPreferenceFieldsDataHandler.init(userPreferenceImportRequestUrl);
+    });
+</script>

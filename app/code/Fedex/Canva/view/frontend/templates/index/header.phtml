@@ -1,0 +1,27 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\Canva\ViewModel\BlockProvider $provider */
+$provider = $block->getProvider();
+$helper = $this->helper('Fedex\CustomizedMegamenu\Helper\Data');
+$tutorialCustomUrl = $block->getTutorialCustomUrl();
+$isUrlOpenNewTabEnabled = $block->isUrlOpenNewTabEnabled();
+?>
+<div class="canva-header d-flex canva-pdp-header">
+    <div class="canva-logo d-no-shrink">
+        <a class="d-block" href="/" title="FedEx Home">
+            <img class="d-block fedex-logo" src="<?php echo $block->getViewFileUrl('images/FedEx_Office_Logo.svg'); ?>" alt="FedEx Print Online">
+        </a>
+    </div>
+    <div class="canva-design d-no-shrink">
+        <span role="link" tabindex="0" class="canva_home_button fs-14 lh-21 pointer">Design Templates</span>
+    </div>
+    <?php if ($tutorialCustomUrl !== ''): ?>
+        <div class="canva-design d-no-shrink">
+            <a href="<?php echo $tutorialCustomUrl; ?>" <?php echo $isUrlOpenNewTabEnabled ? 'target="_blank"' : 'target="_self"'; ?> class="canva-tutorials-button no-underline fs-14 lh-21">Tutorials</a>
+        </div>
+    <?php endif; ?>
+    <div class="canva-content btn-xs-tdevice ml-auto">
+        <?php echo $provider->getPromotionBlockPdp()->toHtml(); ?>
+    </div>
+</div>

@@ -1,0 +1,111 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<!-- /* B-1140445 - RT-ECVS- Ability to sort any of the columns on the Order History page */ -->
+	<preference for="Magento\Sales\Block\Order\History" type="Fedex\Orderhistory\Block\Order\History" />
+
+	<!-- replace real order ID with ext_order_id -->
+	<type name="Magento\Sales\Model\Order">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_Sales_Model_Order" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Sales\Model\Order" sortOrder="12" disabled="false"/>
+	</type>
+
+	<!-- override my account history list template -->
+	<type name="Magento\OrderHistorySearch\Model\OrderFilterBuilderService">
+		<plugin name="OrderFilterBuilderService" type="Fedex\Orderhistory\Plugin\Frontend\Magento\OrderHistorySearch\Model\OrderFilterBuilderService" sortOrder="13" disabled="false"/>
+	</type>
+
+	<!-- override order filter template -->
+	<type name="Magento\OrderHistorySearch\Block\Filters">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_OrderHistorySearch_Block_Filters_Template" type="Fedex\Orderhistory\Plugin\Frontend\Magento\OrderHistorySearch\Block\Filters" sortOrder="10" disabled="false"/>
+	</type>
+	
+	<!-- B-1063523 plugin  for quote ShippingMethodManagement -->
+	<type name="Magento\Quote\Model\ShippingMethodManagement">
+		<plugin name="quote_list_shipping_method_management" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Quote\Model\ShippingMethodManagement" sortOrder="10" disabled="false"/>
+	</type>
+
+	<!-- override order filter status options template -->
+	<type name="Magento\OrderHistorySearch\Model\Order\Status\DataProvider">
+		<plugin name="Fedex_Orderhistory_Plugin_Order_Status_Options_DataProvider" type="Fedex\Orderhistory\Plugin\Frontend\Magento\OrderHistorySearch\Model\Order\Status\DataProvider" sortOrder="10" disabled="false"/>
+	</type>
+
+	<!-- B-B-1027092 plugin  for Ui Component Column -->
+	<type name="Magento\Ui\Component\Listing\Columns\Column">
+		<plugin name="ui_component_before_prepare" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Ui\Component\Listing\Columns\Column" sortOrder="10" disabled="false"/>
+	</type>
+
+    <!-- /* B-1060632 - RT-ECVS- View Order Details */ -->
+	<!-- override Buttons templete to remove reorder button -->
+	<type name="Magento\Sales\Block\Order\Info\Buttons">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_Sales_Block_Order_Buttons_Template" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Sales\Block\Order\Info\Buttons" sortOrder="14" disabled="false"/>
+	</type>
+	<!-- /* B-1060632 - RT-ECVS- View Order Details */ -->
+	<preference for="Magento\Sales\Block\Order\Link" type="Fedex\Orderhistory\Block\Order\Link" />
+
+	<!-- /* B-1060632 - RT-ECVS- View Order Details */ -->
+	<preference for="Magento\Sales\Block\Order\Info" type="Fedex\Orderhistory\Block\Order\Info" />
+	
+	<!-- B-1060636 override order quote order template -->
+	<type name="Magento\NegotiableQuote\Block\Quote\Info\Order">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_NegotiableQuote_Block_Quote_Info_Order" type="Fedex\Orderhistory\Plugin\Frontend\Magento\NegotiableQuote\Block\Quote\Info\Order"  disabled="false"/>
+	</type>
+
+	<type name="Magento\Checkout\Block\Cart\Item\Renderer">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_Checkout_Block_Cart_Item_Renderer" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Checkout\Block\Cart\Item\Renderer"  disabled="false"/>
+	</type>
+
+	<!-- B-1060636 override  quote info template -->
+	<type name="Magento\NegotiableQuote\Block\Quote\Info">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_NegotiableQuote_Block_Quote_Info" type="Fedex\Orderhistory\Plugin\Frontend\Magento\NegotiableQuote\Block\Quote\Info"  disabled="false"/>
+	</type>
+	
+	<!-- B-1078869/B-1082825 override file to add shipment/pickup location address -->
+	<type name="Magento\Sales\Block\Order\Info">
+		<plugin name="shipmentPickupLocationAddress" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Sales\Block\Order\Info" sortOrder="14" disabled="false"/>
+	</type>
+
+	<!-- B-1094978 -->
+	<type name="Magento\NegotiableQuote\Model\Status\FrontendLabelProvider">
+		<plugin name="quotestatus" type="Fedex\Orderhistory\Plugin\Frontend\Magento\NegotiableQuote\Model\Status\FrontendLabelProvider" disabled="false"/>
+	</type>
+
+	<!-- B-1053021 - Sanchit Bhatia - RT-ECVS - ePro - Search Capability for Quotes  -->
+	<preference for="Magento\NegotiableQuote\Ui\DataProvider\DataProvider" type="Fedex\Orderhistory\Ui\DataProvider\DataProvider" />
+
+	<!-- B-1058846 - Print Quote Receipt -->
+	<type name="Magento\NegotiableQuote\Block\Quote\View">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_NegotiableQuote_Block_Quote_View" type="Fedex\Orderhistory\Plugin\Frontend\Magento\NegotiableQuote\Block\Quote\View"  disabled="false"/>
+	</type>
+	<!-- B-1058846 - Print Quote Receipt -->
+	<preference for="Magento\NegotiableQuote\Block\Quote\View" type="Fedex\Orderhistory\Block\Quote\View" />
+
+	<!-- B-1149275 override default renderer template in order view -->
+	<type name="Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer">
+		<plugin name="Fedex_Orderhistory_Plugin_Frontend_Magento_Sales_Block_Order_Renderer_Template" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer" sortOrder="20" disabled="false"/>
+	</type>
+	
+	<!-- B-1140448 override file to remove creation info from Retail -->
+	<type name="Magento\NegotiableQuote\Block\Order\Info\CreationInfo">
+		<plugin name="creationInfo" type="Fedex\Orderhistory\Plugin\Frontend\Magento\NegotiableQuote\Block\Order\Info\CreationInfo" sortOrder="14" disabled="false"/>
+	</type>
+
+	<!-- B-1140448 - override file to remove creation info from Retail -->
+	<!-- To be removed on explorers core override toggle removal -->
+	<preference for="Magento\Sales\Block\Order\View" type="Fedex\Orderhistory\Block\Order\View" />
+
+	<type name="Magento\Sales\Block\Order\View">
+		<plugin name="creationInfo" type="Fedex\Orderhistory\Plugin\Block\Order\ViewPlugin" sortOrder="14" disabled="false"/>
+	</type>
+
+	<!-- B-1140448 - override file to remove creation view from Retail Print Page -->
+	<preference for="Magento\Sales\Block\Order\PrintShipment" type="Fedex\Orderhistory\Block\Order\PrintShipment" />
+	
+	<!-- B-1281434 - Order history search by product name -->
+	<preference for="Magento\OrderHistorySearch\Model\Filter\ProductSku" type="Fedex\Orderhistory\Model\Filter\ProductSku" />
+
+	<preference for="Magento\Catalog\Model\CustomOptions\CustomOptionProcessor" type="Fedex\Orderhistory\Model\CustomOptions\CustomOptionProcessor" />
+
+	<!-- B-2107362 Update tab name for My Orders Page -->
+	<type name="Magento\Sales\Controller\Order\History">
+		<plugin name="Fedex_Orderhistory_History_Plugin" type="Fedex\Orderhistory\Plugin\Frontend\Magento\Sales\Controller\Order\History" sortOrder="14" disabled="false"/>
+	</type>
+</config>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <title>My Quotes</title>
+    </head>
+    <body>
+        <move element="page.main.title" destination="columns" before="-" />
+        <move element="sidebar.main" destination="customer.left.nav" before="-" />
+        <move element="customer.left.nav" destination="columns" after="page.main.title" />
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            </container>
+        </referenceContainer>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">My Quotes</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Fedex\UploadToQuote\Block\QuoteHistory" name="uploadtoquote-quote-history" template="Fedex_UploadToQuote::quote/quote_history.phtml">
+                <arguments>
+                    <argument name="quoteHistoryViewModel" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteHistory</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

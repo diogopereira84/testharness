@@ -1,0 +1,40 @@
+{
+    "userworkspace": {
+        "column": {
+            "userworkspace_id": true,
+            "customer_id": true,
+            "workspace_data": true,
+            "application_type": true,
+            "old_upload_date": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "USERWORKSPACE_CUSTOMER_ID": true,
+            "USERWORKSPACE_OLD_UPLOAD_DATE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "order_retention_period": {
+        "column": {
+            "id": true,
+            "order_item_id": true,
+            "document_id": true,
+            "extended_date": true,
+            "extended_flag": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "index": {
+            "ORDER_RETENTION_PERIOD_EXTENDED_DATE": true,
+            "ORDER_RETENTION_PERIOD_EXTENDED_FLAG": true,
+            "ORDER_RETENTION_PERIOD_DOCUMENT_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "ORDER_RETENTION_PERIOD_ORDER_ITEM_ID_SALES_ORDER_ITEM_ITEM_ID": true
+        }
+    }
+}

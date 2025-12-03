@@ -1,0 +1,109 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\LiveSearchStorefrontPopover\Block\Frontend\SaaSContext;
+use Magento\Search\Helper\Data;
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php
+// This file is a modified copy of magento/module-search/view/frontend/templates/form.mini.phtml
+
+/** @var $block SaaSContext */
+/** @var $helper Data */
+//phpcs:ignore
+$helper = $this->helper(Data::class);
+$viewModel = $block->getData('view_model');
+$blockObj= $block->getLayout()->createBlock('Fedex\PopularSearchTermsFilter\Block\PopularSearch');
+$popularTerms = $blockObj->getPopularSearchTerms();
+?>
+<div class="block block-search">
+    <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
+    <div class="block block-content">
+        <form class="form minisearch d-flex" id="search_mini_form"
+              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
+            <div class="field search">
+                <div class="control">
+                    <input id="search"
+                           type="text"
+                           name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                           value="<?= /* @noEscape */ $helper->getEscapedQueryText() ?>"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Search all products')) ?>"
+                           class="input-text cl-white search-controls"
+                           maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                           role="combobox"
+                           aria-haspopup="false"
+                           aria-autocomplete="both"
+                           autocomplete="off"
+                           aria-expanded="false"
+                           onchange=""
+                           />
+                    <div id="search_autocomplete" class="search-autocomplete"></div>
+                    <?= $block->getChildHtml() ?>
+                    <!-- Block for Popular Search Starts -->
+                    <div class="search-autocomplete popular-search">
+                        <div class="bg-cl-white w-100">
+                            <div class="popover-header product-item weight-bold">
+                                POPULAR SEARCHES
+                            </div>
+                            <div class="products-container">
+                                <?php if(count($popularTerms) > 0):
+                                    foreach($popularTerms as $term){
+                                    ?>
+                                <a class="product-item no-underline" href="<?=$block->escapeUrl($blockObj->getProductRedirectUrl($term['productName']??''))?>" >
+                                    <span class="product-name cl-gray fedex-light">
+                                        <?= $block->escapeHtmlAttr($term['productName']??'');?>
+                                    </span>
+                                </a>
+                             <?php } endif;?>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Popular Search block ends -->
+                </div>
+            </div>
+            <div class="d-flex actions">
+                <button type="submit" class="action search search-controls weight-300" aria-label="Search">
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    require([
+            "dataServicesBase",
+            "magentoStorefrontEvents",
+            "<?= $block->escapeUrl($block->getPopoverUrl()); ?>"
+        ],
+        function () {
+        new window.LiveSearchAutocomplete({
+                    environmentId: "<?= $block->escapeJs($block->getEnvironmentId()); ?>",
+                    websiteCode: "<?= $block->escapeJs($block->getWebsiteCode()); ?>",
+                    storeCode: "<?= $block->escapeJs($block->getStoreCode()); ?>",
+                    storeViewCode: "<?= $block->escapeJs($block->getStoreViewCode()); ?>",
+                    config: {
+                        pageSize: "<?= $block->escapeJs($block->getAutocompleteLimit()); ?>",
+                        minQueryLength: "<?= $block->escapeJs($helper->getMinQueryLength()); ?>",
+                        currencySymbol: "<?= $block->escapeJs($block->getCurrencySymbol()); ?>",
+                        displayOutOfStock: "<?= $block->escapeJs($block->isDisplayOutOfStock()); ?>"
+                    },
+                    context: {
+                        customerGroup: "<?= $block->escapeJs($block->getCustomerGroupCode()) ?>"
+                    }
+                });
+    })
+</script>
+
+<script>
+    require(['magentoStorefrontEvents'], function (magentoStorefrontEvents) {
+        if (!magentoStorefrontEvents) return;
+
+        magentoStorefrontEvents.context.setSearchExtension({
+            version: "<?= $block->escapeHtmlAttr($block->getModuleVersion()); ?>"
+        });
+    });
+</script>

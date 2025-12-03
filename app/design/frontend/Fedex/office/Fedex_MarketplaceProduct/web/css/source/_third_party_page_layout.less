@@ -1,0 +1,57 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    .page-layout-third-party-product-full-width {
+        #maincontent {
+            max-width: 1336px;
+
+            .page-title {
+                padding-top: unset;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__s) {
+    .page-layout-third-party-product-full-width {
+        #maincontent {
+            .page-title {
+                font-size: 48px;
+                line-height: 56px;
+            }
+        }
+        &.with-essendant-toggle {
+            #maincontent {
+                .page-title {
+                    font-size: 32px;
+                    line-height: 40px;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    .page-layout-third-party-product-full-width {
+        .title-format.page-title-wrapper.product {
+            margin: unset !important;
+            max-width: unset !important;
+
+            .page-title {
+                max-width: unset;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__s) {
+    .page-layout-third-party-product-full-width {
+        #maincontent {
+            .page-title {
+                font-size: 32px;
+                line-height: 40px;
+            }
+        }
+    }
+}

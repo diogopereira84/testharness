@@ -1,0 +1,367 @@
+type Mutation {
+    createEmptyCart(input: CreateEmptyCartInput): CreateEmptyCartOutput @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CreateEmptyCart") @doc(description:"Creates an empty shopping cart for a guest or logged in user")
+    addProductsToCart(cartId: String!, cartItems: [CartItemCustomInput!]!): AddProductsToCartOutput @doc(description:"Add any type of product to the cart") @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\AddProductsToCart")
+    updateCartItems(cartId: String!, cartItems: [CartItemCustomInput!]!): UpdateCartItemsOutput @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\UpdateCartItems")
+    updateGuestCartContactInformation(input: UpdateGuestCartContactInformationInput): UpdateGuestCartContactInformationOutput @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\UpdateGuestCartContactInformation")
+    createOrUpdateOrder(input: CreateOrUpdateOrderInput): CreateOrUpdateOrderOutput @resolver(class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\CreateOrUpdateOrder") @doc(description:"Creates or update an order") @cache(cacheable: false) @deprecated(reason: "Use updateOrderDelivery and dueDate mutation instead ")
+    updateOrderDelivery(input: UpdateOrderDeliveryInput): UpdateOrderDeliveryOutput @resolver(class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\UpdateOrderDelivery") @doc(description:"Updates order delivery information")
+    addOrUpdateFedexAccountNumber(input: AddOrUpdateFedexAccountNumberInput): AddOrUpdateFedexAccountNumberOutput @resolver(class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\AddOrUpdateFedexAccountNumber") @doc(description:"Adds or updates fedex account number")
+    notes(input: NotesInput): UpdateCartItemsOutput @doc(description:"Add Notes") @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\Notes")
+    placeOrder (input: PlaceOrderInput): PlaceOrderOutput @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\PlaceOrder") @doc(description:"Places the Order in Magento")
+    addOrUpdateDueDate (input: AddOrUpdateDueDateInput): AddOrUpdateDueDateOutput @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\AddOrUpdateDueDate") @doc(description:"Update the due date for Order in Magento")
+    addOrUpdatePoliticalDisclosure (input: AddOrUpdatePoliticalDisclosureInput): AddOrUpdatePoliticalDisclosureOutput @resolver(class: "Fedex\\CartGraphQl\\Model\\Resolver\\AddOrUpdatePoliticalDisclosure") @doc(description:"Update the political disclosure for Order in Magento")
+}
+
+input CreateEmptyCartInput {
+    cart_id: String
+    store_id: String!
+    location_id: String!
+}
+
+type CreateEmptyCartOutput {
+    cart_id: String
+    store_id: String
+    location_id: String
+    gtn: String
+}
+
+input NotesInput {
+    cart_id: String!
+    notes: [NotesDetails]
+}
+
+input CartItemCustomInput {
+    cart_item_id: String
+    quantity: Float
+    data: String
+}
+
+type Cart {
+    id: ID! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\MaskedCartId") @doc(description: "The ID of the cart.")
+    items: [CartItemInterface] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartItems")
+    applied_coupon: AppliedCoupon @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupon") @doc(description:"An array of coupons that have been applied to the cart") @deprecated(reason: "Use applied_coupons instead ")
+    applied_coupons: [AppliedCoupon] @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\AppliedCoupons") @doc(description:"An array of `AppliedCoupon` objects. Each object contains the `code` text attribute, which specifies the coupon code")
+    email: String @resolver (class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartEmail")
+    shipping_addresses: [ShippingCartAddress]! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\ShippingAddresses")
+    billing_address: BillingCartAddress @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\BillingAddress")
+    available_payment_methods: [AvailablePaymentMethod] @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AvailablePaymentMethods") @doc(description: "Available payment methods")
+    selected_payment_method: SelectedPaymentMethod @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\SelectedPaymentMethod")
+    prices: CartPrices @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartPrices")
+    total_quantity: Float! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartTotalQuantity")
+    is_virtual: Boolean! @resolver(class: "\\Magento\\QuoteGraphQl\\Model\\Resolver\\CartIsVirtual")
+    store_id: String! @resolver (class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\CartStoreId")
+    location_id: String! @resolver (class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\CartLocationId")
+}
+
+interface CartItemInterface {
+    data: String @resolver (class: "\\Fedex\\CartGraphQl\\Model\\Resolver\\CartItemData")
+}
+
+input CreateOrUpdateOrderInput {
+    cart_id: String
+    contact_information: ContactInformation
+    pickup_data: PickupData @deprecated(reason: "The fields are deprecated.")
+    notes: NotesDetails
+}
+
+input NotesDetails {
+    text: String!
+    audit: AuditDetails!
+}
+
+input AuditDetails {
+    user: String!
+    creationTime: String!
+    userReference: UserReferenceDetails!
+}
+
+input UserReferenceDetails {
+    reference: String!
+    source: String!
+}
+
+type CreateOrUpdateOrderOutput {
+    cart: CreateOrUpdateOrderCart
+}
+
+type CreateOrUpdateOrderCart {
+    store_id: String
+    location_id: String
+    currency: String
+    contact_information: ContactInformationOutput
+    rate_details: [RateDetails]
+    gross_amount: Float
+    total_discount_amount: Float
+    net_amount: Float
+    taxable_amount: Float
+    tax_amount: Float
+    total_amount: Float
+    estimated_vs_actual: String
+    gtn: String
+}
+
+input UpdateGuestCartContactInformationInput {
+    cart_id: String!
+    contact_information: ContactInformation
+}
+
+input ContactInformation {
+    retail_customer_id: String!
+    firstname:  String!
+    lastname: String!
+    email: String!
+    telephone: String!
+    organization: String
+    ext: String
+    fedex_account_number: String
+    fedex_ship_account_number: String
+    lte_identifier: String
+    alternate_contact: AlternateContact
+}
+
+input AlternateContact {
+    firstname: String
+    lastname: String
+    email: String
+    telephone: String
+    ext: String
+}
+
+type UpdateGuestCartContactInformationOutput {
+    cart_id: String
+    contact_information: ContactInformationOutput
+}
+
+type ContactInformationOutput {
+    firstname:  String
+    lastname: String
+    email: String
+    telephone: String
+    organization: String
+    ext: String
+    has_alternate_person: Boolean
+    fedex_account_number: String
+    fedex_ship_account_number: String
+    lte_identifier: String
+    alternate_contact: AlternateContactOutput
+}
+
+type AlternateContactOutput {
+    firstname: String
+    lastname: String
+    email: String
+    telephone: String
+    ext: String
+}
+
+input PickupData {
+    pickup_location_id: String @deprecated(reason: "The field is deprecated.")
+    pickup_store_id: String @deprecated(reason: "The field is deprecated.")
+    pickup_location_name: String @deprecated(reason: "The field is deprecated.")
+    pickup_location_street: String! @deprecated(reason: "The field is deprecated.")
+    pickup_location_city: String! @deprecated(reason: "The field is deprecated.")
+    pickup_location_state: String! @deprecated(reason: "The field is deprecated.")
+    pickup_location_zipcode: String! @deprecated(reason: "The field is deprecated.")
+    pickup_location_country: String! @deprecated(reason: "The field is deprecated.")
+    pickup_location_date: String! @deprecated(reason: "The field is deprecated.")
+}
+
+type RateDetails {
+    instance_id: String
+    product_id: String
+    name: String
+    user_product_name: String
+    retail_price: Float
+    discount_amount: Float
+    unity_quantity: Float
+    line_price: Float
+    unit_of_measure: String
+    priceable: Boolean
+    product_line_price: Float
+    editable: Boolean
+}
+
+input UpdateOrderDeliveryInput {
+    cart_id: String!
+    pickup_data: PickupDataInput
+    shipping_data: ShippingDataInput
+    alternate_contact: AlternateContact
+}
+
+input PickupDataInput {
+    pickup_location_id: String!
+    pickup_store_id: String!
+    pickup_location_name: String!
+    pickup_location_street: String!
+    pickup_location_city: String!
+    pickup_location_state: String!
+    pickup_location_zipcode: String!
+    pickup_location_country: String!
+    pickup_location_date: String @doc(description:"Deprecated: use the Due Date mutation instead") @deprecated(reason: "Use the Due Date mutation instead")
+}
+
+input ShippingDataInput {
+    shipping_firstname: String!
+    shipping_lastname: String!
+    shipping_company: String!
+    shipping_location_street1: String!
+    shipping_location_street2: String
+    shipping_location_street3: String
+    shipping_location_city: String!
+    shipping_location_state: String!
+    shipping_location_zipcode: String!
+    shipping_location_country: String!
+    shipping_phone_number: String!
+    shipping_phone_ext: String
+    shipping_email: String!
+    shipping_address_classification: String!
+    shipping_method: String!
+    shipping_title: String
+    shipping_price: Float
+    shipping_estimated_delivery_local_time: String
+    shipping_account_number: String
+    shipping_reference_id: String
+    shipping_account_type: String
+}
+
+type UpdateOrderDeliveryOutput {
+    store_id: String
+    location_id: String
+    currency: String
+    contact_information: ContactInformationWithRetail
+    recipient_information: RecipientInformation
+    deliveryLines: [DeliveryLine]
+    gtn: String
+}
+
+type ContactInformationWithRetail {
+    retailcustomerid: String
+    firstname: String
+    lastname: String
+    email: String
+    telephone: String
+    ext: String
+    has_alternate_person: Boolean
+    alternate_contact: AlternateContactOutpu
+}
+
+type RecipientInformation {
+    shipping_firstname: String!
+    shipping_lastname: String!
+    shipping_company: String!
+    shipping_location_street: [String]!
+    shipping_location_city: String!
+    shipping_location_state: String!
+    shipping_location_zipcode: String!
+    shipping_location_country: String!
+    shipping_phone_number: String!
+    shipping_phone_ext: String
+    shipping_email: String
+    shipping_address_classification: String!
+}
+
+type AlternateContactOutpu {
+    firstname: String
+    lastname: String
+    email: String
+    telephone: String
+    ext: String
+}
+
+type DeliveryLine {
+    recipientReference: String
+    linePrice: String
+    estimatedDeliveryLocalTime: String
+    deliveryLinePrice: String
+    priceable: Boolean
+    deliveryRetailPrice: String
+    deliveryDiscountAmount: String
+}
+
+input PlaceOrderInput {
+    cart_id: String!
+    payment_data: PaymentMethod
+    comment: String @doc(description: "a comment to add while place order")
+    notes: [NotesDetails] @doc(description:"Deprecated: use the notes mutation instead") @deprecated(reason: "Use the notes mutation instead")
+    political_campaign_disclosure: PoliticalCampaignDisclosureInput
+}
+
+input PaymentMethod {
+    payment_method: String!
+}
+
+type PlaceOrderOutput {
+    order: Order
+    transaction_id: String!
+}
+
+type Order {
+    order_number: String!
+}
+
+type CartItemPrices {
+    row_total_including_discounts: Money  @doc(description: "The total of the item including any discounts.")
+}
+
+input AddOrUpdateDueDateInput {
+    cart_id: String!
+    due_date: String!
+    shipping_estimated_delivery_local_time: String
+}
+
+type AddOrUpdateDueDateOutput {
+    cart: Cart,
+    gtn: String,
+    due_date: String
+    shipping_estimated_delivery_local_time: String
+}
+
+input AddOrUpdateFedexAccountNumberInput {
+    cart_id: String!
+    fedex_account_number: String
+    fedex_ship_account_number: String
+    lte_identifier: String
+}
+
+type AddOrUpdateFedexAccountNumberOutput {
+    cart: Cart,
+    gtn: String,
+    fedex_account_number: String
+    fedex_ship_account_number: String
+    lte_identifier: String
+}
+
+input PoliticalCampaignDisclosureInput {
+    candidate_pac_ballot_issue: String
+    election_date: String
+    election_state: String
+    sponsoring_committee: String
+    address_street_lines: [String]
+    city: String
+    zipcode: String
+    state: String
+    email: String
+    status: Int
+}
+
+input AddOrUpdatePoliticalDisclosureInput {
+    order_id: String!
+    political_disclosure: PoliticalCampaignDisclosureInput!
+}
+
+type PoliticalCampaignDisclosureOutput {
+    candidate_pac_ballot_issue: String!
+    election_date: String!
+    election_state: String
+    sponsoring_committee: String
+    address_street_lines: [String]!
+    city: String!
+    zipcode: String!
+    state: String!
+    email: String!
+}
+
+type AddOrUpdatePoliticalDisclosureOutput {
+    order: Order,
+    political_disclosure: PoliticalCampaignDisclosureOutput
+}

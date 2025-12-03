@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="customer_email_verification" resource="default" engine="innodb" comment="Customer Email Verification Table">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false"  identity="true" comment="Id"/>
+        <column xsi:type="varbinary" name="verification_key" length="16" nullable="false" comment="Email UUID"/>
+        <column xsi:type="int" name="customer_entity_id" padding="10" unsigned="true" nullable="false" comment="Customer Id "/>
+        <column xsi:type="datetime" name="key_created_datetime" nullable="true" comment="Current Datetime"/>
+        <column xsi:type="datetime" name="key_expiration_datetime" nullable="true" comment="Email Expiration Datetime"/>
+        <column xsi:type="datetime" name="key_verified_datetime" nullable="true" comment="Email Verification Datetime"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CSTR_EMAIL_VERIFICATION_CSTR_ENTT_ID_CSTR_ENTT_ENTT_ID" table="customer_email_verification"
+                    column="customer_entity_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>
+        <index referenceId="CUSTOMER_EMAIL_VERIFICATION_VERIFICATION_KEY" indexType="btree">
+            <column name="verification_key"/>
+        </index>
+        <index referenceId="CUSTOMER_EMAIL_VERIFICATION_CUSTOMER_ENTITY_ID" indexType="btree">
+            <column name="customer_entity_id"/>
+        </index>
+   </table>
+</schema>

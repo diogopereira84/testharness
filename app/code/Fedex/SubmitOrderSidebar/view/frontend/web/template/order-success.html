@@ -1,0 +1,1443 @@
+<div class="fujitsu-receipt-error" style='display: none;'>
+    <div class="fujitsu-receipt-error-box-inner">
+        <img alt="Error Icon" data-bind="attr: { src: errorIconSrcUrl}">
+    </div>
+    <div class="fujitsu-receipt-error-msg">
+        <p class="fujitsu-receipt-error-notification-msg">System Error, Please try again.</p>
+    </div>
+    <div class="fujitsu-receipt-error-close-icon"></div>
+</div>
+<div class="order_outer_container marketplace-checkout-order-confirmation"
+     data-bind="css: { 'order_outer_container alignment-issue-fix' : isAligmentIssueFix }">
+	<div class="order_summary_title" data-bind="text: userName"></div>
+	<h1 class="title">Your order has been submitted.</h1>
+    <!-- ko if: isOrderApprovalEnabled() -->
+    <div class="approval-notification-text">
+        <div class="image-container">
+            <img class="info-icon" alt="toast msg info icon" data-bind="attr: {src: toastMsgInfoIconUrl()}"/>
+        </div>
+        <div class="toast-msg" data-bind="text: b2bPendingOrderSuccessToastMsg()"></div>
+    </div>
+    <!--/ko-->
+	<div class="order_no" data-bind="text: orderNo"></div>
+	<div class="order_email_desc">Confirmation email has been delivered to
+		<span class="order_email" data-bind="text: emailId"></span>
+	</div>
+
+    <!-- ko ifnot: isOrderApprovalEnabled() -->
+	<div class="marketing_opt_in mail-list fedex-light fs-16 mb-30">
+        <a data-bind="attr: { href: marketingOptInUrl}" target="_blank">Join our email list</a> so that you're always the first to know about new products, exclusive discounts, and inspirational tips on how to get the most value out of your projects. You can unsubscribe at any time.
+	</div>
+    <!--/ko-->
+
+	<div class="checkout-success checkout-order-success">
+        <!-- ko ifnot: isOrderApprovalEnabled() -->
+		<div class="actions-toolbar">
+			<div class="primary receipt-button">
+				<a class="action primary continue receipt" href="#" onclick="window.print()"
+                   data-testid="order-confirmation-print-receipt-fujitsu-not-enable-button">
+					<span>Print Confirmation</span>
+				</a>
+			</div>
+		</div>
+        <!--/ko-->
+		<div class="actions-toolbar">
+			<div class="primary cont-btn">
+				<a class="action primary continue continue-shopping" data-bind="attr: { href: continueShoppingUrl}" data-testid="order-confirmation-continue-shopping-button">
+					<span>Continue Shopping</span>
+				</a>
+			</div>
+		</div>
+	</div>
+<br>
+
+	<br>
+
+    <div class="order-summary-step-info d-flex float-left w-100">
+        <!-- ko if: isDelivery() && !isPickup() -->
+        <div class="step-info-box d-flex">
+            <div class="step-data-info">
+                <p class="info-title" data-bind="text: 'Contact information'"></p>
+                <p class="info-sub-title" data-bind="text: 'Contact'"></p>
+
+                <div class="checkout-info">
+                    <div data-bind="text: shippingAddress().firstname + ' ' + shippingAddress().lastname"></div>
+                    <div data-bind="text: shippingAddress().customAttributes[0].value"></div>
+                    <!-- ko if: shippingAddress().customAttributes[1]-->
+                    <div class="tele"><a data-bind="attr: {href: 'tel:'+shippingAddress().telephone + ' ' + shippingAddress().ext_attribute.value}"><span data-bind="text: shippingAddress().telephone + ' ' + shippingAddress().ext_attribute.value"></span></a></div>
+                    <!--/ko-->
+                    <!-- ko ifnot: shippingAddress().customAttributes[1]-->
+                    <div class="tele"><a data-bind="attr: {href: 'tel:'+shippingAddress().telephone}"><span data-bind="text: shippingAddress().telephone"></span></a></div>
+                    <!--/ko-->
+                </div>
+
+                <br>
+                <!-- ko if: shippingAddress().is_alternate -->
+                <p class="info-sub-title">ALTERNATE CONTACT PERSON</p>
+                <div class="checkout-info">
+                    <div
+                        data-bind="text: shippingAddress().altFirstName +' '+ shippingAddress().altLastName">
+                    </div>
+                    <div data-bind="text: shippingAddress().altEmail"></div>
+                    <div class="tele"><a data-bind="attr: {href: 'tel:'+shippingAddress().altPhoneNumber +' '+ shippingAddress().altPhoneNumberext}"><span data-bind="text: shippingAddress().altPhoneNumber +' '+ shippingAddress().altPhoneNumberext"></span></a></div>
+                </div>
+                <!--/ko-->
+            </div>
+            <div class="step-data-info">
+                <p class="info-title">Shipping information</p>
+                <p class="info-sub-title">ADDRESS</p>
+                <div class="checkout-info">
+                    <div data-bind="text: shippingAddress().firstname + ' ' + shippingAddress().lastname"></div>
+                    <div data-bind="text: shippingAddress().company"></div>
+                    <div data-bind="text: shippingAddress().street[0]"></div>
+                    <div data-bind="text: shippingAddress().street[1]"></div>
+                    <div data-bind="text: shippingAddress().city + ', ' + stateOrProvinceCode() + ', ' + shippingAddress().postcode"></div>
+                    <div data-bind="text: shippingAddress().countryId"></div>
+                    <br>
+                    <!-- ko if: isfedexShipAccountNumber() -->
+                    <p class="info-sub-title-ship">Shipping Account Number</p>
+                    <div class="ship-account-no" data-bind="text: fedexShipAccountNumber()"></div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!--/ko-->
+
+        <!-- ko if: !isDelivery() && isPickup() -->
+        <div class="step-info-box d-flex">
+            <div class="step-data-info">
+                <p class="info-title">Contact information</p>
+                <p class="info-sub-title">CONTACT PERSON</p>
+                <div class="checkout-info">
+                    <div data-bind="text: pickupContactInformationFullName()"></div>
+                    <div data-bind="text: pickupContactInformationEmail()"></div>
+                    <div data-bind="text: pickupContactInformationNumber()"></div>
+                </div>
+                <br>
+                <!-- ko if: isPickupContactInformationAlternatePerson() -->
+                <p class="info-sub-title">ALTERNATE PICKUP PERSON</p>
+                <div class="checkout-info">
+                    <div data-bind="text: pickupContactInformationAlternatePersonFullName()"></div>
+                    <div data-bind="text: pickupContactInformationAlternatePersonEmail()"></div>
+                    <div data-bind="text: pickupContactInformationAlternatePersonNumber()"></div>
+                </div>
+                <!--/ko-->
+            </div>
+            <div class="step-data-info">
+                <p class="info-title">Pickup location</p>
+                <p class="info-sub-title">STORE LOCATION</p>
+                <div class="checkout-info">
+                    <div>FedEx Office Print & Ship</div>
+                    <div
+                        data-bind="text: pickupAddressInformationLine1()">
+                    </div>
+                    <div data-bind="text: pickupAddressInformationLine2()"></div>
+                    <br>
+                    <div>Estimated pickup time:</div>
+                    <div data-bind="text: pickupDateTime()"></div>
+                </div>
+            </div>
+        </div>
+        <!--/ko-->
+
+        <!-- ko if: isPickup() && isDelivery() -->
+        <div class="step-info-box d-flex">
+            <div class="step-data-info">
+                <p class="info-title">Pickup location</p>
+                <p class="info-sub-title">Fedex print & ship</p>
+                <div class="checkout-info">
+                    <div>FedEx Office Print & Ship</div>
+                    <div
+                        data-bind="text: pickupAddressInformationLine1()">
+                    </div>
+                    <div data-bind="text: pickupAddressInformationLine2()"></div>
+                    <br>
+                    <div>Estimated pickup time:</div>
+                    <div data-bind="text: pickupDateTime()"></div>
+                </div>
+                <br>
+                <!-- ko if: isPickupContactInformationAlternatePerson() -->
+                <p class="info-sub-title">ALTERNATE PICKUP PERSON</p>
+                <div class="checkout-info">
+                    <div data-bind="text: pickupContactInformationAlternatePersonFullName()"></div>
+                    <div data-bind="text: pickupContactInformationAlternatePersonEmail()"></div>
+                    <div data-bind="text: pickupContactInformationAlternatePersonNumber()"></div>
+                </div>
+                <!--/ko-->
+            </div>
+            <div class="step-data-info">
+                <p class="info-title">Shipping information</p>
+                <p class="info-sub-title">ADDRESS</p>
+                <div class="checkout-info">
+                    <div data-bind="text: shippingAddress().firstname + ' ' + shippingAddress().lastname"></div>
+                    <div data-bind="text: shippingAddress().company"></div>
+                    <div data-bind="text: shippingAddress().street[0]"></div>
+                    <div data-bind="text: shippingAddress().street[1]"></div>
+                    <div data-bind="text: shippingAddress().city + ', ' + stateOrProvinceCode() + ', ' + shippingAddress().postcode"></div>
+                    <div data-bind="text: shippingAddress().countryId"></div>
+                </div>
+                <p class="info-sub-title info-sub-title-ship">CONTACT</p>
+                <div class="checkout-info">
+                    <div data-bind="text: pickupContactInformationFullName()">
+                    </div>
+                    <div data-bind="text: pickupContactInformationEmail()"></div>
+                    <div data-bind="text: pickupContactInformationNumber()"></div>
+                    <!-- ko if: isfedexShipAccountNumber() -->
+                    <p class="info-sub-title-ship">Shipping Account Number</p>
+                    <div class="ship-account-no" data-bind="text: fedexShipAccountNumber()"></div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+        <!--/ko-->
+        <div class="step-data-info">
+            <p class="info-title">Payment</p>
+            <p class="info-sub-title">PAYMENT METHOD</p>
+            <div class="payment-title" data-bind="text: payBy"></div>
+
+            <!-- ko if: !isCreditCardSelected() -->
+            <div class="credit-card-no" data-bind="text: fedexAccountNumber()"></div>
+            <!-- /ko -->
+
+            <!-- ko if: isCreditCardSelected() -->
+            <div class="credit-card-no" data-bind="text: creditCardNumber()"></div>
+            <!-- /ko -->
+
+            <!-- ko if: isfedexAccountNumber() -->
+            <br/>
+            <p class="info-sub-title">Discount Account Number</p>
+            <div class="credit-card-no" data-bind="text: fedexAccountNumber()"></div>
+            <!-- /ko -->
+
+            <br/>
+            <!-- ko if: paymentStepData() -->
+            <!-- ko if: isCreditCardSelected() -->
+            <p class="info-sub-title">BILLING ADDRESS</p>
+
+            <!-- ko if: isBillingAddress() -->
+            <div class="checkout-info">
+                <!--B-1326759: Remove billing address name when site configured CC is used for payment-->
+                <!--ko if: !isSiteConfiguredCreditCardUsed()-->
+                <div data-bind="text: paymentStepData().nameOnCard"></div>
+                <!-- /ko -->
+                <div data-bind="text: paymentStepData().billingAddress.company"></div>
+                <div data-bind="text: paymentStepData().billingAddress.address"></div>
+                <div data-bind="text: paymentStepData().billingAddress.addressTwo"></div>
+                <div
+                    data-bind="text: paymentStepData().billingAddress.city +', '+ paymentStepData().billingAddress.state +' '+ paymentStepData().billingAddress.zip">
+                </div>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: !isBillingAddress() -->
+            <!-- ko if: isDelivery() -->
+            <div class="checkout-info">
+                <div data-bind="text: billingAddress().firstname + ' ' + billingAddress().lastname"></div>
+                <div data-bind="text: paymentStepData().billingAddress.company"></div>
+                <div data-bind="text: paymentStepData().billingAddress.street[0]"></div>
+                <div data-bind="text: paymentStepData().billingAddress.street[1]"></div>
+                <div data-bind="text: paymentStepData().billingAddress.city + ', ' + paymentStepData().billingAddress.regionCode + ', ' + paymentStepData().billingAddress.postcode"></div>
+                <div data-bind="text: paymentStepData().billingAddress.countryId"></div>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: !isDelivery() -->
+            <div class="checkout-info">
+                <div
+                    data-bind="text: pickupContactInformation().contact_fname +' '+ pickupContactInformation().contact_lname">
+                </div>
+                <div
+                    data-bind="text: pickupAddressInformation().pickup_location_street +' , '+ pickupAddressInformation().pickup_location_city +', '">
+                </div>
+                <div data-bind="text: pickupAddressInformation().pickup_location_state+' '+ pickupAddressInformation().pickup_location_zipcode"></div>
+            </div>
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- /ko -->
+            <!-- /ko -->
+        </div>
+    </div>
+
+    <div class="order-cart-summary">
+        <div class="title-summary" data-bind="text: cartSummaryText()"></div>
+        <br>
+        <!-- ko if: isAdditionalDetailsAvailable() -->
+        <div class="cart-table-info including-additional-details" style="overflow-x:auto;">
+            <table aria-describedby="cart-table" class="cart-table">
+                <tr class="table-row-th">
+                    <th>PRODUCT NAME</th>
+                    <th>PRICE</th>
+                    <th>QTY</th>
+                    <th>DISCOUNT</th>
+                    <th>SUBTOTAL</th>
+                </tr>
+
+                <!-- ko if: chosenDeliveryMethod === 'pick-up' -->
+                <!-- ko if: getFirstPartyItemsCount() > 0 -->
+                    <tr class="delivery-methods-mobile-view">
+                        <td colspan="5" class="delivery-method mobile">
+                            <div class="delivery-method-td">
+                                <img data-bind="attr: {src: storeIconUrl()}" alt="">
+                                <p>In-store pickup</p>
+                            </div>
+                        </td>
+                        <td colspan="5" class="product-divider mobile">
+                            <span>
+                                FedEx Office
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="delivery-method desktop">
+                        <td colspan="5" class="delivery-method-td">
+                            <img data-bind="attr: {src: storeIconUrl()}" alt="">
+                            <p>In-store pickup</p>
+                        </td>
+                    </tr>
+                        <tr>
+                            <td colspan="5" class="product-divider desktop">
+                                FedEx Office
+                            </td>
+                        </tr>
+                <!-- /ko -->
+
+                    <!-- ko foreach: cartItems() -->
+                    <!-- ko if: type !== "EXTERNAL_PRODUCT" -->
+                        <!-- ko if: type === "bundle" -->
+                        <tr class="table-row">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                            <span class="order-success product-image-container">
+                                                <span class="order-success product-image-wrapper">
+                                                    <img class="order-success product-image-photo"
+                                                         alt="Product-image"
+                                                         data-bind="attr: {src: image}"/>
+                                                </span>
+                                            </span>
+                                    <div class="product-name-details" data-bind="attr: { id: $index()+1 }">
+                                        <p class='product-name' data-bind="text: name"></p>
+                                        <span class="show-details-btn" style="display: none;"
+                                              data-bind="attr: { contentshow: 'build-child-'+id, 'data-testid': 'pickup-cart-item-see-details-1p-' + ($index() + 1) }">
+                                                    <a href="javascript:void(0)" class="show-details-button-text"
+                                                       data-bind="text: 'Show Products'"
+                                                       title="Show Products">
+                                                    </a>
+                                                </span>
+                                        <div class="hide-details-button-row">
+                                                    <span class="hide-details-button"
+                                                          data-bind="attr: { contenthide: 'build-child-'+id, 'data-testid': 'pickup-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                        <a href="javascript:void(0)"
+                                                           class="hide-details-button-text"
+                                                           data-bind="text: 'Hide Products'" title="Hide Products">
+                                                        </a>
+                                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty"
+                                   data-bind="text: $parent.priceFormatWithCurrency(price)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-discount" data-bind="text: 1"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p data-bind="text: discount > 0 ? '-' + $parent.priceFormatWithCurrency(discount) : '-',
+                                                      class: 'order-success-total',
+                                                      css: {'has-discount': discount > 0}"></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total"
+                                   data-bind="text: $parent.priceFormatWithCurrency(subtotal)"></p>
+                            </td>
+                        </tr>
+                        <tr data-bind="attr: { content: 'build-child-'+$data.id +'-title'}"
+                            class="hidden-m-l-xl ">
+                            <td colspan="5" class="pb-16 pl-0 pr-0">
+                                <div class="weight-bold fs-14 lh-24 fedex-bold text-uppercase ls-0-75 hidden-m-l-xl"
+                                     data-bind="text: 'Bundled Items ('+ $data.children.length + ')'"></div>
+                            </td>
+                        </tr>
+                        <!-- ko foreach: $data.children -->
+                        <!-- ko if: type !== "EXTERNAL_PRODUCT" -->
+                        <tr class="table-row bundle-child" data-bind="attr: { content: 'build-child-'+$parent.id }">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                            <span class="order-success product-image-container">
+                                                <span class="order-success product-image-wrapper">
+                                                    <img data-bind="attr: {src: $parents[1].imgLoaderUrl()}"
+                                                         alt="Product-image" class="product-loader"/>
+                                                    <img class="order-success product-image-photo"
+                                                         alt="Product-image"
+                                                         data-bind="attr: {data: $parents[1].imgLoad(preview_url,$element,instanceId), src: preview_url}"/>
+                                                </span>
+                                            </span>
+                                    <div class="product-name-details" data-bind="attr: { id: $index()+1 }">
+                                        <p class='product-name' data-bind="text: userProductName"></p>
+                                        <span class="show-details-btn"
+                                              data-bind="attr: { contentshow: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-see-details-1p-' + ($index() + 1) }">
+                                                    <a href="javascript:void(0)"
+                                                       class="show-details-button-text"
+                                                       data-bind="text: $parents[1].viewDetailsText()"
+                                                       title="Show Details">
+                                                    </a>
+                                                </span>
+                                        <div class="hide-details-button-row">
+                                                    <span class="hide-details-button"
+                                                          style="display: none;"
+                                                          data-bind="attr: { contenthide: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                        <a href="javascript:void(0)"
+                                                           class="hide-details-button-text"
+                                                           data-bind="text: 'Hide Details'"
+                                                           title="Hide Details">
+                                                        </a>
+                                                    </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty"
+                                   data-bind="text: $parents[1].priceFormatWithCurrency(productUnitPrice)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-discount" data-bind="text: unitQuantity"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p data-bind="
+                                            text: productDiscountAmount > 0 ? '-' + $parents[1].priceFormatWithCurrency(productDiscountAmount) : '-',
+                                            class: 'order-success-total',
+                                            css: {'has-discount': productDiscountAmount > 0}"></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total"
+                                   data-bind="text: $parents[1].priceFormatWithCurrency(productLinePrice)"></p>
+                            </td>
+                        </tr>
+                        <tr class="show-hide-content"
+                            data-bind="attr: { content: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-hide-details-1p-' + ($index() + 1) }"
+                            style="display: none;">
+                            <td colspan="5" class="additional-details-container pickup">
+                                <table aria-describedby="product-line-details-table" class="product-line-details-table">
+                                    <thead>
+                                    <tr>
+                                        <th data-bind="text: 'SKU'"></th>
+                                        <th data-bind="text: 'Base Price'"></th>
+                                        <th class="col qty" data-bind="text: 'Qty'"></th>
+                                        <th class="col discount" data-bind="text: 'Discount'"></th>
+                                        <th data-bind="text: 'Total'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: productLineDetails -->
+                                    <tr>
+                                        <td data-bind="text: description" data-th="SKU"></td>
+                                        <td data-bind="text: $parents[2].priceFormatWithCurrency(detailUnitPrice)"
+                                            data-th="BASE PRICE"></td>
+                                        <td data-bind="text: unitQuantity" data-th="QTY"></td>
+                                        <td data-bind="text: detailDiscountPrice > 0 ? '-' + $parents[2].priceFormatWithCurrency(detailDiscountPrice) : '-'"
+                                            data-th="DISCOUNT"></td>
+                                        <td data-bind="text: $parents[2].priceFormatWithCurrency(detailPrice)"
+                                            data-th="TOTAL"></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features?.length > 0  -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: features -->
+                                    <tr>
+                                        <td><strong data-bind="text: name + ': ' + value "></strong></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <tr class="bundle-children-separator" data-bind="attr: { content: 'build-child-'+$data.id }">
+                            <td colspan="5"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if: type !== "bundle" -->
+                        <tr class="table-row">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                    <span class="order-success product-image-container">
+                                        <span class="order-success product-image-wrapper">
+                                            <img data-bind="attr: {src: $parent.imgLoaderUrl()}" alt="Product-image" class="product-loader" />
+                                            <img class="order-success product-image-photo" alt="Product-image"
+                                                 data-bind="attr: {data: $parent.imgLoad(preview_url,$element,instanceId)}"/>
+                                        </span>
+                                    </span>
+                                    <div class="product-name-details" data-bind="attr: { id: $index()+1 }">
+                                        <p class='product-name' data-bind="text: userProductName"></p>
+                                        <span class="show-details-btn" data-bind="attr: { contentshow: '1p-pickup-'+$index()+1, 'data-testid': 'pickup-cart-item-see-details-1p-' + ($index() + 1) }">
+                                            <a href="javascript:void(0)" class="show-details-button-text" data-bind="text: $parent.viewDetailsText()" title="Show Details">
+                                            </a>
+                                        </span>
+                                        <div class="hide-details-button-row">
+                                            <span class="hide-details-button" style="display: none;" data-bind="attr: { contenthide: '1p-pickup-'+$index()+1, 'data-testid': 'pickup-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                <a href="javascript:void(0)" class="hide-details-button-text" data-bind="text: 'Hide Details'" title="Hide Details">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty" data-bind="text: $parent.priceFormatWithCurrency(productUnitPrice)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-discount" data-bind="text: unitQuantity"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p
+                                data-bind="
+                                    text: productDiscountAmount > 0 ? '-' + $parent.priceFormatWithCurrency(productDiscountAmount) : '-',
+                                    class: 'order-success-total',
+                                    css: {'has-discount': productDiscountAmount > 0}
+                                "></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total" data-bind="text: $parent.priceFormatWithCurrency(productLinePrice)"></p>
+                            </td>
+                        </tr>
+                        <tr class="show-hide-content" data-bind="attr: { content: '1p-pickup-'+$index()+1, 'data-testid': 'pickup-cart-item-hide-details-1p-' + ($index() + 1) }" style="display: none;">
+                            <td colspan="5" class="additional-details-container pickup">
+
+                                <table aria-describedby="product-line-details-table" class="product-line-details-table">
+                                    <thead>
+                                    <tr>
+                                        <th data-bind="text: 'SKU'"></th>
+                                        <th data-bind="text: 'Base Price'"></th>
+                                        <th class="col qty" data-bind="text: 'Qty'"></th>
+                                        <th data-bind="text: 'Discount'"></th>
+                                        <th data-bind="text: 'Total'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: productLineDetails -->
+                                    <tr>
+                                        <td data-bind="text: description" data-th="SKU"></td>
+                                        <td data-bind="text: $parents[1].priceFormatWithCurrency(detailUnitPrice)" data-th="BASE PRICE"></td>
+                                        <td data-bind="text: unitQuantity" data-th="QTY"></td>
+                                        <td data-bind="text: detailDiscountPrice > 0 ? '-' + $parents[1].priceFormatWithCurrency(detailDiscountPrice) : '-'" data-th="DISCOUNT"></td>
+                                        <td data-bind="text: $parents[1].priceFormatWithCurrency(detailPrice)" data-th="TOTAL"></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: features -->
+                                    <tr>
+                                        <td><strong data-bind="text: name + ': ' + value "></strong></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                    <!-- /ko -->
+
+                    <!-- ko if: $parent.cartItems().length > 1 && $index() < ($parent.cartItems().length - 1) -->
+                    <tr>
+                        <td colspan="5" class="order-success-item-separator" >
+                            <div class="border-top-iron w-100 h-1"></div>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- ko if: chosenDeliveryMethod === 'pick-up' && thirdPartyProducts().length > 0 -->
+                    <tr>
+                        <td colspan="5" class="" >
+                            <div class="border-top-iron w-100 h-1"></div>
+                        </td>
+                    </tr>
+                <!-- /ko -->
+
+                <!-- ko if: chosenDeliveryMethod === 'shipping' -->
+                    <tr class="delivery-methods-mobile-view">
+                        <td colspan="5" class="delivery-method mobile">
+                            <div class="delivery-method-td">
+                                <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                                <p>Shipping</p>
+                            </div>
+                        </td>
+                        <!-- ko if: getFirstPartyItemsCount() > 0 -->
+                        <td colspan="5" class="product-divider mobile">
+                            <span>
+                                FedEx Office (<span data-bind="text: itemsCount()"></span>)
+                            </span>
+                        </td>
+                        <!-- /ko -->
+                    </tr>
+                    <tr class="delivery-method desktop">
+                        <td colspan="5" class="delivery-method-td">
+                            <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                            <p>Shipping</p>
+                        </td>
+                    </tr>
+                    <!-- ko if: getFirstPartyItemsCount() > 0 -->
+                        <tr>
+                            <td colspan="5" class="product-divider desktop">
+                                FedEx Office (<span data-bind="text: itemsCount()"></span>)
+                            </td>
+                        </tr>
+                    <!-- /ko -->
+
+                    <!-- ko foreach: cartItems() -->
+                    <!-- ko if: type !== "EXTERNAL_PRODUCT" -->
+                        <!-- ko if: type === "bundle" -->
+                        <tr class="table-row">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                    <span class="order-success product-image-container">
+                                        <span class="order-success product-image-wrapper">
+                                            <img class="order-success product-image-photo"
+                                                 alt="Product-image"
+                                                 data-bind="attr: {src: image}"/>
+                                        </span>
+                                    </span>
+                                    <div class="product-name-details" data-bind="attr: { id: $index()+1 }">
+                                        <p class='product-name' data-bind="text: name"></p>
+                                        <span class="show-details-btn" style="display: none;"
+                                              data-bind="attr: { contentshow: 'build-child-'+id, 'data-testid': 'pickup-cart-item-see-details-1p-' + ($index() + 1) }">
+                                            <a href="javascript:void(0)" class="show-details-button-text"
+                                               data-bind="text: 'Show Products'"
+                                               title="Show Products">
+                                            </a>
+                                        </span>
+                                        <div class="hide-details-button-row">
+                                            <span class="hide-details-button"
+                                                  data-bind="attr: { contenthide: 'build-child-'+id, 'data-testid': 'pickup-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                <a href="javascript:void(0)"
+                                                   class="hide-details-button-text"
+                                                   data-bind="text: 'Hide Products'" title="Hide Products">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty"
+                                   data-bind="text: $parent.priceFormatWithCurrency(price)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-discount" data-bind="text: 1"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p data-bind="text: discount > 0 ? '-' + $parent.priceFormatWithCurrency(discount) : '-',
+                                              class: 'order-success-total',
+                                              css: {'has-discount': discount > 0}"></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total"
+                                   data-bind="text: $parent.priceFormatWithCurrency(subtotal)"></p>
+                            </td>
+                        </tr>
+                        <tr data-bind="attr: { content: 'build-child-'+$data.id +'-title'}"
+                            class="hidden-m-l-xl ">
+                            <td colspan="5" class="pb-16 pl-0 pr-0">
+                                <div class="weight-bold fs-14 lh-24 fedex-bold text-uppercase ls-0-75 hidden-m-l-xl"
+                                     data-bind="text: 'Bundled Items ('+ $data.children.length + ')'"></div>
+                            </td>
+                        </tr>
+                        <!-- ko foreach: $data.children -->
+                        <!-- ko if: type !== "EXTERNAL_PRODUCT" -->
+                        <tr class="table-row bundle-child" data-bind="attr: { content: 'build-child-'+$parent.id }">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                    <span class="order-success product-image-container">
+                                        <span class="order-success product-image-wrapper">
+                                            <img data-bind="attr: {src: $parents[1].imgLoaderUrl()}"
+                                                 alt="Product-image" class="product-loader"/>
+                                            <img class="order-success product-image-photo"
+                                                 alt="Product-image"
+                                                 data-bind="attr: {data: $parents[1].imgLoad(preview_url,$element,instanceId), src: preview_url}"/>
+                                        </span>
+                                    </span>
+                                    <div class="product-name-details" data-bind="attr: { id: $index()+1 }">
+                                        <p class='product-name' data-bind="text: userProductName"></p>
+                                        <span class="show-details-btn"
+                                              data-bind="attr: { contentshow: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-see-details-1p-' + ($index() + 1) }">
+                                            <a href="javascript:void(0)"
+                                               class="show-details-button-text"
+                                               data-bind="text: $parents[1].viewDetailsText()"
+                                               title="Show Details">
+                                            </a>
+                                        </span>
+                                        <div class="hide-details-button-row">
+                                            <span class="hide-details-button"
+                                                  style="display: none;"
+                                                  data-bind="attr: { contenthide: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                <a href="javascript:void(0)"
+                                                   class="hide-details-button-text"
+                                                   data-bind="text: 'Hide Details'"
+                                                   title="Hide Details">
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty"
+                                   data-bind="text: $parents[1].priceFormatWithCurrency(productUnitPrice)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-discount" data-bind="text: unitQuantity"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p data-bind="
+                                    text: productDiscountAmount > 0 ? '-' + $parents[1].priceFormatWithCurrency(productDiscountAmount) : '-',
+                                    class: 'order-success-total',
+                                    css: {'has-discount': productDiscountAmount > 0}"></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total"
+                                   data-bind="text: $parents[1].priceFormatWithCurrency(productLinePrice)"></p>
+                            </td>
+                        </tr>
+                        <tr class="show-hide-content"
+                            data-bind="attr: { content: 'bundle-'+$parent.id+'-1p-pickup-'+$index()+1, 'data-testid': 'bundle-'+$parent.id+'-pickup-cart-item-hide-details-1p-' + ($index() + 1) }"
+                            style="display: none;">
+                            <td colspan="5" class="additional-details-container pickup">
+                                <table aria-describedby="product-line-details-table" class="product-line-details-table">
+                                    <thead>
+                                    <tr>
+                                        <th data-bind="text: 'SKU'"></th>
+                                        <th data-bind="text: 'Base Price'"></th>
+                                        <th class="col qty" data-bind="text: 'Qty'"></th>
+                                        <th class="col discount" data-bind="text: 'Discount'"></th>
+                                        <th data-bind="text: 'Total'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: productLineDetails -->
+                                    <tr>
+                                        <td data-bind="text: description" data-th="SKU"></td>
+                                        <td data-bind="text: $parents[2].priceFormatWithCurrency(detailUnitPrice)"
+                                            data-th="BASE PRICE"></td>
+                                        <td data-bind="text: unitQuantity" data-th="QTY"></td>
+                                        <td data-bind="text: detailDiscountPrice > 0 ? '-' + $parents[2].priceFormatWithCurrency(detailDiscountPrice) : '-'"
+                                            data-th="DISCOUNT"></td>
+                                        <td data-bind="text: $parents[2].priceFormatWithCurrency(detailPrice)"
+                                            data-th="TOTAL"></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features?.length > 0  -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: features -->
+                                    <tr>
+                                        <td><strong data-bind="text: name + ': ' + value "></strong></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <tr class="bundle-children-separator" data-bind="attr: { content: 'build-child-'+$data.id }">
+                            <td colspan="5"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if: type !== "bundle" -->
+                        <tr class="table-row">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                    <span class="order-success product-image-container">
+                                        <span class="order-success product-image-wrapper">
+                                            <img data-bind="attr: {src: $parent.imgLoaderUrl()}" alt="Product-image" class="product-loader" />
+                                            <img class="order-success product-image-photo" alt="Product-image"
+                                                 data-bind="attr: {data: $parent.imgLoad(preview_url,$element,instanceId), src: preview_url}"/>
+                                        </span>
+                                    </span>
+                                    <div class="product-name-details">
+                                        <p class='product-name' data-bind="text: userProductName"></p>
+                                        <span class="show-details-btn" data-bind="attr: { contentshow: '1p-shipping-'+$index()+1, 'data-testid': 'shipping-cart-item-see-details-1p-' + ($index() + 1) }">
+                                            <a href="javascript:void(0)" class="show-details-button-text" data-bind="text: $parent.viewDetailsText()" title="Show Details">
+                                            </a>
+                                        </span>
+                                        <div class="hide-details-button-row">
+                                            <span class="hide-details-button" style="display: none;" data-bind="attr: { contenthide:'1p-shipping-'+ $index()+1, 'data-testid': 'shipping-cart-item-hide-details-1p-' + ($index() + 1) }">
+                                                <a href="javascript:void(0)" class="hide-details-button-text" data-bind="text: 'Hide Details'" title="Hide Details" >
+                                                </a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty" data-bind="text: $parent.priceFormatWithCurrency(productUnitPrice)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-qty" data-bind="text: unitQuantity"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p
+                                data-bind="
+                                    text: productDiscountAmount > 0 ? '-' + $parent.priceFormatWithCurrency(productDiscountAmount) : '-',
+                                    class: 'order-success-total',
+                                    css: {'has-discount': productDiscountAmount > 0}
+                                "></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total" data-bind="text: $parent.priceFormatWithCurrency(productLinePrice)"></p>
+                            </td>
+                        </tr>
+                        <tr class="show-hide-content" data-bind="attr: { content: '1p-shipping-'+$index()+1 }" style="display: none;">
+                            <td colspan="5" class="additional-details-container">
+
+                                <table aria-describedby="product-line-details-table" class="product-line-details-table">
+                                    <thead>
+                                    <tr>
+                                        <th data-bind="text: 'SKU'"></th>
+                                        <th data-bind="text: 'Base Price'"></th>
+                                        <th class="col qty" data-bind="text: 'Qty'"></th>
+                                        <th data-bind="text: 'Discount'"></th>
+                                        <th data-bind="text: 'Total'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: productLineDetails -->
+                                    <tr>
+                                        <td data-bind="text: description" data-th="SKU"></td>
+                                        <td data-bind="text: $parents[1].priceFormatWithCurrency(detailUnitPrice)" data-th="BASE PRICE"></td>
+                                        <td data-bind="text: unitQuantity" data-th="QTY"></td>
+                                        <td data-bind="text: detailDiscountPrice > 0 ? '-' + $parents[1].priceFormatWithCurrency(detailDiscountPrice) : '-'" data-th="DISCOUNT"></td>
+                                        <td data-bind="text: $parents[1].priceFormatWithCurrency(detailPrice)" data-th="TOTAL"></td>
+                                    </tr>
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table"
+                                data-bind="css:{ shipping: $parent.chosenDeliveryMethod === 'shipping' && $index() === ($parent.getFirstPartyItemsCount() - 1)}">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: features -->
+                                    <tr>
+                                        <td><strong data-bind="text: name + ': ' + value "></strong></td>
+                                    </tr>
+                                    <!-- /ko -->
+
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- ko if: $parent.chosenDeliveryMethod === 'shipping' && $index() === ($parent.getFirstPartyItemsCount() - 1) -->
+                        <tr class="view-receipt-shipping-separator">
+                            <td colspan="5">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr class="order-shipping-method">
+                            <td colspan="5">
+                                <table>
+                                    <tr class="shipping-method">
+                                        <td colspan="4" class="shipping-method-title">
+                                            <span class="shipping-title">
+                                                Shipping method:
+                                            </span>
+                                            <span class="chosen-shipping" data-bind="text: $parent.getFirstCarrierTitle()"></span>
+                                            <sup>®</sup>
+                                        </td>
+                                        <td class="payment-information-price" colspan="1" data-bind="text: $parent.priceFormatWithCurrency($parent.firstPartyProductsShippingAmount())"></td>
+                                    </tr>
+                                    <!-- ko if: $parent.isExpectedDeliveryDateEnabled() -->
+                                    <tr class="shipping-method">
+                                        <td class="shipping-method-title pt-0" colspan="5">
+                                          <span class="shipping-title">Expected Delivery:</span>
+                                          <span class="chosen-shipping" data-bind="text: $parent.getExpectedDeliveryDate()"></span>
+                                        </td>
+                                    </tr>
+                                    <!-- /ko -->
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+
+                        <!-- ko if: $index() === ($parent.getFirstPartyItemsCount() - 1) -->
+                            <tr><td colspan="5" class="p-0"><hr class="mt-0" /></td></tr>
+                        <!-- /ko -->
+
+                        <!-- ko if: $parent.cartItems().length > 1 && $index() < ($parent.cartItems().length - 1) -->
+                        <tr>
+                            <td colspan="5" class="order-success-item-separator" >
+                                <div class="border-top-iron w-100 h-1"></div>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- ko if: groupedBySellers().length > 0 -->
+
+                    <!-- ko if: chosenDeliveryMethod === 'pick-up' -->
+                      <tr class="delivery-methods-mobile-view">
+                          <td colspan="5" class="delivery-method mobile">
+                              <div class="delivery-method-td">
+                                  <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                                  <p>Shipping</p>
+                              </div>
+                          </td>
+                      </tr>
+                      <tr class="delivery-method desktop">
+                          <td colspan="5" class="delivery-method-td">
+                              <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                              <p>Shipping</p>
+                          </td>
+                      </tr>
+                    <!-- /ko -->
+
+                    <!-- ko foreach: groupedBySellers() -->
+                      <tr>
+                        <td colspan="5" class="product-divider seller-name">
+                            <div class="seller-name-container">
+                                <span class="p-0" data-bind="text: seller"></span>
+                                <span class="seller-name-items-separator" data-bind="text: '(' "></span>
+                                <span class="seller-name-items" data-bind="i18n: items.length + ' ' "></span>
+                                <translate args="'item'" if="items.length === 1"></translate>
+                                <translate args="'items'" if="items.length > 1"></translate>
+                                <span class="seller-name-items-separator-close" data-bind="text: ')' "></span>
+
+                                <!-- ko if: tooltip != '' -->
+                                    <div class="tooltip-area relative">
+                                        <i></i>
+                                        <div class="tooltip d-none absolute fedex-light fs-16 lh-24 cl-stonegray weight-300">
+                                            <span data-bind="text: tooltip"></span>
+                                        </div>
+                                    </div>
+                                <!-- /ko -->
+                            </div>
+                        </td>
+                      </tr>
+
+                      <!-- ko foreach: items -->
+                        <tr class="table-row">
+                          <td class="col options">
+                            <div class="item-description-img">
+                              <span class="order-success product-image-container">
+                                  <span class="order-success product-image-wrapper">
+                                      <img class="order-success product-image-photo" alt="Product-image"
+                                           data-bind="attr: {src: preview_url}"/>
+                                  </span>
+                              </span>
+                              <div class="product-name-details">
+                                  <p class='product-name' data-bind="html: name"></p>
+                                  <!-- ko if: features.length > 0 -->
+                                  <span class="show-details-btn" data-bind="attr: { contentshow: $parent.seller+'3p-'+$index()+1, 'data-testid': $parent.seller+'shipping-cart-item-see-details-3p-' + $index() + 1 }">
+                                      <a href="javascript:void(0)" class="show-details-button-text" data-bind="text: $parents[1].viewDetailsText()" title="Show Details">
+                                      </a>
+                                  </span>
+                                  <div class="hide-details-button-row">
+                                      <span class="hide-details-button" data-bind="attr: { contenthide: $parent.seller+'3p-'+$index() + 1, 'data-testid': $parent.seller+'shipping-cart-item-see-details-3p-' + ($index() + 1) }" style="display: none;">
+                                          <a href="javascript:void(0)" class="hide-details-button-text" data-bind="text: 'Hide Details'" title="Hide Details">
+                                          </a>
+                                      </span>
+                                  </div>
+                                  <!-- /ko -->
+                              </div>
+                            </div>
+                          </td>
+                          <td class="col price" data-th="PRICE">
+                            <p class="order-success-qty" data-bind="html: price"></p>
+                          </td>
+                          <td class="col qty" data-th="QTY">
+                              <p class="order-success-discount" data-bind="text: qty "></p>
+                          </td>
+                          <td class="col discount" data-th="DISCOUNT">
+                              <p
+                              data-bind="
+                                  class: 'order-success-total' ,
+                                  css: {'has-discount': discountAmount > 0},
+                                  text: discountAmount > 0 ? '-' + $parents[1].priceFormatWithCurrency(discountAmount) : '-'
+                              ">-</p>
+                          </td>
+                          <td class="col total" data-th="SUBTOTAL">
+                              <p class="order-success-total" data-bind="html: subtotal"></p>
+                          </td>
+                        </tr>
+
+                        <!-- ko if: features.length > 0 -->
+                          <tr class="show-hide-content" data-bind="attr: { content: $parent.seller+'3p-'+$index()+1 }" style="display: none;">
+                            <td colspan="5" class="additional-details-container">
+
+                                <table aria-describedby="product-line-details-table" class="product-line-details-table">
+                                    <thead>
+                                    <tr>
+                                        <th data-bind="text: 'SKU'"></th>
+                                        <th data-bind="text: 'Base Price'"></th>
+                                        <th class="col qty" data-bind="text: 'Qty'"></th>
+                                        <th data-bind="text: 'Discount'"></th>
+                                        <th data-bind="text: 'Total'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td data-bind="html: name" data-th="ITEM-DESCRIPTON:"></td>
+                                        <td data-bind="html: price" data-th="BASE PRICE:"></td>
+                                        <td data-bind="text: '1'" data-th="QTY:"></td>
+                                        <td data-bind="text: discountAmount > 0 ? '-' + $parents[1].priceFormatWithCurrency(discountAmount) : '-'" data-th="DISCOUNT:"></td>
+                                        <td data-bind="html: subtotal" data-th="TOTAL:"></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table"
+                                data-bind="css:{ shipping: $parents[1].chosenDeliveryMethod === 'shipping' && $index() === ($parent.items.length - 1)}">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: features -->
+                                    <tr>
+                                        <td><strong data-bind="html: name + ': ' + choice.name "></strong></td>
+                                    </tr>
+                                    <!-- /ko -->
+
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                          </tr>
+                        <!-- /ko -->
+
+                        <!-- ko if: $index() === ($parent.items.length - 1) -->
+                        <tr class="view-receipt-shipping-separator">
+                            <td colspan="5">
+                                <hr>
+                            </td>
+                        </tr>
+                        <tr class="order-shipping-method">
+                            <td colspan="5">
+                                <table>
+                                    <tr class="shipping-method">
+                                        <td colspan="4" class="shipping-method-title commercial-shipping">
+                                            <span class="shipping-title">
+                                                Shipping method:
+                                            </span>
+                                            <span class="chosen-shipping" data-bind="text: $parent.shippingMethodTitle"></span>
+                                            <sup>®</sup>
+                                            <!-- ko if: $parents[1].isMarketplaceFreightShippingEnabled && $parent.surchargeAmount -->
+                                            <div class="fs-16 lh-24 pl-24 pt-16">
+                                                <span class="fedex-light" data-bind="text: $parents[1].marketplaceFreightSurchargeText"></span>
+                                                <span class="fedex-regular ml-8" data-bind="text: '$'+$parent.surchargeAmount"></span>
+                                            </div>
+                                            <!-- /ko -->
+                                        </td>
+                                        <!-- ko if: $parents[1].enableShippingFreeText() -->
+                                            <!-- ko if: $parent.shippingPrice -->
+                                            <td class="payment-information-price" colspan="1" data-bind="text: $parents[1].priceFormatWithCurrency($parent.shippingPrice)"></td>
+                                            <!-- /ko -->
+                                            <!-- ko ifnot: $parent.shippingPrice -->
+                                            <td class="payment-information-price" colspan="1">
+                                                <span class="fedex-bold weight-700 cl-green" data-bind="i18n: 'FREE'"></span>
+                                            </td>
+                                            <!-- /ko -->
+                                        <!-- /ko -->
+                                        <!-- ko ifnot: $parents[1].enableShippingFreeText() -->
+                                        <td class="payment-information-price" colspan="1" data-bind="text: $parents[1].priceFormatWithCurrency($parent.shippingPrice)"></td>
+                                        <!-- /ko -->
+                                    </tr>
+                                    <tr class="shipping-method">
+                                      <td class="shipping-method-title pt-0" colspan="5">
+                                        <span class="shipping-title">
+                                          Expected Delivery:
+                                        </span>
+                                        <span class="chosen-shipping" data-bind="text: $parent.deliveryDate"></span>
+                                      </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <!-- /ko-->
+
+                        <!-- ko if: $index() < ($parent.items.length - 1) -->
+                            <tr>
+                                <td colspan="5" class="order-success-item-separator" >
+                                    <div class="border-top-iron w-100 h-1"></div>
+                                </td>
+                            </tr>
+                        <!-- /ko -->
+
+                      <!-- /ko -->
+                      <!-- ko if: $index() < ($parent.groupedBySellers().length - 1) -->
+                      <tr><td colspan="5" class="p-0"><hr class="mt-0" /></td></tr>
+                      <!-- /ko -->
+
+                    <!-- /ko -->
+
+                <!-- /ko -->
+
+            </table>
+        </div>
+        <!-- /ko -->
+        <!-- ko ifnot: isAdditionalDetailsAvailable() -->
+        <div class="cart-table-info including-additional-details" style="overflow-x:auto;">
+            <table aria-describedby="cart-table" class="cart-table order-success">
+                <tr class="table-row-th">
+                    <th>PRODUCT NAME</th>
+                    <th>PRICE</th>
+                    <th>QTY</th>
+                    <th>DISCOUNT</th>
+                    <th>SUBTOTAL</th>
+                </tr>
+                <tr class="delivery-methods-mobile-view">
+                    <td colspan="5" class="delivery-method mobile">
+                        <div class="delivery-method-td">
+                            <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                            <p>Shipping</p>
+                        </div>
+                    </td>
+                    <td colspan="5" class="product-divider mobile">
+                        <span>
+                            FedEx Office (<span data-bind="text: itemsCount()"></span>)
+                        </span>
+                    </td>
+                </tr>
+                <tr class="delivery-method desktop">
+                    <td colspan="5" class="delivery-method-td">
+                        <img data-bind="attr: {src: deliveryIconUrl()}" alt="">
+                        <p>Shipping</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="5" class="product-divider desktop">
+                        FedEx Office (<span data-bind="text: itemsCount()"></span>)
+                    </td>
+                </tr>
+
+                <!-- ko foreach: cartItems() -->
+                    <!-- ko if: type !== "EXTERNAL_PRODUCT" -->
+                        <tr class="table-row">
+                            <td class="col options">
+                                <div class="item-description-img">
+                                    <span class="order-success product-image-container">
+                                        <span class="order-success product-image-wrapper">
+                                            <img class="order-success product-image-photo" alt="sensitive-product-image-placehoder"
+                                                data-bind="attr: {data: $parent.imgLoad(preview_url,$element), src: preview_url}" />`
+                                        </span>
+                                    </span>
+                                    <div class="product-name-details">
+                                        <p class='product-name' data-bind="text: userProductName"></p>
+                                        <span class="show-details-button" data-bind="click: function(config, event) { $parent.toggleAdditionalDataVisibilityOnOrderSuccess(config, event) }">
+                                            <span class="show-details-button-text" data-bind="text: $parent.viewDetailsText()"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col price" data-th="PRICE">
+                                <p class="order-success-qty" data-bind="text: $parent.priceFormatWithCurrency(productUnitPrice)"></p>
+                            </td>
+                            <td class="col qty" data-th="QTY">
+                                <p class="order-success-qty" data-bind="text: unitQuantity"></p>
+                            </td>
+                            <td class="col discount" data-th="DISCOUNT">
+                                <p
+                                data-bind="
+                                    text: productDiscountAmount > 0 ? $parent.priceFormatWithCurrency(productDiscountAmount) : '-',
+                                    class: 'order-success-total',
+                                    css: {'has-discount': productDiscountAmount > 0}
+                                "></p>
+                            </td>
+                            <td class="col total" data-th="SUBTOTAL">
+                                <p class="order-success-total" data-bind="text: $parent.priceFormatWithCurrency(productLinePrice)"></p>
+                            </td>
+                        </tr>
+                        <tr class="show-hide-content" >
+                            <td colspan="5" data-bind="attr: {class: 'additional-details-container item-' + instanceId}" style="display: none;">
+                                <table aria-describedby="table-row-th product-line-details-table" class="cart-table product-line-details-table">
+                                    <thead>
+                                        <tr class="table-row-th">
+                                            <th class="col options" data-bind="text: 'SKU'"></th>
+                                            <th class="col price" data-bind="text: 'Base Price'"></th>
+                                            <th class="col qty" data-bind="text: 'Qty'"></th>
+                                            <th class="col discount" data-bind="text: 'Discount'"></th>
+                                            <th class="col total" data-bind="text: 'Total'"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td data-th="SKU"><p data-bind="text: productLineDetails[0].description"></p></td>
+                                            <td data-th="BASE PRICE"><p data-bind="text: $parent.priceFormatWithCurrency(productLineDetails[0].detailPrice)"></p></td>
+                                            <td data-th="QTY"><p data-bind="text: productLineDetails[0].unitQuantity"></p></td>
+                                            <td class="discount" data-th="DISCOUNT">
+                                                <p data-bind="
+                                                text: productLineDetails[0].detailDiscountPrice > 0 ? $parent.priceFormatWithCurrency(productLineDetails[0].detailDiscountPrice) : '-',
+                                                css: {'has-discount': productLineDetails[0].detailDiscountPrice > 0}"></p>
+                                            </td>
+                                            <td data-th="TOTAL" class="cart-total-amount"><p data-bind="text: $parent.priceFormatWithCurrency(productLineDetails[0].detailPrice)"></p></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- ko if: $data.features -->
+                                <table aria-describedby="additional-option-table" class="additional-option-table">
+                                    <thead>
+                                    <tr>
+                                        <th class="additional-details-title" data-bind="text: 'Additional Details'"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <!-- ko foreach: $parent.getAdditionalData(instanceId) -->
+                                        <!-- ko foreach: features -->
+                                            <tr>
+                                                <td><strong data-bind="text: name + ': ' + value "></strong></td>
+                                            </tr>
+                                        <!-- /ko -->
+                                    <!-- /ko -->
+                                    </tbody>
+                                </table>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: carrierTitle() !== ''-->
+                <tr class="view-receipt-shipping-separator">
+                    <td colspan="5">
+                        <hr>
+                    </td>
+                </tr>
+                <tr class="order-shipping-method">
+                    <td colspan="5">
+                        <table>
+                            <tr class="shipping-method">
+                                <td colspan="4" class="shipping-method-title">
+                                    <span>
+                                        <span class="shipping-title">
+                                            Shipping method:
+                                        </span>
+                                        <span class="chosen-shipping" data-bind="text: carrierTitle()"></span>
+                                        <sup>®</sup>
+                                    </span>
+                                </td>
+                                <td class="payment-information-price" colspan="1" data-bind="text: priceFormatWithCurrency(carrierPrice())"></td>
+                            </tr>
+                            <!-- ko if: isExpectedDeliveryDateEnabled() -->
+                            <tr class="shipping-method">
+                                <td class="shipping-method-title pt-0" colspan="5">
+                                  <span class="shipping-title">Expected Delivery:</span>
+                                  <span class="chosen-shipping" data-bind="text: expectedDeliveryDate()"></span>
+                                </td>
+                            </tr>
+                            <!-- /ko -->
+                        </table>
+                    </td>
+                </tr>
+                <!-- /ko -->
+            </table>
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <div class="order-query mobile">
+        <div class="total-cart-count-query">
+            <div class="query-about">
+                <div class="query-question">Questions about your order?</div>
+                <!-- ko ifnot: isEssendantToggleEnabled() -->
+                    <div class="query-link">
+                        Visit our <a data-bind="attr: {href: customerSupportUrl}">Customer Support</a> page for help.
+                    </div>
+                <!-- /ko -->
+                <!-- ko ifnot: isEssendantToggleEnabled() -->
+                    <div class="query-link">
+                        Call
+                        <a href="tel:18004633339">1.800.GoFedEx</a>
+                        or
+                        <a href="tel:18004633339">1.800.463.3339</a>
+                    </div>
+                <!-- /ko -->
+                <!-- ko if: isExpectedDeliveryDateEnabled() && !isOnlyNonCustomizableCart() -->
+                <div class="query-note" data-bind="text: orderConfirmationCancellationMsg()"></div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+
+    <div class="order-transaction-summary">
+        <div class="total-cart-count">
+            <div class="order-details">
+                <!--B-1275188 Show split totals based on rate quote response -->
+
+                <!-- ko if: canShowEstimatedShippingTotal()-->
+                <table aria-describedby="order-table" class="order-table" style="width:100%">
+                    <tr>
+                        <th>Items (<span data-bind="text: itemCount"></span>)</th>
+                        <td data-bind="text: productTotal"></td>
+                    </tr>
+                    <tr>
+                        <!-- ko if: marketplaceShippingAmount() -->
+                        <th>Shipping Total </th>
+                        <td data-bind="text: marketplaceShippingAmount"></td>
+                        <!-- /ko -->
+                    </tr>
+                    <tr>
+                        <th>Tax</th>
+                        <td data-bind="text: taxAmount"></td>
+                    </tr>
+                    <tr class="total-disc">
+                        <th class ="toggle-discount" data-bind="html: getDiscountTitle(), click:toggleDiscount"></th>
+                        <td data-bind="text: totalDiscountAmount"></td>
+                    </tr>
+                    <!-- ko if: isDiscountAvailable() -->
+                    <tr class="discount_breakdown total-disc-dropdown">
+                        <td colspan="2">
+                            <table>
+                                <tbody data-bind="foreach: getSortedDiscounts()">
+                                <!-- ko if: is_active -->
+                                <tr class="discount" data-bind="class: type">
+                                    <th class="mark" scope="row" data-bind="text: label"></th>
+                                    <td class="amount">
+                                        <span class="price" data-bind ="text: price, attr:{'data-label': label}"></span>
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <tr>
+                        <th>Total</th>
+                        <td data-bind="text: totalAmount"></td>
+                    </tr>
+                    <tr class="total-estimated-shipping">
+                        <th>Estimated Shipping Charges</th>
+                        <td data-bind="text: shippingAmount"></td>
+                    </tr>
+                </table>
+                <!-- /ko -->
+                <!-- ko if: !canShowEstimatedShippingTotal()-->
+                <table aria-describedby="order-table" class="order-table" style="width:100%">
+                    <tr>
+                        <th>Items (<span data-bind="text: itemCount"></span>)</th>
+                        <td data-bind="text: productTotal"></td>
+                    </tr>
+                    <!-- ko if: showShippingTotal() -->
+                    <tr>
+                        <th>Shipping Total</th>
+                        <!-- ko if: enableShippingFreeText() -->
+                            <!-- ko if: shippingAmount() == '$0.00' -->
+                                <td>
+                                    <span class="fedex-bold weight-700 cl-green" data-bind="i18n: 'FREE'"></span>
+                                </td>
+                            <!-- /ko -->
+                            <!-- ko ifnot: shippingAmount() == '$0.00' -->
+                                <td data-bind="text: shippingAmount"></td>
+                            <!-- /ko -->
+                        <!-- /ko -->
+                        <!-- ko ifnot: enableShippingFreeText() -->
+                        <td data-bind="text: shippingAmount"></td>
+                        <!-- /ko -->
+                    </tr>
+                    <!-- /ko -->
+                    <tr>
+                        <th>Tax</th>
+                        <td data-bind="text: taxAmount"></td>
+                    </tr>
+                    <tr class="total-disc">
+                        <th class ="toggle-discount" data-bind="html: getDiscountTitle(),, click:toggleDiscount"></th>
+                        <td data-bind="text: totalDiscountAmount"></td>
+                    </tr>
+                    <!-- ko if: isDiscountAvailable() -->
+                    <tr class="discount_breakdown total-disc-dropdown">
+                        <td colspan="2">
+                            <table>
+                                <tbody data-bind="foreach: getSortedDiscounts()">
+                                <!-- ko if: is_active -->
+                                <tr class="discount" data-bind="class: type">
+                                    <th class="mark" scope="row" data-bind="text: label"></th>
+                                    <td class="amount">
+                                        <span class="price" data-bind ="text: price, attr:{'data-label': label}"></span>
+                                    </td>
+                                </tr>
+                                <!-- /ko -->
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <tr class="order-table-total">
+                        <th>
+                            <div>
+                                Total
+                            </div>
+                        </th>
+                        <td>
+                            <div data-bind="text: totalAmount">
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+
+    <div class="order-query desktop">
+        <div class="total-cart-count-query">
+            <div class="query-about">
+                <div class="query-question">Questions about your order?</div>
+                <!-- ko if: isEssendantToggleEnabled() -->
+                    <div class="query-link">
+                        Visit our <a data-bind="attr: {href: customerSupportUrl}">Customer Support</a> page for help.
+                    </div>
+                <!-- /ko -->
+                <!-- ko ifnot: isEssendantToggleEnabled() -->
+                    <div class="query-link">
+                        Call
+                        <a href="tel:18004633339">1.800.GoFedEx</a>
+                        or
+                        <a href="tel:18004633339">1.800.463.3339</a>
+                    </div>
+                <!-- /ko -->
+                <!-- ko if: isExpectedDeliveryDateEnabled() && !isOnlyNonCustomizableCart() -->
+                <div class="query-note" data-bind="text: orderConfirmationCancellationMsg()"></div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+
+</div>

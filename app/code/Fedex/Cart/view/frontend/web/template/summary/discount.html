@@ -1,0 +1,46 @@
+<!--
+/**
+ * Copyright © Fedex, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tr class="discount">
+    <th class="mark toggle-discount" scope="row">
+        <!-- ko if: isDiscountBreakdownEnable() -->
+            <!-- ko if: isQuotePriceable() -->
+            <a href="#" id="discdrop" tabindex="0" data-bind="click: toggleDiscount" role="button">Total Discount(s)  <span id="discbreak" class="arrow down"></span></a>
+            <!-- /ko -->
+            <!-- ko if: !isQuotePriceable() -->
+            Total Discount(s)
+            <!-- /ko -->
+        <!-- /ko -->
+        <!-- ko ifnot: isDiscountBreakdownEnable() -->
+        Total Discount(s)
+        <!-- /ko -->
+    </th>
+    <td class="amount">
+        <span class="price" data-bind ="text: getValue(), attr:{'data-label': title}"></span>
+        <!-- ko foreach: elems() -->
+            <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+    </td>
+</tr>
+<!-- ko if: isDiscountBreakdownEnable() -->
+<tr class="discount_breakdown">
+    <td colspan="2">
+        <table>
+            <tbody data-bind="foreach: getSortedDiscounts()">
+            <!-- ko if: is_active -->
+            <tr class="discount" data-bind="class: type">
+                <th class="mark" scope="row" data-bind="text: label"></th>
+                <td class="amount">
+                    <span class="price" data-bind ="text: price, attr:{'data-label': label}"></span> 
+                </td>
+            </tr>
+            <!-- /ko -->
+            </tbody>
+        </table>
+    </td>
+</tr>
+<!-- /ko -->

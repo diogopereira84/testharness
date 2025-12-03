@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="catalog_product_entity" resource="default" engine="innodb" comment="Catalog Product Table">
+        <column xsi:type="smallint" name="pod2_0_editable" unsigned="true" nullable="true" default="0" comment="POD2_0_editble Product Status"/>
+        <column xsi:type="datetime" name="product_document_expire_date" comment="Product Document Expire Date"/>
+        <!-- Fix issue D-209736: If document already expired and removed from system that case it will no more retry flag -->
+        <column xsi:type="smallint" name="is_document_expire" unsigned="true" nullable="false" default="0" comment="Is Document Expire"/>
+        <column xsi:type="varchar" name="fxo_menu_id" comment="FXO Menu Id"/>
+        <column xsi:type="varchar" name="folder_path" nullable="true" comment="folder path"/>
+        <column xsi:type="smallint" name="added_by" unsigned="true" nullable="true" comment="Added By"/>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_POD2_0_EDITABLE" indexType="btree">
+            <column name="pod2_0_editable"/>
+        </index>
+    </table>
+    <table name="catalog_category_entity" resource="default" engine="innodb" comment="Catalog Category Table">
+        <index referenceId="CATALOG_CATEGORY_ENTITY_PARENT_ID" indexType="btree">
+            <column name="parent_id"/>
+        </index>
+        <column name="etag" xsi:type="varchar" nullable="true" length="255" comment="ETag Field for catalog category page"/>
+    </table>
+    <table name="catalog_product_activity" resource="default" engine="innodb" comment="Catalog Product Activity Table">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
+        <column xsi:type="int" name="user_id" nullable="false" comment="User ID either admin or customer"/>
+        <column xsi:type="int" name="user_type" nullable="false" comment="User Type 1 - Customer 2 - Admin 3 - Cron"/>
+        <column xsi:type="int" name="product_id" nullable="false" comment="Product ID"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Activity Description"/>
+        <column xsi:type="varchar" name="user_name" nullable="true" length="255" comment="User Name"/>
+        <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product Name"/>
+        <column xsi:type="int" name="activity_type" unsigned="true" nullable="true" identity="false" default="0" comment="Activity Type (default => 0, 1 =>  Create, 2=> Update, 3=> Delete, 4=> Renew)"/>
+        <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Activity Created At"/>
+        <constraint xsi:type="primary" referenceId="catalog_product_activity_primary_id">
+            <column name="id"/>
+        </constraint>
+        <index referenceId="catalog_product_activity_user_id" indexType="btree">
+            <column name="user_id"/>
+        </index>
+        <index referenceId="catalog_product_activity_user_type" indexType="btree">
+            <column name="user_type"/>
+        </index>
+        <index referenceId="catalog_product_activity_product_id" indexType="btree">
+            <column name="product_id"/>
+        </index>
+        <index referenceId="catalog_product_activity_type" indexType="btree">
+            <column name="activity_type"/>
+        </index>
+    </table>
+</schema>

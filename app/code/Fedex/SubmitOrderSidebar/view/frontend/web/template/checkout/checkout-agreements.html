@@ -1,0 +1,43 @@
+
+<!-- ko if: isTermsAndConditionsEnabled() -->
+<div data-role="checkout-agreements" id="terms-conditions" data-bind="visible: showTerms">
+    <div class="checkout-agreements fieldset mt-20 mb-0 d-flex flex-col" data-bind="visible: isVisible">
+        <!-- ko foreach: agreements -->
+            <!-- ko if: ($parent.isAgreementRequired($data)) -->
+                <div class="checkout-agreement field choice required d-flex flex-col">
+                    <label class="label checkout-checkbox" data-bind="attr: {'for': $parent.getCheckboxId($parentContext, agreementId)}">
+                        <input type="checkbox" class="required-entry agreement_enable"
+                            data-testid="checkout-order-summary-input-checkbox-terms-and-conditions-agreements" data-bind="attr: {
+                                'id': $parent.getCheckboxId($parentContext, agreementId),
+                                'name': 'agreement[' + agreementId + ']',
+                                'value': agreementId
+                                }" />                                  
+                        <span class="checkmark" tabindex="0"></span>    
+                        <div class="terms-text">
+                            <span class="lh-28" data-bind="i18n: 'I have reviewed my order and accept the'"></span>
+                            <a href="https://www.fedex.com/en-us/office/terms-and-conditions.html" target="_blank"
+                                data-testid="checkout-order-summary-link-terms-and-conditions">
+                                <span data-bind="html: checkboxText" class="terms-page-link"></span>
+                            </a>
+                        </div>
+                    </label>
+                </div>
+                <div class="field-error" id="terms-and-conditions-error" style="display: none;">
+                    <span data-bind="i18n: 'Please accept the terms and conditions.'"></span>
+                </div>
+            <!-- /ko -->
+            <!-- ko ifnot: ($parent.isAgreementRequired($data)) -->
+                <div class="checkout-agreement">
+                    <button type="button" class="action action-show"
+                        data-bind="click: function(data, event) { return $parent.showContent(data, event) }">
+                        <span data-bind="html: checkboxText"></span>
+                    </button>
+                </div>
+            <!-- /ko -->
+        <!-- /ko -->
+        <div id="checkout-agreements-modal" data-bind="afterRender: initModal" style="display: none">
+            <div class="checkout-agreements-item-content" data-bind="html: modalContent, style: {height: contentHeight, overflow:'auto' }"></div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="1column"/>
+
+    <referenceContainer name="main">
+        <block class="Magento\Catalog\Block\Product\View" name="product.info.brand" template="Fedex_MarketplaceProduct::product/view/brand.phtml" after="breadcrumbs">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+            </arguments>
+        </block>
+    </referenceContainer>
+
+    <referenceContainer name="content">
+        <container name="delivery.only.tag" before="content.wrapper">
+            <block class="Magento\Framework\View\Element\Template" name="delivery.only.tag.block" template="Fedex_MarketplaceProduct::product/view/deliveryOnlyTag.phtml"
+                   ifconfig="environment_toggle_configuration/environment_toggle/tiger_e422224dispaly_unit_cost_for_3p_and_1p_products">
+                <arguments>
+                    <argument name="3pProductAttribute_viewModel" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                </arguments>
+            </block>
+        </container>
+       
+        <container name="content.wrapper" htmlTag="div" htmlClass="content-wrapper">
+
+            <referenceContainer name="product.info.media">
+                <referenceBlock name="page.main.title" remove="false" />
+                <referenceBlock name="marketing_description" remove="true" />
+                <block class="Magento\Framework\View\Element\Template" name="product.message" template="Fedex_MarketplaceProduct::product/view/message.phtml" after="-">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                    </arguments>
+                </block>
+            </referenceContainer>
+
+            <referenceContainer name="product.info.main">
+                <!-- Product description (right column) -->
+                <referenceBlock name="product.info.config">
+                    <action method="setTemplate">
+                        <argument name="template" xsi:type="string">Fedex_MarketplaceProduct::product/view/attributes.phtml</argument>
+                    </action>
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                    </arguments>
+                    <!-- Product options -->
+                    <container name="product.options" htmlTag="div" htmlClass="product-options"></container>
+                    <!-- Price -->
+                    <referenceBlock name="product.info.config.price.box">
+                        <action method="setTemplate">
+                            <argument name="template" xsi:type="string">Fedex_MarketplaceProduct::product/view/price_box.phtml</argument>
+                        </action>
+                        <arguments>
+                            <argument name="view_model" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                            <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                        </arguments>
+                    </referenceBlock>
+                </referenceBlock>
+                <!-- File upload -->
+                <referenceBlock name="product.info.fileupload">
+                    <action method="setTemplate">
+                        <argument name="template" xsi:type="string">Fedex_MarketplaceProduct::product/view/fileupload.phtml</argument>
+                    </action>
+                    <arguments>
+                        <argument name="viewModel" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                    </arguments>
+                </referenceBlock>
+
+                <block name="product.info.additional.instructions" class="Magento\Catalog\Block\Product\View"
+                       template="Fedex_MarketplaceProduct::product/view/additional_instructions.phtml" after="product.info.fileupload">
+                    <arguments>
+                        <argument name="view_model" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+                    </arguments>
+                </block>
+            </referenceContainer>
+        </container>
+
+        <referenceBlock name="product.info.details" remove="true" />
+        <referenceBlock name="catalog.product.related" remove="true" />
+
+        <block class="Fedex\Catalog\Block\Product\View\AboutUs" name="product.about" as="product_about" template="Magento_Catalog::product/view/about-this-product.phtml">
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Info" name="product.about.info" as="product_about_info" template="Magento_Catalog::product/view/about-us/info.phtml" />
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Faq" name="product.about.faq" as="product_about_faq" template="Magento_Catalog::product/view/about-us/faqs.phtml" />
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Shipping" name="product.about.shipping" as="product_about_shipping" template="Magento_Catalog::product/view/about-us/shipping.phtml" />
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Options" name="product.about.options" as="product_about_options" template="Magento_Catalog::product/view/about-us/options.phtml" />
+        </block>
+
+        <container name="related.products.area" htmlTag="div" htmlClass="related-products-area products-carousel">
+            <block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.related.third.party" template="Fedex_MarketplaceProduct::product/list/items.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">related</argument>
+                    <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Listing\PreparePostData</argument>
+                </arguments>
+            </block>
+        </container>
+
+        <container name="recent.products.area" htmlTag="div" htmlClass="recent-products-area products-carousel" after="related-products-area">
+            <block class="Magento\Catalog\Block\Widget\RecentlyViewed" name="recently_viewed" template="Fedex_MarketplaceProduct::product/widget/viewed/grid.phtml" after="-">
+                <arguments>
+                    <argument name="uiComponent" xsi:type="string">widget_recently_viewed</argument>
+                    <argument name="page_size" xsi:type="number">4</argument>
+                    <!-- 'Product attributes to show' configuration -->
+                    <argument name="show_attributes" xsi:type="string">name,image,price</argument>
+                </arguments>
+            </block>
+        </container>
+    </referenceContainer>
+
+    <referenceContainer name="page.wrapper">
+        <block class="Magento\Framework\View\Element\Template"
+               name="product_specifications_tab"
+               template="Fedex_MarketplaceProduct::product/view/tabs/specifications.phtml"
+               before="-">
+            <arguments>
+                <argument name="tab_label" xsi:type="string">Specifications</argument>
+                <argument name="tab_sort_order" xsi:type="number">40</argument>
+                <argument name="viewModel" xsi:type="object">Fedex\MarketplaceProduct\ViewModel\Product\Attribute</argument>
+            </arguments>
+        </block>
+    </referenceContainer>
+    <move element="product.info" destination="product.options" before="-" />
+    <move element="product.info.media" destination="content.wrapper" before="-" />
+    <move element="product.info.main" destination="content.wrapper" after="-" />
+    <move element="product.info.details" destination="content" after="content.wrapper" />
+</layout>

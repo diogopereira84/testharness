@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Mirakl\Mcm\Model\Product\Import\Adapter\Mcm">
+        <plugin name="Fedex_MarketplaceProduct_Plugin_Mirakl_Mcm_Model_Product_Import_Adapter_Mcm"
+                type="Fedex\MarketplaceProduct\Plugin\Mirakl\Mcm"
+                sortOrder="0" disabled="false"/>
+    </type>
+    <type name="Mirakl\Mcm\Model\Product\Import\Adapter\Bulk">
+        <plugin name="Fedex_MarketplaceProduct_Plugin_Mirakl_Bulk_Model_Product_Import_Adapter_Bulk"
+                type="Fedex\MarketplaceProduct\Plugin\Mirakl\Bulk"
+                sortOrder="0" disabled="false"/>
+    </type>
+    <type name="Magento\Catalog\Block\Product\View\GalleryOptions">
+        <plugin name="Fedex_MarketplaceProduct_Plugin_Change_Navdir_To_Horizontal"
+                type="Fedex\MarketplaceProduct\Plugin\Catalog\Product\GalleryOptions"
+                sortOrder="0"
+                disabled="false"
+                />
+    </type>
+    <type name="Mirakl\Mci\Helper\Product\Import\Category">
+        <plugin name="Fedex_MarketplaceProduct_Plugin_Product_Import_Category"
+                type="Fedex\MarketplaceProduct\Plugin\Product\Import\Category" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Mirakl\Mci\Helper\Product\Image">
+        <plugin name="Fedex_MarketplaceProduct_Plugin_Mirakl_Helper_Product_Image"
+                type="Fedex\MarketplaceProduct\Plugin\Mirakl\Helper\Product\Image" sortOrder="10" disabled="false"/>
+    </type>
+
+    <preference for="Fedex\MarketplaceProduct\Api\Data\OfferInterface"
+                type="Fedex\MarketplaceProduct\Model\Offer" />
+    <preference for="Fedex\MarketplaceProduct\Api\Data\ShopInterface"
+                type="Fedex\MarketplaceProduct\Model\Shop" />
+    <preference for="Fedex\MarketplaceProduct\Api\OfferRepositoryInterface"
+                type="Fedex\MarketplaceProduct\Model\OfferRepository" />
+    <preference for="Fedex\MarketplaceProduct\Api\ShopManagementInterface"
+                type="Fedex\MarketplaceProduct\Model\ShopManagement" />
+    <preference for="Fedex\MarketplaceProduct\Api\ShopRepositoryInterface"
+                type="Fedex\MarketplaceProduct\Model\ShopRepository" />
+    <preference for="Fedex\MarketplaceProduct\Api\NonCustomizableProductInterface"
+                type="Fedex\MarketplaceProduct\Model\NonCustomizableProduct" />
+
+    <preference for="Magento\NegotiableQuote\Plugin\Quote\Api\CartItemRepository\ValidateNegotiablePricePlugin"
+                type="Fedex\MarketplaceProduct\Plugin\Quote\Api\CartItemRepository\ValidateNegotiablePricePlugin"/>
+</config>

@@ -1,0 +1,1588 @@
+<?php
+$subCategories = $block->getCategoryCollection();
+$printproductcoll = $block->getProductCollectionByCategories();
+$getproductimage = $block->getProductImage();
+$configuratorUrl = $block->getConfiguratorUrl();
+$fxomenuId = $block->getFxoMenuId();
+$pendingReviewStatus = $block->getCatalogPendingReviewStatus();
+//FXOCM Code start
+$fxocmViewModel = $block->getData('fxo_cm_view_model');
+$isIframeSdkEnable = is_null($fxocmViewModel) ? null : $fxocmViewModel->isIframeSdkEnable() ;
+if ($isIframeSdkEnable) {
+    $FXOCMBaseUrl = $fxocmViewModel->getBaseUrl();
+    $FXOCMClientId = $fxocmViewModel->getClientId();
+    $driveUploadEnable = "true"; // Need to keep it true, as toggle value is not modifiable in the admin section.
+    $boxEnabled = ($fxocmViewModel->isBoxEnabled())?"true":"false";
+    $dropBoxEnable = ($fxocmViewModel->isDropboxEnabled())?"true":"false";
+    $googleEnabled = ($fxocmViewModel->isGoogleEnabled())?"true":"false";
+    $microSoftEnabled = ($fxocmViewModel->isMicrosoftEnabled())?"true":"false";
+}
+
+ $isE475721ToggleEnabled = $fxocmViewModel->isToggleEnabledForProductAdminCTCE475721(); 
+//FXOCM Code End
+$printProductCategoryId = $block->getPrintProductCategory();
+$isCloudDriveIntegrationBox = $block->getConfigurationValue(
+    'fedex/cloud_drive_integration/box_enabled'
+);
+$isCloudDriveIntegrationDropbox = $block->getConfigurationValue(
+    'fedex/cloud_drive_integration/dropbox_enabled'
+);
+$isCloudDriveIntegrationGoogle = $block->getConfigurationValue(
+    'fedex/cloud_drive_integration/google_enabled'
+);
+$isCloudDriveIntegrationMicrosoft = $block->getConfigurationValue(
+    'fedex/cloud_drive_integration/microsoft_enabled'
+);
+$customProductCategoryId = $block->getConfigurationValue(
+    'ondemand_setting/category_setting/epro_print_custom_product'
+);
+$downloadAjaxurl = $block->getUrl('catalogmvp/catalog/download');
+$customerTimeZoneUrl = $block->getUrl('catalogmvp/catalog/getCustomerTime');
+
+$isNonStandardCatalogToggleEnabled = $fxocmViewModel->getNonStandardCatalogToggleEnabled();
+$uploadToQuoteConfigData = json_encode($fxocmViewModel->getUploadToQuoteConfigValue());
+$isFixAllowFileUploadToggleEnabled = $fxocmViewModel->getFixAllowFileUploadToggle();
+$additionalPrintInstructionsConfigData = json_encode($fxocmViewModel->getAdditionalPrintInstructionsConfigValue());
+$skuOnlyProductId = $block->getConfigurationValue(
+    'ondemand_setting/category_setting/sku_only_productId'
+);
+
+$productEngineUrl = '';
+$fixedQtyHandlerToggle = $block->getConfigurationValue('environment_toggle_configuration/environment_toggle/fxo_cm_fixed_qty_handle_for_catalog_mvp') ?? 0;
+if ($fixedQtyHandlerToggle) {
+    $productEngineUrl = $block->getConfigurationValue('product_engine/general/url') ?? '';
+}
+$slectedCheckoboxIcon = 'Fedex_CatalogMvp::images/selected-checkbox.png';
+
+$productAttributeSetName = null;
+$productAttributeSetCollection = null;
+
+if ($block->getConfigurationValue('environment_toggle_configuration/environment_toggle/mazegeeks_d194278_admin_product_refresh')) {
+    $productAttributeSetName = $block->getAttrSetIdByProductId();
+    $productAttributeSetCollection = $block->getProductAttrSetCollection();
+}
+$isCatalogFileUploadToggleEnabled = 0;
+if ($fxocmViewModel->getAllowFileUploadCatalogFlow()) {
+    $isCatalogFileUploadToggleEnabled = 1;
+}
+$isFXOSessionIdRemoveToggle = $block->getConfigurationValue('environment_toggle_configuration/environment_toggle/explorer_ctcadmin_remove_fxosessionid') ?? 0;
+$isExplorerNscReplaceFileToggle = $block->getConfigurationValue('environment_toggle_configuration/environment_toggle/explorer_nsc_replace_file') ?? 0;
+$isManualSkuDefaultToggle = $block->getConfigurationValue('environment_toggle_configuration/environment_toggle/explorers_b_2205903_fix') ?? 0;
+$magegeeksD236791enabled = $block->getConfigurationValue('environment_toggle_configuration/environment_toggle/magegeeks_d236791') ?? 0;
+?>
+<div id="custom-model-popup" class="custom-configure-product-popup" style="display:none;">
+    <div id="configure-product-popup-container">
+        <div id="custom-model-popup-header" class="header-configure-product">
+            <span class="configure-product-heading"><?= $block->escapeHtml(__('Select Product Type')); ?></span>
+        </div>
+        <div class="custom-popup-main-content">
+            <div class="custom-pop-up-left-nav sidebar">
+                <div class="custom-popup-category-tree">
+                    <ul>
+                        <?php
+                        foreach ($subCategories as $subCategory) {
+                        if (($subCategory->getName() === 'Print Products' || $subCategory->getId() == $printProductCategoryId) && $subCategory->hasChildren() ) {
+                            $allproducts = 'All Products';
+                            $printproid = $subCategory->getId();
+                            ?>
+                            <li class="custom-pop-up-category-link active" id="<?= /* @noEscape */ $printproid ?>">
+                                <p>
+                                    <a class="custom-pop-up-category-link-tag"  id="<?= /* @noEscape */ $printproid ?>"><?= /* @noEscape */ $allproducts ?></a>
+                                </p>
+                            </li>
+                            <?php
+                            /* For Sub Categories */
+                                $childCategoryObj = $this->categoryRepository->get($subCategory->getId());
+                                $childSubcategories = $childCategoryObj->getChildrenCategories();
+                                foreach ($childSubcategories as $childSubcategory) {
+                                    $childofprintproduct = $childSubcategory->getName();
+                                    $catid = $childSubcategory->getId();
+                                    if ($catid == $customProductCategoryId) {
+                                        continue;
+                                    }
+                            ?>
+                            <li class="custom-pop-up-category-link" id="<?= /* @noEscape */ $catid ?>">
+                                <p>
+                                    <a class="custom-pop-up-category-link-tag" id="<?= /* @noEscape */ $catid ?>"><?= /* @noEscape */ $childofprintproduct ?></a>
+                                </p>
+                            </li>
+                    <?php
+                                }
+                        }
+                    }
+                    ?>
+
+                    </ul>
+                </div>
+            </div>
+            <div class="custom-pop-up-category-product">
+                <div class ="custom-pop-up-product-grid">
+                <ol class="products list items product-items">
+                <?php
+                foreach ($printproductcoll as $printproductcolls) {
+                $productname = $printproductcolls->getName();
+                if (!empty($printproductcolls)) {
+                    $productimage =  $this->productImage->init($printproductcolls, 'new_products_content_widget_grid')
+                                            ->setImageFile($printproductcolls->getSmallImage())
+                                            ->keepFrame(true)
+                                            ->resize(147)
+                                            ->getUrl();
+                } else {
+                    $productimage = $this->productImage->getDefaultPlaceholderUrl('thumbnail');
+                }
+                if (str_contains($productimage, 'placeholder/.jpg')) {
+                    $productimage = str_replace('placeholder/.jpg', 'placeholder/thumbnail.jpg', $productimage);
+                }
+                ?>
+                <li class="item product product-item"
+                 data-index-engineid="<?= $printproductcolls->getProductId()?>"
+                  data-index-id="<?= $printproductcolls->getSku();?>"
+                   data-index-name="<?= $printproductcolls->getName();?>">
+                        <div class="product-item-info">
+                            <span class="product-image-container">
+                                <span class="product-image-wrapper">
+                                    <img class="product-image-photo"
+                                    src="<?= /* @noEscape */ $productimage ?>"
+                                    loading="lazy"
+                                    style="width: 173px;height: 146px;" alt="<?= /* @noEscape */ $productname ?>">
+                                </span>
+                            </span>
+                        <div class="product-name-list">
+                            <p class="product name product-item-name"><?= /* @noEscape */ $productname ?></p>
+                        </div>
+                    </li>
+                <?php
+                }
+                ?>
+                </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="product-sku-model" class="product-sku-model-popup" style="display:none;">
+    <form class="form" id="product-sku-popup-form" method="post" autocomplete="off">
+        <div class="product-sku-section">
+            <?php echo __("You've added manual SKUs to this catalog item, choose which SKUs should be a one time fee by marking them 'fixed'. SKUs not marked 'fixed' will be multiplied by the quantity the customer orders.") ?>
+        </div>
+        <br></br>
+        <div class="center-line"></div>
+        <div class="product-sku-model-form-data">
+            <table class="product-sku-list" aria-describedby="product-sku-list">
+                <tr class="product-sku-list-heading">
+                    <th class="sku-label"></th>
+                    <th class="qty-label"><?php echo __('QTY') ?></th>
+                    <th class="unit-label"><?php echo __('UNIT') ?></th>
+                    <th class="total-label"><?php echo __('TOTAL') ?></th>
+                    <th class="fixed-label"><?php echo __('FIXED') ?></th>
+                </tr>
+            </table>
+            <div class="manage-sku-actions-toolbar">
+                <button type="button" class="action go-back-button" title="<?php echo __('GO BACK') ?>">
+                    <span><?php echo __('GO BACK') ?></span>
+                </button>
+                <button type="button" class="action save-sku-button" title="<?php echo __('SAVE') ?>">
+                    <span><?php echo __('SAVE') ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<?php
+if (!$isIframeSdkEnable): ?>
+ <div class="iframe_popup" id="iframe_popup">
+    <div class="container" id="iframe-selector"></div>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+<?php else: ?>
+<div class="iframe_popup" id="iframe_popup">
+    <div class="container-page">
+        <div id ="iframe_container">
+            <div class="loading">
+                <div class="lds-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <h3 class="iframe_text"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
+<?php $instanceId = time();?>
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/modal",
+        "iframe",
+        "fedex/storage",
+        "peProductController",
+        "uiRegistry",
+        "domReady!"
+    ], function($, modal, iframe, fxoStorage, productController, uiRegistry) {
+        var nonStandardToggle = '<?= $isNonStandardCatalogToggleEnabled ?>';
+        var isExplorerNscReplaceFileToggleEnabled = '<?= $isExplorerNscReplaceFileToggle ?>';
+        var isManualSkuDefaultToggle = '<?= $isManualSkuDefaultToggle ?>';
+        $("#iframe_container").css("display","none");
+        if(window.e383157Toggle){
+            fxoStorage.delete('changeProduct');
+            fxoStorage.delete('changeProductValue');
+        }else{
+            localStorage.removeItem('changeProduct');
+            localStorage.removeItem('changeProductValue');
+        }
+        window.configuratorUrl = "<?= $configuratorUrl;?>";
+        $(".custom-pop-up-category-link").on('click', function(){
+
+            var id = $(this).attr('id');
+            $(this).addClass("active");
+            $("li.custom-pop-up-category-link").not(this).removeClass("active");
+            var url = "<?php echo $this->getUrl('catalogmvp/catalog/modelpopup')?>";
+            $.ajax({
+                type: "post",
+                url: url,
+                showLoader: true,
+                data: { id: id },
+                success: function(data) {
+                    if (data == ''){
+                        $('.products.list.items.product-items').html('<div class="message message-error">No product found for your selection.</div>');
+                    } else {
+                        $('.products.list.items.product-items').html(data);
+                    }
+                }
+            });
+        });
+        $('#iframe_popup').on('modalclosed', function() {
+            if (!$('body').hasClass('catalog_mvp_custom_docs')) {
+                $("#iframe_container").css("display","none");
+                $(".modal-inner-wrap").css("width","1000px");
+            }
+
+            <?php if ($isIframeSdkEnable){ ?>
+                $('#iframe_container iframe').remove();
+            <?php }?>
+        });
+        $(document).on('change', "textarea[name='product[customization_fields]']", function(){
+            let customizeFields = $(this).val();
+            let customize = false;
+            if(customizeFields != "") {
+                let arr = JSON.parse(customizeFields);
+                $.each(arr,function(key,value){
+                    if (value.documentId !== undefined && value.formFields !== undefined) {
+                        customize = true;
+                    }
+                });
+            }
+            if (customize) {
+                $("input[name='product[customizable]']").prop("checked",true).change();
+            } else {
+                $("input[name='product[customizable]']").prop("checked",false).change();
+            }
+        });
+        $(document).on('click', ".checkbox-checked", function() {
+            let sku = $(this).attr("data-skuid");
+            $("#fixedCheckbox-"+sku).prop("checked", false);
+            $("#fixedCheckbox-"+sku).css("display", "block");
+            $(".selected-checkbox-icon-"+sku).css("display", "none");
+        });
+        $(document).on('click', ".fixed-checkbox", function() {
+            let sku = $(this).attr("data-sku");
+            $("#fixedCheckbox-"+sku).prop("checked", true);
+            $("#fixedCheckbox-"+sku).css("display", "none");
+            $(".selected-checkbox-icon-"+sku).css("display", "block");
+        });
+        var isE475721ToggleEnabled = <?= $isE475721ToggleEnabled ? 'true' : 'false' ?>;
+        if(isE475721ToggleEnabled){
+            $(document).on('click', ".continue-setting", function() {
+                if (window.isEditFlow === true) {
+                return;
+            }
+            $('#configure-popup').modal('closeModal');
+            $("#iframe_container").css("display", "block");
+            let sku = $('#configure-popup').data('selected-sku');
+            let productName = $('#configure-popup').data('selected-name');
+            let engineId = $('#configure-popup').data('selected-id');
+            let engineQty = $(this).attr("data-index-engineqty");
+            var instanceId = "<?= $instanceId ?>";
+            let isCatalogMvpCloudDriveToggle = "1";
+            let isCloudDriveIntegrationBox = "<?= $isCloudDriveIntegrationBox ?>";
+            let isCloudDriveIntegrationDropbox = "<?= $isCloudDriveIntegrationDropbox ?>";
+            let isCloudDriveIntegrationGoogle = "<?= $isCloudDriveIntegrationGoogle ?>";
+            let isCloudDriveIntegrationMicrosoft = "<?= $isCloudDriveIntegrationMicrosoft ?>";
+
+            var podData = {
+                id: sku,
+                instanceId: instanceId,
+                fromAdmin: true,
+                fedexAccount: null,
+                isCatalogMvpCloudDriveToggle: isCatalogMvpCloudDriveToggle,
+                isCloudDriveIntegrationBox: isCloudDriveIntegrationBox,
+                isCloudDriveIntegrationDropbox: isCloudDriveIntegrationDropbox,
+                isCloudDriveIntegrationGoogle: isCloudDriveIntegrationGoogle,
+                isCloudDriveIntegrationMicrosoft: isCloudDriveIntegrationMicrosoft
+            };
+
+            if (window.e383157Toggle) {
+                fxoStorage.set('pod-data', podData);
+            } else {
+                localStorage.setItem('pod-data', JSON.stringify(podData));
+            }
+
+            var options = {
+                type: 'popup',
+                responsive: false,
+                innerScroll: false,
+                buttons: []
+            };
+
+            $('#custom-model-popup').modal("closeModal");
+            var popup = modal(options, $('#iframe_popup'));
+            $('#iframe_popup').modal(options, $('#iframe_popup')).modal('openModal');
+            $(".modal-inner-wrap").css("width", "100%");
+            $(".modal-inner-wrap").css("height", "100vh");
+
+            if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                $(".modals-overlay").css("display", "none");
+            }
+            <?php if (!$isIframeSdkEnable) { ?>
+                iframe();
+            <?php } else { ?>
+                let changeProduct = '';
+                if (window.e383157Toggle) {
+                    changeProduct = fxoStorage.get("changeProduct");
+                } else {
+                    changeProduct = localStorage.getItem("changeProduct");
+                    changeProduct = JSON.parse(changeProduct);
+                }
+                if (changeProduct !== null) {
+                    fxocmConfigurator('NEW', sku, changeProduct, modal);
+                    if (window.e383157Toggle) {
+                        fxoStorage.delete('changeProduct');
+                        fxoStorage.delete('changeProductValue');
+                    } else {
+                        localStorage.removeItem('changeProduct');
+                        localStorage.removeItem('changeProductValue');
+                    }
+                } else {
+                    fxocmConfigurator('NEW', sku, null, modal);
+                }
+            <?php } ?>
+        });
+    }else {
+        $(document).on('click', ".item.product.product-item", function(){
+            $("#iframe_container").css("display","block");
+            let sku = $(this).attr("data-index-id");
+            let productName = $(this).attr("data-index-name");
+            let engineId = $(this).attr("data-index-engineid");
+            let engineQty = $(this).attr("data-index-engineqty");
+            var instanceId = "<?= $instanceId?>";
+            let isCatalogMvpCloudDriveToggle = "1";
+            let isCloudDriveIntegrationBox = "<?= $isCloudDriveIntegrationBox ?>";
+            let isCloudDriveIntegrationDropbox = "<?= $isCloudDriveIntegrationDropbox ?>";
+            let isCloudDriveIntegrationGoogle = "<?= $isCloudDriveIntegrationGoogle ?>";
+            let isCloudDriveIntegrationMicrosoft = "<?= $isCloudDriveIntegrationMicrosoft ?>";
+
+            var podData = {
+                id:sku,
+                instanceId: instanceId,
+                fromAdmin: true,
+                fedexAccount: null,
+                isCatalogMvpCloudDriveToggle: isCatalogMvpCloudDriveToggle,
+                isCloudDriveIntegrationBox: isCloudDriveIntegrationBox,
+                isCloudDriveIntegrationDropbox: isCloudDriveIntegrationDropbox,
+                isCloudDriveIntegrationGoogle: isCloudDriveIntegrationGoogle,
+                isCloudDriveIntegrationMicrosoft: isCloudDriveIntegrationMicrosoft
+            };
+
+            if(window.e383157Toggle){
+                fxoStorage.set('pod-data',podData);
+            }else{
+                localStorage.setItem('pod-data', JSON.stringify(podData));
+            }
+
+            var options = {
+                type: 'popup',
+                responsive: false,
+                innerScroll: false,
+                buttons: []
+            };
+
+            $('#custom-model-popup').modal("closeModal");
+            var popup = modal(options, $('#iframe_popup'));
+            $('#iframe_popup').modal(options, $('#iframe_popup')).modal('openModal');
+            $(".modal-inner-wrap").css("width","100%");
+            $(".modal-inner-wrap").css("height","100vh");
+
+            if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                $(".modals-overlay").css("display","none");
+            }
+            <?php if (!$isIframeSdkEnable) { ?>
+                iframe();
+            <?php } else { ?>
+                let changeProduct = '';
+                if(window.e383157Toggle){
+                    changeProduct = fxoStorage.get("changeProduct");
+                }else{
+                    changeProduct = localStorage.getItem("changeProduct");
+                    changeProduct = JSON.parse(changeProduct);
+                }
+                if (changeProduct !== null) {
+                    fxocmConfigurator('NEW', sku, changeProduct, modal);
+                    if(window.e383157Toggle){
+                        fxoStorage.delete('changeProduct');
+                        fxoStorage.delete('changeProductValue');
+                    }else{
+                        localStorage.removeItem('changeProduct');
+                        localStorage.removeItem('changeProductValue');
+                    }
+                } else {
+                    fxocmConfigurator('NEW', sku, null, modal);
+                }
+            <?php } ?>
+        });
+    }
+
+        if(isE475721ToggleEnabled){
+            $(document).on('click', ".continue-setting", function(){
+                if (window.isEditFlow === false) {
+                    return;
+                }
+                $('#configure-popup').modal('closeModal');
+                $("#iframe_container").css("display","block");
+                let instanceVal = $("textarea[name='product[external_prod]']").val();
+                let product = JSON.parse(instanceVal);
+                let fxomenuId = '<?= $fxomenuId?>';
+                let productName = $('#shared-catalog-admin-setting-name').val().trim();
+                if (productName.length) {
+                    product.userProductName = productName;
+                    if (product.productConfig && product.productConfig.product) {
+                        product.product.userProductName = productName;
+                    }
+                }
+                let newObjConfigurator = {
+                    "fxoMenuId":fxomenuId,
+                    "fxoProductInstance": {
+                        "id" : product.instanceId,
+                        "productConfig": {
+                            "product": JSON.parse(instanceVal)
+                        },
+                        "isEditable": true
+                    }
+                };
+                let productSku = $("input[name='product[sku]']").val();
+                let isCatalogMvpCloudDriveToggle = "1";
+                let isCloudDriveIntegrationBox = "<?= $isCloudDriveIntegrationBox ?>";
+                let isCloudDriveIntegrationDropbox = "<?= $isCloudDriveIntegrationDropbox ?>";
+                let isCloudDriveIntegrationGoogle = "<?= $isCloudDriveIntegrationGoogle ?>";
+                let isCloudDriveIntegrationMicrosoft = "<?= $isCloudDriveIntegrationMicrosoft ?>";
+                let podData = {
+                    id:productSku,
+                    instanceId: product.instanceId,
+                    fromAdmin: true,
+                    fedexAccount: null,
+                    isEdit: true,
+                    isCatalogMvpCloudDriveToggle: isCatalogMvpCloudDriveToggle,
+                    isCloudDriveIntegrationBox: isCloudDriveIntegrationBox,
+                    isCloudDriveIntegrationDropbox: isCloudDriveIntegrationDropbox,
+                    isCloudDriveIntegrationGoogle: isCloudDriveIntegrationGoogle,
+                    isCloudDriveIntegrationMicrosoft: isCloudDriveIntegrationMicrosoft
+                };
+                var adminconfig;
+                if (window.e383157Toggle) {
+                    adminconfig = {
+                        instance: newObjConfigurator
+                    }
+                    fxoStorage.set("adminconfig", adminconfig);
+                    fxoStorage.set('pod-data', podData);
+                } else {
+                    adminconfig = {
+                        instance: JSON.stringify(newObjConfigurator)
+                    }
+                    localStorage.setItem("adminconfig", JSON.stringify(adminconfig));
+                    localStorage.setItem('pod-data', JSON.stringify(podData));
+                }
+                var options = {
+                    type: 'popup',
+                    responsive: false,
+                    innerScroll: false,
+                    buttons: []
+                };
+                $('#iframe_popup').modal(options, $('#iframe_popup')).modal('openModal');
+                $(".modal-inner-wrap").css("width","100%");
+                if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                    $(".modals-overlay").css("display","none");
+                }
+
+                <?php if (!$isIframeSdkEnable) { ?>
+                    iframe();
+                <?php } else { ?>
+                    fxocmConfigurator('EDIT', productSku, product, modal);
+                <?php } ?>
+            });
+        } else {
+            $(document).on('click', ".mvp-catalog-edit-button", function(){
+                $("#iframe_container").css("display","block");
+                let instanceVal = $("textarea[name='product[external_prod]']").val();
+                let product = JSON.parse(instanceVal);
+                let fxomenuId = '<?= $fxomenuId?>';
+                let newObjConfigurator = {
+                    "fxoMenuId":fxomenuId,
+                    "fxoProductInstance": {
+                        "id" : product.instanceId,
+                        "productConfig": {
+                            "product": JSON.parse(instanceVal)
+                        },
+                        "isEditable": true
+                    }
+                };
+                let productSku = $("input[name='product[sku]']").val();
+                let isCatalogMvpCloudDriveToggle = "1";
+                let isCloudDriveIntegrationBox = "<?= $isCloudDriveIntegrationBox ?>";
+                let isCloudDriveIntegrationDropbox = "<?= $isCloudDriveIntegrationDropbox ?>";
+                let isCloudDriveIntegrationGoogle = "<?= $isCloudDriveIntegrationGoogle ?>";
+                let isCloudDriveIntegrationMicrosoft = "<?= $isCloudDriveIntegrationMicrosoft ?>";
+                let podData = {
+                    id:productSku,
+                    instanceId: product.instanceId,
+                    fromAdmin: true,
+                    fedexAccount: null,
+                    isEdit: true,
+                    isCatalogMvpCloudDriveToggle: isCatalogMvpCloudDriveToggle,
+                    isCloudDriveIntegrationBox: isCloudDriveIntegrationBox,
+                    isCloudDriveIntegrationDropbox: isCloudDriveIntegrationDropbox,
+                    isCloudDriveIntegrationGoogle: isCloudDriveIntegrationGoogle,
+                    isCloudDriveIntegrationMicrosoft: isCloudDriveIntegrationMicrosoft
+                };
+                var adminconfig;
+                if (window.e383157Toggle) {
+                    adminconfig = {
+                        instance: newObjConfigurator
+                    }
+                    fxoStorage.set("adminconfig", adminconfig);
+                    fxoStorage.set('pod-data', podData);
+                } else {
+                    adminconfig = {
+                        instance: JSON.stringify(newObjConfigurator)
+                    }
+                    localStorage.setItem("adminconfig", JSON.stringify(adminconfig));
+                    localStorage.setItem('pod-data', JSON.stringify(podData));
+                }
+                var options = {
+                    type: 'popup',
+                    responsive: false,
+                    innerScroll: false,
+                    buttons: []
+                };
+                $('#iframe_popup').modal(options, $('#iframe_popup')).modal('openModal');
+                $(".modal-inner-wrap").css("width","100%");
+                if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                    $(".modals-overlay").css("display","none");
+                }
+
+                <?php if (!$isIframeSdkEnable) { ?>
+                    iframe();
+                <?php } else { ?>
+                    fxocmConfigurator('EDIT', productSku, product, modal);
+                <?php } ?>
+            });
+        }
+
+        $(document).on('click', '.product-sku-popup-model .action-close', function(){
+            $('.iframe-popup-model .modal-inner-wrap .action-close').trigger('click');
+            $('#iframe_container').empty();
+            $('#iframe_container iframe').remove();
+            $('#iframe_popup').modal("closeModal");
+            setTimeout(function () {
+                if ($('.configure-button').length > 0) {
+                    $('.configure-button').trigger('click');
+                } else {
+                    $('.mvp-catalog-edit-button').trigger('click');
+                }
+            }, 200);
+        });
+
+        $(document).on('click', '.go-back-button', function(){
+            $('#product-sku-model').modal("closeModal");
+            $('.iframe-popup-model .modal-inner-wrap .action-close').trigger('click');
+            $('#iframe_container').empty();
+            $('#iframe_container iframe').remove();
+            $('#iframe_popup').modal("closeModal");
+            setTimeout(function () {
+                if ($('.configure-button').length > 0) {
+                    $('.configure-button').trigger('click');
+                } else {
+                    $('.mvp-catalog-edit-button').trigger('click');
+                }
+            }, 200);
+        });
+
+        $(document).on('click', '#setup_customize_doc', function () {
+            $("#iframe_container").css("display","block");
+            let instanceVal = $("textarea[name='product[external_prod]']").val();
+            let product = JSON.parse(instanceVal);
+            let customizableFields = $("textarea[name='product[customization_fields]']").val();
+            let documentData = JSON.parse(customizableFields);
+            let productSku = $("input[name='product[sku]']").val();
+            var options = {
+                type: 'popup',
+                responsive: false,
+                innerScroll: false,
+                buttons: []
+            };
+            $('#iframe_popup').modal(options, $('#iframe_popup')).modal('openModal');
+            $(".modal-inner-wrap").css("width","100%");
+
+            if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                $(".modals-overlay").css("display","none");
+            }
+            fxocmConfigurator("SETUP_CUSTOM_DOC", productSku, product, modal);
+        });
+        // Custom Doc field for configured product
+        function customDocFieldForConfProd() {
+            if($(".custom-doc-field-configured").length > 0) {
+                return true;
+            }
+            const tooltipConst = '<svg class="custom-doc-field-tooltip" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect opacity="0.01" width="32" height="32" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M15.9999 26.6666C10.1089 26.6666 5.33325 21.891 5.33325 15.9999C5.33325 10.1089 10.1089 5.33325 15.9999 5.33325C21.891 5.33325 26.6666 10.1089 26.6666 15.9999C26.6666 21.891 21.891 26.6666 15.9999 26.6666ZM15.9999 25.3333C21.1546 25.3333 25.3333 21.1546 25.3333 15.9999C25.3333 10.8453 21.1546 6.66658 15.9999 6.66658C10.8453 6.66658 6.66658 10.8453 6.66658 15.9999C6.66658 21.1546 10.8453 25.3333 15.9999 25.3333ZM18.3333 20.6666H16.3344L16.3333 20.6666L16.3321 20.6666H14.3333C13.9651 20.6666 13.6666 20.3681 13.6666 19.9999C13.6666 19.6317 13.9651 19.3333 14.3333 19.3333H15.6666V14.9999H14.9999C14.6317 14.9999 14.3333 14.7014 14.3333 14.3333C14.3333 13.9651 14.6317 13.6666 14.9999 13.6666H16.3333C16.7014 13.6666 16.9999 13.9651 16.9999 14.3333V19.3333H18.3333C18.7014 19.3333 18.9999 19.6317 18.9999 19.9999C18.9999 20.3681 18.7014 20.6666 18.3333 20.6666ZM14.9999 10.9999C14.9999 10.4499 15.4459 9.99992 15.9999 9.99992C16.5499 9.99992 16.9999 10.4499 16.9999 10.9999C16.9999 11.5539 16.5499 11.9999 15.9999 11.9999C15.4459 11.9999 14.9999 11.5539 14.9999 10.9999Z" fill="#4D148C"/></svg>';
+
+            $('.edit-product-pod').after("<div class='admin__field custom-doc-field custom-doc-field-configured'><div class='admin__field-label customize-product-label configure-product-pod-lable'><label><span>Customize<br/>Product</span></label><div class='custom-doc-tooltip-content' style='display: none;'>The uploaded file has fields that can be <br/>customized.</div><div class='svg-tool-tip'>"+tooltipConst+"</div></div><div class='admin__field-control'><button type='button' class='customize' id='setup_customize_doc' style='float: left;'>SET UP</div></div>");
+
+            $(document).on('mouseenter', '.custom-doc-field-tooltip, .custom-doc-tooltip-content', function () {
+                $('.custom-doc-tooltip-content').show();
+            }).on('mouseleave', '.custom-doc-field-tooltip, .custom-doc-tooltip-content', function () {
+                $('.custom-doc-tooltip-content').hide();
+            });
+
+        }
+        function customDocFieldForNonConfProd() {
+            if($(".custom-doc-field-non-configured").length > 0) {
+                return true;
+            }
+            let self = this;
+            const tooltipConst = '<svg class="custom-doc-field-tooltip" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none"><rect opacity="0.01" width="32" height="32" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M15.9999 26.6666C10.1089 26.6666 5.33325 21.891 5.33325 15.9999C5.33325 10.1089 10.1089 5.33325 15.9999 5.33325C21.891 5.33325 26.6666 10.1089 26.6666 15.9999C26.6666 21.891 21.891 26.6666 15.9999 26.6666ZM15.9999 25.3333C21.1546 25.3333 25.3333 21.1546 25.3333 15.9999C25.3333 10.8453 21.1546 6.66658 15.9999 6.66658C10.8453 6.66658 6.66658 10.8453 6.66658 15.9999C6.66658 21.1546 10.8453 25.3333 15.9999 25.3333ZM18.3333 20.6666H16.3344L16.3333 20.6666L16.3321 20.6666H14.3333C13.9651 20.6666 13.6666 20.3681 13.6666 19.9999C13.6666 19.6317 13.9651 19.3333 14.3333 19.3333H15.6666V14.9999H14.9999C14.6317 14.9999 14.3333 14.7014 14.3333 14.3333C14.3333 13.9651 14.6317 13.6666 14.9999 13.6666H16.3333C16.7014 13.6666 16.9999 13.9651 16.9999 14.3333V19.3333H18.3333C18.7014 19.3333 18.9999 19.6317 18.9999 19.9999C18.9999 20.3681 18.7014 20.6666 18.3333 20.6666ZM14.9999 10.9999C14.9999 10.4499 15.4459 9.99992 15.9999 9.99992C16.5499 9.99992 16.9999 10.4499 16.9999 10.9999C16.9999 11.5539 16.5499 11.9999 15.9999 11.9999C15.4459 11.9999 14.9999 11.5539 14.9999 10.9999Z" fill="#4D148C"/></svg>';
+            let appendElement;
+            if($('.configure-product-pod').length > 0) {
+                appendElement = $('.configure-product-pod');
+            } else {
+                appendElement = $('.edit-product-pod');
+            }
+            appendElement.after("<div class='admin__field custom-doc-field custom-doc-field-non-configured'><div class='admin__field-label customize-product-label configure-product-pod-lable'><label><span>Customize<br/>Product</span></label><div class='custom-doc-tooltip-content' style='display: none;'>The uploaded file has fields that can be <br/>customized.</div><div class='svg-tool-tip'>"+tooltipConst+"</div></div><div class='admin__field-control'><button type='button' class='customize'>SET UP</div></div>");
+
+            $(document).on('mouseenter', '.custom-doc-field-tooltip, .custom-doc-tooltip-content', function () {
+                $('.custom-doc-tooltip-content').show();
+            }).on('mouseleave', '.custom-doc-field-tooltip, .custom-doc-tooltip-content', function () {
+                $('.custom-doc-tooltip-content').hide();
+            });
+        }
+
+        // Download field for configured product
+        function downloadFieldForConfProd() {
+            const downloadIconBlue='<svg class="download-configure-img" style="cursor: pointer" xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none"><rect opacity="0.01" width="48" height="48" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M29.0391 22.4819L32.2331 22.5C33.067 22.5048 33.4801 23.5144 32.8887 24.1024L24.661 32.282C24.2945 32.6463 23.7024 32.6455 23.337 32.2801L15.1339 24.0758C14.5434 23.4851 14.9617 22.4754 15.7969 22.4754H18.9609V10.5234C18.9609 10.0057 19.3807 9.58594 19.8984 9.58594H28.1016C28.6193 9.58594 29.0391 10.0057 29.0391 10.5234V22.4819ZM18.06 24.3504L24.002 30.2933L29.9679 24.3622L28.0962 24.3515C27.5806 24.3486 27.1641 23.9298 27.1641 23.4141V11.4609H20.8359V23.4129C20.8359 23.9307 20.4162 24.3504 19.8984 24.3504H18.06ZM11 32V37H37V32C37 31.4477 37.4477 31 38 31C38.5523 31 39 31.4477 39 32V38C39 38.5523 38.5523 39 38 39H10C9.44772 39 9 38.5523 9 38V32C9 31.4477 9.44772 31 10 31C10.5523 31 11 31.4477 11 32Z" fill="#007AB7"/></svg>';
+        $('div[data-index="name"]').after("<div class='admin__field download-field download-field-configured'><div class='admin__field-label configure-product-pod-lable'><label><span>Download File(s)</span></label></div><div class='admin__field-control'>"+downloadIconBlue+"</div></div>");
+        }
+        <?php if ($isIframeSdkEnable) { ?>
+        <?php if ($fixedQtyHandlerToggle): ?>
+        // Function to find allowedValues when name is "Product Quantity Sets"
+        function getAllowedValuesByName(data) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].key === "PRODUCT_QTY_SET") {
+                    var allowedValues = data[i].allowedValues;
+                    var valuesArray = [];
+                    for (var j = 0; j < allowedValues.length; j++) {
+                        valuesArray.push(allowedValues[j].value);
+                    }
+                    return valuesArray;
+                }
+            }
+            return null; // If not found
+        }
+        <?php endif; ?>
+        function fxocmConfigurator(configuratorType, sku, product, modal) {
+            var fixedQtyHandlerToggle = <?= /* @escapeNotVerified */ $fixedQtyHandlerToggle ?>;
+            var isFXOSessionIdRemoveToggle = <?= /* @escapeNotVerified */ $isFXOSessionIdRemoveToggle ?>;
+            if (isFXOSessionIdRemoveToggle) {
+                $.cookieStorage.remove('FXOSESSIONID');
+            }
+            // Due to Multiple Success callback set variable "restrictMultiplePopupCount" to stop multiple popup opening.
+            let restrictMultiplePopupCount = 0;
+            var sdkConfig = {
+                baseUrl: "<?= $FXOCMBaseUrl?>",
+                client_id: "<?= $FXOCMClientId?>",
+                containerEl: document.getElementById('iframe_container'),
+                heartbeatCallback: {},
+                integrationType: 'IFRAME',
+                replaceWithLocal: false,
+                successCallback: function(data) {
+                    if (fixedQtyHandlerToggle) {
+                        let productEngineUrl = '<?= $escaper->escapeUrl($productEngineUrl) ?? '' ?>';
+                        let productControllerObj = new productController.ProductController(productEngineUrl);
+                        let productInstanceData = JSON.stringify(data.product);
+                        let version = JSON.stringify(data.product.version);
+                        let responseProductId = JSON.stringify(data.product.id);
+                        let ControllId = 2;
+
+                        if (version == 0) {
+                            isQuantityAvailable =
+                                new Promise(function(resolve, reject) {
+                                    resolve(true);
+                                });
+                        } else {
+                            isQuantityAvailable =
+                                new Promise(function(resolve, reject) {
+                                    productControllerObj.selectProductById(responseProductId, version, ControllId, (responseData) => {
+                                        productControllerObj.loadSerializedProduct(productInstanceData);
+                                        let displayableProduct = productControllerObj.displayableProduct.properties;
+                                        let allowedValueNames= getAllowedValuesByName(displayableProduct);
+
+                                        if (allowedValueNames) {
+                                            data.product.quantityChoices = allowedValueNames;
+                                        }
+
+                                        resolve(true);
+                                    }, () => {
+                                        console.log("Failure: Unable to select product.");
+                                        resolve(true);
+                                    });
+                            });
+                        }
+
+                        isQuantityAvailable.then(() => {
+                            if (data.errors && data.errors.length > 0) {
+                                console.log(JSON.stringify(response.errors));
+                            } else {
+                                // Need to make dynamic once FXOCM implement changeProduct in response
+                                let changeProduct = data.changeProduct;
+                                if (nonStandardToggle && changeProduct) {
+                                    var customModelPopupOptions = {
+                                        type: 'popup',
+                                        responsive: true,
+                                        innerScroll: true,
+                                        buttons: []
+                                    };
+                                    if (restrictMultiplePopupCount == 0) {
+                                        modal(customModelPopupOptions, $('#custom-model-popup'));
+                                        $('#custom-model-popup').modal(customModelPopupOptions, $('#custom-model-popup')).modal('openModal');
+                                        $('#iframe_popup').modal("closeModal");
+                                    }
+                                    restrictMultiplePopupCount++;
+                                    if (window.e383157Toggle) {
+                                        fxoStorage.set('changeProduct', data.product);
+                                        fxoStorage.set('changeProductValue', 1);
+                                    } else {
+                                        localStorage.setItem('changeProduct', JSON.stringify(data.product));
+                                        localStorage.setItem('changeProductValue', 1);
+                                    }
+                                } else {
+                                    <?php if ($isNonStandardCatalogToggleEnabled) { ?>
+                                        if (window.e383157Toggle) {
+                                            fxoStorage.set('changeProductValue', 0);
+                                        } else {
+                                            localStorage.setItem('changeProductValue', 0);
+                                        }
+                                        if (data.product.externalSkus && data.product.externalSkus.length > 0) {
+                                            if ($('.modal-popup.product-sku-popup-model.modal-slide._show').length == 0) {
+                                                
+                                                // Check and store existing externalSku's
+                                                let existingSkuCodes = [];
+                                                if (
+                                                    isManualSkuDefaultToggle != undefined &&
+                                                    isManualSkuDefaultToggle == 1 &&
+                                                    product != undefined &&
+                                                    product.externalSkus != undefined &&
+                                                    product.externalSkus.length > 0
+                                                ) {
+                                                    let existingExternalSkuDetails = product.externalSkus;
+                                                    $.each(existingExternalSkuDetails, function(key, existingExternalSku) {
+                                                        existingSkuCodes.push(existingExternalSku.code);
+                                                    });
+                                                }
+
+                                                let externalSkuDetails = data.product.externalSkus;
+                                                let skuDetailsHtmlData = '';
+                                                $('.product-sku-list-data').remove();
+
+                                                <?php if ($magegeeksD236791enabled): ?>
+                                                    
+                                                    let productDataForRate = JSON.stringify(data.product);
+
+                                                    getPriceFromRateCall(productDataForRate, true).done(function(rateResponse) {
+                                                        if (typeof rateResponse === "string") {
+                                                            rateResponse = JSON.parse(rateResponse);
+                                                        }
+
+                                                        // Create a mapping of detailCode => price info
+                                                        let priceMap = {};
+                                                        let detailsArray = Array.isArray(rateResponse) ? rateResponse : rateResponse.details || [];
+
+                                                        if (detailsArray.length > 0) {
+                                                            detailsArray.forEach(function(detail) {
+                                                                priceMap[detail.detailCode] = {
+                                                                    detailPrice: detail.detailPrice,
+                                                                    detailUnitPrice: detail.detailUnitPrice,
+                                                                    detailDescription: detail.detailDescription,
+                                                                    detailLabel: detail.detailCode + ' - ' + detail.detailDescription
+                                                                };
+                                                            });
+                                                        }
+
+                                                        let detailLabel = 0;
+                                                        let detailUnitPrice = 0;
+                                                        let detailPrice = 0;
+                                                        $.each(externalSkuDetails, function(key, externalSkuDetail) {
+                                                            if (priceMap[externalSkuDetail.code]) {
+                                                                detailPrice = priceMap[externalSkuDetail.code].detailPrice;
+                                                                detailUnitPrice  = priceMap[externalSkuDetail.code].detailUnitPrice;
+                                                                detailLabel = priceMap[externalSkuDetail.code].detailLabel;
+                                                            }
+                                                            
+                                                            if (
+                                                                isManualSkuDefaultToggle != undefined &&
+                                                                isManualSkuDefaultToggle == 1 &&
+                                                                !existingSkuCodes.includes(externalSkuDetail.code)
+                                                            ) {
+                                                                externalSkuDetail.applyProductQty = true;
+                                                            }
+
+                                                            let applyProductCheck = externalSkuDetail.applyProductQty ? '' : 'checked';
+                                                            skuDetailsHtmlData += '<tr class="product-sku-list-data"><td class="sku-value">' + detailLabel + '</td><td class="qty-value"><input type="text" id="qty" class="qty-input" name="qty" value="' + externalSkuDetail.qty + '" readonly/></td><td class="unit-value">' + detailUnitPrice + '</td><td class="total-value">' + detailPrice + '</td><td class="fixed-value"><input type="checkbox" id="fixedCheckbox-' + externalSkuDetail.code + '" class="fixed-checkbox ' + applyProductCheck + '" data-sku="' + externalSkuDetail.code + '" ' + applyProductCheck + ' name="sku-fixed" /><img src="<?= $this->getViewFileUrl($slectedCheckoboxIcon); ?>" class="checkbox-checked ' + applyProductCheck + ' selected-checkbox-icon-' + externalSkuDetail.code + '" data-skuid="' + externalSkuDetail.code + '" alt="Checkbox checked"></td></tr>';
+                                                        });
+
+                                                        $('.product-sku-list-heading').after(skuDetailsHtmlData);
+                                                    });
+                                                   
+                                                <?php else: ?>
+                                                    $.each(externalSkuDetails, function(key, externalSkuDetail) {
+                                                        // Check if externalSku is new or existing for checkbox unselect for new sku
+                                                        if (
+                                                            isManualSkuDefaultToggle != undefined &&
+                                                            isManualSkuDefaultToggle == 1 &&
+                                                            !existingSkuCodes.includes(externalSkuDetail.code)
+                                                        ) {
+                                                            externalSkuDetail.applyProductQty = true;
+                                                        }
+
+                                                        let applyProductCheck = externalSkuDetail.applyProductQty ? '' : 'checked';
+                                                        skuDetailsHtmlData += '<tr class="product-sku-list-data"><td class="sku-value">'+externalSkuDetail.code+'</td><td class="qty-value"><input type="text" id="qty" class="qty-input" name="qty" value="'+externalSkuDetail.qty+'" readonly/></td><td class="unit-value">'+externalSkuDetail.unitPrice+'</td><td class="total-value">'+externalSkuDetail.price+'</td><td class="fixed-value"><input type="checkbox" id="fixedCheckbox-'+externalSkuDetail.code+'" class="fixed-checkbox '+applyProductCheck+'" data-sku="'+externalSkuDetail.code+'" '+applyProductCheck+' name="sku-fixed" /><img src="<?= $this->getViewFileUrl($slectedCheckoboxIcon); ?>" class="checkbox-checked '+applyProductCheck+' selected-checkbox-icon-'+externalSkuDetail.code+'" data-skuid="'+externalSkuDetail.code+'" alt="Checkbox checked"></td></tr>';
+                                                    });
+
+                                                    $('.product-sku-list-heading').after(skuDetailsHtmlData);
+                                                <?php endif; ?>
+                                                
+                                                let skuOptions = {
+                                                    type: 'popup',
+                                                    modalClass: 'product-sku-popup-model',
+                                                    responsive: true,
+                                                    innerScroll: false,
+                                                    title: 'SKU Details',
+                                                    buttons: []
+                                                };
+
+                                                modal(skuOptions, $('#product-sku-model'));
+                                                $('#product-sku-model').modal(skuOptions, $('#product-sku-model')).modal('openModal');
+                                            }
+                                        } else {
+                                            if ($('.configure-product-pod').length !== 0) {
+                                                $('.configure-product-pod').remove();
+                                                $('.download-field-non-configured').remove();
+                                            }
+                                            if ($('#iframe_popup')) {
+                                                $('#iframe_popup').modal("closeModal");
+                                            }
+    
+                                            $('#iframe_container iframe').remove();
+                                          isE475721ToggleEnabled ? openFolderModalAndSave(data) : productJsonSave(data);
+                                        }
+                                        $(document).on('click', '.save-sku-button', function(){
+                                            let applyProductSkuQty = [];
+                                            $(".fixed-checkbox").each(function(){
+                                                var sku = $(this).attr('data-sku');
+                                                applyProductSkuQty[sku] = this.checked ? false : true;
+                                            });
+                                            let externalSkuDetails = data.product.externalSkus;
+                                            $.each(externalSkuDetails, function(key, externalSkuDetail) {
+                                                externalSkuDetail.applyProductQty = applyProductSkuQty[externalSkuDetail.code];
+                                            });
+                                            data.product.externalSkus = JSON.parse(JSON.stringify(externalSkuDetails));
+                                            if(!isE475721ToggleEnabled) {
+                                                productJsonSave(data);
+                                            }
+                                            if ($('.configure-product-pod').length !== 0) {
+                                                $('.configure-product-pod').remove();
+                                                $('.download-field-non-configured').remove();
+                                            }
+                                            $('#product-sku-model').modal("closeModal");
+                                            $('#iframe_container').empty();
+                                            $('#iframe_container iframe').remove();
+                                            $('#iframe_popup').modal("closeModal");
+                                            if(isE475721ToggleEnabled) {
+                                                openFolderModalAndSave(data);
+                                            }
+
+                                            if ($('.edit-product-pod').length === 0) {
+                                                $('div[data-index="attribute_set_id"]')
+                                                .after(
+                                                    "<div class='admin__field edit-product-pod'>" +
+                                                    "<div class='admin__field-label edit-product-pod-lable'>" +
+                                                    "<label>" +
+                                                    "<span>Configure Product</span>" +
+                                                    "</label>" +
+                                                    "</div>" +
+                                                    "<div class='admin__field-control'>" +
+                                                    "<button id='edit-product' " +
+                                                    "title='Edit Product' " +
+                                                    "class='action-default primary edit-button mvp-catalog-edit-button'>" +
+                                                    "<span>EDIT</span>" +
+                                                    "</button>" +
+                                                    "</div>" +
+                                                    "</div>"
+                                                );
+                                            }
+                                        });
+                                    <?php } else { ?>
+                                    if ($('.configure-product-pod').length !== 0) {
+                                        $('.configure-product-pod').remove();
+                                        $('.download-field-non-configured').remove();
+                                    }
+                                    if ($('#iframe_popup')) {
+                                        $('#iframe_popup').modal("closeModal");
+                                    }
+    
+                                    $('#iframe_container iframe').remove();
+    
+                                 isE475721ToggleEnabled ? openFolderModalAndSave(data) : productJsonSave(data);
+                                <?php } ?>
+                                // End
+
+                                    if(!isE475721ToggleEnabled) {
+                                        $("input[name='product[name]'").val(data.product.userProductName).change();
+                                    }
+
+                                    if($("textarea[name='product[external_prod]']").val().length !== 0){
+                                        if ($('.edit-product-pod').length === 0) {
+                                        $('div[data-index="attribute_set_id"]')
+                                            .after(
+                                                "<div class='admin__field edit-product-pod'>" +
+                                                "<div class='admin__field-label edit-product-pod-lable'>" +
+                                                "<label>" +
+                                                "<span>Configure Product</span>" +
+                                                "</label>" +
+                                                "</div>" +
+                                                "<div class='admin__field-control'>" +
+                                                "<button id='edit-product' " +
+                                                "title='Edit Product' " +
+                                                "class='action-default primary edit-button mvp-catalog-edit-button'>" +
+                                                "<span>EDIT</span>" +
+                                                "</button>" +
+                                                "</div>" +
+                                                "</div>"
+                                            );
+        
+                                            if ($('body').hasClass('mazegeeks_download_catalog_items')) {
+                                                downloadFieldForConfProd();
+                                            }
+                                        }
+                                    }
+                                    if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                                        let customizeDocument = false;
+                                        if (data.customDocumentDetails !== undefined) {
+                                            let arr = data.customDocumentDetails;
+        
+                                            $.each(arr,function(key,value){
+                                                if (value.documentId !== undefined && value.formFields !== undefined) {
+                                                    customizeDocument = true;
+                                                }
+                                            });
+                                        }
+                                        if (customizeDocument) {
+                                            $(".custom-doc-field-non-configured").remove();
+                                            $("input[name='product[customizable]']").val("1");
+                                            $("input[name='product[customizable]']").attr("checked",true).change();
+                                            customDocFieldForConfProd();
+                                            $("textarea[name='product[customization_fields]']").val(JSON.stringify(data.customDocumentDetails)).change();
+                                            if (configuratorType == "SETUP_CUSTOM_DOC") {
+                                                $("#setupcompleted").remove();
+                                                $('<div class="setupcompleted" id="setupcompleted" style="float: left;     margin-left: 14px; margin-top: 2px;"><div class="text" style="font-weight: 700; float: left; margin-top: 14%;">Completed</div><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" style="margin-top: 8px; float: right;"><rect opacity="0.01" width="30" height="30" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5505 18.2827L22.9195 9.06575C23.4355 8.6071 24.2256 8.65358 24.6843 9.16956C25.1429 9.68554 25.0964 10.4756 24.5805 10.9343L13.3305 20.9343C12.8358 21.374 12.0841 21.3519 11.6161 20.8839L5.36612 14.6339C4.87796 14.1457 4.87796 13.3543 5.36612 12.8661C5.85427 12.378 6.64573 12.378 7.13388 12.8661L12.5505 18.2827Z" fill="#008A00"/></svg></div>').insertAfter('.custom-doc-field-configured button');
+                                            }
+                                        } else {
+                                            $("textarea[name='product[customization_fields]']").val('').change();
+                                            $(".custom-doc-field-configured").remove();
+                                            customDocFieldForNonConfProd();
+                                            if (configuratorType != "SETUP_CUSTOM_DOC" && $("textarea[name='product[customization_fields]']").val() == "") {
+                                                $("#setupcompleted").remove();
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                            }
+                        
+                        });
+                    } else {
+                        if(data.errors && data.errors.length > 0) {
+                        } else {
+                            // Need to make dynamic once FXOCM implement changeProduct in response
+                            let changeProduct = data.changeProduct
+                            if (nonStandardToggle && changeProduct) {
+                                var customModelPopupOptions = {
+                                        type: 'popup',
+                                        responsive: true,
+                                        innerScroll: true,
+                                        buttons: []
+                                    };
+                                if (restrictMultiplePopupCount == 0) {
+                                    modal(customModelPopupOptions, $('#custom-model-popup'));
+                                    $('#custom-model-popup').modal(customModelPopupOptions, $('#custom-model-popup')).modal('openModal');
+                                    $('#iframe_popup').modal("closeModal");
+                                }
+                                restrictMultiplePopupCount++;
+                                $('#iframe_popup').modal("closeModal");
+                                if (window.e383157Toggle) {
+                                    fxoStorage.set('changeProduct', data.product);
+                                    fxoStorage.set('changeProductValue', 1);
+                                } else {
+                                    localStorage.setItem('changeProduct', JSON.stringify(data.product));
+                                    localStorage.setItem('changeProductValue', 1);
+                                }
+                            } else {
+                                <?php if ($isNonStandardCatalogToggleEnabled) { ?>
+                                    if (window.e383157Toggle) {
+                                        fxoStorage.set('changeProductValue', 0);
+                                    } else {
+                                        localStorage.setItem('changeProductValue', 0);
+                                    }
+
+                                    if (data.product.externalSkus && data.product.externalSkus.length > 0) {
+                                        if ($('.modal-popup.product-sku-popup-model.modal-slide._show').length == 0) {
+                                            let externalSkuDetails = data.product.externalSkus;
+                                            let skuDetailsHtmlData = '';
+                                            $('.product-sku-list-data').remove();
+                                            $.each(externalSkuDetails, function(key, externalSkuDetail) {
+                                                let applyProductCheck = externalSkuDetail.applyProductQty ? '' : 'checked';
+                                                skuDetailsHtmlData += '<tr class="product-sku-list-data"><td class="sku-value">'+externalSkuDetail.code+'</td><td class="qty-value"><input type="text" id="qty" class="qty-input" name="qty" value="'+externalSkuDetail.qty+'" readonly/></td><td class="unit-value">'+externalSkuDetail.unitPrice+'</td><td class="total-value">'+externalSkuDetail.price+'</td><td class="fixed-value"><input type="checkbox" id="fixedCheckbox-'+externalSkuDetail.code+'" class="fixed-checkbox '+applyProductCheck+'" data-sku="'+externalSkuDetail.code+'" '+applyProductCheck+' name="sku-fixed" /><img src="<?= $this->getViewFileUrl($slectedCheckoboxIcon); ?>" class="checkbox-checked '+applyProductCheck+' selected-checkbox-icon-'+externalSkuDetail.code+'" data-skuid="'+externalSkuDetail.code+'" alt="Checkbox checked"></td></tr>';
+                                            });
+
+                                            $('.product-sku-list-heading').after(skuDetailsHtmlData);
+
+                                            let skuOptions = {
+                                                type: 'popup',
+                                                modalClass: 'product-sku-popup-model',
+                                                responsive: true,
+                                                innerScroll: false,
+                                                title: 'SKU Details',
+                                                buttons: []
+                                            };
+                                            modal(skuOptions, $('#product-sku-model'));
+                                            $('#product-sku-model').modal(skuOptions, $('#product-sku-model')).modal('openModal');
+                                        }
+                                    } else {
+                                        if ($('.configure-product-pod').length !== 0) {
+                                            $('.configure-product-pod').remove();
+                                            $('.download-field-non-configured').remove();
+                                        }
+                                        if ($('#iframe_popup')) {
+                                            $('#iframe_popup').modal("closeModal");
+                                        }
+
+                                        $('#iframe_container iframe').remove();
+                                        
+        isE475721ToggleEnabled ? openFolderModalAndSave(data) : productJsonSave(data);
+                                    }
+
+                                    $(document).on('click', '.save-sku-button', function(){
+                                        let applyProductSkuQty = [];
+                                        $(".fixed-checkbox").each(function(){
+                                            var sku = $(this).attr('data-sku');
+                                            applyProductSkuQty[sku] = this.checked ? false : true;
+                                        });
+                                        let externalSkuDetails = data.product.externalSkus;
+                                        $.each(externalSkuDetails, function(key, externalSkuDetail) {
+                                            externalSkuDetail.applyProductQty = applyProductSkuQty[externalSkuDetail.code];
+                                        });
+                                        data.product.externalSkus = JSON.parse(JSON.stringify(externalSkuDetails));
+                                        if(!isE475721ToggleEnabled) {
+                                            productJsonSave(data);
+                                        }
+                                        if ($('.configure-product-pod').length !== 0) {
+                                            $('.configure-product-pod').remove();
+                                            $('.download-field-non-configured').remove();
+                                        }
+                                        $('#product-sku-model').modal("closeModal");
+                                        $('#iframe_container').empty();
+                                        $('#iframe_container iframe').remove();
+                                        $('#iframe_popup').modal("closeModal");
+                                        if(isE475721ToggleEnabled) {
+                                            openFolderModalAndSave(data);
+                                        }
+                                        if ($('.edit-product-pod').length === 0) {
+                                            $('div[data-index="attribute_set_id"]')
+                                            .after(
+                                                "<div class='admin__field edit-product-pod'>" +
+                                                "<div class='admin__field-label edit-product-pod-lable'>" +
+                                                "<label>" +
+                                                "<span>Configure Product</span>" +
+                                                "</label>" +
+                                                "</div>" +
+                                                "<div class='admin__field-control'>" +
+                                                "<button id='edit-product' " +
+                                                "title='Edit Product' " +
+                                                "class='action-default primary edit-button mvp-catalog-edit-button'>" +
+                                                "<span>EDIT</span>" +
+                                                "</button>" +
+                                                "</div>" +
+                                                "</div>"
+                                            );
+                                        }
+                                    });
+                                <?php } else { ?>
+                                    if ($('.configure-product-pod').length !== 0) {
+                                        $('.configure-product-pod').remove();
+                                        $('.download-field-non-configured').remove();
+                                    }
+                                    if ($('#iframe_popup')) {
+                                        $('#iframe_popup').modal("closeModal");
+                                    }
+
+                                    $('#iframe_container iframe').remove();
+                                    
+        
+                                    isE475721ToggleEnabled ? openFolderModalAndSave(data) : productJsonSave(data);
+
+                                <?php } ?>
+                                // End
+                                if(!isE475721ToggleEnabled) {
+                                    $("input[name='product[name]'").val(data.product.userProductName).change();
+                                }
+    
+                                if($("textarea[name='product[external_prod]']").val().length !== 0){
+                                    if ($('.edit-product-pod').length === 0) {
+                                    $('div[data-index="attribute_set_id"]')
+                                        .after(
+                                            "<div class='admin__field edit-product-pod'>" +
+                                            "<div class='admin__field-label edit-product-pod-lable'>" +
+                                            "<label>" +
+                                            "<span>Configure Product</span>" +
+                                            "</label>" +
+                                            "</div>" +
+                                            "<div class='admin__field-control'>" +
+                                            "<button id='edit-product' " +
+                                            "title='Edit Product' " +
+                                            "class='action-default primary edit-button mvp-catalog-edit-button'>" +
+                                            "<span>EDIT</span>" +
+                                            "</button>" +
+                                            "</div>" +
+                                            "</div>"
+                                        );
+    
+                                        if ($('body').hasClass('mazegeeks_download_catalog_items')) {
+                                            downloadFieldForConfProd();
+                                        }
+                                    }
+                                }
+                                if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                                    let customizeDocument = false;
+                                    if (data.customDocumentDetails !== undefined) {
+                                        let arr = data.customDocumentDetails;
+    
+                                        $.each(arr,function(key,value){
+                                            if (value.documentId !== undefined && value.formFields !== undefined) {
+                                                customizeDocument = true;
+                                            }
+                                        });
+                                    }
+                                    if (customizeDocument) {
+                                        $(".custom-doc-field-non-configured").remove();
+                                        $("input[name='product[customizable]']").val("1");
+                                        $("input[name='product[customizable]']").attr("checked",true).change();
+                                        customDocFieldForConfProd();
+                                        $("textarea[name='product[customization_fields]']").val(JSON.stringify(data.customDocumentDetails)).change();
+                                        if (configuratorType == "SETUP_CUSTOM_DOC") {
+                                            $("#setupcompleted").remove();
+                                            $('<div class="setupcompleted" id="setupcompleted" style="float: left;     margin-left: 14px; margin-top: 2px;"><div class="text" style="font-weight: 700; float: left; margin-top: 14%;">Completed</div><svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30" fill="none" style="margin-top: 8px; float: right;"><rect opacity="0.01" width="30" height="30" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M12.5505 18.2827L22.9195 9.06575C23.4355 8.6071 24.2256 8.65358 24.6843 9.16956C25.1429 9.68554 25.0964 10.4756 24.5805 10.9343L13.3305 20.9343C12.8358 21.374 12.0841 21.3519 11.6161 20.8839L5.36612 14.6339C4.87796 14.1457 4.87796 13.3543 5.36612 12.8661C5.85427 12.378 6.64573 12.378 7.13388 12.8661L12.5505 18.2827Z" fill="#008A00"/></svg></div>').insertAfter('.custom-doc-field-configured button');
+                                        }
+                                    } else {
+                                        $("textarea[name='product[customization_fields]']").val('').change();
+                                        $(".custom-doc-field-configured").remove();
+                                        customDocFieldForNonConfProd();
+                                        if (configuratorType != "SETUP_CUSTOM_DOC" && $("textarea[name='product[customization_fields]']").val() == "") {
+                                            $("#setupcompleted").remove();
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            var documentData = [{}];
+            if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                if(configuratorType == "SETUP_CUSTOM_DOC" || configuratorType == "EDIT") {
+                    let customizableFields = $("textarea[name='product[customization_fields]']").val();
+                    if (customizableFields != "") {
+                        documentData = JSON.parse(customizableFields);
+                    }
+                }
+            }
+
+            let ctcAdminFlow = false;
+            let enableUserProvidedInstructions = false;
+            let uploadToQuoteData = '<?= $uploadToQuoteConfigData ?>';
+            let uploadToQuote = JSON.parse(uploadToQuoteData);
+            let skuOnlyProductId = ''
+            let isPendingReview = '<?= $pendingReviewStatus ?>';
+            <?php if ($isNonStandardCatalogToggleEnabled) { ?>
+                ctcAdminFlow = true;
+                enableUserProvidedInstructions = true;
+                skuOnlyProductId = '<?= $skuOnlyProductId ?>';
+                let isSpecialInstructionAvailable = false;
+                let externalAttributeValue = $("textarea[name='product[external_prod]']").val();
+                if (externalAttributeValue !== "") {
+                    let externalAttribute = JSON.parse(externalAttributeValue);
+                    let externalAttributeProperties = externalAttribute.properties;
+                    $.each(externalAttributeProperties, function(key, externalAttributeData){
+                        if (externalAttributeData.name == 'USER_SPECIAL_INSTRUCTIONS'
+                        && externalAttributeData.value
+                        && externalAttributeData.value !== undefined
+                        && externalAttributeData.value !== "") {
+                            isSpecialInstructionAvailable = true;
+                        }
+                    });
+                }
+
+                if (configuratorType == "EDIT" && isSpecialInstructionAvailable && isPendingReview != 0) {
+                    // Product Created by Customer Admin
+                    uploadToQuoteData = '<?= $additionalPrintInstructionsConfigData ?>';
+                    uploadToQuote = JSON.parse(uploadToQuoteData);
+                }
+            <?php } ?>
+
+            if ($('body').hasClass('catalog_mvp_custom_docs')) {
+                if(configuratorType == "SETUP_CUSTOM_DOC" || configuratorType == "EDIT") {
+                    let customizableFields = $("textarea[name='product[customization_fields]']").val();
+                    if (customizableFields != "") {
+                        documentData = JSON.parse(customizableFields);
+                    }
+                }
+            }
+            let addToCartCTAText = "CONTINUE";
+            if (configuratorType == "SETUP_CUSTOM_DOC") {
+                addToCartCTAText = "COMPLETE";
+            } else if (nonStandardToggle && isPendingReview != 0) {
+                addToCartCTAText = "SAVE";
+            }
+            let changeProductValue = false;
+            <?php if ($isNonStandardCatalogToggleEnabled) { ?>
+                if(window.e383157Toggle){
+                    changeProductValue = fxoStorage.get("changeProductValue");
+                }else{
+                    changeProductValue = localStorage.getItem("changeProductValue");
+                }
+                if (changeProductValue == 1) {
+                    changeProductValue = true;
+                } else {
+                    changeProductValue = false;
+                }
+            <?php } ?>
+            let isCustomizeDocument = uiRegistry.get('product_form.product_form.product-details.container_customizable.customizable').value();
+            let isFixAllowFileUploadToggleEnabled = <?=$isFixAllowFileUploadToggleEnabled?> || false;
+            let isEditDocument = $('#edit-product').length;
+            let isCatalogFileUploadToggleEnabled = <?=$isCatalogFileUploadToggleEnabled?>;
+            
+            let allowFileUpload = false;
+            if(isCatalogFileUploadToggleEnabled) {
+                allowFileUpload = true;
+            } else {
+                allowFileUpload = isFixAllowFileUploadToggleEnabled && isEditDocument && isCustomizeDocument == "0" ? true : false;
+            }
+
+            var userWorkspace = {};
+            var externalProductObject = $("textarea[name='product[external_prod]']").val();
+            if (isExplorerNscReplaceFileToggleEnabled && externalProductObject !== "" && externalProductObject !== null) {
+                var externalProductObj = JSON.parse(externalProductObject);
+                if (typeof externalProductObj.userWorkspace !== 'undefined' && externalProductObj.userWorkspace !== null && externalProductObj.userWorkspace !== '') {
+                    userWorkspace = externalProductObj.userWorkspace;
+                }
+            }
+
+            var singleProjectMode = true;
+            if (configuratorType == "EDIT") {
+                singleProjectMode = false;
+            }
+            var discount = isE475721ToggleEnabled ? fxoStorage.get('DiscountNumber') : null;
+            var ConfiguratorSession = {
+                'integrationDetails': {
+                    'integratorId':'POD2.0',
+                    'integrationType':'IFRAME',
+                    'workflow': 'CATALOG'
+                },
+                'configuratorOptions': {
+                    'addToCartCTAText': addToCartCTAText,
+                    'allowFileUpload':allowFileUpload,
+                    'allowProjectNameChange':true,
+                    'allowQuantityChange':false,
+                    'skuOnlyProductID':skuOnlyProductId,
+                    'changeProduct':changeProductValue,
+                    'documents':documentData,
+                    'documentUploadConfigurations': {
+                        'cloudDriveFlags': {
+                            'enableCloudDrives':"true",
+                            'enableBox':"<?= $boxEnabled?>",
+                            'enableDropbox':"<?= $dropBoxEnable?>",
+                            'enableGoogleDrive':"<?= $googleEnabled?>",
+                            'enableMicrosoftOneDrive':"<?= $microSoftEnabled?>"
+                        },
+                        'extendFileRetention':false,
+                        'hideFileExpirationText':true
+                    },
+                    'configurationType':configuratorType,
+                    'enableUserProvidedInstructions':enableUserProvidedInstructions,
+                    'footerOptions': {
+                        'type':'DEFAULT'
+                    },
+                    'headerOptions': {
+                        'type':'DEFAULT'
+                    },
+                    'heartbeat': {
+                        'enabled':false,
+                        'frequencyInMinutes':5
+                    },
+                    'priceDisplaySettings': {
+                        'showDiscountDetails':true,
+                        'showPrice':true,
+                        'showPriceDetails':true
+                    },
+                    'primaryCTA': {},
+                    'productSelector': {
+                        'productId':sku
+                    },
+                    'sensitiveDataFlow':false,
+                    'userPreferences': {
+                        'ctcAdminFlow': ctcAdminFlow,
+                        'fedExAccountNumber': discount
+                    },
+                    product,
+                    uploadToQuote,
+                    userWorkspace,
+                    'singleProjectMode': singleProjectMode,
+                    'useNewDocumentApi': true
+                },
+                'codeChallenge': ' '
+            };
+
+            (window).FedExOfficePCSdk.openProductConfigurator(sdkConfig, ConfiguratorSession);
+        }
+
+        function getPriceFromRateCall(productJson,isPopup = false) {
+            var url = "<?php echo $this->getUrl('fxocm/rate/index')?>";
+            let sharedCatalogId;
+            if (isE475721ToggleEnabled) {
+                sharedCatalogId = fxoStorage.get('selectedSharedCatalogId');
+            } else {
+                let sharedCatalogComponent = uiRegistry.get('product_form.product_form.shared_catalog.shared_catalog');
+                if( sharedCatalogComponent.value().length ) {
+                    sharedCatalogId = sharedCatalogComponent?.value()[0];
+                }
+            }
+            <?php if ($magegeeksD236791enabled): ?>
+                return $.ajax({
+                    type: "POST",
+                    url: url,
+                    dataType: "json",
+                    showLoader: true,
+                    data: { 
+                        data: productJson, 
+                        sharedCatalogId: sharedCatalogId,
+                        isPopup: true
+                    },
+                    success: function(response) {
+                        if (!response) {
+                            return 0;
+                        }
+
+                        if (response.totalPrice !== undefined && response.totalPrice !== null) {
+                            const totalPrice = parseFloat(response.totalPrice?.toString().replace('$', '')) || 0;
+                            $("input[name='product[price]'").val(totalPrice).change();
+                            return totalPrice;
+                        }
+
+                        else if (Array.isArray(response) && response.length > 0) {
+                            const totalNetAmount = response.reduce((sum, item) => sum + parseFloat(item.detailPrice || 0), 0);
+                            $("input[name='product[price]'").val(totalNetAmount).change();
+                            return totalNetAmount;
+                        }
+
+                        else if (typeof response === "number" || typeof response === "string") {
+                            const price = parseFloat(response.toString().replace('$', '')) || 0;
+                            $("input[name='product[price]'").val(price).change();
+                            return price;
+                        }
+                        
+                        else {
+                            $("input[name='product[price]'").val(response).change();
+                        }
+
+                        return 0;
+                    },
+                    error: function(err, textStatus, xhr) {
+                        console.error("Rate call failed", err);
+                        return 0;
+                    }
+                });
+            <?php else: ?>
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { data: productJson, sharedCatalogId: sharedCatalogId },
+                    success: function(data) {
+                        if (data){
+                            $("input[name='product[price]'").val(data).change();
+                        }
+                    }
+                });
+           <?php endif; ?>
+        }
+
+        function productJsonSave(data) {
+            if (
+                isExplorerNscReplaceFileToggleEnabled &&
+                data.userWorkspace !== undefined &&
+                data.userWorkspace !== "" &&
+                data.userWorkspace !== null
+            ) {
+                data.product.userWorkspace = data.userWorkspace;
+            }
+
+            $("textarea[name='product[external_prod]']").val(JSON.stringify(data.product)).change();
+            let ProductPrice = getPriceFromRateCall(JSON.stringify(data.product));
+
+            if (isE475721ToggleEnabled) {
+                if ($("textarea[name='product[external_prod]']").val().length !== 0 && $('.edit-product-pod').length === 0) {
+                    $('div[data-index="attribute_set_id"]')
+                        .after(
+                            "<div class='admin__field edit-product-pod'>" +
+                            "<div class='admin__field-label edit-product-pod-lable'>" +
+                            "<label><span>Configure Product</span></label>" +
+                            "</div>" +
+                            "<div class='admin__field-control'>" +
+                            "<button id='edit-product' title='Edit Product' class='action-default primary edit-button mvp-catalog-edit-button'>" +
+                            "<span>EDIT</span>" +
+                            "</button>" +
+                            "</div>" +
+                            "</div>"
+                        );
+                    if ($('body').hasClass('mazegeeks_download_catalog_items')) {
+                        downloadFieldForConfProd();
+                    }
+                }
+            }
+        }
+        // Handles opening the Folder Modal popup and saving product data only after folder selection
+        function openFolderModalAndSave(data) {
+            $('#folder-popup').modal('openModal');
+            $(document).trigger('fetchFoldersData');
+            $(document).on('click', '#folder-save', function(e) {
+                $('#folder-popup').modal("closeModal");
+
+                productJsonSave(data);
+
+                $("input[name='product[name]']").val(data.product.userProductName).change();
+
+                // Prefill selected start end date on add product page
+                var startDateValue = $('#start-date').val();
+                $("input[name='product[start_date_pod]']").val(startDateValue).change();
+                var endDateValue = $('#end-date').val();
+                if (endDateValue) {
+                    $("input[name='product[end_date_pod]']").val(endDateValue).change();
+                } else {
+                    $("input[name='product[end_date_pod]']").val('').change();
+                }
+
+                // Prefill description on add product page
+                let descValue = $('#description').val();
+                if (descValue) {
+                    let contentElement = $('div[data-index="content"]');
+                    contentElement.find('.fieldset-wrapper-title[data-state-collapsible="closed"]').trigger('click');
+                    jQuery("textarea[name='product[catalog_description]']").val(descValue).change();
+                }
+ 
+                // prefill related keywords on add product page
+                let tagsValue = $('#product-tags-hidden').val();
+                if (tagsValue) {
+                    let tagsElement = $('div[data-index="search-engine-optimization"]');
+                    tagsElement.find('.fieldset-wrapper-title[data-state-collapsible="closed"]').trigger('click');
+                    jQuery("input[name='product[related_keywords]']").val(tagsValue).change();
+                }
+           
+                // Prefill selected shared catalog on add product page
+                var selectedCatalogId = fxoStorage.get('selectedSharedCatalogId');
+                if (selectedCatalogId) {
+                    let sharedCatalogElement = $('div[data-index="shared_catalog"]');
+                    sharedCatalogElement.find('.fieldset-wrapper-title[data-state-collapsible="closed"]').trigger('click');
+                    let catalogComponent = uiRegistry.get('product_form.product_form.shared_catalog.shared_catalog');
+                    if (catalogComponent) {
+                        // Check if the current value is already set to selectedCatalogId
+                        let currentValue = catalogComponent.value();
+                        if (!currentValue.length || String(currentValue[0]) !== String(selectedCatalogId)) {
+                            catalogComponent.setSelected(selectedCatalogId.toString());
+                            catalogComponent.setValue([parseInt(selectedCatalogId)]);
+                            if (typeof catalogComponent.setOptions === 'function') {
+                                catalogComponent.setOptions(catalogComponent.options);
+                            }
+                        }
+                    }
+                }
+
+                // Prefill selected category on add product page
+                var selectedCategoryId = fxoStorage.get('selectedCategoryId');
+                if (selectedCategoryId) {
+                    let categoryComponent = uiRegistry.get('product_form.product_form.product-details.container_category_ids.category_ids');
+                    if (categoryComponent) {
+                        let currentValue = categoryComponent.value() || [];
+                    
+                        // Check if the category is not already selected
+                        if (!currentValue.includes(String(selectedCategoryId)) && !currentValue.includes(parseInt(selectedCategoryId))) {
+                            let updatedCategories = [...currentValue, String(selectedCategoryId)];
+                            categoryComponent.value(updatedCategories);
+                            
+                            setTimeout(function() {
+                                // Find and check the checkbox for this category
+                                let categoryCheckbox = $('.admin__action-multiselect-label[data="' + selectedCategoryId + '"]')
+                                    .closest('.action-menu-item')
+                                    .find('input.admin__control-checkbox');
+                                
+                                if (categoryCheckbox.length && !categoryCheckbox.prop('checked')) {
+                                    categoryCheckbox.prop('checked', true).trigger('change');
+                                }
+                            }, 300);
+                        }
+                    }   
+                }
+                
+            });
+        } 
+        <?php } ?>
+    });
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "download": {
+                "downloadAjaxUrl": "<?php echo $downloadAjaxurl; ?>"
+            }
+        }
+    }
+</script>
+<script>
+    window.customerTimeZoneUrl = '<?php echo $customerTimeZoneUrl; ?>';
+    window.productAttributeSetName = '<?php echo $productAttributeSetName; ?>';
+    window.productAttributeSetCollection = '<?php echo json_encode($productAttributeSetCollection) ?>';
+</script>

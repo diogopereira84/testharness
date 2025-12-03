@@ -1,0 +1,262 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    .page-layout-third-party-product-full-width {
+        .column.main {
+            .product.info.detailed {
+                .tab {
+                    padding: 5px 35px 5px 35px;
+                    text-align: center;
+                    width: 181.33px;
+                    color: #6d6d6d;
+                    height: 51.33px;
+                    border-radius: 0;
+                    font-size: 1.4rem;
+                    font-weight: 400;
+                    &:focus, &:active {
+                        background-color: #4D148C;
+                        color: @fx-white-100;
+                        outline: none;
+                    }
+                    &.active {
+                        background-color: #4D148C;
+                        color: @fx-white-100;
+                    }
+                }
+
+                .product-info-tabs-toggle-enabled {
+                    .tab {
+                        &:focus, &:active {
+                            background-color: unset !important;
+                        }
+                        span {
+                            width: auto !important;
+                        }
+                    }
+                }
+
+                h2 {
+                    color: @fx-grey-1200;
+                    font-family: "FedEx Sans Light";
+                    font-size: 48px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 56px;
+                    text-align: center;
+                }
+                
+                .shipping-toggle-container h2,
+                .product-options-section h2.product-options-heading {
+                    font-size: 32px;
+                    text-align: left;
+                }
+                .item.content {
+                    padding: 30px 24px 32px 24px !important;
+                    margin: 0 !important;
+                    .info-content {
+                        padding: unset !important;
+
+                        h2 {
+                            color: @fx-grey-1200;
+                            font-family: "FedEx Sans Light";
+                            font-size: 32px;
+                            font-weight: 300;
+                            letter-spacing: 0;
+                            line-height: 40px;
+                            margin-bottom: 24px;
+                            margin-top: unset;
+                            text-align: left;
+                        }
+                    }
+
+                    &#tab-faq {
+                        &[data-content-type=divider] {
+                            padding: unset !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    .page-layout-third-party-product-full-width {
+        .column.main {
+            div.product.info.detailed {
+                .tab-specifications-wrapper {
+                    display: flex;
+                    flex-direction: column;
+                }
+                .product.data.items.detail-tabs {
+                    &:not(.tab-buttons-desktop) {
+                        display: flex;
+                        flex-direction: column;
+                    }
+                }
+                .tab {
+                    font-weight: 600;
+                    color: #121e24;
+                    margin: 0;
+                    text-align: left;
+                    border-top: 0 !important;
+                    border-bottom: 1px solid #cccccc;
+                    width: auto !important;
+                    border-right: 0;
+                    border-left: 0;
+                    padding: 0 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    span {
+                        width: 100px;
+                        display: inline-block;
+                        margin-left: 5px;
+                    }
+                    &:after {
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        font-size: 14px;
+                        line-height: inherit;
+                        color: inherit;
+                        content: '\e622';
+                        font-family: 'luma-icons';
+                        vertical-align: middle;
+                        display: inline-block;
+                        font-weight: normal;
+                        overflow: hidden;
+                        speak: none;
+                        text-align: center;
+                        margin-right: 10px;
+                    }
+                    &:focus::after {
+                        content: '\e621';
+                    }
+                    &:active ~ .tab, &:focus ~ .tab {
+                        color: #121e24;
+                    }
+                }
+                .item.content {
+                    &#tab-shipping {
+                        h2 {
+                            font-size: 20px;
+                        }
+
+                        .estimated-wrapper {
+                            margin-top: unset;
+                        }
+                    }
+
+                    &#tab-faq {
+                        .faq-container {
+                            padding-top: unset !important;
+
+                            .faq-content-section {
+                                padding-top: unset;
+
+                                .tab-title {
+                                    margin-bottom: 24px;
+                                }
+
+                                .ui-tabs-panel {
+                                    padding-top: unset !important;
+
+                                    &[data-content-type=divider] {
+                                        padding: unset !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    &#tab-ideas {
+                        p {
+                            margin-bottom: 24px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__xs) {
+    .page-layout-third-party-product-full-width {
+        .column.main {
+            div.product.info.detailed {
+                h2 {
+                    font-size: 32px;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: @screen__m) and (max-width: (@screen__l - 1) ) {
+    .page-layout-third-party-product-full-width {
+        .column.main {
+            div.product.info.detailed {
+                .product.data.items.detail-tabs {
+                    &:not(.tab-buttons-desktop) {
+                        display: flex;
+                        flex-direction: column;
+                        padding-bottom: 56px;
+                    }
+                }
+                .tab {
+                    font-weight: 600;
+                    color: #121e24;
+                    margin: 0px 15px 0px 15px;
+                    text-align: left;
+                    border-top: 0;
+                    border-bottom: 1px solid #cccccc;
+                    width: auto !important;
+                    border-right: 0;
+                    border-left: 0;
+                    padding: 0;
+                    display: flex;
+                    justify-content: space-between;
+                    span {
+                        width: 100px;
+                        display: inline-block;
+                        margin-left: 5px;
+                    }
+                    &:after {
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        font-size: 14px;
+                        line-height: inherit;
+                        color: inherit;
+                        content: '\e622';
+                        font-family: 'luma-icons';
+                        vertical-align: middle;
+                        display: inline-block;
+                        font-weight: normal;
+                        overflow: hidden;
+                        speak: none;
+                        text-align: center;
+                        margin-right: 10px;
+                    }
+                    &:focus::after {
+                        content: '\e621';
+                    }
+                    &:active ~ .tab, &:focus ~ .tab {
+                        color: #121e24;
+                    }
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (max-width: (@screen__l - 1)) {
+        .page-layout-third-party-product-full-width {
+            .product.data.items.detail-tabs {
+                .tab.item.title.mobile-hidden {
+                    display: none;
+                } 
+            }  
+        }
+    }    
+}

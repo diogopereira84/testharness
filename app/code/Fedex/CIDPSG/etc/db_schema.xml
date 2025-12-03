@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+  <table name="psg_customer" resource="default" engine="innodb" comment="Table for PSG customers details">
+    <column xsi:type="int" name="entity_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="varchar" name="company_participation_id" nullable="false" length="50"/>
+    <column xsi:type="varchar" name="client_id" nullable="false" length="100" comment="PSG Customer Client ID"/>
+    <column xsi:type="varchar" name="company_name" nullable="false" length="100"/>
+    <column xsi:type="text" name="company_logo" nullable="false" />
+    <column xsi:type="text" name="participation_agreement" nullable="false"/>
+    <column xsi:type="int" name="support_account_type" padding="11" nullable="false" default="0" comment="0 - Discount Account, 1 - Invoice Account, 2 - Both"/>
+    <column xsi:type="varchar" name="created_by" length="100"/>
+    <column xsi:type="varchar" name="updated_by" length="100"/>
+    <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Created Datetime"/>
+    <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated Datetime"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="entity_id" />
+    </constraint>
+    <constraint xsi:type="unique" referenceId="PSG_CUSTOMER_CLIENT_ID">
+      <column name="client_id"/>
+    </constraint>
+    <index referenceId="PSG_CUST_PARTICIPATION_COMPANY_CREATED_MODIFIED" indexType="fulltext">
+      <column name="company_participation_id"/>
+      <column name="company_name"/>
+      <column name="created_by"/>
+      <column name="updated_by"/>
+    </index>
+    <index referenceId="PSG_CUST_COMPANY_PARTICIPATION_ID" indexType="btree">
+      <column name="company_participation_id"/>
+    </index>
+    <index referenceId="PSG_CUST_COMPANY_NAME" indexType="btree">
+      <column name="company_name"/>
+    </index>
+    <index referenceId="PSG_CUST_CREATED_BY" indexType="btree">
+      <column name="created_by"/>
+    </index>
+    <index referenceId="PSG_CUST_UPDATED_BY" indexType="btree">
+      <column name="updated_by"/>
+    </index>
+  </table>
+  <table name="psg_customer_fields" resource="default" engine="innodb" comment="Table for PSG customers fields details">
+    <column xsi:type="int" name="entity_id" padding="11" unsigned="false" nullable="false" identity="true"/>
+    <column xsi:type="int" name="psg_customer_entity_id" padding="11" nullable="false"/>
+    <column xsi:type="smallint" name="field_group" padding="5" nullable="false" default="0" comment="0 - Default Fields, 1 - Custom Fields"/>
+    <column xsi:type="varchar" name="field_type" nullable="false" length="20" default="textbox" comment="textbox => Textbox, textarea => TextArea, select => Select, checkbox => Checkbox, radio => Radio"/>
+    <column xsi:type="varchar" name="field_option_value" nullable="false" length="100"/>
+    <column xsi:type="varchar" name="field_label" nullable="false" length="100"/>
+    <column xsi:type="varchar" name="field_description" nullable="false" length="250"/>
+    <column xsi:type="varchar" name="validation_type" length="100" nullable="false" default="text" comment="Text - text, Email - email, Telephone - telephone, Fax - fax, FedEx Account - fedex_account, Zipcode-zipcode"/>
+    <column xsi:type="int" name="max_character_length" padding="11" nullable="false" default="70"/>
+    <column xsi:type="smallint" name="is_required" padding="5" nullable="false" unsigned="true" default="0" comment="0 - Not Required, 1 - Required"/>
+    <column xsi:type="int" name="position" padding="11" nullable="false" default="0"/>
+    <column xsi:type="timestamp" name="created_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="false" comment="Created Datetime"/>
+    <column xsi:type="timestamp" name="updated_at" nullable="false" default="CURRENT_TIMESTAMP" on_update="true" comment="Updated Datetime"/>
+    <constraint xsi:type="primary" referenceId="PRIMARY">
+      <column name="entity_id" />
+    </constraint>
+    <constraint xsi:type="foreign" referenceId="PSG_CUST_ENTITY_ID_PSG_CUST_FIELDS_ENTITY_ID" table="psg_customer_fields" column="psg_customer_entity_id" referenceTable="psg_customer" referenceColumn="entity_id" onDelete="CASCADE"/>
+    <index referenceId="PSG_CUST_FIELDS_PSG_CUSTOMER_ENTITY_ID" indexType="btree">
+      <column name="psg_customer_entity_id"/>
+    </index>
+  </table>
+</schema>

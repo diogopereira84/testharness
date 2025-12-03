@@ -1,0 +1,38 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModal */
+$uploadToQuoteViewModal = $block->getData('uploadToQuoteViewModal');
+$deletItemMessage = $uploadToQuoteViewModal->getUploadToQuoteConfigValue('delete_item_message');
+$btnCancelLabel = $uploadToQuoteViewModal->getUploadToQuoteConfigValue('delete_item_btn_cancel_label');
+$btnSubmitLabel = $uploadToQuoteViewModal->getUploadToQuoteConfigValue('delete_item_btn_submit_label');
+?>
+<div id="delete_item_popup" class="delete-model-popup-content" style="display:none;">
+    <div class="delete-icon-container delete-row">
+        <img class="delete-warning-icon" alt="Decline Warning"
+                src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/trash.png'));?>"/>
+    </div>
+    <h3 class="delete-item-title delete-row">&nbsp;</h3>
+    <div class="delete-message delete-row">
+        <?= $block->escapeHtml(__($deletItemMessage)) ?>
+    </div>
+
+    <div class="delete-row delete-popup-btn-container">
+        <div class="btn-left-container">
+        <button type="button" class="btn-delete-cancel"><?= $block->escapeHtml(__($btnCancelLabel)) ?></button>
+        </div>
+        <div class="btn-right-container">
+        <button type="button" class="btn-delete-submit" data-itemid="" data-item-name="">
+            <?= $block->escapeHtml(__($btnSubmitLabel)) ?></button>
+        </div>
+    </div>
+</div>
+<script>
+    require(['uploadToQuoteModelPopup', 'uploadToQuoteDeleteItem'],
+        function(uploadToQuoteModelPopup, uploadToQuoteDeleteItem){}
+    );
+</script>
+

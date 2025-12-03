@@ -1,0 +1,112 @@
+<?php
+
+// @codingStandardsIgnoreFile
+
+use Fedex\CatalogDocumentUserSettings\Helper\Data;
+use Fedex\Orderhistory\Helper\Data as OrderhistoryHelper;
+use Fedex\EnhancedProfile\Helper\Account as AccountHelper;
+use Fedex\SDE\Block\SensitiveMessage;
+use Magento\Theme\Block\Html\Title;
+
+/**
+ * @var $block Title
+ */
+
+$helperData = $this->helper(Data::class);
+$currentActionName = $helperData->getActionName();
+$deliveryHelper = $this->helper(Fedex\Delivery\Helper\Data::class);
+$catalogMvpHelper = $this->helper(Fedex\CatalogMvp\Helper\CatalogMvp::class);
+$isRetailCustomer = !$deliveryHelper->isCommercialCustomer();
+$isEproCustomer = $deliveryHelper->isEproCustomer();
+$sharedCatId = 0;
+$hideTitle = "";
+$accountHelperData = $this->helper(AccountHelper::class);
+if (!$isRetailCustomer) {
+    $sharedCatId = $catalogMvpHelper->getCompanySharedCatId();
+}
+?>
+
+<?php if ($currentActionName != 'configurator_index_index'): ?>
+<?php echo $this->getLayout()->createBlock(SensitiveMessage::class)->setTemplate("Fedex_SDE::sensative_block.phtml")->toHtml(); ?>
+<?php endif;?>
+<?php
+if ($currentActionName === "catalog_category_view") {
+    $currentCategory = $helperData->getCurrentCategory()->getName();
+    $sharedCatalogChnagesStatus = 0;
+    if (!$isRetailCustomer && $sharedCatId) {
+
+        $categoryPath = $helperData->getCurrentCategory()->getPath();
+        $path = explode("/",$categoryPath);
+        if (in_array($sharedCatId, $path) && (!$isEproCustomer || $isEproCustomer && in_array($sharedCatId, $path))) {
+            $hideTitle = 'display:none;';
+        }
+        if ($sharedCatId == $helperData->getCurrentCategory()->getId()) {
+            $sharedCatalogChnagesStatus = 1;
+        }
+    }
+    if ($currentCategory === "Browse Catalog" || !empty(strpos($currentCategory, "Browse Catalog")) || $sharedCatalogChnagesStatus) {
+        $pageTitle = "Shared Catalog";
+    } else {
+        $pageTitle = $currentCategory;
+    }
+} else {
+    $pageTitle = $block->getPageHeading();
+}
+
+$trackingClass = '';
+if($block->escapeHtml($pageTitle) == 'Tracking') {
+    $trackingClass = 'tracking-page-title';
+}
+if ($currentActionName === 'customer_account_sharedcreditcards'
+    && $accountHelperData->isCompanySettingToggleEnabled()):
+    $pageTitle = "Site Level Payments";
+endif;
+if ($currentActionName === 'personaladdressbook_index_view' && $isRetailCustomer):
+        $pageTitle = "Address Book";
+endif;
+$cssClass = $block->getCssClass() ? ' ' . $block->getCssClass() : '';
+$title = '';
+if (trim($block->getPageHeading())) {
+    $title = '<span class="base" data-ui-id="page-title-wrapper" ' . $block->getAddBaseAttribute() . '>'
+    . $block->escapeHtml($pageTitle) . '</span>';
+}
+/** B-1047968 | Print Order Receipt **/
+$orderHistoryHelper = $this->helper(OrderhistoryHelper::class);
+$eproClass = $orderHistoryHelper->isModuleEnabledForPrint() ? 'epro-print-order' : '';
+$eproClassEnhancement = $orderHistoryHelper->isEnhancementEnabledForPrint() ? 'epro-print-order-enhancement' : '';
+$retailClassEnhancement = $orderHistoryHelper->isRetailOrderHistoryEnabled() ? 'retail-print-order-enhancement' : '';
+?>
+<?php if ($title):
+    // Condition added for cart page, title
+    if ($currentActionName == "checkout_cart_index") {
+       $title="Cart Summary";
+    }
+    if ($currentActionName == "catalogsearch_advanced_index") {
+        $title="Advanced Product Search";
+    }
+    if ($currentActionName == "search_term_popular") {
+        $title="Popular Search Terms";
+    }
+    ?>
+
+<div class="title-format page-title-wrapper<?=/* @escapeNotVerified */$cssClass?> <?=/* @escapeNotVerified */$eproClass?> <?=/* @escapeNotVerified */$eproClassEnhancement?> <?=/* @escapeNotVerified */$retailClassEnhancement?> <?=/* @escapeNotVerified */$trackingClass?>" role="region" aria-label="page-title" style="<?= $hideTitle?>">
+	    <?php if (($currentActionName === "customer_account_sharedcreditcards") || ($currentActionName === "shared_order_history")) : ?>
+	        <h2 class="page-title"
+	        <?php if ($block->getId()): ?> id="<?=/* @escapeNotVerified */$block->getId()?>" <?php endif;?>
+        <?php if ($block->getAddBaseAttributeAria()): ?>
+            aria-labelledby="<?=/* @escapeNotVerified */$block->getAddBaseAttributeAria()?>"
+        <?php endif;?>>
+        <?=/* @escapeNotVerified */$title?>
+    </h2>
+    <?php else: ?>
+    <h1 class="page-title"
+        <?php if ($block->getId()): ?> id="<?=/* @escapeNotVerified */$block->getId()?>" <?php endif;?>
+        <?php if ($block->getAddBaseAttributeAria()): ?>
+            aria-labelledby="<?=/* @escapeNotVerified */$block->getAddBaseAttributeAria()?>"
+        <?php endif;?>>
+        <?=/* @escapeNotVerified */$title?>
+    </h1>
+    <?php endif;?>
+    <?=$block->getChildHtml()?>
+</div>
+<?php endif;?>

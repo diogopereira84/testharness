@@ -1,0 +1,36 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$confirmationPopupMsg = $block->getData('confirmation_popup_msg');
+?>
+<div id="cid-confirmation-modal-popup" class="cid-confirmation-modal-popup" style="display: none">
+    <div class="modal-body-content">
+    <div class="confirmation-popup-modal-icon">
+    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/check-icon.png'))?>"
+    alt="">
+    </div>
+        <h3 class="confirmation-popup-heading">
+        <?=$escaper->escapeHtml(__($confirmationPopupMsg['title']))?>
+        </h3>
+        <?= $escaper->escapeHtml(__($confirmationPopupMsg['msg']))?>
+        <div class="btn-container-home">
+            <a href="<?=$escaper->escapeHtmlAttr($block->getUrl());?>"
+            class="btn-popup-home"
+            data-testid="E-349679-B-1648248-TK-2820794-cid-accepted-modal-submit-btn">
+                <span class="span-popup-home">
+                    <?=$escaper->escapeHtml(__('Home'))?>
+                </span>
+            </a>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_CIDPSG/js/confirmation_popup_modal": {}
+        }
+    }
+</script>

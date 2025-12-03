@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+  <group id="compression_crongroup">
+    
+    <job name="catalog_mvp_item_enable" instance="Fedex\CatalogMvp\Cron\ItemEnableCron" method="execute">
+        <schedule>*/5 * * * *</schedule>
+    </job>
+    <job name="catalog_mvp_item_disable" instance="Fedex\CatalogMvp\Cron\ItemDisableCron" method="execute">
+        <schedule>*/5 * * * *</schedule>
+    </job>
+   <job name="extend_document_life_cron" instance="Fedex\CatalogMvp\Cron\DocumentExtendLifeCron" method="execute">
+        <config_path>doc_ref_cron/config/extend_life_cron</config_path>
+    </job>
+    <job name="catalog_expiry_notification_cron" instance="Fedex\CatalogMvp\Cron\CatalogExpiryNotificationCron" method="execute">
+        <config_path>catalog_expiry_notification_setting/config/expire_notification_cron</config_path>
+    </job>
+    <job name="bulk_product_delete_cron" instance="Fedex\CatalogMvp\Cron\BulkDeleteCron" method="execute">
+        <schedule>0 * * * *</schedule>
+    </job>
+  </group>
+  <group id="retention_crongroup">
+       <job name="catalog_item_retention" instance="Fedex\CatalogMvp\Cron\CatalogItemRetention" method="execute">
+            <config_path>fedex/config/run_cron_time</config_path>
+       </job>
+   </group> 
+</config> 

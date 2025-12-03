@@ -1,0 +1,119 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$infoUrl = $this->getInfoWarningIcon();
+$iconographyOptions = $block->getIconographyOptions();
+$notificationBannerConfigurations = $this->getCompanyConfigNotificationBanner();
+$isBannerEnable = $notificationBannerConfigurations['is_banner_enable'];
+$bannerTitle = $notificationBannerConfigurations['banner_title'];
+$description = $notificationBannerConfigurations['description'];
+$ctaText = $notificationBannerConfigurations['cta_text'];
+$ctaLink = $notificationBannerConfigurations['cta_link'];
+$iconography = $notificationBannerConfigurations['iconography'];
+$linkOpenInNewTab = $notificationBannerConfigurations['link_open_in_new_tab'];
+$popupIconSrc = $this->getPopupInfoIcon();
+$warningIconImage = $this->getWarningIconImage();
+$warningModelClass = '';
+if ($iconography == 'warning') {
+    $popupIconSrc = $warningIconImage;
+    $warningModelClass = 'warning';
+}
+?>
+<li style="list-style-type: none;">
+    <div class="notification-banners-content">
+        <h4 class="notification-banner-title"><?= $escaper->escapeHtml(__("The notification banner appears after login and persists until it is acknowledged. Use this feature to provide additional messaging to users, or link to another site or other useful information.")) ?></h4>
+        <div class="ep-notification">
+            <h4 class="toggle-title"><?= $escaper->escapeHtml(__("ENABLE BANNER TITLE")) ?></h4>
+            <div class="info-icon">
+                <span class="enhanced-profile-tooltip">
+                    <img aria-describedby="info-notificationbanner" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Info Banner Icon" />
+                    <span id="info-notificationbanner" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                        <?= $escaper->escapeHtml(__("When enabled, you can customize a message that will be displayed throughout your site visible to your end users.")) ?>
+                    </span>
+                </span>
+            </div>
+            <div class="enhanced-profile-toggle">
+                <label class="switch">
+                    <input name="is_banner_enable" type="checkbox" id="notificationbanner-toggle" <?= $isBannerEnable ? 'checked' : ''; ?> aria-label='Enable Banner Title' />
+                    <span class="custom-slider round"></span>
+                    <span class="labels" data-on="ON" data-off="OFF"></span>
+                </label>
+            </div>
+        </div>
+        <h3 class="preview-banner-label">
+            <?= $escaper->escapeHtml(__("Preview for Banner Title")) ?>
+        </h3>
+        <div class="preview-banner-section d-flex <?= $warningModelClass; ?>" role="dialog" aria-label="preview-banner">
+            <div class="preview-banner-left-section">
+                <img aria-describedby="preview-banner-icon" src="<?= $popupIconSrc; ?>" class="preview-banner-icon" alt="Preview Banner Icon" />
+            </div>
+            <div class="preview-banner-right-section">
+                <h4 class="preview-banner-title">
+                    <?= $bannerTitle != '' ? $bannerTitle : $escaper->escapeHtml(__("Title")) ?>
+                </h4>
+                <p class="preview-banner-description">
+                    <?= $description != '' ? $description : $escaper->escapeHtml(__("Use this to provide the user with more context.")) ?>
+                </p>
+                <a href="" class="preview-button" aria-label="preview-button-link">
+                    <?= $ctaText ?>
+                </a>
+            </div>
+            <span class="preview-banner-close-icon"></span>
+        </div>
+        <div class="form-group">
+            <label for="bannerTitle"><?= $escaper->escapeHtml(__("BANNER TITLE")) ?></label>
+            <input type="text" name="banner_title" id="bannerTitle" placeholder="Text for title of banner" value="<?= $bannerTitle; ?>">
+            <p class="banner-title-warning">
+                <?= $escaper->escapeHtml(__("This text will be used for the banner title.")) ?>
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="bannerType"><?= $escaper->escapeHtml(__("BANNER TYPE")) ?></label>
+            <select name="iconography" id="bannerType">
+                <?php foreach ($iconographyOptions as $option) {
+                    $selected = '';
+                    if ($iconography == $option['value']) {
+                        $selected = 'selected';
+                    } ?>
+                    <option value="<?= $escaper->escapeHtml($option['value']) ?>" <?= $selected; ?>><?= $escaper->escapeHtml($option['label']) ?></option>
+                <?php } ?>
+            </select>
+            <p class="banner-type-warning">
+                <?= $escaper->escapeHtml(__("This will indicate the visual type of banner.")) ?>
+            </p>
+        </div>
+        <div class="form-group">
+            <label for="description"><?= $escaper->escapeHtml(__("DESCRIPTION")) ?></label>
+            <textarea name="description" id="description" rows="4" placeholder="Use this to provide the user with more context."><?= $description; ?></textarea>
+            <p class="banner-description-warning">
+                <?= $escaper->escapeHtml(__("400 characters left")) ?>
+            </p>
+        </div>
+        <div class="form-group links-to-address-display">
+            <div class="row">
+                <div class="link-address column">
+                    <label for="linkAddress"><?= $escaper->escapeHtml(__("LINK ADDRESS (OPTIONAL)")) ?></label>
+                    <input type="text" name="cta_link" id="linkAddress" placeholder="Text input" value="<?= $ctaLink; ?>">
+                </div>
+                <div class=" column link-display">
+                    <label for="linkDisplay"><?= $escaper->escapeHtml(__("LINK TO DISPLAY (OPTIONAL)")) ?></label>
+                    <input type="text" id="linkDisplay" name="cta_text" placeholder="Text input" value="<?= $ctaText; ?>">
+                </div>
+            </div>
+        </div>
+        <div class="ep-notificationbanner">
+            <h4 class="toggle-title"><?= $escaper->escapeHtml(__("LINK OPEN IN NEW TAB")) ?></h4>
+            <div class="enhanced-profile-toggle">
+                <label class="switch">
+                    <input type="checkbox" name="link_open_in_new_tab" id="link-newtab-toggle" <?= $linkOpenInNewTab ? 'checked' : ''; ?> aria-label='Link Open In New Tab' />
+                    <span class="custom-slider round"></span>
+                    <span class="labels" data-on="ON" data-off="OFF"></span>
+                </label>
+            </div>
+        </div>
+        <button type="button" class="update-preview"><?= $escaper->escapeHtml(__("UPDATE PREVIEW")) ?></button>
+        <div id="companySettingRedirectUrl" style="display:none;"></div>
+    </div>
+</li>

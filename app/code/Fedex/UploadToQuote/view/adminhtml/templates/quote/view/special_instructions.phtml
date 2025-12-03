@@ -1,0 +1,35 @@
+<?php if ($block->isEnhancementToggleEnabled()): ?>
+<div id="specialInstructions" class="admin-quote-special-instructions">
+    <div class="special-instructions-list">
+        <?php foreach ($block->getSpecialInstructions() as $instruction): ?>
+            <div class="instruction-item">
+                <div class="instruction-header" data-target="#instruction-1">
+                    <div class="instruction-title">
+                        <strong><?= $escaper->escapeHtmlAttr(__($instruction['title'])) ?></strong>
+                        <div class="sku">SKU: <?= $escaper->escapeHtmlAttr(__($instruction['sku'])) ?></div>
+                    </div>
+                    <button type="button" class="toggle-details" 
+                    data-target="#instruction-<?= $escaper->escapeHtmlAttr(__($instruction['sku']))  ?>">
+                        <span class="circle-arrow"></span>
+                    </button>
+                </div>
+                <div id="instruction-<?= $escaper->escapeHtmlAttr(__($instruction['sku']))  ?>" 
+                class="instruction-details collapse">
+                    <?php $instructionValues =  explode('--', $instruction['details']) ?>
+                    <?php foreach ($instructionValues as $item): ?>
+                        <p><?= $escaper->escapeHtmlAttr(__($item)) ?></p>
+                    <?php endforeach; ?>
+                </div>
+                <hr>
+                </hr>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
+<?php endif; ?>
+<script>
+    window.isEnhancementToggleEnabled = <?= $block->isEnhancementToggleEnabled() ? 'true' : 'false' ?>;
+    require(['quoteDetailEnhancement'],
+        function(quoteDetailEnhancement){}
+    );
+</script>

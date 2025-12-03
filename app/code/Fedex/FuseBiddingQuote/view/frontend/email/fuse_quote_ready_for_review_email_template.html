@@ -1,0 +1,153 @@
+<!--@subject Fuse Quote Ready for Review Customer Email Template @-->
+<!--@vars {
+"var user_name|raw":"User Name",
+"var quote_id|raw":"quote id",
+"var items":"Items",
+"var company_url_extension|raw":"Company URL",
+"var quote_placed_date":"Quote Placed On",
+"var quote_expiration_date_raw":"Quote Expiring On",
+"var store_location_address_line_1":"Store Location Address Line 1",
+"var store_location_address_line_2":"Store Location Address Line 2",
+"var store_location_address_city_state_pincode":"Store Location Address City, State, Pincode",
+"var store_location_phone":"Store Location Phone",
+"var store_location_email":"Store Location Email",
+"var is_bid_checkout_enable":"Online Fuse Bid Checkout Enabled",
+"var is_epro_customer":"isEproCustomer"
+"var should_show_quote_link":"Should show hyperlink"
+} @-->
+
+<div class="email-container">
+	<div class="content-section">
+		<div class="email-solutation"
+			style="margin-top:0;margin-bottom:0;font-size:16px;line-height:24px;font-weight:400;color:#333;">
+			<span class="email-text-content">Hi {{var user_name|raw}},</span><br><br>
+			<span class="email-text-content">{{trans "We are pleased to inform you that your quote is ready for
+			review. Please find the details of your
+			project below."}}</span>
+			<br><br>
+			<span class="email-text-content">{{trans "We&rsquo;d love the opportunity to earn your business and
+			show how our team of friendly experts can
+			provide flexible solutions to make your copying, printing, signage, and large format needs easier, faster,
+			and more reliable."}}</span>
+			<br><br>
+			<span class="email-text-content">{{trans "If you&rsquo;d like to request changes or proceed with your
+			quote, feel free to contact your local FedEx Office — our team is happy to help."}}</span><br>
+			<span class="email-text-content">{{trans "This quote will expire in 30 days. "}}</span><br><br>
+			<span class="email-text-content">{{trans "We sincerely appreciate your business."}}</span><br><br>
+		</div>
+		<div class="store-location-container">
+			<div class="delivery-method-information">
+				<div><span
+						style="padding-bottom:8px;font-size:16px;line-height:24px;font-weight:700;color:#333;">{{trans
+						"Store Information"}}</span></div>
+				<div style="margin-left:2px;margin-top:2px">
+					<div><span>{{var store_location_address_line_1}}</span></div>
+					<div><span>{{var store_location_address_line_2}}</span></div>
+					<div><span>{{var store_location_address_city_state_pincode}}</span></div>
+				</div>
+				<div style="margin-left:2px;margin-top:10px">
+					<div><span>{{var store_location_phone}}</span></div>
+					<div><span style="color:#0078B4">{{var store_location_email}}</span></div>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="email-status">
+			<span class="email-summary"
+				style="font-weight:700;font-size:18px;line-height:24px;text-transform:uppercase;color:#333;font-style:normal;">{{trans
+				"Summary"}}</span><br>
+		</div>
+		<div class="quote-info">
+			<span class="quote-no" style="color:#333;">Quote Number: {{var quote_id|raw}}</span>
+			<br>
+			<span class="quote-expiration-date"
+				style="color:#333;font-family:'FedEx Sans Regular';font-size:14px;font-style:normal;font-weight:400;line-height:24px;">Quote
+				Expiration Date:
+			</span><span style="color:#333">{{var quote_expiration_date_raw}}</span>
+			<br>
+		</div>
+		<div class='field-container'>
+			{{layout handle="email_fuse_quote_ready_for_review" items=$items area="frontend"}}
+		</div>
+		<hr>
+		<div class="quote-place-date"
+			style="margin-bottom:38px;margin-left:8px;font-size:14px;line-height:24px;font-weight:400;color:#333;line-height:24px;font-style:normal;">
+			Quote Placed On: {{var quote_placed_date}}</div>
+	</div>
+</div>
+<style>
+	.email-solutation {
+		color: #333;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-top: 48px;
+		margin-bottom: 48px;
+	}
+
+	.email-text-content {
+		color: #333;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-top: 48px;
+		margin-bottom: 48px;
+	}
+
+	.email-summary {
+		color: #333;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 24px;
+		text-transform: uppercase;
+	}
+
+	.declined {
+		color: #E3002D;
+		font-size: 18px;
+		font-style: italic;
+		font-weight: 700;
+		line-height: 24px;
+	}
+
+	.quote-no {
+		color: #333;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.quote-expiration-date {
+		color: #333;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+
+	.quote-info {
+		color: #0078B4;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		text-decoration-line: none;
+	}
+
+	.quote-info a {
+		text-decoration-line: underline;
+		color: #0078B4;
+	}
+
+	.quote-place-date {
+		color: #333;
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-bottom: 38px;
+	}
+</style>

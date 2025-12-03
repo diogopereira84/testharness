@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<?php
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$uploadToQuoteViewModel = $block->getData('uploadToQuoteViewModal');
+
+/** @var Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel $orderApprovalB2bViewModel */
+$orderApprovalB2bViewModel = $block->getData('orderApprovalB2bViewModal');
+$pendingOrderApprovalMsgTitle = $orderApprovalB2bViewModel->getPendingOrderApprovalMsgTitle();
+$pendingOrderApprovalMsg = $orderApprovalB2bViewModel->getPendingOrderApprovalMsg();
+if ($uploadToQuoteViewModel->checkoutQuotePriceisDashable()): ?>
+    <div class="sidebar-print-instruction-inner-container">
+        <div class="info-icon-container">
+            <span>
+                <img class="info-icon" alt="Print Instruction Message"
+                src="<?= $block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/info.png')); ?>"/>
+            </span>
+        </div>
+        <img class="close-icon" alt="Print Instruction Message"
+    src="<?= $block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/close.png')); ?>" tabindex="0"/>
+        <?= $block->escapeHtml($uploadToQuoteViewModel->getUploadToQuoteConfigValue('quote_request_message')) ?>
+    </div>
+    <script>
+    require(['uploadToQuoteSummary'], function(uploadToQuoteSummary) {
+    });
+    </script>
+<?php endif; ?>
+<?php
+if ($orderApprovalB2bViewModel->isOrderApprovalB2bEnabled()
+&& !$uploadToQuoteViewModel->checkoutQuotePriceisDashable()): ?>
+    <div class="sidebar-pending-order-approval-inner-container">
+        <div class="info-icon-container">
+            <img class="info-icon" alt='<?= $escaper->escapeHtml(__("Pending approval message")) ?>'
+            src="<?= $block->escapeUrl($block->getViewFileUrl('images/commercial-order-approval/Union.png')); ?>"/>
+        </div>
+        <div class="info-msg">
+        <div class="msg-heading">
+            <?= $escaper->escapeHtml(__($pendingOrderApprovalMsgTitle)) ?>
+        </div>
+        <div class="msg-content">
+        <?= $escaper->escapeHtml(__($pendingOrderApprovalMsg)) ?>
+        </div>
+        </div>
+    </div>
+    <script>
+    require(['uploadToQuoteSummary'], function(uploadToQuoteSummary) {
+    });
+    </script>
+<?php endif; ?>
+<script>
+    require(['cartItemEditDisable'], function(cartItemEditDisable) {
+    });
+</script>

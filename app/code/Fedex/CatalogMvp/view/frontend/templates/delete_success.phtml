@@ -1,0 +1,66 @@
+<?php
+ if ($block->getData('view_model')->isSharedCatalogPermissionEnabled() &&
+ (!$block->getData('view_model')->checkPrintCategory())) { ?>
+
+    <div class="toast-msg-container product-delete" id="delete-product-scucess">
+        <div class="product-delete" role="dialog" aria-label="welcome-to-our-beta-site">
+            <div class="product-delete-toast-box-inner product-delete">
+                <span>
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="Success Icon">
+                </span>
+            </div>
+            <div class="success-toast-msg">
+                <p></p>
+            </div>
+            <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+            </span>
+        </div>
+    </div>
+<?php } ?>
+
+<?php
+if ($block->getData('view_model')->isEnableStopRedirectMvpAddToCart()) { ?>
+    <!-- E-443304 Add to cart success message popup -->
+    <div class="toast-msg-container" id="add-to-cart-toast-message">
+        <div class="add-to-cart-toast-msg" role="dialog" aria-label="welcome-to-our-beta-site">
+            <div class="add-to-cart-toast-box-inner ">
+                <span>
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Success Icon')) ?>">
+                </span>
+            </div>
+            <div class="success-toast-msg">
+                <p class="fedex-regular"></p>
+                <span class="view-cart">
+                    <a class="redirect-on-cart fedex-bold" href="<?= $block->getUrl('checkout/cart')?>"><?= $block->escapeHtml(__('VIEW CART')) ?></a>
+                </span>
+            </div>
+            <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt="<?= $block->escapeHtml(__('close button Icon')) ?>">
+            </span>
+        </div>
+    </div>
+<?php } ?>
+
+<script>
+    require(['jquery','fedex/storage'], function($,fxoStorage){
+            $(document).ready(function() {
+                let toastMessage;
+                if(window.e383157Toggle){
+                    toastMessage = fxoStorage.get("mvp_toast_message");
+                }else{
+                    toastMessage = localStorage.getItem("mvp_toast_message");
+                }
+                if (toastMessage) {
+                    $(".product-delete .success-toast-msg p").text(toastMessage);
+                    $("#delete-product-scucess").show();
+                    if(window.e383157Toggle){
+                        fxoStorage.delete("mvp_toast_message");
+                    }else{
+                        localStorage.removeItem("mvp_toast_message");
+                    }
+                    $('html, body').animate({
+                        scrollTop: $(".toast-msg-container.product-delete").offset().top
+                    }, 500);
+                }
+            })
+        });
+</script>

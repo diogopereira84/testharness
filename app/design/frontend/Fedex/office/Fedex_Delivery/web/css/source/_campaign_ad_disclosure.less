@@ -1,0 +1,75 @@
+
+& when (@media-common = true) {
+    .checkout-index-index {
+        .modals-wrapper {
+            .campaign-ad-disclosure-modal {
+                &.modal-popup {
+                    overflow-y: scroll !important; // Fix checkout modal scroll issue
+                    .modal-inner-wrap {
+                        left: 0 !important;
+                        padding-top: 64px; // Not a standard DDT padding top for mobile devices
+                        max-height: unset;
+                        margin: 50px 16px 0 !important;
+                        position: relative;
+                        .input-text {
+                            max-width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+
+        .campaign-ad-address-box {
+            padding: 16px;
+            border: 1px solid @fx-grey-350;
+            margin-top: 32px;
+            &__header {
+                justify-content: space-between;
+                align-items: flex-start;
+                color: @fx-grey-500;
+            }
+
+            &__edit-btn {
+                color: @fx-orange-500;
+                border: 1px solid @fx-orange-500;
+                padding: 4px 16px;
+                letter-spacing: 0.75px;
+                background-color: @fx-white-100;
+                border-radius: 0;
+            }
+
+            &__divider {
+                border-top: 1px solid @fx-grey-350;
+            }
+
+            &__content {
+                color: @fx-grey-450;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+    .checkout-index-index {
+        .modals-wrapper {
+            .campaign-ad-disclosure-modal {
+                &.modal-popup {
+                    .modal-inner-wrap {
+                        margin: 50px auto 0 !important;
+                    }
+                }
+            }
+        }
+
+         .campaign-ad-address-box {
+            &__content {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 64px;
+            }
+        }
+    }
+}

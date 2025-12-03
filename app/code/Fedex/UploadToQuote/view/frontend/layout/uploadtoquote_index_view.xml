@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>Quote Details</title>
+    </head>
+    <body>
+    <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template" name="fxo_cm_sdk" template="Fedex_FXOCMConfigurator::sdk.phtml">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="page.main.title" remove="true"/>
+        <referenceContainer name="content">
+            <block class="Fedex\UploadToQuote\Block\QuoteDetails" name="uploadtoquote_quote_details" template="Fedex_UploadToQuote::quote_details.phtml" cacheable="false">
+                <arguments>
+                    <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                    <argument name="quoteDetailsViewModel" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel</argument>
+                    <argument name="productInfoHandler" xsi:type="object">Fedex\Cart\ViewModel\ProductInfoHandler</argument>
+                    <argument name="bundleProductHandler" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+                    <argument name="item_renderer_provider" xsi:type="object">Fedex\ProductBundle\ViewModel\ItemRendererProvider</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\UploadToQuote\Block\QuoteDetails" name="uploadtoquote_decline_popup" template="Fedex_UploadToQuote::quote_decline_popup.phtml">
+                <arguments>
+                    <argument name="quoteDetailsViewModel" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\UploadToQuote\Block\QuoteDetails" name="uploadtoquote_delete_item_popup" template="Fedex_UploadToQuote::quote_delete_item_popup.phtml">
+                <arguments>
+                    <argument name="uploadToQuoteViewModal" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="uploadtoquote_quote_details">
+            <block name="quote.page.expiry.msg" before="-" template="Fedex_ExpiredItems::quote/expiry_message.phtml">
+                <arguments>
+                    <argument name="quote.details.view.model" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel</argument>
+                    <argument name="expiry.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                    <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                </arguments>
+			</block>
+			<block name="quote.page.expired.msg" before="-" template="Fedex_ExpiredItems::quote/expired_message.phtml">
+                <arguments>
+                    <argument name="quote.details.view.model" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel</argument>
+                    <argument name="expiry.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                    <argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                </arguments>
+			</block>
+            <block class="Fedex\UploadToQuote\Block\Preview" name="preview_block" template="Fedex_UploadToQuote::preview.phtml">
+                <arguments>
+                     <argument name="fxo_cm_view_model" xsi:type="object">Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\UploadToQuote\Block\QuoteDetails" name="review_request_block" template="Fedex_UploadToQuote::review_request_popup.phtml">
+                <arguments>
+                     <argument name="quoteDetailsViewModel" xsi:type="object">Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

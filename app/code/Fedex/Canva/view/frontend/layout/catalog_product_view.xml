@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.config">
+            <block class="Magento\Framework\View\Element\Template" name="product.canva" template="Fedex_Canva::product/view/canva.phtml">
+                <arguments>
+                    <argument name="canva" xsi:type="object">Fedex\Canva\ViewModel\Canva</argument>
+                    <argument name="pod" xsi:type="object">Fedex\Canva\ViewModel\PodConfiguration</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block class="Magento\Framework\View\Element\Template" name="canva.login.modal" template="Fedex_Canva::login/modal.phtml">
+                <arguments>
+                    <argument name="config" xsi:type="object">Fedex\Canva\ViewModel\ConfigAdapter</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

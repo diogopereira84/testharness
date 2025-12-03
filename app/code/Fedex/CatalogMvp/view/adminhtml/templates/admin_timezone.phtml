@@ -1,0 +1,7 @@
+<?php 
+$config = $block->getLayout()->createBlock(\Magento\Config\Block\System\Config\Form::class);
+$timezone = $config->getConfigValue('general/locale/timezone');
+?>
+<script>
+  window.adminTimezone = '<?= $timezone; ?>';
+</script>

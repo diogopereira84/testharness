@@ -1,0 +1,178 @@
+<!--
+/**
+ * Copyright © McFadyen, Inc. All rights reserved.
+ */
+-->
+
+<div class="contact-from-container">
+
+    <!-- B-1306275 | preferred pickup time -->
+    <div data-bind="if: isPreferredPickupDateTimeEnabled()">
+        <!-- ko ifnot: isPromiseTimePickupOptionsToggle() -->
+        <div class="estimate-pickup-container mt-50">
+            <h2 class="fedex-light fs-24 weight-300 lh-32 cl-stonegray">Estimated Pickup Time</h2>
+            <p class="earliest-pickup-date fedex-light fs-18 lh-24 cl-stonegray"
+                data-bind="html: koEarliestPickupDateTime"></p>
+        </div>
+
+        <div class="pref-pickup-container mb-32">
+            <button class="pref-pickup-btn pt-15 pl-35 pb-10 pr-35 fedex-bold fs-19 lh-24 ls-1-19" type="button"
+                data-bind="click: showPickupTimeModal,afterRender: isB2bOrderApproval()" data-testid="change-pickup-time-button">
+                CHANGE PICKUP TIME
+            </button>
+        </div>
+        <!-- /ko -->
+
+        <div id="pickuptimeModal" class="pickuptime-modal" afterRender="initPickUpModal">
+            <div class="modal-body-content">
+                <div class="preferred-modal-content">
+                    <div class="pickup-location-details mb-25">
+                        <p id="pickuptime-addresslabel" class="pickuptime-text text-center cl-stonegray lh-19"
+                            data-bind="text: getPickupLocationAndAddress()"></p>
+                        <p id="pickuptime-timelabel" class="pickuptime-text text-center cl-stonegray lh-19"
+                            data-bind="html: getPickupDateTime()"></p>
+                    </div>
+                    <div class="datepicker-wrapper">
+                        <div id="prefdatetimepicker"></div>
+                        <div id="preftimeselect" class="d-flex mx-auto pt-16">
+                            <label for="pickuptime-select" class="lh-32 w-100 fedex-bold fs-14 cl-stonegray">Select
+                                time:</label>
+                            <select id="pickuptime-select" data-bind="options: availableTimeslotOptions,
+                        optionsText: 'label',
+                        optionsValue: 'value',
+                        value: selectedTimeslot" name="pickuptimeDropdown"
+                                data-testid="select-pickup-time-modal-select">
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- B-1306275 | preferred pickup time -->
+
+    <p class="contact-heading mt-50">Contact Information</p>
+    <!-- B-1126844 | update cart items price -->
+    <input value="" type="hidden" id="rateApiResponse" />
+    <p class="contact-sub-heading">Who should we contact with questions regarding this order?</p>
+    <div class="contact-name-container">
+        <div class="contact-first-name">
+            <label class="contact-fname-label contact-form-font" for="contact-fname">FIRST NAME</label>
+            <input class="contact-fname" type="text" id="contact-fname" aria-label="First name" maxlength="30"
+                data-testid="contact-information-first-name" />
+            <span class="contact-fname-error"></span>
+        </div>
+        <div class="contact-last-name">
+            <label class="contact-lname-label contact-form-font" for="contact-lname">LAST NAME</label>
+            <input class="contact-lname" type="text" id="contact-lname" aria-label="Last name" maxlength="30"
+                data-testid="contact-information-last-name" />
+            <p class="contact-lname-error"></p>
+        </div>
+    </div>
+    <div class="contact-number-container">
+        <div class="contact-phone-no">
+            <label class="contact-number-label contact-form-font" for="contact-number">PHONE NUMBER</label>
+            <input class="contact-number" type="text" id="contact-number" aria-label="Phone Number" maxlength="14"
+                data-testid="contact-information-phone-number" />
+            <p class="contact-number-error"></p>
+        </div>
+        <div class="contact-phone-ext">
+            <label class="contact-ext-label contact-form-font" for="contact-ext">EXT.</label>
+            <input class="contact-ext" type="number"
+                id="contact-ext" aria-label="Ext Number" maxlength="5" data-testid="contact-information-ext" />
+        </div>
+    </div>
+    <div class="contact-email-container">
+        <label class="contact-email-label contact-form-font" for="contact-email">EMAIL ADDRESS</label>
+        <input class="contact-email" type="text" id="contact-email" aria-label="Email" maxlength="180"
+            data-testid="contact-information-email-address" />
+        <p class="contact-email-error"></p>
+    </div>
+    <p class="alternate-heading">Pickup person</p>
+    <p class="alternate-sub-heading">Will someone else be picking up the order at the FedEx Office location?</p>
+    <div class="alternate-check-container">
+        <label class="alternate-checkbox-container">
+            <input type="checkbox" aria-labelledby="alt-pickup"
+                data-testid="assign-an-alternate-pickup-person-checkbox" />
+            <span class="checkmark"></span>
+        </label>
+        <div id="alt-pickup" class="assign-alt-text">Assign an alternate pickup person</div>
+    </div>
+</div>
+<div class="alternate-from-container">
+    <div class="alternate-name-container">
+        <div class="alternate-first-name">
+            <label class="alternate-fname-label contact-form-font" for="alternate-fname">FIRST NAME</label>
+            <input class="alternate-fname" type="text" id="alternate-fname" aria-label="First Name"
+                data-testid="alternate-pickup-person-first-name" />
+            <span class="alternate-fname-error"></span>
+        </div>
+        <div class="alternate-last-name">
+            <label class="alternate-lname-label contact-form-font" for="alternate-lname">LAST NAME</label>
+            <input class="alternate-lname" type="text" id="alternate-lname" aria-label="Last Name"
+                data-testid="alternate-pickup-person-last-name" />
+            <p class="alternate-lname-error"></p>
+        </div>
+    </div>
+    <div class="alternate-number-container">
+        <div class="alternate-phone-no">
+            <label class="alternate-number-label contact-form-font" for="alternate-number">PHONE NUMBER</label>
+            <input class="alternate-number" type="text" id="alternate-number" aria-label="Phone Number" maxlength="14"
+                data-testid="alternate-pickup-person-phone-number" />
+            <p class="alternate-number-error"></p>
+        </div>
+        <div class="alternate-phone-ext">
+            <label class="alternate-ext-label contact-form-font" for="alternate-ext">EXT.</label>
+            <input class="alternate-ext" type="number"
+                   id="alternate-ext" aria-label="Ext Number" maxlength="5" data-testid="alternate-pickup-person-ext" />
+        </div>
+    </div>
+    <div class="alternate-email-container">
+        <label class="alternate-email-label contact-form-font" for="alternate-email">EMAIL ADDRESS</label>
+        <input class="alternate-email" type="text" id="alternate-email" aria-label="Email"
+            data-testid="alternate-pickup-person-email-address" />
+        <p class="alternate-email-error"></p>
+    </div>
+</div>
+
+<!-- ko foreach: getRegion('campaign-ad-disclosure') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+<!-- /ko -->
+
+<!-- ko if: isMixedQuote() -->
+<button data-bind="click: function() {
+    placePickupOrder(false, true);
+}, disable: disablePlacePickupButton() || (
+        disclosureModel.shouldDisplayInlineEproQuestionnaire() &&
+        !disclosureModel.isCampaignAdDisclosureComplete()
+    )" class="place-pickup-order place-pickup-order-disabled"
+    data-testid="continue-to-payment-button-if-ismixedquote">
+    <span>CONTINUE TO SHIPPING</span>
+</button>
+<!-- /ko -->
+
+<!-- ko ifnot: isMixedQuote() -->
+<button data-bind="click: function() {
+    placePickupOrder(true, true);
+}, disable: disablePlacePickupButton() || (
+        disclosureModel.shouldDisplayInlineEproQuestionnaire() &&
+        !disclosureModel.isCampaignAdDisclosureComplete()
+    )" class="place-pickup-order place-pickup-order-disabled"
+    data-testid="continue-to-payment-button-ifnot-ismixedquote">
+    <span data-bind="visible: isCustomerLoggedIn()">SUBMIT ORDER</span>
+    <span data-bind="visible: !isCustomerLoggedIn()">CONTINUE TO PAYMENT</span>
+</button>
+<!-- /ko -->
+
+<div data-bind="if: isPromiseTimePickupOptionsToggle()">
+    <div class="in-branch pick-message" style="display: none;">
+        <div class="message-icon pick-message-icon info-icon">
+            <img alt="Alert icon" data-bind="attr: { src: infoUrl}" class="fa fa-info-circle icon-purple">
+        </div>
+        <div class="pickup-message-text">
+            <p class="pick-0">
+                Please note that pickup dates/times are subject to change upon order submission.
+            </p>
+        </div>
+    </div>
+</div>

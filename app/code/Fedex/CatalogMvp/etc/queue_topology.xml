@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento.catalogMvpItemEnable" type="topic" connection="amqp">
+        <binding id="magento.catalogMvpItemEnable.catalogMvpItemEnableQueue" topic="catalogMvpItemEnable" destinationType="queue"
+    destination="catalogMvpItemEnableQueue"/>
+    </exchange>
+    <exchange name="magento.catalogMvpItemDisable" type="topic" connection="amqp">
+        <binding id="magento.catalogMvpItemDisable.catalogMvpItemDisableQueue" topic="catalogMvpItemDisable" destinationType="queue"
+    destination="catalogMvpItemDisableQueue"/>
+    </exchange>
+    <exchange name="magento.enableProductPriceSync" type="topic" connection="amqp">
+        <binding id="magento.productPriceSync" topic="enableProductPriceSync" destinationType="queue" destination="productPriceSync"/>
+    </exchange>
+    <exchange name="magento.docRefAdd" type="topic" connection="amqp">
+        <binding id="magento.docRefAdd.docRefAddQueue" topic="docRefAdd" destinationType="queue" destination="docRefAddQueue"/>
+    </exchange>
+    <exchange name="magento.docRefDelete" type="topic" connection="amqp">
+        <binding id="magento.docRefDelete.docRefDeleteQueue" topic="docRefDelete" destinationType="queue" destination="docRefDeleteQueue"/>
+    </exchange>
+    <exchange name="magento.docRefMetaData" type="topic" connection="amqp">
+        <binding id="magento.docRefMetaData.docRefMetaDataQueue" topic="docRefMetaData" destinationType="queue" destination="docRefMetaDataQueue"/>
+    </exchange>
+    <exchange name="magento.docRefExtandExpire" type="topic" connection="amqp">
+        <binding id="magento.docRefExtandExpire.docRefExtandExpireQueue" topic="docRefExtandExpire" destinationType="queue" destination="docRefExtandExpireQueue"/>
+    </exchange>
+        <exchange name="magento.bulkDelete" type="topic" connection="amqp">
+        <binding id="magento.bulkDelete.bulkDeleteQueue" topic="bulkDelete" destinationType="queue"
+        destination="bulkDeleteQueue"/>
+    </exchange>
+    <exchange name="magento" type="topic" connection="amqp">
+        <binding
+            id="CheckoutCartProductAddAfter"
+            topic="checkout.cart.product.add.after"
+            destinationType="queue"
+            destination="checkout_cart_product_add_after"/>
+    </exchange>
+</config>

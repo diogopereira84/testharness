@@ -1,0 +1,194 @@
+// Default styling for tabs page-builder content-type
+& when (@media-common = true) {
+    .tabbed-display {
+        div[data-content-type='tabs'] {
+            .tabs-navigation {
+                display: block;
+                font-size: 0;
+                margin: 0 0 -1px;
+                padding: 0;
+
+                border: 0 solid @color-gray80 !important; // Overriding inheritance from data.navigation (see master.html of tabs content-type)
+                border-bottom-width: 1px !important;
+
+                li:first-child {
+                    margin-left: 0 !important;
+                }
+
+                li.tab-header {
+                    padding: 0 2.2rem; // This padding will not be underlined by a border when active
+
+                    background: transparent !important; // Overriding default implementation
+
+                    border-bottom-left-radius: 0 !important;
+                    border-bottom-right-radius: 0 !important;
+                    display: inline-block;
+                    margin: 0;
+                    max-width: 100%;
+                    overflow-wrap: break-word;
+                    position: relative;
+                    word-wrap: break-word;
+                    z-index: 1;
+
+                    &:first-child {
+                        padding-left: 0;
+                    }
+
+                    &:not(:first-child) {
+                        margin-left: -1px;
+                    }
+
+                    a.tab-title {
+                        border-right: 0;
+                        color: @fx-grey-1100;
+                        cursor: pointer !important;
+                        display: block;
+                        font-size: 15px;
+                        font-weight: 600;
+                        padding: 0.8rem 0 !important; // Overriding default implementation
+                        position: relative;
+                        transition: all .3s;
+                        vertical-align: middle;
+                        white-space: normal;
+
+                        span.tab-title {
+                            display: block;
+                        }
+
+                        &:hover {
+                            text-decoration: none;
+                        }
+
+                        &::after { // Pseudo-element to display a rounded border
+                            content:'';
+                            position: absolute;
+                            bottom: 0;
+                            left: 0;
+                            right: 0;
+                            background: @content-type-tabs__color__active;
+                            height: 0px;
+                            border-radius: 3px;
+                            transition: all .15s;
+                        }
+                    }
+
+                    &:last-child {
+                        border-right: 1px solid @color-gray80;
+                    }
+
+                    &.ui-state-active {
+                        a.tab-title {
+                            position: relative;
+                            color: #152830;
+
+
+                            &::after {
+                                height: 4px; // Active header border thickness
+                            }
+                        }
+                    }
+                }
+            }
+
+            .tabs-content {
+                border: 0 solid @color-gray80 !important; // Overriding inheritance from data.navigation (see master.html)
+                border-top: 1px !important;
+
+                padding-top: 30px;
+                box-sizing: border-box;
+                overflow: hidden;
+                position: relative;
+                z-index: 9;
+
+                [data-content-type='tab-item'] {
+                    box-sizing: border-box;
+                    min-height: inherit;
+
+                    &:not(:first-child) {
+                        display: none;
+                    }
+                }
+            }
+
+            &.tab-align-left {
+                .tabs-content {
+                    border-top-left-radius: 0 !important;
+                }
+            }
+            &.tab-align-right {
+                .tabs-content {
+                    border-top-right-radius: 0 !important;
+                }
+            }
+        }
+    }
+}
+
+//
+//  Mobile (style-m.css)
+//  _____________________________________________
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (max-width: 767px) {
+        .tabbed-display {
+            div[data-content-type='tabs'] {
+                position: relative;
+
+                ul.tabs-navigation {
+                    display: none;
+                    position: absolute;
+                    top: 25px;
+                    left: 0;
+                    width: 100%;
+                    box-shadow: 0 0 5px #ccc;
+                    z-index: 99;
+                    background: @fx-white-100;
+
+                    li.tab-header {
+                        width: 100%;
+                        padding: 0px 15px !important;
+                        box-sizing: border-box;
+
+                        li.tab-header.ui-state-default.ui-corner-top.ui-tabs-active.ui-state-active {
+                            background-color: #F7F9FA;
+                        }
+
+                        a::after {
+                            content: none !important;
+                        }
+                    }
+                }
+                .tabs-content {
+                    div[data-content-type='tab-item'] {
+                        display:block !important;
+                        height: 0px;
+                        overflow: hidden;
+                        }
+                        div[aria-expanded='true'] {
+                        height: auto;
+                        }
+                }
+
+                .most-active-content {
+                    width: 100%;
+                    color: @fx-grey-1100;
+                    font-family: "FedEx Sans Medium";
+                    font-size: 17px;
+                    letter-spacing: 0.5px;
+                    line-height: 20px;
+                    border-bottom: 1px solid #ccc;
+                    padding-bottom: 9px;
+                    &::after {
+                    content: "";
+                    height: 24px;
+                    width: 24px;
+                    background-image: url('@{baseDir}Magento_PageBuilder/images/arrow.svg');
+                    float: right;
+                    background-repeat: no-repeat;
+                    margin-top: 2px;
+                    background-size: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

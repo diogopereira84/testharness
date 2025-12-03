@@ -1,0 +1,92 @@
+<?php
+
+$viewModelMvphelper= $block->getData('view_model_mvphelper');
+$viewModel = $block->getData('product_list_view_model');
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$customerAdmin = $catalogMvpHelper->isSharedCatalogPermissionEnabled();
+?>
+<?php if($customerAdmin) { ?>
+    <div class="selected-number <?= $block->getMode() ?>">
+        <div class="left-section">
+            <span class="item-count"></span>
+            <span class="spacing">&nbsp;</span>
+            <span class="count-text"><?= $escaper->escapeHtml(__(' Items selected')) ?></span>
+        </div>
+        <div class="right-section">
+            <a href="Javascript:void(0)" class="cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+            <button class="bulk-move-to" style="display: none;">
+                <?= $escaper->escapeHtml(__('Move')) ?>
+            </button>
+            <button class="bulk-delete" >
+                <?= $escaper->escapeHtml(__('Delete')) ?>
+            </button>
+            <button class="bulk-add-to-cart" style="display: none;">
+                <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+            </button>
+        </div>
+        <?php if($viewModelMvphelper->getCatalogBreakpointToggle()): ?>
+            <div class="right-section-action-kebab-mobile">
+                <div class="kebab" data-th="ACTIONS">
+                    <div class="kebab-image category-list"></div>
+                </div>
+                <div class="kebab-options">
+                    <div class="dropdown-menu-list">
+                        <div class="menu-item">
+                            <div class="menu-item-label-mobile action_kebab_folder_cancel">
+                                <a href="Javascript:void(0)" class="menu-option cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+                            </div>
+                            <div class="menu-item-label-mobile Move cat-move">
+                                <a href="Javascript:void(0)" class="menu-option bulk-move-to" style="display: none;">
+                                    <?= $escaper->escapeHtml(__('Move')) ?>
+                                </a>
+                            </div>
+                            <div class="menu-item-label-mobile action_kebab_folder_delete">
+                                <a href="Javascript:void(0)" class="menu-option bulk-delete" >
+                                    <?= $escaper->escapeHtml(__('Delete')) ?>
+                                </a>
+                            </div>
+                            <div class="menu-item-label-mobile action_kebab_folder_addtocart">
+                                <a href="Javascript:void(0)" class="menu-option bulk-add-to-cart" style="display: none;">
+                                    <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php } else { ?>
+    <div class="selected-number">
+        <div class="left-section">
+            <span class="item-count"></span>
+            <span class="spacing">&nbsp;</span>
+            <span class="count-text"><?= $escaper->escapeHtml(__(' Items selected')) ?></span>
+        </div>
+        <div class="right-section">
+            <a href="Javascript:void(0)" class="cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+            <button class="add-to-cart"><?= $escaper->escapeHtml(__('Add to Cart')) ?></button>
+        </div>
+        <?php if($viewModelMvphelper->getCatalogBreakpointToggle()): ?>
+            <div class="right-section-action-kebab-mobile">
+                <div class="kebab" data-th="ACTIONS">
+                    <div class="kebab-image category-list"></div>
+                </div>
+                <div class="kebab-options">
+                    <div class="dropdown-menu-list">
+                        <div class="menu-item">
+                            <div class="menu-item-label-mobile action_kebab_folder_cancel">
+                                <a href="Javascript:void(0)" class="menu-option cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+                            </div>
+                            <div class="menu-item-label-mobile action_kebab_folder_addtocart">
+                                <a href="Javascript:void(0)" class="menu-option user-bulk-add-to-cart">
+                                    <?= $escaper->escapeHtml(__('Add to Cart')) ?>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+<?php } ?>

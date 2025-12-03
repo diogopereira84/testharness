@@ -1,0 +1,71 @@
+<?php
+
+/**
+ * Copyright © Fedex. All rights reserved.
+ */
+?>
+
+<div class="toast-messages" data-bind="scope: 'marketplace_messages'">
+
+    <!-- ko if: marketplaceMessages().length > 0 -->
+
+    <div role="alert" data-bind="foreach: {
+                data: marketplaceMessages(), as: 'message'
+            }, css: {
+                visible: marketplaceMessages().length > 0
+            }" class="messages">
+
+        <!-- ko if: $index() + 1 <= 6 -->
+
+        <div data-bind="
+                attr: {
+                    class: 'message-'
+                    + message.type + ' '
+                    + message.type + ' '
+                    + message.category
+                    + ' message '
+                    + 'toast-message-' + $index(),
+                    'data-ui-id': 'message-' + message.type
+                }">
+
+            <span class="message-type-icon"></span>
+
+            <div class="message-content">
+
+                <!-- ko if: message.title -->
+                <p>
+                    <strong data-bind="text: message.title"></strong>
+                </p>
+                <!-- /ko -->
+
+                <div data-bind="text: message.text"></div>
+
+            </div>
+
+            <span class="close-message" data-bind="click: $parent.removeMessage.bind($data, message, false)">
+            </span>
+        </div>
+
+        <!-- ko if: message.removeAfter5Seconds === undefined || message.removeAfter5Seconds -->
+        <!-- ko if: $parent.removeMessage(message) --><!-- /ko -->
+        <!-- /ko -->
+
+        <!-- /ko -->
+    </div>
+
+    <!-- /ko -->
+</div>
+
+<script type="text/x-magento-init">
+    {
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "marketplace_messages": {
+                    "component": "Fedex_MarketplaceUi/js/view/marketplace_messages"
+                }
+            }
+        }
+    }
+}
+</script>

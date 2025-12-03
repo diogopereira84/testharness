@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$productPreviewImgScript = <<<script
+    let productPreviewImg;
+    require(["jquery", "previewImg"], function($, previewImg) {
+        productPreviewImg = previewImg;
+        window.LoaderImgUrl = "{$block->getViewFileUrl('images/loader-2.gif')}";
+    });
+script;
+
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $productPreviewImgScript, false); ?>

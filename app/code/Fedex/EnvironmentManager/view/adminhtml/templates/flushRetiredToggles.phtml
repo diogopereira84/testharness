@@ -1,0 +1,86 @@
+<?php
+/** @var $block \Fedex\EnvironmentManager\Block\System\Config\FlushRetiredToggles */
+
+$togglesToBeFlushed = $block->getTogglesToBeFlushed();
+?>
+<div id="flush-retired-toggles-modal" style="display: none">
+    <form method="post" class="form-inline" id="flush-retired-toggles-form" enctype="multipart/form-data" novalidate="novalidate" action="<?= $block->getFlushRetiredTogglesUrl() ?>">
+        <fieldset class="admin__fieldset">
+            <input name="all_toggles_to_be_flushed" type="hidden" value="<?= $togglesToBeFlushed; ?>">
+            <div class="admin__field field _required">
+                <label for="retired-toggles-to-be-flushed" class="admin__field-label">
+                    <span>Select Retired Toggles to be Flushed</span>
+                </label>
+                <div class="admin__field-control">
+                    <select name="retired_toggles_to_be_flushed[]" id="retired-toggles-to-be-flushed" class="select multiselect admin__control-multiselect" multiple="multiple" size="25">
+                        <?php foreach (explode(',', $togglesToBeFlushed) as $retiredToggles): ?>
+                            <option value="<?= $retiredToggles ?>" selected="selected"><?= $retiredToggles ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</div>
+
+<script>
+    require(['jquery', 'Magento_Ui/js/modal/modal', 'Magento_Ui/js/modal/confirm',],
+        function ($, modal, confirmation)
+        {
+            let self = this;
+            var options = {
+                type: 'slide',
+                responsive: true,
+                innerScroll: true,
+                title: 'Flush Retired Toggles',
+                modalClass: 'magento flush-retired-toggles-modal',
+                buttons: [{
+                    'class': 'action close',
+                    'text': $.mage.__('Close'),
+                    click: function () {
+                        this.closeModal();
+                    }
+                },{
+                    text: $.mage.__('Submit'),
+                    'class': 'action-primary',
+
+                    /**
+                     * Click
+                     */
+                    click: function () {
+                        $('#flush-retired-toggles-form').append($('<input>', {
+                            'name': 'form_key',
+                            'value': window.FORM_KEY,
+                            'type': 'hidden'
+                        }));
+                        let confirmationContent = '<h2>Click OK to proceed or Cancel to go back</h2><div class="content" style="max-height: 500px;overflow: auto;overflow-x: hidden;">';
+                        let fieldsSelected = $('#retired-toggles-to-be-flushed').val();
+                        fieldsSelected.forEach(function (value){
+                            confirmationContent += '<p>'+value+'</p>';
+                        })
+                        confirmationContent += '</div>';
+                        confirmation({
+                            title: $.mage.__('The following toggles will be permanently removed from the configuration table.'),
+                            content: confirmationContent,
+                            actions: {
+                                confirm: function() {
+                                    $('#flush-retired-toggles-form').submit();
+                                },
+                            }
+                        });
+                    }
+                }]
+            };
+
+            let popup = modal(options, $('#flush-retired-toggles-modal'));
+            $("#flush_retired_toggles_button").click(function() {
+                $("#flush-retired-toggles-modal").modal('openModal');
+            });
+
+            $('#flush-retired-toggles-submit').click(function () {
+
+            });
+        }
+
+    );
+</script>

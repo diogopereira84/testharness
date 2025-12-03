@@ -1,0 +1,2012 @@
+@import "enhanced-profile-toggle.less";
+@fedex-sans-regular: 'FedEx Sans Regular';
+@fedex-sans-bold: 'FedEx Sans Bold';
+@fedex-sans-xbold: 'FedEx Sans XBold';
+@fedex-sans-light: 'FedEx Sans Light';
+@fedex-sans-medium: 'FedEx Sans Medium';
+@color-black: #000000;
+@color-white: #ffffff;
+@color-orange: #ff6200;
+@color-gray: #333333;
+@color-light-blue: #00689C;
+@fedex-border-color: #cccccc;
+@fedex-revert-button-color: #f5f5f5;
+@fedex-text-area-color: #8E8E8E;
+@fedex-preview-banner-border-color: #4D148C;
+@fedex-preview-banner-anchor-color: #0078B4;
+@color-border-gray: #E3E3E3;
+@color-border-model-title: #c1c1c1;
+@color-preview-warning-model: #f9b200;
+@color-revert-button: #8A8A99;
+
+.modal-popup.company-setting-level-warning-popup {
+    text-align: center;
+    color: @color-gray;
+    font-family: @fedex-sans-light;
+    font-size: 16px;
+    line-height: 24px;
+
+    .modal-inner-wrap {
+        width: 656px !important;
+        height: 392px;
+        padding: 64px 48px 48px 48px;
+        border: 1px solid @color-border-gray;
+        .modal-title {
+            border-bottom: 0px solid @color-border-model-title;
+            font-size: 32px;
+            padding-bottom: unset;
+            .comapny-setting-level-warning-icon-img {
+                width: 88px;
+                height: 88px;
+            }
+        }
+        button.action-close {
+            right: 15px;
+            top: 15px;
+        }
+        button.action-close::before {
+            color: @color-gray;
+            font-size: 19px;
+        }
+        .modal-footer {
+            width: 558px;
+            padding-left: unset;
+            padding-right: unset;
+            padding-bottom: 0px;
+            button {
+                padding: 16px 24px 16px 24px;
+                margin: unset;
+                border-radius: unset;
+            }
+            .company-setting-level-action-secondary {
+                margin-right: 6px;
+                width: 271px;
+                height: 56px;
+                padding: 16px 24px 16px 24px;
+                border: 2px solid @color-gray;
+            }
+            .company-setting-level-action-primary {
+                margin-left: 6px;
+                width: 271px;
+                height: 56px;
+                padding: 16px 24px 16px 24px;
+            }
+        }
+        .company-setting-level-action-secondary {
+            background: @color-white;
+            border: 2px solid @color-gray;
+            span {
+                color: @color-gray;
+                font-size: 19px;
+                line-height: 24px;
+                font-weight: 700;
+                font-family: @fedex-sans-bold;
+                letter-spacing: 1.19px;
+            }
+        }
+        .company-setting-level-action-primary {
+            background: @color-orange;
+            span {
+                color: @color-white;
+                font-size: 19px;
+                line-height: 24px;
+                font-weight: 700;
+                font-family: @fedex-sans-bold;
+                letter-spacing: 1.19px;
+            }
+        }
+        .comapny-setting-level-warning-popup-content .comapny-setting-level-warning-title {
+            color: @color-gray;
+            font-size: 24px;
+            line-height: 32px;
+            font-weight: 300;
+            font-family: @fedex-sans-light;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            overflow-wrap: anywhere;
+        }
+        .comapny-setting-level-warning-popup-content .comapny-setting-level-warning-description {
+            color: @color-gray;
+            font-size: 16px;
+            line-height: 24px;
+            font-weight: 300;
+            font-family: @fedex-sans-light;
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .company-settings {
+        margin-top: 100px;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .modal-popup.company-setting-level-warning-popup {
+        .modal-inner-wrap {
+            width: 288px !important;
+            height: auto;
+            padding: 32px 24px 24px 24px !important;
+            margin: 5rem auto;
+            .modal-footer {
+                width: 240px;
+                padding: 0;
+                display: flex;
+                flex-direction: column-reverse;
+                justify-content: space-between;
+                margin: 0;
+                margin-top: 5px;
+                .company-setting-level-action-secondary, .company-setting-level-action-primary {
+                    width: 240px;
+                    margin: 0;
+                }
+                .company-setting-level-action-primary {
+                    margin-bottom: 10px;
+                }
+            }
+        }
+    }
+}
+ol, ul {
+    list-style-type: none;
+}
+.customer-account-sitesettings {
+    .company-settings-save-section {
+        display: flex;
+        width: 100%;
+        position: sticky;
+        top: 0;
+        background: #fff;
+        z-index: 2;
+        .save-changes-title {
+            width: 80%;
+            font-family: @fedex-sans-medium;
+            font-size: 19px;
+            font-weight: 400;
+            line-height: 24px;
+            letter-spacing: 1px;
+            text-align: left;
+            margin-top: 1rem;
+            color: @color-black;
+        }
+        .save-changes-btn {
+            width: 225px;
+            height: 56px;
+            padding: 16px 24px;
+            float: right;
+            background: @color-orange;
+            border-radius: unset;
+            .save-changes-btn-title {
+                font-family: @fedex-sans-bold;
+                font-size: 19px;
+                font-weight: 700;
+                line-height: 24px;
+                letter-spacing: 1px;
+                text-align: center;
+                color: @color-white;
+            }
+        }
+    }
+    .ëxpand-all-section {
+        margin-top: 40px;
+        padding-right: 5px;
+        width: 100%;
+        text-align: right;
+        .ëxpand-all {
+            padding: 12px 16px 12px 16px;
+            font-family: @fedex-sans-bold;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 24px;
+            letter-spacing: 1.1875px;
+            color: @color-light-blue;
+            cursor: pointer;
+        }
+        .collapse-all {
+            display: none;
+            padding: 12px 16px 12px 16px;
+            font-family: @fedex-sans-bold;
+            font-size: 19px;
+            font-weight: 700;
+            line-height: 24px;
+            letter-spacing: 1.1875px;
+            color: @color-light-blue;
+            cursor: pointer;
+        }
+    }
+    .company-settings-accordion {
+        margin-top: 40px;
+        .company-settings-details {
+            list-style: none;
+            padding-left: 0px;
+            .accordion-li {
+                height: auto;
+                margin-bottom: 0px;
+                border: 1px solid @fedex-border-color;
+                border-left: unset;
+                border-right: unset;
+                border-bottom: unset;
+                a:hover {
+                    text-decoration: none;
+                }
+                .accordion-title {
+                    font-family: @fedex-sans-light;
+                    font-size: 18px;
+                    font-weight: 300;
+                    line-height: 56px;
+                    margin-left: 24px;
+                    color: @color-gray;
+                }
+                .down-icon {
+                    float: right;
+                    margin-top: 12px;
+                    margin-right: 24px;
+                }
+                .up-icon {
+                    display: none;
+                    float: right;
+                    margin-top: 12px;
+                    margin-right: 24px;
+                }
+                .accordion-ul {
+                    display: none;
+                    padding-left: 0px;
+                    .site-logo-content {
+                        text-align: center;
+                        margin-top: 50px;
+                        margin-bottom: 50px;
+                        .site-logo-label {
+                            font-family: @fedex-sans-light;
+                            font-weight: 300;
+                            line-height: 32px;
+                            font-size: 24px;
+                            color: @color-black;
+                            margin-top: unset;
+                        }
+                        .site-logo-img {
+                            padding: 8px 0px 8px 0px;
+                            .site-logo-img-preview {
+                                width: 142px;
+                                height: 40px;
+                                object-fit: contain;
+                            }
+                        }
+                        .max-size-allow-site-logo-warning, .allow-logo-type-warning {
+                            display: none;
+                            font-family: @fedex-sans-regular;
+                            font-weight: 300;
+                            line-height: 24px;
+                            font-size: 14px;
+                            color: red;
+                            margin-bottom: 0px;
+                        }
+                        .site-logo-size-label, .site-logo-file-type-label {
+                            font-family: @fedex-sans-light;
+                            font-weight: 300;
+                            line-height: 24px;
+                            font-size: 16px;
+                            color: @color-black;
+                            margin-bottom: 0px;
+                        }
+                        .site-logo-button {
+                            padding-top: 20px;
+                            .upload-site-logo {
+                                display: none;
+                            }
+                            .upload-site-logo-image {
+                                .upload-site-logo-btn {
+                                    width: 250px;
+                                    height: 48px;
+                                    padding: 12px 16px 12px 16px;
+                                    border: 2px solid @color-orange;
+                                    background: @color-white;
+                                    font-family: @fedex-sans-regular;
+                                    font-weight: 700;
+                                    line-height: 24px;
+                                    font-size: 19px;
+                                    font-family: @fedex-sans-bold;
+                                    letter-spacing: 1px;
+                                    color: @color-orange;
+                                    border-radius: unset;
+                                }
+                            }
+                            .revert-site-logo-image {
+                                .revert-site-logo-btn {
+                                    width: 250px;
+                                    height: 48px;
+                                    padding: 12px 16px 12px 16px;
+                                    border: 2px solid @color-gray;
+                                    background: @color-white;
+                                    font-family: @fedex-sans-regular;
+                                    font-weight: 700;
+                                    line-height: 24px;
+                                    font-size: 19px;
+                                    font-family: @fedex-sans-bold;
+                                    letter-spacing: 1px;
+                                    color: @color-gray;
+                                    border-radius: unset;
+                                    cursor: pointer;
+                                }
+                                .revert-site-logo-btn.disable {
+                                    pointer-events: none;
+                                    border: 1px solid @fedex-revert-button-color;
+                                    background: @fedex-revert-button-color;
+                                    color: @color-revert-button;
+                                }
+                            }
+                        }
+                    }
+                    .order-confirmation-content {
+                        display: inline-flex;
+                        align-items: center;
+                        margin-top: 20px;
+                        margin-bottom: 20px;
+                        .toggle-title {
+                            width: 280px;
+                            height: 16px;
+                            margin-right: 16px;
+                            font-weight: 700;
+                            font-size: 12px;
+                            line-height: 16px;
+                            color: @color-black;
+                            letter-spacing: 0.75px;
+                            font-family: @fedex-sans-bold;
+                        }
+                        .info-icon {
+                            .tooltip-icon {
+                                height: 30px;
+                                width: 30px;
+                                vertical-align: middle;
+                                margin-left: 0px;
+                                cursor: pointer;
+                            }
+                            .tooltip-content {
+                                max-width: 400px;
+                                width: max-content;
+                                margin-left: -1px;
+                                margin-bottom: 18px;
+                                line-height: 16px;
+                                font-weight: 400;
+                                font-style: normal;
+                                font-family: @fedex-sans-light;
+                                box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.3);
+                                padding: 12px 12px;
+                            }
+                        }
+                    }
+                    .notification-banners-content {
+                        max-width: 100%;
+                        margin: auto;
+                        margin-top: 30px;
+                        margin-bottom: 40px;
+                        .preview-banner-label {
+                            font-family: @fedex-sans-light;
+                            font-weight: 300;
+                            line-height: 32px;
+                            font-size: 24px;
+                            color: @color-black;
+                        }
+                        .notification-banner-title {
+                            width: 820px;
+                            font-family: @fedex-sans-light;
+                            font-size: 20px;
+                            font-weight: 300;
+                            line-height: 32px;
+                            text-align: left;
+                            color: @color-black;
+                            margin-bottom: auto;
+                            margin-top: unset;
+                        }
+                        .ep-notification {
+                            display: inline-flex;
+                            margin-top: 35px;
+                            .toggle-title {
+                                width: 200px;
+                                margin: unset;
+                                padding-top: 5px;
+                                font-weight: 700;
+                                font-size: 12px;
+                                line-height: 20px;
+                                color: @color-black;
+                                letter-spacing: 0.75px;
+                                font-family: @fedex-sans-bold;
+                            }
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    vertical-align: middle;
+                                    margin-left: 0px;
+                                    cursor: pointer;
+                                }
+                                .tooltip-content {
+                                    width: 620px;
+                                    max-width: 620px;
+                                    margin-left: 85px;
+                                    margin-top: -60px;
+                                    line-height: 16px;
+                                    font-weight: 400;
+                                    font-style: normal;
+                                    font-family: @fedex-sans-light;
+                                    box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.30);
+                                    padding: 12px 12px;
+                                }
+                            }
+                            .enhanced-profile-toggle {
+                                float: left;
+                                position: relative;
+                                margin-top: 0px;
+                                width: 11%;
+                                .switch {
+                                    position: relative;
+                                    display: inline-block;
+                                    width: 60px;
+                                    height: 26px;
+                                }
+                            }
+                        }
+                        .form-group {
+                            width: 560px;
+                            opacity: 0px;
+                            margin-top: 25px;
+                            label {
+                                width: 95px;
+                                height: 16px;
+                                opacity: 0px;
+                                font-family: @fedex-sans-regular;
+                                font-size: 12px;
+                                font-weight: 700;
+                                line-height: 16px;
+                                letter-spacing: 0.75px;
+                                text-align: left;
+                            }
+                            textarea {
+                                width: 560px;
+                                height: 150px;
+                                padding: 8px 8px 8px 12px;
+                                border: 1px solid @fedex-text-area-color;
+                                font-family: @fedex-sans-light;
+                                font-size: 16px;
+                                font-weight: 300;
+                                line-height: 24px;
+                                text-align: left;
+                                color: @color-gray;
+                            }
+                            .banner-title-warning, .banner-type-warning {
+                                font-family: @fedex-sans-regular;
+                                font-size: 12px;
+                                font-style: italic;
+                                font-weight: 400;
+                                line-height: 16px;
+                                text-align: left;
+                                padding-top: 5px;
+                                color: @color-gray;
+                            }
+                            .banner-description-warning {
+                                font-family: @fedex-sans-regular;
+                                font-size: 12px;
+                                font-style: italic;
+                                font-weight: 400;
+                                line-height: 16px;
+                                text-align: left;
+                            }
+                        }
+                        .links-to-address-display {
+                            width: 985px;
+                            height: 68px;
+                            opacity: 0px;
+                            margin-top: 25px;
+                            .row:after {
+                                content: "";
+                                display: table;
+                                clear: both;
+                            }
+                            .link-address {
+                                label {
+                                    font-family: @fedex-sans-regular;
+                                    font-size: 12px;
+                                    font-weight: 700;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                    text-align: left;
+                                }
+                                #linkAddress {
+                                    width: 450px;
+                                    height: 48px;
+                                    padding: 8px 8px 8px 12px;
+                                    font-family: @fedex-sans-light;
+                                    border: 1px solid @fedex-text-area-color;
+                                    color: @color-gray;
+                                    font-size: 16px;
+                                    font-weight: 300;
+                                    line-height: 24px;
+                                    text-align: left;
+                                }
+                            }
+                            .link-display {
+                                label {
+                                    width: 113px;
+                                    height: 16px;
+                                    opacity: 0px;
+                                    font-family: @fedex-sans-regular;
+                                    font-size: 12px;
+                                    font-weight: 700;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                    text-align: left;
+                                }
+                                #linkDisplay {
+                                    width: 450px;
+                                    height: 48px;
+                                    padding: 8px 8px 8px 12px;
+                                    border: 1px solid @fedex-text-area-color;
+                                    color: @color-gray;
+                                    font-family: @fedex-sans-light;
+                                    font-size: 16px;
+                                    font-weight: 300;
+                                    line-height: 24px;
+                                    text-align: left;
+                                }
+                            }
+                            .column {
+                                float: left;
+                                width: 48%;
+                            }
+                        }
+                        input[type="text"], select {
+                            width: 560px;
+                            height: 48px;
+                            padding: 8px 8px 8px 8px;
+                            border: 1px solid @fedex-text-area-color;
+                            color: @color-gray;
+                            font-family: @fedex-sans-light;
+                            font-size: 16px;
+                            font-weight: 300;
+                            line-height: 24px;
+                            text-align: left;
+                        }
+                        textarea {
+                            width: 560px;
+                            padding: 8px 8px 8px 8px;
+                            border: 1px solid @fedex-text-area-color;
+                            font-family: @fedex-sans-light;
+                            font-size: 16px;
+                            font-weight: 300;
+                            line-height: 24px;
+                            text-align: left;
+                            color: @fedex-text-area-color;
+                        }
+                        .preview-banner-section {
+                            width: 650px;
+                            border: 1px solid @fedex-preview-banner-border-color;
+                            margin-top: 25px;
+                            box-shadow: 0 0 3px 0px @fedex-preview-banner-border-color;
+                            background: @color-white;
+                            .preview-banner-left-section {
+                                width: 56px;
+                                .preview-banner-icon {
+                                    height: 30px;
+                                    left: 55%;
+                                    position: relative;
+                                    top: 50%;
+                                    transform: translate3d(-50%, -50%, 0);
+                                    width: 30px;
+                                }
+                            }
+                            .preview-banner-right-section {
+                                padding: 15px;
+                                padding-right: 15px;
+                                width: 100%;
+                                .preview-banner-title {
+                                    margin-bottom: 8px;
+                                    margin-top: 0;
+                                    font-family: @fedex-sans-bold;
+                                }
+                                .preview-banner-description {
+                                    font-family: @fedex-sans-regular;
+                                    font-size: 14px;
+                                    margin-top: 10px;
+                                    margin-bottom: 15px;
+                                }
+                                .preview-button {
+                                    color: @fedex-preview-banner-anchor-color;
+                                    font-family: @fedex-sans-regular;
+                                    font-size: 14px;
+                                    font-weight: bold;
+                                    line-height: 24px;
+                                    letter-spacing: 0.75px;
+                                }
+                                .preview-button:hover {
+                                    color: @fedex-preview-banner-anchor-color;
+                                }
+                            }
+                            .preview-banner-close-icon {
+                                padding: 10px 16px;
+                            }
+                            .preview-banner-close-icon::before {
+                                color: @color-gray;
+                                content: '\e616';
+                                font-family: 'luma-icons';
+                                font-size: 16px;
+                            }
+                        }
+                        .preview-banner-section.warning {
+                            border: 1px solid @color-preview-warning-model;
+                            box-shadow: 0 2px 4px 0 rgba(47, 64, 71, 0.3);
+                            .preview-banner-left-section {
+                                background: @color-preview-warning-model;
+                                .preview-banner-icon {
+                                    left: 50%;
+                                }
+                            }
+                        }
+                        .button {
+                            background-color: #007bff;
+                            color: white;
+                            padding: 10px;
+                            border: none;
+                            border-radius: 4px;
+                            cursor: pointer;
+                        }
+                        .button:hover {
+                            background-color: #0056b3;
+                        }
+                        .update-preview {
+                            font-size: 19px;
+                            padding: 16px 24px 16px 24px;
+                            border: 2px 0px 0px 0px;
+                            opacity: 0px;
+                            border: 2px solid @color-orange;
+                            background: @color-white;
+                            font-family: @fedex-sans-bold;
+                            font-weight: 700;
+                            line-height: 24px;
+                            letter-spacing: 1.1875px;
+                            text-align: center;
+                            color: @color-orange;
+                            margin-top: 20px;
+                            border-radius: unset;
+                        }
+                        .tooltip {
+                            position: relative;
+                            display: inline-block;
+                            margin-left: -54px;
+                            .tooltiptext {
+                                visibility: hidden;
+                                width: 200px;
+                                background-color: @color-black;
+                                color: @color-white;
+                                text-align: center;
+                                border-radius: 6px;
+                                padding: 5px;
+                                position: absolute;
+                                z-index: 1;
+                                bottom: 125%;
+                                left: 50%;
+                                margin-left: -100px;
+                                opacity: 0;
+                                transition: opacity 0.3s;
+                            }
+                            .tooltiptext::after {
+                                content: "";
+                                position: absolute;
+                                top: 100%;
+                                left: 50%;
+                                margin-left: -5px;
+                                border-width: 5px;
+                                border-style: solid;
+                                border-color: @color-black transparent transparent transparent;
+                            }
+                        }
+                        .tooltip:hover .tooltiptext {
+                            visibility: visible;
+                            opacity: 1;
+                        }
+                        .ep-notificationbanner {
+                            display: inline-flex;
+                            width: 100%;
+                            margin-top: 30px;
+                            margin-bottom: 25px;
+                            .toggle-title {
+                                width: 180px;
+                                margin: unset;
+                                padding-top: 5px;
+                                font-family: @fedex-sans-bold;
+                                font-size: 12px;
+                                font-weight: 700;
+                                line-height: 20px;
+                                letter-spacing: 0.75px;
+                            }
+                            .enhanced-profile-toggle {
+                                float: left;
+                                position: relative;
+                                margin-top: 0px;
+                                width: 0%;
+                                .switch {
+                                    position: relative;
+                                    display: inline-block;
+                                    width: 60px;
+                                    height: 26px;
+                                }
+                            }
+                        }
+                    }
+                    .delivery-options-content {
+                        margin-top: 30px;
+                        margin-bottom: 40px;
+                        .delivery-options-title {
+                            width: 100%;
+                            font-family: @fedex-sans-light;
+                            font-size: 20px;
+                            font-weight: 300;
+                            line-height: 24px;
+                            text-align: left;
+                            color: @color-black;
+                            margin-bottom: auto;
+                            padding-bottom: 20px;
+                        }
+                        .enhanced-profile-toggle-main {
+                            width: 100%;
+                            display: inline-flex;
+                            align-items: center;
+                            margin-top: 15px;
+                            .toggle-title {
+                                width: 170px;
+                                margin-right: 10px;
+                                font-weight: 700;
+                                font-size: 12px;
+                                line-height: 16px;
+                                color: @color-black;
+                                letter-spacing: 0.75px;
+                                font-family: @fedex-sans-bold;
+                                margin-top: 1.5rem;
+                                margin-bottom: 1.5rem;
+                            }
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    vertical-align: middle;
+                                    margin-left: 0px;
+                                    cursor: pointer;
+                                }
+                                .tooltip-content {
+                                    width: 615px;
+                                    max-width: 615px;
+                                    margin-left: 85px;
+                                    margin-top: -40px;
+                                    line-height: 16px;
+                                    font-weight: 400;
+                                    font-style: normal;
+                                    font-family: @fedex-sans-light;
+                                    box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.30);
+                                    padding: 12px 12px;
+                                }
+                            }
+                        }
+                        .ep-shipping-options {
+                            margin-top: 30px;
+                            margin-bottom: 20px;
+                            display: none;
+                            .shipping-option-label {
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: @color-gray;
+                                font-family: @fedex-sans-regular;
+                                margin: unset;
+                                padding-bottom: 5px;
+                            }
+                            .wrapper {
+                                position: relative;
+                                .shipping-options {
+                                    display: block;
+                                    width: 300px;
+                                    height: 48px;
+                                    padding: 8px 8px 8px 12px !important;
+                                    border-radius: 0px;
+                                    border: 1px solid @fedex-text-area-color;
+                                    background-color: @color-white;
+                                    cursor: pointer;
+                                    position: relative;
+                                    font-size: 16px;
+                                    font-weight: 300;
+                                    font-family: @fedex-sans-light;
+                                    text-align:left;
+                                    .arrow {
+                                        float: right;
+                                        border: solid @color-black;
+                                        border-width: 0 1px 1px 0;
+                                        padding: 3px;
+                                        width: 9px;
+                                        height: 9px;
+                                        margin-top: -5px;
+                                    }
+                                    .down {
+                                        transform: rotate(45deg);
+                                        -webkit-transform: rotate(45deg);
+                                    }
+                                    .up {
+                                        transform: rotate(-135deg);
+                                        -webkit-transform: rotate(-135deg);
+                                        margin-top: 3px !important;
+                                    }
+                                    &:hover {
+                                        border: 1px solid @fedex-preview-banner-border-color;
+                                        background-color: @color-white;
+                                        font-size: 16px;
+                                        font-weight: 300;
+                                        font-family: @fedex-sans-light;
+                                        border-radius: 0px;
+                                    }
+                                    &:active {
+                                        border: 1px solid @fedex-preview-banner-border-color;
+                                        background-color: @color-white;
+                                        font-size: 16px;
+                                        font-family: @fedex-sans-light;
+                                        border-radius: 0px;
+                                    }
+                                    &:focus {
+                                        border: 1px solid @fedex-preview-banner-border-color;
+                                        background-color: @color-white;
+                                        font-size: 16px;
+                                        font-family: @fedex-sans-light;
+                                        border-radius: 0px;
+                                    }
+                                }
+                                .checkboxes {
+                                    position: absolute;
+                                    top: 100%;
+                                    left: 0;
+                                    width: 298px;
+                                    max-height: 200px;
+                                    overflow-y: auto;
+                                    border: 1px solid #ccc;
+                                    border-top: none;
+                                    background-color: @color-white;
+                                    display: none;
+                                    z-index: 9;
+                                    .inner-wrap {
+                                        padding: 10px;
+                                        .shipping-option-row {
+                                            display: flex;
+                                            width: 100%;
+                                            height: 24px;
+                                            font-size: 16px;
+                                            font-weight: 300;
+                                            padding-bottom: 10px;
+                                            font-family: @fedex-sans-light;
+                                            .checkBox {
+                                                margin: unset;
+                                                height: 24px;
+                                                width: 24px;
+                                                border-radius: 0px;
+                                                accent-color: @fedex-preview-banner-border-color;
+                                            }
+                                            .checkBox.hidden {
+                                                display: none;
+                                            }
+                                            .shipping-option-checkbox-checked {
+                                                display: none;
+                                            }
+                                            .shipping-option-checkbox-checked.show {
+                                                display: block;
+                                            }
+                                            .shipping-option-level {
+                                                font-size: 16px;
+                                                font-weight: 300;
+                                                font-family: @fedex-sans-light;
+                                                padding-top: 4px;
+                                                padding-left: 10px;
+                                            }
+                                        }
+                                    }
+                                }
+                                .checkboxes.open {
+                                    display: block;
+                                }
+                            }
+                        }
+                        .ep-allow-hotel-convention {
+                            display: none;
+                            margin-bottom: 20px;
+                            .allow-hotels-wrapper {
+                                margin-top: 28px;
+                                .enhanced-profile-tooltip.hotel-checkbox-tooltip {
+                                    top: -3px;
+                                    .allow-hotel-tooltip {
+                                        height: 30px;
+                                        width: 30px;
+                                        vertical-align: bottom;
+                                        margin-left: 10px;
+                                    }
+                                    .tooltip-content {
+                                        width: 425px;
+                                        max-width: 425px;
+                                        margin-left: 15px;
+                                        margin-top: -40px;
+                                        line-height: 16px;
+                                        font-weight: 400;
+                                        font-style: normal;
+                                        font-family: @fedex-sans-light;
+                                        box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.30);
+                                        padding: 12px 12px;
+                                    }
+                                }
+                                .hotel-checkbox {
+                                    height: 24px;
+                                    width: 24px;
+                                    accent-color: @fedex-preview-banner-border-color;
+                                    top: 0px;
+                                    &+span {
+                                        font-size: 14px;
+                                        font-family: 'FedEx Sans Regular';
+                                        font-weight: 400;
+                                        top: -7px;
+                                        position: relative;
+                                        margin-left: 10px;
+                                    }
+                                }
+                                .hotel-checkbox.hidden {
+                                    display: none;
+                                }
+                                .checkbox-checked {
+                                    display: none;
+                                    height: 24px;
+                                    width: 24px;
+                                    accent-color: @fedex-preview-banner-border-color;
+                                    top: 0px;
+                                    &+span {
+                                        font-size: 14px;
+                                        font-family: 'FedEx Sans Regular';
+                                        font-weight: 400;
+                                        top: -7px;
+                                        position: relative;
+                                        margin-left: 10px;
+                                    }
+                                }
+                                .checkbox-checked.show {
+                                    display: inline-block;
+                                }
+                            }
+                        }
+                    }
+                    .catalog-and-document-user-content {
+                        margin-top: 25px;
+                        margin-bottom: 35px;
+                        .enhanced-profile-toggle-main {
+                            width: 100%;
+                            display: inline-flex;
+                            align-items: center;
+                            margin-top: 8px;
+                            .toggle-title {
+                                width: 465px;
+                                margin-right: 16px;
+                                font-weight: 700;
+                                font-size: 12px;
+                                line-height: 16px;
+                                color: @color-black;
+                                letter-spacing: 0.75px;
+                                font-family: @fedex-sans-bold;
+                                margin-top: 1.5rem;
+                                margin-bottom: 1.5rem;
+                            }
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    vertical-align: middle;
+                                    margin-left: 0px;
+                                    cursor: pointer;
+                                }
+                                .tooltip-content {
+                                    width: 430px;
+                                    max-width: 430px;
+                                    margin-left: 90px;
+                                    margin-top: -10px;
+                                    line-height: 16px;
+                                    font-weight: 400;
+                                    font-style: normal;
+                                    font-family: @fedex-sans-light;
+                                    box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.30);
+                                    padding: 12px 12px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .accordion-li.active .accordion-ul {
+                border: 1px solid @fedex-border-color;
+                border-left: unset;
+                border-right: unset;
+                border-bottom: unset;
+            }
+            .accordion-li:last-child {
+                border: 1px solid @fedex-border-color;
+                border-left: unset;
+                border-right: unset;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .customer-account-sitesettings {
+        .company-settings-save-section {
+            width: 288px !important;
+            display: flow !important;
+
+            .save-changes-title {
+                width: 288px;
+                height: 78px;
+                margin-top: 30px;
+            }
+
+            .save-changes-btn {
+                margin-left: 40px;
+                float: none !important;
+            }
+        }
+
+        .ëxpand-all-section {
+            width: 288px !important;
+            text-align: center !important;
+        }
+
+        .company-settings-accordion {
+            margin-top: 40px;
+
+            .company-settings-details {
+                list-style: none;
+                padding-left: 0px;
+
+                .accordion-li {
+                    width: 288px;
+
+                    .accordion-ul {
+                        display: none;
+                        padding-left: 0px;
+
+                        .order-confirmation-content {
+                            width: 288px;
+                            height: 32px;
+                            margin-left: 10px;
+                            margin-bottom: 20px !important;
+
+                            .toggle-title {
+                                width: 160px;
+                                height: 32px;
+                                margin-right: 16px;
+                            }
+
+                            .info-icon {
+                                .tooltip-content {
+                                    max-width: 72px !important;
+                                    width: 72px !important;
+                                    min-width: 72px !important;
+                                }
+                            }
+                        }
+
+                        .notification-banners-content {
+                            .notification-banner-title {
+                                width: 288px;
+                            }
+
+                            .ep-notification {
+                                .enhanced-profile-toggle {
+                                    width: 64px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-content {
+                                        width: 61px !important;
+                                        max-width: 61px !important;
+                                        min-width: 61px !important;
+                                        margin-left: 5px;
+                                        margin-top: -20px;
+                                    }
+                                }
+                            }
+
+                            .ep-notificationbanner {
+                                .toggle-title {
+                                    width: 153px;
+                                }
+                            }
+
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 25px;
+                                    width: 25px;
+                                    margin-left: 10px;
+                                }
+                            }
+
+                            .preview-banner-section {
+                                width: 288px;
+                            }
+
+                            .form-group {
+                                width: 288px;
+
+                                textarea {
+                                    width: 288px;
+                                }
+                            }
+
+                            input[type="text"],
+                            select {
+                                width: 288px;
+                            }
+
+                            .links-to-address-display {
+                                width: 288px;
+                                height: 68px;
+
+                                .column {
+                                    float: left;
+                                    width: 288px;
+                                    height: 68px;
+                                    margin-top: 24px;
+                                }
+
+                                .link-address {
+                                    #linkAddress {
+                                        width: 288px;
+                                        height: 48px;
+                                    }
+                                }
+
+                                .link-display {
+                                    #linkDisplay {
+                                        width: 288px;
+                                        height: 48px;
+                                    }
+                                }
+                            }
+
+                            .update-preview {
+                                margin-left: 28px;
+                                margin-bottom: 46px;
+                            }
+                        }
+
+                        .delivery-options-content {
+                            width: 288px;
+                            margin-top: 30px;
+                            margin-bottom: 40px;
+
+                            .delivery-options-title {
+                                width: 288px;
+                                line-height: 32px;
+                                text-align: left;
+                                margin-bottom: auto;
+                                padding-bottom: 20px;
+                            }
+
+                            .enhanced-profile-toggle-main {
+                                width: 288px;
+                                display: inline-flex;
+                                align-items: center;
+                                margin-top: 0px;
+
+                                .toggle-title {
+                                    width: 157px;
+                                    margin-right: 10px;
+                                    font-weight: 700;
+                                    font-size: 12px;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        vertical-align: middle;
+                                        margin-left: 0px;
+                                        cursor: pointer;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 60px !important;
+                                        max-width: 60px !important;
+                                        min-width: 60px !important;
+                                        margin-left: 10px;
+                                        margin-top: -20px;
+                                    }
+                                }
+                            }
+
+                            .ep-shipping-options {
+                                margin-top: 30px;
+                                margin-bottom: 20px;
+                                display: none;
+
+                                .shipping-option-label {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin: unset;
+                                    padding-bottom: 5px;
+                                }
+
+                                .wrapper {
+                                    position: relative;
+
+                                    .shipping-options {
+                                        display: block;
+                                        width: 276px;
+                                        height: 48px;
+                                        padding: 8px 8px 8px 12px !important;
+                                        cursor: pointer;
+                                        position: relative;
+                                        text-align: left;
+
+                                        .arrow {
+                                            float: right;
+                                            border-width: 0 1px 1px 0;
+                                            padding: 3px;
+                                            width: 6px;
+                                            height: 6px;
+                                            margin-top: -20px !important;
+                                        }
+
+                                        .down {
+                                            transform: rotate(45deg);
+                                            -webkit-transform: rotate(45deg);
+                                        }
+
+                                        .up {
+                                            transform: rotate(-135deg);
+                                            -webkit-transform: rotate(-135deg);
+                                            margin-top: -12px !important;
+                                        }
+                                    }
+
+                                    .checkboxes {
+                                        position: absolute;
+                                        top: 100%;
+                                        left: 0;
+                                        width: 276px;
+                                        max-height: 200px;
+                                        overflow-y: auto;
+                                        display: none;
+
+                                        .inner-wrap {
+                                            padding: 10px;
+
+                                            .shipping-option-row {
+                                                display: flex;
+                                                width: 274px;
+                                                height: 24px;
+                                                font-size: 16px;
+                                                line-height: 24px;
+                                                font-weight: 300;
+                                                padding-bottom: 10px;
+
+                                                .checkBox {
+                                                    margin: unset;
+                                                    height: 24px;
+                                                    width: 24px;
+                                                    border-radius: 0px;
+                                                }
+
+                                                .checkBox.hidden {
+                                                    display: none;
+                                                }
+
+                                                .shipping-option-checkbox-checked {
+                                                    display: none;
+                                                }
+
+                                                .shipping-option-checkbox-checked.show {
+                                                    display: block;
+                                                }
+
+                                                .shipping-option-level {
+                                                    font-size: 16px;
+                                                    padding-top: 4px;
+                                                    padding-left: 10px;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .checkboxes.open {
+                                        display: block;
+                                    }
+                                }
+                            }
+
+                            .ep-allow-hotel-convention {
+                                display: none;
+                                margin-bottom: 20px;
+
+                                .allow-hotels-wrapper {
+                                    margin-top: 16px;
+                                    width: 250px;
+                                    padding-left: 12px;
+
+                                    .enhanced-profile-tooltip.hotel-checkbox-tooltip {
+                                        top: -50px;
+                                        margin-left: 8px;
+
+                                        .allow-hotel-tooltip {
+                                            height: 21.33px;
+                                            width: 21.33px;
+                                            vertical-align: bottom;
+                                            margin-left: 220px;
+                                        }
+
+                                        .tooltip-content {
+                                            width: 65px !important;
+                                            max-width: 70px !important;
+                                            min-width: 60px !important;
+                                            margin-left: 2px;
+                                            margin-top: -20px;
+                                        }
+                                    }
+
+                                    .hotel-checkbox {
+                                        height: 24px;
+                                        width: 24px;
+                                        top: 0px;
+
+                                        &+span {
+                                            font-size: 14px;
+                                            max-width: 200px;
+                                            line-height: 24px;
+                                            font-family: 'FedEx Sans Regular';
+                                            font-weight: 400;
+                                            top: -7px;
+                                            position: relative;
+                                            margin-left: 5px;
+                                            display: inline-flex;
+                                        }
+                                    }
+
+                                    .hotel-checkbox.hidden {
+                                        display: none;
+                                    }
+
+                                    .checkbox-checked {
+                                        display: none;
+                                        height: 24px;
+                                        width: 24px;
+                                        top: 0px;
+
+                                        &+span {
+                                            font-size: 14px;
+                                            top: -7px;
+                                            position: relative;
+                                            margin-left: 10px;
+                                        }
+                                    }
+
+                                    .checkbox-checked.show {
+                                        display: inline-block;
+                                    }
+                                }
+                            }
+                        }
+
+                        .catalog-and-document-user-content {
+                            margin-top: 25px;
+                            margin-bottom: 35px;
+
+                            .enhanced-profile-toggle-main {
+                                width: 100%;
+                                display: inline-flex;
+                                align-items: center;
+                                margin-top: 8px;
+
+                                .toggle-title {
+                                    width: 160px;
+                                    margin-right: 16px;
+                                    font-weight: 700;
+                                    font-size: 12px;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 21.33px !important;
+                                        width: 21.33px !important;
+                                        vertical-align: middle;
+                                        margin-left: 0px;
+                                        cursor: pointer;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 85px !important;
+                                        max-width: 85px !important;
+                                        min-width: 50px !important;
+                                        margin-left: 10px;
+                                        margin-top: -10px;
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1119px) {
+    .customer-account-sitesettings {
+        .company-settings-save-section {
+            width: 688px;
+            margin-top: 100px;
+
+            .save-changes-title {
+                width: 456px;
+            }
+
+            .save-changes-btn {
+                margin-left: 25px;
+            }
+        }
+
+        .ëxpand-all-section {
+            width: 688px;
+            margin-top: 40px;
+            padding-right: 5px;
+            text-align: right;
+        }
+
+        .company-settings-accordion {
+            margin-top: 40px;
+
+            .company-settings-details {
+                list-style: none;
+                padding-left: 0px;
+
+                .accordion-li {
+                    width: 688px;
+
+                    .accordion-ul {
+                        display: none;
+                        padding-left: 0px;
+
+                        .order-confirmation-content {
+                            width: 688px;
+                            display: inline-flex;
+                            align-items: center;
+                            margin-top: 16px;
+                            margin-bottom: 16px;
+
+                            .toggle-title {
+                                width: 254px;
+                                height: 16px;
+                                margin-right: 16px;
+                                line-height: 16px;
+                                letter-spacing: 0.75px;
+                            }
+
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    margin-left: 0px;
+                                }
+
+                                .tooltip-content {
+                                    max-width: 350px;
+                                    width: max-content;
+                                }
+                            }
+                        }
+
+                        .notification-banners-content {
+                            .notification-banner-title {
+                                width: 688px;
+                            }
+
+                            .ep-notification {
+                                .enhanced-profile-toggle {
+                                    width: 64px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-content {
+                                        width: 340px;
+                                        max-width: 340px;
+                                    }
+                                }
+                            }
+
+                            .ep-notificationbanner {
+                                .toggle-title {
+                                    width: 153px;
+                                }
+                            }
+
+                            .info-icon {
+                                .tooltip-icon {
+                                    height: 30px;
+                                    width: 30px;
+                                    margin-left: 24px;
+                                }
+                            }
+
+                            .preview-banner-section {
+                                width: 650px;
+                            }
+
+                            .links-to-address-display {
+                                width: 688px;
+                                height: 68px;
+
+                                .column {
+                                    float: left;
+                                    width: 332px;
+                                    height: 68px;
+                                    margin-top: 24px;
+                                }
+
+                                .link-address {
+                                    #linkAddress {
+                                        width: 332px;
+                                        height: 48px;
+                                    }
+                                }
+
+                                .link-display {
+                                    margin-left: 24px;
+
+                                    #linkDisplay {
+                                        width: 332px;
+                                        height: 48px;
+                                    }
+                                }
+                            }
+
+                            .update-preview {
+                                margin-top: 16px;
+                            }
+                        }
+
+                        .delivery-options-content {
+                            width: 688px;
+                            margin-top: 30px;
+                            margin-bottom: 40px;
+
+                            .delivery-options-title {
+                                width: 688px;
+                                font-size: 20px;
+                                font-weight: 300;
+                                line-height: 32px;
+                                text-align: left;
+                                margin-bottom: auto;
+                                padding-bottom: 20px;
+                            }
+
+                            .enhanced-profile-toggle-main {
+                                width: 688px;
+                                display: inline-flex;
+                                align-items: center;
+                                margin-top: 0px;
+
+                                .toggle-title {
+                                    width: 157px;
+                                    margin-right: 10px;
+                                    font-weight: 700;
+                                    font-size: 12px;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        vertical-align: middle;
+                                        margin-left: 0px;
+                                        cursor: pointer;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 380px;
+                                        max-width: 380px;
+                                    }
+                                }
+                            }
+
+                            .ep-shipping-options {
+                                margin-top: 30px;
+                                margin-bottom: 20px;
+                                display: none;
+
+                                .shipping-option-label {
+                                    font-size: 14px;
+                                    font-weight: 400;
+                                    margin: unset;
+                                    padding-bottom: 5px;
+                                }
+
+                                .wrapper {
+                                    position: relative;
+
+                                    .shipping-options {
+                                        display: block;
+                                        width: 276px;
+                                        height: 48px;
+                                        padding: 8px 8px 8px 12px !important;
+                                        text-align: left;
+
+                                        .arrow {
+                                            float: right;
+                                            border-width: 0 1px 1px 0;
+                                            padding: 3px;
+                                            width: 6px;
+                                            height: 6px;
+                                            margin-top: -12px !important;
+                                        }
+
+                                        .down {
+                                            margin-top: -20px !important;
+                                        }
+
+                                        .up {
+                                            margin-top: -12px !important;
+                                        }
+                                    }
+
+                                    .checkboxes {
+                                        position: absolute;
+                                        top: 100%;
+                                        left: 0;
+                                        width: 276px;
+                                        max-height: 200px;
+                                        overflow-y: auto;
+                                        border: 1px solid #ccc;
+                                        border-top: none;
+                                        display: none;
+                                        z-index: 9;
+
+                                        .inner-wrap {
+                                            padding: 10px;
+
+                                            .shipping-option-row {
+                                                display: flex;
+                                                width: 274px;
+                                                height: 24px;
+                                                font-size: 16px;
+                                                line-height: 24px;
+                                                font-weight: 300;
+                                                padding-bottom: 10px;
+
+                                                .checkBox {
+                                                    margin: unset;
+                                                    height: 24px;
+                                                    width: 24px;
+                                                }
+
+                                                .checkBox.hidden {
+                                                    display: none;
+                                                }
+
+                                                .shipping-option-checkbox-checked {
+                                                    display: none;
+                                                }
+
+                                                .shipping-option-checkbox-checked.show {
+                                                    display: block;
+                                                }
+
+                                                .shipping-option-level {
+                                                    padding-top: 4px;
+                                                    padding-left: 10px;
+                                                }
+                                            }
+                                        }
+                                    }
+
+                                    .checkboxes.open {
+                                        display: block;
+                                    }
+                                }
+                            }
+
+                            .ep-allow-hotel-convention {
+                                .allow-hotels-wrapper {
+                                    margin-top: 28px;
+                                    padding-left: 12px;
+                                    .enhanced-profile-tooltip.hotel-checkbox-tooltip {
+                                        top: -3px;
+
+                                        .tooltip-content {
+                                            width: 250px;
+                                            max-width: 250px;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        .catalog-and-document-user-content {
+                            width: 688px;
+
+                            .enhanced-profile-toggle-main {
+                                .info-icon {
+                                    .tooltip-content {
+                                        width: 150px !important;
+                                        max-width: 150px !important;
+                                        min-width: 150px !important;
+                                        margin-left: 10px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .customer-account-sitesettings {
+        .company-settings-save-section {
+            width: 869px;
+        }
+
+        .ëxpand-all-section {
+            width: 869px;
+        }
+        .company-settings-accordion {
+            margin-top: 40px;
+
+            .company-settings-details {
+                list-style: none;
+                padding-left: 0px;
+
+                .accordion-li {
+                    width: 869px;
+
+                    .accordion-ul {
+                        display: none;
+                        padding-left: 0px;
+
+                        .notification-banners-content {
+                            .notification-banner-title {
+                                width: 869px;
+                            }
+
+                            .update-preview {
+                                margin-top: 4px;
+                            }
+
+                            .links-to-address-display {
+                                width: 869px;
+
+                                .column {
+                                    float: left;
+                                    width: 422.5px;
+                                }
+
+                                .link-address {
+                                    #linkAddress {
+                                        width: 422.5px;
+                                        height: 48px;
+                                        text-align: left;
+                                    }
+                                }
+
+                                .link-display {
+                                    #linkDisplay {
+                                        width: 422.5px;
+                                        height: 48px;
+                                        margin-left: 24px;
+                                        text-align: left;
+                                    }
+                                }
+                            }
+
+                            .ep-notification {
+                                display: inline-flex;
+                                margin-top: 35px;
+
+                                .toggle-title {
+                                    width: 200px;
+                                    margin: unset;
+                                    padding-top: 5px;
+                                    font-size: 12px;
+                                    line-height: 20px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        vertical-align: middle;
+                                        margin-left: 0px;
+                                        cursor: pointer;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 520px;
+                                        max-width: 520px;
+                                        margin-left: 85px;
+                                        margin-top: -60px;
+                                    }
+                                }
+
+                                .enhanced-profile-toggle {
+                                    float: left;
+                                    position: relative;
+                                    margin-top: 0px;
+                                    width: 11%;
+
+                                    .switch {
+                                        position: relative;
+                                        display: inline-block;
+                                        width: 60px;
+                                        height: 26px;
+                                    }
+                                }
+                            }
+                        }
+
+                        .delivery-options-content {
+                            .enhanced-profile-toggle-main {
+                                width: 100%;
+                                display: inline-flex;
+                                align-items: center;
+                                margin-top: 15px;
+
+                                .toggle-title {
+                                    width: 170px;
+                                    margin-right: 10px;
+                                    font-weight: 700;
+                                    font-size: 12px;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        margin-left: 0px;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 520px;
+                                        max-width: 520px;
+                                        margin-left: 85px;
+                                        margin-top: -40px;
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                            .ep-allow-hotel-convention {
+                                .allow-hotels-wrapper {
+                                    padding-left: 12px;
+                                }
+                            }
+                        }
+
+                        .catalog-and-document-user-content {
+                            margin-top: 25px;
+                            margin-bottom: 35px;
+
+                            .enhanced-profile-toggle-main {
+                                width: 100%;
+                                display: inline-flex;
+                                align-items: center;
+                                margin-top: 8px;
+
+                                .toggle-title {
+                                    width: 465px;
+                                    margin-right: 16px;
+                                    font-weight: 700;
+                                    font-size: 12px;
+                                    line-height: 16px;
+                                    letter-spacing: 0.75px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        vertical-align: middle;
+                                        margin-left: 0px;
+                                        cursor: pointer;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 240px;
+                                        max-width: 240px;
+                                        margin-left: 90px;
+                                        margin-top: -10px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 1440px) and (max-width: 1699px) {
+    .customer-account-sitesettings {
+        .company-settings-accordion {
+            margin-top: 40px;
+
+            .company-settings-details {
+                list-style: none;
+                padding-left: 0px;
+
+                .accordion-li {
+                    .accordion-ul {
+                        display: none;
+                        padding-left: 0px;
+
+                        .notification-banners-content {
+                            .ep-notification {
+                                .info-icon {
+                                    .tooltip-content {
+                                        width: 520px;
+                                        max-width: 520px;
+                                        margin-left: 85px;
+                                        margin-top: -60px;
+                                    }
+                                }
+                            }
+                        }
+                        .delivery-options-content{
+                            .enhanced-profile-toggle-main {
+                                .info-icon {
+                                    .tooltip-content {
+                                        width: 540px;
+                                        max-width: 540px;
+                                    }
+                                }
+                            }
+                            .ep-allow-hotel-convention {
+                                .allow-hotels-wrapper {
+                                    padding-left: 12px;
+                                }
+                            }
+                        }
+                        .catalog-and-document-user-content {
+                            margin-top: 25px;
+                            margin-bottom: 35px;
+
+                            .enhanced-profile-toggle-main {
+                                .toggle-title {
+                                    width: 465px;
+                                    margin-right: 16px;
+                                }
+
+                                .info-icon {
+                                    .tooltip-icon {
+                                        height: 30px;
+                                        width: 30px;
+                                        margin-left: 0px;
+                                    }
+
+                                    .tooltip-content {
+                                        width: 250px !important;
+                                        max-width: 250px !important;
+                                        margin-left: 90px;
+                                        margin-top: -10px;
+                                        line-height: 16px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

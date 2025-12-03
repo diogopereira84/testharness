@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+$isLoggedIn = $helperData->isCommercialCustomer();
+?>
+<?php if (!$isLoggedIn): ?>
+    <div class="cart-alertbox" style='display: none;'>
+        <div class="cart-warning-box-inner">
+            <img src="<?=$this->getViewFileUrl('images/cart/Alert.svg');?>" alt="Warning Icon">
+        </div>
+        <div class="cart-alert-warning-msg">
+            <p class="attention-title"><strong>Attention</strong></p>
+            <p class="notification-msg"></p>
+        </div>
+        <span class="close-icon"></span>
+    </div>
+<?php endif;?>

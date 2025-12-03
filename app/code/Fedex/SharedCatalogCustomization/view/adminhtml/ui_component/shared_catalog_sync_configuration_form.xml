@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">shared_catalog_sync_configuration_form.shared_catalog_sync_configuration_form_data_source</item>
+        </item>
+        <item name="label" xsi:type="string" translate="true">Configuration</item>
+    </argument>
+    <settings>
+        <buttons>
+            <!-- <button name="delete" class="Fedex/SharedCatalogCustomization\Block\Adminhtml\SharedCatalog\Edit\DeleteSharedCatalogButton"/>
+            <button name="reset" class="Fedex/SharedCatalogCustomization\Block\Adminhtml\SharedCatalog\Edit\ResetButton"/> -->
+            <button name="save" class="Fedex\SharedCatalogCustomization\Block\Adminhtml\SharedCatalogSyncConfiguration\Edit\SaveSharedCatalogButton"/>
+            <button name="back" class="Fedex\SharedCatalogCustomization\Block\Adminhtml\SharedCatalogSyncConfiguration\Edit\BackToListingButton"/>
+        </buttons>
+        <layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+        <deps>
+            <dep>shared_catalog_sync_configuration_form.shared_catalog_sync_configuration_form_data_source</dep>
+        </deps>
+    </settings>
+    <dataSource name="shared_catalog_sync_configuration_form_data_source">
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+            </item>
+        </argument>
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="validateBeforeSave" xsi:type="boolean">false</item>
+                </item>
+            </argument>
+        </argument>
+        <settings>
+            <submitUrl path="shared_catalog_customization/sharedcatalogsyncqueue/saveconfiguration"/>
+        </settings>
+        <dataProvider class="Fedex\SharedCatalogCustomization\Ui\DataProvider\SharedCatalogSyncConfiguration" name="shared_catalog_sync_configuration_form_data_source">
+            <settings>
+                <requestFieldName>shared_catalog_id</requestFieldName>
+                <primaryFieldName>shared_catalog_id</primaryFieldName>
+            </settings>
+        </dataProvider>
+    </dataSource>
+    <fieldset name="catalog_sync_config">
+        <settings>
+            <label translate="true">Catalog Sync Details</label>
+        </settings>
+        <hidden name="shared_catalog_id">
+            <argument name="data" xsi:type="array">
+                <item name="sortOrder" xsi:type="number">1</item>
+            </argument>
+            <settings>
+                <dataType>int</dataType>
+            </settings>
+        </hidden>
+        <field name="status" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="sortOrder" xsi:type="number">30</item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>int</dataType>
+                <label>Enable Catalog Sync</label>
+                <visible>true</visible>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Magento\Config\Model\Config\Source\Yesno"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+        <field name="legacy_catalog_root_folder_id" formElement="input">
+            <argument name="data" xsi:type="array">
+                <item name="sortOrder" xsi:type="number">10</item>
+            </argument>
+            <settings>
+               <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>text</dataType>
+                <label>Legacy Catalog Root Folder Id</label>
+            </settings>
+        </field>
+        <field name="category_id" formElement="select">
+            <argument name="data" xsi:type="array">
+                <item name="sortOrder" xsi:type="number">30</item>
+            </argument>
+            <settings>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">false</rule>
+                </validation>
+                <dataType>int</dataType>
+                <label>Shared Catalog Category</label>
+                <visible>true</visible>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Fedex\SharedCatalogCustomization\Model\Source\CategoryOption"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+    </fieldset>
+</form>

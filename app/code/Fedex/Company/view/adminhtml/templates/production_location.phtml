@@ -1,0 +1,1682 @@
+<?php
+$isDisplay = $block->displayBlock();
+$companyData = $block->getCompanyData();
+$isLocationUiFixToggle = $block->isLocationUiFixToggle();
+$url = $this->getUrl("shipto/plocation/getlocation");
+$save = $this->getUrl("shipto/plocation/save");
+$companyId = $companyData==null?0:$companyData->getId();
+$styleDisplayNone = 'style="display:none;"';
+$propChecked = 'checked="checked"';
+$isRecommendeFlag = 1;
+$isRecommendedLocationsRemoved = true;
+$isRestrictedProductionToggle = $block->isRestrictedProductionToggleEnabled();
+$radius = $block->getRadius();
+$productLocationCollectionOfRestricted = $block->getProductionLocationsData($companyId);
+$productLocationCollectionOfRecommended = $block->getProductionLocationsData($companyId, $isRecommendeFlag);
+?>
+<?php if ($isRestrictedProductionToggle): ?>
+    <div class="admin__field-control  production_location_html">
+    <div class="error_msg _error"></div>
+    <div class="admin__control-table-wrapper">
+        <div class="production_location_options"
+            <?=/* @noEscape */$isDisplay ? '' : $styleDisplayNone;?>>
+            <strong><?=$block->escapeHtml(__('Designate which FedEx stores
+            are allowed to be used for print production.'))?></strong><br/><br/>
+            <div class="production_location_main">
+                <div class="productionLocation">
+                    <?php if ($companyData !== null): ?>
+                    <input <?=/* @noEscape */($companyData->getProductionLocationOption() ==
+                    'geographical' || $companyData->getProductionLocationOption() == null)
+                    ? $propChecked : '';?> class="admin__control" data-form-part="company_form" type="radio"
+                    name="production_location[production_location_option]"
+                    id="production_location_value1" value="geographical">
+                    <?php else: ?>
+                    <input checked="checked" class="admin__control" data-form-part="company_form" type="radio"
+                    name="production_location[production_location_option]"
+                    id="production_location_value1" value="geographical">
+                    <?php endif;?>
+                    <label for="production_location_value1"><?=$block->escapeHtml(__('All FedEx Office retail stores'))?></label>
+                </div><br/>
+                <div class="restricted">
+                    <?php if ($companyData !== null): ?>
+                        <input <?=/* @noEscape */$companyData->getProductionLocationOption() ==
+                        'recommended_location_all_locations' ? $propChecked : '';?>
+                        class="admin__control" data-form-part="company_form" type="radio"
+                        name="production_location[production_location_option]"
+                        id="production_location_value2" value="recommended_location_all_locations">
+                    <?php else: ?>
+                        <input class="admin__control" data-form-part="company_form" type="radio"
+                        name="production_location[production_location_option]"
+                        id="production_location_value2" value="recommended_location_all_locations">
+                    <?php endif;?>
+                    <label for="production_location_value2">
+                        <?=$block->escapeHtml(__('Restricted stores only'))?></label><br/>
+                    <div class="is_restricted"
+                        <?php if ($companyData !== null): ?>
+                            <?=$block->escapeHtmlAttr($companyData->getProductionLocationOption() == 'recommended_location_all_locations' ? '' : $styleDisplayNone)?>
+                        <?php else: ?>
+                            <?=$block->escapeHtmlAttr($styleDisplayNone)?>
+                        <?php endif;?>>
+                    <div>
+                    <div class="location-header-outter">
+                        <div class="store-title">Production Locations
+                            (<?=count($productLocationCollectionOfRestricted)?>)
+                        </div>
+                        <div class="edit-production-location">
+                            <?php if (count($productLocationCollectionOfRestricted) > 0): ?>
+                                <button type="button" name="edit-location" class="edit-location">Edit</button>
+                            <?php endif;?>
+                        </div>
+                    </div><br/>
+                    <?php if (count($productLocationCollectionOfRestricted)): ?>
+                        <div class="restricted_stores" id="restricted_stores_div">
+                            <?php foreach ($productLocationCollectionOfRestricted as $productionLocation): ?>
+                                <?php if ($productionLocation['is_recommended_store'] == 0): ?>
+                                    <div class="list_container" id="list_container_div">
+                                        <div class="box-container">
+                                            <div class="checkbox-area">
+                                                <input type="checkbox" name="production-location-id"
+                                                id="location-id-<?=$productionLocation['id']?>"
+                                                value="<?=$productionLocation['id']?>">
+                                                <label for="location-id-<?=$productionLocation['id']?>">
+                                                </label>
+                                            </div>
+                                            <div class="box-container-inner">
+                                                <label class="custom-radio-btn pick-up-button">
+                                                    <span class="radio-label_name"><span>
+                                                        <?=$productionLocation['location_name'].' ('.$productionLocation['location_id'].')';?>
+                                                    </span></span>
+                                                </label>
+                                                <div class="pickup-address">
+                                                        <span class="fa fa-map-marker icon-grey"></span>
+                                                        <span class="pickup-location-street">
+                                                        <?=$productionLocation['address1'] == '' ? '' : $productionLocation['address1'] . ',';?>
+                                                        <?=$productionLocation['address2'] == '' ? '' : $productionLocation['address2'] . ',';?>
+                                                        </span><span>
+                                                        <?=$productionLocation['city'] == '' ? '' : $productionLocation['city'] . ',';?>
+                                                        <?=$productionLocation['state'] == '' ? '' : $productionLocation['state'] . ',';?>
+                                                        <?=$productionLocation['postcode'] == '' ? '' : $productionLocation['postcode'];?>
+                                                        </span>
+                                                </div>
+                                                <div class="show-details-container">
+                                                    <a data-locationid="<?=$productionLocation['id'];?>"
+                                                    class="link-detail"
+                                                    href="#">SHOW DETAILS <span class="fa fa-angle-down"></span></a>
+                                                </div>
+                                                <div id="location-<?=$productionLocation['id'];?>" style="display: none;">
+                                                    <div><span class="fa fa-phone icon-grey"></span>
+                                                    <span><?=$productionLocation['telephone'];?></span></div>
+                                                    <div><span class="fa fa-envelope-square icon-grey"></span>
+                                                    <span><?=$productionLocation['location_email'];?></span></div>
+                                                    <?php 
+                                                        if($productionLocation['hours_of_operation'] != null) {
+                                                    ?>
+                                                        <div><span class="fa fa-clock-o icon-grey"></span>
+                                                        <span><?=$block->escapeHtml(__('Hours Of Operation'))?></span></div>    
+                                                    <?php        
+                                                        $operations = json_decode($productionLocation['hours_of_operation']);
+                                                        } else {
+                                                            $operations = []; ?>
+                                                    <?php }
+                                                    foreach ($operations as $operation) {?>
+                                                    <div class="hours_of_opp">
+                                                        <div class="shedule-container">
+                                                            <div class="day"><?=substr($operation->day, 0, 3);?> </div>
+                                                            <div class="range-main">
+                                                                <div class="range">
+                                                                    <?php if(isset($operation->schedule) &&$operation->schedule !==  'Open') : ?>
+                                                                        <?= /* @noEscape */$operation->schedule ?>
+                                                                    <?php elseif((isset($operation->openTime) && $operation->openTime === '00:00:00') && (isset($operation->closeTime) && $operation->closeTime === '24:00:00')): ?>
+                                                                        <?= /* @noEscape */ 'Open 24hrs'  ?>    
+                                                                    <?php elseif((isset($operation->openTime) && $operation->openTime !== '00:00:00') && (isset($operation->closeTime) && $operation->closeTime !== '00:00:00')): ?>
+                                                                        <?= /* @noEscape */ date("h:i A", strtotime($operation->openTime)) ?> - <?= /* @noEscape */date("h:i A", strtotime($operation->closeTime)) ?>
+                                                                    <?php else: ?>
+                                                                        Closed
+                                                                    <?php endif; ?>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php }?>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <?php endif;?>
+                                    <?php endforeach;?>
+                        </div>
+                    <?php else: ?>
+                        <label for="is_restricted">You currently have no Production Locations saved.</label><br/>
+                    <?php endif;?><br/>
+                    <div class="action-container">
+                        <button id="click-me-restricted" class="add-store-button" type="button">+ ADD STORE</button>
+                            <?php if (count($productLocationCollectionOfRestricted) > 0): ?>
+                                <button class="remove-locations-button" id="remove-restricted-button" type="button">Remove Store</button>
+                            <?php endif;?>
+                    </div>
+                    <div id="popup-modal-alert" style="text-align: center;">
+                        <div class="choose-container">
+                            <h1 class="main-popup-title"></h1>
+                        </div>
+                    </div>
+                    <div id="popup-modal" class="restricted-production-toggle">
+                        <div><h1 class="main-popup-title"><?=$block->escapeHtml
+                        (__('Add Production Location'))?></h1></div>
+                        <div class="choose-container">
+                            <div class="heading-flex">
+                                <div class="input-icons">
+                                    <input class="zipcoderistricted" type="text" name="zipcoderistricted" 
+                                    id="zipcoderistricted" maxlength="5"  pattern="\d{5}" required placeholder="Search by zip code" />
+                                    <button type="button" class="primary search-btn">
+                                        <span><?=$block->escapeHtml(__('SEARCH'))?></span>
+                                    </button>
+                                    <div class="search-msg">
+                                        <span id="search-msg"><?=$block->escapeHtml(__('Search results show up to a 15 mile radius.'))?></span>
+                                    </div>
+                                </div>
+                                <div class="toggle-container">
+                                    <div class="zip-code-container">
+                                        <span class="zip-toggle"><?=$block->escapeHtml(__('Zip Code'))?></span>
+                                    </div>
+                                    <div class="toggle-switch-container">
+                                        <label class="toggle-switch"><input class="toggle-input" type="checkbox"><span class="slider round"></span>
+                                        </label>
+                                    </div>
+                                    <div class="store-toggle-container">
+                                        <span class="store-toggle"><?=$block->escapeHtml
+                                        (__('Store Number'))?></span>
+                                    </div>
+                                </div>
+                                <div class ="error-msg" style= "margin-top:5px">
+                                    <span id="errmsg" ></span>
+                                </div>
+                            </div><br/>
+                            <div class="map-canvas" id="googleMap" style="height:245px"></div>
+                            <div class="select_all_restricted_stores">
+                            <button type="button" name="select-all-restricted-stores-button" class="select-all-restricted-stores-button" style="display:none">Select All</button>
+                            <span class="separator" style="display:none">|</span>
+                            <button type="button" name="deselect-all-restricted-stores-button" class="deselect-all-restricted-stores-button" style="display:none">Deselect All</button>
+                        </div>
+                        <div class = "restricted_stores" id="restricted_stores"></div>
+                    </div>
+                </div>
+            </div>
+        </div></br>
+        <?php if ($companyData !== null): ?>
+            <input <?=/* @noEscape */$companyData->getProductionLocationOption() ==
+            'recommended_stores_all_location' ? $propChecked : '';?>
+            class="admin__control" data-form-part="company_form" type="radio"
+            name="production_location[production_location_option]" 
+            id="production_location_value3" value="recommended_stores_all_location">
+        <?php else: ?>
+            <input class="admin__control" data-form-part="company_form" type="radio"
+            name="production_location[production_location_option]"
+            id="production_location_value3" value="recommended_stores_all_location">
+        <?php endif;?>
+        <label for="production_location_value3"><?=$block->escapeHtml(__
+        ('All FedEx Office retail stores plus Recommended stores'))?></label>
+        <div class="is_recommended_store"
+            <?php if ($companyData !== null): ?>
+                <?=$block->escapeHtmlAttr($companyData->getProductionLocationOption()
+                == 'recommended_stores_all_location' ? '' : $styleDisplayNone)?>
+            <?php else: ?>
+                <?=$block->escapeHtmlAttr($styleDisplayNone)?>
+            <?php endif;?>>
+            <div class="location-header-outter">
+                <div class="store-title">Recommended Locations 
+                    (<?=count($productLocationCollectionOfRecommended)?>)</div>
+                <div class="edit-production-location">
+                    <?php if (count($productLocationCollectionOfRecommended) > 0): ?>
+                        <button type="button" name="edit-location" class="edit-location">Edit</button>
+                    <?php endif;?>
+                </div>
+            </div><br/>
+                <?php if (count($productLocationCollectionOfRecommended)): ?>
+                    <div class="restricted_stores" id="restricted_stores_div">
+                        <?php foreach ($productLocationCollectionOfRecommended as $productionLocation): ?>
+                            <?php if ($productionLocation['is_recommended_store'] == 1): ?>
+                                <div class="list_container" id="list_container_div">
+                                    <div class="box-container">
+                                        <div class="checkbox-area">
+                                            <input type="checkbox" name="production-location-id"
+                                            id="location-id-<?=$productionLocation['id']?>"value="
+                                            <?=$productionLocation['id']?>">
+                                            <label for="location-id-<?=$productionLocation['id']?>"></label>
+                                        </div>
+                                        <div class="box-container-inner">
+                                            <label class="custom-radio-btn pick-up-button">
+                                                <span class="radio-label_name"><span>
+                                                    <?=$productionLocation['location_name'].' ('.$productionLocation['location_id'].')';?></span></span>
+                                            </label>
+                                            <div class="pickup-address">
+                                                    <span class="fa fa-map-marker icon-grey"></span>
+                                                    <span class="pickup-location-street">
+                                                        <?=$productionLocation['address1'] == '' 
+                                                        ? '' :$productionLocation['address1'] . ',';?>
+                                                        <?=$productionLocation['address2'] == '' 
+                                                        ? '' :$productionLocation['address2'] . ',';?>
+                                                    </span>
+                                                    <span>
+                                                        <?=$productionLocation['city'] == '' ? '' :
+                                                        $productionLocation['city'] . ',';?>
+                                                        <?=$productionLocation['state'] == '' ? '' :
+                                                        $productionLocation['state'] . ',';?>
+                                                        <?=$productionLocation['postcode'] == '' ? '' 
+                                                        : $productionLocation['postcode'];?>
+                                                    </span>
+                                            </div>
+                                            <div class="show-details-container">
+                                                <a data-locationid="<?=$productionLocation['id'];?>"class="link-detail"
+                                                href="#">SHOW DETAILS <span class="fa fa-angle-down"></span></a>
+                                            </div>
+                                            <div id="location-<?=$productionLocation['id'];?>" style="display: none;">
+                                                <div><span class="fa fa-phone icon-grey"></span>
+                                                <span><?=$productionLocation['telephone'];?></span></div>
+                                                <div><span class="fa fa-envelope-square icon-grey"></span>
+                                                <span><?=$productionLocation['location_email'];?></span></div>
+                                                <?php 
+                                                        if($productionLocation['hours_of_operation'] != null) {
+                                                    ?>
+                                                        <div><span class="fa fa-clock-o icon-grey"></span>
+                                                        <span><?=$block->escapeHtml(__('Hours Of Operation'))?></span></div>    
+                                                    <?php        
+                                                        $operations = json_decode($productionLocation['hours_of_operation']);
+                                                        } else {
+                                                            $operations = []; ?>
+                                                    <?php }
+                                                foreach ($operations as $operation) {?>
+                                                <div class="hours_of_opp">
+                                                    <div class="shedule-container">
+                                                        <div class="day"><?=substr($operation->day, 0, 3);?></div>
+                                                        <div class="range-main">
+                                                            <div class="range">
+                                                            <?php if(isset($operation->schedule) &&$operation->schedule !==  'Open') : ?>
+                                                                <?= /* @noEscape */ $operation->schedule ?>
+                                                            <?php elseif((isset($operation->openTime) && $operation->openTime === '00:00:00') && (isset($operation->closeTime) && $operation->closeTime === '24:00:00')): ?>
+                                                                <?= /* @noEscape */ 'Open 24hrs'  ?>    
+                                                            <?php elseif((isset($operation->openTime) && $operation->openTime !== '00:00:00') && (isset($operation->closeTime) && $operation->closeTime !== '00:00:00')): ?>
+                                                                <?= /* @noEscape */ date("h:i A", strtotime($operation->openTime)) ?> - <?= /* @noEscape */ date("h:i A", strtotime($operation->closeTime)) ?>
+                                                            <?php else: ?>
+                                                                Closed
+                                                            <?php endif; ?>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <?php }?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?php endif;?>
+                                <?php endforeach;?>
+                    </div>
+                <?php else: ?>
+                <label for="is_recommended_store">You currently have no Recommended Locations saved.</label><br/>
+                <?php endif;?><br/>
+                <div class="action-container">
+                    <button id="click-me-recommended" class="add-store-button" type="button">+ ADD STORE</button>
+                    <?php if (count($productLocationCollectionOfRecommended) > 0): ?>
+                    <button class="remove-locations-button" id="remove-recommended-button" type="button">Remove Store</button>
+                    <?php endif;?>
+                </div>
+                <div id="popup-modal-alert" style="text-align: center;">
+                    <div class="choose-container"><h1 class="main-popup-title"></h1></div>
+                </div>
+        </div><br/><br/>
+        <div class="check_box">
+                <?php if ($companyData !== null): ?>
+                <input class="admin__control-checkbox allow_production_location-checkbox"
+                <?=/* @noEscape */$companyData->getAllowProductionLocation() == 1 ? $propChecked : '';?>
+                data-form-part="company_form" type="checkbox" 
+                name="production_location[allow_production_location]" id="allow_production_location"
+                value="<?=/* @noEscape */$companyData->getAllowProductionLocation();?>">
+                <?php else: ?>
+                <input class="admin__control-checkbox allow_production_location-checkbox"
+                data-form-part="company_form" type="checkbox"
+                name="production_location[allow_production_location]" id="allow_production_location" value="0">
+                <?php endif;?>
+                <label for="allow_production_location">
+                    <?=$block->escapeHtml(__(' Allow customers to select production locations for shipment delivery'))?>
+                </label>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</div>
+<?php else: /**explorers_restricted_and_recommended_production
+    Toggle off condition**/?>
+	<div class="admin__field-control  production_location_html">
+	    <div class="error_msg _error"></div>
+	    <div class="admin__control-table-wrapper">
+	        <div class="">
+	            <?php if ($companyData !== null): ?>
+	            <input class="admin__control-checkbox allow_production_location-checkbox"
+	                <?=/* @noEscape */$companyData->getAllowProductionLocation() == 1 ? $propChecked : '';?>
+	            data-form-part="company_form" type="checkbox"
+	            name="production_location[allow_production_location]" id="allow_production_location"
+	            value="<?=/* @noEscape */$companyData->getAllowProductionLocation();?>">
+	            <?php else: ?>
+            <input class="admin__control-checkbox allow_production_location-checkbox"
+            data-form-part="company_form" type="checkbox"
+            name="production_location[allow_production_location]" id="allow_production_location"
+            value="0">
+            <?php endif;?>
+            <label for="allow_production_location">
+                <?=$block->escapeHtml(__(' Allow site members to choose production location.'))?>
+            </label>
+        </div>
+        <br/>
+        <div class="production_location_options" 
+            <?= /* @noEscape */ $isDisplay?'': $styleDisplayNone ; ?>>
+            <strong><?= $block->escapeHtml(__('Designate which FedEx stores 
+            are allowed to be used for print production.')) ?></strong>
+            <br/><br/>
+            <div class="production_location_main">
+                <div class="">
+                    <?php if ($companyData!==null): ?>
+                    <input <?= /* @noEscape */ ($companyData->getProductionLocationOption()==
+                    'geographical' || $companyData->getProductionLocationOption()==
+                    null)?$propChecked:''; ?> class="admin__control" 
+                    data-form-part="company_form" type="radio" 
+                    name="production_location[production_location_option]" 
+                    id="production_location_value1" value="geographical">
+                    <?php else: ?>
+                    <input checked="checked" class="admin__control" 
+                    data-form-part="company_form" type="radio" 
+                    name="production_location[production_location_option]" 
+                    id="production_location_value1" value="geographical">
+                    <?php endif; ?>
+                    <label for="production_location_value1"><?= $block->escapeHtml(__('The system will use closest 
+                    geographical location to produce the order.')) ?></label>
+                </div>
+                <br/>
+                <div class="">
+                    <?php if ($companyData!==null): ?>
+                    <input <?= /* @noEscape */ $companyData->getProductionLocationOption()==
+                    'recommended_location_all_locations'?$propChecked:''; ?> 
+                    class="admin__control" data-form-part="company_form" type="radio" 
+                    name="production_location[production_location_option]" 
+                    id="production_location_value2" value="recommended_location_all_locations">
+                    <?php else: ?>
+                    <input class="admin__control" data-form-part="company_form" type="radio" 
+                    name="production_location[production_location_option]" 
+                    id="production_location_value2" value="recommended_location_all_locations"> 
+                    <?php endif; ?>
+                    <label for="production_location_value2"><?= $block->escapeHtml(__('The system will restrict the 
+                    production locations to only those specified in the list.')) ?></label>
+                    <input class="admin__control" 
+                    data-form-part="company_form" type="hidden" 
+                    name="production_location[is_restricted]" value="<?=count($productLocationCollectionOfRestricted)?>">
+                    <br/><br/>
+
+                    <div class="is_restricted" 
+                        <?php if ($companyData!==null) {
+                            echo $companyData->getProductionLocationOption()==
+                            'recommended_location_all_locations'?'':
+                            $styleDisplayNone;
+                        } else {echo $styleDisplayNone;} ?>>
+                        <div>
+                            <div class="location-header-outter">
+                                <div class="store-title">Restricted Stores (<?=count($productLocationCollectionOfRestricted)?>)
+                            </div>
+                                <div class="edit-production-location">
+                                    <?php if (count($productLocationCollectionOfRestricted) > 0):?>
+                                        <button type="button" name="edit-location" class="edit-location">Edit</button>
+                                    <?php endif;?>                          
+                                </div>
+                            </div>
+                            <br/>
+                           <?php if (count($productLocationCollectionOfRestricted)): ?>
+                                <div class="restricted_stores" id="restricted_stores_div">           
+                                    <?php foreach ($productLocationCollectionOfRestricted as $productionLocation): ?>
+                                    <div class="list_container" id="list_container_div">
+                                    <div class="box-container">
+                                        <div class="checkbox-area">
+                                                <input type="checkbox" 
+                                                name="production-location-id" 
+                                                id="location-id-<?= $productionLocation['id'] ?>" 
+                                                value="<?= $productionLocation['id'] ?>">
+                                                <label for="location-id-<?= $productionLocation['id'] ?>"></label>
+                                        </div>
+                                        <div class="box-container-inner">
+                                    <label class="custom-radio-btn pick-up-button">
+                                        <span class="radio-label_name"><span>
+                                            <?= $productionLocation['location_name']; ?>
+                                        </span></span>
+                                    </label>
+                                    <div class="pickup-address">
+                                      <div>
+                                      <span class="fa fa-map-marker icon-grey"></span>
+                                      <span class="pickup-location-street">
+                                        <?= $productionLocation['address1']==''?'':
+                                        $productionLocation['address1'].','; ?>
+                                        <?= $productionLocation['address2']==''?'':
+                                        $productionLocation['address2'].','; ?>
+                                    </span><span>
+                                        <?= $productionLocation['city']==''?'':
+                                        $productionLocation['city'].','; ?>
+                                        <?= $productionLocation['state']==''?'':
+                                        $productionLocation['state'].','; ?>
+                                        <?= $productionLocation['postcode']==''?'':$productionLocation['postcode']; ?>
+                                    </span>
+                                      </div>
+                                    </div>
+                                    <div class="show-details-container">
+                                        <div>
+                                        <a data-locationid="<?= $productionLocation['id']; ?>"
+                                         class="link-detail"
+                                          href="#">SHOW DETAILS <span class="fa fa-angle-down"></span></a>
+                                        </div>
+                                    </div>
+                                    <div id="location-<?= $productionLocation['id']; ?>" style="display: none;">
+                                        <div><span class="fa fa-phone icon-grey"></span>
+                                        <span><?= $productionLocation['telephone'];?></span>
+                                    </div>
+                                        <div><span class="fa fa-envelope-square icon-grey"></span>
+                                        <span><?= $productionLocation['location_email'];?>
+                                    </span></div>
+                                                    <?php 
+                                                        if($productionLocation['hours_of_operation'] != null) {
+                                                    ?>
+                                                        <div><span class="fa fa-clock-o icon-grey"></span>
+                                                        <span><?=$block->escapeHtml(__('Hours Of Operation'))?></span></div>    
+                                                    <?php        
+                                                        $operations = json_decode($productionLocation['hours_of_operation']);
+                                                        } else {
+                                                            $operations = []; ?>
+                                                    <?php }
+                                        
+                                            foreach ($operations as $operation) {
+                                                ?>
+                                                <div class="hours_of_opp">
+                                                    <div class="shedule-container">
+                                                        <div class="day"><?= substr($operation->day, 0, 3); ?> </div>
+                                                         <div class="range-main">
+                                                            <div class="range">
+                                                            <?php if(isset($operation->schedule) &&$operation->schedule !==  'Open') : ?>
+                                                                <?= /* @noEscape */ $operation->schedule ?>
+                                                            <?php elseif((isset($operation->openTime) && $operation->openTime === '00:00:00') && (isset($operation->closeTime) && $operation->closeTime === '24:00:00')): ?>
+                                                                <?= /* @noEscape */ 'Open 24hrs'  ?>    
+                                                            <?php elseif((isset($operation->openTime) && $operation->openTime !== '00:00:00') && (isset($operation->closeTime) && $operation->closeTime !== '00:00:00')): ?>
+                                                                <?= /* @noEscape */ date("h:i A", strtotime($operation->openTime)) ?> - <?= /* @noEscape */ date("h:i A", strtotime($operation->closeTime)) ?>
+                                                            <?php else: ?>
+                                                                Closed
+                                                            <?php endif; ?>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <?php } ?>
+                                        
+                                    </div>
+                                    </div>
+                                    </div>
+                                    </div>
+                                    <?php endforeach; ?>                
+                            </div>
+                            <?php else: ?>
+                            <label for="is_restricted">You currently have no Restrict Stores saved.</label>
+                            <br/>
+                            <?php endif; ?>
+                            <br/>
+                            <div class="action-container">
+                                <button id="click-me" type="button">+ ADD STORE</button>
+                                <?php if (count($productLocationCollectionOfRestricted) > 0):?>
+                                <button class="remove-locations-button" type="button">Remove Store</button>
+                                <?php endif; ?>
+                            </div>
+                            <div id="popup-modal-alert" style="text-align: center;">                                
+                                
+                                <div class="choose-container">
+                                     <h1 class="main-popup-title"></h1>
+                                </div>
+                            </div>
+
+                            <div id="popup-modal">                                
+                                <div>
+                                    <h1 class="main-popup-title">Add Restricted Store </h1>
+                                </div>
+                                <div class="choose-container">
+                                
+                                    <div class="heading-flex">
+                                        <div class="input-icons">
+                                        <input class="zipcoderistricted" type="text"
+                                        name="zipcoderistricted" id="zipcoderistricted"
+                                        maxlength="5"  pattern="\d{5}" required placeholder="Search by zip code" />
+                                        <div class="toggle-container">
+                                            <div >
+                                                <span class="toggle-text">Show Map</span>
+                                            </div>
+                                            <div>
+                                                <label class="toggle-switch">
+                                                <input class="toggle-input" type="checkbox" checked>
+                                                <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        </div> 
+                                        <div class ="error-msg" style= "margin-top:5px">
+                                            <span id="errmsg" ></span>
+                                         </div>                                       
+                                    </div>
+                                    <br/>
+                                    <div class="map-canvas" id="googleMap" style="height:245px"></div>
+                                    <div class = "restricted_stores" id="restricted_stores">
+                                    </div>                                    
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif;?>
+<script type="text/javascript">
+require([
+    "jquery",
+    'Magento_Ui/js/modal/modal',
+    "mage/url"
+], function($ , modal,urlBuilder){
+
+        var popupClass = 'popup_cancel';
+        var addStoreClass = 'add_restricted_stores';
+        <?php if ($isRestrictedProductionToggle) { ?>
+            popupClass = 'popup_closed';
+            addStoreClass = 'add_restricted_stores_button';
+        <?php } ?>
+        var popupModalClose = '.' + popupClass;
+        var isLocationUiFixToggle = false;
+        <?php if ($isLocationUiFixToggle) { ?>
+            isLocationUiFixToggle = true;
+        <?php } ?>
+
+    $(document).ready(function(){
+        
+        $('[name="production_location[order_notes]"]').on('input', function(e) {
+            $(this).val(function(i, v) {
+                return v.replace(/[\/\\();=~<>{}]/g, '');
+            });
+        });
+
+        $(document).on('click','.is_restricted button[name="edit-location"]',function(){
+            $('.production_location_main .is_restricted '+
+            ':is(.list_container input[name="production-location-id"] + label,.remove-locations-button)').toggle();
+        });
+
+        $(document).on('click','.is_recommended_store button[name="edit-location"]',function(){
+            $('.production_location_main .is_recommended_store '+
+            ':is(.list_container input[name="production-location-id"] + label,.remove-locations-button)').toggle();
+        });
+
+        $(document).on('click','.is_restricted .remove-locations-button',function(){
+            var alertoptions = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: [{
+                    text: $.mage.__('OK'),
+                    class: 'alert_popup_cancel',
+                    click: function () {
+                        this.closeModal();
+                    }  
+                }]
+            };
+            var ids = [];
+            $('.is_restricted .list_container').each(function() {
+                var inputField = $(this).find('input[name="production-location-id"]');
+                if(inputField.is(':checked')){
+                    ids.push(inputField.val());
+                }
+            });
+            if(ids.length < 1){
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("Please select atleast one Location.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+            }
+            else if($('.is_restricted .list_container').length == 1){ 
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("At least one "+
+                "store is required in the list. Please add another store to remove this.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+            }
+            else if(ids.length != $('.is_restricted .list_container').length){ 
+                var url = "<?php echo $this->getUrl('shipto/plocation/remove')?>";
+                $.ajax({
+                    showLoader: true,
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        location_id: ids,
+                        form_key: '<?php echo $block->getFormKey();?>',
+                    },
+                    success: function(response) {    
+                       if(response.status == 'success'){
+                          location.reload();
+                       }else{
+                            var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                            $('#popup-modal-alert .choose-container h1').html("Something went wrong please try again.");
+                            $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+                       }
+                    }
+                });
+            }else{
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("Can't remove all stores.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+                
+            }
+        });
+    });
+
+	//D-191726 - UI Issue
+        if (isLocationUiFixToggle) {
+            $(document).on('click', '.add_restricted_stores_button', function() {
+                var isSelectAllVisible = $('.select-all-restricted-stores-button').is(":visible");
+                var isDeSelectAllVisible = $('.deselect-all-restricted-stores-button').is(":visible");
+                if (isSelectAllVisible && isDeSelectAllVisible) {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.separator').hide();
+                    $('.select-all-restricted-stores-button').show();
+                    $('.select_all_restricted_stores').css('white-space', '');
+                    $('.deselect-all-restricted-stores-button').css('margin-left', '712px');
+                    $('.select-all-restricted-stores-button').css('margin-left', '725px');
+                } else {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.select-all-restricted-stores-button').show();
+                }
+            });
+            $(document).on('click', popupModalClose, function() {
+                var isSelectAllVisible = $('.select-all-restricted-stores-button').is(":visible");
+                var isDeSelectAllVisible = $('.deselect-all-restricted-stores-button').is(":visible");
+                var isStoreVisible = $('.restricted_stores').is(":visible");
+                var errMsg = $('.errmsg').is(":visible");
+                if (isSelectAllVisible && isDeSelectAllVisible) {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.separator').hide();
+                    $('.select-all-restricted-stores-button').show();
+                    $('.select_all_restricted_stores').css('white-space', '');
+                    $('.deselect-all-restricted-stores-button').css('margin-left', '712px');
+                    $('.select-all-restricted-stores-button').css('margin-left', '725px');
+                } else {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.select-all-restricted-stores-button').show();
+                }
+                if (!isStoreVisible || errMsg) {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.select-all-restricted-stores-button').hide();
+                }
+            });
+
+            $(document).on('click', '.action-close', function() {
+                var isSelectAllVisible = $('.select-all-restricted-stores-button').is(":visible");
+                var isDeSelectAllVisible = $('.deselect-all-restricted-stores-button').is(":visible");
+                var isStoreVisible = $('.restricted_stores').is(":visible");
+                var errMsg = $('.errmsg').is(":visible");
+                if (isSelectAllVisible && isDeSelectAllVisible) {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.separator').hide();
+                    $('.select-all-restricted-stores-button').show();
+                    $('.select_all_restricted_stores').css('white-space', '');
+                    $('.deselect-all-restricted-stores-button').css('margin-left', '712px');
+                    $('.select-all-restricted-stores-button').css('margin-left', '725px');
+                } else {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.select-all-restricted-stores-button').show();
+                }
+                if (!isStoreVisible || errMsg) {
+                    $('.deselect-all-restricted-stores-button').hide();
+                    $('.select-all-restricted-stores-button').hide();
+                }
+            });
+        }
+
+    //removing location for recommended store
+    $(document).on('click','.is_recommended_store .remove-locations-button',function(){
+            var alertoptions = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: [{
+                    text: $.mage.__('OK'),
+                    class: 'alert_popup_cancel',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }]
+            };
+            var ids = [];
+            $('.is_recommended_store .list_container').each(function() {
+                var inputField = $(this).find('input[name="production-location-id"]');
+                if(inputField.is(':checked')){
+                    ids.push(inputField.val());
+                }
+            });
+            if(ids.length < 1){
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("Please select atleast one Location.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+            }else if($('.is_recommended_store .list_container').length == 1){
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("At least one "+
+                "store is required in the list. Please add another store to remove this.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+            }else if(ids.length != $('.is_recommended_store .list_container').length){
+                var url = "<?php echo $this->getUrl('shipto/plocation/remove') ?>";
+                $.ajax({
+                    showLoader: true,
+                    url: url,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        location_id: ids,
+                        form_key: '<?php echo $block->getFormKey(); ?>',
+                        is_recommended_store : "<?= /* @noEscape */$isRecommendedLocationsRemoved?>",
+
+                    },
+                    success: function(response) {
+                       if(response.status == 'success'){
+                          location.reload();
+                       }else{
+                            var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                            $('#popup-modal-alert .choose-container h1').html("Something went wrong please try again.");
+                            $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+                       }
+                    }
+                });
+            }else{
+                var alertpopup = modal(alertoptions, $('#popup-modal-alert'));
+                $('#popup-modal-alert .choose-container h1').html("Can't remove all stores.");
+                $('#popup-modal-alert').modal(alertoptions).modal('openModal');
+
+            }
+    });
+
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: [{
+                    text: $.mage.__('CANCEL'),
+                    class: popupClass,
+                    click: function () {
+                        $(".chk").prop("checked",false);
+                        this.closeModal();
+                    }  
+                },
+                {
+                    id: "add_restricted_stores",
+                    class: addStoreClass,
+                    text: "ADD STORE",
+                    click: function () {
+                            var checkedIds = $(".chk:checked").map(function () {
+                                var checkedelement = $("#location-id-" + this.value).length;
+                                if (checkedelement == 0) {
+                                    var parant = $(this).parent().closest("#list_container");
+                                    var html = '<div class="list_container" id="list_container_div_toadd"><div class="box-container"><div class="checkbox-area">' +
+                                        '<input type="checkbox" name="production-location-id" id="location-id-' + this.value + '" value="' + this.value + '">' +
+                                        '<label for="location-id-' + this.value + '"></label></div>' +
+                                        '<div class="box-container-inner"><label class="custom-radio-btn pick-up-button">' +
+                                        parant.find(".radio-label_name")[0].outerHTML + '</label>' +
+                                        parant.find(".pickup-address")[0].outerHTML +
+                                        '<div class="show-details-container"><div><a data-locationid="' + this.value + '" class="link-detail" href="#">SHOW DETAILS <span class="fa fa-angle-down"></span></a></div></div>' +
+                                        '<div id=location-' + this.value + ' style="display:none">' +
+                                        parant.find(".center-details")[0].innerHTML +
+                                        '</div>';
+                                    if ($('input[name="production_location[production_location_option]"]:checked').val() == "recommended_location_all_locations") {
+                                        var element = $(".is_restricted")
+                                    } else {
+                                        var element = $(".is_recommended_store");
+                                    }
+                                    if (element.find("#restricted_stores_div").length == 0) {
+                                        let parantelemnt = element.find(".location-header-outter");
+                                        html = '<div class="restricted_stores" id="restricted_stores_div">' + html + '</div>';
+                                        parantelemnt.after(html);
+                                    } else {
+                                        element.find("#restricted_stores_div").append(html);
+                                    }
+                                    return this.value;
+                                }
+                            }).toArray();
+                            if (checkedIds.length != 0) {
+                                var locationid = checkedIds.join(","); 
+                                 if($('input[name="general[new_compnay_location_id]"]').val()!=''){
+                                       locationid= $('input[name="general[new_compnay_location_id]"]').val()+","+locationid;
+                                }
+                                $('input[name="general[new_compnay_location_id]"]').val(locationid).change();
+                                $('input[name="production_location[is_restricted]"]').val(1);
+                                this.closeModal();
+                        }               
+                    }
+  
+                }
+            ]
+            };
+            localStorage.removeItem('isSearchableByStore');
+            $("#zipcoderistricted").on("keypress", function (e) {
+            //if the letter is not digit then display error and don't type anything
+            if ((e.which != 8 && e.which != 0 && e.which != 32 && (e.which < 48 || e.which > 57)) && (e.which != 32 || (e.which == 32 && e.target.selectionStart == 0))) {
+                //display error message
+                return false;
+            }
+            });
+            <?php if ($isRestrictedProductionToggle): ?>
+                $(".toggle-input").on('click', function() {
+                    if($(this).is(":checked")) {
+                        $('.zipcoderistricted').attr("placeholder", "Search by Store Number");
+                        $('.zipcoderistricted').attr("pattern", "\d+(\s\d+)*");
+                        $('.zipcoderistricted').attr("maxlength", "499");
+                        $('#search-msg').text('Search for multiple stores by separating each store number with a space.');
+                        $('.store-toggle-container').removeClass('deactive');
+                        $('.zip-code-container').addClass('deactive');
+                        localStorage.setItem('isSearchableByStore',true);
+                    } else {
+                        $('.zipcoderistricted').attr("placeholder", "Search by Zip Code");
+                        $('.zipcoderistricted').attr("pattern", "\d{5}");
+                        $('.zipcoderistricted').attr("maxlength", "5");
+                        $('#search-msg').text('Search results show up to a 15 mile radius.');
+                        $('.store-toggle-container').addClass('deactive');
+                        $('.zip-code-container').removeClass('deactive');
+                        localStorage.setItem('isSearchableByStore',false);
+                    }
+                });
+                if($(".toggle-input").is(":checked")) {
+                    $("#popup-modal .main-popup-title").text('Add Production Location');
+                    $('.zipcoderistricted').attr("placeholder", "Search by Store Number");
+                    $('#search-msg').text('Search for multiple stores by separating each store number with a space.');
+                    $('.store-toggle-container').removeClass('deactive');
+                    $('.zip-code-container').addClass('deactive');
+                } else {
+                    $('.zipcoderistricted').attr("placeholder", "Search by Zip Code");
+                    $('#search-msg').text('Search results show up to a 15 mile radius.');
+                    $('.store-toggle-container').addClass('deactive');
+                    $('.zip-code-container').removeClass('deactive');
+                }
+                $(".map-canvas").hide();
+            <?php else: ?>
+            $(".toggle-input").on('click', function() {
+                if($(this).is(":checked")) {
+                    $(".map-canvas").show();
+                } else {
+                    $(".map-canvas").hide();
+                }
+            });
+            <?php endif;?>
+
+            $(".show-details-button").on('click', function() {
+                
+                $(this).parents('.box-container').find(".center-details-main").show();
+                $(this).parents('.box-container').find(".show-details-container").hide();
+             });
+
+            $(".hide-details-button").on('click', function() {
+                $(this).parents('.box-container').find(".center-details").hide();
+                $(this).hide();
+            });
+
+            <?php if ($isRestrictedProductionToggle): ?>
+                $('.production_location_options').show();
+            <?php else: ?>
+            $('#allow_production_location').on('click', function() {
+                if($(this).is(":checked")){
+                    $(this).val(1);
+                    $('.production_location_options').show();
+                }else{
+                    $(this).val(0);
+                    $('.production_location_options').hide();
+                }        
+            });
+            <?php endif;?>
+             // add listener on link-detail for selected store   
+            document.addEventListener("click", function(e)
+           {
+                const target = e.target.className;
+                if(target=="link-detail")
+                {                       
+                    e.preventDefault();
+                    if($(e.target).html()=='SHOW DETAILS <span class="fa fa-angle-down"></span>'){
+                       $(e.target).html('HIDE DETAILS <span class="fa fa-angle-up"></span>');
+                    }else{
+                      $(e.target).html('SHOW DETAILS <span class="fa fa-angle-down"></span>');
+                    }
+                    var id = $(e.target).attr('data-locationid');
+                    $('#location-'+id).toggle();
+                }
+           });
+
+           //remove selected stores
+           $(document).ready(function () {
+                $('input[name="production_location[production_location_option]"]').change(function () {
+                    $("#list_container_div_toadd").remove();
+                    $('input[name="general[new_compnay_location_id]"]').val('').change();
+               });
+             });
+            $(document).ready(function() {
+                // Function to hide/show the div based on the radio button status
+                function toggleSecondDiv() {
+                    if($('#production_location_value1').is(':checked')) {
+                        $('.is_restricted').hide();
+                    }
+                }
+                    // Call the function on page load
+                    toggleSecondDiv();
+            });
+
+            function showRestrictedDiv() {
+                // Show the div when the second radio button is checked
+                $('.is_restricted').show();
+            }
+            function showRecommendedDiv() {
+                // Show the div when the second radio button is checked
+                $('.is_recommended_store').show();
+            }
+            $('#production_location_value1').change(function() {
+                if($(this).on('click')) {
+                    showRestrictedDiv();
+                    $('.is_recommended_store').hide();
+                    $('.is_restricted').hide();
+
+                }
+            });
+        $('#production_location_value2').change(function() {
+                if($(this).on('click')) {
+                    showRestrictedDiv();
+                    $('.is_recommended_store').hide();
+                }
+            });
+        $('#production_location_value3').change(function() {
+            if($(this).on('click')) {
+                showRecommendedDiv();
+                $('.is_restricted').hide();
+            }
+        });
+            <?php if ($isRestrictedProductionToggle): ?>
+                $(document).ready(function() {
+                    $('input[name="production_location[production_location_option]"]').on('click', function() {
+                    if ($(this).val() == 'recommended_stores_all_location') {
+                        $('#popup-modal .main-popup-title').text('Add Recommended Location');
+                    } else {
+                        $('#popup-modal .main-popup-title').text('Add Production Location');
+                    }
+                });
+            <?php endif;?>
+
+            $('#is_recommended').on('click', function() {
+                if($(this).is(":checked")){
+                    $(this).val(1);            
+                }else{
+                    $(this).val(0);            
+                }     
+            });
+
+            <?php if ($isRestrictedProductionToggle): ?>
+                //Checking the the checked radio button and changing the text
+                if($("#production_location_value2").is(":checked")) {
+                    $('#popup-modal .main-popup-title').text('Add Production Location');
+                }else {
+                    $('#popup-modal .main-popup-title').text('Add Recommended Location');
+                }
+                });
+                if($("#production_location_value3").is(":checked")){
+                    $('.is_recommended_store').show();
+                    $('.is_restricted').hide()
+
+                }else {
+                    $('.is_restricted').show();
+                    $('.is_recommended_store').hide();
+                }
+            <?php endif;?>                
+
+            var popup = modal(options, $('#popup-modal'));
+            $("#click-me,#click-me-recommended,#click-me-restricted").on('click',function(){
+                <?php if ($isRestrictedProductionToggle): ?>
+                    $('.modal-inner-wrap').css('width','850px');
+                <?php endif; ?>
+                $("#popup-modal").modal("openModal");
+                $(".chk").prop("checked",false);
+            });
+            <?php if ($isRestrictedProductionToggle): ?>
+                var event = 'click';
+                var searchClass = '.search-btn';
+            <?php else: ?>
+                var event = 'keyup';
+                var searchClass = '#zipcoderistricted';
+             <?php endif; ?>
+
+            $(searchClass).on(event, function(event){
+                $('.search-btn').css({'border-color': '#333333','color':'#333333'});
+                var isSearchableByStore = localStorage.getItem('isSearchableByStore');
+                if(isSearchableByStore == 'true'){
+                    var storeNumbersString = $('.zipcoderistricted').val();
+                    var linkUrl = "<?php echo $url ?>";
+                    var html = "";
+                    var queryArr = [];
+
+                    $.ajax({
+                    url: linkUrl,
+                    showLoader: true,
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        zipcode: storeNumbersString,
+                        isStoreSearchEnabled: true,
+                        is_restricted_product_location_toggle: 
+                                                        "<?= /* @noEscape */$isRestrictedProductionToggle?>",
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        if(result.status == 'error'){
+                            $('#errmsg').show();
+                            $('#errmsg').text('Please provide correct store numbers separated by space.');
+                            $('#googleMap').hide();
+                            $('#restricted_stores').hide();
+                            return;
+                        }
+                        $('#errmsg').hide();
+                    <?php if ($isRestrictedProductionToggle): ?>
+                        $('#googleMap').hide();
+                     <?php else: ?>
+                        $('#googleMap').show();
+                    <?php endif;?>
+                        $('.select-all-restricted-stores-button').show();
+                        $('#restricted_stores').show();
+                        var Maplocations = [];
+                        var locationLength = null;
+                        var searchResultsCount = result.locations.length;
+                        var checkedCount = 0;
+                        var unCheckedCount = searchResultsCount;
+                        var isAllSelected = false;
+                        var isAllDeselected = false;
+                        for (var i = 0; i < result.locations.length; i++) {
+                            var name = (result.locations[i].locationName !== undefined) ? result.locations[i].locationName:'';
+                            var address1 = (result.locations[i].address.streetLines !== undefined) ? result.locations[i].address.streetLines[0]:'';
+                            var city = (result.locations[i].address.city !== undefined) ? result.locations[i].address.city:'';
+                            var stateOrProvinceCode = (result.locations[i].address.stateOrProvinceCode !== undefined) ? result.locations[i].address.stateOrProvinceCode:'';
+                            var postalCode = (result.locations[i].address.postalCode !== undefined) ? result.locations[i].address.postalCode:'';
+                            var licationid = (result.locations[i].officeLocationId !== undefined) ? result.locations[i].officeLocationId:'';
+                            var phone = (result.locations[i].phoneNumber !== undefined) ? result.locations[i].phoneNumber:'';
+                            var email = (result.locations[i].emailAddress !== undefined) ? result.locations[i].emailAddress:'';
+                            if(result.locations[i].geoCode !== undefined) {
+                                var latitude = result.locations[i].geoCode.latitude;
+                                var longitude = result.locations[i].geoCode.longitude;
+                            }
+                            const formatter = new Intl.NumberFormat('en-US', {
+                                minimumFractionDigits: 2,
+                                maximumFractionDigits: 2,
+                            });
+                            if(name && city && stateOrProvinceCode && postalCode && licationid && phone && email) {
+                                html += '<div id="list_container" class= "list_container">';
+                                html += '<div class="box-container">';
+                                html += '<label class="custom-radio-btn pick-up-button">';
+                                html += '<span class="pickup-location-id" '+
+                                'name="locationid" value="' + licationid + '" hidden>' + licationid + '</span>';
+                                html += '<input type="checkbox" name="options[]" class="chk" value="'+ licationid + '"/>';
+                                html += '<span class="radio-label_name"><span>' + name + ' ('+ licationid + ')</span></span>';
+                                html += '</label>';
+                                html += '<div class="pickup-address">';
+                                html += '<div>';
+                                html += '<span class="fa fa-map-marker icon-grey"></span>';
+                                html += '<span class="pickup-location-street">' + address1 + '</span>';
+                                html += '<span>,&nbsp;</span>';
+                                html += '<span class="pickup-location-city">' + city + '</span>';
+                                html += '<span>,&nbsp;</span>';
+                                html += '<span class="pickup-location-state">' + stateOrProvinceCode + '</span>';
+                                html += '<span>,&nbsp;</span>';
+                                html += '<span class="pickup-location-zipcode">' + postalCode + '</span>';
+                                html += '</div>';
+                                html += '</div>';
+                                html += '<div class="show-details-container" style="display:block">';
+                                html += '<div class="show-details-button" id="show-details-button-' + licationid + '" >';
+                                html += 'SHOW DETAILS';
+                                html += '<span class="fa fa-angle-down"></span>';
+                                html += '</div>';
+                                html += '</div>';
+
+                                html += '<div class="center-details-main"'+
+                                    'id="center-details-main-' + licationid + '" style="display:none">';
+                                html += '<div class="center-details">';
+                                html += '<div>';
+                                html += '<span class="fa fa-phone icon-grey"></span>';
+                                html += '<span >' + phone + '</span>';
+                                html += '</div>';
+                                html += '<div>';
+                                html += '<span class="fa fa-envelope-square icon-grey"></span>';
+                                html += '<span >' + email + '</span>';
+                                html += '</div>';
+                                
+                                if(result.locations[i].operatingHours !== undefined) {
+                                    html += '<div>';
+                                    html += '<span class="fa fa-clock-o icon-grey"></span>';
+                                    html += '<span>Hours Of Operation</span>';
+                                    html += '</div>';
+                                    for (var j = 0; j < result.locations[i].operatingHours.length; j++) {
+                                        var date = result.locations[i].operatingHours[j].date;
+                                        var day = result.locations[i].operatingHours[j].dayOfWeek;
+                                        var day = day.slice(0, 3);
+                                        var schedule = result.locations[i].operatingHours[j].closedFlag;
+                                        var openTime = result.locations[i].operatingHours[j].openTime;
+                                        var closeTime = result.locations[i].operatingHours[j].closeTime;
+                                        if(schedule === true) {
+                                            range = 'Closed';
+                                        } else {
+                                            range = convertTo12HourFormat(openTime) + ' - ' + convertTo12HourFormat(closeTime);
+                                        }
+
+                                        html += '<div class = "hours_of_opp">';
+                                        html += '<div class="shedule-container">';
+                                        html += '<div class="day" >' + day + '</div>';
+                                        html += '<div class ="range-main">';
+                                        html += '<div class ="range">' + range + '</div>';
+                                        html += '</div>';
+                                        html += '</div>';
+                                        html += '</div>';
+                                    }
+                                }
+
+                                html += '<div class="hide-details-button" id= "hide-details-button" style="display:none">HIDE DETAILS';
+                                html += '<span class="fa fa-angle-up"></span>';
+                                html += '</div>';
+                                html += '</div>';
+                                html += '</div>';
+                                html += '</div>';
+                                html += '</div>';
+                            } else {
+                                --searchResultsCount;
+                            }
+                        }
+
+                        if(latitude !== undefined && longitude !== undefined) {
+                            var latlong = { lat: latitude, lng: longitude, title: name };
+                            Maplocations.push(latlong);
+                            const uluru = {lat: parseFloat(Maplocations[0].lat), lng: parseFloat(Maplocations[0].lng)};
+                            // The map, centered at Uluru
+                            const map = new google.maps.Map(document.getElementById("googleMap"), {
+                                zoom: 10,
+                                center: uluru,
+                            });
+                            Maplocations.forEach(function (location, index) {
+                                    let marker = new google.maps.Marker({
+                                        position: {'lat':parseFloat(location.lat),'lng':parseFloat(location.lng)},
+                                        map: map,
+                                        title:location.title
+                                    });
+                                    var infowindow = new google.maps.InfoWindow;
+                                    infowindow.setContent(location.title);
+                                    marker.addListener("hover", () => {
+                                    infowindow.open({
+                                    anchor: marker,
+                                    map,
+                                    shouldFocus: false,
+                                    });
+                                });
+
+                                });
+                            }
+                        
+                        $( "#restricted_stores" ).html(html);
+                        if(!searchResultsCount) {
+                            $('.select-all-restricted-stores-button').hide();
+                            $('.deselect-all-restricted-stores-button').hide();
+                        }
+                        $(".select-all-restricted-stores-button").on('click', function() {
+                            $(".chk").prop("checked",true);
+                            checkedCount = searchResultsCount;
+                            unCheckedCount = 0;
+                            $('.deselect-all-restricted-stores-button').show();
+                            $('.separator').hide();
+                            $('.select-all-restricted-stores-button').hide();
+                            $('.select_all_restricted_stores').css('white-space', '');
+                            $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                            $('.select-all-restricted-stores-button').css('margin-left','725px');
+                        });
+                        $(".deselect-all-restricted-stores-button").on('click', function() {
+                            $(".chk").prop("checked",false);
+                            unCheckedCount = searchResultsCount;
+                            checkedCount = 0;
+                            $('.deselect-all-restricted-stores-button').hide();
+                            $('.separator').hide();
+                            $('.select-all-restricted-stores-button').show();
+                            $('.select_all_restricted_stores').css('white-space', '');
+                            $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                            $('.select-all-restricted-stores-button').css('margin-left','725px');
+                        });
+                        $(".chk").on('click', function() {
+                            if(this.checked != true) {
+                                unCheckedCount++;
+                                checkedCount--;
+                            } else {
+                                checkedCount++;
+                                unCheckedCount--;
+                            }
+                            if(checkedCount > 0 && unCheckedCount > 0){
+                                $('.separator').show();
+                                $('.select_all_restricted_stores').css('white-space','nowrap');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','0px');
+                                $('.select-all-restricted-stores-button').css('margin-left','632px');
+                                $('.deselect-all-restricted-stores-button').show();
+                                $('.select-all-restricted-stores-button').show();
+                            } else if(checkedCount == 0) {
+                                $('.deselect-all-restricted-stores-button').hide();
+                                $('.separator').hide();
+                                $('.select-all-restricted-stores-button').show();
+                                $('.select_all_restricted_stores').css('white-space', '');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                                $('.select-all-restricted-stores-button').css('margin-left','725px');
+                            } else if(unCheckedCount == 0) {
+                                $('.deselect-all-restricted-stores-button').show();
+                                $('.separator').hide();
+                                $('.select-all-restricted-stores-button').hide();
+                                $('.select_all_restricted_stores').css('white-space', '');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                                $('.select-all-restricted-stores-button').css('margin-left','725px');
+                            }
+                        });
+                        $(".show-details-button").on('click', function() {
+                            $(this).parents('.box-container').find(".center-details-main").show();
+                            $(this).parents('.box-container').find(".hide-details-button").show();
+                            $(this).parents('.box-container').find(".show-details-button").hide();
+                        });
+
+                        $(".hide-details-button").on('click', function() {
+                            $(this).parents('.box-container').find(".show-details-button").show();
+                            $(this).parents('.box-container').find(".center-details-main").hide();
+                            $(this).parents('.box-container').find(".hide-details-button").hide();
+                        });
+                    }
+                });                
+                } else if($('.zipcoderistricted').val().length == 5){
+                    var postalCode = $(".zipcoderistricted").val();
+                    console.log(postalCode);
+                    var linkUrl = "<?php echo $url ?>";
+                    var html = "";
+                    var queryArr = [];
+
+                    var geocoder = new google.maps.Geocoder();
+                    geocoder.geocode({ 'address': $(".zipcoderistricted").val() }, function (results, status) {
+                            if (status == google.maps.GeocoderStatus.OK) {
+                                latdis = results[0].geometry.location.lat();
+                                lngdis = results[0].geometry.location.lng();
+                            } else {
+                                var errmsg = $('#errmsg');
+                                if (errmsg.length === 0) {
+                                    errmsg = $('<div id="errmsg"></div>');
+                                }
+                                errmsg.show();
+                                errmsg.text('Please provide correct postal code.');
+                                errmsg.insertAfter('.search-msg');
+                            }
+                    });
+
+                    $.ajax({
+                    url: linkUrl,
+                    showLoader: true,
+                    type: "POST",
+                    dataType: 'json',
+                    data: {
+                        zipcode: postalCode,
+                        isStoreSearchEnabled: false,
+                        is_restricted_product_location_toggle: 
+                                                        "<?= /* @noEscape */$isRestrictedProductionToggle?>",
+                        radius: "<?= /* @noEscape */$radius?>",
+                    },
+                    success: function (result) {
+                        if(result.status == 'error'){
+                            $('#errmsg').show();
+                            $('#errmsg').text('Please provide correct postal code.');
+                            $('#googleMap').hide();
+                            $('#restricted_stores').hide();
+                            return;
+                        }
+                        $('#errmsg').hide();
+                    <?php if ($isRestrictedProductionToggle): ?>
+                        $('#googleMap').hide();
+                     <?php else: ?>
+                        $('#googleMap').show();
+                    <?php endif;?>
+                        $('.select-all-restricted-stores-button').show();
+                        $('#restricted_stores').show();
+                        var searchResultsCount = result.locations.length;
+                        var checkedCount = 0;
+                        var unCheckedCount = searchResultsCount;
+                        var Maplocations = [];
+                        var isAllSelected = false;
+                        var isAllDeselected = false;
+                        <?php if ($isRestrictedProductionToggle): ?>
+                            for (var i = 0; i < result.locations.length; i++) {
+                                var name = (result.locations[i].locationName !== undefined) ? result.locations[i].locationName:'';
+                                var address1 = (result.locations[i].address.streetLines !== undefined) ? result.locations[i].address.streetLines[0]:'';
+                                var city = (result.locations[i].address.city !== undefined) ? result.locations[i].address.city:'';
+                                var stateOrProvinceCode = (result.locations[i].address.stateOrProvinceCode !== undefined) ? result.locations[i].address.stateOrProvinceCode:'';
+                                var postalCode = (result.locations[i].address.postalCode !== undefined) ? result.locations[i].address.postalCode:'';
+                                var licationid = (result.locations[i].officeLocationId !== undefined) ? result.locations[i].officeLocationId:'';
+                                var phone = (result.locations[i].phoneNumber !== undefined) ? result.locations[i].phoneNumber:'';
+                                var email = (result.locations[i].emailAddress !== undefined) ? result.locations[i].emailAddress:'';
+                                if(result.locations[i].geoCode !== undefined) {
+                                    var latitude = result.locations[i].geoCode.latitude;
+                                    var longitude = result.locations[i].geoCode.longitude;
+                                }
+                                var latlong = { lat: latitude, lng: longitude, title: name };
+
+                                Maplocations.push(latlong);
+
+                                const formatter = new Intl.NumberFormat('en-US', {
+                                    minimumFractionDigits: 2,
+                                    maximumFractionDigits: 2,
+                                });
+
+                                var R = 3958.8; // Radius of the Earth in miles
+                                var rlat1 = latdis * (Math.PI/180); // Convert degrees to radians
+                                var rlat2 = latitude * (Math.PI/180); // Convert degrees to radians
+                                var difflat = rlat2-rlat1; // Radian difference (latitudes)
+                                var difflon = (longitude-lngdis) * (Math.PI/180); // Radian difference (longitudes)
+
+                                var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+
+                                Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+                                var distance =  formatter.format(d) + ' mi' ;
+                                console.log(distance);
+
+                                if(name && city && stateOrProvinceCode && postalCode && licationid && phone && email) {
+                                    html += '<div id="list_container" class= "list_container">';
+                                    html += '<div class="box-container">';
+                                    html += '<label class="custom-radio-btn pick-up-button">';
+                                    html += '<span class="pickup-location-id" '+
+                                    'name="locationid" value="' + licationid +'" hidden>'+ licationid + '</span>';
+                                    html += '<input type="checkbox" name="options[]" class="chk" value="' + licationid + '"/>';
+                                    html += '<span class="radio-label_name"><span>' + name + '(' + licationid + ')</span></span>';
+                                    html += '<span class="distance-map">' + distance + '</span>';
+                                    html += '</label>';
+                                    html += '<div class="pickup-address">';
+                                    html += '<div>';
+                                    html += '<span class="fa fa-map-marker icon-grey"></span>';
+                                    html += '<span class="pickup-location-street">' + address1 + '</span>';
+                                    html += '<span>,&nbsp;</span>';
+                                    html += '<span class="pickup-location-city">' + city + '</span>';
+                                    html += '<span>,&nbsp;</span>';
+                                    html += '<span class="pickup-location-state">' + stateOrProvinceCode + '</span>';
+                                    html += '<span>,&nbsp;</span>';
+                                    html += '<span class="pickup-location-zipcode">' + postalCode + '</span>';
+                                    html += '</div>';
+                                    html += '</div>';
+                            
+                                    html += '<div class="show-details-container" style="display:block">';
+                                    html += '<div class="show-details-button" id="show-details-button-' + licationid + '" >';
+                                    html += 'SHOW DETAILS';
+                                    html += '<span class="fa fa-angle-down"></span>';
+                                    html += '</div>';
+                                    html += '</div>';
+
+                                    html += '<div class="center-details-main"'+
+                                        'id="center-details-main-' + licationid + '" style="display:none">';
+                                    html += '<div class="center-details">';
+                                    html += '<div>';
+                                    html += '<span class="fa fa-phone icon-grey"></span>';
+                                    html += '<span >' + phone + '</span>';
+                                    html += '</div>';
+                                    html += '<div>';
+                                    html += '<span class="fa fa-envelope-square icon-grey"></span>';
+                                    html += '<span >' + email + '</span>';
+                                    html += '</div>';
+                            
+                                    if(result.locations[i].operatingHours !== undefined) {
+                                        html += '<div>';
+                                        html += '<span class="fa fa-clock-o icon-grey"></span>';
+                                        html += '<span>Hours Of Operation</span>';
+                                        html += '</div>';
+                                        for (var j = 0; j < result.locations[i].operatingHours.length; j++) {
+                                            var date = result.locations[i].operatingHours[j].date; 
+                                            var day = result.locations[i].operatingHours[j].dayOfWeek;
+                                            var day = day.slice(0, 3);
+                                            var openTime = result.locations[i].operatingHours[j].openTime;
+                                            var closeTime = result.locations[i].operatingHours[j].closeTime;
+                                            var schedule = result.locations[i].operatingHours[j].closedFlag;
+                                            if(schedule === true) {
+                                                range = 'Closed';
+                                            } else {
+                                                range = convertTo12HourFormat(openTime) + ' - ' + convertTo12HourFormat(closeTime);
+                                            }
+
+                                            html += '<div class = "hours_of_opp">';
+                                            html += '<div class="shedule-container">';
+                                            html += '<div class="day" >' + day + '   </div>';
+                                            html += '<div class ="range-main">';
+                                            html += '<div class ="range">' + range + '</div>';
+                                            html += '</div>';
+                                            html += '</div>';
+                                            html += '</div>';
+                                        }
+                                    }
+
+                                    html += '<div class="hide-details-button" id= "hide-details-button" style="display:none">HIDE DETAILS';
+                                    html += '<span class="fa fa-angle-up"></span>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                } else {
+                                    --searchResultsCount;
+                                }
+                            }
+                            <?php else: ?>
+                            for (var i = 0; i < result.locations.length; i++) {
+                                    var name = result.locations[i].name;   
+                                    var address1 = result.locations[i].address.address1;
+                                    var city = result.locations[i].address.city;
+                                    var stateOrProvinceCode = result.locations[i].address.stateOrProvinceCode;
+                                    var postalCode = result.locations[i].address.postalCode;
+                                    var licationid = result.locations[i].Id;
+                                    var phone = result.locations[i].phone; 
+                                    var email = result.locations[i].email;
+                                    var latitude = result.locations[i].geoCode.latitude; 
+                                    var longitude = result.locations[i].geoCode.longitude; 
+                                    
+
+                                    var latlong = { lat: latitude, lng: longitude, title: name };
+
+                            Maplocations.push(latlong);
+
+                            const formatter = new Intl.NumberFormat('en-US', {
+                                minimumFractionDigits: 2,      
+                                maximumFractionDigits: 2,
+                            });
+
+                            var R = 3958.8; // Radius of the Earth in miles
+                            var rlat1 = latdis * (Math.PI/180); // Convert degrees to radians
+                            var rlat2 = latitude * (Math.PI/180); // Convert degrees to radians
+                            var difflat = rlat2-rlat1; // Radian difference (latitudes)
+                            var difflon = (longitude-lngdis) * (Math.PI/180); // Radian difference (longitudes)
+
+                            var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+
+                            Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+                            var distance =  formatter.format(d) + ' mi' ;
+                            console.log(distance);
+
+                            html += '<div id="list_container" class= "list_container">';
+                            html += '<div class="box-container">';
+                            html += '<label class="custom-radio-btn pick-up-button">';
+                            html += '<span class="pickup-location-id" '+
+                            'name="locationid" value="'+licationid +'" hidden>'+licationid + '</span>';
+                            html += '<input type="checkbox" name="options[]" class="chk" value="'+licationid +'"/>';
+                            html += '<span class="radio-label_name"><span>'+ name +'</span></span>';
+                            html += '<span class="distance-map">'+distance + '</span>';
+                            html += '</label>';
+                            html += '<div class="pickup-address">';
+                            html += '<div>';
+                            html += '<span class="fa fa-map-marker icon-grey"></span>';
+                            html += '<span class="pickup-location-street">'+address1 + '</span>';
+                            html += '<span>,&nbsp;</span>';
+                            html += '<span class="pickup-location-city">'+city + '</span>';
+                            html += '<span>,&nbsp;</span>';
+                            html += '<span class="pickup-location-state">'+stateOrProvinceCode + '</span>';
+                            html += '<span>,&nbsp;</span>';
+                            html += '<span class="pickup-location-zipcode">'+postalCode + '</span>';
+                            html += '</div>';
+                            html += '</div>';
+                    
+                            html += '<div class="show-details-container" style="display:block">'; 
+                            html += '<div class="show-details-button" id="show-details-button-'+licationid +'" >'; 
+                            html += 'SHOW DETAILS'; 
+                            html += '<span class="fa fa-angle-down"></span>'; 
+                            html += '</div>'; 
+                            html += '</div>'; 
+
+                            html += '<div class="center-details-main"'+
+                                 'id="center-details-main-'+licationid +'" style="display:none">';
+                            html += '<div class="center-details">';
+                            html += '<div>';
+                            html += '<span class="fa fa-phone icon-grey"></span>';
+                            html += '<span >'+phone + '</span>';
+                            html += '</div>';
+                            html += '<div>';
+                            html += '<span class="fa fa-envelope-square icon-grey"></span>';
+                            html += '<span >'+email + '</span>';
+                            html += '</div>';
+                            html += '<div>';
+                            html += '<span class="fa fa-clock-o icon-grey"></span>';
+                            html += '<span>Hours Of Operation</span>';
+                            html += '</div>';
+                           
+
+                            for (var j = 0; j < result.locations[i].hoursOfOperation.length; j++) {
+
+                                    var date = result.locations[i].hoursOfOperation[j].date; 
+                                    var day = result.locations[i].hoursOfOperation[j].day;
+                                    var day = day.slice(0, 3);
+                                    var schedule = result.locations[i].hoursOfOperation[j].schedule;
+                                    var openTime = result.locations[i].hoursOfOperation[j].openTime;
+                                    var closeTime = result.locations[i].hoursOfOperation[j].closeTime;
+                                    if(schedule === 'Closed'){
+                                        range = 'Closed';
+                                    }else{
+                                        range = openTime +' - '+ closeTime;
+                                    }
+                                    
+                                    html += '<div class = "hours_of_opp">';
+                                    html += '<div class="shedule-container">';
+                                    html += '<div class="day" >'+day+'   </div>';
+                                    html += '<div class ="range-main">';
+                                    html += '<div class ="range">'+range+'</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                            }
+
+                                    html += '<div class="hide-details-button" id= "hide-details-button" '+
+                                    'style="display:none">HIDE DETAILS';
+                                    html += '<span class="fa fa-angle-up"></span>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                                    html += '</div>';
+                        }
+                        <?php endif; ?>
+                        const uluru = {lat: parseFloat(Maplocations[0].lat), lng: parseFloat(Maplocations[0].lng)};
+                        // The map, centered at Uluru
+                        const map = new google.maps.Map(document.getElementById("googleMap"), {
+                            zoom: 10,
+                            center: uluru,
+                        });
+                        Maplocations.forEach(function (location, index) {
+                                let marker = new google.maps.Marker({
+                                    position: {'lat':parseFloat(location.lat),'lng':parseFloat(location.lng)},
+                                    map: map,
+                                    title:location.title
+                                });
+                                var infowindow = new google.maps.InfoWindow;
+                                infowindow.setContent(location.title);
+                                marker.addListener("hover", () => {
+                                infowindow.open({
+                                anchor: marker,
+                                map,
+                                shouldFocus: false,
+                                });
+                            });
+
+                            });
+
+                        $( "#restricted_stores" ).html(html);
+                        $(".select-all-restricted-stores-button").on('click', function() {
+                            $(".chk").prop("checked",true);
+                            checkedCount = searchResultsCount;
+                            unCheckedCount = 0;
+                            $('.deselect-all-restricted-stores-button').show();
+                            $('.separator').hide();
+                            $('.select-all-restricted-stores-button').hide();
+                            $('.select_all_restricted_stores').css('white-space', '');
+                            $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                            $('.select-all-restricted-stores-button').css('margin-left','725px');
+                        });
+                        $(".deselect-all-restricted-stores-button").on('click', function() {
+                            $(".chk").prop("checked",false);
+                            unCheckedCount = searchResultsCount;
+                            checkedCount = 0;
+                            $('.deselect-all-restricted-stores-button').hide();
+                            $('.separator').hide();
+                            $('.select-all-restricted-stores-button').show();
+                            $('.select_all_restricted_stores').css('white-space', '');
+                            $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                            $('.select-all-restricted-stores-button').css('margin-left','725px');
+                        });
+                        $(".chk").on('click', function() {
+                            if(this.checked != true) {
+                                unCheckedCount++;
+                                checkedCount--;
+                            } else {
+                                checkedCount++;
+                                unCheckedCount--;
+                            }
+                            if(checkedCount > 0 && unCheckedCount > 0) {
+                                $('.separator').show();
+                                $('.select_all_restricted_stores').css('white-space','nowrap');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','0px');
+                                $('.select-all-restricted-stores-button').css('margin-left','632px');
+                                $('.deselect-all-restricted-stores-button').show();
+                                $('.select-all-restricted-stores-button').show();
+                            } else if(checkedCount == 0) {
+                                $('.deselect-all-restricted-stores-button').hide();
+                                $('.separator').hide();
+                                $('.select-all-restricted-stores-button').show();
+                                $('.select_all_restricted_stores').css('white-space', '');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                                $('.select-all-restricted-stores-button').css('margin-left','725px');
+                            } else if(unCheckedCount == 0) {
+                                $('.deselect-all-restricted-stores-button').show();
+                                $('.separator').hide();
+                                $('.select-all-restricted-stores-button').hide();
+                                $('.select_all_restricted_stores').css('white-space', '');
+                                $('.deselect-all-restricted-stores-button').css('margin-left','712px');
+                                $('.select-all-restricted-stores-button').css('margin-left','725px');
+                            }
+                        });
+                        $(".show-details-button").on('click', function() {
+                            $(this).parents('.box-container').find(".center-details-main").show();
+                            $(this).parents('.box-container').find(".hide-details-button").show();
+                            $(this).parents('.box-container').find(".show-details-button").hide();
+                        });
+
+                        $(".hide-details-button").on('click', function() {
+                            $(this).parents('.box-container').find(".show-details-button").show();
+                            $(this).parents('.box-container').find(".center-details-main").hide();
+                            $(this).parents('.box-container').find(".hide-details-button").hide();
+                        });
+                    }
+                });                
+                }
+            });            
+        }
+    );
+    function convertTo12HourFormat(time) {
+        var parts = time.split(":");
+        var hours = parseInt(parts[0]);
+        var minutes = parseInt(parts[1]);
+        var ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        return hours + ':' + minutes + ' ' + ampm;
+    }
+</script>

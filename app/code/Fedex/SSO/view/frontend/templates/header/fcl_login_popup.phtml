@@ -1,0 +1,75 @@
+<?php
+
+/**@var Fedex\SSO\ViewModel\SsoConfiguration $fclLogin*/
+$fclLogin = $block->getData('fcl_login');
+$bidQuote = $fclLogin->isBidQuoteParamSet();
+$quoteId = $fclLogin->isFuseBidToggleEnabled();
+?>
+<div id="login-register-popup" data-mage-init='{"fcl-login-modal":{"target": "#login-register-popup"}}'
+     class="pod-upload-warning login-top-popup" style="display: none;">
+    <div class="modal-body-content">
+        <h3 class="note-heading">
+            <?= $escaper->escapeHtml(__($fclLogin->getLoginPopupConfig('login_popup_message_heading'))) ?>
+        </h3>
+        <p class="note-description">
+            <?= $escaper->escapeHtml(__($fclLogin->getLoginPopupConfig('login_popup_message'))) ?>
+        </p>
+        <div class="row-1">
+            <div class="btn-container-left">
+                <?php
+                    $redirectUrl = $fclLogin->getCurrentUrl();
+                    $currentPath = $fclLogin->getCurrentUrlPath($redirectUrl);
+                    $registerAdminURL = $fclLogin->getGeneralConfig('register_url');
+                    $registerAdminQueryParam = $fclLogin->getGeneralConfig('register_url_param');
+                    $registerURL = $registerAdminURL.$registerAdminQueryParam .$currentPath;
+                    $createUserButtonText = $fclLogin->getLoginPopupConfig('create_user_button_text');
+                    $homeUrl = $fclLogin->getHomeUrl();
+
+                    $orderSuccessUrl = $fclLogin->getOrderSuccessUrl();
+                    $homeUrl = $fclLogin->getHomeUrl();
+                    if ($redirectUrl == $orderSuccessUrl) {
+                        $redirectUrl = $homeUrl;
+                    }
+                    
+                    $finalRedirectUrl = $fclLogin->getCurrentUrl();
+                    if ($finalRedirectUrl == $orderSuccessUrl) {
+                        $finalRedirectUrl = $homeUrl;
+                    }
+                    $registerURL = $registerAdminURL.$registerAdminQueryParam. '/oauth/index/index/rc/'.base64_encode($finalRedirectUrl);
+                    $redirectUrl = $homeUrl . 'oauth/index/index/rc/'.base64_encode($finalRedirectUrl);
+                ?>
+                <a href="<?= $block->escapeHtmlAttr($registerURL); ?>"
+                    class="btn-popup-create-user">
+                    <span class="span-popup-create-user">
+                        <?= $escaper->escapeHtml(__($createUserButtonText)) ?>
+                    <span>
+                </a>
+            </div>
+            <div class="btn-container-right">
+                <?php
+                    $loginButtonText = $fclLogin->getLoginPopupConfig('login_button_text');
+                    $wlgnLoginPageUrl = $fclLogin->getGeneralConfig('wlgn_login_page_url');
+                    $queryParameter = $fclLogin->getGeneralConfig('query_parameter');
+                    $registerLoginUrl = $wlgnLoginPageUrl.'?'.$queryParameter.'='.$redirectUrl;
+                    if ($fclLogin->getLoginMockToggle()) {
+                        $registerLoginUrl = $this->getUrl('selfreg/landing/mock');
+                    }
+                ?>
+                <a href="<?= $block->escapeHtmlAttr($registerLoginUrl); ?>"
+                class="btn-popup-login">
+                    <span class="span-popup-login">
+                        <?= $block->escapeHtmlAttr($escaper->escapeHtml(__($loginButtonText))) ?>
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<?php if ($fclLogin->isFuseBidToggleEnabled() && !empty($bidQuote) && !$fclLogin->isFclCustomer()): ?>
+    <script>
+        require(['triggerLoginPopupBid'],
+            function(triggerLoginPopupBid){}
+        );
+        window.isBid = "<?= /* @noEscape */ $bidQuote ?>"
+    </script>
+<?php endif; ?>

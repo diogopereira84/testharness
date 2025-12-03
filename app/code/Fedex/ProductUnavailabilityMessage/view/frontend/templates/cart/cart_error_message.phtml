@@ -1,0 +1,18 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+
+/** @var Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability $productUnavailableModel */
+$productUnavailableModel = $block->getData('product_availability_view_model');
+
+ if($productUnavailableModel->isE441563ToggleEnabled() &&
+    $productUnavailableModel->checkCartHaveUnavailbleProduct()):?>
+    <div class="message-block message-error d-flex mt-25 cart-error-message-header">
+        <div class="icon d-flex d-no-shrink v-center">
+            <img alt="Error icon" class="img-auto" src="<?php echo $this->getViewFileUrl('images/error-white.svg');?>">
+        </div>
+        <div class="message-text">
+            <h3 class="message-title cl-error fs-14 lh-24 m-0 fedex-bold weight-700"><?php echo $productUnavailableModel->getProductPDPErrorMessageTitle();?></h3>
+            <p class="fs-14 lh-21 m-0"><?php echo $productUnavailableModel->getProductPDPErrorMessage();?> </p>
+        </div>
+    </div>
+<?php endif;?>

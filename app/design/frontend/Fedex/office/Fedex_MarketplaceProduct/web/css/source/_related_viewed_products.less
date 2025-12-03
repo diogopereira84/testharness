@@ -1,0 +1,132 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    .catalog-product-view {
+        .products-carousel {
+            .block.related,
+            .block-viewed-products-grid {
+                margin: auto;
+                max-width: 1344px;
+                .product-item-details {
+                    .price-unit_cost {
+                        span.price {
+                            font-family: 'Fedex Sans Bold';
+                        }
+                    }
+                }
+            }
+            .block-title {
+                text-align: center;
+                text-transform: lowercase;
+                margin-bottom: 24px;
+                &:first-letter {
+                    text-transform: uppercase;
+                }
+                strong {
+                    font-family: 'FedEx Sans Light';
+                    font-size: 32px;
+                    font-weight: 300;
+                    line-height: 40px;
+                }
+            }
+            .block-actions,
+            .choice,
+            .slick-arrow.slick-disabled {
+                display: none !important;
+            }
+            .product-items {
+                margin-bottom: 65px;
+            }
+
+            .product-item {
+                margin: 0 !important;
+                .product-item-info {
+                    border-width: 0;
+                    box-shadow: none;
+                    font-size: 16px;
+                    margin: 0 auto;
+                    padding: 0;
+                    position: static;
+                    width: 100%;
+                    max-width: 340px;
+                    z-index: auto;
+
+                    .all-unset .product-item-photo{
+                        padding-top: 0;
+                    }
+
+                    .product-item-photo {
+                        display: block;
+                        line-height: 0;
+                    }
+                    .product-item-name {
+                        font-size: 20px;
+                        line-height: 32px;
+                        margin: 20px 0 0;
+                        a {
+                            color: @fx-grey-1200;
+                        }
+                    }
+                    .price-container.show-each {
+                      &::after {
+                        content: ' each';
+                      }
+                      .price {
+                        font-family: 'FedEx Sans Bold';
+                      }
+                    }
+                    .price-box {
+                        font-family: "FedEx Sans Light";
+                        margin: 0;
+                        &:before {
+                            content: 'Starting at';
+                        }
+                    }
+                    .price {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+        .recent-products-area {
+            .product-item {
+                .product-item-info {
+                    .price-box {
+                        margin-top: 8px;
+                    }
+                    .price-wrapper {
+                        display: inline;
+                        .unit-cost {
+                            font-family: 'FedEx Sans Bold';
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .page-layout-commercial-product-full-width {
+        .products-carousel {
+            .product-item {
+                .product-item-name {
+                    font-family: 'FedEx Sans Bold';
+                }
+            }
+        }
+    }
+}
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+.media-width(@extremum, @break) when (@extremum ='max') and (@break = @screen__m) {
+    .catalog-product-view {
+        .products-carousel {
+            .product-items {
+                .slick-slide {
+                    padding: 0 10px;
+                }
+            }
+        }
+    }
+}

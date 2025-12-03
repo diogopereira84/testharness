@@ -1,0 +1,121 @@
+<?php
+/**
+ * @var \Fedex\Email\Block\Order\Email\Items $block
+ */
+?>
+<?php $shipmentItemFormatted = $block->getShipmentItemsFormatted();
+ $shipmentItem = $shipmentItemFormatted['1p'];
+ $totalItems = 0;
+ $totalDetails = $this->getTotalDetails();
+ $isExpectedDeliveryDateEnabled = $block->isExpectedDeliveryDateEnabled();
+?>
+<table class="email-items" cellpadding="0" cellspacing="0" border="0">
+<tr>
+    <td>
+    <?php if (count($shipmentItem) > 0): ?>
+    <table class="email-items fedEx-office-items" width="100%">
+        <thead>
+            <tr>
+                <th class="item-info" style="background-color: #F2F2F2; vertical-align: middle">
+                    <div class="container" style="display: flex; align-items: center">
+                        <?php
+                        $firstIndex = array_keys($shipmentItem);
+                        if (isset($shipmentItem[reset($firstIndex)]['shipping_label']) &&
+                            isset($shipmentItem[reset($firstIndex)]['shipping_total'])): ?>
+                            <img class="icon pickup" style="margin-right: 8px;" alt="Delivery Icon Icon" width="32px"
+                                 height="32px"
+                                 src="<?= $block->getViewFileUrl('Fedex_MarketplaceCheckout::images/icons/delivery-gray.png') ?>"/>
+                        <?php else: ?>
+                            <img class="icon pickup" style="margin-right: 8px;" alt="Pickup Icon" width="32px"
+                                 height="32px"
+                                 src="<?= $block->getViewFileUrl('Fedex_MarketplaceCheckout::images/icons/store-gray.png') ?>"/>
+                        <?php endif; ?>
+                        <span>
+                            <?= $block->escapeHtml(__('FedEx Office (%1 %2)', count($shipmentItem), count($shipmentItem) > 1? 'items':'item')) ?>
+                        </span>
+                    </div>
+                </th>
+                <th class="item-qty" style="background-color: #F2F2F2; vertical-align: middle; text-align: right">
+                    <?= $block->escapeHtml(__('Qty')) ?>
+                </th>
+                <th class="item-price" style="background-color: #F2F2F2; vertical-align: middle; padding-right: 10px;">
+                    <?= $block->escapeHtml(__('Price')) ?>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($shipmentItem as $item) : ?>
+                <tr class="item">
+                    <td class="item-info" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; padding: 10px; border-top: 1px solid #ccc;">
+                        <p class="product-name" style="margin-top: 0; font-weight: 400; margin-bottom: 5px;"><?php echo $item['name']; ?></p>
+                    </td>
+                    <td class="item-qty" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; padding: 10px; border-top: 1px solid #ccc; text-align: right;"><?php echo (int) $item['qty'] ?></td>
+                    <td class="item-price" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; padding: 10px; border-top: 1px solid #ccc; text-align: right;">
+                        <span class="price"><?php echo $block->formattedCurrencyValue($item['row_total']) ?></span>
+                    </td>
+                </tr>
+            <?php $totalItems++; endforeach; ?>
+            <?php if (isset($item['shipping_label']) && isset($item['shipping_total'])): ?>
+                <tr class="item">
+                    <td class="item-info" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; padding: 10px; border-top: 1px solid #ccc;" colspan="2">
+                        <p class="product-name" style="margin-top: 0; font-weight: normal; margin-bottom: 5px;">
+                            <strong><?= __("Shipping Method:") ?></strong> <?= $this->formatShippingMethodName($item['shipping_label']); ?><sup>®</sup>
+                        </p>
+                    </td>
+                    <td class="item-price" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; padding: 10px; border-top: 1px solid #ccc; text-align: right;">
+                        <span class="price"><?php echo $block->formattedCurrencyValue($item['shipping_total']) ?></span>
+                    </td>
+                </tr>
+                <?php if ($isExpectedDeliveryDateEnabled && isset($item['shipping_expected_delivery_date']) && $item['shipping_expected_delivery_date']): ?>
+                    <tr class="item">
+                        <td class="item-info" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; font-size: 14px; line-height:24px; font-weight: 400; padding: 13px 10px; border-top: 1px solid #ccc;" colspan="3">
+                            <p class="product-name" style="margin-top: 0; margin-bottom: 5px;">
+                                <strong><?= __("Expected Delivery:") ?></strong> <?= $item['shipping_expected_delivery_date']; ?>
+                            </p>
+                        </td>
+                    </tr>
+                <?php endif; ?>
+            <?php endif; ?>
+        </tbody>
+        <tfoot class="order-totals">
+        <tr class="subtotal">
+            <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  font-weight: 400; padding: 10px; text-align: right;border-top: 1px solid #ccc;"><?= __("Items (%1)", $totalItems) ?></th>
+            <td data-th="Subtotal" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  padding: 10px; text-align: right;border-top: 1px solid #ccc;">
+                <span class="price" style="white-space: nowrap;"><?php echo $block->formattedCurrencyValue($totalDetails['sub_total']); ?></span></td>
+        </tr>
+        <?php if ($totalDetails['shipping'] > 0): ?>
+            <tr class="subtotal">
+                <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  font-weight: 400; padding: 10px; text-align: right;"><?= __("Shipping") ?></th>
+                <td data-th="Subtotal" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  padding: 10px; text-align: right;">
+                    <span class="price" style="white-space: nowrap;"><?php echo $block->formattedCurrencyValue($totalDetails['shipping']); ?></span></td>
+            </tr>
+        <?php endif; ?>
+        <tr class="discount">
+            <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; background-color: #f2f2f2; font-weight: 700; padding: 10px; text-align: right;">Total Discount</th>
+            <td data-th="Shipping &amp; Handling" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; background-color: #f2f2f2; padding: 10px; text-align: right;"><span class="price" style="white-space: nowrap; font-weight: 700">-<?php echo $block->formattedCurrencyValue($totalDetails['discount']); ?></span></td>
+        </tr>
+        <?php foreach($totalDetails['discounts'] as $discount): ?>
+            <?php if ($discount['price'] > 0): ?>
+            <tr class="discount">
+                <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; background-color: #f2f2f2; font-weight: 400; padding: 10px; text-align: right;"><?= $discount['label'] ?></th>
+                <td data-th="Discount" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top; background-color: #f2f2f2; padding: 10px; text-align: right;"><span class="price" style="white-space: nowrap; font-weight: 400">-<?= $block->formattedCurrencyValue($discount['price']); ?></span></td>
+            </tr>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        <tr class="tax">
+            <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  font-weight: 400; padding: 10px; text-align: right;">Tax</th>
+            <td data-th="Tax" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  padding: 10px; text-align: right;"><span class="price" style="white-space: nowrap;"><?php echo $block->formattedCurrencyValue($totalDetails['tax']); ?></span></td>
+        </tr>
+        <tr class="grand_total">
+            <th colspan="2" scope="row" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  font-weight: 400; padding: 10px; text-align: right;">Total</th>
+            <td data-th="Grand Total" style="font-family: &quot;Open Sans&quot;,&quot;Helvetica Neue&quot;,Helvetica,Arial,sans-serif; vertical-align: top;  padding: 10px; text-align: right;">
+                <span class="price" style="white-space: nowrap;"><?php echo $block->formattedCurrencyValue($totalDetails['total']); ?></span>
+            </td>
+        </tr>
+        </tfoot>
+
+    </table>
+    <?php endif; ?>
+    </td>
+</tr>
+</table>

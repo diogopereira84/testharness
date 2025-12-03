@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+	/**
+	* Copyright © FedEx, Inc. All rights reserved.
+	* See COPYING.txt for license details.
+	*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Fedex\EnhancedProfile\Api\ProfileMockServiceInterface" type="Fedex\EnhancedProfile\Model\ProfileMockService"/>
+	<type name="Magento\Customer\Controller\Account\Index">
+        <plugin name="customer_account_plugin" type="Fedex\EnhancedProfile\Plugin\CustomerAccountPlugin" />
+    </type>
+    <type name="Magento\Checkout\Block\Checkout\LayoutProcessor">
+        <plugin name="fedex_enhancedprofile_layout_processor_plugin" type="Fedex\EnhancedProfile\Plugin\Checkout\LayoutProcessorPlugin"/>
+    </type>
+</config>

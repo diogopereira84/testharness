@@ -1,0 +1,23 @@
+<?php
+
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $block \Magento\Framework\View\Element\Template */
+/** @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+?>
+<?php if ($bundleProductHandler->isTigerE468338ToggleEnabled()): ?>
+    <tr class="bundle-warning">
+        <td colspan="5" class="pl-0 pr-0">
+            <div class="bundle-warning-container d-flex border-violet box-shadow-2 pt-12 pb-12 pl-10 pr-10">
+                <img src="<?= $block->getViewFileUrl('Fedex_ProductBundle::images/info-purple.svg'); ?>"
+                     alt="bundle warning icon">
+                <div class="d-flex flex-col lh-24 fs-14 pl-16">
+                    <strong class="fedex-bold weight-bold">Files needed for product bundle</strong>
+                    <span>Upload your files to each product in the bundle to proceed to checkout.
+                        <a onclick="return false" data-trigger="bundle-instructions" class="underline pointer">View Instructions</a>
+                    </span>
+                </div>
+            </div>
+        </td>
+    </tr>
+<?php endif; ?>

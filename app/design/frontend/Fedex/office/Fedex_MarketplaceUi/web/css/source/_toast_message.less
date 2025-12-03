@@ -1,0 +1,205 @@
+@successColor: @fx-green-100;
+@infoColor: #614185;
+@warningColor: #f9b201;
+@errorColor: @fx-red-100;
+@shadowColor: #dadada;
+
+& when (@media-common =true) {
+    .toast-messages {
+        z-index: 999;
+        max-width: 730px;
+
+        .messages {
+            margin-bottom: 30px;
+
+            .message {
+                background-color: @fx-white-100 !important;
+                border-style: solid;
+                border-width: 1px;
+                color: black;
+                display: flex;
+                padding: unset;
+                box-shadow: 5px 7px 7px @shadowColor;
+
+                .message-type-icon {
+                    position: relative;
+                    width: 40px;
+
+                    &::before {
+                        font-size: 1.1em;
+                        left: 50%;
+                        position: absolute;
+                        top: 50%;
+                        transform: translateX(-50%);
+                    }
+                }
+
+                &.success,
+                &.info,
+                &.warning,
+                &.error,
+                &.notice {
+                    &>*:first-child {
+                        &::before {
+                            content: '';
+                            background-image: unset;
+                        }
+                    }
+                }
+
+                &.success {
+                    border-color: @successColor;
+
+                    .message-type-icon {
+                        background-color: @successColor;
+
+                        &::before {
+                            border: 2px solid @fx-white-100;
+                            border-radius: 50%;
+                            color: @fx-white-100;
+                            content: '\e91a';
+                            font-family: 'FedEx Icons';
+                            font-size: 1.5em;
+                            width: ~'calc(100% - 15px)';
+                        }
+                    }
+                }
+
+                &.info {
+                    border-color: @infoColor;
+
+                    .message-type-icon {
+                        &::before {
+                            background-image: url('@{baseDir}images/information.png');
+                            background-position: center;
+                            background-repeat: no-repeat;
+                            background-size: contain;
+                            height: 25px;
+                            width: 25px;
+                        }
+                    }
+                }
+
+                &.warning,
+                &.notice {
+                    border-color: @warningColor;
+
+                    .message-type-icon {
+                        background-color: @warningColor;
+
+                        &::before {
+                            color: @fx-grey-1200;
+                            content: '\e972';
+                            font-family: 'FedEx Icons';
+                            font-size: 3em;
+                        }
+                    }
+                }
+
+                &.error {
+                    border-color: @errorColor;
+
+                    .message-type-icon {
+                        background-color: @errorColor;
+
+                        &::before {
+                            color: @fx-white-100;
+                            content: '!';
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 1.5em;
+                            width: ~'calc(100% - 15px)';
+                        }
+
+                        &::after {
+                            border-radius: 50%;
+                            border: 2px solid @fx-white-100;
+                            content: '';
+                            height: 25px;
+                            left: 50%;
+                            position: absolute;
+                            top: 50%;
+                            transform: translate(-50%, -58%);
+                            width: ~'calc(100% - 15px)';
+                        } 
+                    }
+                }
+
+                .message-content {
+                    padding: 12px 16px;
+                    width: ~'calc(100% - 100px)';
+
+                    p {
+                        margin-bottom: unset;
+
+                        b {
+                            color: @fx-grey-1200;
+                            font-size: 1.1em;
+                            letter-spacing: 0;
+                            line-height: 24px;
+                        }
+                    }
+
+                    div {
+                        color: @fx-grey-1200;
+                        font-size: 1.1em;
+                        letter-spacing: 0;
+                        line-height: 24px;
+                    }
+                }
+
+                .close-message {
+                    position: relative;
+                    width: 40px;
+
+                    &::before {
+                        content: '\e91c';
+                        cursor: pointer;
+                        font-family: 'FedEx Icons';
+                        font-size: 1.9em;
+                        left: 50%;
+                        position: absolute;
+                        transform: translateX(-50%);
+                    }
+                }
+            }
+        }
+    }
+}
+
+//
+//  Mobile (style-m.css)
+//  _____________________________________________
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    .toast-messages {
+        position: relative;
+    }
+}
+//
+//  Tablet Only
+//  _____________________________________________
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: @screen__m) and (max-width: (@screen__l - 1)) {
+        // styles for breakpoint >= 768px and < 1024px
+        .toast-messages {
+            .messages {
+                margin: 0;
+            }
+        }
+        .account.is-fcl-global.sales-order-view .column.main {
+            margin-top: 30px;
+        }
+    }
+}
+
+//  Tablet and desktop, @screen__m: 769px (styles-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+    .toast-messages {
+        left: 50%;
+        min-width: 730px;
+        position: absolute;
+        transform: translateX(-50%);
+        top: 250px;
+    }
+}

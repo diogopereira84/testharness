@@ -1,0 +1,149 @@
+# This file describes an application. You can have multiple applications
+# in the same project.
+
+# The name of this app. Must be unique within a project.
+name: mymagento
+
+# The toolstack used to build the application.
+type: php:8.2
+build:
+    flavor: none
+
+dependencies:
+    php:
+        composer/composer: '2.7.7'
+# Enable extensions required by Magento 2
+runtime:
+    extensions:
+        - xsl
+        - newrelic
+        - sodium
+        - imagick
+        - intl
+        - xdebug
+
+# The relationships of the application with services or other applications.
+# The left-hand side is the name of the relationship as it will be exposed
+# to the application in the environment variable. The right-hand
+# side is in the form `<service name>:<endpoint name>`.
+relationships:
+    database: "mysql:mysql"
+    redis: "redis:redis"
+    redis-session: "redis-session:redis"
+    opensearch: "opensearch:opensearch"
+    rabbitmq: "rabbitmq:rabbitmq"
+# The configuration of app when it is exposed to the web.
+web:
+    locations:
+        "/":
+            # The public directory of the app, relative to its root.
+            root: "pub"
+            # The front-controller script to send non-static requests to.
+            passthru: "/index.php"
+            index:
+                - index.php
+            expires: -1
+            scripts: true
+            allow: false
+            rules:
+                \.(css|js|map|hbs|gif|jpe?g|png|tiff|wbmp|ico|jng|bmp|svgz|midi?|mp?ga|mp2|mp3|m4a|ra|weba|3gpp?|mp4|mpe?g|mpe|ogv|mov|webm|flv|mng|asx|asf|wmv|avi|ogx|swf|jar|ttf|eot|woff|otf|html?)$:
+                    allow: true
+                ^/sitemap(.*)\.xml$:
+                    passthru: "/media/sitemap$1.xml"
+        "/media":
+            root: "pub/media"
+            allow: true
+            scripts: false
+            expires: 1y
+            passthru: "/get.php"
+        "/static":
+            root: "pub/static"
+            allow: true
+            scripts: false
+            expires: 1y
+            passthru: "/front-static.php"
+            rules:
+                ^/static/version\d+/(?<resource>.*)$:
+                    passthru: "/static/$resource"
+        "/favicon.ico":
+            root: "pub"
+            allow: true
+            expires: 1y
+            scripts: false
+        "/apple-touch-icon.png":
+            root: "pub/media/favicon"
+            allow: true
+            expires: 1y
+            scripts: false
+
+# The size of the persistent disk of the application (in MB).
+disk: 4096
+
+# The mounts that will be performed when the package is deployed.
+mounts:
+    "var": "shared:files/var"
+    "app/etc": "shared:files/etc"
+    "pub/media": "shared:files/media"
+    "pub/static": "shared:files/static"
+
+hooks:
+    # We run build hooks before your application has been packaged.
+    build: |
+        set -e
+        composer --no-ansi --no-interaction install --no-progress --prefer-dist --optimize-autoloader
+        php ./vendor/bin/ece-tools run scenario/build/generate.xml
+        php ./vendor/bin/ece-tools run scenario/build/transfer.xml
+    # We run deploy hook after your application has been deployed and started.
+    deploy: |
+        php ./vendor/bin/ece-tools run scenario/deploy.xml
+    # We run post deploy hook to clean and warm the cache. Available with ECE-Tools 2002.0.10.
+    post_deploy: |
+        php ./vendor/bin/ece-tools run scenario/post-deploy.xml
+        php bin/magento fedex:newrelic:create-deployment-marker
+
+# Default Magento 2 cron jobs
+# Comment added to redeploy 13Mar2025
+crons:
+    cronrun:
+        spec: "* * * * *"
+        cmd: "php bin/magento cron:run"
+    diskcleanup:
+        # Removes files older than 30 days
+        spec: "0 4 * * *"
+        cmd: "find var/report/ -mtime +30 -exec rm {} +"
+    mirakloffer:
+      # Sync offers every 10 minutes
+        spec: "0 */12 * * *"
+        cmd: "php bin/magento mirakl:sync --run OF51 >> var/log/magento.cron.log&"
+    m2miraklproduct:
+      # Sync Product updates to Mirakl every hour, this will only sync 3P products
+        spec: "0 * * * *"
+        cmd: "php bin/magento mirakl:sync --run CM21 >> var/log/magento.cron.log&"
+    miraklm2product:
+      # Sync Mirakl products to Magento every 30 minutes
+        spec: "0/30 * * * *"
+        cmd: "php bin/magento mirakl:mcm:product:import >> var/log/magento.cron.log&"
+  #  miraklm2image:
+      # Sync product images into Magento every 30 minutes
+  #      spec: "0/30 * * * *"
+  #      cmd: "php bin/magento mirakl:mci:product-import-images >> var/log/magento.cron.log&"
+    miraklprocesscleanup:
+      # Processes and their associated files older than 90 days are deleted automatically
+      # from your server every day at midnight, configurable in the admin
+        spec: "0 0 * * *"
+        cmd: "php bin/magento mirakl:process:clear-history >> var/log/magento.cron.log&"
+    mirakleventscleanup:
+      # Events older than 90 days are deleted automatically from your server every day at midnight
+      # Configurable in the admin
+        spec: "0 0 * * *"
+        cmd: "php bin/magento mirakl:event:clear-history >> var/log/magento.cron.log&"
+    miraklstatuscheck:
+      # Status checks are executed every 15 minutes
+        spec: "0/15 * * * *"
+        cmd: "php bin/magento mirakl:process:api >> var/log/magento.cron.log&"
+
+# Environment variables
+variables:
+    env:
+        CONFIG__DEFAULT__PAYPAL_ONBOARDING__MIDDLEMAN_DOMAIN: 'payment-broker.magento.com'
+        CONFIG__STORES__DEFAULT__PAYPAL__NOTATION_CODE: 'Magento_Enterprise_Cloud'

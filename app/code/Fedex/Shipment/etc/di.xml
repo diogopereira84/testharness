@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+	/**
+	* Copyright © Magento, Inc. All rights reserved.
+	* See COPYING.txt for license details.
+	*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Fedex\Shipment\Api\NewOrderUpdateInterface" type="Fedex\Shipment\Model\NewOrderUpdate" />
+	<preference for="Fedex\Shipment\Api\MessageInterface" type="Fedex\Shipment\Model\Message" />
+	<preference for="Fedex\Shipment\Api\SubscriberInterface" type="Fedex\Shipment\Model\Subscriber" />
+	<!-- Override controller of sent email to send confirmation email from order admin-->
+	<preference for="Magento\Sales\Controller\Adminhtml\Order\Email" type="Fedex\Shipment\Controller\Adminhtml\Order\Email" />
+
+	<type name="Magento\Catalog\Model\Product\Type\AbstractType">
+		<plugin name="json_serialization_fix" type="Fedex\Shipment\Plugin\JsonFix" sortOrder="1"/>
+	</type>
+    <preference for="Fedex\Shipment\Api\Data\SendOrderEmailMessageInterface"
+                type="Fedex\Shipment\Model\Data\SendOrderEmailMessage"/>
+    <preference for="Fedex\Shipment\Api\GetOrderByIncrementIdInterface"
+                type="Fedex\Shipment\Model\GetOrderByIncrementId"/>
+    <preference for="Fedex\Shipment\Api\DueDateLogRepositoryInterface"
+                type="Fedex\Shipment\Model\DueDateLogRepository"/>
+    <preference for="Fedex\Shipment\Api\ProducingAddressServiceInterface" type="Fedex\Shipment\Service\ProducingAddressService"/>
+</config>

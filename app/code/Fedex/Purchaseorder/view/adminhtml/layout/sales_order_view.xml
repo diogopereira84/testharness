@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_transactions_grid_block"/>
+    <head>
+        <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
+        <link src="Magento_Sales::js/bootstrap/order-post-action.js"/>
+    </head>
+    <update handle="sales_order_item_price"/>
+    <body>
+        <referenceBlock name="order_shipping_view">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Fedex_Purchaseorder::order/view/info.phtml</argument>
+            </action>   
+        </referenceBlock>
+        <referenceBlock name="order_totals">
+            <referenceBlock name="tax">
+                <action method="setTemplate">
+                    <argument name="template" xsi:type="string">Fedex_Purchaseorder::order/totals/tax.phtml</argument>
+                </action>   
+            </referenceBlock>
+        </referenceBlock>
+        <referenceBlock name="order_items">
+            <arguments>
+                <argument name="columns" xsi:type="array">
+                    <item name="ext_order_id" xsi:type="string" translate="true">GTN#</item>
+                </argument>
+            </arguments>
+            <referenceBlock name="default_order_items_renderer">
+                <arguments>
+                    <argument name="columns" xsi:type="array">
+                        <item name="ext_order_id" xsi:type="string" translate="true">ext_order_id</item>
+                    </argument>
+                </arguments>
+            </referenceBlock>
+             <block class="Magento\Sales\Block\Adminhtml\Items\Column\Name" name="column_name" template="Fedex_Purchaseorder::items/column/name.phtml" group="column"/>
+        </referenceBlock>
+    </body>
+</page>

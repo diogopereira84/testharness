@@ -1,0 +1,81 @@
+{
+    "shared_catalog": {
+        "column": {
+            "legacy_catalog_root_folder_id": true,
+            "category_id": true
+        }
+    },
+    "catalog_sync_queue": {
+        "column": {
+            "id": true,
+            "company_id": true,
+            "store_id": true,
+            "legacy_catalog_root_folder_id": true,
+            "shared_catalog_id": true,
+            "status": true,
+            "email_sent": true,
+            "created_by": true,
+            "email_id": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "catalog_sync_queue_process": {
+        "column": {
+            "id": true,
+            "catalog_sync_queue_id": true,
+            "shared_catalog_id": true,
+            "store_id": true,
+            "category_id": true,
+            "json_data": true,
+            "error_msg": true,
+            "status": true,
+            "catalog_type": true,
+            "action_type": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "CAT_SYNC_QUEUE_PROCESS_CAT_SYNC_QUEUE_ID_CAT_SYNC_QUEUE_ID": true
+        }
+    },
+    "catalog_sync_queue_cleanup_process": {
+        "column": {
+            "id": true,
+            "catalog_sync_queue_id": true,
+            "shared_catalog_id": true,
+            "category_id": true,
+            "json_data": true,
+            "product_id": true,
+            "sku": true,
+            "catalog_type": true,
+            "error_msg": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_D0998697480CFDB4CBA1E99D633B5CF9": true
+        }
+    },
+    "shared_catalog_sync_queue_configuration": {
+        "column": {
+            "id": true,
+            "shared_catalog_id": true,
+            "legacy_catalog_root_folder_id": true,
+            "category_id": true,
+            "status": true,
+            "created_at": true,
+            "updated_at": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "FK_093FF1B5D1FA21B1AA32BDCE926C9D3C": true
+        }
+    }
+}

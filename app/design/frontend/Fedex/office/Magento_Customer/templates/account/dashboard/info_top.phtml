@@ -1,0 +1,22 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * My Account Index Page -  Title and Description
+ */
+?>
+<?php
+    /** @var \Fedex\SSO\ViewModel\SsoConfiguration $fclLogin */
+    $fclLogin = $block->getData('fcl_login');
+?>
+<?= $block->getChildHtml('page_main_title'); ?>
+<div class="block block-dashboard-info-top">
+    <div class="my-profile">
+        <?php if ($fclLogin->isFclCustomer()): ?>
+            <div class="profile-redirect">
+                <p><?= $block->escapeHtml(__('You will be redirected to Fedex.com to update your information.')) ?></p>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="categoryConsumer" queue="categoryQueue" connection="amqp"
+ handler="Fedex\SharedCatalogCustomization\Model\Subscriber::processMessage"/>
+    <consumer name="productConsumer" queue="productQueue" connection="amqp"
+ handler="Fedex\SharedCatalogCustomization\Model\Subscriber::processMessage"/>
+    <consumer name="catalogCleanupConsumer" queue="catalogCleanupQueue" connection="amqp"
+ handler="Fedex\SharedCatalogCustomization\Model\CatalogCleanup::processMessage"/>
+    <consumer name="catalogEnableStoreConsumer" queue="catalogEnableStoreQueue" connection="amqp"
+ handler="Fedex\SharedCatalogCustomization\Model\CatalogEnableStoreSubscriber::processMessage"/>
+</config>

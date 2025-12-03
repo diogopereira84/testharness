@@ -1,0 +1,84 @@
+<!--@subject {{trans 'order shipment delivery'}} @-->
+<style>{{var template_styles|raw}}{{css file="Fedex_MarketplaceCheckout::css/email.css"}}</style>{{inlinecss file="Fedex_MarketplaceCheckout::css/email-inline.css"}}
+<table style='max-width: 612px; margin: auto' width='612'>
+    <tr class='email-intro'>
+        <td colspan='6'>
+            <p class='greeting'>{{trans 'Hi %customer_first_name  %customer_last_name,' customer_first_name=$customer_first_name customer_last_name=$customer_last_name}}</p>
+            {{if is_expected_delivery_enabled}}
+                <p>
+                    {{trans 'We're happy to confirm your order has been completed and shipped. For your reference, your tracking number for the shipped product is <a style="text-decoration: underline" href='%tracking_url%tracking_number'>%tracking_number</a>.' tracking_number=$tracking_number tracking_url=$tracking_url |raw}}
+                </p>
+            {{/if}}
+            {{if producingstore_phonenumber_display}}
+                <p>
+                    {{trans 'We're happy to confirm that part of your order has been shipped based on your instructions. For your reference, the tracking number for this shipment of your order is <a href='%tracking_url%tracking_number'>%tracking_number</a>.' tracking_number=$tracking_number tracking_url=$tracking_url |raw}}
+                </p>
+                <p>
+                    {{trans 'If you have any questions concerning your order, please contact a team member at '}}
+                    {{trans '<a style="color: #333;" href='tel:%producingstore_phonenumber'>%producingstore_phonenumber</a> as soon as possible.' producingstore_phonenumber=$producingstore_phonenumber |raw}}
+                </p>
+            {{/if}}
+            {{if producingstore_regular_number_display}}
+                <p>
+                    {{trans 'We're happy to confirm that part of your order has been shipped based on your instructions. For your reference, the tracking number for this shipment of your order is <a href='%tracking_url%tracking_number'>%tracking_number</a>.' tracking_number=$tracking_number tracking_url=$tracking_url |raw}}
+                </p>
+                <p>
+                    {{trans 'If you have any questions concerning your order, please contact a team member at '}}
+                    {{trans ' %phone_number_one' phone_number_one='1.800.GoFedEx' |raw}}
+                    {{trans ' or <a style="color: #333;" href='tel:%phone_number_two'>%phone_number_two</a> as soon as possible.' phone_number_two='1.800.463.3339' |raw}}
+                </p>
+            {{/if}}
+            <p>
+                {{trans 'Thank you for choosing FedEx Office. We look forward to working with you again soon!'}}
+            </p>
+            {{if show_track_status_cta}}
+                {{trans '<a href="%tracking_url%tracking_number" style="text-decoration: none;width: 202px;display: block;text-align: center;background-color: #ff6200;color: #FFFFFF;border: 1px solid #ff6200;font-size: 19px;font-weight: bold;height: 54px;text-transform: uppercase;line-height: 24px;letter-spacing: 1.5px;margin-bottom: 40px;margin-top: 20px;cursor: pointer;"><span style="line-height: 54px">Track Status</span></a>' tracking_number=$tracking_number tracking_url=$tracking_url |raw}}
+            {{/if}}
+            {{if not is_expected_delivery_enabled}}
+                <p class='multiple-shipments warning'  style="display: flex;align-items: center; border: 1px solid  #4D148C;box-shadow: 0px 2px 4px 0px rgba(51, 51, 51, 0.30);">
+                    <img src='{{view url="images/info-purple.png"}}' height='40' width='40'
+                        alt='{{trans 'Info icon'}}' />
+                    <span style="display: inline-block;padding: 16px;font-size: 16px;font-style: normal;font-weight: 700; line-height: 24px;">{{trans '*Some of your items have been separated into multiple shipments.'}}</span>
+                </p>
+            {{/if}}
+        </td>
+    </tr>
+    <tr class='email-information'>
+        <td colspan='6'>
+            <table class='order-summary'>
+                <tr >
+                    <td style="padding-bottom: 24px">
+                        <h1>{{trans 'ORDER SUMMARY'}}</h1>
+                        <p>{{trans 'Order Number:' }}
+                            {{trans '<a href='%account_url?gtns=%increment_id'>' increment_id=$gtn  account_url=$this.getUrl($store,'track/',[_nosid:1]) |raw}}
+                                {{trans '%increment_id</a>' increment_id=$gtn |raw}}
+                        </p>
+                        <p>{{trans 'Click your order number for more information.'}}</p>
+                        {{if is_expected_delivery_enabled}}
+                            <p class='multiple-shipments warning'  style="display: flex;align-items: center; border: 1px solid  #4D148C;box-shadow: 0px 2px 4px 0px rgba(51, 51, 51, 0.30);">
+                                <img src='{{view url="images/info-purple.png"}}' height='40' width='40'
+                                    alt='{{trans 'Info icon'}}' />
+                                <span style="display: inline-block;padding: 16px;font-size: 16px;font-style: normal;font-weight: 700; line-height: 24px;">{{trans '*Some of your items have been separated into multiple shipments.'}}</span>
+                            </p>
+                        {{/if}}
+                    </td>
+                </tr>
+            </table>
+            {{var item_html|raw}}
+            <table class='email-date' style="max-width: 612px; margin: auto" width="612">
+                <tr >
+                    <td style="padding-top: 16px; border-top: 1px solid #ccc; font-family: FedEx Sans; font-size: 14px; font-weight: 400; line-height: 24px;">
+                        <p>
+                            {{trans 'Order Placed On: <span class='no-link'>%created_at</span>' created_at=$order_date |raw}}
+                        </p>
+                        {{depend footer_messages_html}}
+                            {{var footer_messages_html|raw}}
+                        {{/depend}}
+                    </td>
+                </tr>
+            </table>
+            {{var order_details_html|raw}}
+        </td>
+    </tr>
+</table>
+

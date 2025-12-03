@@ -1,0 +1,94 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$img = $block->getViewFileUrl('Fedex_SharedDetails::images/export-calender-icon.png');
+$timeframeDownIcon = $block->getViewFileUrl('Fedex_SharedDetails::images/down.png');
+$timeFrameOptionsArray = $this->getTimeframeValue();
+$timeFrameSelectOptionsArray = $this->getTimeframeSelectOptions();
+?>
+<div class="export-commercial-reporting-section" style="display:none;">
+    <form class="form" id="export-commercial-reporting-form" method="post" autocomplete="off">
+        <h2 class="export-order-history-title"><?=$escaper->escapeHtml(__('Export Order History')); ?></h2>
+        <div class="model-form-data">
+            <span class="action-close" data-role="closeBtn" tabindex="0">
+                <span><?=$escaper->escapeHtml(__('Close')); ?></span>
+            </span>
+            <div class="field field-export-timeframe">
+                <label for="timeframe" class="timeframe-label">
+                    <span><?=$escaper->escapeHtml(__('TIMEFRAME')); ?></span>
+                </label>
+                <div class="field-export-timeframe-section">
+                    <ul class="timeframe-ul">
+                        <li value="" class="timeframe-li init">
+                            <?=$escaper->escapeHtml(__('Select a timeframe')); ?>
+                            <img src="<?= $block->escapeHtmlAttr($timeframeDownIcon) ?>"
+                         alt="timeframe-down-icon" class="timeframe-down-icon"/>
+                        </li>
+                        <li class="timeframe-li">
+                            <ul class="timeframe-ul-li-ul">
+                                <?php
+                                    if (!empty($timeFrameSelectOptionsArray)) {
+                                        foreach ($timeFrameSelectOptionsArray as $key => $timeFrameSelectOptions) { ?>
+                                            <li value="<?= trim($timeFrameSelectOptions['value']); ?>" class="timeframe-li-ul-li">
+                                                <?=$escaper->escapeHtml(__(trim($timeFrameSelectOptions['label']))); ?>
+                                                <img src="<?= $block->escapeHtmlAttr($timeframeDownIcon) ?>"
+                                                 alt="timeframe-down-icon" class="timeframe-down-icon"/>
+                                            </li>
+                                        <?php }
+                                    }
+                                ?>
+                            </ul>
+                        </li>
+                    </ul>
+                    <select name="timeframe" id="timeframe" class="timeframe-dropdown-hidden">
+                        <?php
+                            if (!empty($timeFrameOptionsArray)) {
+                                foreach ($timeFrameOptionsArray as $key => $timeFrameOptions) { ?>
+                                    <option value="<?= trim($timeFrameOptions['value']); ?>"
+                                     class="timeframe-option-hidden">
+                                        <?=$escaper->escapeHtml(__(trim($timeFrameOptions['label']))); ?>
+                                    </option>
+                                <?php }
+                            }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="field field-reprt-dates field-export-date-range">
+                <label class="label" for="export-date-range"><?=$escaper->escapeHtml(__('Date Range')); ?></label>
+                <div class="order-date-range-field">
+                    <input type="text" name="export-date-range" value=""
+                        placeholder="<?=$escaper->escapeHtml(__('MM/DD/YYYY - MM/DD/YYYY')); ?>"
+                    class="date-range-filter-field" id="export-date-range-picker" readonly/>
+                    <img src="<?= $block->escapeHtmlAttr($img) ?>" alt="date"
+                        height="40" id="export-date-range-picker-icon"/>
+                </div>
+            </div>
+            <div class="field recipients-email">
+                <label for="email-address" class="email-address-label">
+                    <span><?=$escaper->escapeHtml(__('EMAIL (OPTIONAL)')); ?></span>
+                </label>
+                <div class="recipients-email-address">
+                    <div class="all-mail"></div>
+                    <input type="email" name="email" id="email_address" class="email-input-text"
+                        placeholder="<?=$escaper->escapeHtml(__('Enter recipient email')); ?>" multiple/>
+                </div>
+                <span class="email-address-note">
+                    <?=$escaper->escapeHtml(__('The email associated with your account will receive a copy of
+                     this report. If you would like to share it with additional recipients, enter them above.')); ?>
+                </span>
+            </div>
+            <div class="export-actions-toolbar">
+                <button type="button" class="action cancel-export" title="<?=$escaper->escapeHtml(__('CANCEL')); ?>">
+                    <span><?=$escaper->escapeHtml(__('CANCEL')); ?></span>
+                </button>
+                <button type="button" class="action export-data disable"
+                 title="<?=$escaper->escapeHtml(__('EXPORT')); ?>" disabled>
+                    <span><?=$escaper->escapeHtml(__('EXPORT')); ?></span>
+                </button>
+            </div>
+        </div>
+    </form>
+</div>

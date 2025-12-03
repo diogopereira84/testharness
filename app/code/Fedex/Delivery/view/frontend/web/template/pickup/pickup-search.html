@@ -1,0 +1,74 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- Quote request text - only for upload to quote -->
+<!-- ko if: isEproUploadtoQuoteToggle() -->
+<div class="quote-location-text mb-18">
+    <p class="fs-20 fedex-light weight-300 ls-0 lh-32">Enter your location to see which stores are best for your quote request.</p>
+</div>
+<!-- /ko -->
+<form class="pickup-search-form-container pickup-search-radius-container" aria-label="Pickup Location Search Form">
+    <fieldset class="input-filed-container mb-24 border-0 p-0 d-flex">
+
+        <!-- Radius Selection -->
+        <div class="radius-miles-container">
+            <label for="pickup-search-radius" class="search-text">Search Radius</label>
+            <div class="pickup-search-radius-dropdown">
+                <div class="pickup-search-selector" role="combobox" aria-label="Search radius selector"
+                    aria-expanded="false" tabindex="0"
+                    data-bind="event: { click: toggleRadiusDropdown }, attr: { 'aria-expanded': showRadiusDropdown() ? 'true' : 'false' }">
+                    <span class="selected-miles" data-bind="text: searchRadius() + ' Miles'"></span>
+                </div>
+                <div class="pickup-search-radius-options" role="listbox" data-bind="visible: showRadiusDropdown">
+                    <ul>
+                        <li role="option" data-bind="click: function() { selectRadius(10); showRadiusDropdown(false) }"
+                            data-testid="pickup-select-option-10-miles">10 Miles</li>
+                        <li role="option" data-bind="click: function() { selectRadius(25); showRadiusDropdown(false) }"
+                            data-testid="pickup-select-option-25-miles">25 Miles</li>
+                        <li role="option" data-bind="click: function() { selectRadius(50); showRadiusDropdown(false) }"
+                            data-testid="pickup-select-option-50-miles">50 Miles</li>
+                        <li role="option" data-bind="click: function() { selectRadius(100); showRadiusDropdown(false) }"
+                            data-testid="pickup-select-option-100-miles">100 Miles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zip Code or City/State Input -->
+        <div class="zipcode-container searchByRadiusBox">
+            <label for="zipcodePickup" class="search-text">Search By Zip Code Or City And State</label>
+            <input class="input-text zipcodePickup radiusBox" autocomplete="off" type="text" name="zipcodePickup"
+                id="zipcodePickup" placeholder="Enter zip code or city and state"
+                data-bind="value: searchQuery, valueUpdate: 'input', event: { keyup: handleSearchInputEvent, focus: handleSearchInputEvent }"
+                data-testid="zip-code-city-state" aria-autocomplete="list" aria-controls="results" />
+            <div id="results" class="google-maps-results" role="listbox" aria-label="Suggested addresses">
+                <!-- ko foreach: sugestedAddresses -->
+                <div class="result-wrapper" role="option"
+                    data-bind="click: $parent.handleAddressSuggestionSelect.bind($parent), attr: { id: 'suggestion-' + $index() }">
+                    <div class="result" data-bind="text: description"></div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+
+        <!-- Search Button -->
+        <div class="search-button-container">
+            <button id="search-pickup" class="button action continue primary search-pickup" type="button"
+                data-bind="click: onClickSearchLocation, enable: searchQuery()"
+                data-testid="button-search-by-zip-code-and-radius">SEARCH</button>
+        </div>
+    </fieldset>
+    <div role="note" aria-label="Location Message Note" class="modal-container location-message">
+        <div class="message-icon message-icon-restricted">
+            <img data-bind="attr: { src: infoUrl}" class="fa fa-info-circle icon-purple" alt="">
+        </div>
+        <div class="message-content message-content-restricted d-flex v-center">
+            <div class="message-text"
+                data-bind="text: isEproUploadtoQuoteToggle() ? 'To see more locations, try expanding your search radius.' : 'To see more pickup locations, try expanding your search radius.'">
+            </div>
+        </div>
+    </div>
+</form>

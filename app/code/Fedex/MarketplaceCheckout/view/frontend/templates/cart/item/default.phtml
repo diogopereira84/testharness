@@ -1,0 +1,755 @@
+<?php
+
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Magento2.Files.LineLength.MaxExceeded
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer */
+/** @var \Fedex\MarketplaceCheckout\ViewModel\Cart $marketplaceViewModel */
+$marketplaceViewModel =  $block->getData('marketplace_view_model');
+$unavailableModel = $block->getData('product_availability_view_model');
+
+$productHelper =  $this->helper(Fedex\Delivery\Helper\Data::class);
+$discountHelper = $this->helper(Magento\Checkout\Helper\Data::class);
+$newDocumentImageHelper = $this->helper(Fedex\FXOCMConfigurator\Helper\Data::class);
+$marketplaceCheckoutHelper = $this->helper(Fedex\MarketplaceCheckout\Helper\Data::class);
+
+$productEngineUrl = '';
+$viewModel = $block->getData('productEngineUrl_view_model');
+$productViewModel = $block->getData('product_availability_view_model');
+if ($viewModel->getProductEngineUrl()) {
+    $productEngineUrl = $viewModel->getProductEngineUrl();
+}
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productInfoHandler');
+
+//New Document image toggle value
+$newDocumentImageToggle =   $newDocumentImageHelper->getNewDocumentsApiImagePreviewToggle();
+
+$onchangeUpdate = '';
+if($marketplaceViewModel->isImprovingUpdateItemQtyCart()){
+   $onchangeUpdate = 'onchange="'. $block->escapeHtmlAttr(
+                        'editCartItem.updateCart()').'"';
+}
+$toggleViewModel = $block->getData('toggle_view_model');
+$bundleProductsToggle = $toggleViewModel && $toggleViewModel->getToggleConfigValue('tiger_e468338');
+
+$_item = $block->getItem();
+$hasLegacyDocument = false;
+$checkLegacyDocApiOnCartToggle = (bool) $marketplaceViewModel->checkLegacyDocApiOnCartToggle();
+$hasLegacyDocument = $checkLegacyDocApiOnCartToggle && (bool) $marketplaceViewModel->checkLegacyDocumentInCart($_item);
+
+$marketplaceItemInfo = [];
+$isMarketplaceProduct = false;
+$canEditReorder = true;
+$punchoutEnabled = true;
+$minQty = null;
+$maxQty = null;
+if (!is_null($_item->getAdditionalData())) {
+    $marketplaceItemInfo = json_decode($_item->getAdditionalData());
+    if (isset($marketplaceItemInfo->isMarketplaceProduct)) {
+        $isMarketplaceProduct = $marketplaceItemInfo->isMarketplaceProduct;
+    }
+    if (isset($marketplaceItemInfo->can_edit_reorder)) {
+        $canEditReorder = $marketplaceItemInfo->can_edit_reorder;
+    }
+    if ($marketplaceViewModel->isMktCbbEnabled()) {
+        if (isset($marketplaceItemInfo->punchout_enabled)) {
+            $punchoutEnabled = $marketplaceItemInfo->punchout_enabled;
+        }
+        if ($_item && $_item->getProduct() && $_item->getProduct()?->getMainOffer()?->getMinOrderQuantity()) {
+            $minQty = $_item?->getProduct()?->getMainOffer()?->getMinOrderQuantity();
+        }
+        if ($_item && $_item->getProduct() && $_item->getProduct()?->getMainOffer()?->getMaxOrderQuantity()) {
+            $maxQty = $_item?->getProduct()?->getMainOffer()?->getMaxOrderQuantity();
+        }
+    }
+}
+
+$messages = $block->getMessages();
+
+// Remove Mirakl price update message.
+forEach($messages as $key => $message) {
+    if(str_contains($message['text'], 'Price has changed from')) {
+        unset($messages[$key]);
+    }
+}
+
+$product = $_item->getProduct();
+
+$additionalOption = $_item->getOptionByCode('info_buyRequest');
+$additionalOptions = $additionalOption->getValue();
+$decodeProductValue = json_decode($additionalOptions, true);
+$productLinePriceable = $decodeProductValue['external_prod'][0]['priceable'] ?? '';
+$product_json = $productInfoHandler->getItemExternalProd($_item);
+$externalProductId = $product_json['id'] ?? '';
+$preview_url = $product_json['preview_url'] ?? '';
+$product_json['features'] = $product_json['features'] ?? [];
+$product_json['features'] = $isMarketplaceProduct && isset($marketplaceItemInfo->features) ?
+    $marketplaceItemInfo->features : $product_json['features'];
+$features = $product_json['features'] ?? [];
+$colorImageStyle = "width: 165px;";
+foreach ($features as $feature) {
+    if ($feature->name == 'Print Color' &&
+        isset($feature->choice->properties[0]->value) &&
+        $feature->choice->properties[0]->value == 'B/W' &&
+        !$viewModel->isSdeStore()
+    ) {
+        $colorImageStyle = "-webkit-filter: grayscale(100%); filter: grayscale(100%);";
+        break;
+    }
+}
+$attributeSetId = $product->getAttributeSetId();
+$newDocumentImage = false;
+$isCustomize = $productHelper->getProductCustomAttributeValue($product->getId(), 'customizable');
+$attribute_set_name = $productHelper->getProductAttributeName($attributeSetId);
+$selfRegPreviewImage = $newDocumentImageHelper->isSelfRegPreviewImage();
+if ($selfRegPreviewImage) {
+    $siteName = '';
+    $siteName = $productHelper->getCompanySite();
+    if ($siteName != "") { // for epro with catalogmvp off and legacy site name present
+        $newDocumentImage = false;
+    } elseif ($attribute_set_name == 'PrintOnDemand' || $newDocumentImageToggle) { // catalogmvp toggle and site nme blank
+        $newDocumentImage = true;
+    }
+} else {
+    if (($product->getData('pod2_0_editable') && ($isCustomize)) || $newDocumentImageToggle) {
+        $newDocumentImage = true;
+    }
+}
+
+$fixedQtyHandlerToggle = $newDocumentImageHelper->getFixedQtyHandlerToggle();
+$catalogMvpProduct = $product->getData('pod2_0_editable') ?? false;
+
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper(Magento\Msrp\Helper\Data::class);
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
+
+/** expired item toogle */
+$expiredItemViewModal = $block->getData('expiredItemViewModal');
+$expiredItemConfig = $expiredItemViewModal->getConfig();
+$isExpired = (
+    $expiredItemViewModal->isCustomerLoggedIn()
+    && ($expiredItemViewModal->isItemExpired($_item) || $hasLegacyDocument)
+);
+$isExpiringSoon = (
+    $expiredItemViewModal->isCustomerLoggedIn()
+    && $expiredItemViewModal->isItemExpiringSoon($_item->getId())
+);
+
+/** item applicable for upload to quote */
+/** @var \Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$uploadToQuoteViewModel =  $block->getData('uploadToQuoteViewModal');
+$isUploadToQuoteEnable = $uploadToQuoteViewModel->isUploadToQuoteEnable();
+$pricebale = $uploadToQuoteViewModel->isProductLineItems($product_json);
+$specialInstruction = $uploadToQuoteViewModel->isProductLineItems($product_json, true);
+$isNonStandardFile = $uploadToQuoteViewModel->isNonStandardFile($additionalOptions);
+$isPrintonDemandProduct = ($attribute_set_name == 'PrintOnDemand') ? true : false;
+$isSiItemNonEditable = !$isMarketplaceProduct && $isUploadToQuoteEnable
+    && $uploadToQuoteViewModel->isSiItemEditBtnDisable($product_json) && !$isPrintonDemandProduct;
+$showDetails =  (!empty($product_json['features']) || ($isUploadToQuoteEnable && $specialInstruction));
+$unavailableQtyClass='';
+if($productViewModel->isE441563ToggleEnabled() && !$productViewModel->checkProductAvailable($product)) {
+    $unavailableQtyClass = $productViewModel->getUnavailableQtyCssClass()??'';
+}
+
+?>
+<?php if (($attribute_set_name == 'FXOPrintProducts')) { ?>
+    <td style="display:flex; padding: 10px;" data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item custom-print-item">
+    <?php  } elseif ($isCustomize) { ?>
+    <td style="display:flex; padding: 10px;" data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item custom-print-item">
+    <?php } else { ?>
+    <td data-th="<?= $block->escapeHtml(__('Item')) ?>" class="col item">
+    <?php  } ?>
+
+    <?php if (($attribute_set_name == 'FXOPrintProducts') || ($isCustomize)) : ?>
+        <?php if ($isMarketplaceProduct) : ?>
+            <span class="product-image-container sde-product-image-container prev-img-loader">
+                <div>
+                    <img alt="Product Preview" style="<?= $block->escapeHtml($colorImageStyle); ?>" class="preview-product-img" src="<?= $marketplaceItemInfo->image ?>" />
+                </div>
+            </span>
+        <?php elseif ($viewModel->isSdeStore()) : ?>
+            <span class="product-image-container sde-product-image-container prev-img-loader">
+                <div>
+                    <img alt="Product Preview" style="<?= $block->escapeHtml($colorImageStyle); ?>" class="preview-product-img" data-bind="attr:{src: window.checkoutConfig.sde_product_mask_image_url}" />
+                </div>
+            </span>
+        <?php else : ?>
+            <span class="product-image-container prev-img-loader">
+            <?php if($isNonStandardFile):?>
+                <div>
+                    <img alt="Product Preview" class="preview-product-img"
+                    src="<?= $block->escapeUrl($uploadToQuoteViewModel->getNonStandardImageUrl()) ?>"/>
+                </div>
+            <?php elseif ($product->getTypeId() == \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE) : ?>
+                <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
+            <?php else: ?>
+                <?php if(!$hasLegacyDocument) :?>
+                    <div data-bind="if: productPreviewImg">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                        alt="product-loader-img" class="product-loader" />
+                        <img alt="Product Preview" style="<?= $block->escapeHtml($colorImageStyle); ?>" class="preview-product-img" data-bind="attr:{onload: productPreviewImg.getPreviewImg('<?= $block->escapeHtml($preview_url); ?>', $element,'<?php echo $newDocumentImage;?>')}" />
+                    </div>
+                <?php else: ?>
+                    <div>
+                        <img src="#" alt="Product Image" class="product-empty-image" />
+                    </div>
+                <?php endif;?>
+                    <div data-bind="ifnot: productPreviewImg">
+                        <img src="#" alt="Product Image" class="product-empty-image" />
+                    </div>
+
+            <?php endif;?>
+            </span>
+        <?php endif; ?>
+    <?php else : ?>
+        <?php if ($block->hasProductUrl()) : ?>
+            <a title="<?= $block->escapeHtml($block->getProductName()) ?>" tabindex="-1" class="product-item-photo">
+            <?php else : ?>
+                <span class="product-item-photo">
+                <?php endif; ?>
+                <?= $block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml() ?>
+                <?php if ($block->hasProductUrl()) : ?>
+            </a>
+        <?php else : ?>
+            </span>
+        <?php endif; ?>
+    <?php endif; ?>
+
+    <div class="product-item-details">
+        <?php if($isMarketplaceProduct) : ?>
+            <strong tabindex="<?= $isUploadToQuoteEnable ? '' : 0 ?>" style="margin-left: 10px;"
+            class="product-item-name">
+                <?= $marketplaceItemInfo->marketplace_name ?? $marketplaceItemInfo->navitor_name ?>
+            </strong>
+        <?php elseif ($attribute_set_name == 'FXOPrintProducts' || ($isCustomize)): ?>
+            <strong tabindex="<?= $isUploadToQuoteEnable ? '' : 0 ?>"
+            style="margin-left: 10px;" class="product-item-name">
+            <?php else : ?>
+                <strong tabindex="<?= $isUploadToQuoteEnable ? '' : 0 ?>" class="product-item-name">
+                <?php endif; ?>
+                <?php if ($attribute_set_name == 'FXOPrintProducts' && !$isMarketplaceProduct): ?>
+                    <?php if (isset($product_json['userProductName'])): ?>
+                        <?= /* @noEscape */ ($product_json['userProductName']); ?>
+                    <?php endif; ?>
+                    <?php if ($isUploadToQuoteEnable && !$pricebale): ?>
+                        <div class="upload-to-quote-store-review-lable">
+                            <?= $block->escapeHtml(__('Needs Store Review')) ?>
+                        </div>
+                    <?php endif; ?>
+                <?php elseif ($isCustomize ): ?>
+                    <?php
+                    if (isset($product_json['fxo_product'])):
+                        $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? []; ?>
+                        <?= /* @noEscape */ ($fxoProduct ? $fxoProduct->name : $product->getName()); ?>
+                    <?php elseif (!$isMarketplaceProduct): ?>
+                        <?= /* @noEscape */ ($product_json['userProductName'] ?? $product->getName()); ?>
+                    <?php endif; ?>
+                <?php elseif (!$isMarketplaceProduct): ?>
+                    <?php if ($block->hasProductUrl()) : ?>
+                        <?= $block->escapeHtml($block->getProductName()) ?>
+                    <?php else: ?>
+                        <?= $block->escapeHtml($block->getProductName()) ?>
+                    <?php endif; ?>
+                <?php  endif;  ?>
+                </strong>
+                <?php if ($messages) : ?>
+                    <?php foreach ($messages as $message) : ?>
+                        <div class="cart item message <?= $block->escapeHtmlAttr($message['type']) ?>">
+                            <div><?= $block->escapeHtml($message['text']) ?></div>
+                        </div>
+                    <?php endforeach; ?>
+                <?php endif; ?>
+                <?php $addInfoBlock = $block->getProductAdditionalInformationBlock(); ?>
+                <?php if ($addInfoBlock) : ?>
+                    <?= $addInfoBlock->setItem($_item)->toHtml() ?>
+                <?php endif; ?>
+                <?php if (!$uploadToQuoteViewModel->isUploadToQuoteGloballyEnabled()) : ?>
+                    <?php if ($attribute_set_name == 'FXOPrintProducts' && !empty($product_json['features'])) : ?>
+                        <a href="#" aria-expanded="false" aria-controls="configurater-product-attr-<?=
+                        $block->escapeHtmlAttr($_item->getId()) ?>" class="plain-link show-detail fedex-regular"
+                        data-item-id="<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                        id="show-detail-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                        <?=$escaper->escapeHtml(__("Show Details"))?></a>
+                        <div class="configurater-product-attr" id="configurater-product-attr-<?=
+                        $block->escapeHtmlAttr($_item->getId()) ?>" style="display:none">
+                        <?php if(!$isNonStandardFile):?>
+                            <ul role="listbox" aria-labelledby="show-detail-<?=
+                                $block->escapeHtmlAttr($_item->getId()) ?>">
+                                <?php if (!empty($product_json['features'])) {
+                                    $opt = 1;
+                                    foreach ($product_json['features'] as $configAttribute) {
+                                        if (!empty($configAttribute->name)) { ?>
+                                            <?= /* @noEscape */ "<li tabindex='-1' role='option'>"
+                                            . $configAttribute->name . ": " . $configAttribute->choice->name . "</li>";
+                                        }
+                                        $opt++;
+                                    }
+                                }
+                                ?>
+                            </ul>
+                        <?php endif; ?>
+                        </div>
+                        </span>
+                    <?php endif; ?>
+                <?php endif; ?>
+                <?php $reorderedProduct = $isMarketplaceProduct
+                                            && property_exists($marketplaceItemInfo, 'reorder_item')
+                                            && $marketplaceItemInfo->reorder_item;?>
+
+                    <?php $reorderedProduct = !$canEditReorder
+                        && property_exists($marketplaceItemInfo, 'reorder_item')
+                        && $marketplaceItemInfo->reorder_item; ?>
+
+                <div class="item-actions <?= $reorderedProduct ? 'reorder-disabled':'' ?>">
+                        <div class="custom-toolbar-action product-tooltip <?= ($isSiItemNonEditable) ? 'si-item-non-editable' : '' ?>">
+                            <?= /* @noEscape */ $block->getActions($_item) ?>
+                        </div>
+                </div>
+                <?php if ($isSiItemNonEditable) : ?>
+                    <div class="upload-to-quote-cart-edit-link">
+                        <a class="upload-to-quote-why-edit-button" href="#" aria-expanded="false">
+                            <?=$escaper->escapeHtml(__("Why can't I edit?"))?>
+                        </a>
+                        <div class="upload-to-quote-edit-button-msg" style="display:none">
+                            <?= $uploadToQuoteViewModel->getQuoteEditButtonMsg()?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if($reorderedProduct): ?>
+                    <div class="reorder-warning mt-8">
+                        <input type="checkbox" id="<?=$_item->getId()?>">
+                        <label class="reorder-label" for="<?=$_item->getId()?>">Why Can't I Edit?</label>
+                        <div class="reorder-content">
+                            When reordering, this product cannot be edited.
+                            To make changes to this item, visit the
+                            <?php if ($block->hasProductUrl()): ?>
+                                <a href="<?= $block->escapeUrl($block->getProductUrl()) ?>"
+                                title="<?= $block->escapeHtml($block->getProductName()) ?>"
+                                tabindex="-1"
+                                >product page</a>
+                            <?php else: ?>
+                                <span>product page</span>
+                            <?php endif; ?>
+                            and start a new project with your previously uploaded file.
+                        </div>
+                    </div>
+                <?php endif;?>
+                <?php if (!$bundleProductsToggle):?>
+                <?php if ($isExpiringSoon && !$isExpired): ?>
+                    <div class="cart-expiryitem-inline-warning-msg-outer-most-info"
+                         style="display: none;"
+                         data-bind="visible: !$parent.isProductDisabled(<?= $externalProductId ?>)"
+                    >
+                        <div class="cart-expiryitem-inline-info-warning-msg-container">
+                            <div class="expiry-icon-container">
+                                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/expiring-icon.png')) ?>"
+                                     alt="expiry-icon" class="img-check-icon" />
+                            </div>
+                            <div class="expiry-item-inline-warning-msg">
+                                <p class="warning-title">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpiry3pTitle() : $expiredItemConfig->getCartItemExpiryTitle())) ?>
+                                </p>
+                                <p class="warning-msg">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpiry3pMessage() : $expiredItemConfig->getCartItemExpiryMessage())) ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif;?>
+                <?php if ($isExpired && !$unavailableModel->checkCartHaveUnavailbleProduct()): ?>
+                    <div class="cart-expireditem-inline-err-msg-outer-most-info"
+                         style="display: none;"
+                         data-bind="visible: !$parent.isProductDisabled(<?= $externalProductId ?>)"
+                    >
+                        <div class="cart-expireditem-inline-info-err-msg-container">
+                            <div class="icon-container">
+                                <span >
+                                    <img src="
+                                    <?= $block->escapeUrl($block->getViewFileUrl('images/expired-icon.png'))
+                                    ?>" alt="" class="img-check-icon" />
+                                </span>
+                            </div>
+                            <div class="expired-item-inline-err-msg">
+                                <p class="error-title">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pTitle() : $expiredItemConfig->getCartItemExpiredTitle())) ?>
+                                </p>
+                                <p class="error-msg">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pMessage() : $expiredItemConfig->getCartItemExpiredMessage())) ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif;?>
+                <div class="cart-expireditem-inline-err-msg-outer-most-info"
+                     style="display: none;"
+                     data-bind="visible: $parent.isProductDisabled(<?= $externalProductId ?>)"
+                >
+                    <div class="cart-expireditem-inline-info-err-msg-container">
+                        <div class="icon-container">
+                            <span >
+                                <img src="
+                                <?= $block->escapeUrl($block->getViewFileUrl('images/expired-icon.png'))
+                                ?>" alt="" class="img-check-icon" />
+                            </span>
+                        </div>
+                        <div class="expired-item-inline-err-msg">
+                            <p class="error-title">
+                                <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pTitle() : $expiredItemConfig->getCartItemExpiredTitle())) ?>
+                            </p>
+                            <p class="error-msg">
+                                <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pMessage() : $expiredItemConfig->getCartItemExpiredMessage())) ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <?php endif;?>
+    </div>
+    </td>
+    <?php if ($isSiItemNonEditable) : ?>
+        <td class="mobile-why-edit-link" style="display:none">
+            <a class="upload-to-quote-why-edit-button" href="#" aria-expanded="false">
+                <?=$escaper->escapeHtml(__("Why can't I edit?"))?>
+            </a>
+            <div class="upload-to-quote-edit-button-msg" style="display:none">
+                <?= $uploadToQuoteViewModel->getQuoteEditButtonMsg()?>
+            </div>
+        </td>
+    <?php endif;?>
+    <?php if ($uploadToQuoteViewModel->isUploadToQuoteGloballyEnabled()) : ?>
+        <td class="mobile-quote-show-detail-row" style="display:none">
+            <?php if ($attribute_set_name == 'FXOPrintProducts' && $showDetails) : ?>
+                <a href="#" aria-expanded="false" aria-controls="configurater-product-attr-<?=
+                    $block->escapeHtmlAttr($_item->getId()) ?>"
+                    class="plain-link show-detail fedex-regular"
+                    data-item-id="<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                    id="show-detail-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                    <?=$escaper->escapeHtml(__("Show Details"))?>
+                </a>
+                <div class="configurater-product-attr" id="configurater-product-attr-<?=
+                    $block->escapeHtmlAttr($_item->getId()) ?>" style="display:none;">
+                    <?php if(!$isNonStandardFile):?>
+                        <ul role="listbox" aria-labelledby="show-detail-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                            <?php
+                            if (!empty($product_json['features'])) {
+                                $opt = 1;
+                                foreach ($product_json['features'] as $configAttribute) {
+                                    if (!empty($configAttribute->name)) { ?>
+                                        <?= /* @noEscape */ "<li tabindex='-1' role='option'>"
+                                        . $configAttribute->name . ": " . $configAttribute->choice->name . "</li>";
+                                    }
+                                    $opt++;
+                                }
+                            }
+                            ?>
+                        </ul>
+                    <?php endif; ?>
+                    <?php if ($isUploadToQuoteEnable && $specialInstruction) : ?>
+                        <div class="upload-to-quote-show-print-instruction">
+                            <p class="additional-print-instruction">
+                                <?= $block->escapeHtml(__('Additional Print Instructions:')) ?>
+                            </p>
+                            <p class="print-banner">
+                                <?= $block->escapeHtml(__($specialInstruction)) ?>
+                            </p>
+                        </div>
+                    <?php endif; ?>
+                </div>
+                </span>
+            <?php endif; ?>
+        </td>
+    <?php endif; ?>
+    <?php if ($canApplyMsrp) : ?>
+        <td class="col msrp" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <span class="pricing msrp">
+                <span class="msrp notice">
+                    <?= $block->escapeHtml(__('See price before order confirmation.')) ?>
+                </span>
+                <?php $helpLinkId = 'cart-msrp-help-' . $_item->getId(); ?>
+                <a href="#" class="action help map" id="<?= ($block->escapeHtmlAttr($helpLinkId)) ?>" data-mage-init='{"addToCart":{
+                                    "helpLinkId": "#<?= $block->escapeJs($block->escapeHtml($helpLinkId)) ?>",
+                                    "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
+                                    "showAddToCart": false
+                                    }
+                                }'>
+                    <span><?= $block->escapeHtml(__("What's this?")) ?></span>
+                </a>
+            </span>
+        </td>
+    <?php elseif($isMarketplaceProduct) : ?>
+        <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <?= /* @noEscape */ $discountHelper->convertPrice($marketplaceItemInfo->unit_price, true); ?>
+        </td>
+    <?php elseif($isUploadToQuoteEnable && !$productLinePriceable) : ?>
+        <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <?= "$--.--"; ?>
+        </td>
+    <?php else : ?>
+        <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+            <?= /* @noEscape */ $discountHelper->convertPrice($_item->getBaseRowTotal(), true); ?>
+        </td>
+    <?php endif; ?>
+    <td class="col qty text-center" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+        <div class="field qty">
+            <div class="control qty product-engine-qty">
+                <label for="cart-<?= $block->escapeHtmlAttr($_item->getId()) ?>-qty">
+                    <span class="label"><?= $block->escapeHtml(__('Qty')) ?></span>
+                    <?php
+                    $optionHtml = '';
+                    $optionSelected = '';
+
+                    ?>
+
+                    <?php if ($isMarketplaceProduct && $punchoutEnabled) : ?>
+                        <div class="blocked-qty">
+                            <span class="qty-marketplace">
+                                <?= $block->escapeHtmlAttr($marketplaceItemInfo->quantity) ?>
+                            </span>
+                            <i class="qty-tooltip"></i>
+                            <div class="marketplace-tooltip fedex-light fs-16 lh-24 cl-stonegray weight-300">
+                                <span>
+                                    <?= $block->escapeHtml($marketplaceItemInfo->cart_quantity_tooltip) ?>
+                                </span>
+                            </div>
+                        </div>
+                    <?php endif;?>
+
+                    <?php
+                    if (!$isMarketplaceProduct && $attribute_set_name == 'FXOPrintProducts' || ($isCustomize)) {
+
+                        if (isset($product_json['fxo_product'])) {
+                            $quantityList = json_decode($product_json['fxo_product'], true);
+                            $quantityList = $quantityList['fxoProductInstance']['quantityChoices'];
+                        } else {
+                            $quantityList = $productInfoHandler->getQuantityChoices($_item);
+                        }
+                        foreach ($quantityList as $key => $quantity) {
+
+                            if ($quantity == $block->escapeHtmlAttr($block->getQty())) {
+                                $optionHtml .= '<option value="' . $quantity . '"' . $optionSelected . ' selected>' . $quantity . '</option>';
+                            } else {
+                                $optionHtml .= '<option value="' . $quantity . '"' . $optionSelected . '>' . $quantity . '</option>';
+                            }
+                        }
+                    }
+                    if ($catalogMvpProduct && $fixedQtyHandlerToggle) {
+                        foreach (($product_json['quantityChoices'] ?? []) as $qty) {
+                            if ($qty == $block->escapeHtmlAttr($block->getQty())) {
+                                $optionHtml .= '<option value="' . $qty . '"' . $optionSelected . ' selected>' . $qty . '</option>';
+                            } else {
+                                $optionHtml .= '<option value="' . $qty . '"' . $optionSelected . '>' . $qty . '</option>';
+                            }
+                        }
+                    }
+                    ?>
+
+                    <?php if(!$isMarketplaceProduct) : ?>
+                        <?php if ($optionHtml) : ?>
+                            <select <?= /* @noEscape */ $onchangeUpdate ?>
+                            aria-label="Quantity"
+                            id="cart-<?= /* @noEscape */ $_item->getId() ?>-qty"
+                            name="cart[<?= /* @noEscape */ $_item->getId() ?>][qty]"
+                            data-cart-item-id="<?= /* @noEscape */ $_item->getSku() ?>"
+                            class="input-text qty product-engine-qty <?= $unavailableQtyClass?>"
+                            <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>
+                            data-role="cart-item-qty"><?= /* @noEscape */ $optionHtml ?>
+                            </select>
+                        <?php else : ?>
+                            <input <?= /* @noEscape */ $onchangeUpdate ?>
+                            id="cart-<?= $block->escapeHtmlAttr($_item->getId()) ?>-qty"
+                            name="cart[<?= $block->escapeHtmlAttr($_item->getId()) ?>][qty]"
+                            data-cart-item-id="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
+                            value="<?= $block->escapeHtmlAttr($block->getQty()) ?>"
+                            type="number"
+                            size="4"
+                            step="any"
+                            aria-label="<?= $block->escapeHtmlAttr(__('Quantity input')) ?>"
+                            class="input-text qty <?= ($isSiItemNonEditable) ? 'si-item-non-editable' : '' ?> <?= $unavailableQtyClass?>"
+                            <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>
+                            data-validate="{required:true,'validate-greater-than-zero':true}"
+                            data-role="cart-item-qty" />
+                        <?php endif; ?>
+                    <?php elseif($isMarketplaceProduct && !$punchoutEnabled): ?>
+                        <input <?= /* @noEscape */ $onchangeUpdate ?>
+                            id="cart-<?= $block->escapeHtmlAttr($_item->getId()) ?>-qty"
+                            name="cart[<?= $block->escapeHtmlAttr($_item->getId()) ?>][qty]"
+                            data-cart-item-id="<?= $block->escapeHtmlAttr($_item->getSku()) ?>"
+                            value="<?= $block->escapeHtmlAttr($block->getQty()) ?>"
+                            type="number"
+                            size="4"
+                            step="any"
+                            aria-label="<?= $block->escapeHtmlAttr(__('Quantity input')) ?>"
+                            class="input-text qty <?= ($isSiItemNonEditable) ? 'si-item-non-editable' : '' ?> <?= $unavailableQtyClass?>"
+                            <?= !empty($unavailableQtyClass) ? 'disabled' : '' ?>
+                            data-validate="{required:true,'validate-greater-than-zero':true}"
+                            <?= $minQty ? 'data-min-value="'.$minQty.'"' : ''?>
+                            <?= $maxQty ? 'data-max-value="'.$maxQty.'"' : ''?>
+                            data-role="cart-item-qty" />
+                    <?php endif; ?>
+                </label>
+            </div>
+        </div>
+    </td>
+    <?php
+        $discount = $_item->getDiscount();
+        $hasDiscount = $discount > 0 ? true : false;
+    ?>
+    <td class="col discount <?= $hasDiscount ? 'show-discount' : '' ?>" data-th="<?= $block->escapeHtml(__('Discount')) ?>">
+        <?= /* @noEscape */ $hasDiscount ? $discountHelper->convertPrice("-" . $discount, true) : "-" ?>
+    </td>
+
+    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+        <?php if ($canApplyMsrp) : ?>
+            <span class="cart msrp subtotal">--</span>
+        <?php elseif ($isMarketplaceProduct) : ?>
+        <?php
+            $rowTotal = str_replace(',', '', $marketplaceItemInfo->total);
+            $itemDiscount = str_replace(',', '', (string)$_item->getDiscount());
+            $finalLineTotal = floatval($rowTotal - ($itemDiscount == "" ? 0 : $itemDiscount)); ?>
+            <?= /* @noEscape */ $discountHelper->convertPrice($finalLineTotal, true); ?>
+        <?php elseif($isUploadToQuoteEnable && !$productLinePriceable) : ?>
+            <?= "$--.--"; ?>
+        <?php else: ?>
+            <?php
+            $row_total = str_replace(',', '', $_item->getRowTotal());
+            $item_discount = str_replace(',', '', (string)$_item->getDiscount());
+            $final_line_total = floatval($row_total - ($item_discount == "" ? 0 : $item_discount)); ?>
+            <?= /* @noEscape */ $discountHelper->convertPrice($final_line_total, true); ?>
+        <?php endif; ?>
+    </td>
+    <?php if ($uploadToQuoteViewModel->isUploadToQuoteGloballyEnabled()) : ?>
+        <tr class="cart-show-detail">
+            <td colspan="5">
+                <?php if (($attribute_set_name == 'FXOPrintProducts'  || $attribute_set_name == 'FXONonCustomizableProducts') && $showDetails) : ?>
+                    <a href="#" aria-expanded="false" aria-controls="configurater-product-attr-<?=
+                    $block->escapeHtmlAttr($_item->getId()) ?>" class="plain-link show-detail fedex-regular"
+                    data-item-id="<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                    id="show-detail-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                    <?=$escaper->escapeHtml(__("Show Details"))?></a>
+                    <div class="configurater-product-attr" id="configurater-product-attr-<?=
+                    $block->escapeHtmlAttr($_item->getId()) ?>" style="display:none">
+                    <?php if(!$isNonStandardFile):?>
+                        <ul role="listbox" aria-labelledby="show-detail-<?= $block->escapeHtmlAttr($_item->getId()) ?>">
+                            <?php if (!empty($product_json['features'])) {
+                                $opt = 1;
+                                foreach ($product_json['features'] as $configAttribute) {
+                                    if (!empty($configAttribute->name)) { ?>
+                                        <?= /* @noEscape */ "<li tabindex='-1' role='option'>"
+                                        . $configAttribute->name . ": " . $configAttribute->choice->name . "</li>";
+                                    }
+                                    $opt++;
+                                }
+                            }
+                            ?>
+                        </ul>
+                    <?php endif;?>
+                        <?php if ($isUploadToQuoteEnable && $specialInstruction) : ?>
+                            <div class="upload-to-quote-show-print-instruction">
+                                <p class="additional-print-instruction">
+                                    <?= $block->escapeHtml(__('Additional Print Instructions:')) ?>
+                                </p>
+                                <p class="print-banner">
+                                    <?= $block->escapeHtml(__($specialInstruction)) ?>
+                                </p>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    </span>
+                <?php endif; ?>
+            </td>
+        </tr>
+    <?php endif; ?>
+<?php if ($bundleProductsToggle): ?>
+    <?php if ($isExpiringSoon || $isExpired): ?>
+        <tr>
+            <td colspan="5" class="expiry-messages-container pb-24">
+                <?php if ($isExpiringSoon && !$isExpired): ?>
+                    <div class="cart-expiryitem-inline-warning-msg-outer-most-info"
+                         style="display: none;"
+                         data-bind="visible: !$parent.isProductDisabled(<?= $externalProductId ?>)"
+                    >
+                        <div class="cart-expiryitem-inline-info-warning-msg-container">
+                            <div class="expiry-icon-container">
+                                <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/expiring-icon.png')) ?>"
+                                     alt="expiry-icon" class="img-check-icon"/>
+                            </div>
+                            <div class="expiry-item-inline-warning-msg">
+                                <p class="warning-title">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpiry3pTitle() : $expiredItemConfig->getCartItemExpiryTitle())) ?>
+                                </p>
+                                <p class="warning-msg">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpiry3pMessage() : $expiredItemConfig->getCartItemExpiryMessage())) ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <?php if ($isExpired && !$unavailableModel->checkCartHaveUnavailbleProduct()): ?>
+                    <div class="cart-expireditem-inline-err-msg-outer-most-info"
+                         style="display: none;"
+                         data-bind="visible: !$parent.isProductDisabled(<?= $externalProductId ?>)"
+                    >
+                        <div class="cart-expireditem-inline-info-err-msg-container">
+                            <div class="icon-container">
+                                <span>
+                                    <img src="
+                                    <?= $block->escapeUrl($block->getViewFileUrl('images/expired-icon.png'))
+                                    ?>" alt="" class="img-check-icon"/>
+                                </span>
+                            </div>
+                            <div class="expired-item-inline-err-msg">
+                                <p class="error-title">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pTitle() : $expiredItemConfig->getCartItemExpiredTitle())) ?>
+                                </p>
+                                <p class="error-msg">
+                                    <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pMessage() : $expiredItemConfig->getCartItemExpiredMessage())) ?>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
+                <div class="cart-expireditem-inline-err-msg-outer-most-info"
+                     style="display: none;"
+                     data-bind="visible: $parent.isProductDisabled(<?= $externalProductId ?>)"
+                >
+                    <div class="cart-expireditem-inline-info-err-msg-container">
+                        <div class="icon-container">
+                            <span>
+                                <img src="
+                                <?= $block->escapeUrl($block->getViewFileUrl('images/expired-icon.png'))
+                                ?>" alt="" class="img-check-icon"/>
+                            </span>
+                        </div>
+                        <div class="expired-item-inline-err-msg">
+                            <p class="error-title">
+                                <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pTitle() : $expiredItemConfig->getCartItemExpiredTitle())) ?>
+                            </p>
+                            <p class="error-msg">
+                                <?= $escaper->escapeHtml(__($isMarketplaceProduct ? $expiredItemConfig->getCartItemExpired3pMessage() : $expiredItemConfig->getCartItemExpiredMessage())) ?>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    <?php endif; ?>
+<?php endif; ?>
+<script type="text/x-magento-init">
+    {
+        ".show-detail": {
+            "Magento_Checkout/js/configurator-attribute": {}
+        }
+    }
+</script>
+<script>
+    require(['product'], function(product) {
+        editCartItem = product;
+    });
+
+</script>

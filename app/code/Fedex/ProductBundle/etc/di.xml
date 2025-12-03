@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\ProductBundle\Api\ConfigInterface" type="Fedex\ProductBundle\Model\Config"/>
+    <type name="Magento\Quote\Model\Quote\Item\Option\Comparator">
+        <arguments>
+            <argument name="customComparators" xsi:type="array">
+                <item name="bundle_instance_id_hash" xsi:type="object">Fedex\ProductBundle\Model\Quote\Item\BundleInstanceIdHash</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

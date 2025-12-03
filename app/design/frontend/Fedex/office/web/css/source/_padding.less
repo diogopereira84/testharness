@@ -1,0 +1,36 @@
+/* LESS generator for padding. */
+@_padding: 0,1,6,8,10,12,15,20,24;
+@_padding_top: 0,4,7,8,10,12,15,16,20,25,32,64,80;
+@_padding_bottom: 0,4,5,7,8,10,12,15,16,20,24,25,30,35,40,48;
+@_padding_left: 0,3,10,12,15,16,20,24,35,48,80;
+@_padding_right: 0,5,10,12,15,16,20,24,35,48,80;
+
+.padding-utility(@param, @index) when (@index > 0) {
+    & when(@param = "padding") {
+        @_p_value: extract(@_padding, @index);
+        .p-@{_p_value}   { padding:~"@{_p_value}px"; }
+    }
+  	& when(@param = "padding-top") {
+        @_pt_value: extract(@_padding_top, @index);
+        .pt-@{_pt_value}   { padding-top:~"@{_pt_value}px"; }
+    }
+  	& when(@param = "padding-bottom") {
+        @_pb_value: extract(@_padding_bottom, @index);
+        .pb-@{_pb_value}   { padding-bottom:~"@{_pb_value}px"; }
+    }
+    & when(@param = "padding-left") {
+        @_pl_value: extract(@_padding_left, @index);
+        .pl-@{_pl_value}   { padding-left:~"@{_pl_value}px"; }
+    }
+    & when(@param = "padding-right") {
+        @_pr_value: extract(@_padding_right, @index);
+        .pr-@{_pr_value}   { padding-right:~"@{_pr_value}px"; }
+    }
+    .padding-utility(@param, @index - 1);
+}
+
+.padding-utility("padding", length(@_padding));
+.padding-utility("padding-top", length(@_padding_top));
+.padding-utility("padding-bottom", length(@_padding_bottom));
+.padding-utility("padding-left", length(@_padding_left));
+.padding-utility("padding-right", length(@_padding_right));

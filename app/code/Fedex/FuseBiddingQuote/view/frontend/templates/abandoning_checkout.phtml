@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var Fedex\FuseBiddingQuote\ViewModel\FuseBidViewModel $fuseBidViewModel */
+$fuseBidViewModel = $block->getData('fusebidQuoteViewModal');
+?>
+
+<?php
+if ($fuseBidViewModel->isFuseBidToggleEnabled()): ?>
+    <div id="retail-abandoning-checkout-modal-popup" class="retail-abandoning-checkout-modal-popup-content" style="display: none">
+        <div class="warning-icon-container">
+            <img class="warning-icon" alt="Warning" 
+            src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/commercial-order-approval/warning.png'));?>"/>
+        </div>
+        <h3 class="abandoning-checkout-title">
+            <?= $escaper->escapeHtml(__('Are you sure you want to leave checkout?')) ?>
+        </h3>
+        <div class="abandoning-checkout-message">
+            <?= $escaper->escapeHtml(__('You will be redirected to the homepage and lose all progress.')) ?>
+        </div>
+        <div class="abandoning-checkout-popup-btn-container">
+            <button type="button" data-role="closeBtn" class="btn-popup-cancel">
+                <?= $escaper->escapeHtml(__('Cancel')) ?>
+            </button>
+            <button type="button" class="btn-close-checkout">
+                <?= $escaper->escapeHtml(__('Yes, Close Checkout')) ?>
+            </button>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+            "*": {
+                    "Fedex_FuseBiddingQuote/js/abandoning_checkout_modal_popup": {
+                    }
+            }
+    }
+    </script>
+<?php endif; ?>

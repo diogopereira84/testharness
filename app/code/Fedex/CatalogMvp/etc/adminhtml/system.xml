@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex">
+            <group id="general" translate="label" type="text"  showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="create_zip_download_file_api_url" translate="label" type="text" sortOrder="548" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Create Zip Download File API URL</label>
+                </field>
+            </group>
+            <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Retention Cron Settings</label>
+                     <field id="run_cron_time" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                         <label>Set Cron run time</label>
+                         <comment>Set "0 0 30 2 *" to disable cron</comment>
+                     </field>
+                    <field id="retention_period" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                         <label>Retention Period(in months)</label>
+                    </field>
+            </group>
+            <group id="non_standard_catalog_popup_model_replace_file_config" translate="label" type="text" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Request Change Popup Non Standard Catalog Replace File Config</label>
+                <field id="replace_file_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace File New Document Api Url</label>
+                </field>
+                <field id="replace_file_max_limit_msg" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Message</label>
+                </field>
+                <field id="replace_file_max_limit" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Limit</label>
+                </field>
+                <field id="replace_file_text" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Request Change Popup Replace File Text</label>
+                </field>
+                <field id="replace_file_name_length_msg" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Name Length Message</label>
+                </field>
+                <field id="replace_file_name_length" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Name Length</label>
+                </field>
+                <field id="replace_file_supported_types" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files supported types</label>
+                    <comment>Provide comma seprated value like jpg, jpeg etc.</comment>
+                </field>
+                <field id="replace_file_max_size_msg" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Size Message</label>
+                </field>
+                <field id="replace_file_max_size" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Max Size (In MB)</label>
+                </field>
+                <field id="replace_file_expiration" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Expiration (In Days)</label>
+                    <comment>Provide Expiration (In Days)</comment>
+                </field>
+                <field id="replace_file_check_pdf" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Replace Files Check PDF</label>
+                </field>
+            </group>
+        </section>
+        <section id="ondemand_setting">
+			<group id="category_setting" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <field id="epro_print_custom_product" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Custom Product Category</label>
+                    <source_model>Fedex\CatalogMvp\Model\Source\CategoryOptions</source_model>
+                </field>
+                 <field id="epro_print_skuonly_product" type="select" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sku Product Category</label>
+                    <source_model>Fedex\CatalogMvp\Model\Source\CategoryOptions</source_model>
+                </field>
+                <field id="sku_only_productId" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Sku Only Product Id</label>
+                </field>
+			</group>
+            <group id="top_menu_settings" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>Top Menu</label>
+                <field id="excluded_classes" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Excluded Top Menu Classes</label>
+                    <comment>This is comma delimited list of classes (no spaces) that are exempt from calling the /selfreg/ajax/topmenu for performance.</comment>
+                </field>
+            </group>
+		</section>
+        <section id="catalog_expiry_notification_setting" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<label>Catalog Expiry Notification Settings</label>
+			<tab>fedex_configurations</tab>
+			<resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+			<group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Expiry Notification Cron Configuration</label>
+                <field id="expire_notification_cron" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Set Cron run time</label>
+                    <comment>Set "0 12 1 * *" to run on 1st of every month at 12:00</comment>
+                </field>
+            </group>
+		</section>
+        <section id="environment_toggle_configuration">
+            <group id="environment_toggle">
+                <field id="tiger_d206810" translate="label" type="select" sortOrder="432" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-206810 - Selfreg/Epro: Duplicate function not working for catalog/custom docs in grid/list view</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="etag_b2371268" translate="label" type="select" sortOrder="433" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Mage Geeks - B-2371268 - ETag For Catalog Page Only</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d210517" translate="label" type="select" sortOrder="433" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-210517 - Epro-For the catalog item, updated price details are not reflecting.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d213910" translate="label" type="select" sortOrder="434" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-213910 - Selfreg_Unpublished catalog folders are reflecting for normal users</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d215859" translate="label" type="select" sortOrder="435" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-215859 - Selfreg/Epro -Unable to search newly created catalog document</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="magegeeks_d236791" translate="label" type="select" sortOrder="436" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Mage Geeks - D-236791 - POD COMMERCIAL - Undefined values in SKU modal for Magento created products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

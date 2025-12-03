@@ -1,0 +1,1327 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+use Magento\Framework\App\Action\Action;
+// B-1149167 : RT-ECVS-SDE-SDK changes for File upload
+/** @var $viewModel ProductList */
+$viewModel = $block->getData('product_list_view_model');
+$viewModelMvphelper= $block->getData('view_model_mvphelper');
+$tazToken = $viewModel->getTazToken();
+$siteName = $viewModel->getSiteName();
+$eProClass = $viewModel->getWrapperClass();
+$isCommercialCustomer = $viewModel->isCommercialCustomer();
+$catalogHelper = $viewModel->getCatalogDocumentUserSettingsHelper();
+$helper = $viewModel->getDeliveryDataHelper();
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$catalogMvpToggle = $catalogMvpHelper->isMvpSharedCatalogEnable();
+$customerAdmin = $catalogMvpHelper->isSharedCatalogPermissionEnabled();
+$isPrintProductCategory = $catalogMvpHelper->checkPrintCategory();
+$isCustomDocEnabled = $catalogMvpHelper->customDocumentToggle();
+$eproUnableToAddInBranchProductToCartToggle = $viewModelMvphelper->eproUnableToAddInBranchProductToCartToggle();
+
+$fixedQtyHandlerToggle = $viewModel->getFixedQtyHandlerToggle() ?? 0;
+$addToCartRedirectStop = $catalogMvpHelper->isEnableStopRedirectMvpAddToCart();
+
+$catalogEllipsisEnable = 0;
+$char100Enable =0 ;
+if($block->getMode() == 'grid'){
+    $catalogEllipsisEnable = $viewModel->isCatalogEllipsisControlEnabled();
+    $char100Enable = $viewModel->getCharLimitToggle();
+}
+$minChar = $viewModel->getCatalogEllipsisControlTotalCharacters();
+$minChar = !empty($minChar)?$minChar:56;
+$ellipsisStartChar = $viewModel->getCatalogEllipsisControlStartCharacters();
+$ellipsisStartChar = !empty($ellipsisStartChar)?$ellipsisStartChar:36;
+$ellipsisEndChar = $viewModel->getCatalogEllipsisControlEndCharacters();
+$ellipsisEndChar = !empty($ellipsisEndChar)?$ellipsisEndChar:20;
+
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+
+$_productCollection = $block->getLoadedProductCollection();
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
+$subcategories = $catalogMvpHelper->getSubCategories();
+
+if ($isCommercialCustomer) { ?>
+    <div class='commercial-toolbar-top'>
+     <?= $block->getToolbarHtml() ?>
+     </div>  
+ <?php } 
+
+if (!$_productCollection->count() && !$viewModelMvphelper->getChildCategoryCount()) { ?>
+   <div class="breadcrum-container-no-count"><?= $this->getLayout()->getBlock('breadcrumbs')->toHtml() ?></div>
+      <div class="message info empty mvp-catalog-product-an-category">
+          <div><?= $escaper->escapeHtml(__('We can\'t find products and folder matching the selection.')) ?></div>
+      </div>
+      <input type="hidden" class="category-product-count-is-zero" value="1">  
+<?php } else {
+// B-1569586 start
+if ($catalogMvpToggle){
+    ?>
+<div class="selected-number">
+    <div class="left-section">
+        <span class="item-count"></span>
+        <span class="spacing">&nbsp;</span>
+        <span class="count-text"><?= $escaper->escapeHtml(__(' Items selected')) ?></span>
+    </div>
+    <div class="right-section">
+        <a href="Javascript:void(0)" class="cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+        <button class="add-to-cart"><?= $escaper->escapeHtml(__('Add to Cart')) ?></button>
+    </div>
+</div>
+<?php } ?>
+<!-- B-1569586 end -->
+
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        
+            $imageDisplayArea = 'category_page_grid_custom';
+        
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <div class="loading-mask" style="display: none;" data-role="loader"><div class="loader"><img alt="Loading..." src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>"><p>Please wait...</p></div></div>
+    <?php if ($catalogMvpToggle) { ?>
+        <div class="loading-mask-mvp"  data-role="loader">
+            <div class="loader-mvp"><img alt="Loading..."
+                src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+                <p>Please wait...</p>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="products wrapper <?php echo $eProClass; ?> <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+
+        <ol class="products list items product-items customer-view">
+            <?php if($isCommercialCustomer && $catalogMvpToggle): ?>
+                <li class="item product product-item">
+                    <table>
+                        <tr>
+                            <th class="checkbox-selection-th">
+                                <input class="check-box-check-all  list-checkbox" type="checkbox"
+                            onClick="selects(this)" aria-label="checkbox-check-all" />
+                                <div class="Check-box-title"><?= $escaper->escapeHtml(__('CHECK ALL')) ?></div>
+                            </th>
+                            <th class="name-section-th">
+                                <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                            </th>
+                            <th class="modified-section-th">
+                                <div class="modified-info-title"><?= $escaper->escapeHtml(__('MODIFIED')) ?></div>
+                            </th>
+                            <th class="price-section-th">
+                                <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                            </th>
+                            
+                                <th class="preview-section-th">
+                                    <div class="preview-info-title"><?= $escaper->escapeHtml(__('PREVIEW')) ?></div>
+                                </th>
+                            
+                        </tr>
+                    </table>
+                </li>
+            <?php else :?>
+                <li class="item product product-item">
+                    <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                    <div class="modified-info-title"><?= $escaper->escapeHtml(__('LAST MODIFIED')) ?></div>
+                    <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                </li>
+
+            <?php endif; ?>
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <!-- B-1569586 -->
+            <?php if ($subcategories && $catalogMvpToggle && $this->getRequest()->getParam('p') < '2') { ?>
+                <?php
+                    foreach ($subcategories as $subcategorie):
+                    $isFolderPermissionAllowed = $catalogMvpHelper->isFolderPermissionAllowed($subcategorie->getId());
+                    if ($isFolderPermissionAllowed):
+                ?>
+                <li class="item product product-item">
+                    <?php if($isCommercialCustomer && $catalogMvpToggle): ?>
+                    <div class="product-item-info">
+                        <?php if($viewMode == "list") :?>
+                        <table>
+                            <tr>
+                                <td class="checkox-section-td">
+                                    <input class="category-item-checkbox list-checkbox dummy-hide" type="checkbox"
+                                            id="<?= /* @noEscape */ $subcategorie->getName() ?>"
+                                            name="<?= /* @noEscape */ $subcategorie->getName() ?>" value=""/>
+                                    <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                    aria-label="sub category links">
+                                        <span class="product-image-container">
+                                            <span class="product-image-wrapper" style="padding-bottom: 125%;">
+                                                <div class="sub-categorty-img"></div>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </td>
+                                <td class="name-section-td">
+                                    <div class = "product-name-list">
+                                        <span class = "sub-category name product-item-name">
+                                            <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                                aria-label="sub category links">
+                                                <?= /* @noEscape */ $subcategorie->getName() ?>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="modified-section-td">
+                                    <div class="modified-info">
+                                        <?php
+                                        $sec = strtotime($subcategorie->getUpdatedAt());
+                                        $modifiedDate = date("m/d/Y", $sec);
+                                        ?>
+                                        <?= /* @noEscape */ $modifiedDate ?>
+                                    </div>
+                                </td>
+                                <td class="price-section-td">
+                                    &nbsp;
+                                </td>
+                                
+                                    <td class="preview-section-td"></td>
+                                
+                            </tr>
+                        </table>
+                        <?php else :?>
+                            <table>
+                            <tr>
+                                <td class="grid checkox-section-td">
+                                    <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                    aria-label="sub category links">
+                                        <span class="product-image-container">
+                                            <span class="product-image-wrapper" style="padding-bottom: 125%;">
+                                                <div class="sub-categorty-img"></div>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="grid name-section-td">
+                                    <div class = "product-name-list">
+                                        <span class = "sub-category name product-item-name">
+                                            <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                                    aria-label="sub category links" alt="<?= /* @noEscape */ $subcategorie->getName() ?>">
+                                                <?= /* @noEscape */ $subcategorie->getName() ?>
+                                            </a>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="grid modified-section-td">
+                                    <div class="modified-info">
+                                        <?php
+                                        $sec = strtotime($subcategorie->getUpdatedAt());
+                                        $modifiedDate = date("m/d/Y", $sec);
+                                        ?>
+                                        <?= /* @noEscape */ $modifiedDate ?>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="grid price-section-td">
+                                   &nbsp;
+                                </td>
+                            </tr>
+                        </table>
+                        <?php endif;?>
+                    </div>
+                    <?php endif;?>
+                </li>
+                <?php endif; endforeach; ?>
+                <?php  } ?>
+            <?php foreach ($_productCollection as $_product):?>
+                <?php
+                    $attributeSetId = $_product->getAttributeSetId();
+                    $attribute_set_name = $helper->getProductAttributeName($attributeSetId);
+                    $custmizable = (bool)$_product->getData('customizable');
+                    $customizableClass = $custmizable ? 'customizable' : '';
+
+                    if($attribute_set_name == 'PrintOnDemand'
+                        && $_product->getData('external_prod') !== null) {
+                      $externalProdData=$_product->getData('external_prod');
+                      $externalProdData=json_decode($externalProdData,true);
+
+                      $catalogProductId=(isset($externalProdData['catalogReference']['catalogProductId'])) ?
+                       $externalProdData['catalogReference']['catalogProductId'] : "";
+                    }
+                 ?>
+
+            <li class="item product product-item">
+                <?php if($isCommercialCustomer && $catalogMvpToggle): ?>
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                     <?php if($viewMode == "list") :?>
+                     <table>
+                        <tr>
+                            <td class="checkox-section-td">
+                                <input class="product-item-checkbox list-checkbox <?php echo $customizableClass; ?>" type="checkbox"
+                                id="product-item-checkbox_<?= /* @noEscape */ $_product->getId() ?>"
+                                name="<?= /* @noEscape */ $_product->getId() ?>"
+                                value="product-name<?= /* @noEscape */ $_product->getId() ?>"
+                                data-item-sku="<?= /* @noEscape */ $_product->getSku() ?>"
+                                aria-label="checkbox-<?= $_product->getId()?>"
+                                />
+                                <?php $productImage = $block->getImage($_product, $imageDisplayArea);?>
+                                <?= $productImage->toHtml() ?>
+                            </td>
+                            <td class="name-section-td">
+                                <?php
+                                    $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                                    $length = 50;
+                                    if($isCommercialCustomer && strlen($proName) > $length) {
+                                        $proName = wordwrap($proName, $length);
+                                        $proNameArray = explode("\n", $proName, 2);
+                                        $proName = $proNameArray[0] . ' ...';
+                                    }
+                                ?>
+                                <?php if($isCustomDocEnabled && $custmizable): ?>
+                                    <div class="wrench-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25" fill="none">
+                                        <rect x="0.25" y="0.25" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M1 1V19.75H14.5V1H1Z" fill="#F2F2F2"/>
+                                        <rect x="2.5" y="2.5" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M3.25 3.25V22H16.75V3.25H3.25Z" fill="#F2F2F2"/>
+                                        <rect x="4.75" y="4.75" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M5.5 5.5V24.25H19V5.5H5.5Z" fill="#F2F2F2"/>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.6674 12.6053L17.1686 11.1092C17.3744 10.9041 17.7203 10.9588 17.8527 11.2174C18.5629 12.605 18.3085 14.3119 17.1896 15.431C16.1475 16.4728 14.5981 16.7641 13.269 16.2248L8.65688 20.8362C8.10578 21.3878 7.21322 21.3878 6.66271 20.8368C6.11087 20.2866 6.11327 19.3924 6.6649 18.8417L11.2824 14.2296C10.7454 12.9036 11.0436 11.3538 12.0878 10.31C13.2063 9.19238 14.9292 8.93701 16.3172 9.64665C16.5742 9.77806 16.6304 10.1208 16.4289 10.3274L14.9642 11.8292V12.6053H15.6674ZM17.3067 12.1816L16.147 13.3374C16.0667 13.4175 15.9579 13.4624 15.8445 13.4624H14.5357C14.299 13.4624 14.1071 13.2706 14.1071 13.0339V11.6548C14.1071 11.543 14.1508 11.4356 14.2289 11.3556L15.3606 10.1952C14.4268 9.9547 13.4002 10.2103 12.6937 10.9162C11.8369 11.7727 11.6375 13.0733 12.1772 14.1273C12.262 14.2929 12.2302 14.4943 12.0986 14.6258L7.27055 19.4482C7.05356 19.6648 7.05262 20.0152 7.26848 20.2304C7.48479 20.4469 7.83422 20.4469 8.05069 20.2303L12.8732 15.4084C13.0047 15.277 13.2059 15.2453 13.3714 15.33C14.4305 15.8717 15.7302 15.678 16.5835 14.825C17.2883 14.1201 17.5437 13.1088 17.3067 12.1816Z" fill="#333333"/>
+                                        </svg>
+                                    </div>
+                                <?php endif; ?>
+                                <div class="product-name-list">
+                                    <strong class="product name product-item-name">
+                                        <?=/* @noEscape */ $proName;  ?>
+                                    </strong>
+                                </div>
+                            </td>
+                            <td class="modified-section-td item-list-view">
+                                <div class="modified-info">
+                                    <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?>
+                                </div>
+                            </td>
+                            <td class="price-section-td">
+                                <?php if ($attribute_set_name != 'FXOPrintProducts') : ?>
+                                    <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                                <?php endif; ?>
+                            </td>
+                            
+                            <td class="preview-section-td">
+                                <?php 
+                                    if ($eproUnableToAddInBranchProductToCartToggle) {
+
+                                    if (isset($externalProdData['contentAssociations']) &&
+                                    !empty($externalProdData['contentAssociations'])) 
+                                    {                                    
+                                     ?>
+                                    <a href="javascript:void(0);" title="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">Preview</a>
+                                    <?php } ?>
+                                <?php } else { ?>
+                                    <a href="javascript:void(0);" title="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">Preview</a>
+                                <?php } ?>
+                            </td>
+                            
+                        </tr>
+                     </table>
+                     <?php else :?>
+                    <table>
+                        <tr>
+                            <td class="grid checkox-section-td">
+                                <div style="float:left;width:100%;">
+                                    <div style="margin-left: 15px;margin-top: 15px;position: absolute;">
+                                        <input class="product-item-checkbox list-checkbox <?php echo $customizableClass; ?>" type="checkbox"
+                                        id="product-item-checkbox_<?= /* @noEscape */ $_product->getId() ?>"
+                                        name="<?= /* @noEscape */ $_product->getId() ?>"
+                                        value="product-name<?= /* @noEscape */ $_product->getId() ?>"
+                                        data-item-sku="<?= /* @noEscape */ $_product->getSku() ?>"
+                                        aria-label="checkbox-<?= $_product->getId()?>"
+                                        />
+                                    </div>
+                                    <?php if($isCustomDocEnabled && $custmizable): ?>
+                                    <div class="wrench-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25" fill="none">
+                                        <rect x="0.25" y="0.25" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M1 1V19.75H14.5V1H1Z" fill="#F2F2F2"/>
+                                        <rect x="2.5" y="2.5" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M3.25 3.25V22H16.75V3.25H3.25Z" fill="#F2F2F2"/>
+                                        <rect x="4.75" y="4.75" width="15" height="20.25" fill="#333333"/>
+                                        <path d="M5.5 5.5V24.25H19V5.5H5.5Z" fill="#F2F2F2"/>
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M15.6674 12.6053L17.1686 11.1092C17.3744 10.9041 17.7203 10.9588 17.8527 11.2174C18.5629 12.605 18.3085 14.3119 17.1896 15.431C16.1475 16.4728 14.5981 16.7641 13.269 16.2248L8.65688 20.8362C8.10578 21.3878 7.21322 21.3878 6.66271 20.8368C6.11087 20.2866 6.11327 19.3924 6.6649 18.8417L11.2824 14.2296C10.7454 12.9036 11.0436 11.3538 12.0878 10.31C13.2063 9.19238 14.9292 8.93701 16.3172 9.64665C16.5742 9.77806 16.6304 10.1208 16.4289 10.3274L14.9642 11.8292V12.6053H15.6674ZM17.3067 12.1816L16.147 13.3374C16.0667 13.4175 15.9579 13.4624 15.8445 13.4624H14.5357C14.299 13.4624 14.1071 13.2706 14.1071 13.0339V11.6548C14.1071 11.543 14.1508 11.4356 14.2289 11.3556L15.3606 10.1952C14.4268 9.9547 13.4002 10.2103 12.6937 10.9162C11.8369 11.7727 11.6375 13.0733 12.1772 14.1273C12.262 14.2929 12.2302 14.4943 12.0986 14.6258L7.27055 19.4482C7.05356 19.6648 7.05262 20.0152 7.26848 20.2304C7.48479 20.4469 7.83422 20.4469 8.05069 20.2303L12.8732 15.4084C13.0047 15.277 13.2059 15.2453 13.3714 15.33C14.4305 15.8717 15.7302 15.678 16.5835 14.825C17.2883 14.1201 17.5437 13.1088 17.3067 12.1816Z" fill="#333333"/>
+                                        </svg>
+                                    </div>
+                                <?php endif; ?>
+                                    <div class="item-container-image">
+                                        <?php $productImage = $block->getImage($_product, $imageDisplayArea);?>
+                                        <a href="javascript:void(0);" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">
+                                            <?= $productImage->toHtml() ?>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="grid name-section-td">
+                                <?php
+                                    $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                                    $length = 50;
+                                    if($isCommercialCustomer && strlen($proName) > $length) {
+                                        $proName = wordwrap($proName, $length);
+                                        $proNameArray = explode("\n", $proName, 2);
+                                        $proName = $proNameArray[0] . ' ...';
+                                    }
+                                ?>
+                                <div class="product-name-list">
+                                    <strong class="product name product-item-name product-item-link-nolinks">
+                                        <a class="product-item-link" alt="<?= /* @noEscape */ $proName ?>">
+                                            <?=/* @noEscape */ $proName;  ?>
+                                        </a>    
+                                    </strong>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="grid modified-section-td item-list-view">
+                                <div class="modified-info">
+                                    <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="grid price-section-td">
+                                <?php if ($attribute_set_name != 'FXOPrintProducts') : ?>
+                                    <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                                <?php endif; ?>
+                            </td>
+                        </tr>
+                     </table>
+                     <?php endif;?>
+                </div>
+                <?php else : ?>
+                <div style= "display:block;" class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                     <!-- B-1569586 -->
+                    <?php
+                    if ($catalogMvpToggle) {
+                    ?>
+                        <input class="product-item-checkbox list-checkbox" type="checkbox"
+                        id="product-item-checkbox_<?= /* @noEscape */ $_product->getId() ?>"
+                        name="<?= /* @noEscape */ $_product->getId() ?>"
+                        value="product-name<?= /* @noEscape */ $_product->getId() ?>"
+                         data-item-sku="<?= /* @noEscape */ $_product->getSku() ?>"
+                         aria-label="checkbox-<?= $_product->getId()?>"
+                         />
+                    <?php } ?>
+                    <?php
+                    $productImage = $block->getImage($_product, $imageDisplayArea);
+                    if ($pos != null) {
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
+                    }
+                    ?>
+                     <!-- Atul | D-64087 | Removed item link for Epro -->
+                    <?php if($isCommercialCustomer): ?>
+                        <?= $productImage->toHtml() ?>
+                    <?php else: ?>
+                        <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                           class="product photo product-item-photo"
+                           tabindex="-1">
+                            <?= $productImage->toHtml() ?>
+                        </a>
+                    <?php endif; ?>
+                     <?php
+                            $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                            $length = 50;
+                            if($isCommercialCustomer && strlen($proName) > $length) {
+                                $proName = wordwrap($proName, $length);
+                                $proNameArray = explode("\n", $proName, 2);
+                                $proName = $proNameArray[0] . ' ...';
+                             }
+                        ?>
+                         <!-- Atul | D-64087 | Removed item link for Epro -->
+                        <div class="product-name-list">
+                            <strong class="product name product-item-name">
+                                <?php if($isCommercialCustomer): ?>
+                                    <?=/* @noEscape */ $proName;  ?>
+                                <?php else: ?>
+                                    <a class="product-item-link"
+                                       href="<?= $escaper->escapeUrl($_product->getProductUrl()); ?>">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                               <?php endif; ?>
+                           </strong>
+
+                           <!-- Atul | B-918802 | Ability to display document description (Grid View) in Browse Catalog for ePro -->
+                        <?php if($isCommercialCustomer && $attribute_set_name == 'PrintOnDemand'): ?>
+                        <?php
+                            $shortDesc = $_helper->productAttribute($_product, $_product->getShortDescription(), 'short_description');
+                            $shortDescWithoutTag = strip_tags((string)$shortDesc);
+                            $shortDescLength = 50;
+                            if(strlen((string)$shortDesc) > $shortDescLength) {
+                                $shortDesc = wordwrap($shortDesc, $shortDescLength);
+                                $shortDescArray = explode("\n", $shortDesc, 2);
+                                $shortDesc = $shortDescArray[0] . ' ...';
+                             }
+                        ?>
+                        <!-- B-1569586 -->
+                        <?php if (!$catalogMvpToggle) { ?>
+                            <div class="short-desc" title="<?=/* @noEscape */ $shortDescWithoutTag; ?>">
+                            <?=/* @noEscape */ $shortDesc; ?></div>
+                        <?php } ?>
+                        <?php endif; ?>
+
+                       </div>
+                       <div class="modified-info">
+                       <!-- B-1569586 -->
+                       <?php if ($catalogMvpToggle) { ?>
+                            <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?>
+                        <?php } else { ?>
+                            <?= date('m/d/Y',strtotime($_product->getUpdatedAt())).' at '; ?>
+                        <span><?=date('g:i a',strtotime($_product->getUpdatedAt()))?></span>
+                        <?php } ?>
+                        <br/>
+                        <?php
+                        if($isCommercialCustomer): ?>
+                        <?php
+                            if($_product->getResource()->getAttribute('admin_user_id')):
+                            $uid = $_product->getResource()->getAttribute('admin_user_id')
+                            ->getFrontend()->getValue($_product);
+                        ?>
+                        <!-- B-1569586 -->
+                        <?php if (!$catalogMvpToggle) { ?>
+                            <?= $catalogHelper->getFirstName($uid)==''?'':'by '.$catalogHelper->getFirstName($uid); ?>
+                        <?php } ?>
+                        <?php endif; ?>
+                        <?php endif; ?>
+                        </div>
+                    <div class="product details product-item-details">
+
+                        <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
+                        <?php if ($attribute_set_name != 'FXOPrintProducts') : ?>
+                        <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                        <?php endif; ?>
+                        <?php if ($_product->isAvailable()):?>
+                            <?= $block->getProductDetailsHtml($_product) ?>
+                        <?php endif; ?>
+
+                        <div class="product-item-inner">
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()):?>
+                                        <?php $postParams = $block->getAddToCartPostParams($_product); ?>
+
+                                        <form data-role="tocart-form"
+                                              data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
+                                              action="<?= $escaper->escapeUrl($postParams['action']) ?>"
+                                              method="post">
+                                            <input type="hidden"
+                                                   name="product"
+                                                   value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
+                                            <input type="hidden"
+                                                   name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
+                                                   value="<?=
+                                                   /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                    ?>">
+                                            <?= $block->getBlockHtml('formkey') ?>
+                                            <!--D-104270: If the page is not fully loaded, user is taken to shopping cart-->
+                                            <?php if ($attribute_set_name == 'FXOPrintProducts') : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadPrintProduct(event)('<?php echo $_product->getSku(); ?>', '<?php echo $siteName; ?>', '<?php echo $tazToken; ?>') : event.preventDefault()"
+                                                    class="action tocart primary primary upload-file" tabindex="0">
+                                                    Upload File
+                                                </button>
+                                                <?php elseif ($attribute_set_name == 'PrintOnDemand' && $custmizable == true) : ?>
+                                                 <button
+                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadCustomDocProduct(event)('<?php echo $tazToken; ?>', '<?php echo $siteName; ?>', '<?php echo $catalogProductId; ?>') : event.preventDefault()"
+                                                    class="action tocart custmizable_button primary primary" tabindex="0">
+                                                    Customize
+                                                </button>
+                                            <?php else: ?>
+                                                    <button type="submit"
+                                                    title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
+                                                    class="action tocart primary add-to-cart">
+                                                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
+                                                    </button>
+                                             <?php  endif;  ?>
+                                        </form>
+                                    <?php else:?>
+                                        <?php if($viewMode=='grid'): ?>
+                                        <?php if ($_product->isAvailable()):?>
+                                            <div class="stock available">
+                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else:?>
+                                            <div class="stock unavailable">
+                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
+                                        <?php endif; ?>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+
+
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-primary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                    ) : '' ?>
+                                <div data-role="add-to-links" class="actions-secondary">
+                                    <?php if ($addToBlock = $block->getChildBlock('addto')):?>
+                                        <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                    <?php endif; ?>
+                                </div>
+                                <?= strpos((string)$pos, $viewMode . '-secondary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                    ) : '' ?>
+                            </div>
+                            <?php if ($showDescription):?>
+                                <div class="product description product-item-description">
+                                    <?= /* @noEscape */ $_helper->productAttribute(
+                                        $_product,
+                                        $_product->getShortDescription(),
+                                        'short_description'
+                                    ) ?>
+                                    <?= $escaper->escapeHtml(__('Learn More')) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+                <?= strpos((string)$pos, $viewMode . '-actions') ?
+                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    $position,
+                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                ) : '' ?>
+                <?php endif?>
+            </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+<!-- B-1569586 -->
+<?php if ($catalogMvpToggle) { ?>
+
+    <?php
+    /*B-1611718*/
+    $panelTabs = [
+        "Print Properties",
+        "Description",
+        "Tags",
+        "Quantity"
+    ];
+    $descTags = [
+        "Print Properties",
+        "Description",
+        "Tags",
+    ];
+    $tags = [
+        "Tag ABC",
+        "Tag ABC"
+    ];
+    $menuitems = [
+        "Edit",
+        "Delete",
+        "Duplicate",
+        "Move",
+        "Rename"
+    ];
+    ?>
+    <!--B-1611718-->
+    <div id="accordion" class="panel-container" data-mage-init='{"accordion":{
+    "active": [1],
+    "collapsible": true,
+    "openedState": "active",
+    "multipleCollapsible": true
+}}' aria-busy="true">
+
+        <div class="panel-top">
+            <div class="item-panel-new">
+                <div class="panel-top-content">
+                    <div class="item-title"></div>
+                    <?php if($isCustomDocEnabled): ?>
+                        <div class="item-custom-doc-box">
+                            <div class="item-custom-option"></div>
+                            <div class="item-status" style="visibility: hidden;"></div>
+                        </div>
+                    <?php else: ?>
+                        <div class="item-status" style="visibility: hidden;"></div>
+                    <?php endif; ?>
+
+                </div>
+                <div class="panel-top-actions" style="visibility: hidden;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 48 48" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M24 33C25.656 33 27 34.344 27 36C27 37.656 25.656 39 24 39C22.344 39 21 37.656 21 36C21 34.344 22.344 33 24 33ZM24 21C25.656 21 27 22.344 27 24C27 25.656 25.656 27 24 27C22.344 27 21 25.656 21 24C21 22.344 22.344 21 24 21ZM27 12C27 10.344 25.656 9 24 9C22.344 9 21 10.344 21 12C21 13.656 22.344 15 24 15C25.656 15 27 13.656 27 12Z" fill="#333333"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        <?php foreach ($panelTabs as $panelTab): ?>
+            <?php if($panelTab != "Quantity"): ?>
+            <div class="panel-tab <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="collapsible">
+                <div data-role="trigger">
+                    <div class="tab-wrapper">
+                        <div class="tab-title">
+                            <?= $escaper->escapeHtml(__($panelTab)) ?>
+                        </div>
+                        <div class="tab-icon"></div>
+                    </div>
+                </div>
+            </div>
+            <?php endif; ?>
+            <div class="panel-content <?php if(in_array($panelTab,$descTags)): echo strtolower($panelTab); endif; ?>" data-role="content">
+                <?php if ($panelTab == "Print Properties"): ?>
+                    <div class="content-wrapper-print-properties">
+                        <div class="gallery-media">
+                            
+                            <img alt="gallery" class="preview-image-container" datashowpreview="1" datasku="" src="<?= $block->getViewFileUrl('images/gallery.png');?>">
+                            
+                        </div>
+
+                        <div class="print-properties"></div>
+                    </div>
+                <?php elseif ($panelTab == "Tags"): ?>
+                    <div class="content-wrapper <?php if ($panelTab == "Tags"): ?> tags <?php endif; ?>">
+                        <div class="content-title">Tag(s)</div>
+                        <div class="tags-wrapper"></div>
+                    </div>
+                <?php elseif ($panelTab == "Quantity"): ?>
+                    <div class="content-wrapper" style="padding: 17px 20px 30px 11px">
+                        <div class="content-title"><?= $panelTab ?></div>
+                        <div class="quantity-wrapper">
+                            <div class="qty-box-label">
+                                <div class="field-box-qty">
+                                    <input class="qty-box-value" value="50" aria-label="qty-box-value">
+                                    <select class="qty-dropbox-value" aria-label="qty-dropbox-value"></select>
+                                </div>
+                            </div>
+                            <!--B-1651604-->
+                            <div class="cart-chip-wrapper" onclick="location.href='#';" style="cursor: pointer;">
+                                <div class="cart-chip">
+                                    <div class="cart-chip-label">
+                                        <?= $escaper->escapeHtml(__('Add to cart')) ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                <?php else: ?>
+                    <div class="content-wrapper">
+                        <div class="content-title"><?= __('Description'); ?></div>
+                        <div class="content-desc"><?= __(''); ?></div>
+                    </div>
+                <?php endif; ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <!--B-1611718-->
+    <div class="dropdown-menu" style="display: none">
+        <?php foreach ($menuitems as $menuitem): ?>
+            <div class="menu-item">
+                <div class="menu-item-label <?= 'action_kebab_right_item_'.strtolower($menuitem)?>"><?= $menuitem; ?></div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php if ($isCommercialCustomer) { ?>
+         <div class="commercial-toolbar-bottom">
+            <?= $block->getToolbarHtml() ?>
+        </div>
+    <?php } ?>
+    <script>
+        function selects(checkBox) {
+            get = document.getElementsByClassName('product-item-checkbox');
+            for(var i=0; i<get.length; i++) {
+                get[i].checked = checkBox.checked;
+            }
+        };
+
+        /*B-1611718*/
+        function showPanel() {
+            /*D-137050*/
+            jQuery('body').removeClass('page-layout-2columns-left');
+            jQuery('body').addClass('page-layout-3columns catalog-mvp-customer-view');
+
+            jQuery( ".panel-top-actions" ).on( "click", function() {
+                jQuery(".dropdown-menu").show();
+            });
+
+            jQuery( ".dropdown-menu" ).on( "mouseleave", function() {
+                jQuery(this).hide();
+            });
+
+            jQuery(".panel-container").addClass("active");
+
+            if(screen.width >= 1280 && screen.width <= 1440) {
+                /* D-138269 */
+                jQuery(".commercial-toolbar-bottom") . css("width", "135%");
+
+            }
+            setTimeout(function() {
+                var mainContentEl = jQuery('#maincontent');
+                var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                var rightPanelEl = jQuery('#accordion');
+                var mainContentElHeight = mainContentEl.height();
+                var rightPanelElHeight = rightPanelEl.height();
+                var columnMainEl = jQuery('.column.main');
+                var columnMainElHeight = columnMainEl.height()- 60;
+                var fraction = 50;
+                if(columnMainElHeight < rightPanelElHeight){
+                    var newRightPanelHeight = rightPanelElHeight + fraction;
+                    mainContentEl.height(newRightPanelHeight);
+                    var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                    bootomToolbarEl.css('top',toolbarTop);
+                    bootomToolbarEl.css('position','relative');
+                    bootomToolbarEl.css('margin-top','50px');
+                }
+            }, 500);
+        }
+        /*B-1611718*/
+        function hidePanel() {
+            /*D-137050*/
+            jQuery('body').addClass('page-layout-2columns-left');
+            jQuery('body').removeClass('page-layout-3columns catalog-mvp-customer-view');
+
+            jQuery(".panel-container").removeClass("active");
+            if(screen.width >= 1280 && screen.width <= 1440) {
+                /* D-138269 */
+                jQuery(".commercial-toolbar-bottom") . css("width", "100%");
+            }else{
+                /* D-138269 */
+                jQuery(".commercial-toolbar-bottom") . css("width", "100%");
+            }
+
+            var mainContentEl = jQuery('#maincontent');
+            var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+            var columnMainEl = jQuery('.column.main');
+            var columnMainElHeight = columnMainEl.height();
+
+            mainContentEl.height(columnMainElHeight);
+            bootomToolbarEl.css('position','inherit');
+            bootomToolbarEl.css('margin-top','unset');
+        }
+
+        function getPrintProperties(externalProd, printingCost = null){
+            var json = externalProd.replace('/\\/g', '');
+            const obj = JSON.parse(json);
+            const printProperties = {};
+            var printPropertiesTab = [];
+            var printPropertiesContent = [];
+
+            if(!obj){
+                return false;
+            }else{
+                Object.entries(obj.features).forEach(([key, value]) => {
+                    printPropertiesTab.push(value.name);
+                    if(value.name != 'Orientation' ){
+                        printPropertiesContent.push(value.choice.name );
+                    }else{
+                        var valueTransform = value.choice.properties[0].value;
+                        var finalValue = valueTransform.split(' ').map(function(word, index){
+                            return word.charAt(0) + word.slice(1).toLowerCase();
+                        }).join('-');
+                        printPropertiesContent.push(finalValue);
+                    }
+                });
+
+
+                if(printingCost) {
+                   const formatter = new Intl.NumberFormat('en-US', {
+                      style: 'currency',
+                      currency: 'USD',
+                    });
+                    printPropertiesTab.push("Printing Cost");
+                    printPropertiesContent.push(formatter.format(printingCost));
+                }
+                Object.entries(obj.contentAssociations)
+                .forEach(([key, value]) => {
+                    Object.entries(value).forEach(([k, v]) => {
+                        if(k == "fileName"){
+                            printPropertiesTab.push(k);
+                            printPropertiesContent.push(v);
+                        }
+                    });
+                });
+
+                printPropertiesTab.forEach((key, idx) => printProperties[key] = printPropertiesContent[idx]);
+
+                return printProperties;
+            }
+
+        }
+
+        function propertiesHtml(properties){
+            var printPropertiesContent = '';
+            if(properties){
+                for (const [key, value] of Object.entries(properties)) {
+                    if(key !== 'fileName' && value !== "None"){
+                        printPropertiesContent += '<div class="property-wrapper">'
+                            + '<div class="property-label">' + key + '</div>'
+                            + '<div class="property">' + value + '</div>'
+                        + '</div>';
+                    }
+                }
+            }else{
+                printPropertiesContent = properties;
+            }
+            return printPropertiesContent;
+        }
+
+    // Pattern Fly Truncation Default Values
+
+     function patternFlyTruncationCatalog(
+            text,
+            minimumCharacters = <?= $minChar ?>,
+            firstPartNumChars = <?= $ellipsisStartChar ?>,
+            lastPartNumChars = <?= $ellipsisEndChar ?>
+        ) {
+
+            let isTruncated = false;
+            if (text?.length > minimumCharacters) {
+                isTruncated = true;
+                return [`${text.slice(0, firstPartNumChars)}...${text.slice(-lastPartNumChars)}`, isTruncated];
+            }
+
+            return [text, isTruncated];
+        }
+
+        require(['jquery','mage/url'], function($){
+        
+         if ("<?= $catalogEllipsisEnable?>" == "1" && "<?= $char100Enable ?>" == "1" ) {
+            $('.product-items .product-item-name a').each(function() {
+                    $(this).attr('aria-label', $(this).text().trim());
+                    const [truncatedText, isTruncated] = patternFlyTruncationCatalog($(this).text().trim());
+
+                    if (isTruncated) {
+                       $(this).attr("title",jQuery(this).attr("alt"));
+                       $(this).html(truncatedText);
+                       $(this).addClass("break-all")
+                    }
+            });
+        }
+
+            $(document).ready(function() {
+                $('.loading-mask-mvp').hide();
+                var isCustomerView = $("ol.products.list").hasClass("customer-view");
+               if(isCustomerView){
+                   $("body").addClass("customer-view");
+                }
+
+                $(".product-item-checkbox").on('click', function(){
+                    $(".selected-number").addClass("show");
+                    if ($(".check-box-check-all").is(":checked")) {
+                        $('.check-box-check-all').attr('checked', false);
+                    }
+                });
+
+                var $checkboxes = $('.product-item-checkbox.list-checkbox');
+                $checkboxes.change(function(){
+                    var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+                    var isCustomizableCheckboxSelected = $checkboxes.filter('.customizable:checked').length;
+                    var isCustomDocEnabled = <?php echo json_encode(boolval($isCustomDocEnabled)); ?>;
+                    if(isCustomDocEnabled && isCustomizableCheckboxSelected > 0){
+                        $(".add-to-cart").hide();
+                    }else {
+                        $(".add-to-cart").show();
+                    }
+                    if (countCheckedCheckboxes) {
+                        $('.item-count') . text(countCheckedCheckboxes);
+                        $('.item-count') . val(countCheckedCheckboxes);
+
+                        /*B-1611718*/
+                        if(countCheckedCheckboxes < 2){
+                            $(window).scrollTop(0);
+                            /*B-1651604*/
+                            var itemId = $checkboxes.filter(':checked').attr("id").split("_");
+                            var url = "<?= $this->getUrl('catalogmvp/index/rightpanel')?>";
+                            var isCustomDocEnabled = '<?= $isCustomDocEnabled ?>';
+                            $.ajax({
+                                url: url,
+                                type: 'get',
+                                dataType: 'JSON',
+                                data: {
+                                    item_id: parseInt(itemId[1])
+                                },
+                                showLoader: true,
+                                success: function (response){
+                                    if (response.previewLinkDisplay == 'false' && jQuery('.menu-item-label:contains("Preview")').length) {
+                                        jQuery('.menu-item-label:contains("Preview")').closest('.menu-item').remove();
+                                    }
+                                    var itemTitle = response.name?response.name: "Catalog Item";
+                                    var itemStatus = (response.published == 1)?"Published":"Unpublished";
+                                    var itemThumbnail = response.small_image_url;
+                                    var printProperties = {};
+                                    var printingCost = response.price ? response.price: null;
+                                    var itemDesc = response.catalog_description?response.catalog_description: false;
+                                    var itemMetaKeyword = response.related_keywords?response.related_keywords: false;
+                                    var productQty = (response.quantity_and_stock_status.qty)
+                                    ?response.quantity_and_stock_status.qty:1;
+                                    var isCustomizeProduct = response.customizable;
+
+                                    if(response.external_prod != null
+                                    && Object.keys(response.external_prod).length > 2){
+                                        var obj = JSON.parse(response.external_prod);
+
+                                        productQty = (obj.qty)?obj.qty:1;
+
+                                        if(obj.name !== "Legacy Catalog"
+                                        && obj.instanceId !== 0)
+                                        {
+                                            productQty = (obj.qty)
+                                            ?obj.qty:1;
+                                            printProperties = getPrintProperties(response.external_prod, printingCost);
+                                        }
+                                    }
+
+                                    $('.item-title').text(itemTitle);
+                                    $('.item-status').text(itemStatus);
+                                    if(isCustomizeProduct == 1 && isCustomDocEnabled == 1) {
+                                        $('.cart-chip-label').text('Customize');
+                                        $('.item-custom-option').text('Customizable Document');
+                                        $('.cart-chip-wrapper').addClass('action-customize-product');
+                                    } else {
+                                        $('.cart-chip-label').text('Add to cart');
+                                        $('.item-custom-option').text('');
+                                        $('.cart-chip-wrapper').removeClass('action-customize-product');
+                                    }
+                                    $('.gallery-media img').attr('src', itemThumbnail);
+                                    $('.gallery-media img').attr('datasku', response.sku);
+                                    var propertiesDivEl = $('.print-properties');
+
+                                    var propertiesEl = '';
+                                    if(Object.keys(printProperties).length !== 0){
+                                        propertiesEl = propertiesHtml(printProperties);
+                                        propertiesDivEl.html(propertiesEl);
+
+                                    }else{
+                                        propertiesEl = propertiesHtml(printProperties);
+                                        propertiesDivEl.html(propertiesEl);
+                                    }
+
+                                    $('.content-desc').html(itemDesc);
+
+                                    if(itemDesc){
+                                            $('.panel-tab.description').show();
+                                            $('.panel-content.description').show();
+                                    }else{
+
+                                        $('.panel-tab.description').show();
+                                        $('.panel-content.description').hide();
+                                        $('.panel-tab.description').removeClass('active');
+                                    }
+
+                                    var chipsEl = '';
+                                    if(itemMetaKeyword){
+                                        var tags = itemMetaKeyword.split(',');
+
+                                        $.each(tags, function( index, tag ) {
+                                            chipsEl += '<div class="chips">'
+                                            +'<div class="tag-button">'
+                                                +'<div class="tag-label">'
+                                                +  tag
+                                                + '</div>'
+                                            +'</div></div>';
+                                        });
+                                    }
+                                    $('.tags-wrapper').html(chipsEl);
+
+                                    // Allowed qty for catalogMvp
+                                    var fixedQtyHandlerToggle = <?= /* @escapeNotVerified */ $fixedQtyHandlerToggle?: 0 ?>;
+
+                                    if (fixedQtyHandlerToggle) {
+                                        var productQtyArray = '';
+                                        if (response.external_prod != null
+                                            && Object.keys(response.external_prod).length > 2) {
+                                            var obj = JSON.parse(response.external_prod);
+                                            productQtyArray = obj.quantityChoices ? obj.quantityChoices : 0;
+                                        }
+
+                                        if (productQtyArray.length > 1) {
+                                            var options = '';
+                                                jQuery.each( productQtyArray, function( key, value ) {
+                                                    var isSelected = (value == productQty)? 'selected="selected"': '';
+                                                    options += '<option value="'+value+'" '
+                                                    + isSelected + '>'+value+'</option>';
+                                                });
+                                                jQuery('.qty-box-value').hide();
+                                                jQuery('.qty-dropbox-value').html(options);
+                                                jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+                                        } else if (productQty > 1) {
+                                            var options = '';
+                                            for (let i = 1; i <= 5; i++) {
+                                                var result = i * productQty;
+                                                var isSelected = (result == productQty)? 'selected="selected"': '';
+                                                    options += '<option value="'+result+'" '
+                                                                + isSelected + '>'+result+'</option>';
+                                            }
+
+                                            jQuery('.qty-box-value').hide();
+                                            jQuery('.qty-dropbox-value').html(options);
+
+                                            jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+
+                                        } else {
+                                            jQuery('.qty-dropbox-value').next(".select2-container").hide();
+                                            jQuery('.qty-dropbox-value').hide();
+                                            jQuery('.qty-box-value').show();
+                                            $('.qty-box-value').val(productQty);
+                                        }
+                                    }
+                                    else {
+                                        if(productQty > 1){
+                                            var options = '';
+                                            for(let i = 1; i <= 5; i++) {
+                                            var result = i * productQty;
+                                                var isSelected = (result == productQty)? 'selected="selected"': '';
+                                                options += '<option value="'+result+'" '
+                                                + isSelected + '>'+result+'</option>';
+                                            }
+
+                                            jQuery('.qty-box-value').hide();
+                                            jQuery('.qty-dropbox-value').html(options);
+
+                                            jQuery('.qty-dropbox-value').select2({minimumResultsForSearch: -1});
+
+                                        }else{
+                                            jQuery('.qty-dropbox-value').next(".select2-container").hide();
+                                            jQuery('.qty-dropbox-value').hide();
+                                            jQuery('.qty-box-value').show();
+                                            $('.qty-box-value').val(productQty);
+                                        }
+                                    }
+                                }
+                            });
+
+                            /*B-1611718*/
+                            showPanel();
+                        }else{
+                            /*B-1611718*/
+                            hidePanel();
+                        }
+                    } else {
+                        $(".selected-number").removeClass("show");
+
+                        /*B-1611718*/
+                        hidePanel();
+                    }
+                });
+                $(".check-box-check-all").on('click', function(){
+                    if ($(".check-box-check-all").is(":checked")) {
+                        $(".selected-number").addClass("show");
+                    } else {
+                        $(".selected-number").removeClass("show");
+                    }
+                    $checkboxes.parent().parent().parent().parent().parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+                    var countCheckedCheckboxes = $checkboxes.filter(':checked').length;
+                    if (countCheckedCheckboxes) {
+                        $('.item-count') . text(countCheckedCheckboxes);
+                        $('.item-count') . val(countCheckedCheckboxes);
+                    }
+                });
+
+                let bodyCls = $('body').attr('class'),
+                isSharedCatalog = "browse-catalog";
+
+                if(bodyCls.indexOf(isSharedCatalog) !== -1){
+                    $('body').addClass('catalog-mvp-shared-catalog');
+                }
+            });
+
+            $(document).on("change", ".product-item-checkbox.list-checkbox", function () {
+                $(this).parent().parent().parent().parent().parent().parent()[this.checked ? "addClass" : "removeClass"]("checked");
+            });
+
+            $(".cancel-all").on('click', function(){
+                $(".selected-number").removeClass("show");
+                $(".product-item-checkbox.list-checkbox").prop("checked", false);
+                $(".product-item-checkbox.list-checkbox").parent().parent().parent().parent().parent().parent().removeClass("checked");
+                $(".check-box-check-all").prop("checked", false);
+
+                /*B-1611718*/
+                hidePanel();
+            });
+
+            $(".right-section button").on('click', function(event){
+                var arr = [];
+                $('.product-item-checkbox.list-checkbox').each(function () {
+                    var self = $(this);
+                    if (self.is(':checked')) {
+                        arr.push(self.attr("name"));
+                    }
+                });
+                var url = "<?php echo $this->getUrl('catalogmvp/index/addtocart')?>";
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: arr },
+                    success: function(response) {
+                        if (response) {
+                            if ('<?= $addToCartRedirectStop ?>' == '1') {
+                                $(".cancel-all").trigger("click");
+                                $("#add-to-cart-toast-message").show();
+                                $("#add-to-cart-toast-message .success-toast-msg p").text(response + ' item has been added to your cart.');
+                                $('html, body').animate({
+                                    scrollTop: $(".header-top").offset().top
+                                }, 500);
+                            } else {
+                                $(location).prop('href', '<?php echo $this->getUrl('checkout/cart')?>');
+                            }
+                        }
+                    }
+                });
+            });
+
+            function customizeProduct(sku) {
+                if (sku == null) {
+                    $('.product-item-checkbox.list-checkbox').each(function () {
+                        var self = $(this);
+                        if (self.is(':checked')) {
+                            sku = self.attr("data-item-sku");
+                        }
+                    });
+                }
+                if (sku) {
+                    var customizeUrl = "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>" + '?sku=' + sku + '&configurationType=customize';
+                    window.location.href = customizeUrl;
+                }
+            }
+
+            function customizeProductWithQty(sku,qty) {
+                if (sku == null) {
+                    $('.product-item-checkbox.list-checkbox').each(function () {
+                        var self = $(this);
+                        if (self.is(':checked')) {
+                            sku = self.attr("data-item-sku");
+                        }
+                    });
+                }
+                if (sku) {
+                    var customizeUrl = "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>" + '?sku=' + sku + '&configurationType=customize&qty=' + qty ;
+                    window.location.href = customizeUrl;
+                }
+            }
+
+            $(document).on("click",".action-customize-product",function() {
+                let sku = $(this).attr("data-item-sku");
+                if($(".quantity-wrapper").is(':visible')) {
+                    if($('.qty-dropbox-value').is(':visible')) {
+                        $(".qty-box-value").val($(".qty-dropbox-value").val());
+                    }
+                    var qty = $(".qty-box-value").val();
+                    customizeProductWithQty(sku,qty);
+                }else{
+                    customizeProduct(sku);
+                }
+            });
+
+            $(".cart-chip-wrapper").on('click', function(event){
+                if ($(".cart-chip-wrapper").hasClass('action-customize-product')) {
+                    return;
+                }
+                if($('.qty-dropbox-value').is(':visible')) {
+                    $(".qty-box-value").val($(".qty-dropbox-value").val());
+                }
+                var id = 0;
+                $('.product-item-checkbox.list-checkbox').each(function () {
+                    var self = $(this);
+                    if (self.is(':checked')) {
+                        id =self.attr("name");
+                    }
+                });
+                var url = "<?php echo $this->getUrl('catalogmvp/index/addtocartsingle')?>";
+                var qyt = $(".qty-box-value").val();
+                $.ajax({
+                    type: "post",
+                    url: url,
+                    showLoader: true,
+                    data: { id: id, qty:qyt },
+                    success: function(response) {
+                        if (response) {
+                            if ('<?= $addToCartRedirectStop ?>' == '1') {
+                                $("#add-to-cart-toast-message").show();
+                                $("#add-to-cart-toast-message .success-toast-msg p").text('1 Item has been added to your cart.');
+                                $('html, body').animate({
+                                    scrollTop: $(".header-top").offset().top
+                                }, 500);
+                            } else {
+                                $(location).prop('href', '<?php echo $this->getUrl('checkout/cart')?>');
+                            }
+                        }
+                    },
+                    complete: function () {
+                        $(document).trigger("mvp_add_to_cart_end");
+                    }
+                });
+            });
+
+            $(".panel-tab").click(function() {
+                setTimeout(function() {
+                    var mainContentEl = jQuery('#maincontent');
+                    var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                    var rightPanelEl = jQuery('#accordion');
+                    var mainContentElHeight = mainContentEl.height();
+                    var rightPanelElHeight = rightPanelEl.height();
+                    var columnMainEl = jQuery('.column.main');
+                    var columnMainElHeight = columnMainEl.height()- 60;
+                    var fraction = 50;
+                    if(columnMainElHeight < rightPanelElHeight){
+                        var newRightPanelHeight = rightPanelElHeight + fraction;
+                        mainContentEl.height(newRightPanelHeight);
+                        var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                        bootomToolbarEl.css('top',toolbarTop);
+                        bootomToolbarEl.css('position','relative');
+                        bootomToolbarEl.css('margin-top','50px');
+                    }
+                    else {
+                        bootomToolbarEl.css('top','0px');
+                    }
+                }, 50);
+            });
+            $(document).ajaxStop(function() {
+                setTimeout(function() {
+                var mainContentEl = jQuery('#maincontent');
+                var bootomToolbarEl = jQuery('.commercial-toolbar-bottom');
+                var rightPanelEl = jQuery('#accordion');
+                var mainContentElHeight = mainContentEl.height();
+                var rightPanelElHeight = rightPanelEl.height();
+                var columnMainEl = jQuery('.column.main');
+                var columnMainElHeight = columnMainEl.height()- 60;
+                var fraction = 50;
+                if(columnMainElHeight < rightPanelElHeight){
+                    var newRightPanelHeight = rightPanelElHeight + fraction;
+                    mainContentEl.height(newRightPanelHeight);
+                    var toolbarTop = newRightPanelHeight - columnMainElHeight;
+                    bootomToolbarEl.css('top',toolbarTop);
+                    bootomToolbarEl.css('position','relative');
+                    bootomToolbarEl.css('margin-top','50px');
+                }
+                else {
+                    bootomToolbarEl.css('top','0px');
+                }
+            }, 100);
+            });
+        });
+    </script>
+<?php }
+}
+?>

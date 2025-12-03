@@ -1,0 +1,26 @@
+# The value PHP is not supported. Do not change.
+sonar.language=php
+
+# must be unique in a given SonarQube instance
+sonar.projectKey=${SONAR_PROJECT_KEY}
+
+# defaults to project key
+sonar.projectName=${EAI_NAME}
+ 
+# Path is relative to the sonar-project.properties file. Defaults to .
+sonar.sources=./app/code/Fedex
+
+# Exclude test subdirectories from source scope
+sonar.exclusions=./app/code/Fedex/**/Test/**/*
+
+sonar.tests=./app/code/Fedex
+
+# Include test subdirectories in test scope
+sonar.test.inclusions=./app/code/Fedex/**/Test/**/*
+
+# Jenkins will replace this token with and env variable and generate sonar-project.properties
+sonar.branch.name=${GIT_BRANCH}
+
+sonar.php.coverage.reportPaths=phpunit.coverage.xml
+
+sonar.php.tests.reportPath=phpunit.report.xml

@@ -1,0 +1,82 @@
+
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/**
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\OrderHistorySearch\Block\Filters $block
+ * B-1053021 - Sanchit Bhatia - RT-ECVS - ePro - Search Capability for Quotes
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+?>
+<?php
+if ($this->helper('\Fedex\Orderhistory\Helper\Data')->isModuleEnabled() == true) {
+    $search = $this->getRequest()->getParam('search');
+    $customersession = $this->helper('\Fedex\Orderhistory\Helper\Data')->getCustomerSession();
+    $customersession->setSearchdata($search);
+    $quoteurl = $block->getBaseUrl() . 'negotiable_quote/quote/';
+    ?>
+    <div class="data-grid-search-control-wrap epro-quote-search">
+    <!-- D-81481 -->
+        <input class="data-grid-search-control epro-quote-search-bar"
+        value="<?=$search;?>"id="keyword" type="text" placeholder='Search by Quote ID'/>
+        <button class="epro-search-button" aria-label="Tag Search"  id="tag-search" type="submit"></button>
+        <div id="warning-message" class="mage-error"></div>
+    </div>
+   <!-- B-1092709- Reset button on order view and Quote page-->
+    <div class="epro-quote-reset">
+        <button class="secondary reset-btn"
+                type="button" disabled="disabled"
+                data-role="action"
+                title="<?=$escaper->escapeHtmlAttr(__('Reset'));?>">
+            <span><?=$escaper->escapeHtml(__('Reset'));?></span>
+        </button>
+    </div>
+<script>
+    require(['jquery'
+    ],function($,errorProcessor,urlBuilder){
+        var minLength = 3;
+        $(document).ready(function() {
+            $('#tag-search').on('click', function() {
+				var searchStr = $('#keyword').val();
+
+				/*B-1096388 - Implement search through quote ID on the list of quote */
+
+              //  B-1130766
+                var goUrl =  '<?=$quoteurl;?>' +'?search='+ searchStr;
+                window.location = goUrl;
+                return false;
+			});
+
+     /*B-1092709- Reset button on order view and Quote page */
+     $('.epro-quote-search-bar').each(function(){
+        $('.epro-quote-search-bar').on("keyup", function ()
+        {
+            if($(this).val().length !=0){
+                $('.reset-btn').attr('disabled', false);
+            }
+            else
+            {
+                $('.reset-btn').attr('disabled',true);
+            }
+
+        })
+        if($(this).val().length !=0){
+                $('.reset-btn').attr('disabled', false);
+            }
+        });
+
+    });
+    $('.reset-btn').on('click', function() {
+        finalUrl =  '<?=$quoteurl;?>' +'?search=';
+        window.location.replace(finalUrl);
+
+     });
+});
+</script>
+
+<?php }?>

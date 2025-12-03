@@ -1,0 +1,21 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+?>
+<?php
+    $linkOpenType = (bool) $block->getData('featured_link_open_new_tab');
+    $linkOpenType = $linkOpenType ? '_blank' : '_self';
+?>
+<div class="featured-image-container">
+    <div class="mega-menu-featured-image">
+        <img src="<?= /* @noEscape */ $block->getData('featuredimage_icon'); ?>"
+            alt="<?= /* @noEscape */ $block->getData('featuredimage_alttext'); ?>">
+    </div>
+    <div class="featured-image-details">
+        <div class="featured-image-description">
+            <?= /* @noEscape */ $block->getData('featuredimage_description'); ?>
+        </div>
+        <a class="find-out-more-link" target="<?= /* @noEscape */ $linkOpenType ?>"  
+        href="<?= /* @noEscape */ $block->getData('featuredimage_link'); ?>">
+        <span class=""><?= $escaper->escapeHtml(__($block->getData('featuredimage_link_lable'))); ?></span></a>
+    </div>
+</div>

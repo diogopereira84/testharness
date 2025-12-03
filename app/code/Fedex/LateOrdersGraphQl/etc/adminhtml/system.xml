@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="graphql_settings" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>GraphQl Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_LateOrdersGraphQl::graphql_settings</resource>
+            <group id="graphql_response_options" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1">
+                <label>GraphQl Response Options</label>
+                <group id="late_order" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Late Orders</label>
+                    <field id="lateorder_query_max_window_hours" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
+                        <label>Late Order GraphQl Query Max Window By Hours</label>
+                        <validate>required-number validate-number</validate>
+                        <config_path>graphql_settings/graphql_response_options/lateorder_query_max_window_hours</config_path>
+                    </field>
+                    <field id="lateorder_query_max_pagination" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
+                        <label>Late Order GraphQl Query Max Response Pagination</label>
+                        <validate>required-number validate-number</validate>
+                        <config_path>graphql_settings/graphql_response_options/lateorder_query_max_pagination</config_path>
+                    </field>
+                    <field id="lateorder_query_default_pagination" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
+                        <label>Late Order GraphQl Query Default Response Pagination</label>
+                        <validate>required-number validate-number</validate>
+                        <config_path>graphql_settings/graphql_response_options/lateorder_query_default_pagination</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+    </system>
+</config>

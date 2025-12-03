@@ -1,0 +1,492 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$states = $block->getData('states');
+
+?>
+<div class="block-title">
+    <h2><?= $block->escapeHtml(__('Company Information')) ?></h2>
+</div>
+<div class="grey-background">
+    <div id="company_physical_add_container" class="form-section-container">
+        <div class="section-title">
+            <h5><?= $block->escapeHtml(__('Physical Address')) ?></h5>
+            <div data-content-type="divider" data-appearance="default" data-element="main">
+                <hr data-element="line" data-pb-style="PXRD72G">
+            </div>
+            <p class="physical-para"><?= $block->escapeHtml(
+                __('This should be the physical location of your company, P.O. boxes are not permitted.')
+            ) ?>
+            </p>
+        </div>
+        <div id="physical_add_col1" class="left-col-content">
+            <div class="input-container">
+                <label class="input-label" for="cid_psg_country"><?= $block->escapeHtml(__('Country')) ?></label>
+                <select class="dropdown-elem input-textbox v-validate" name="cid_psg_country" id="cid_psg_country"
+                onchange="getAllStates(this, 'cid_psg_state');"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-physical-cid-psg-country"
+                data-msg-required="Country is required."
+                data-validate="{required:true}"
+                >
+                    <option value="US"><?= $block->escapeHtml(__('United States')) ?></option>
+                    <option value="CA"><?= $block->escapeHtml(__('Canada')) ?></option>
+                </select>
+            </div>
+            <div class="input-container tool-tip-outer-container">
+                <label class="input-label" for="legal_company_name">
+                    <?= $block->escapeHtml(__('Legal company name')) ?>
+                </label>
+                <div class="my-tooltip">
+                    <img class="tooltip-toggle tooltip-icon"
+                    src="<?= $block->escapeUrl($block->getViewFileUrl('images/cid-psg/tool-tip-grey-icon.png')); ?>"
+                    alt="Legal company name" tabindex="0"/>
+                    <span id="legal-company-name-tooltip"
+                    class="tooltip-content alternate-tooltip-text legal-company-name-tooltip">
+                        <?= $block->escapeHtml(__('This is your company\'s formal registered name.')) ?>
+                    </span>
+                </div>
+                <input class="input-textbox v-validate
+            validate-company-name minimum-characters-limit-three" type="text" name="legal_company_name"
+            id="legal_company_name"
+            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-legal-company-name"
+            maxlength="40"
+            data-msg-required="Company name is required."
+            data-validate="{required:true,'validate-length':true}"
+            >
+            </div>
+            <div class="input-container tool-tip-outer-container pre-acc-name">
+                <label class="input-label" for="pre_acc_name">
+                    <?= $block->escapeHtml(__('Preferred account name (optional)')) ?>
+                </label>
+                <div class="my-tooltip">
+                    <img class="tooltip-toggle tooltip-icon"
+                    src="<?= $block->escapeUrl($block->getViewFileUrl('images/cid-psg/tool-tip-grey-icon.png')); ?>"
+                    alt="Preferred account name" tabindex="0"/>
+                    <span id="pre-acc-name-tooltip" class="tooltip-content alternate-tooltip-text">
+                        <?= $block->escapeHtml(__('This is the company name you want to appear on your account.')) ?>
+                    </span>
+                </div>
+                <input class="input-textbox v-validate validate-preffered-account-name minimum-characters-limit-three"
+                type="text" name="pre_acc_name" id="pre_acc_name"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-preferred-acc-name"
+                maxlength="40"
+                data-validate="{required:false, 'validate-preffered-account-name':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="contact_fname">
+                    <?= $block->escapeHtml(__('Contact first name')) ?>
+                </label>
+                <input class="input-textbox minimum-characters-limit-two v-validate
+            account-user-first-name-validation" type="text"
+            name="contact_fname" id="contact_fname"
+            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-contact-fname"
+            maxlength="20"
+            data-msg-required="First name is required."
+            data-validate="{required:true,'validate-length':true}"
+            >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="contact_lname">
+                    <?= $block->escapeHtml(__('Contact last name')) ?>
+                </label>
+                <input class="input-textbox minimum-characters-limit-two v-validate
+                account-user-last-name-validation" type="text" name="contact_lname" id="contact_lname"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-contact-lname"
+                maxlength="20"
+            data-msg-required="Last name is required."
+            data-validate="{required:true,'validate-length':true}"
+            >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="street_add">
+                    <?= $block->escapeHtml(__('Street Address')) ?>
+                </label>
+                <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+            validate-street-address" type="text" name="street_add" id="street_add"
+            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-street-address"
+            maxlength="60"
+            data-msg-required="Street address is required."
+            data-validate="{required:true,'validate-length':true}"
+            >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="add_line2">
+                    <?= $block->escapeHtml(__('Address Line 2 (Optional)')) ?>
+                </label>
+                <input class="input-textbox
+                set-maximum-characters-limit-seventy" type="text" name="add_line2" id="add_line2"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-address-line2"
+                maxlength="60"
+                data-validate="{required:false,'set-maximum-characters-limit-seventy':true}"
+                >
+            </div>
+        </div>
+        <div id="physical_add_col2" class="right-col-content">
+            <div class="input-container">
+                <label class="input-label" for="suite_other">
+                    <?= $block->escapeHtml(__('Suite/Other (Optional)')) ?>
+                </label>
+                <input class="input-textbox v-validate
+                validate-street-address-suite
+                set-maximum-characters-limit-seventy" type="text" name="suite_other" id="suite_other"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-suite-other"
+                maxlength="70"
+                data-validate="{required:false, 'validate-street-address-suite':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="city">
+                    <?= $block->escapeHtml(__('City')) ?>
+                </label>
+                <input class="input-textbox v-validate
+                set-maximum-characters-limit-seventy account-user-city-validation" type="text" name="city" id="city"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-city"
+                maxlength="38"
+                data-msg-required="City is required."
+                data-validate="{required:true,'validate-length':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="cid_psg_state"><?= $block->escapeHtml(__('State')) ?></label>
+                <select class="dropdown-elem input-textbox v-validate" name="cid_psg_state" id="cid_psg_state"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-physical-cid-psg-state"
+                data-msg-required="State is required."
+                data-validate="{required:true}"
+                >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <?php foreach ($states as $state): ?>
+                    <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                    ><?= $block->escapeHtml($state['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="zip">
+                    <?= $block->escapeHtml(__('Zip Code')) ?>
+                </label>
+                <input class="input-textbox v-validate validate-zip-code" type="text" name="zip" id="zip"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-zip-code"
+                maxlength="10"
+                onkeypress="allowOnlyNumbers(event);formatZipCodeValue(event)"
+                data-msg-required="Zip Code is required."
+                data-validate="{required:true,'validate-length':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="email">
+                    <?= $block->escapeHtml(__('E-mail')) ?>
+                </label>
+                <input class="input-textbox v-validate
+                set-maximum-characters-limit-seventy"
+                type="text" name="email" id="email"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-email"
+                maxlength="70"
+                data-msg-required="E-mail is required."
+                data-msg-validate-email="Please enter valid email address (Ex: johndoe@domain.com)."
+                data-validate="{required:true,'validate-length':true, 'validate-email':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="phoneno">
+                    <?= $block->escapeHtml(__('Phone No.')) ?>
+                </label>
+                <input class="input-textbox v-validate validate-user-phone"
+                type="text"
+                name="phoneno" id="phoneno" placeholder="(___) ___-____"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-phone-no"
+                maxlength="14"
+                data-msg-required="Phone No. is required."
+                data-validate="{required:true, 'validate-length':true}"
+                >
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="fax">
+                    <?= $block->escapeHtml(__('Fax (Optional)')) ?>
+                </label>
+                <input class="input-textbox v-validate validate-user-fax"
+                type="text" name="fax" id="fax" placeholder="(___) ___-____"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-fax"
+                maxlength="14"
+                data-validate="{'validate-length':true}">
+            </div>
+        </div>
+    </div>
+    <div id="company_corr_add_container" class="form-section-container correspondence-address-container">
+        <div class="section-title">
+            <h5><?= $block->escapeHtml(__('Correspondence Address')) ?></h5>
+            <div data-content-type="divider" data-appearance="default" data-element="main">
+                <hr data-element="line" data-pb-style="PXRD72G">
+            </div>
+            <p class="corresspondence-para">
+                <?= $block->escapeHtml(__('This is where account communication will be sent.')) ?></p>
+        </div>
+        <div class="checkmark-container">
+            <div class="alternate-check-container">
+                <label class="alternate-checkbox-container" for="company_info_set_as_default">
+                    <input type="checkbox" name="company_info_set_as_default" id="company_info_set_as_default"
+                    aria-label="set as default"
+                    class= "company-info-check-input" value="1" checked="checked" tabindex="-1"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-company-corr-company-info-set-default">
+                    <span class="checkmark corr-company-add" id="corr_checkbox" tabindex="0"
+                    onclick="showHideSection('company_info_set_as_default','corr_add_checkbox','corr_add_section');"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-corr-company-add">
+                </span>
+                </label>
+                <input id="corr_add_checkbox" name="corr_add_checkbox_val" type='hidden' value="1" />
+                <div class="set-as-default">
+                    <?= $block->escapeHtml(__('This address is the same as the physical address entered above.')) ?>
+                </div>
+            </div>
+        </div>
+        <div class="corr-add-section" id="corr_add_section" style="display:none">
+            <div id="corr_add_col1" class="left-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="corr_cid_psg_country"><?= $block->escapeHtml(__('Country')) ?>
+                    </label>
+                    <select class="dropdown-elem input-textbox" name="corr_cid_psg_country" id="corr_cid_psg_country"
+                    onchange='getAllStates(this, "corr_cid_psg_state");'
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-corr-cid-psg-country">
+                        <option value="US"><?= $block->escapeHtml(__('United States')) ?></option>
+                        <option value="CA"><?= $block->escapeHtml(__('Canada')) ?></option>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_fname">
+                        <?= $block->escapeHtml(__('Correspondence first name')) ?>
+                    </label>
+                    <input class="input-textbox minimum-characters-limit-two v-validate
+                    account-user-first-name-validation"
+                    type="text" name="corr_fname" id="corr_fname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-corr-first-name"
+                    maxlength="20"
+                    data-msg-required="First name is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_lname">
+                        <?= $block->escapeHtml(__('Correspondence last name')) ?>
+                    </label>
+                    <input class="input-textbox minimum-characters-limit-two v-validate
+                    account-user-last-name-validation"
+                    type="text" name="corr_lname" id="corr_lname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-corr-last-name"
+                    maxlength="20"
+                    data-msg-required="Last name is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_street_add">
+                        <?= $block->escapeHtml(__('Street Address')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    validate-street-address" type="text"
+                    name="corr_street_add" id="corr_street_add"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-street-address"
+                    maxlength="60"
+                    data-msg-required="Street address is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_suite_other">
+                        <?= $block->escapeHtml(__('Suite/Other (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    validate-street-address-suite
+                    set-maximum-characters-limit-seventy"
+                    type="text" name="corr_suite_other" id="corr_suite_other"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-suite-other"
+                    maxlength="70"
+                    data-validate="{required:false, 'validate-street-address-suite':true}"
+                    >
+                </div>
+            </div>
+            <div id="corr_add_col2" class="right-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="corr_city">
+                        <?= $block->escapeHtml(__('City')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    set-maximum-characters-limit-seventy
+                    account-user-city-validation"
+                    type="text" name="corr_city" id="corr_city"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-city"
+                    maxlength="38"
+                    data-msg-required="City is required."
+                    data-validate="{required:true,'validate-length':true}"
+                >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_cid_psg_state"><?= $block->escapeHtml(__('State')) ?></label>
+                    <select class="dropdown-elem input-textbox v-validate" name="corr_cid_psg_state"
+                    id="corr_cid_psg_state"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-corr-cid-psg-state"
+                    data-msg-required="State is required."
+                    data-validate="{required:true}"
+                    >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <?php foreach ($states as $state): ?>
+                    <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                    ><?= $block->escapeHtml($state['title']); ?></option>
+                    <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_postal_code">
+                        <?= $block->escapeHtml(__('Postal code')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    set-maximum-characters-limit-seventy validate-postal-code"
+                    type="text" name="corr_postal_code" id="corr_postal_code"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-postal-code"
+                    maxlength="10"
+                    onkeypress="allowOnlyNumbers(event);formatZipCodeValue(event)"
+                    data-msg-required="Postal code is required."
+                    data-validate="{required:true,'set-maximum-characters-limit-seventy':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_email">
+                        <?= $block->escapeHtml(__('E-mail (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                set-maximum-characters-limit-seventy"
+                type="text" name="corr_email" id="corr_email"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-email"
+                maxlength="70"
+                data-msg-validate-email="Please enter valid email address (Ex: johndoe@domain.com)."
+                data-validate="{'required':false,'validate-length':true, 'validate-email':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_phoneno">
+                        <?= $block->escapeHtml(__('Phone No.')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-user-phone"
+                    type="text" name="corr_phoneno" id="corr_phoneno"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-phone-no"
+                    placeholder="(___) ___-____"
+                    maxlength="14"
+                    data-msg-required="Phone No. is required."
+                    data-validate="{required:true, 'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="corr_fax">
+                        <?= $block->escapeHtml(__('Fax (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-user-fax"
+                    type="text" name="corr_fax" id="corr_fax"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-fax"
+                    placeholder="(___) ___-____"
+                    maxlength="14"
+                    data-validate="{required:false,'validate-length':true}"
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="additional_company_existing_acc_info_add_container"
+    class="form-section-container additional-company-info-container">
+        <div id="additional_company_info" class="left-col-content">
+            <div class="addition-com-info-inner-container">
+                <div class="section-title">
+                    <h5><?= $block->escapeHtml(__('Additional Company Information')) ?></h5>
+                    <div data-content-type="divider" data-appearance="default" data-element="main">
+                        <hr data-element="line" data-pb-style="PXRD72G">
+                    </div>
+                </div>
+                <div class="tab-col1">
+                    <div class="tab-col1-left">
+                        <div class="input-container">
+                            <label class="input-label" for="federal_id">
+                                <?= $block->escapeHtml(__('Federal Id (Optional)')) ?>
+                            </label>
+                            <input class="input-textbox v-validate validate-federal-id"
+                            type="text" name="federal_id" id="federal_id"
+                            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-federal-id"
+                            maxlength="9"
+                            data-validate="{required:false, 'validate-federal-id':true}"
+                             >
+                        </div>
+                        <div class="input-container">
+                            <label class="input-label" for="employees_no_nationwide">
+                                <?= $block->escapeHtml(__('No. of employees nationwide (Optional)')) ?>
+                            </label>
+                            <input class="input-textbox v-validate validate-no-of-employees-nationwide-seven-digits"
+                            type="text" name="employees_no_nationwide"
+                            id="employees_no_nationwide"
+                            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-no-of-emp-nationalwide"
+                            maxlength="7"
+                            onkeypress="allowOnlyNumbers(event)"
+                            data-msg-validate-number="No. of employees nationwide allows numbers only."
+                            data-validate="{required:false, 'validate-number':true}"
+                            >
+                        </div>
+                    </div>
+                    <div class="tab-col1-right">
+                        <div class="input-container">
+                            <label class="input-label" for="dun_bradstreet_no">
+                                <?= $block->escapeHtml(__('Dun & Bradstreet no. (Optional)')) ?>
+                            </label>
+                            <input class="input-textbox v-validate validate-dun-bradstreet-no
+                            set-maximum-characters-limit-seventy"
+                            type="text" name="dun_bradstreet_no" id="dun_bradstreet_no"
+                            data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-dun-bradstreet-no"
+                            maxlength="70"
+                            data-validate="{required:false, 'validate-dun-bradstreet-no':true}"
+                            >
+                        </div>
+                    </div>
+                </div>
+                <input id="is_card_required" name="is_card_required" type='hidden' value="0" />
+            </div>
+        </div>
+        <div id="existing_acc_info" class="right-col-content">
+            <div class="existing-account-inner-container">
+                <div class="section-title">
+                    <h5><?= $block->escapeHtml(__('Existing Account Information')) ?></h5>
+                    <div data-content-type="divider" data-appearance="default" data-element="main">
+                        <hr data-element="line" data-pb-style="PXRD72G">
+                    </div>
+                    <p class="account-exist-para"><?= $block->escapeHtml(
+                        __('If your company already has a FedEx Office account(s), enter that here.')
+                    ) ?>
+                    </p>
+                </div>
+                <div class="existing-account-inner-input-container">
+                    <div class="input-container tab-col1-left">
+                        <label class="input-label" for="fedex_office_acc_no">
+                            <?= $block->escapeHtml(__('FedEx Office account no. (Optional)')) ?>
+                        </label>
+                        <input class="input-textbox v-validate validate-fedex-account-no
+                        set-maximum-characters-limit-seventy"
+                        type="text" name="fedex_office_acc_no" id="fedex_office_acc_no"
+                        data-testid="E-349679-B-1755654-TK-2969058-foa-company-information-fedex-office-acc-no"
+                        maxlength="24"
+                        data-validate="{required:false}"
+                        >
+                    </div>
+                    <div class="input-container tab-col1-right">
+                        <label class="input-label" for="company_name_on_acc">
+                            <?= $block->escapeHtml(__('Company name on account (Optional)')) ?>
+                        </label>
+                        <input class="input-textbox v-validate validate-company-name-on-account
+                        set-maximum-characters-limit-seventy"
+                        type="text" name="company_name_on_acc" id="company_name_on_acc"
+                        data-testid=E-349679-B-1755654-TK-2969058-foa-company-information-company-name-on-acc"
+                        maxlength="70"
+                        data-validate="{required:false, 'validate-company-name-on-account':true}"
+                        >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

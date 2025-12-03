@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © Fedex, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$viewModel = $block->getViewModel();
+$isEproQuote = $viewModel->isEproQuote();
+$createdByLocationId = '';
+
+if (!$isEproQuote) {
+    $createdByLocationId = $viewModel->getCreatedByLocationId();
+}
+
+$producedByLocationId = $viewModel->getProducingLocationId();
+$responsibleLocationId = $viewModel->getResponsibleLocationId();
+?>
+
+<tr>
+    <th>
+        <?= $escaper->escapeHtml(__('Created By Store Location ID')) ?>
+    </th>
+    <td>
+        <span id="quote_created_by">
+            <?php if ($isEproQuote): ?>
+                <?= $escaper->escapeHtml('NA') ?>
+            <?php else: ?>
+                <?= $escaper->escapeHtml($createdByLocationId) ?>
+            <?php endif; ?>
+        </span>
+    </td>
+</tr>
+<tr>
+    <th>
+        <?= $escaper->escapeHtml(__('Produced By Store Location ID')) ?>
+    </th>
+    <td>
+        <span id="quote_produced_by">
+            <?= $escaper->escapeHtml($responsibleLocationId) ?>
+        </span>
+    </td>
+</tr>

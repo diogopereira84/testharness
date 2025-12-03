@@ -1,0 +1,97 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$columnsLimit = $block->getColumnsLimit() ? : 0;
+$_menu = $block->getHtml('level-top', 'submenu', $columnsLimit);
+$mainClass = $block->getMenuClass();
+
+$trackOrderToggle = $block->getToggleValue("sgc_b1528031_track_order_pod");
+$blockObj= $block->getLayout()->createBlock('Fedex\PopularSearchTermsFilter\Block\PopularSearch');
+$popularTerms = $blockObj->getPopularSearchTerms();
+?>
+<div class="menu-container horizontal-menu" role="navigation" aria-label="horizontal-menu-navigation">
+    <div data-action="navigation" class="<?= /* @noEscape */ $mainClass; ?>">
+    <?php
+        $helper = $this->helper('Fedex\CustomizedMegamenu\Helper\Data');
+        $helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+        $isLoggedIn = $helperData->isCommercialCustomer();
+    ?>
+    <?php if(!$isLoggedIn): ?>
+        <div class="fxg-logo d-no-shrink">
+            <a href="/" title="FedEx Home">
+                <img src="<?php echo $helper->getStoreUrl()?>wysiwyg/fxo-logo.png" alt="FedEx Print Online"/>
+            </a>
+        </div>
+    <?php endif; ?>
+        <div class="quick-search retail-search d-flex flex-grow-1 relative qs-xs-md-hide">
+            <div class="search-field flex-grow-1">
+                <input type="text" class="search-input cl-white search-controls" placeholder="Search all products" aria-autocomplete="list" aria-haspopup="listbox" autocomplete="off" role="textbox">
+                <div class="custom-search search-suggestions absolute bg-cl-white d-none" aria-hidden="true">
+                    <div class="product-list result-list fancy-scroll" role="listbox" aria-label="Product Suggestions"></div>
+                    <a data-url="<?=$block->escapeUrl($blockObj->getProductRedirectUrl(''))?>" class="view-all btn-view-srp d-none fs-14 lh-24 fedex-bold ls-0-75 no-underline">VIEW ALL RESULTS</a>
+                </div>
+
+                <!-- Block for Popular Search Starts -->
+                <div class="popular-search search-suggestions absolute bg-cl-white d-none">
+                    <div class="search-header product-result d-flex fedex-bold fs-16 lh-24 v-center">
+                        POPULAR SEARCHES
+                    </div>
+                    <div class="popular-terms result-list fancy-scroll">
+                        <?php if(count($popularTerms) > 0):
+                            foreach($popularTerms as $term){
+                                ?>
+                                <a class="product-result d-flex fs-16 lh-24 no-underline v-center" href="<?=$block->escapeUrl($blockObj->getProductRedirectUrl($term['productName']??''))?>" >
+                                    <span class="product-name cl-gray fedex-light">
+                                        <?= $block->escapeHtmlAttr($term['productName']??'');?>
+                                    </span>
+                                </a>
+                        <?php } endif;?>
+                    </div>
+                </div>
+                <!-- Popular Search block ends -->
+
+            </div>
+            <div class="d-flex">
+                <button class="btn-search btn-view-srp search-controls fs-32 fedex-icon lens lh-normal p-0 weight-300" aria-label="Search">
+                </button>
+            </div>
+        </div>
+        <ul class="md-top-menu-items">
+            <?= /* @noEscape */ $_menu; ?>
+        </ul>
+        <?= /* @noEscape */ $block->menuStyleHtml(); ?>
+        <button class="btn-toggle-search search-controls border-r-0 d-none fedex-icon lens ml-auto p-0 weight-300" aria-label="Toggle Search Box"></button>
+    </div>
+
+    <?php if ($trackOrderToggle && !$isLoggedIn): ?>
+        <div class="track_order_icon_small_screen">
+            <img src="<?= /* @noEscape */ $block->getViewFileUrl('Fedex_TrackOrder::images/track-order-small-screen.png'); ?>"
+            alt="Track order icon" />
+            <a href="<?=/* @noEscape */$block->getUrl('track'); ?>">Track Order</a>
+        </div>
+    <?php endif; ?>
+    <div class="add-location-mobile-megamenu">
+        <a href="https://local.fedex.com/en/fxo-only" target="_blank">
+        <?= $block->escapeHtml(__('Locations')) ?></a>
+    </div>
+</div>
+<div id="retail_minicart_mobile" class='retail_minicarticon_mobile' role="navigation" aria-label="navigation-retail-minicart-mobile"></div>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_CustomizedMegamenu/js/new-topmenu": {
+                "animation_time": "<?= $block->animationTime() ?>"
+            }
+        }
+    }
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_CustomizedMegamenu/js/megamenu-gdl-event": {}
+        }
+    }
+</script>

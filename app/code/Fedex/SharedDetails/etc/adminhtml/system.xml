@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+        <section id="fedex" translate="label">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="recipient_email_address_limit" translate="label" sortOrder="1700" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Shared Order Configuration</label>
+                <field id="timeframe_options" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Timeframe Options</label>
+                    <source_model>Fedex\SharedDetails\Model\Config\Options</source_model>
+                    <comment><![CDATA[Select multiple options]]></comment>
+                </field>
+                <field id="custom_date_option" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enter Custom Date Range</label>
+                    <validate>validate-number validate-digits no-whitespace</validate>
+                    <comment><![CDATA[In months]]></comment>
+                </field>
+                <field id="set_recipient_email_address_limit" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Set Recipient Email Address Limit</label>
+                    <validate>validate-number no-whitespace</validate>
+                </field>
+                <field id="manage_user_email_address_limit" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Set Manage User Email Address Limit</label>
+                    <validate>validate-number no-whitespace</validate>
+                </field>
+            </group>
+         </section>
+	</system>
+</config>

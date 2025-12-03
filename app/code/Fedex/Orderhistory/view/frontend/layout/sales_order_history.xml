@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<body>
+<move element="page.main.title" destination="columns" before="-" />
+<move element="sidebar.main" destination="customer.left.nav" before="-" />
+<move element="customer.left.nav" destination="columns" after="page.main.title" />
+<referenceBlock name="page.top">
+        <block class="Magento\Framework\View\Element\Template" name="header.top.reorder.notification" template="Fedex_Orderhistory::order/reorder-notification.phtml" after="page.builder.promo.banner.widget"/>
+</referenceBlock>
+
+<referenceContainer name="columns">
+    <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+    </container>
+</referenceContainer>
+
+    <!-- B-900127 - ePro Expand order details -->
+    <referenceBlock name="sales.order.history">
+		<arguments>
+			<argument name="order_enhancement_view_model"
+				  xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement
+			</argument>
+            <argument name="order_history_reorder_view_model"
+				xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryReorder
+			</argument>
+            <argument name="productinfo_handler_view_model"
+                      xsi:type="object">
+                Fedex\Cart\ViewModel\ProductInfoHandler
+            </argument>
+            <argument name="shared_enhancement_view_model"
+				  xsi:type="object">Fedex\SharedDetails\ViewModel\SharedEnhancement
+			</argument>
+            <argument name="item_renderer_provider"
+				  xsi:type="object">Fedex\ProductBundle\ViewModel\ItemRendererProvider
+			</argument>
+            <argument name="bundleProductHandler" xsi:type="object">
+                Fedex\ProductBundle\ViewModel\BundleProductHandler
+            </argument>
+		</arguments>
+	</referenceBlock>
+    <!-- B-1227397 : Retail - RT-ECVS- Reorder placement, the checkbox for the eligible item to reorder, and update of View Receipt button -->
+    <referenceBlock name="sales.order.history.filters">
+		<arguments>
+			<argument name="reorder_view_model"
+				xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryReorder
+			</argument>
+            <argument name="shared_enhancement_view_model"
+				  xsi:type="object">Fedex\SharedDetails\ViewModel\SharedEnhancement
+			</argument>
+		</arguments>
+	</referenceBlock>
+
+    <!-- Remove unwanted account navigation links -->
+      <!--Customer balance link-->
+      <referenceBlock name="customer-account-navigation-customer-balance-link" remove="true"/>
+      <!-- Downloadable product link -->
+      <referenceBlock name="customer-account-navigation-downloadable-products-link" remove="true"/>
+      <!-- Subscription link -->
+      <referenceBlock name="customer-account-navigation-newsletter-subscriptions-link" remove="true"/>
+      <!-- Billing agreement link -->
+      <referenceBlock name="customer-account-navigation-billing-agreements-link" remove="true"/>
+      <!-- Product review link -->
+      <referenceBlock name="customer-account-navigation-product-reviews-link" remove="true"/>
+      <!-- My credit card link -->
+      <referenceBlock name="customer-account-navigation-my-credit-cards-link" remove="true"/>
+      <!-- Contact Information heading -->
+    <referenceBlock name="customer-account-navigation-account-link" class="Fedex\EnhancedProfile\Block\Account\ContactInformation">
+        <arguments>
+            <argument name="label" xsi:type="string" translate="true">Contact Information</argument>
+            <argument name="attributes" xsi:type="array">
+                <item name="class" xsi:type="string">my-contact-information</item>
+            </argument>
+        </arguments>
+    </referenceBlock>
+      <!-- Account edit link -->
+      <referenceBlock name="customer-account-navigation-account-edit-link" remove="true"/>
+      <!-- Address link -->
+      <referenceBlock name="customer-account-navigation-address-link" remove="true"/>
+      <!-- Wish list link -->
+      <referenceBlock name="customer-account-navigation-wish-list-link" remove="true"/>
+      <!-- Gift card link -->
+      <referenceBlock name="customer-account-navigation-gift-card-link" remove="true"/>
+      <!-- Order by SKU -->
+      <referenceBlock name="customer-account-navigation-checkout-sku-link" remove="true"/>
+      <!-- Gift registry -->
+      <referenceBlock name="customer-account-navigation-giftregistry-link" remove="true"/>
+      <!-- Reward points -->
+      <referenceBlock name="customer-account-navigation-reward-link" remove="true"/>
+      <!-- Company Struture -->
+      <referenceBlock name="customer-account-navigation-company-link" remove="true"/>
+      <!-- Invitation Link -->
+      <referenceBlock name="customer-account-navigation-magento-invitation-link" remove="true"/>
+</body>
+</config>

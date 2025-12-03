@@ -1,0 +1,16 @@
+<?php
+/** @var \Fedex\Catalog\Pricing\Render\UnitCost $block */
+/** @var \Magento\Framework\Pricing\Price\PriceInterface $finalPriceModel */
+$unitCostModel = $block->getPriceType('unit_cost');
+$idSuffix = $block->getIdSuffix() ? $block->getIdSuffix() : '';
+$schema = ($block->getZone() == 'item_view') ? true : false;
+?>
+<?php if ($block->hasUnitCost()) :?>
+    <?= /* @noEscape */ $block->renderAmount($unitCostModel->getAmount(), [
+        'price_id'          => $block->getPriceId('product-price-' . $idSuffix),
+        'price_type'        => 'unitCost',
+        'include_container' => true,
+        'schema' => $schema
+    ]); ?>
+    <span class="label"><?= __("each")?></span>
+<?php endif; ?>

@@ -1,0 +1,20 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$isCommercialStore = $this->helper('Fedex\Commercial\Helper\CommercialHelper')->isGlobalCommercialCustomer();
+?>
+<?php if (!$isCommercialStore): ?>
+<div class="copyright bg-cl-primary p-0" role="complementary">
+    <div class="block-wrapper fs-12">
+        <div class="copyright-content mt-20"><?= /* @escapeNotVerified */ $block->getCopyright() ?></div>
+        <div class="copyright-links">
+            <?php echo $this->getLayout()
+            ->createBlock('Magento\Cms\Block\Block')
+            ->setBlockId('bottom_footer_link')
+            ->toHtml(); ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>

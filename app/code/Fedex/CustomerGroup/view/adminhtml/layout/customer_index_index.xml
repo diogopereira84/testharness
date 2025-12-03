@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="formkey"/>
+    <head>
+        <script src="Fedex_CustomerGroup::js/customergroup-popup.js"/>
+        <script src="Fedex_CustomerGroup::js/assign-permissions-modal.js"/>
+    </head>
+    <body>
+        <referenceContainer name="content">
+            <block class="Fedex\CustomerGroup\Block\Adminhtml\RenderAssignPermissionButton" name="add-assign-permission-button">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fedex\CustomerGroup\ViewModel\AssignPermissions</argument> 
+                </arguments>
+            </block>
+            <block class="Fedex\CustomerGroup\Block\Adminhtml\RenderButton" name="add-button"/>
+        </referenceContainer>
+    </body>
+</page>

@@ -1,0 +1,611 @@
+<!--
+/**
+ * Copyright © McFadyen, Inc. All rights reserved.
+ */
+-->
+
+<div class="title-wrapper" ifnot="rates().length == 0">
+    <div class="step-title" translate="'Shipping methods'" data-role="title"></div>
+
+    <!-- ko ifnot: isFullFirstPartyQuote()-->
+    <div class="shipping-methods-tooltip" if="getDeliveryMethodsTooltip().length">
+        <i class="info"></i>
+        <span class="tooltip" data-bind="i18n: getDeliveryMethodsTooltip"></span>
+    </div>
+    <!-- /ko -->
+</div>
+
+<!-- ko if: isExpectedDeliveryDateEnabled() -->
+<div class="shipping-methods-message" ifnot="rates().length == 0" translate="'Expected delivery dates below include the time to produce your order.'"></div>
+<!-- /ko -->
+
+<each args="getRegion('before-shipping-method-form')" render=""></each>
+<div id="checkout-step-shipping_method" class="step-content" data-role="content" role="tabpanel" aria-hidden="false">
+    <form id="co-shipping-method-form" class="form methods-shipping" if="rates().length" submit="setShippingInformation"
+        novalidate="novalidate">
+        <div id="onepage-checkout-shipping-method-additional-load">
+            <!-- ko if: ( getDeliveryMethodsQty('not-marketplace') > 0 || getDeliveryMethodsQty('marketplace') > 0 ) -->
+            <table class="table-checkout-shipping-method">
+                <thead>
+                    <tr class="row">
+                        <th class="col col-method" data-bind="i18n: 'Select Method'"></th>
+                        <th class="col col-price" data-bind="i18n: 'Price'"></th>
+                        <th class="col col-method" data-bind="i18n: 'Method Title'"></th>
+                        <th class="col col-carrier" data-bind="i18n: 'Carrier Title'"></th>
+                    </tr>
+                </thead>
+
+                <!-- |------------------------------------------------------- -->
+                <!-- |          Fedex (1P) Shipping Methods Section           -->
+                <!-- |------------------------------------------------------- -->
+
+                <!-- ko if: ( getDeliveryMethodsQty('not-marketplace') > 0 && !isFullMarketplaceQuote() && !isPickupFormFilled() ) -->
+                <tbody class="fedex-delivery-methods">
+                    <tr class="seller">
+                        <td class="methods-seller-label" colspan="6">
+                            <span data-bind="text: 'Fedex Office'"></span>
+                            <span data-bind="text: getTotalCartItemsByParty('first_party')"></span>
+                        </td>
+                    </tr>
+                    <!-- ko ifnot: window.checkoutConfig.tiger_shipping_methods_display -->
+                    <!-- ko foreach: { data: rates().filter((method) => !method.marketplace), as: 'method'} -->
+                    <!-- ko if: methodIndex() == 0 -->
+                    <tr class="row" data-bind="click: $parent.selectShippingMethod.bind($parent), clickBubble: false">
+                        <td class="col col-method">
+                            <!-- ko ifnot: method.error_message -->
+                            <!-- ko if: $parent.rates().length == 1 -->
+                            <input class="radio" type="radio" name="first-party-method"
+                                data-testid="input-radio-select-shipping-method-if-parent-rates-length-1" data-bind="attr: {
+                                            checked: $parent.firstPartyMethod,
+                                            'value' : method.carrier_code + '_' + method.method_code,
+                                            'id': 's_method_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                         }" />
+                            <!-- /ko -->
+                            <!--ko ifnot: ($parent.rates().length == 1)-->
+                            <input type="radio" name="first-party-method" class="radio"
+                                data-testid="input-radio-select-shipping-method-if-not-parent-rates-length-1" data-bind="
+                                        checked: $parent.firstPartyMethod,
+                                        value: method.carrier_code + '_' + method.method_code,
+                                        attr: {
+                                            'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                        }"  />
+                            <!--/ko-->
+                            <!-- /ko -->
+                        </td>
+                        <td class="col col-price">
+                            <!-- ko foreach: $parent.getRegion('price') -->
+                            <!-- ko template: getTemplate() --><!-- /ko -->
+                            <!-- /ko -->
+                        </td>
+                        <!-- ko if: $parent.showFirstPartyAccordionButton -->
+                        <td class="col col-carrier custom-carrier-accordian"
+                            data-bind="attr: {'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.carrier_title"></span><sup>®</sup>
+                        </td>
+                        <!-- /ko -->
+                        <!-- ko ifnot: $parent.showFirstPartyAccordionButton -->
+                        <td class="col col-carrier"
+                            data-bind="attr: {'id': $index() + '_label_carrier_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.carrier_title"></span><sup>®</sup>
+                        </td>
+                        <!-- /ko -->
+                        <td class="col col-method">
+                            <!-- ko ifnot: $parent.showFirstPartyAccordionButton -->
+                            <span data-bind="text: method.method_title, attr: {'id': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}"></span>
+                            <!-- /ko -->
+                            <!-- ko if: $parent.showFirstPartyAccordionButton -->
+                            <span class="custom-accordian" data-bind="text: method.method_title, attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}"></span>
+                            <button type="button" class="accordion-toggle"
+                                    data-bind="click: $parent.toggleFirstPartyAccordion.bind($parent),
+                                        clickBubble: false,
+                                        css:{active: $parent.firstPartyShippingMethodsVisibility}">toggle</button>
+                            <!-- /ko -->
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- ko if: methodIndex() > 0 -->
+                    <tr class="row" data-bind="click: $parent.selectShippingMethod.bind($parent), visible: $parent.firstPartyShippingMethodsVisibility">
+                        <td class="col col-method">
+                            <!-- ko ifnot: method.error_message -->
+                            <!-- ko if: $parent.rates().length == 1 -->
+                            <input class="radio" type="radio" name="first-party-method"
+                                data-testid="input-radio-select-shipping-method-if-parent-rates-length-1" data-bind="attr: {
+                                            checked: $parent.firstPartyMethod,
+                                            'value' : method.carrier_code + '_' + method.method_code,
+                                            'id': 's_method_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                         }" />
+                            <!-- /ko -->
+                            <!--ko ifnot: ($parent.rates().length == 1)-->
+                            <input type="radio" name="first-party-method" class="radio"
+                                data-testid="input-radio-select-shipping-method-if-not-parent-rates-length-1" data-bind="
+                                        checked: $parent.firstPartyMethod,
+                                        value: method.carrier_code + '_' + method.method_code,
+                                        attr: {
+                                            'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                        }"  />
+                            <!--/ko-->
+                            <!-- /ko -->
+                        </td>
+                        <td class="col col-price">
+                            <!-- ko foreach: $parent.getRegion('price') -->
+                            <!-- ko template: getTemplate() --><!-- /ko -->
+                            <!-- /ko -->
+                        </td>
+
+                        <td class="col col-carrier"
+                            data-bind="attr: {'id': $index() + '_label_carrier_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.carrier_title"></span><sup>®</sup>
+                        </td>
+
+                        <td class="col col-method">
+                            <span data-bind="text: method.method_title, attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}"></span>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- ko if:  method.error_message -->
+                    <tr class="row row-error">
+                        <td class="col col-error" colspan="4">
+                            <div class="message error">
+                                <div data-bind="text: method.error_message"></div>
+                            </div>
+                            <span class="no-display">
+                                <input type="radio"
+                                    data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}" />
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko if: window.checkoutConfig.tiger_shipping_methods_display -->
+                    <tr >
+                        <td  class="border-0" colspan="4">
+                            <div class="featured-method-wrapper">
+                                <!-- ko foreach: { data: sortedShippingMethods().topTwoMethods, as: 'method'} -->
+                                <div class="row" data-bind="click: $parent.selectShippingMethod.bind($parent), css: { 'active': $parent.firstPartyMethod() === method.carrier_code + '_' + method.method_code }">
+                                    <div class="d-flex featured-method-top">
+                                        <div class="col col-method radio-wrp pr-10 mt-12">
+                                            <!-- ko ifnot: method.error_message -->
+                                            <!-- ko if: $parent.rates().length == 1 -->
+                                            <input class="radio" type="radio" name="first-party-method"
+                                                data-testid="input-radio-select-shipping-method-if-parent-rates-length-1" data-bind="attr: {
+                                                            checked: $parent.firstPartyMethod,
+                                                            'value' : method.carrier_code + '_' + method.method_code,
+                                                            'id': 's_method_' + method.method_code,
+                                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                                        }" />
+                                            <!-- /ko -->
+                                            <!--ko ifnot: ($parent.rates().length == 1)-->
+                                            <input type="radio" name="first-party-method" class="radio"
+                                                data-testid="input-radio-select-shipping-method-if-not-parent-rates-length-1" data-bind="
+                                                        checked: $parent.firstPartyMethod,
+                                                        value: method.carrier_code + '_' + method.method_code,
+                                                        attr: {
+                                                            'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                                        }"  />
+                                            <!--/ko-->
+                                            <!-- /ko -->
+                                        </div>
+                                        <div class="col col-method method-wrp pr-15 mt-15">
+                                            <b class="fedex-bold fs-14 lh-24 d-block text-uppercase">Expected by:</b>
+                                            <div class="fs-20 lh-32"><span data-bind="text: method.method_title, attr: {'id': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}"></span></div>
+                                        </div>
+                                        <div class="shipping-label-wrp">
+                                            <div class="shipping-label" data-bind="css: method.extension_attributes.cheapest && method.extension_attributes.fastest ? 'two-labels' : 'one-label'">
+                                                <!-- ko if: method.extension_attributes.cheapest -->
+                                                <div class="cheapest-label pl-16 pr-16 text-center fedex-bold cl-white lh-24 bg-cl-primary mb-8">Cheapest</div>
+                                                <!-- /ko -->
+                                                <!-- ko if: method.extension_attributes.fastest -->
+                                                <div class="fastest-label pl-16 pr-16 text-center fedex-bold cl-white lh-24 bg-cl-red">Fastest</div>
+                                                <!-- /ko -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-carrier truck-icon ml-40" data-bind="attr: {'id': $index() + '_label_carrier_' + method.method_code + '_' + method.carrier_code}">
+                                        <div class="fs-14 lh-24 fedex-regular"><span data-bind="text: method.carrier_title"></span><sup class="fedex-regular">®</sup></div>
+                                    </div>
+                                    <div class="col col-price text-right">
+                                        <!-- ko foreach: $parent.getRegion('price') -->
+                                        <!-- ko template: getTemplate() --><!-- /ko -->
+                                        <!-- /ko -->
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- ko foreach: { data: sortedShippingMethods().otherMethods, as: 'method'} -->
+                    <tr data-bind="click: $parent.selectShippingMethod.bind($parent), visible: $parent.firstPartyShippingMethodsVisibility,
+                    attr: { class: 'row shipping-method-wrp row-' + ($index() + 2) }">
+                        <td class="col col-method pl-24">
+                            <!-- ko ifnot: method.error_message -->
+                            <!-- ko if: $parent.rates().length == 1 -->
+                            <input class="radio" type="radio" name="first-party-method"
+                                data-testid="input-radio-select-shipping-method-if-parent-rates-length-1" data-bind="attr: {
+                                            checked: $parent.firstPartyMethod,
+                                            'value' : method.carrier_code + '_' + method.method_code,
+                                            'id': 's_method_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                         }" />
+                            <!-- /ko -->
+                            <!--ko ifnot: ($parent.rates().length == 1)-->
+                            <input type="radio" name="first-party-method" class="radio"
+                                data-testid="input-radio-select-shipping-method-if-not-parent-rates-length-1" data-bind="
+                                        checked: $parent.firstPartyMethod,
+                                        value: method.carrier_code + '_' + method.method_code,
+                                        attr: {
+                                            'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                        }"  />
+                            <!--/ko-->
+                            <!-- /ko -->
+                        </td>
+                        <td class="col col-carrier"
+                        data-bind="attr: {'id': $index() + '_label_carrier_' + method.method_code + '_' + method.carrier_code}">
+                            <span class="fedex-regular fs-14 lh-24" data-bind="text: method.carrier_title"></span><sup class="fedex-regular">®</sup>
+                        </td>
+                        <td class="col col-method">
+                            <b class="fedex-bold fs-14 lh-24 d-inline-block pr-10">Expected by:</b>
+                            <span class="fedex-regular fs-14 lh-24" data-bind="text: method.method_title, attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}"></span>
+                        </td>
+                        <td class="col col-price">
+                            <!-- ko foreach: $parent.getRegion('price') -->
+                            <!-- ko template: getTemplate() --><!-- /ko -->
+                            <!-- /ko -->
+                        </td>
+                    </tr>
+                    <!-- ko if:  method.error_message -->
+                    <tr class="row row-error">
+                        <td class="col col-error" colspan="4">
+                            <div class="message error">
+                                <div data-bind="text: method.error_message"></div>
+                            </div>
+                            <span class="no-display">
+                                <input type="radio"
+                                    data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}" />
+                            </span>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <!-- ko if: sortedShippingMethods().topTwoMethods.length == 2 && sortedShippingMethods().otherMethods.length > 0 -->
+                    <tr>
+                        <td  data-bind="css: { 'border-0 pt-0': !firstPartyShippingMethodsVisibility() }" colspan="4">
+                            <button type="button" class="show-shipping-method-toggle fedex-bold fs-14 lh-24 weight-700 cl-aster-blue p-0 text-uppercase"
+                                data-bind="click: toggleFirstPartyAccordion.bind($data),
+                                        clickBubble: false,
+                                        css: { active: firstPartyShippingMethodsVisibility },
+                                        text: firstPartyShippingMethodsVisibility() ? 'See Less Options' : 'See More Options'">
+                            </button>
+
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                </tbody>
+                <!-- /ko -->
+
+                <!-- |------------------------------------------------------- -->
+                <!-- | Marketplace (3P) Shipping Methods from Mirakl Section  -->
+                <!-- |------------------------------------------------------- -->
+
+                <!-- ko if: (getDeliveryMethodsQty('marketplace') > 0) -->
+
+                <!-- ko ifnot: window.checkoutConfig.tiger_shipping_methods_display -->
+                <!-- ko foreach: thirdPartyShippingMethods -->
+                <tbody class="marketplace-delivery-methods">
+                    <tr class="seller">
+                        <td class="methods-seller-label" colspan="6">
+                            <span data-bind="text: seller_name"></span>
+                            <span data-bind="text: $parent.getTotalCartItemsBySeller(seller_name)"></span>
+                        </td>
+                    </tr>
+
+                    <!--ko foreach: { data: shipping_methods, as: 'method' } -->
+                    <!-- ko if: methodIndex() == 0 -->
+                    <tr data-bind="attr: { 'class': 'row row-' + $index() }, css: { 'shipping-collapsed': !$parent.is_accordion_expanded() }, click:$parents[1].selectShippingMethod.bind($parents[1], $data, event), clickBubble: false">
+                        <td class="col col-method">
+                            <input type="radio" class="radio"
+                                data-bind="
+                                    checked: $parent.selected_shipping_method,
+                                    value: method.method_code,
+                                    attr: {
+                                        'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                        'name': 'tp-shipping_method[' + method.offer_id + ']',
+                                        'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                    }"  />
+                        </td>
+                        <!-- ko template: { name: 'Fedex_Delivery/checkout/shipping_step/mirakl_marketplace/shipping/delivery_rate', data: method } -->
+                        <!-- /ko -->
+                        <!-- ko if: $parent.show_expand_button -->
+                        <td class="col col-method custom-carrier-accordian"
+                            data-bind="attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.method_title"></span><sup>®</sup>
+                        </td>
+                        <!-- /ko -->
+                        <!-- ko ifnot: $parent.show_expand_button -->
+                        <td class="col col-method"
+                            data-bind="attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.method_title"></span><sup>®</sup>
+                        </td>
+                        <!-- /ko -->
+                        <td class="col col-delivery-date">
+                            <!-- ko if: $parent.show_expand_button -->
+                            <span class="custom-accordian" data-bind="text: method.deliveryDateText, attr: {'id': 'label_delivery_date' + method.method_code + '_' + method.carrier_code}"></span>
+                            <button type="button" class="accordion-toggle"
+                                data-bind="click: function() { $parents[1].toggleShippingAccordion($parentContext.$index()) },
+                                    clickBubble: false,
+                                    css:{active: $parent.is_accordion_expanded}">toggle</button>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $parent.show_expand_button -->
+                            <span data-bind="text: method.deliveryDateText, attr: {'id': 'label_delivery_date' + method.method_code + '_' + method.carrier_code}"></span>
+                            <!-- /ko -->
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- ko if: methodIndex() > 0 -->
+                    <tr data-bind="attr: { 'class': 'row row-' + $index() }, click:$parents[1].selectShippingMethod.bind($parents[1], $data, event)">
+                        <td class="col col-method">
+                            <input type="radio" class="radio"
+                                data-bind="
+                                    checked: $parent.selected_shipping_method,
+                                    value: method.method_code,
+                                    attr: {
+                                        'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                        'name': 'tp-shipping_method[' + method.offer_id + ']',
+                                        'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                    }"  />
+                        </td>
+                        <!-- ko template: { name: 'Fedex_Delivery/checkout/shipping_step/mirakl_marketplace/shipping/delivery_rate', data: method } -->
+                        <!-- /ko -->
+                        <td class="col col-method"
+                            data-bind="attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}">
+                            <span data-bind="text: method.method_title"></span><sup>®</sup>
+                        </td>
+                        <td class="col col-delivery-date"
+                            data-bind="text: method.deliveryDateText, attr: {'id': 'label_delivery_date' + method.method_code + '_' + method.carrier_code}">
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+
+                </tbody>
+                <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- ko if: window.checkoutConfig.tiger_shipping_methods_display -->
+                <!-- ko foreach: thirdPartyShippingMethods -->
+                <tbody class="marketplace-delivery-methods">
+                    <tr class="seller">
+                        <td class="methods-seller-label" colspan="6">
+                            <span data-bind="text: seller_name"></span>
+                            <span data-bind="i18n: $parent.getTotalCartItemsBySeller(seller_name) + ' ' "></span>
+                            <translate args="'Item'" if="$parent.getTotalCartItemsBySeller(seller_name) === 1"></translate>
+                            <translate args="'Items'" if="$parent.getTotalCartItemsBySeller(seller_name) > 1"></translate>
+                        </td>
+                    </tr>
+
+                    <tr data-bind="css: { 'shipping-collapsed': !is_accordion_expanded() }">
+                        <td class="border-0" colspan="4">
+                            <div class="featured-method-wrapper">
+                                <!-- ko foreach: { data: shipping_methods.slice(0, 2), as: 'method' } -->
+                                <div data-bind="attr: { 'class': 'row row-' + $index() }, css: { 'shipping-collapsed': !$parent.is_accordion_expanded(), 'active': method.method_code === $parent.selected_shipping_method() }, click:$parents[1].selectShippingMethod.bind($parents[1], $data, event), clickBubble: false">
+                                    <div class="d-flex featured-method-top">
+                                        <div class="col col-method radio-wrp pr-10 mt-12">
+                                            <input type="radio" class="radio"
+                                                data-bind="
+                                                    checked: $parent.selected_shipping_method,
+                                                    value: method.method_code,
+                                                    attr: {
+                                                        'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                                        'name': 'tp-shipping_method[' + method.offer_id + ']',
+                                                        'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                                    }"  />
+                                        </div>
+                                        <div class="col col-delivery-date method-wrp pr-15 mt-15">
+                                            <b class="fedex-bold fs-14 lh-24 d-block text-uppercase">Expected by:</b>
+                                            <div class="fs-20 lh-32">
+                                                <span data-bind="text: method.deliveryDateText, attr: {'id': 'label_delivery_date' + method.method_code + '_' + method.carrier_code}"></span>
+                                            </div>
+                                        </div>
+                                        <div class="shipping-label-wrp">
+                                            <div class="shipping-label" data-bind="css: method.extension_attributes.cheapest && method.extension_attributes.fastest ? 'two-labels' : 'one-label'">
+                                                <!-- ko if: method.extension_attributes.cheapest -->
+                                                <div class="cheapest-label pl-16 pr-16 text-center fedex-bold cl-white lh-24 bg-cl-primary mb-8">Cheapest</div>
+                                                <!-- /ko -->
+                                                <!-- ko if: method.extension_attributes.fastest -->
+                                                <div class="fastest-label pl-16 pr-16 text-center fedex-bold cl-white lh-24 bg-cl-red">Fastest</div>
+                                                <!-- /ko -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col col-method truck-icon ml-40"
+                                        data-bind="attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}">
+                                        <div class="fs-14 lh-24 fedex-regular"><span data-bind="text: method.method_title"></span><sup>®</sup></div>
+                                    </div>
+                                    <div class="col col-price text-right">
+                                        <!-- ko template: { name: 'Fedex_Delivery/checkout/shipping_step/mirakl_marketplace/shipping/delivery_rate', data: method } -->
+                                        <!-- /ko -->
+                                    </div>
+                                </div>
+                                <!-- /ko -->
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- ko foreach: { data: shipping_methods.slice(2), as: 'method' } -->
+                        <tr data-bind="attr: { 'class': 'shipping-method-wrp row row-' + ($index()+2) }, click:$parents[1].selectShippingMethod.bind($parents[1], $data, event)">
+                            <td class="col col-method pl-24">
+                                <input type="radio" class="radio"
+                                    data-bind="
+                                        checked: $parent.selected_shipping_method,
+                                        value: method.method_code,
+                                        attr: {
+                                            'id': $index() + '_s_method_' + method.carrier_code + '_' + method.method_code,
+                                            'name': 'tp-shipping_method[' + method.offer_id + ']',
+                                            'aria-labelledby': $index() + '_label_method_' + method.method_code + '_' + method.carrier_code + ' ' + 'label_carrier_' + method.method_code + '_' + method.carrier_code
+                                        }"  />
+                            </td>
+
+                            <td class="col col-method"
+                                data-bind="attr: {'id':  $index() + '_label_method_' + method.method_code + '_' + method.carrier_code}">
+                                <span class="fedex-regular fs-14 lh-24" data-bind="text: method.method_title"></span><sup class="fedex-regular">®</sup>
+                            </td>
+                            <td class="col col-delivery-date">
+                                <b class="fedex-bold fs-14 lh-24 d-inline-block pr-10">Expected by:</b>
+                                <span class="fedex-regular fs-14 lh-24" data-bind="text: method.deliveryDateText, attr: {'id': 'label_delivery_date' + method.method_code + '_' + method.carrier_code}"></span>
+                            </td>
+                            <!-- ko template: { name: 'Fedex_Delivery/checkout/shipping_step/mirakl_marketplace/shipping/delivery_rate', data: method } -->
+                            <!-- /ko -->
+                        </tr>
+                    <!-- /ko -->
+                    <!-- ko if: shipping_methods.length > 2 -->
+                    <tr class="d-row">
+                        <td data-bind="css: { 'border-0 pt-0': !is_accordion_expanded() }" colspan="4">
+                            <!-- ko if: show_expand_button -->
+                            <button type="button" class="show-shipping-method-toggle fedex-bold fs-14 lh-24 weight-700 cl-aster-blue p-0 text-uppercase"
+                            data-bind="click: function() { $parent.toggleShippingAccordion($index()) },
+                                       clickBubble: false,
+                                       css: { active: is_accordion_expanded },
+                                       text: is_accordion_expanded() ? 'See Less Options' : 'See More Options'">
+                            </button>
+                            <!-- /ko -->
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                </tbody>
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+            </table>
+            <!-- /ko -->
+        </div>
+        <!-- ko foreach: getRegion('campaign-ad-disclosure') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!-- /ko -->
+
+        <ul style="list-style: none;">
+            <li>
+                <!-- ko if: isMixedQuote() && !pickupShippingComboKey()
+                    || isFullMarketplaceQuote()
+                    || isFullFirstPartyQuote() && chosenDeliveryMethod() === 'shipping'  -->
+                <div class="contact-person-container hide">
+                    <div class="title">Contact Person</div>
+                    <hr class="line">
+                    <!-- B-1126844 | update cart items price -->
+                    <input value="" type="hidden" id="rateApiResponseShipment" />
+                    <div class="subtitle"> Who should we contact with questions and order updates?</div>
+                    <div class="alternate-form-title">
+                        <input type="radio" name="contact-form" aria-label="Contact form" value="isSame"
+                            class="input-text" data-testid="input-radio-same-as-the-recipient" checked /><label
+                            class="contact-title alternate-form-label">Same as the recipient</label>
+                    </div>
+                    <div class="alternate-form-title">
+                        <input type="radio" name="contact-form" aria-label="Contact form" value="isNotsame"
+                            class="input-text" data-testid="input-radio-alternate-contact-person" />
+                        <span class="my-tooltip">
+                            <label class="contact-title">Alternate contact person</label>
+                            <img aria-describedby="info-contact" data-bind="attr: { src: infoUrl}"
+                                class="tooltip-toggle tooltip-icon" alt="Alternate contact icon" />
+                            <span id="info-contact" role="tooltip" class="tooltip-content alternate-tooltip-text">Only
+                                the
+                                Alternate Contact Person will
+                                receive order
+                                updates.</span>
+                        </span>
+                    </div>
+
+                    <div role="form" aria-label="Alternate contact information" class="alternate-contact-form">
+
+                        <div id="fullname">
+                            <!-- First Name -->
+                            <div class="fname-grid">
+                                <label class="label" for="alternate_firstname">First Name <span
+                                        class="required_span">*</span></label>
+                                <input type="text" id="alternate_firstname" name="alternate_firstname" value=""
+                                    maxlength="30" aria-label="First Name" data-testid="checkout-delivery-method-shipping-button-alternate-firstname"/>
+                                <span id="firstname_validate" class="field-error"></span>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="lname-grid">
+                                <label class="label" for="alternate_lastname">Last Name <span
+                                        class="required_span">*</span></label>
+                                <input type="text" id="alternate_lastname" name="alternate_lastname" value=""
+                                    aria-label="Last Name" maxlength="30" data-testid="checkout-delivery-method-shipping-button-alternate-lastname"/>
+                                <span id="lastname_validate" class="field-error"></span>
+                            </div>
+                        </div>
+
+                        <div id="phonenumber">
+                            <!-- Phone Number-->
+                            <div class="field phone-grid required">
+                                <label class="label" for="alternate_phonenumber">Phone Number <span
+                                        class="required_span">*</span></label>
+                                <input type="text" id="alternate_phonenumber" name="alternate_phonenumber"
+                                    aria-label="Phone Number" value="" maxlength="14" data-testid="checkout-delivery-method-shipping-button-alternate-phone-number"/>
+                                <span id="phonenumber_validate" class="field-error"></span>
+                            </div>
+                            <!-- Phone ext -->
+                            <div class="field ext-grid required">
+                                <label class="label" for="alternate_ext">Ext</label>
+                                <input type="text" id="alternate_ext"
+                                    name="lalternate_ext" value="" maxlength="5" aria-label="Ext Number" data-testid="checkout-delivery-method-shipping-button-alternate-ext"/>
+                            </div>
+                        </div>
+                        <!-- Email -->
+                        <div id="email-grid">
+                            <label class="label" for="alternate_email">Email</label>
+                            <span class="required_span">*</span>
+                            <input type="text" id="alternate_email" name="alternate_email" aria-label="Email"
+                                value="" data-testid="checkout-delivery-method-shipping-button-alternate-email" />
+                            <span id="email_validate" class="field-error"></span>
+                        </div>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </li>
+        </ul>
+        <div class="actions-toolbar" id="shipping-method-buttons-container" style="display: none;">
+            <div class="primary">
+
+                <!-- ko ifnot: hasPreferredPaymentOnExpressCheckout() -->
+                
+                <button data-role="opc-continue" class="button action continue primary create_quote"
+                    data-bind="enable: continuneToPaymentButtonEnable,
+                    attr: {
+                        id: getShippingButtonId(),
+                        type: getShippingButtonId() === null ? 'submit' : 'button'
+                    }"
+                    data-testid="shipping-button-continue-to-payment">
+                    <span data-bind="visible: isCustomerLoggedIn()">SUBMIT ORDER</span>
+                    <span class="continue-payment-btn" data-bind="visible: !isCustomerLoggedIn()">CONTINUE TO PAYMENT</span>
+                </button>
+                <!-- /ko -->
+
+                <!-- ko if: hasPreferredPaymentOnExpressCheckout() -->
+                <button data-role="opc-continue" type="button" class="button action continue primary"
+                    data-bind="enable: rates().length > 0, click: goToReviewStep" data-testid="review-order-button">
+                    <span>REVIEW ORDER</span>
+                </button>
+                <!-- /ko -->
+            </div>
+        </div>
+
+        <div data-bind="if: isPromiseTimePickupOptionsToggle() && shouldShowShippingMessage()">
+            <div class="in-branch shipping-message" style="display: none;">
+                <div class="message-icon shipping-message-icon info-icon">
+                    <img alt="Alert icon" data-bind="attr: { src: infoUrl}" class="fa fa-info-circle icon-purple">
+                </div>
+                <div class="shipping-message-text">
+                    <p class="ship-0">
+                        Please note that delivery dates/times are subject to change upon order submission.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

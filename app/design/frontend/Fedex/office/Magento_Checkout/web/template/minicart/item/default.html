@@ -1,0 +1,221 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<li class="item product product-item" data-role="product-item">
+    <div class="product">
+        <!-- ko if: isNonStandardFile -->
+        <span data-bind="attr: {title: product_name}" tabindex="-1" class="product-item-photo">
+            <img class="product-image-photo uploadtoquote-nonstandard-img" alt="" style="width: auto; height: auto; position: relative;" data-bind="attr: {
+                src: nonStandardImageUrl
+               }">
+        </span>
+        <!-- /ko -->
+        <!-- ko if: product_has_url && !isNonStandardFile -->
+        <span data-bind="attr: {title: product_name}" tabindex="-1" class="product-item-photo">
+            <!-- ko foreach: $parent.getRegion('itemImage') -->
+            <!-- ko template: {name: getTemplate(), data: {item, imgLoad, imgLoaderUrl, isCheckImage} } --><!-- /ko -->
+            <!-- /ko -->
+        </span>
+        <!-- /ko -->
+        <!-- ko ifnot: product_has_url -->
+        <span class="product-item-photo">
+            <!-- ko foreach: $parent.getRegion('itemImage') -->
+            <!-- ko template: {name: getTemplate(), data: {item, imgLoad, imgLoaderUrl, isCheckImage} } --><!-- /ko -->
+            <!-- /ko -->
+        </span>
+        <!-- /ko -->
+
+        <div class="product-item-details">
+            <strong class="product-item-name">
+                <!-- ko if: product_has_url -->
+                <span data-bind="attr: {}, html: product_name"></span>
+                <!-- /ko -->
+                <!-- ko ifnot: product_has_url -->
+                <!-- ko text: product_name --><!-- /ko -->
+                <!-- /ko -->
+            </strong>
+
+            <!-- ko if: !isItemPriceable -->
+            <div class="upload-to-quote-minicart-need-store-label">
+                <p>
+                    Needs Store Review
+                </p>
+            </div>
+            <!-- /ko -->
+
+            <div class="product-item-pricing">
+                <!-- ko if: canApplyMsrp -->
+
+                <div class="details-map">
+                    <span class="label" data-bind="i18n: 'Price'"></span>
+                    <span class="value" data-bind="i18n: 'See price before order confirmation.'"></span>
+                </div>
+
+                <!-- /ko -->
+                <!-- ko if: is_discount_applied -->
+                <!-- ko ifnot: canApplyMsrp -->
+                <!-- ko foreach: $parent.getRegion('priceSidebar') -->
+                <!-- ko template: {name: getTemplate(), data: item.price_including_qty_calculation, as: 'price'} --><!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- ko ifnot: item.is_final_discount_price -->
+                <div class="subtotal-price" data-bind="html: subtotal">
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: item.is_final_discount_price -->
+                <div class="final-discount-wrapper">
+                    <div class="price-container-final-discount">
+                        <span class="price-final-discount" data-bind="html: item.final_discount_price"></span>
+                    </div>
+                </div>
+                <!-- /ko -->
+
+                <div class="details-qty qty"  data-bind="css: { 'disabled-qty-wrp': $data.is_unavailable || $data.product_type === 'bundle' }">
+                    <label class="label" data-bind="i18n: 'Qty', attr: {
+                        for: 'cart-item-'+item_id+'-qty'}"></label>
+                    <!-- ko if: is_third_party_product && marketplace_customizable_product  -->
+                    <div class="qty-area d-inline-flex relative">
+                        <span data-bind="text: qty"></span>
+                        <i role="button" class="tooltip-icon mb-5 pointer" aria-describedby="quantity-tooltip"></i>
+                        <span id="quantity-tooltip" role="tooltip" class="absolute d-none tooltip p-10" data-bind="text: cart_quantity_tooltip"></span>
+                    </div>
+                    <!-- /ko -->
+                    <!-- ko if: (!is_third_party_product) || (is_third_party_product && !marketplace_customizable_product) -->
+                    <input data-bind="attr: {
+                                class: 'cart-item-qty item-qty cart-item-'+item_id+'-qty'+ (($data.is_unavailable==true) ? ' disabled-qty' : '') + (product_type === 'bundle' ?' bundle-product':''),
+                                id: 'cart-item-'+item_id+'-qty',
+                                'data-cart-item': item_id,
+                                'data-item-qty': qty,
+                                'data-cart-item-id': product_sku,
+                                'disabled': ((($data.is_unavailable || $data.is_expired || isSiItemNonEditable) && (marketplace_customizable_product)) || product_type === 'bundle') ? true : false
+                                }, value: qty" type="number" size="4" >
+                    <span
+                        data-bind="html: $parent.getProductEngineQtyOption(id, version, item_id, qty, product_sku, product_engine_url, qtyData)"></span>
+                    <button data-bind="attr: {
+                            id: 'update-cart-item-'+item_id,
+                            'data-cart-item': item_id,
+                            title: $t('Update')
+                            }" class="update-cart-item" style="display: none">
+                        <span data-bind="i18n: 'Update'"></span>
+                    </button>
+                    <!-- /ko -->
+                </div>
+            </div>
+            <!-- ko if: is_third_party_product -->
+                <!-- ko if: additional_data && additional_data.reorder_item -->
+                        <!-- ko if: can_edit_reorder === false -->
+                        <div class="reorder-warning">
+                            <input type="checkbox" data-bind="attr:{id: 'reorder-'+item_id}">
+                            <label class="reorder-label" data-bind="attr:{for: 'reorder-'+item_id}">Why Can't I Edit?</label>
+                            <div class="reorder-content">
+                                When reordering, this product cannot be edited. To make changes to this item, visit the
+                                <a data-bind="attr:{href:product_url}">product page</a> and start a new project with your previously uploaded file.
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                <!-- /ko -->
+            <!-- /ko -->
+            <div class="product actions custom-minicar-edit-delete mt-0">
+                <!-- ko if: is_visible_in_site_visibility && product_type !== 'bundle' -->
+                <!-- ko if: product_attributesetname == 'FXOPrintProducts' || is_customize == '1' -->
+                <!-- ko if: !$data.is_expired -->
+                <!-- ko if: !additional_data || !(additional_data && additional_data.reorder_item) -->
+                <div class="primary cta-link" data-bind="let: { isEditDisabled: isDyeSubEnable && isDyeSubProduct && isDyeSubEditDisable }">
+                    <!-- ko if: !is_third_party_product && (isNonStandardFile || isSiItemNonEditable)-->
+                        <span class="upload-to-quote-nonstandard-mini-edit-link" data-bind="i18n: 'Edit'"></span>
+                    <!-- /ko -->
+                    <!-- ko if: (is_third_party_product && !is_unavailable && marketplace_customizable_product) || (!isNonStandardFile && !isSiItemNonEditable && !is_unavailable)-->
+                    <!-- ko ifnot:isDyeSubExpired -->
+                        <a href="#"
+                            data-bind="css: { 'edit-disabled': isEditDisabled },
+                                        attr: {
+                                            title: $t('Edit item'),
+                                            tabindex: isEditDisabled ? -1 : null,
+                                            'aria-disabled': isEditDisabled
+                                        },
+                                        click: $parent.alternativeEditItem.bind(this, externalProductInstance, item, item_id)"
+                            class="action edit">
+                                <span data-bind="i18n: 'Edit'"></span>
+                        </a>
+                        <!-- ko if: isEditDisabled -->
+                            <span class="edit-tooltip fs-12 d-inline-block valign-bottom">
+                                <i tabindex="0" role="button" class="tooltip-icon d-inline-block pointer" aria-describedby="edit-button-tooltip"></i>
+                                <span id="edit-button-tooltip" role="tooltip" class="absolute d-none tooltip fedex-light fs-16 lh-24 pt-8 pb-8 pl-12 pr-12" data-bind="i18n: 'Editing is currently unavailable.'"></span>
+                            </span>
+                        <!-- /ko -->
+                    <!-- /ko -->
+                <!-- /ko -->
+                </div>
+                <!-- /ko -->
+                <!-- ko if: $parent.tiger_D217169 -->
+                    <!-- ko if: (additional_data && additional_data.reorder_item && additional_data.punchout_enabled !== false) && (!is_unavailable) -->
+                    <div class="primary cta-link">
+                        <!-- ko if: can_edit_reorder === false -->
+                        <span data-bind="attr: { title: $t('Edit item') }" class="action edit reorder-disabled">
+                            <span data-bind="i18n: 'Edit'"></span>
+                        </span>
+                        <!-- /ko -->
+                        <!-- ko if: can_edit_reorder === true -->
+                        <a href="javascript:void(0)" data-bind="attr: { title: $t('Edit item') }, click: $parent.alternativeEditItem.bind(this, externalProductInstance, item, item_id)"
+                           class="action edit">
+                            <span data-bind="i18n: 'Edit'"></span>
+                        </a>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko ifnot: $parent.tiger_D217169 -->
+                    <!-- ko if: (additional_data && additional_data.reorder_item) && (!is_unavailable) -->
+                    <div class="primary cta-link">
+                        <!-- ko if: can_edit_reorder === false -->
+                        <span href="#"
+                              data-bind="attr: { title: $t('Edit item') }"
+                              class="action edit reorder-disabled" tabindex="0">
+                                            <span data-bind="i18n: 'Edit'"></span>
+                                        </span>
+                        <!-- /ko -->
+                        <!-- ko if: can_edit_reorder === true -->
+                        <a href="#"
+                           data-bind="attr: { title: $t('Edit item') }, click: $parent.alternativeEditItem.bind(this, externalProductInstance, item, item_id)"
+                           class="action edit" tabindex="0">
+                            <span data-bind="i18n: 'Edit'"></span>
+                        </a>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+                <!-- /ko -->
+
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- /ko -->
+                <!-- ko if: $parent.tiger_team_D_186617_unable_to_delete_1p3p_product -->
+                  <div class="secondary cta-link">
+                      <a href="#" role="button"
+                          data-bind="attr: {'data-cart-item': item_id, title: $t('Remove item'), 'data-cart-item-name': product_name}, css: ($data.is_expired || (product_attributesetname == 'PrintOnDemand' && is_customize == '0') || is_unavailable) ? 'remove-pipe' : ''"
+                          class="action delete">
+                          <span data-bind="i18n: 'Delete'"></span>
+                      </a>
+                  </div>
+                <!-- /ko -->
+                <!-- ko ifnot: $parent.tiger_team_D_186617_unable_to_delete_1p3p_product -->
+                  <div class="secondary cta-link">
+                    <a href="#" role="button"
+                        data-bind="attr: {'data-cart-item': item_id, title: $t('Remove item'), 'data-cart-item-name': product_name}, css: ($data.is_expired || (product_attributesetname == 'PrintOnDemand' && is_customize == '0') || is_unavailable) ? 'remove-pipe' : ''"
+                        class="action delete">
+                        <span data-bind="i18n: 'Delete'"></span>
+                    </a>
+                  </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </div>
+    <div class="message notice" if="$data.message">
+        <div data-bind="text: $data.message"></div>
+    </div>
+</li>

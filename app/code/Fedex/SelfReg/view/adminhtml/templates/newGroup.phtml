@@ -1,0 +1,365 @@
+<script>
+    require([
+        "prototype",
+        "jquery",
+        "uiRegistry"
+    ], function (prototype, $, uiRegistry) {
+        window.ajaxUrlToGetCustomer = '<?= /** @noEscape */ $block->getUrl('orderapprover/index/getcustomer')?>';
+
+        $(document).ready(function () {
+            // Set maxlength immediately
+            $('input[name="group_name"]').attr('maxlength', '200');
+
+            // Initialize button validation with aggressive approach
+            initButtonValidation();
+
+            // Initialize site selection handler
+            initSiteSelection();
+        });
+        
+        /**
+         * Initialize button state validation
+         */
+        function initButtonValidation() {
+            // Disable button initially
+            disableButton();
+
+            // Set up aggressive event listeners
+            setupAggressiveListeners();
+
+            // Monitor UI Registry components
+            monitorUIComponents();
+
+            // Initial validation check
+            validateButtonState();
+        }
+
+        /**
+         * Set up aggressive event listeners for immediate response
+         */
+        function setupAggressiveListeners() {
+            // Listen to EVERY possible event on group name input
+            $(document).on('input keydown keyup keypress paste cut change blur focus', 'input[name="group_name"]', function() {
+                validateButtonState();
+            });
+
+            // Listen to EVERY possible event on dropdowns
+            $(document).on('change click mousedown mouseup keydown keyup', 'select[name*="site"], select[name*="order_approver"]', function() {
+                validateButtonState();
+            });
+
+            // Listen to dropdown menu clicks
+            $(document).on('click', '.admin__action-multiselect-menu .action-menu-item, .admin__control-select option, .admin__action-multiselect-text', function() {
+                // Validate both immediately and after a tiny delay
+                validateButtonState();
+                setTimeout(validateButtonState, 1);
+            });
+
+            // Listen to ANY form element changes
+            $(document).on('input change keyup paste cut blur focus click', 'input, select, textarea', function() {
+                validateButtonState();
+            });
+
+            // Aggressive mutation observer
+            const observer = new MutationObserver(function() {
+                validateButtonState();
+            });
+
+            observer.observe(document.body, {
+                attributes: true,
+                attributeFilter: ['value', 'selected', 'checked'],
+                childList: true,
+                subtree: true,
+                characterData: true
+            });
+        }
+
+        /**
+         * Monitor Magento UI Registry components aggressively
+         */
+        function monitorUIComponents() {
+            const componentPaths = [
+                'new_approver_add.new_approver_add.genral.group_name',
+                'new_approver_add.new_approver_add.genral.site',
+                'new_approver_add.new_approver_add.genral.order_approver'
+            ];
+
+            // Monitor components as they load
+            componentPaths.forEach(function(path) {
+                uiRegistry.async(path, function(component) {
+                    if (component && component.value && typeof component.value.subscribe === 'function') {
+                        component.value.subscribe(function() {
+                            validateButtonState();
+                        });
+                    }
+                    
+                    if (component.on) {
+                        component.on('value', validateButtonState);
+                        component.on('update', validateButtonState);
+                        component.on('change', validateButtonState);
+                    }
+                    
+                    validateButtonState();
+                });
+            });
+
+            // Check for components that might already be loaded
+            uiRegistry.async(function() {
+                componentPaths.forEach(function(path) {
+                    const component = uiRegistry.get(path);
+                    if (component && component.value && typeof component.value.subscribe === 'function') {
+                        component.value.subscribe(validateButtonState);
+                    }
+                });
+                validateButtonState();
+            });
+        }
+
+        /**
+         * Validate button state - immediate execution
+         */
+        function validateButtonState() {
+            if (areAllMandatoryFieldsFilled()) {
+                enableButton();
+            } else {
+                disableButton();
+            }
+        }
+
+        /**
+         * Check if all mandatory fields are filled
+         */
+        function areAllMandatoryFieldsFilled() {
+            // Get Group Name from multiple sources
+            let groupName = '';
+            
+            // Try UI component first
+            try {
+                const groupNameComponent = uiRegistry.get('new_approver_add.new_approver_add.genral.group_name');
+                if (groupNameComponent && groupNameComponent.value) {
+                    groupName = groupNameComponent.value();
+                }
+            } catch (e) {}
+            
+            // Try DOM if component didn't work
+            if (!groupName) {
+                groupName = $('input[name="group_name"]').val() || '';
+            }
+
+            // Get Site from multiple sources
+            let site = '';
+            
+            // Try UI component first
+            try {
+                const siteComponent = uiRegistry.get('new_approver_add.new_approver_add.genral.site');
+                if (siteComponent && siteComponent.value) {
+                    site = siteComponent.value();
+                }
+            } catch (e) {}
+            
+            // Try DOM if component didn't work
+            if (!site || site === '') {
+                site = $('select[name*="site"]').val() || '';
+            }
+
+            // Get Order Approver from multiple sources
+            let orderApprover = '';
+            
+            // Try UI component first
+            try {
+                const orderApproverComponent = uiRegistry.get('new_approver_add.new_approver_add.genral.order_approver');
+                if (orderApproverComponent && orderApproverComponent.value) {
+                    orderApprover = orderApproverComponent.value();
+                }
+            } catch (e) {}
+            
+            // Try DOM if component didn't work
+            if (!orderApprover || orderApprover === '') {
+                orderApprover = $('select[name*="order_approver"]').val() || '';
+            }
+
+            // Strict validation
+            const isGroupNameValid = groupName && groupName.toString().trim().length > 0;
+            
+            const isSiteValid = site && 
+                            site !== '0' && 
+                            site !== 'select' && 
+                            site !== '' && 
+                            site !== null && 
+                            site !== undefined &&
+                            site.toString().toLowerCase() !== 'select';
+
+            const isOrderApproverValid = orderApprover && 
+                (Array.isArray(orderApprover) ? 
+                    orderApprover.length > 0 && 
+                    orderApprover[0] !== '0' && 
+                    orderApprover[0] !== 'select' && 
+                    orderApprover[0] !== '' && 
+                    orderApprover[0] !== null &&
+                    orderApprover[0].toString().toLowerCase() !== 'select' : 
+                    (orderApprover !== '0' && 
+                    orderApprover !== 'select' && 
+                    orderApprover !== '' && 
+                    orderApprover !== null && 
+                    orderApprover.toString().toLowerCase() !== 'select'));
+
+            return isGroupNameValid && isSiteValid && isOrderApproverValid;
+        }
+
+        /**
+         * Disable button with multiple selectors and methods
+         */
+        function disableButton() {
+            // Try multiple button selectors
+            const buttonSelectors = [
+                'button[data-form-role="save"]',
+                '.save.primary',
+                'button.action-save',
+                'button.save',
+                '.page-actions button.save',
+                '.page-actions-buttons button.save',
+                'button[type="submit"]'
+            ];
+
+            buttonSelectors.forEach(function(selector) {
+                const $buttons = $(selector);
+                if ($buttons.length > 0) {
+                    $buttons.addClass('disabled')
+                            .prop('disabled', true)
+                            .attr('disabled', 'disabled')
+                            .css({
+                                'opacity': '0.5',
+                                'cursor': 'not-allowed',
+                                'pointer-events': 'none'
+                            });
+                }
+            });
+        }
+
+        /**
+         * Enable button with multiple selectors and methods
+         */
+        function enableButton() {
+            // Try multiple button selectors
+            const buttonSelectors = [
+                'button[data-form-role="save"]',
+                '.save.primary',
+                'button.action-save',
+                'button.save',
+                '.page-actions button.save',
+                '.page-actions-buttons button.save',
+                'button[type="submit"]'
+            ];
+
+            buttonSelectors.forEach(function(selector) {
+                const $buttons = $(selector);
+                if ($buttons.length > 0) {
+                    $buttons.removeClass('disabled')
+                            .prop('disabled', false)
+                            .removeAttr('disabled')
+                            .css({
+                                'opacity': '1',
+                                'cursor': 'pointer',
+                                'pointer-events': 'auto'
+                            });
+                }
+            });
+        }
+        
+        /**
+         * Initialize site selection
+         */
+        function initSiteSelection() {
+            // Handle site selection changes
+            $(document).on('change', 'select[name*="site"]', function() {
+                var siteId = $(this).val();
+                if (siteId && siteId !== '0' && siteId !== 'select') {
+                    loadUsersForSite(siteId);
+                }
+            });
+            
+            // Also monitor via UI Registry
+            uiRegistry.async('new_approver_add.new_approver_add.genral.site', function(component) {
+                if (component && component.value) {
+                    component.value.subscribe(function(value) {
+                        if (value && value !== '0' && value !== 'select') {
+                            loadUsersForSite(value);
+                        }
+                    });
+                }
+            });
+        }
+        
+        /**
+         * Load users for site
+         */
+        function loadUsersForSite(siteId) {
+            $.ajax({
+                url: window.ajaxUrlToGetCustomer,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    site_id: siteId,
+                    form_key: $('input[name="form_key"]').val()
+                },
+                success: function(response) {
+                    if (response && (response.users || response.data)) {
+                        var users = response.users || response.data || [];
+                        populateUserDropdowns(users);
+                    }
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error("Failed to load users for site", {
+                        siteId: siteId,
+                        textStatus: textStatus,
+                        errorThrown: errorThrown
+                    });
+                }
+            });
+        }
+        
+       /**
+         * Populate user dropdowns
+         */
+        function populateUserDropdowns(users) {
+            if (!users || !users.length) return;
+            
+            // Format options - Only name, no email
+            var options = users.map(function(user) {
+                var userId = user.entity_id || user.id || user.customer_id;
+                var firstName = user.firstname || user.first_name || '';
+                var lastName = user.lastname || user.last_name || '';
+                
+                return {
+                    value: userId,
+                    label: firstName + ' ' + lastName
+                };
+            });
+            
+            // Update users dropdown
+            uiRegistry.async('new_approver_add.new_approver_add.genral.users', function(component) {
+                if (component && component.setOptions) {
+                    component.setOptions(options);
+                } else if (component) {
+                    component.options(options);
+                    if (component.cacheOptions) {
+                        component.cacheOptions.plain = options;
+                    }
+                }
+            });
+            
+            // Update order approver dropdown
+            uiRegistry.async('new_approver_add.new_approver_add.genral.order_approver', function(component) {
+                if (component && component.setOptions) {
+                    component.setOptions(options);
+                } else if (component) {
+                    component.options(options);
+                    if (component.cacheOptions) {
+                        component.cacheOptions.plain = options;
+                    }
+                }
+            });
+        }
+ 
+    });
+</script>

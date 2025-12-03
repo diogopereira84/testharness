@@ -1,0 +1,29 @@
+<!--@subject Catalog Item Ready for Order Email Template @-->
+<!--@vars {
+"var admin_name":"Admin Name",
+"var document_name":"Document Name",
+"var folder_path":"Folder Path",
+"var login_url":"Product Link",
+"var price":"Product Price"
+} @-->
+
+<div class="email-container">
+	<div class="content-section">
+        
+        <p>Hi {{var admin_name}},</p>
+		<div>
+            <p>Your requested catalog item <span>&quot;</span>{{var document_name}}<span>&quot;</span> has been published and is ready to order.</p>
+            <ul>
+                <li>
+                    Folder Path: {{var folder_path}}
+                </li>
+                <li>
+                    Catalog Item Price: {{var price}}
+                </li>
+            </ul>
+        </div>
+        <div>
+            <p><a href="{{var login_url}}" target="_blank">{{trans 'Log in to review the catalog item'}}</a></p>
+        </div>
+	</div>
+</div>

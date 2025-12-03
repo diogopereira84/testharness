@@ -1,0 +1,21 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+    $expressCheckoutViewModel = $block->getData("express-checkout-view-model");
+?>
+<?php if ($expressCheckoutViewModel->getIsFclCustomer()
+    || $expressCheckoutViewModel->isSelfRegCustomerWithFclEnabled()
+    || $expressCheckoutViewModel->getIsRequestFromSdeStoreFclLogin()
+): ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_ExpressCheckout/js/fcl-populate-address": {}
+        }
+    }
+    </script>
+<?php endif; ?>

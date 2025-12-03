@@ -1,0 +1,25 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $menuItem \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+/** @var $category \Magento\Catalog\Model\Category */
+$menuBlock = $this->getData('menu_block');
+$menuItems = $this->getData('menu_items');
+$key = $this->getData('items_key');
+$menuManagement = $this->getData('menu_management');
+$category = $menuManagement->getCategoryById($menuItems[$key]->value);
+?>
+<?php if ($menuManagement->isAllowPermission($category->getId())): ?>
+    <?php $subCats = $menuManagement->getChildrenCategories($category); ?>
+    <li class="megaCategoryBlock">
+        <?php if (count($subCats) > 0): ?>
+            <?php echo $menuBlock->getChildColumnForSubCategory($menuItems,$key,$category,$subCats); ?>
+        <?php else: ?>
+            <li>
+                <a href="<?= /* @noEscape */ $category->getUrl() ?>"><?= __($category->getName()) ?></a>
+            </li>
+        <?php endif; ?>
+    </li>
+<?php endif; ?>

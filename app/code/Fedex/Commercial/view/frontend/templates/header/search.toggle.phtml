@@ -1,0 +1,16 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php
+$commercialViewModel = $block->getData('view_model');
+$isCommercialStore = $commercialViewModel->isGlobalCommercialCustomerRequest();
+
+if ($isCommercialStore):
+    ?>
+    <button class="btn-toggle-search search-controls border-r-0 d-none fedex-icon lens ml-auto p-0 weight-300" aria-label="Toggle Search Box"></button>
+<?php endif;?>

@@ -1,0 +1,55 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$expiryitemwarningmsg= $block->getData('cart.msg.view.model');
+$unavailableModel = $block->getData('product_availability_view_model');
+
+$configInstance = $expiryitemwarningmsg->getConfig();
+?>
+<?php if ($expiryitemwarningmsg->isCustomerLoggedIn()): ?>
+    <?php if ($expiryitemwarningmsg->isAnyItemExpiringSoon() && !$unavailableModel->checkCartHaveUnavailbleProduct()): ?>
+        <div data-bind="scope: 'check-products-availability-scope'">
+            <div class="expiryitem-alertbox" style="display: none;" data-bind="visible: !hasDisabledProducts()">
+                <div class="expiryitems-warning-box-inner">
+                    <?php $warningIcon = 'images/expired-items/alert.png';?>
+                    <span>
+                        <img  src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($warningIcon)); ?>"
+                        alt="warning icon" />
+                    </span>
+                </div>
+                <div class="expiryitem-alert-warning-msg">
+                    <p class="attention-title">
+                        <?= $escaper->escapeHtml(__($configInstance->getCartExpiryTitle())) ?>
+                    </p>
+                    <p class="notification-msg">
+                        <?= $escaper->escapeHtml(__($configInstance->getCartExpiryMessage())) ?>
+                    </p>
+                </div>
+                <div class="img-cross-icon">
+                    <?php $crossIcon = 'images/expired-items/cross-icon.png';?>
+                    <span>
+                        <img  src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($crossIcon)); ?>"
+                        alt="close icon" tabindex="0" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Fedex_ExpiredItems/js/cart_expiry_messages": {},
+                    "Magento_Ui/js/core/app": {
+                        "components": {
+                            "check-products-availability-scope": {
+                                "component": "Fedex_Cart/js/check-products-availability"
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+    <?php endif;?>
+<?php endif;?>

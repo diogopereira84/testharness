@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="hedare_promo_banner_tab" translate="label" sortOrder="100">
+            <label>Promo Banner</label>
+        </tab>
+        <section id="header_promo_banner" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <class>separator-top</class>
+            <label>Settings</label>
+            <tab>hedare_promo_banner_tab</tab>
+            <resource>Fedex_PageBuilderPromoBanner::promobanner_config</resource>
+            <group id="promobanner_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Promo Banner Configuration</label>
+                <field id="widget_id" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Widget Id For Promo Banner</label>
+                    <validate>required-entry validate-not-negative-number</validate>
+                </field>
+                <field id="foreground_image" type="image" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1" translate="label">
+                    <label>Promo Banner Desktop Foreground Image [Screen 1440]</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">promobanner/foreground</upload_dir>
+                    <base_url type="media" scope_info="1">promobanner/foreground</base_url>
+                </field>
+                <field id="foreground_laptop_image" type="image" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1" translate="label">
+                    <label>Promo Banner Laptop Foreground Image [Screen 1200]</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">promobanner/foreground</upload_dir>
+                    <base_url type="media" scope_info="1">promobanner/foreground</base_url>
+                </field>
+                <field id="foreground_tablet_image" type="image" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1" translate="label">
+                    <label>Promo Banner Tablet Foreground Image [Screen 768]</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">promobanner/foreground</upload_dir>
+                    <base_url type="media" scope_info="1">promobanner/foreground</base_url>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

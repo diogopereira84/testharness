@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="epro_identifier_update" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>ePro External Identifier Update Cron</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="run_cron_time" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Set Cron run time</label>
+                    <comment>Set "0 0 30 2 *" to disable cron</comment>
+                </field>
+            </group>
+        </section>
+        <section id="doc_ref_cron" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Document Reference API Cron</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="config" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="extend_life_cron" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Set Cron run time</label>
+                    <comment>Set "0 0 30 2 *" to disable cron</comment>
+                </field>
+            </group>
+        </section>
+        <section id="fedex" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <group id="general" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <field id="sales_force_api_url" type="text" sortOrder="900" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Salesforce Email Subscription Api URL</label>
+                    <comment/>
+                </field>
+            </group>
+        </section>
+        <section id="promo" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <group id="marketing_opt_in" sortOrder="50" showInDefault="0" showInWebsite="0" showInStore="1" translate="label">
+                <label>Opt-In Marketing Emails</label>
+                <field id="enabled" type="select" sortOrder="10" showInWebsite="0" showInDefault="0" showInStore="1" translate="label">
+                    <label>Opt-In Marketing Email Subscription Checkbox</label>
+                    <comment>This will enable Opt-In Marketing Email Subscription Checkbox.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="url_success_page" type="text" sortOrder="20" showInDefault="0" showInWebsite="0" showInStore="1" translate="label">
+                    <label>URL "Join our email list" Success Page</label>
+                    <comment>This configuration will determine which URL will be present under "Join our email list" message in checkout.</comment>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="environment_toggle" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="hawks_d218499_customer_section_load_session_evict_unnecessary_calls" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Hawks D-214899 - Customer Section Session evict unnecessary calls</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_b2615536" translate="label" type="select" sortOrder="1100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2615536 Reset cart from Magento Admin and create a new quote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

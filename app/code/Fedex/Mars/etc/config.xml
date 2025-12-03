@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_Mars
+ * @copyright   Copyright (c) 2023 Fedex
+ * @author      Olimjon Akhmedov <olimjon.akhmedov.osv@fedex.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <mars>
+            <general>
+                <is_enabled>0</is_enabled>
+                <api_url>https://eventhub-mars-npe.servicebus.windows.net/adobe-commerce-poc/messages</api_url>
+                <api_max_tries>1</api_max_tries>
+                <success_codes>200,201,100</success_codes>
+                <json_content>0</json_content>
+            </general>
+            <token>
+                <grant_type>client_credentials</grant_type>
+                <client_id>24e50b6d-5d04-4cac-ab7d-3145264fc686</client_id>
+                <client_secret>tgMFkxDVaNalFMvBJMGXL88ZX8L4LofP</client_secret>
+                <resource>https://eventhubs.azure.net</resource>
+                <api_url>https://login.microsoftonline.com/b945c813-dce6-41f8-8457-5a12c2fe15bf/oauth2/token</api_url>
+            </token>
+        </mars>
+    </default>
+</config>

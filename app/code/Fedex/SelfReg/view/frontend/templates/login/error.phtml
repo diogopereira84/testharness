@@ -1,0 +1,125 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+//B-1326232- WLGN integration for selfReg customer
+
+$loginErrorMsg = $block->getLoginErrorMsg() ?? null;
+$header_class = "";
+if (!$loginErrorMsg) {
+    $header_class = "profile_failure_header";
+}
+?>
+
+<header class="page-header wlgn-enable-page-header remove-role hborder <?php echo $header_class ?>">
+    <div class="header content">
+        <div id="toggle-menu">
+            <span data-action="toggle-nav" class="action nav-toggle"><span>Toggle Nav</span></span>
+        </div>
+        <a class="logo" href="<?= $block->getBaseUrl()?>" title="<?= $block->getLogoAlt()?>" aria-label="store logo">
+            <img src="<?= $block->getLogoSrc()?>" title="<?= $block->getLogoAlt()?>"
+            alt="<?= $block->getLogoAlt()?>" width="170">
+        </a>
+    </div>
+</header>
+<?php if ($block->isInactiveUser()) : ?>
+<!-- Modal for Inactive User -->
+<div class="inactive-user-error-modal">
+    <div class="inactive-user-error-modal-inner-wrap" data-role="focusable-scope">
+        <div id="modal-content-inactive-user-error" class="modal-content" data-role="content">
+            <div id="inactive-user-error-popup" class="inactive-user-error-popup">
+                <div class="modal-body-content">
+                    <div class="warning-icon-img">
+                        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/expired-items/expiring-icon.png')) ?>" alt="Warning icon">
+                    </div>
+                    <div class="profile_error_msg"><?= $block->getInactiveUserErrorMessage(); ?></div>
+                </div>
+                <div class="action-primary">
+                    <button id="inactive-user-retry" onclick="window.location.href='<?= $block->getAlternateInactiveUserLandingPageLink() ?>'">
+                        <?= __('Retry'); ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /** B-1805640 */ -->
+<?php elseif ($loginErrorMsg && $loginErrorMsg != "profile_error") :?>
+<div class="modal-inner-wrap" data-role="focusable-scope">
+    <div id="modal-content-7" class="modal-content" data-role="content">
+        <div id="login-register-popup" class="pod-upload-warning login-top-popup" style="">
+            <div class="modal-body-content">
+                <h1 class="note-heading"><?= $loginErrorMsg; ?></h1>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .oauth-fail-index.profile-error-modal .page-main {
+        background-color: #ffffff !important;
+    }
+    #login-register-popup .note-heading {
+        height: auto !important;
+    }
+    .oauth-fail-index.profile-error-modal .page-header {
+        border-bottom: 1px solid #ccc !important;
+    }
+}
+</style>
+<!-- /** B-1805640 */ -->
+<?php else:
+    $mainContent = $block->getStoreConfigData('sso/login_error_popup/login_error_popup_message') ?? "We're unable to fetch your profile information.\n Please refresh the page and try again.";
+    $errorMsg = str_replace("\n","<br/>",$mainContent); 
+    ?>
+    <div class="profile_error_message_container">
+        <div class="profile_error_message_container_content">
+            <div class="profile_error_message_container_content_sub_content">
+                <div class="profile_error_warrning_icon_img">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="52" viewBox="0 0 60 52" fill="none">
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M0.912 48.9171L28.412 1.25043C29.1175 0.0275268 30.8825 0.0275268 31.588 1.25043L59.088 48.9171C59.7931 50.1393 58.911 51.6666 57.5 51.6666H2.50001C1.08897 51.6666 0.206872 50.1393 0.912 48.9171Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M5.67426 47.9998H54.3257L30 5.83521L5.67426 47.9998Z" fill="#F7B118"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M31.8334 33.4242V18.5757C31.8334 17.6134 31.0125 16.8333 30 16.8333C28.9875 16.8333 28.1667 17.6134 28.1667 18.5757V33.4242C28.1667 34.3865 28.9875 35.1666 30 35.1666C31.0125 35.1666 31.8334 34.3865 31.8334 33.4242Z" fill="#333333"/>
+                        <path fill-rule="evenodd" clip-rule="evenodd" d="M32.75 41.5833C32.75 43.1013 31.518 44.3333 30 44.3333C28.482 44.3333 27.25 43.1013 27.25 41.5833C27.25 40.0653 28.482 38.8333 30 38.8333C31.518 38.8333 32.75 40.0653 32.75 41.5833Z" fill="#333333"/>
+                    </svg>
+                </div>
+                <div class="profile_error_oops">
+                    <h3>
+                        <?= $block->getStoreConfigData('sso/login_error_popup/login_error_popup_heading') ?? "Oops!"; ?>
+                    </h3>
+                </div>
+                <div class="profile_error_msg">
+                    <h3>
+                        <?= $errorMsg;?>
+                    </h3>
+                </div>
+                <div class="profile_error_retry_btn">
+                    <button id="profile_error_retry_login" onclick="window.location.href='<?= $block->getLoginUrl()?>'">
+                        <?= $block->getStoreConfigData('sso/login_error_popup/login_error_popup_retry_login') ?? "Retry"; ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myPopup" class="popup show">
+        <div class="popup-content">
+            <div class="icon-txt-content">
+                <div class="warrning-con-img"><img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/warrning_icon.png'))?>" title="Warrning icon"
+                alt="Warrning icon"></div>
+                <div class="error-message-api-fail">
+                    <h3 class="error-oops-msg">
+                        <?= $block->getStoreConfigData('sso/login_error_popup/login_error_popup_heading') ?? "Ooops"; ?>
+                    </h3>
+                    <p>
+                        <h3 class="error-h3-msg">
+                            <?= $escaper->escapeHtml(__( $errorMsg ));?>
+                        </h3>
+                    </p>
+            </div>
+            <div class="btn-retry-button">
+                <button id="retry-login" onclick="window.location.href='<?= $block->getLoginUrl()?>'">
+                <?= $block->getStoreConfigData('sso/login_error_popup/login_error_popup_retry_login') ?? "Retry"; ?>
+                </button>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

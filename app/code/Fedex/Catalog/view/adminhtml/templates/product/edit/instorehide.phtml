@@ -1,0 +1,78 @@
+<script>
+    require(['jquery', 'uiRegistry', "domReady!"], function($, uiRegistry) {
+
+        $(document).on('form-uicomponent-done', function (event, componentName){
+
+            if (componentName == 'product_form.product_form') {
+                $(document).on('attribute-set-changed', function () {
+                    let selctedOption = jQuery('div[data-index="attribute_set_id"] .admin__action-multiselect-text').html();
+                    if (selctedOption == 'PrintOnDemand') {
+                        return;
+                    }
+                    let attributeSet = uiRegistry.get('product_form.product_form.product-details.attribute_set_id');
+                    let optionSelect = attributeSet.cacheOptions.plain.filter(function (option) {
+                        return option.value == attributeSet.value();
+                    });
+
+                    if (optionSelect && optionSelect[0] && optionSelect[0].label === 'FXOInStoreProducts') {
+
+                        //attributes to hide
+                        uiRegistry.get("product_form.product_form.product-details.container_tax_class_id.tax_class_id").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.quantity_and_stock_status_qty").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_weight").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_has_canva_design.has_canva_design").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_country_of_manufacture.country_of_manufacture").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_is_returnable").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_customizable.customizable").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_admin_user_id.admin_user_id").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.product-details.container_map_sku.map_sku").visible(true).visible(false);
+
+                        //sections to hide
+                        uiRegistry.get("product_form.product_form.configurable").visible(true).visible(false);
+                        uiRegistry.get("product_form.product_form.downloadable").visible(true).visible(false);
+                        uiRegistry.get('product_form.product_form.custom_options').visible(true).visible(false);
+                        uiRegistry.get('product_form.product_form.mirakl-marketplace').visible(true).visible(false);
+
+                        //attributes to show
+                        if(uiRegistry.get("product_form.product_form.product-details.container_order_form.order_form")
+                            || uiRegistry.get("product_form.product_form.product-details.container_find_location.find_location")) {
+                            uiRegistry.get("product_form.product_form.product-details.container_order_form.order_form").visible(false).visible(true);
+                            uiRegistry.get("product_form.product_form.product-details.container_order_form_target.order_form_target").visible(false).visible(true);
+                            uiRegistry.get("product_form.product_form.product-details.container_find_location.find_location").visible(false).visible(true);
+                            uiRegistry.get("product_form.product_form.product-details.container_find_location_target.find_location_target").visible(false).visible(true);
+                        }
+                    } else {
+
+                        //attributes to show
+                        uiRegistry.get("product_form.product_form.product-details.quantity_and_stock_status_qty").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_weight").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_has_canva_design.has_canva_design").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_country_of_manufacture.country_of_manufacture").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_is_returnable").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_customizable.customizable").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_admin_user_id.admin_user_id").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.product-details.container_map_sku.map_sku").visible(false).visible(true);
+
+                        //sections to show
+                        uiRegistry.get("product_form.product_form.configurable").visible(false).visible(true);
+                        uiRegistry.get("product_form.product_form.downloadable").visible(false).visible(true);
+                        uiRegistry.get('product_form.product_form.custom_options').visible(false).visible(true);
+                        uiRegistry.get('product_form.product_form.mirakl-marketplace').visible(false).visible(true);
+
+                        //attributes to hide
+                        if(uiRegistry.get("product_form.product_form.product-details.container_order_form.order_form")
+                            || uiRegistry.get("product_form.product_form.product-details.container_find_location.find_location")) {
+                            uiRegistry.get("product_form.product_form.product-details.container_order_form.order_form").visible(true).visible(false);
+                            uiRegistry.get("product_form.product_form.product-details.container_order_form_target.order_form_target").visible(true).visible(false);
+                            uiRegistry.get("product_form.product_form.product-details.container_find_location.find_location").visible(true).visible(false);
+                            uiRegistry.get("product_form.product_form.product-details.container_find_location_target.find_location_target").visible(true).visible(false);
+                        }
+
+                    }
+                });
+
+                $(document).trigger('attribute-set-changed');
+            }
+        })
+    });
+</script>

@@ -1,0 +1,23 @@
+<?php
+//D-105839
+$removeLocalStorage = $block->removeLocalStorage();
+?>
+<?php if ($removeLocalStorage) : ?>
+	<script>
+        require([
+            'jquery',
+            'fedex/storage',
+            ''
+        ], function ($, fxoStorage, customerData) {
+            if (window.e383157Toggle) {
+                fxoStorage.set('shippingData', '{}');
+                fxoStorage.set('pickupData', '{}');
+                customerData.removeAll();
+            } else {
+                window.localStorage.setItem('shippingData', '{}');
+                window.localStorage.setItem('pickupData', '{}');
+                window.localStorage.setItem('mage-cache-storage', '{}');
+            }
+        });
+	</script>
+<?php endif; ?>

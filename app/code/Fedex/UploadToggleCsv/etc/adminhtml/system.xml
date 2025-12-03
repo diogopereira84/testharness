@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1002" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle_report_csv" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Feature Toggle Release Control</label>
+                <field id="upload_csv" translate="label" type="label" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Feature Toggle</label>
+                    <frontend_model>Fedex\UploadToggleCsv\Block\Adminhtml\System\Config\Form\Field\File</frontend_model>
+                    <upload_dir config="system" scope_info="1">upload_csv</upload_dir>
+                    <comment><![CDATA[<b>Help Text:</b> A comma-delimited list with header row (Key, Value) can be uploaded with feature toggle key-value pairs.<br/><br/>
+                        <b>Example CSV Format:</b><br/>
+                        Key,Value<br/>
+                        is_remove_base64_image,YES<br/>
+                        sgc_remove_companyadmin_fields,YES<br/><br/>
+                        <i>Note: Configuration and Toggle cache should be updated manually by the user after applying the CSV.</i>
+                        ]]>
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

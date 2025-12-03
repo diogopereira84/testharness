@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+        <section id="fedex" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="customer_data_export_email" translate="label" type="text" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Customer Export Email Settings</label>
+
+                <field id="delete_customer_export_file_cron" type="text" translate="label" sortOrder="33" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Customer Data Export Cache Cleanup</label>
+                    <comment>Enter cron schedule time. Default will be run cron every hour</comment>
+                    <validate>required-entry</validate>
+                </field>
+
+            </group>
+        </section>
+	</system>
+</config>

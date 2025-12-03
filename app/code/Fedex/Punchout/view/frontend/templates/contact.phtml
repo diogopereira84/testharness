@@ -1,0 +1,128 @@
+<div id="popup-modal" class="contact_wrapper" >
+	<div class='contact_wrapper_inner'>
+		<div class="contact_wrapper-label">
+			<h3 class="main-popup-title contact-inforamtion-label"><?= $block->escapeHtml(__('Contact Information')) ?></h3>
+		</div>
+		<div>
+			<div class="floatL">
+				<div class="below-margin"><?= $block->escapeHtml(__('First Name')) ?> <span class="required-feild">*</span></div>
+				<input type='text' class ="width-90 below-margin input-height" id='fname' required="required"/>
+			</div>
+			<div class="floatR">
+				<div class="below-margin"><?= $block->escapeHtml(__('Last Name')) ?> <span class="required-feild">*</span></div>
+				<input type='text' class="width-90 below-margin input-height" id='lname' required="required"/>
+			</div>
+		</div>
+		<div>
+			<div class="phone_floatL">
+				<div class="below-margin"><?= $block->escapeHtml(__('Phone Number')) ?> <span class="required-feild">*</span></div>
+				<input type='text' class = "width-88 below-margin input-height" id='phone' required="required"/>
+			</div>
+			<div class="ext_floatR">
+				<div class="below-margin"><?= $block->escapeHtml(__('Ext')) ?></div>
+				<input type='text' id='ext' class = "width-84 below-margin input-height" />
+			</div>
+		</div>
+		<div>
+			<div class="below-margin"><?= $block->escapeHtml(__('Email Address')) ?> <span class="required-feild">*</span></div>
+			<input type='email' class = "width-95 below_margin-email input-height" id='email' required="required"/>
+		</div>
+	   <button type="button" id="save" class = "button-save-information" title="Save Information"
+	   class="action primary contactinfo">
+			<span><?= $block->escapeHtml(__('Save Information')) ?></span>
+	   </button>
+	   <span class="error"></span>
+	</div>
+</div>
+<script type="text/javascript">
+	require(['jquery','Magento_Ui/js/modal/modal','mage/url'],function( $, modal,urlBuilder) {
+			var options = {
+				type: 'popup',
+				responsive: true,
+				innerScroll: true,
+				clickableOverlay: false,
+				buttons: [{
+					text: $.mage.__('Continue'),
+					class: 'mymodal1',
+					click: function () {
+						this.closeModal();
+					}
+				}],
+				opened: function($Event) {
+					$(".modal-header").hide();
+					$(".modal-footer").attr("style", "display: none !important");;
+				}
+			};
+			var popup = modal(options, $('#popup-modal'));
+			$(document).ready(function(){
+				$("#popup-modal").modal("openModal");
+			});
+			$('#save').on('click',function(){
+				var fname = $('#fname').val();
+				var lname = $('#lname').val();
+				var phone = $('#phone').val();
+				var customer_id = '<?php echo $block->getData('customer_id')?>';
+				var loginData = <?php echo json_encode($block->getData('loginD'));?>;
+				var ext = $('#ext').val();
+				var email = $('#email').val();
+				var flag = 1;
+
+				if (!/^[a-zA-Z\s]+$/.test(fname)) {
+					$(".error").html('Invalid First Name, only characters & space allowed ');
+					flag=0;
+					return false;
+				}
+				else if (!/^[a-zA-Z\s]+$/.test(lname)) {
+					$(".error").html('Invalid last Name, only characters & space allowed ');
+					flag=0;
+					return false;
+				}
+				else if (typeof fname !== undefined &&
+					lname !== undefined &&
+					(fname.length < 2 || lname.length < 2)
+				) {
+					$(".error").html('First/Last Name must have atleast 2 characters.');
+					flag = 0;
+					return false;
+				}
+				else if (!/^[2-9]{1}[0-9]+$/.test(phone) || phone.length!=10) {
+					$(".error").html('Invalid phone number, only 10 digit allowed and Phone number can’t be 123 so on.');
+					flag=0;
+					return false;
+				}
+				else if ((ext.length!=0) && (!/^[0-9]+$/.test(ext) || ext.length>4)) {
+					$(".error").html('Invalid ext number, max 4 digit ext allowed');
+					flag=0;
+					return false;
+				}
+				else if (!/^([a-zA-Z0-9_.+-])+\@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(email)) {
+					$(".error").html('Invalid email');
+					flag=0;
+					return false;
+				}
+				if(flag){
+					var url = '<?php echo $block->getData('redirect_url')?>';
+					c_payload = {'fname':fname,'lname':lname,'phone':phone,'ext':ext,'email':email,
+						'customer_id':customer_id,'loginData':loginData};
+					$.ajax({
+						url: urlBuilder.build('punchout/autologin/save'),
+						type: 'POST',
+						data: {'data':JSON.stringify(c_payload)},
+						dataType: "json",
+						showLoader: true,
+						async: true,
+						complete: function() {
+						}
+					}).done(function(resData){
+						console.log(resData);
+						if(resData.error){
+							$(".error").html(resData.msg);
+						}else{
+							window.location.href=url;
+						}
+					});
+				}
+			});
+		}
+	);
+</script>

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <referenceBlock name="page.main.title" remove="true"/>
+    <referenceBlock name="catalogsearch.product.addto" remove="true"/>
+    <referenceBlock class="Magento\CatalogSearch\Block\SearchResult\ListProduct" name="search_result_list" template="Magento_Catalog::product/search-result-list.phtml">
+        <arguments>
+            <!-- B-1149167 : RT-ECVS-SDE-SDK changes for File upload -->
+            <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+            <argument name="catalog_search_view_model" xsi:type="object">Fedex\CatalogSearch\ViewModel\CatalogSearchResult</argument>
+        </arguments>
+    </referenceBlock>
+    <!-- B-1334240 : Add SDE Sensitive data block in search result page-->
+    <referenceContainer name="columns.top">
+        <block class="Fedex\SDE\Block\SensitiveMessage" name="sensitive-block" template="Fedex_SDE::sensative_block.phtml"/>
+    </referenceContainer>
+</page>

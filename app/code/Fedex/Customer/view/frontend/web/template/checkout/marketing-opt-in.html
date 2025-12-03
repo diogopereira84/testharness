@@ -1,0 +1,20 @@
+<!-- ko if: isMarketingOptInToggleStatus() -->
+<div data-role="marketing-opt-in" id="marketing-opt-in" data-bind="visible: showOptIn">
+    <div class="marketing-opt-in checkout-agreements fieldset mt-24 mb-0 d-flex flex-col" data-bind="visible: isVisible">
+        <div class="opt-in choice d-flex flex-col">
+            <label class="label checkout-checkbox" data-bind="attr: {'for': 'marketing-opt-in-checkbox'}">
+                <input type="checkbox" class="marketing_opt_in_enable" id="marketing-opt-in-checkbox"
+                       data-testid="checkout-order-summary-input-checkbox-marketing-opt-in" data-bind="attr: {
+                                    'id': 'marketing-opt-in-checkbox',
+                                    'name': 'marketing_opt_in'
+                                    }" afterRender="checkInput"/>
+                <span class="checkmark" tabindex="0"></span>
+                <div class="terms-text terms-text-emails">
+                    <span class="lh-28" data-bind="i18n: 'I would like to receive discount and promotion emails.'"></span>
+                    <span class="lh-28" data-bind="i18n: 'Note: you can unsubscribe at any time.'"></span>
+                </div>
+            </label>
+        </div>
+    </div>
+</div>
+<!-- /ko -->

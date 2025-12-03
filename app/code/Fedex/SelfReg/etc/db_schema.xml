@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * B-1257375 - Add configuration for site access (use access flow- all registered users, users from specific domain and admin approval)
+ * 
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <!-- New table for company Self Registration Login Data -->
+    <table name="company_selfreg" resource="default" engine="innodb" comment="Company Additional Data">
+        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="company_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Company ID"/>
+        <column xsi:type="text" name="self_reg_data" nullable="true" comment="SelfRegData"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>        
+        <constraint xsi:type="foreign" referenceId="COMPANY_SELFREG_ID_COMPANY_ENTITY_ID" table="company_selfreg" column="company_id" referenceTable="company" referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+    <table name="enhanced_role_permissions" resource="default" engine="innodb" comment="Company Enhance Role Permissions">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="varchar" name="label" length="255" nullable="false" comment="Permisison Label with code"/>
+        <column xsi:type="int" name="sort_order" nullable="false" comment="Permisison Sort Order"/>
+        <column xsi:type="text" name="tooltip" nullable="true" comment="Permission ToolTip"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>        
+    </table>
+    <table name="enhanced_user_roles" resource="default" engine="innodb" comment="Company Enhance User Roles">
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="company_id"  unsigned="true" nullable="false" comment="Company Id"/>
+        <column xsi:type="int" name="customer_id"  unsigned="true" nullable="false" comment="Customer Id"/>
+        <column xsi:type="int" name="permission_id" unsigned="true" nullable="false" comment="Permission Id"/>
+        <constraint xsi:type="primary" referenceId="enhance_user_role_primary">
+            <column name="id"/>
+        </constraint>   
+        <constraint xsi:type="unique" referenceId="enhance_user_role_unique">
+            <column name="company_id"/>
+            <column name="customer_id"/>
+            <column name="permission_id"/>
+        </constraint> 
+        <constraint xsi:type="foreign" referenceId="enhance_user_role_permission_id" table="enhanced_user_roles" column="permission_id" referenceTable="enhanced_role_permissions" referenceColumn="id" onDelete="CASCADE"/>
+         <constraint xsi:type="foreign" referenceId="enhance_user_role_customer_id" table="enhanced_user_roles" column="customer_id" referenceTable="customer_entity" referenceColumn="entity_id" onDelete="CASCADE"/>   
+         <constraint xsi:type="foreign" referenceId="enhance_user_role_company_id" table="enhanced_user_roles" column="company_id" referenceTable="company" referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+
+    <table name="user_groups_permission" resource="default" engine="innodb" comment="user_groups_permission Table">
+		<column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+        <column name="group_id" padding="10" xsi:type="int" unsigned="true" nullable="false" comment="group_id"/>
+		<column name="user_id" padding="10" nullable="true" xsi:type="int" comment="user_id" identity="false"/>
+		<column name="company_id" padding="10" xsi:type="int" unsigned="true" nullable="false" comment="company_id"/>
+		<column name="order_approval" nullable="true" xsi:type="varchar" comment="order_approval" length="255"/>
+		<column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP" comment="created_at" on_update="false"/>
+		<column name="updated_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP"  comment="updated_at" on_update="true"/>
+		
+		<index referenceId="USER_GROUP_PERMISSION_COMPANY_ID" indexType="btree">
+            <column name="company_id"/>
+        </index>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+		<constraint xsi:type="foreign" referenceId="USER_GROUP_PERMISSION_COMPANY_ID_COMPANY_ENTITY_ID" table="user_groups_permission" column="company_id" referenceTable="company" referenceColumn="entity_id" onDelete="CASCADE"/>
+		<constraint xsi:type="foreign" referenceId="USER_GROUP_PERMISSION_GROUP_ID_USER_GROUP_ID" table="user_groups_permission" column="group_id" referenceTable="user_groups" referenceColumn="id" onDelete="CASCADE"/>
+	</table>
+	<table name="user_groups" resource="default" engine="innodb" comment="user_groups Table">
+		<column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="id"/>
+		</constraint>
+		<column name="group_name" nullable="true" xsi:type="varchar" comment="group_name" length="255"/>
+		<column name="group_type" nullable="true" xsi:type="varchar" comment="group_type" length="100"/>
+		<column name="created_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP"  comment="created_at" on_update="false"/>
+		<column name="updated_at" nullable="true" xsi:type="timestamp" default="CURRENT_TIMESTAMP"  comment="updated_at" on_update="true"/>
+		
+		<index referenceId="USER_GROUP_PERMISSION_GROUP_TYPE" indexType="btree">
+            <column name="group_type"/>
+        </index>
+        <index referenceId="USER_GROUP_PERMISSION_GROUP_NAME" indexType="btree">
+            <column name="group_name"/>
+        </index>
+	</table>
+</schema>

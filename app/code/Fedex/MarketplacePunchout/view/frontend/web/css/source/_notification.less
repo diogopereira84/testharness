@@ -1,0 +1,76 @@
+
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    .modals-wrapper {
+        .modal-popup {
+            &.seller_notifications_modal {
+                .modal-inner-wrap{
+                    border: 2px solid #f9b200;
+                    display: block;
+                    height: 50vh;
+                    max-height: 100px;
+
+                    &::before {
+                        content: '';
+                        background-image: url(../Fedex_MarketplacePunchout/images/icons/warning.svg);
+                        background-repeat: no-repeat;
+                        background-size: 70%;
+                        background-position: center;
+                        position: relative;
+                        height: 100%;
+                        width: 8%;
+                        background-color: #f9b200;
+                        display: block;
+                        float: left;
+                    }
+
+                    .modal-header {
+                        .modal-title {
+                            font-size: 16px;
+                            font-weight: 900;
+                            color: #152830;
+                            border-bottom: none;
+                            padding: 18px 15px 5px 70px;
+                        }
+                        .action-close {
+                            top: -5px;
+                            right: 0px;
+                            &::before {
+                                font-size: 15px;
+                            }
+                        }
+                    }
+
+                    .modal-content {
+                        #notification-modal {
+                            padding: 0 15px 5px 70px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Mobile, @screen__m: 768px
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+    .modals-wrapper {
+        .modal-popup {
+            &.seller_notifications_modal {
+                left: 5%;
+                top: 5%;
+                right: 5%;
+                div.modal-inner-wrap {
+                    max-height: 150px;
+                    &::before {
+                        width: 10%;
+                    }
+                }
+            }
+        }
+    }
+}

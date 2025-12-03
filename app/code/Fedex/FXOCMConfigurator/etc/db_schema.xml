@@ -1,0 +1,44 @@
+<?xml version="1.0" ?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="userworkspace" resource="default" engine="innodb" comment="userworkspace Table">
+		<column xsi:type="int" name="userworkspace_id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="userworkspace_id"/>
+		</constraint>
+		<column name="customer_id" nullable="true" xsi:type="int" comment="customer_id" identity="false"/>
+		<index referenceId="FEDEX_FXOCMCONFIGURATOR_USERWORKSPACE_CUSTOMER_ID" indexType="btree">
+			<column name="customer_id"/>
+		</index>
+		<column name="workspace_data" nullable="true" xsi:type="mediumtext" comment="workspace_data"/>
+		<column name="application_type" nullable="true" xsi:type="varchar" comment="application_type" length="255"/>
+		<column name="old_upload_date" nullable="true" xsi:type="datetime" comment="old_upload_date"/>
+		<index referenceId="FEDEX_FXOCMCONFIGURATOR_USERWORKSPACE_OLD_UPLOAD_DATE" indexType="btree">
+			<column name="old_upload_date"/>
+		</index>
+		<column name="created_at" nullable="true" xsi:type="timestamp" comment="created_at" default="CURRENT_TIMESTAMP"/>
+		<column name="updated_at" nullable="true" xsi:type="timestamp" comment="updated_at" default="CURRENT_TIMESTAMP" on_update="true"/>
+	</table>
+    <table name="order_retention_period" resource="default" engine="innodb" comment="Order Retention Table">
+		<column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+		<constraint xsi:type="primary" referenceId="PRIMARY">
+			<column name="id"/>
+		</constraint>
+		<column xsi:type="int" name="order_item_id" unsigned="true" nullable="false" identity="false"
+                comment="Order Item ID"/>
+        <column xsi:type="varchar" name="document_id" nullable="false" length="64" comment="Document Id"/>
+		<column name="extended_date" nullable="true" xsi:type="datetime" comment="Extended date"/>
+		<index referenceId="FEDEX_ORDER_RETETION_PERIOD_EXTENDED_DATE" indexType="btree">
+			<column name="extended_date"/>
+		</index>
+		<column name="extended_flag" nullable="true" xsi:type="int" comment="Extended Flag" identity="false"/>
+		<index referenceId="FEDEX_ORDER_RETETION_PERIOD_EXTENDED_FLAG" indexType="btree">
+			<column name="extended_flag"/>
+		</index>
+		<column name="created_at" nullable="true" xsi:type="timestamp" comment="created_at" default="CURRENT_TIMESTAMP"/>
+		<column name="updated_at" nullable="true" xsi:type="timestamp" comment="updated_at" default="CURRENT_TIMESTAMP" on_update="true"/>
+		<constraint xsi:type="foreign" referenceId="ORDER_RETETION_PERIOD_FOREIN_KEY" table="order_retention_period" column="order_item_id" referenceTable="sales_order_item" referenceColumn="item_id" onDelete="CASCADE"/>
+        <index referenceId="FEDEX_ORDER_RETENTION_PERIOD_DOCUMENT_ID" indexType="btree">
+            <column name="document_id"/>
+        </index>
+	</table>
+</schema>

@@ -1,0 +1,15 @@
+<?php
+	$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+	$isLoggedIn = $helperData->isCommercialCustomer();
+?>
+
+<?php if(!$isLoggedIn): ?>
+<div class="store-locator">
+	<a href="https://local.fedex.com/en/fxo-only" target="_blank">
+		<?=$block->escapeHtml(__('Locations'))?>
+	</a>
+</div>
+<?php endif; ?>
+
+
+

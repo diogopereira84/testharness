@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!--
+	/**
+	* Copyright © Fedex, Inc. All rights reserved.
+	* See COPYING.txt for license details.
+	*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Cms\Block\Page">
+        <plugin name="update_page_content" type="Fedex\SelfReg\Plugin\Page" />
+    </type>
+
+    <type name="Magento\Company\Ui\DataProvider\Users\DataProvider">
+        <plugin name="company_user_listing_plugin" type="Fedex\SelfReg\Plugin\Ui\Users\DataProvider" />
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <plugin name="selfreg_users_manageusergroups_listing_plugin" type="Fedex\SelfReg\Plugin\UiComponent\DataProviderPlugin" />
+    </type>
+
+    <type name="Magento\Company\Model\Email\Sender">
+        <plugin name="user_activation_email" type="Fedex\SelfReg\Plugin\Model\Email\Sender" />
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="selfreg_users_manageusergroups_listing_data_source"
+                      xsi:type="string">Fedex\SelfReg\Model\ResourceModel\UserGroups\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\Company\Controller\Customer\Save" type="Fedex\SelfReg\Controller\Customer\Save" />
+    <preference for="Magento\Company\Controller\Customer\PermanentDelete" type="Fedex\SelfReg\Controller\Customer\PermanentDelete" />
+    <preference for="Magento\Company\Controller\Customer\Delete" type="Fedex\SelfReg\Controller\Customer\Delete" />
+    <preference for="Magento\Company\Controller\Customer\Get" type="Fedex\SelfReg\Controller\Customer\Get" />
+    <preference for="Fedex\SelfReg\Api\UserGroupsPermissionRepositoryInterface" type="Fedex\SelfReg\Model\UserGroupsPermissionRepository"/>
+    <preference for="Fedex\SelfReg\Api\Data\UserGroupsPermissionInterface" type="Fedex\SelfReg\Model\UserGroupsPermission"/>
+    <preference for="Fedex\SelfReg\Api\Data\UserGroupsPermissionSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <preference for="Fedex\SelfReg\Api\UserGroupsRepositoryInterface" type="Fedex\SelfReg\Model\UserGroupsRepository"/>
+    <preference for="Fedex\SelfReg\Api\Data\UserGroupsInterface" type="Fedex\SelfReg\Model\UserGroups"/>
+    <preference for="Fedex\SelfReg\Api\Data\UserGroupsSearchResultsInterface" type="Magento\Framework\Api\SearchResults"/>
+    <type name="Fedex\SelfReg\Helper\SelfReg">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="order_approver_listing_data_source" xsi:type="string">Fedex\SelfReg\Model\ResourceModel\OrderApprover\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Fedex\SelfReg\Model\ResourceModel\OrderApprover\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">user_groups</argument>
+            <argument name="resourceModel" xsi:type="string">Fedex\SelfReg\Model\ResourceModel\UserGroups</argument>
+        </arguments>
+    </virtualType>
+</config>

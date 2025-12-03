@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+
+    <listingToolbar name="listing_top">
+        <filters name="listing_filters">
+            <filterSelect name="category_id_filter"
+                          provider="${ $.parentName }"
+                          component="Magento_Ui/js/form/element/ui-select"
+                          template="ui/grid/filters/elements/ui-select">
+
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="multiple" xsi:type="boolean">true</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="showCheckbox" xsi:type="boolean">true</item>
+                        <item name="chipsEnabled" xsi:type="boolean">true</item>
+                        <item name="elementTmpl" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                        <item name="sortOrder" xsi:type="number">10</item> 
+                    </item>
+                </argument>
+
+                <settings>
+                    <options class="Fedex\CatalogMvp\Model\Category\Categorylist"/>
+                    <caption translate="true">Select...</caption>
+                    <label translate="true">Category</label>
+                    <dataScope>category_id_filter</dataScope>
+                    <dataType>select</dataType>
+                </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+</listing>

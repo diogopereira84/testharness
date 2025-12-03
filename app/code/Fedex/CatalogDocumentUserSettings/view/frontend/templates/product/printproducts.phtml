@@ -1,0 +1,12 @@
+<?php
+
+$companyConfiguration = $this->helper('Fedex\CatalogDocumentUserSettings\Helper\Data')->getCompanyConfiguration();
+$allowOwnDocument = (bool) $companyConfiguration->getAllowOwnDocument();
+
+if($allowOwnDocument){
+	echo $this->getLayout()
+	->createBlock('Magento\Cms\Block\Block')
+	->setBlockId('prints_products')
+	->toHtml();
+}
+?>

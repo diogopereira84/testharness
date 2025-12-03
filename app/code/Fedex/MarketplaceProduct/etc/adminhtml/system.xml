@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex">
+            <group id="three_p_product" sortOrder="1100" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>3P Product Settings</label>
+                <field id="gallery" type="textarea" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Gallery Configuration</label>
+                    <validate>validate-json</validate>
+                    <comment>This field is maintained to configure the gallery settings for the Third Party Product Detail Pages.
+                    </comment>
+                </field>
+                <field id="offer_product_without_relation_message" type="textarea" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Message for products not related to the offer</label>
+                </field>
+                <field id="price_perception_disclaimer_text_3p" translate="label"
+                       type="editor" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Price Perception Disclaimer Text</label>
+                    <frontend_model>Fedex\Catalog\Block\Adminhtml\System\Config\Editor</frontend_model>
+                </field>
+            </group>
+            <group id="marketplace_configuration">
+                <group id="image_mapping" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Markeplace Image Mapping</label>
+                    <field id="list"  translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Marketplace Image Mapping</label>
+                        <frontend_model>Fedex\MarketplaceProduct\Block\Adminhtml\Form\Field\MarketplaceImageMapping</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <config_path>fedex/marketplace_configuration/image_mapping_list</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration">
+            <group id="environment_toggle">
+                <field id="tiger_d213961" translate="label" type="select" sortOrder="430" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TIGER - D-213961 - Business Review: Issues with Quantity update in Mini cart for 1p and 3p (CBB Sample Pack)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="hawks_D224800_reorder_toggle" translate="label" type="select" sortOrder="450" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>HAWKS - D-224800 - Marketplace Reorder</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d232497" translate="label" type="select" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team -  D-232497 Min and Max Qty for configurable products (Essendant) are not getting set on PDP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

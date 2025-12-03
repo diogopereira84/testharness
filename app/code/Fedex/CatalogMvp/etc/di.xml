@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\CatalogMvp\Api\CatalogMvpItemEnableMessageInterface" type="Fedex\CatalogMvp\Model\CatalogMvpItemEnableMessage"/>
+    <preference for="Fedex\CatalogMvp\Api\CatalogMvpItemDisableMessageInterface" type="Fedex\CatalogMvp\Model\CatalogMvpItemDisableMessage"/>
+    <preference for="Fedex\CatalogMvp\Api\CatalogMvpItemEnableSubscriberInterface" type="Fedex\CatalogMvp\Model\CatalogMvpItemEnableSubscriber"/>
+    <preference for="Fedex\CatalogMvp\Api\CatalogMvpItemDisableSubscriberInterface" type="Fedex\CatalogMvp\Model\CatalogMvpItemDisableSubscriber"/>
+    <preference for="Fedex\CatalogMvp\Api\DocRefMessageInterface" type="Fedex\CatalogMvp\Model\DocRefMessage"/>
+    <preference for="Fedex\CatalogMvp\Api\DocRefSubscriberInterface" type="Fedex\CatalogMvp\Model\DocRefSubscriber"/>
+    <preference for="Fedex\CatalogMvp\Api\BulkDeleteSubscriberInterface" type="Fedex\CatalogMvp\Model\BulkDeleteSubscriber"/>
+    <preference for="Fedex\CatalogMvp\Api\BulkDeleteMessageInterface" type="Fedex\CatalogMvp\Model\BulkDeleteMessage"/>
+    <preference for="Fedex\CatalogMvp\Api\ConfigInterface" type="Fedex\CatalogMvp\Model\Config"/>
+    <preference for="Fedex\CatalogMvp\Api\WebhookInterface"
+                type="Fedex\CatalogMvp\Model\ProductPriceWebhook"/>
+
+    <type name="Magento\Catalog\Model\Product\CopyConstructor\Composite">
+        <arguments>
+            <argument name="constructors" xsi:type="array">
+                <item name="crossSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\CrossSell</item>
+                <item name="upSell" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\UpSell</item>
+                <item name="related" xsi:type="string">Magento\Catalog\Model\Product\CopyConstructor\Related</item>
+                <item name="catalog_inventory" xsi:type="string">Magento\CatalogInventory\Model\Product\CopyConstructor\CatalogInventory</item>
+                <item name="downloadable" xsi:type="string">Magento\Downloadable\Model\Product\CopyConstructor\Downloadable</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <arguments>
+            <argument name="copyConstructor" xsi:type="object">Magento\Catalog\Model\Product\CopyConstructor\Composite</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\HTTP\Client\Curl" type="Fedex\CatalogMvp\HTTP\Client\Curl"/>
+    <!--B-1883021-->
+    <!--Disable Permission Indexer Start-->
+    <type name="Magento\Indexer\Model\Config">
+        <plugin name="fedex_remove_product_price_indexer_from_config" type="Fedex\CatalogMvp\Plugin\Product\RemoveIndexerFromConfig"/>
+    </type>
+    <type name="Magento\Framework\Indexer\Config\DependencyInfoProvider">
+        <plugin name="fedex_remove_product_indexer_from_dependencies" type="Fedex\CatalogMvp\Plugin\Indexer\Config\RemoveIndexerFromDependencies"/>
+    </type>
+    <type name="Magento\CatalogWidget\Block\Product\ProductsList">
+        <plugin sortOrder="1" name="fedexCatalogMvpProductsList"
+                type="Fedex\CatalogMvp\Plugin\Block\Product\ProductsListPlugin"/>
+    </type>
+
+	<type name="Magento\Catalog\Model\Indexer\Product\Price">
+        <plugin sortOrder="1" name="disableindexerprice" type="Fedex\CatalogMvp\Plugin\Indexer\Product\PricePlugin"/>
+    </type>
+	<type name="Magento\CatalogPermissions\Model\Indexer\Category">
+        <plugin sortOrder="1" name="disableindexercategory" type="Fedex\CatalogMvp\Plugin\Indexer\CategoryPlugin"/>
+  </type>
+    <type name="Fedex\CatalogMvp\Helper\CatalogMvp">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\App\Response\Http">
+        <plugin name="etag_plugin" type="Fedex\CatalogMvp\Plugin\ETag\EtagResponsePlugin" sortOrder="1"/>
+    </type>
+    <type name="Magento\CatalogDataExporter\Model\Query\ProductMainQuery">
+        <plugin name="custom_product_main_query_plugin" type="Fedex\CatalogMvp\Plugin\ProductMainQueryPlugin"/>
+	</type>
+    
+    <!-- Plugin to customize category filter behavior in the admin product grid. -->
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductDataProvider">
+        <plugin name="fedex_category_filter_plugin"
+                type="Fedex\CatalogMvp\Plugin\ProductDataProvider\CategoryFilterPlugin"
+                sortOrder="10" />
+    </type>
+
+    <!-- Sorts B2B root category children alphabetically in the admin category tree -->
+    <type name="Magento\Catalog\Block\Adminhtml\Category\Tree">
+        <plugin name="fedex_categorysort_plugin"
+                type="Fedex\CatalogMvp\Plugin\SortCategoryTreePlugin"
+                sortOrder="10"/>
+    </type>
+</config>

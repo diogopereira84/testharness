@@ -1,0 +1,25 @@
+<?php
+    $viewModel = $block->getData("checkout.session.timeout");
+    $isFclCustomer = (bool)$viewModel->isFclCustomer();
+    $cookieLifetime = $viewModel->getWebCookieConfig('cookie_lifetime');
+    $redirectUrl = (string)$block->getUrl();
+    $wlgnLogoutPageUrl = (string)$block->getGeneralConfig('fcl_logout_url');
+    $queryParameter = (string)$block->getGeneralConfig('fcl_logout_query_param');
+    $wlgnLogoutUrl = $wlgnLogoutPageUrl.'?'.$queryParameter.'='.$redirectUrl;
+?>
+<div class="log-out wlgn-logout" style="display: none;">
+    <a href="javascript:void(0)" data-url="<?= $block->escapeHtmlAttr((string)$wlgnLogoutUrl) ?>">
+    </a>
+</div>
+<?php if ($isFclCustomer && $cookieLifetime) : ?>
+    <input type="hidden" name="profile_logout_time" id="checkout_logout_time" 
+    value="<?= $block->escapeHtmlAttr($cookieLifetime) ?>">
+    <script type="text/x-magento-init">
+    {
+            "*": {
+                    "Fedex_SSO/js/fcllogin": {
+                    }
+            }
+    }
+    </script>
+<?php endif; ?>

@@ -1,0 +1,137 @@
+<div id="campaign-ad-disclosure-modal" class="modal-content d-none" data-bind="afterRender: initModal">
+    <p class="fedex-light fs-16 lh-24 mt-24 mb-40">
+        Please provide the details of the political campaign associated with your order. This information helps us maintain records in accordance with state requirements.
+    </p>
+
+    <div class="campaign-ad-disclosure__question mb-40" data-bind="visible: shouldDisplayQuestionnaireInReviewPage">
+        <div class="ddt-custom-control">
+            <input id="campaign-ad-disclosure-yes-modal"
+                type="radio"
+                class="ddt-custom-control-input"
+                name="campaign-ad-disclosure-modal"
+                data-bind="checked: disclosureModel.isCampaignAd, checkedValue: true">
+            <label for="campaign-ad-disclosure-yes-modal" class="ddt-custom-control-label v-center">
+                <span class="indicator radio-circle"></span>
+                <span><strong>Yes,</strong> this order is related to a campaign ad.</span>
+            </label>
+        </div>
+
+        <div class="ddt-custom-control">
+            <input id="campaign-ad-disclosure-no-modal"
+                type="radio"
+                class="ddt-custom-control-input"
+                name="campaign-ad-disclosure-modal"
+                data-bind="checked: disclosureModel.isCampaignAd, checkedValue: false">
+            <label for="campaign-ad-disclosure-no-modal" class="ddt-custom-control-label v-center">
+                <span class="indicator radio-circle"></span>
+                <span><strong>No,</strong> this order is not related to a campaign ad.</span>
+            </label>
+        </div>
+    </div>
+    
+    <form id="campaign-ad-disclosure-form" novalidate data-bind="mageInit: {validation: {}}">
+        <section class="section section-campaign-info mb-40" aria-labelledby="campaign-info-title" data-bind="visible: disclosureModel.isCampaignAd">
+        <h2 id="campaign-info-title" class="section-title sr-only">Campaign Information</h2>
+
+        <div class="input-base-wrapper full-width mb-24 required">
+            <label class="base-label" for="cad-issue"><span>Candidate/PAC/Ballot Issue</span></label>
+            <div class="control">
+                <input type="text" id="cad-issue" name="issue" class="base-input fedex-light" placeholder="Political Issue" data-bind="value: temporaryFormData().candidatePacBallotIssue, event: { focusout: validateFieldOnBlur }" data-validate="{required:true}" />
+            </div>
+        </div>
+
+        <div class="input-base-wrapper full-width mb-24 required">
+            <label class="base-label" for="cad-election-date"><span>Election Date</span></label>
+            <div class="control input-date-control">
+                <input type="text" id="cad-election-date" name="election-date" class="base-input date-input fedex-light" placeholder="01/10/2024" data-bind="value: temporaryFormData().electionDate, afterRender: initDatePicker, event: { focusout: validateFieldOnBlur }" data-validate="{required:true, 'fedex-validate-date':true}" />
+            </div>
+        </div>
+
+        <div class="input-base-wrapper full-width">
+            <label class="base-label" for="cad-sponsor"><span>Sponsoring Committee or Entity (if applicable)</span></label>
+            <div class="control">
+                <input type="text" id="cad-sponsor" name="sponsor" class="base-input fedex-light" placeholder="E.g., Main Street Solutions PAC" data-bind="value: temporaryFormData().sponsoringCommittee" />
+            </div>
+        </div>
+        </section>
+
+        <section class="section section-customer-info" data-bind="visible: disclosureModel.isCampaignAd">
+        <h2 class="section-title fedex-light fs-20 lh-32">Customer Information</h2>
+
+        <div class="input-base-wrapper full-width mb-16 required">
+            <label class="base-label" for="cad-address1"><span>Address Line 1</span></label>
+            <div class="control">
+                <input type="text"
+                       id="cad-address1"
+                       name="address1"
+                       class="base-input fedex-light"
+                       placeholder="Enter Address Line 1"
+                       autocomplete="off"
+                       data-bind="value: temporaryFormData().addressLine1,
+                                  valueUpdate: 'input',
+                                  event: { keyup: handleAddressInputEvent, focus: handleAddressInputEvent, focusout: validateFieldOnBlur }"
+                       data-validate="{required:true}"
+                       aria-autocomplete="list"
+                       aria-controls="cad-address1-results" />
+                <div id="cad-address1-results"
+                     class="google-maps-results google-maps-main"
+                     role="listbox"
+                     aria-label="Suggested addresses"
+                     data-bind="visible: suggestedAddresses().length">
+                    <!-- ko foreach: suggestedAddresses -->
+                    <div class="result-wrapper-shipping-address-suggestions"
+                         role="option"
+                         data-bind="click: $parent.handleAddressSuggestionSelect.bind($parent), attr: { id: 'cad-address1-suggestion-' + $index() }">
+                        <div class="result" data-bind="html: description"></div>
+                    </div>
+                    <!-- /ko -->
+                </div>
+            </div>
+        </div>
+
+        <div class="input-base-wrapper full-width mb-16">
+            <label class="base-label sr-only" for="cad-address2"><span>Address Line 2</span></label>
+            <div class="control">
+                <input type="text" id="cad-address2" name="address2" class="base-input fedex-light" placeholder="Enter Address Line 2" data-bind="value: temporaryFormData().addressLine2" />
+            </div>
+        </div>
+
+        <div class="input-base-wrapper full-width mb-16 required">
+            <label class="base-label" for="cad-city"><span>City</span></label>
+            <div class="control">
+                <input type="text" id="cad-city" name="city" class="base-input fedex-light" placeholder="Enter City" data-bind="value: temporaryFormData().city, event: { focusout: validateFieldOnBlur }" data-validate="{required:true}" maxlength="35"/>
+            </div>
+        </div>
+
+        <div class="d-flex gap-16">
+            <div class="input-base-wrapper flex-grow-1 mb-16 required">
+                <label class="base-label" for="cad-region"><span>State</span></label>
+                <div class="control">
+                    <select id="cad-region" name="region" class="base-input fedex-light"
+                            data-bind="options: currentRegionOptions,
+                                       optionsText: 'label',
+                                       optionsValue: 'value',
+                                       value: temporaryFormData().state"
+                            data-validate="{required:true}"></select>
+                </div>
+            </div>
+
+            <div class="input-base-wrapper flex-grow-1 mb-16 required">
+                <label class="base-label" for="cad-postcode"><span>ZIP Code</span></label>
+                <div class="control">
+                    <input type="text" id="cad-postcode" name="postcode" class="base-input fedex-light" placeholder="Enter ZIP Code" data-bind="value: temporaryFormData().zipCode, event: { focusout: validateFieldOnBlur }" data-validate="{required:true, 'validate-zip-us':true}" />
+                </div>
+            </div>
+        </div>
+        </section>
+    </form>
+
+    <footer class="modal-footer">
+        <button type="button" class="primary-btn" data-role="action-cancel" data-bind="click: closeModal">
+            <span>Cancel</span>
+        </button>
+        <button type="button" class="secondary-btn" data-role="action-save" data-bind="click: saveFormData, disable: !isFormValid()">
+            <span>Save</span>
+        </button>
+    </footer>
+</div>

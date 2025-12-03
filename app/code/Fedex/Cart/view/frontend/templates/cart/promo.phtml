@@ -1,0 +1,146 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ * @var \Fedex\Cart\ViewModel\CheckoutConfig $viewModel
+ */
+
+// We should use strlen function because coupon code could be "0", converted to bool will lead to false
+$viewModel = $block->getData('viewModel');
+$hasCouponCode = $block->getCouponCode() !== null && strlen($block->getCouponCode()) > 0;
+$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+$isLoggedIn = $helperData->isCommercialCustomer();
+$cartHelperData = $this->helper(Fedex\Cart\Helper\Data::class);
+$borderColor = 'style="border-color: #E3002D !important"';
+$promoErrorOutlineColor = $viewModel->getPromoWarnings() ? $borderColor : '';
+$isPromoDiscountEnabled = false;
+$isPromoDiscountEnabled = $viewModel->isPromoDiscountEnabled();
+?>
+<?php if ($isPromoDiscountEnabled): ?>
+   <div class="block discount">
+    <?php if (!$hasCouponCode && !$viewModel->getPromoWarnings()): ?>
+        <div class="title" data-role="title" data-testid="add-promo-code">
+            <strong tabindex="0" class="discount-heading  d-flex"
+            role="heading" aria-level="2">
+                <span class ="plus d-inline-block pr-5 fedex-regular">+</span>
+                <span class ="d-inline-block lh-22"><?=$block->escapeHtml(__('Add Promo Code'))?></span>
+            </strong>
+        </div>
+        <?php endif;?>
+        <form id="discount-coupon-form"
+              action="<?=$block->escapeUrl($block->getUrl('checkout/cart/couponPost'))?>"
+              method="post"
+              data-mage-init='{"discountCode":{"couponCodeSelector": "#coupon_code",
+                                               "removeCouponSelector": "#remove-coupon",
+                                               "applyButton": "button.action.apply",
+                                               "cancelButton": "button.action.cancel"}}' >
+            <div class="discount-block coupon<?=($hasCouponCode) ?
+            ' applied' : ''?>"data-mage-init='{"loader": { "icon":
+                "<?=$block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))?>"}}'
+                <?=($hasCouponCode || $viewModel->getPromoWarnings()) ? ' style="display:block"' :
+                ' style="display:none"'?>>
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="apply-after-discount">Promo Code</div>
+                <div class="field <?=($hasCouponCode) ? 'apply-field applied-discount' : 'cancel-field'?>">
+                    <div class="control">
+                        <input type="text"
+                               class="input-text discount-text <?=($hasCouponCode) ? ' apply' : 'cancel'?>"
+                               id="coupon_code"
+                               name="coupon_code"
+                               placeholder="Ex. SAVE20"
+                               value="<?= $block->escapeHtmlAttr($block->getCouponCode())?>"
+                               aria-label="Input coupon code"
+                                <?php if ($hasCouponCode): ?>
+                                  style="pointer-events: none"
+                                <?php endif;?>
+                                <?= $promoErrorOutlineColor ?>
+
+                        />
+                        <div id="coupon-code-error"><?=$block->escapeHtmlAttr(__('This field is required.'))?></div>
+                        <?php if ($viewModel->getPromoWarnings()): ?>
+                            <div id="coupon-code-error-message">
+                                <span class="error-cross-icon">x</span>
+                                <span class="promo-warning-message">
+                                    <?=$block->escapeHtmlAttr(__($viewModel->getPromoWarnings()));?>
+                                </span>
+                            </div>
+                            <?php $viewModel->unSetPromoWarnings();?>
+                        <?php endif;?>
+                    </div>
+                    <div class="actions-toolbar">
+                    <?php if (!$hasCouponCode): ?>
+                        <div class="primary apply-promo">
+                            <button class="action apply primary promo-code" type="button"
+                            aria-label="<?=$block->escapeHtmlAttr(__('Apply Discount'))?>">
+                                <?=$block->escapeHtml(__('Apply'))?>
+                            </button>
+                            <p id="apply-promo-loader" class="loadersmall"></p>
+                        </div>
+                    <?php else: ?>
+                        <div class="primary cancel-promo">
+                                <button type="button" class="action cancel primary"
+                                value="<?=$block->escapeHtmlAttr(__('Cancel Coupon'))?>">
+                                    <span><?=$block->escapeHtml(__('x'))?></span>
+                                </button>
+                        </div>
+                    <?php endif;?>
+                </div>
+                </div>
+            </div>
+            <?php if (!$hasCouponCode): ?>
+                <?=/* @noEscape */$block->getChildHtml('captcha')?>
+            <?php endif;?>
+        </form>
+    </div>
+    <div class="block discount discount-message" style="display: none">
+        <div class="message">
+            <div class="icon">
+                <img src="<?= $block->getViewFileUrl('images/information.png'); ?>" />
+            </div>
+            <p class="message-content">
+            </p>
+            <div class="close-icon">
+                <button>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="block discount combined-discount-message" style="display: none">
+        <div class="message">
+            <div class="icon">
+                <img src="<?= $block->getViewFileUrl('images/information.png'); ?>" />
+            </div>
+            <p class="message-content">
+            </p>
+            <div class="close-icon">
+                <button>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </div>
+<?php endif;?>
+<script type="text/javascript">
+    require(['jquery','domReady!'], function ($) {
+        let discountTitleClass = '.block.discount .title';
+        $(discountTitleClass).on('click',function() {
+            $(this).hide();
+            $(".coupon").css("display","block");
+        });
+        $(discountTitleClass).on("keypress", function (e) {
+            var key = e.which;
+            if(key == 13) {
+                $(".title").trigger('click');
+            }
+        });
+        $('.error-cross-icon').on('click',function() {
+            $('#coupon-code-error-message').hide();
+       });
+    });
+</script>
+

@@ -1,0 +1,13 @@
+<?php
+    $helper = $this->helper(Fedex\Delivery\Helper\Data::class);
+    $isLoggedIn = $helper->isCommercialCustomer();
+?>
+<?php if (!$isLoggedIn): ?>
+<div class="retail-header">
+    <div id="fxgLogoCheckout" class="fxg-logo pull-left">
+        <a href="/" title="FedEx Home">
+            <img src="<?php echo $block->getViewFileUrl('images/FedEx_Office_Logo.svg'); ?>" alt="FedEx Print Online">
+        </a>
+    </div>
+</div>
+<?php endif; ?>

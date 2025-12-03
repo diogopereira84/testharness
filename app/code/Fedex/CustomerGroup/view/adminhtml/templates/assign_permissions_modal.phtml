@@ -1,0 +1,128 @@
+<?php
+$assignPermissionsViewModel = $block->getData('view_model');
+$permissions = $assignPermissionsViewModel->getAllRolePermission();
+$getSelectedUsersUrl = $block->getUrl('customergroup/options/getselectedusers');
+$findUserUrl = $block->getUrl('customergroup/options/findsearchedusers');
+$bulkSavePermissions = $block->getUrl('customergroup/options/bulkSavePermissions');
+$emailAllowPermission = 'email_allow';
+$emailAllowPermissionId = -1;
+$emailAllowPermissionCode = '';
+$emailDenyPermission = 'email_deny';
+$emailDenyPermissionId = -1;
+$emailDenyPermissionCode = '';
+?>
+
+<input type="hidden" id="get-users-url" value="<?= $escaper->escapeHtml(__($getSelectedUsersUrl)) ?>" />
+<input type="hidden" id="find-users-url" value="<?= $escaper->escapeHtml(__($findUserUrl)) ?>" />
+<input type="hidden" id="bulk-save-permissions" value="<?= $escaper->escapeHtml(__($bulkSavePermissions)) ?>" />
+<div id="assign-permissions-modal" class="assign-permissions-modal" style="display:none;">
+    <div class="admin__fieldset-wrapper-content">
+        <fieldset class="admin__fieldset">
+            <fieldset class="admin__field">
+                <legend class="admin__field-label admin-permissions-label">
+                    <span class="admin-permissions-bold"><?= $escaper->escapeHtml(__('Users')) ?></span>
+                </legend>
+                <div class="admin__field-control admin-permissions-users-container">
+                    <div class="admin__action-multiselect-wrap action-select-wrap admin__action-multiselect-tree">
+                        <div class="action-select admin__action-multiselect customer-ids-multiselect dropdown-inactive">
+                            <div class="selected-users selected-users-section"></div>
+                            <div class="add-users-section"></div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset class="admin__field">
+                <legend class="admin__field-label admin-permissions-label">
+                    <span class="admin-permissions-bold"><?= $escaper->escapeHtml(__('Admin Permissions')) ?></span>
+                </legend>
+                <div class="admin__field-control admin-permissions-options-container">
+                    <?php foreach ($permissions as $permission): ?>
+                            <?php
+                                $permissionLabel = $permission->getLabel();
+                                $permissionLabel = explode("::", $permissionLabel);
+                                $label = $permissionLabel[0] ?? "";
+                                $code = $permissionLabel[1] ?? "";
+                                $toolTip = $permission->getTooltip();
+                                $permissionId = $permission->getId();
+                            ?>
+                        <?php if ($permission->getSortOrder() > 0): ?>
+                            <div class="admin-permissions-option">
+                                <div class="admin__field admin__field-option">
+                                    <input type="checkbox"
+                                        class="admin__control-checkbox"
+                                        data-form-part="customer_form"
+                                        data-index-permission-id="<?= $escaper->escapeHtmlAttr($permissionId) ?>"
+                                        data-index-permission-code="<?= $escaper->escapeHtmlAttr($code) ?>"
+                                        id="admin-permissions-option-<?= $escaper->escapeHtmlAttr($code) ?>" />
+                                    <label class="admin__field-label"
+                                        for="admin-permissions-option-<?= $escaper->escapeHtmlAttr($code) ?>">
+                                        <span class="admin-permission-text"><?= $escaper->escapeHtml($label) ?></span>
+                                    </label>
+                                </div>
+                                <div class="admin__field-tooltip admin-permissions-tooltip">
+                                    <a class="admin__field-tooltip-action action-help" target="_blank" tabindex="1">
+                                        <span><?= $escaper->escapeHtml(__('What is this?')) ?></span>
+                                    </a>
+                                    <div class="admin-permissions-tooltip-content">
+                                        <?= $escaper->escapeHtml($toolTip) ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php elseif ($code === $emailAllowPermission): ?>
+                            <?php
+                                $emailAllowPermissionId = $permissionId;
+                                $emailAllowPermissionCode = $code
+                            ?>
+                        <?php elseif ($code === $emailDenyPermission): ?>
+                            <?php
+                                $emailDenyPermissionId = $permissionId;
+                                $emailDenyPermissionCode = $code
+                            ?>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            </fieldset>
+            <fieldset class="admin__field site-access-approval-email-section" style="display:none;">
+                <legend class="admin__field-label admin-permissions-email-label">
+                    <span class="admin-permissions-bold">
+                        <?= $escaper->escapeHtml(__(
+                            'Would you like this user to receive site access approval emails?'
+                        )) ?>
+                    </span>
+                </legend>
+                <div class="admin__field-control admin-permissions-email-options-container">
+                    <div>
+                        <div class="admin__field admin__field-option site-access-email-option">
+                            <input type="radio"
+                                class="admin__control-radio"
+                                data-form-part="customer_form"
+                                name="email_permission"
+                                id="site-access-approval-email-option-yes"
+                                data-index-permission-id="<?= $escaper->escapeHtmlAttr($emailAllowPermissionId) ?>"
+                                data-index-permission-code="<?= $escaper->escapeHtmlAttr($emailAllowPermissionCode) ?>"
+                            />
+                            <label class="admin__field-label" for="site-access-approval-email-option-yes">
+                                <span><?= $escaper->escapeHtml('Yes') ?></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="admin__field admin__field-option">
+                            <input type="radio"
+                                class="admin__control-radio"
+                                data-form-part="customer_form"
+                                name="email_permission"
+                                id="site-access-approval-email-option-no"
+                                data-index-permission-id="<?= $escaper->escapeHtmlAttr($emailDenyPermissionId) ?>"
+                                data-index-permission-code="<?= $escaper->escapeHtmlAttr($emailDenyPermissionCode) ?>"
+                            />
+                            <label class="admin__field-label" for="site-access-approval-email-option-no">
+                                <span><?= $escaper->escapeHtml('No') ?></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+        </fieldset>
+    </div>
+</div>

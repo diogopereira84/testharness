@@ -1,0 +1,43 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+    // @codingStandardsIgnoreFile
+    $helper = $this->helper('Fedex\Orderhistory\Helper\Data');
+    $moduleenabled = $helper->isEnhancementEnabledForPrint() ? $helper->isEnhancementEnabledForPrint() : '0';
+    $isRetailOrderHistory = $helper->isRetailOrderHistoryEnabled() ? $helper->isRetailOrderHistoryEnabled() : '0';
+?>
+<script>
+    require(
+        [
+            'jquery'
+        ],
+        function($) {
+            $(function() {
+                if (<?= $moduleenabled; ?> || <?= $isRetailOrderHistory; ?>) {
+                    setTimeout(function() {
+                    window.print();
+                }, 5000); /* B-1148619- Print Quote Receipt */
+                } else {
+                    window.print();
+                }
+            });
+        }
+    );
+</script>
+
+<!-- B-1085331 | Remove the footer, date and order/quote number from print receipt of order and quote -->
+<style type="text/css" media="print">
+    .copyright {
+       display:none;
+    }
+    
+    @page 
+    {
+       margin-top: 5mm;  /* this affects the margin in the printer settings */
+       margin-bottom: -50mm;  /* this affects the margin in the printer settings */
+    }
+</style>

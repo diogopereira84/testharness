@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- B-B-1060636 -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+   <body>
+        <referenceContainer name="page.wrapper">
+            <block class="Fedex\Orderhistory\Block\Quote\Breadcrumbs" name="quote_view_breadcrubs"  before="main.content" template="Fedex_Orderhistory::quote/breadcrumbs.phtml"/>
+            <!-- B-1112160 - View Quote Details.  -->  
+            <block class="Fedex\Orderhistory\Block\Quote\Customerinfo" name="quote_view_id"  before="main.content" template="Fedex_Orderhistory::quote/quotetittle.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="quote_totals">
+            <action method="setTemplate">
+                <argument name="template" translate="true" xsi:type="string">Fedex_Orderhistory::quote/totals.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\NegotiableQuote\Block\Quote\Info" name="quote.date"
+                template="Magento_NegotiableQuote::quote/date.phtml"/>
+            <container name="quote.actions.container" htmlTag="div" htmlClass="actions-toolbar quote-actions-toolbar">
+                <block class="Magento\NegotiableQuote\Block\Quote\Info\Links" name="negotiable.quote.info.links"
+                    template="Fedex_Orderhistory::quote/info/links.phtml"/>
+            </container>
+            <!-- B-1112160 - View Quote Details.  -->                    
+            <block class="Fedex\Orderhistory\Block\Quote\Customerinfo" name="quote_view_customer_address"  before="quote.view" template="Fedex_Orderhistory::quote/contact_info.phtml" />
+            <block class="Magento\NegotiableQuote\Block\Quote\Items" name="quote_items" as="quote_items" template="Magento_NegotiableQuote::quote/items.phtml">
+                <block class="Magento\Framework\View\Element\RendererList" name="checkout.cart.item.renderers" as="renderer.list">
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.default" as="default" template="Fedex_Orderhistory::quote/item/default.phtml">
+                        <arguments>
+                            <argument name="productinfo_handler_view_model"
+                                    xsi:type="object">
+                                Fedex\Cart\ViewModel\ProductInfoHandler
+                            </argument>
+                        </arguments>
+                    </block>
+                    <block class="Magento\Checkout\Block\Cart\Item\Renderer" name="checkout.cart.item.renderers.simple" as="simple" template="Fedex_Orderhistory::quote/item/default.phtml">
+                        <arguments>
+                            <argument name="productinfo_handler_view_model"
+                                    xsi:type="object">
+                                Fedex\Cart\ViewModel\ProductInfoHandler
+                            </argument>
+                        </arguments>
+                    </block>
+                </block>
+            </block>
+            <!-- B-1078935 -->
+            <block class="Magento\NegotiableQuote\Block\Quote\Info" name="quote_info" template="Fedex_Orderhistory::quote/info.phtml">
+                <block class="Magento\NegotiableQuote\Block\Quote\Info" name="quote.address" template="Magento_NegotiableQuote::quote/address.phtml"/>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

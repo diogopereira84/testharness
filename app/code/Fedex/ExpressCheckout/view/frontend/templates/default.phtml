@@ -1,0 +1,18 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+    $expressCheckoutViewModel = $block->getData("express-checkout-view-model");
+?>
+<?php if ($expressCheckoutViewModel->getIsRetail()): ?>
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "defaultExpressCheckout": {}
+        }
+    }
+    </script>
+<?php endif; ?>

@@ -1,0 +1,22 @@
+<!--
+/**
+* Copyright © FedEx, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+-->
+<span class="product-image-container" data-bind="style: {width: item.product_image.width/2 + 'px'}">
+    <span class="product-image-wrapper"  data-bind="style: {'padding-bottom': item.product_image.height/item.product_image.width*100 + '%'}">
+        <!-- ko ifnot: isCheckImage(item) -->
+            <img data-bind="attr: {src: imgLoaderUrl()}" class="product-loader" />
+        <!-- /ko -->
+        
+        <!-- ko if: $parents[1].is_third_party_product -->
+        <img class="product-image-photo"
+            data-bind="attr: {src: item.product_image.src, 'alt': item.product_image.alt}, style: {width: 'auto', height: 'auto'}" />
+        <!-- /ko -->
+        <!-- ko ifnot: $parents[1].is_third_party_product -->
+        <img class="product-image-photo"
+            data-bind="attr: {data: imgLoad(item.product_image.src, $element, item.newDocumentImage), 'alt': item.product_image.alt}, style: {width: 'auto',height: 'auto'}" />
+        <!-- /ko -->
+    </span>
+</span>

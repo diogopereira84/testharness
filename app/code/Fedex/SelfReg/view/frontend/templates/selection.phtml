@@ -1,0 +1,384 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+/**@var Fedex\SelfReg\ViewModel\CompanyUser $companyUser */
+$companyUserViewModel = $block->getData('company_user_view_model');
+$userGroupAndFolderLevelPermissionToggle = $companyUserViewModel->toggleUserGroupAndFolderLevelPermissions();
+$companySettingsToggle = $companyUserViewModel->getCompanySettingsToggle();
+?>
+<?php
+if ($this->helper('\Fedex\Commercial\Helper\CommercialHelper')->isRolePermissionToggleEnable() == true) { ?>
+<div class="selected-number">
+    <div class="left-section">
+        <span class="item-count"></span>
+        <span class="spacing">&nbsp;</span>
+        <span class="count-text"><?= $escaper->escapeHtml(__(' Users selected')) ?></span>
+    </div>
+    <div class="right-section">
+        <a href="Javascript:void(0)" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-cancel-all" class="cancel-all" ><?= $escaper->escapeHtml(__('Cancel')) ?></a>
+        <button class="bulk-edit" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-bulk-edit-button" id="role_permission_bulk_edit">
+            <?= $escaper->escapeHtml(__('EDIT')) ?>
+        </button>
+        <button class="bulk-delete" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-bulk-delete-button">
+            <?= $escaper->escapeHtml(__('DELETE')) ?>
+        </button>
+    </div>
+    <div class="right-section-mobile">
+        <div class="mobile-manageusers-dropdown">
+            <div class="mobile-kebab-image" id="mobile-dropdown-content-toggle"></div>
+            <div class="mobile-manageusers-dropdown-content">
+                <a href="Javascript:void(0)" class="bulk-edit" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-bulk-mobile-edit-button" id="role_permission_bulk_edit">
+                    <?= $escaper->escapeHtml(__('Edit User')) ?>
+                </a>
+                <a href="Javascript:void(0)" class="bulk-delete" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-bulk-mobile-delete-button">
+                    <?= $escaper->escapeHtml(__('Delete')) ?>
+                </a>
+                <a href="Javascript:void(0)" class="cancel-all" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-mobile-cancel-all">
+                    <?= $escaper->escapeHtml(__('Cancel')) ?>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="role_permission_bulk_edit_model" style="display:none;">
+<header class="modal-header" aria-labelledby="modal-title" aria-label="edit user title">
+        <h2 class="modal-title" data-role="title">Edit Users</h2>
+</header>
+    <?php echo $block->getChildHtml('permission.user.bulk.edit') ;?>
+</div>
+<div class="custom-action-multicheck-wrap">
+    <input class="custom-mobile-checkbox" data-test-id="E-404291-B-2010873-TK-3436949-manage-user-mobile-select-all" type="checkbox"/>
+    <label for="custom-mobile-checkbox" class="mobile-lable-roles">Select All</label>
+</div>
+<script>
+require(['jquery',   'mage/url',
+'Magento_Customer/js/customer-data',
+'Magento_Ui/js/modal/modal',
+'Magento_Ui/js/modal/confirm',
+'Magento_Ui/js/modal/alert',
+'uiRegistry',
+'mage/translate'
+],function($,url,customerData,modal,confirm, alert, registry){
+    var minLength = 3;
+    $(document).ready(function() {
+        $(".cancel-all").on('click', function(){
+            $('.custom_row_checkbox').each(function() {
+                if($(this).prop('checked')==true) {
+                    $(this).trigger('click');
+                }
+            });
+            $('.custom_header_checkbox').each(function() {
+                this.checked = false;
+            });
+            $('.custom-mobile-checkbox').prop('checked',false);
+            $(".selected-number").hide();
+            $('.custom-action-multicheck-wrap').removeClass('mobile-sde-check');
+            $(".item-count").text("0");
+        });
+        
+        $(document).on("click","#edit-users-form  button.cancel",function(){
+            $('#role_permission_bulk_edit_model').modal('closeModal');
+            return false;
+        });
+
+        $(document).on("click","#role_permission_bulk_edit",function(){
+            var companySettingsToggle = <?php echo $companySettingsToggle; ?>;
+            if(companySettingsToggle != true) {
+                $('.form.form-edit-users .field.admin-permission').find('.site_settings').hide();
+            }
+
+            var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                buttons: []
+            };
+            var selectedUserId = "";
+            var selectedUserName = [];
+            $("#selected-users-container").html('');
+            $('#role_permission_bulk_edit_model').modal(options).modal('openModal');
+            $(".company-users-index .modal-inner-wrap .action-close").attr("data-test-id", "E-404291-B-2006241-TK-3416887-manage-user-close");
+            $('#editedBulkGroupId').val('');
+
+            let i=1;
+            $('.custom_row_checkbox:checked').each(function (){
+                var userId = $(this).val();
+                if(selectedUserId == "") {
+                    selectedUserId = userId;
+                } else {
+                    selectedUserId = selectedUserId + "," + userId;
+                }
+                var ele =  $(this).parents("tr").find(".long-text-field");
+                let crossmarksvg='<svg data-user-id="'+userId+'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12ZM19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12ZM8.14645 8.85355C7.95118 8.65829 7.95118 8.34171 8.14645 8.14645C8.34171 7.95118 8.65829 7.95118 8.85355 8.14645L12 11.2929L15.1464 8.14645C15.3417 7.95118 15.6583 7.95118 15.8536 8.14645C16.0488 8.34171 16.0488 8.65829 15.8536 8.85355L12.7071 12L15.8536 15.1464C16.0488 15.3417 16.0488 15.6583 15.8536 15.8536C15.6583 16.0488 15.3417 16.0488 15.1464 15.8536L12 12.7071L8.85355 15.8536C8.65829 16.0488 8.34171 16.0488 8.14645 15.8536C7.95118 15.6583 7.95118 15.3417 8.14645 15.1464L11.2929 12L8.14645 8.85355Z" fill="#333333"/></svg>';
+                ele.each(function() {
+                    let dataHeader = $(this).attr("data-th");
+                    if (dataHeader == "NAME") {
+                        //alert($(this).find("div").html());
+                        if(i > 1) {
+                            $("#selected-users-container").append('<div class="users-tag-container show-more"><div class="users-tag-value" >'+$(this).find("div").html()+'</div><div class="users-tag-cross"><button type="button" aria-label="close" data-test-id="E-404291-B-2010881-edit-users-single-user-close-'+userId+'">'+crossmarksvg + '</button>');
+                         } else {
+                            $("#selected-users-container").append('<div class="users-tag-container"><div class="users-tag-value" >'+$(this).find("div").html()+'</div><div class="users-tag-cross"><button type="button" aria-label="close" data-test-id="E-404291-B-2010881-edit-users-single-user-close-'+userId+'">'+crossmarksvg + '</button>');
+                            $(".control.users-list").addClass('singel-user');
+                        }
+                    }
+                });
+                i=i+1;
+            });
+            $("#selected_users_id").val(selectedUserId);
+
+            var userGroupToggle = <?php echo json_encode($userGroupAndFolderLevelPermissionToggle); ?>;
+            if(userGroupToggle == true) {
+                var selectedUserIds = $('#selected_users_id').val();
+                var findGroupUrl = url.build('selfreg/users/findGroup');
+                
+                $.ajax({
+                    url: findGroupUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    showLoader: true,
+                    data: {
+                        selectedUserIds: selectedUserIds
+                    },
+                    success: function(response) {
+                        if(response !== undefined && response.status !== undefined && response.status == "success") {
+                            $('#edit-users-form #bulk_edit_usergroup').val(response.value.replace(/<.*?>\s*/, '').trim());
+                        }
+                    },
+                    error: function(error) {
+                        $('#edit-users-form #bulk_edit_usergroup').val('');
+                        console.log(error);
+                    }
+                });
+            }
+            
+            if ($('.custom_row_checkbox:checked').length > 0) {
+                $("#selected-users-container").append('<div class="edit_users_search"><input type="text" autocomplete="off" aria-label="users_search" data-test-id="E-404291-B-2010881-find-edit-users" id="find_edit_users"/></div>');
+            } 
+            $("#edit_users_search_dropdown").html("");
+            $(".edit_users-datalist-wrapper").hide();
+        })
+        function removeItemOnce(arr, value) {
+            var index = arr.indexOf(value);
+            if (index > -1) {
+                arr.splice(index, 1);
+            }
+            return arr;
+        }
+        function setDropDownSerachPosition()
+        {
+            var rect = $('.edit_users_search').position();
+            var scrollHeight = document.getElementById('selected-users-container').scrollHeight;
+            var initialHeight = $('#selected-users-container').height();
+            
+            var parentLeft = $('#selected-users-container').offset().left,
+                parentTop = $('#selected-users-container').offset().top
+                childLeft = $('.edit_users_search').offset().left,
+                childTop = $('.edit_users_search').offset().top;
+
+            var searchInputTopFinal = childTop - parentTop,
+            searchInputLeftFinal = childLeft - parentLeft;
+            let marginLeft =  rect.left + 5;
+            jQuery(".edit_users-datalist-wrapper").css("margin-left", marginLeft+"px");
+         
+            if(Math.ceil(scrollHeight) > Math.ceil(initialHeight)) {
+                jQuery(".edit_users-datalist-wrapper").css("margin-top", "-15px");
+            } else {
+                let topDistance = initialHeight - (searchInputTopFinal + 32);
+                jQuery(".edit_users-datalist-wrapper").css("margin-top", "-"+topDistance+"px");
+            }
+        }
+        $(document).on("click",".edit_users-datalist-wrapper #edit_users_search_dropdown li",function(){
+            let selectedListUser = $(this).attr("data-index-id");
+            let selectedUsersVal = $("#selected_users_id").val();
+            if (selectedUsersVal != "") {
+                selectedUsersVal = selectedUsersVal+","+selectedListUser;
+            } else {
+                selectedUsersVal = selectedListUser;
+            }
+            $("#selected_users_id").val(selectedUsersVal);
+            let crossmarksvg='<svg data-user-id="'+selectedListUser+'" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 12C4 16.4183 7.58172 20 12 20C16.4183 20 20 16.4183 20 12C20 7.58172 16.4183 4 12 4C7.58172 4 4 7.58172 4 12ZM19 12C19 15.866 15.866 19 12 19C8.13401 19 5 15.866 5 12C5 8.13401 8.13401 5 12 5C15.866 5 19 8.13401 19 12ZM8.14645 8.85355C7.95118 8.65829 7.95118 8.34171 8.14645 8.14645C8.34171 7.95118 8.65829 7.95118 8.85355 8.14645L12 11.2929L15.1464 8.14645C15.3417 7.95118 15.6583 7.95118 15.8536 8.14645C16.0488 8.34171 16.0488 8.65829 15.8536 8.85355L12.7071 12L15.8536 15.1464C16.0488 15.3417 16.0488 15.6583 15.8536 15.8536C15.6583 16.0488 15.3417 16.0488 15.1464 15.8536L12 12.7071L8.85355 15.8536C8.65829 16.0488 8.34171 16.0488 8.14645 15.8536C7.95118 15.6583 7.95118 15.3417 8.14645 15.1464L11.2929 12L8.14645 8.85355Z" fill="#333333"/></svg></button></div></div>';
+            if($(".users-tag-container").length>=4){
+            $('<div class="users-tag-container show-more"><div class="users-tag-value">'+$(this).html()+'</div><div class="users-tag-cross"><button type="button" aria-label="close" data-test-id="E-404291-B-2010881-edit-users-single-user-close-'+selectedUsersVal+'">'+crossmarksvg).insertBefore( ".edit_users_search" );
+            }
+            else{
+                $('<div class="users-tag-container"><div class="users-tag-value">'+$(this).html()+'</div><div class="users-tag-cross"><button type="button" aria-label="close" data-test-id="E-404291-B-2010881-edit-users-single-user-close-'+selectedUsersVal+'">'+crossmarksvg).insertBefore( ".edit_users_search" );
+                }
+            $(this).hide();
+            $(".edit_users-datalist-wrapper").hide();
+            setDropDownSerachPosition();
+        });
+
+        $(document).on("focus","#find_edit_users",function(){
+            setDropDownSerachPosition();
+            if($(this).val().length < 3) {
+                $("#edit_users_search_dropdown").html("");
+            }
+            if($(".edit_users-datalist-wrapper ul li").length > 0) {
+                $(".edit_users-datalist-wrapper ul li").each(function(){
+                    if($(this).attr("style") === undefined || $(this).attr("style") == "") {
+                        $(".edit_users-datalist-wrapper").show();
+                    }
+                });
+            } else {
+                $(".edit_users-datalist-wrapper").hide();
+            }
+           
+        })
+        $(document).on("keyup","#find_edit_users",function(e){
+            if (e.which <= 90 && e.which >= 48 || e.which >= 96 && e.which <= 105 && $(this).val().length >= 3) {
+                let selectedUsersVal = $("#selected_users_id").val();
+                var postdata = {filter : $(this).val() , exclude_user : selectedUsersVal};
+                var findUserUrl = url.build('selfreg/users/findUsers');
+               
+                $.ajax({
+                    url: findUserUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    showLoader: true,
+                    data: postdata,
+                    success: function(response) {
+                        if(response !== undefined && response.status !== undefined && response.status == "success" && response.counter != "0") {
+                            $("#edit_users_search_dropdown").html(response.html);
+                            setDropDownSerachPosition();
+                            $(".edit_users-datalist-wrapper").show();
+                        } else {
+                            $(".edit_users-datalist-wrapper").hide();
+                        }
+                    },
+                    error: function(xhr, status, errorThrown) {
+                        
+                    }
+                });
+            }
+        });
+        $(document).on("click", ".edit_users-datalist-wrapper ul li", function () {
+            $("#find_edit_users").val("");
+        });
+        $(document).on("click","#selected-users-container",function(ele){
+            $("#find_edit_users").focus();
+        });
+        $(document).on("click","body",function(ele){
+            if($(".edit_users-datalist-wrapper").is(":visible") && (ele.target.id === undefined || ele.target.id != "find_edit_users")) {
+                $(".edit_users-datalist-wrapper").hide();
+            }
+            if($(".mobile-manageusers-dropdown-content").is(":visible") && (ele.target.id === undefined || ele.target.id != "mobile-dropdown-content-toggle")) {
+                $(".mobile-manageusers-dropdown-content").hide();
+            }
+        });
+        $(document).on("click",".users-tag-container .users-tag-cross svg",function(){
+            let selectedUsersVal = $("#selected_users_id").val();
+            let selectedUsersValArr = selectedUsersVal.split(",");
+            let removeVal = $(this).attr("data-user-id");
+            let newselectedUsersValArr = removeItemOnce(selectedUsersValArr, removeVal);
+            let newselectedUsersVal = newselectedUsersValArr.join(",");
+            $(this).parents('.users-tag-container').remove();
+            $("#selected_users_id").val(newselectedUsersVal);
+            setDropDownSerachPosition();
+            if($(".edit_users-datalist-wrapper ul li").length > 0) {
+                $(".edit_users-datalist-wrapper ul li").each(function(){
+                    if($(this).attr("data-index-id") !== undefined && $(this).attr("data-index-id") == removeVal) {
+                        $(this).show();
+                    }
+                });
+            }
+        });
+        $(document).on("keypress",".users-tag-cross button" ,function(e) {
+            if (e.keyCode === 13) {
+                $(this).find("svg").trigger("click");
+            }
+        });
+        $(".bulk-delete").on('click', function() {
+            var options = {
+                modalClass: 'modal-slide popup-tree bulk-delete-confirm-popup',
+                buttons: [{
+                    text: $.mage.__('DELETE'),
+                    'class': 'action primary delete',
+
+                    /** @inheritdoc */
+                    click: function (event) {
+                        var postdata = window.selectedids;
+                        var customurl = url.build('selfreg/users/bulkdelete?postdata=' + postdata);
+
+                        $.ajax({
+                            url: customurl,
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                postdata: postdata,
+                            },
+                            success: function(response) {
+                                
+                                localStorage.setItem('message', response.message);
+                                localStorage.setItem('type', response.type);
+
+                                location.reload();
+                            },
+                            error: function(xhr, status, errorThrown) {
+                                
+                            }
+                        });
+                        this.closeModal(event);
+                    }
+                }, {
+                    text: $.mage.__('CANCEL'),
+                    'class': 'action primary cancel',
+
+                    /** @inheritdoc */
+                    click: function (event) {
+                        this.closeModal(event);
+                    }
+                }],
+                title: $.mage.__('Delete these users?'),
+                content: $.mage.__("<p>This action will permanently delete the user accounts and content, but the users' orders and quotes will still be visible to the merchant.</p></br><p> To temporaliry lock the users instead, set their status to \"Inactive\". While inactive, the users' content will remain available to parent users. </p>") //eslint-disable-line max-len
+            };
+
+            confirm(options);
+        });
+        $(".custom-mobile-checkbox").on('click', function() {
+            $(".custom_header_checkbox").trigger('click');
+        });
+        $(".mobile-kebab-image").on('click', function() {
+            $(".mobile-manageusers-dropdown-content").toggle();
+        });
+        
+         $(document).on("click",".manage-user-message .message-close",function(ele){
+            $(".msg-container.manage-user-message").remove();
+        });
+
+        $(window).on('load', function() {
+            var storedMessage = localStorage.getItem('message');
+            var storedType = localStorage.getItem('type');
+
+            if (storedMessage !== null && storedType !== null) {
+                if(storedType === 'success'){
+                $('.manage-user-message').remove();
+                $('<div class="msg-container manage-user-message" role="region" aria-label="message"><div class="succ-msg" style=""><span class="icon-container"><span><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.6665 20C6.6665 27.3638 12.636 33.3334 19.9998 33.3334C27.3636 33.3334 33.3332 27.3638 33.3332 20C33.3332 12.6362 27.3636 6.66669 19.9998 6.66669C12.636 6.66669 6.6665 12.6362 6.6665 20ZM31.6665 20C31.6665 26.4433 26.4432 31.6667 19.9998 31.6667C13.5565 31.6667 8.33317 26.4433 8.33317 20C8.33317 13.5567 13.5565 8.33335 19.9998 8.33335C26.4432 8.33335 31.6665 13.5567 31.6665 20ZM18.3668 22.1885L25.2795 16.0439C25.6235 15.7381 26.1502 15.7691 26.456 16.1131C26.7618 16.457 26.7308 16.9838 26.3868 17.2895L18.8868 23.9562C18.557 24.2493 18.0559 24.2346 17.7439 23.9226L13.5772 19.7559C13.2518 19.4305 13.2518 18.9029 13.5772 18.5774C13.9027 18.252 14.4303 18.252 14.7558 18.5774L18.3668 22.1885Z" fill="white"/></svg></span></span> <span class="message">' + storedMessage + '</span> <span class="message-close"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.14645 6.14645C5.95118 6.34171 5.95118 6.65829 6.14645 6.85355L11.2929 12L6.14645 17.1464C5.95118 17.3417 5.95118 17.6583 6.14645 17.8536C6.34171 18.0488 6.65829 18.0488 6.85355 17.8536L12 12.7071L17.1464 17.8536C17.3417 18.0488 17.6583 18.0488 17.8536 17.8536C18.0488 17.6583 18.0488 17.3417 17.8536 17.1464L12.7071 12L17.8536 6.85355C18.0488 6.65829 18.0488 6.34171 17.8536 6.14645C17.6583 5.95118 17.3417 5.95118 17.1464 6.14645L12 11.2929L6.85355 6.14645C6.65829 5.95118 6.34171 5.95118 6.14645 6.14645Z" fill="#333333"/></svg></span></div></div>').insertAfter('.widget-promo-banner-container');
+                }
+                else{
+                    $('.manage-user-message').remove();
+                    $('<div class="msg-container manage-user-message" role="region" aria-label="message"><div class="err-msg"><span class="icon-container"><span><i class="fa fa-times"></i></span></span> <span class="message">' + storedMessage + '</span> <span class="message-close"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.14645 6.14645C5.95118 6.34171 5.95118 6.65829 6.14645 6.85355L11.2929 12L6.14645 17.1464C5.95118 17.3417 5.95118 17.6583 6.14645 17.8536C6.34171 18.0488 6.65829 18.0488 6.85355 17.8536L12 12.7071L17.1464 17.8536C17.3417 18.0488 17.6583 18.0488 17.8536 17.8536C18.0488 17.6583 18.0488 17.3417 17.8536 17.1464L12.7071 12L17.8536 6.85355C18.0488 6.65829 18.0488 6.34171 17.8536 6.14645C17.6583 5.95118 17.3417 5.95118 17.1464 6.14645L12 11.2929L6.85355 6.14645C6.65829 5.95118 6.34171 5.95118 6.14645 6.14645Z" fill="#333333"/></svg></span></div></div>').insertAfter('.widget-promo-banner-container');
+                }
+                $('html, body').animate({
+                    scrollTop: $(".manage-user-message").offset().top
+                }, 500);
+                localStorage.removeItem('message');
+                localStorage.removeItem('type');
+            }
+        });
+    });
+});
+</script>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_SelfReg/bulkedit":{}
+        }
+    }
+</script>
+<?php } ?>

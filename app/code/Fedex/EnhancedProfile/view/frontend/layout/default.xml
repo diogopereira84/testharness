@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+   <body>
+      <referenceBlock name="customer_account_navigation">
+         <block class="Fedex\EnhancedProfile\Block\Account\Navigation" name="account-and-credit-cards-link">
+            <arguments>
+               <argument name="path" xsi:type="string">customer/account/accountsandcreditcards</argument>
+               <argument name="label" xsi:type="string">Accounts &#38; Credit Cards</argument>
+               <argument name="sortOrder" xsi:type="number">150</argument>
+            </arguments>
+         </block>
+         <block class="Fedex\EnhancedProfile\Block\Account\Navigation" name="preferences-link">
+            <arguments>
+               <argument name="path" xsi:type="string">customer/account/preferences</argument>
+               <argument name="label" xsi:type="string">Preferences</argument>
+               <argument name="sortOrder" xsi:type="number">140</argument>
+            </arguments>
+         </block>
+      </referenceBlock>
+      <referenceBlock name="customer-account-navigation-delimiter-b2b" remove="true" />
+      <referenceBlock name="customer-account-navigation-delimiter-1" remove="true" />
+       <referenceBlock name="customer-account-navigation-delimiter-2" remove="true" />
+      <referenceBlock name="customer-account-navigation-delimiter-3" remove="true" />
+       <block class="Magento\Customer\Block\Account\Delimiter" name="customer-account-navigation-delimiter-sso"
+              template="Fedex_EnhancedProfile::account/navigation-delimiter.phtml"
+              after="customer-account-navigation-account-link">
+           <arguments>
+               <argument name="sortOrder" xsi:type="number">200</argument>
+               <argument name="SSO_view_model" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+           </arguments>
+       </block>
+       <referenceBlock name="customer_account_navigation">
+         <block class="Fedex\EnhancedProfile\Block\SharedOrderHistory" name="shared-order-history">
+            <arguments>
+               <argument name="path" xsi:type="string">shared/order/history</argument>
+               <argument name="label" xsi:type="string">Shared Orders</argument>
+               <argument name="sortOrder" xsi:type="number">95</argument>
+            </arguments>
+         </block>
+         <block class="Magento\Customer\Block\Account\Delimiter" name="customer-account-navigation-delimiter-fcl"
+                  template="Magento_Customer::account/navigation-delimiter.phtml"
+                  after="customer-account-navigation-company-roles-link">
+               <arguments>
+                   <argument name="sortOrder" xsi:type="number">100</argument>
+               </arguments>
+           </block>
+           <block class="Fedex\SelfReg\Block\CustomBlock" name="shared-credit-card"
+                  after="customer-account-company-company-users-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">customer/account/sharedcreditcards</argument>
+                    <argument name="label" xsi:type="string" translate="true">Shared Credit Cards</argument>
+                    <argument name="sortOrder" xsi:type="number">100</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\EnhancedProfile\Block\Account\CompanySettings" name="company-settings-block"
+                  after="manage-user-groups-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">customer/account/sitesettings</argument>
+                    <argument name="label" xsi:type="string" translate="true">Site Settings</argument>
+                    <argument name="sortOrder" xsi:type="number">70</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\PersonalAddressBook\Block\PersonalAddressBook" name="personal-address-book-link-new" ifconfig="environment_toggle_configuration/environment_toggle/explorers_e_450676_personal_address_book" after="customer-account-navigation-quotes-link">
+                <arguments>
+                    <argument name="path" xsi:type="string">personaladdressbook/index/view</argument>
+                    <argument name="label" xsi:type="helper" helper="Fedex\SelfReg\Helper\Data::getLabelNameForAddressBook"></argument>
+                    <argument name="sortOrder" xsi:type="helper" helper="Fedex\SelfReg\Helper\Data::getSortOrderForAddressBook"></argument>
+                </arguments>
+            </block>
+       </referenceBlock>
+  </body>
+</page>

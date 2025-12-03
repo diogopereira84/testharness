@@ -1,0 +1,23 @@
+<?php
+
+    /** @var $viewModel Fedex\Catalog\ViewModel\CategoryCatalog  */
+    $viewModel = $block->getViewModel();
+
+    if (strpos($viewModel->getCurrentUrl(), 'catalog/product/new') !== false) {
+?>
+
+<script type="text/javascript">
+    require([
+        "jquery",
+        "categoryCatalogRenderSelection",
+        "domReady!"
+    ], function($, categoryCatalogRenderSelection) {
+        //let importRequestUrl = ''; toggle
+        let adminUpdateToggle = '<?= $block->escapeHtml($viewModel->getAdminUpdateToggleValue()) ?>';
+        
+        if (adminUpdateToggle) {
+            categoryCatalogRenderSelection.init('<?= $block->getUrl('catalogAction/index/categorysharedcatalog') ?>');
+        }
+    });
+</script>
+<?php } ?>

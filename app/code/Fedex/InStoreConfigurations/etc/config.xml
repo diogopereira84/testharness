@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category    Fedex
+ * @package     Fedex_InStoreConfigurations
+ * @copyright   Copyright (c) 2023 Fedex
+ * @author      Eduardo Oliveira
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <instore_toggle_configuration>
+            <instore_group_toggles>
+                <instore_section_pickup_location_date_on_fujitsu_request>0</instore_section_pickup_location_date_on_fujitsu_request>
+                <instore_section_enable_xbehalfof_graphql>0</instore_section_enable_xbehalfof_graphql>
+                <instore_add_or_update_lte_identifier_enabled>0</instore_add_or_update_lte_identifier_enabled>
+                <status_mapping>
+                    {
+                    "item1": {
+                    "magento_status": "processing",
+                    "mapped_status": "CONFIRMED"
+                    },
+                    "item2": {
+                    "magento_status": "confirmed",
+                    "mapped_status": "CONFIRMED"
+                    },
+                    "item3": {
+                    "magento_status": "in_progress",
+                    "mapped_status": "IN_PROGRESS"
+                    },
+                    "item4": {
+                    "magento_status": "ready_for_pickup",
+                    "mapped_status": "READY_FOR_PICKUP"
+                    },
+                    "item5": {
+                    "magento_status": "complete",
+                    "mapped_status": "SHIPPED"
+                    },
+                    "item6": {
+                    "magento_status": "cancelled",
+                    "mapped_status": "CANCELLED"
+                    },
+                    "item7": {
+                    "magento_status": "canceled",
+                    "mapped_status": "CANCELLED"
+                    },
+                    "item8": {
+                    "magento_status": "ordered",
+                    "mapped_status": "RECEIVED"
+                    },
+                    "item9": {
+                    "magento_status": "pending",
+                    "mapped_status": "RECEIVED"
+                    },
+                    "item10": {
+                    "magento_status": "new",
+                    "mapped_status": "RECEIVED"
+                    },
+                    "item11": {
+                    "magento_status": "assigned",
+                    "mapped_status": "RECEIVED"
+                    }
+                    }
+                </status_mapping>
+                <shipment_mapping>
+                    {
+                    "items1": {
+                    "magento_status": "confirmed",
+                    "mapped_status": "CONFIRMED"
+                    },
+                    "items2": {
+                    "magento_status": "in_progress",
+                    "mapped_status": "IN_PROGRESS"
+                    },
+                    "items3": {
+                    "magento_status": "shipping",
+                    "mapped_status": "IN_PROGRESS"
+                    },
+                    "items4": {
+                    "magento_status": "ready_for_pickup",
+                    "mapped_status": "READY_FOR_PICKUP"
+                    },
+                    "items5": {
+                    "magento_status": "shipped",
+                    "mapped_status": "SHIPPED"
+                    },
+                    "items6": {
+                    "magento_status": "delivered",
+                    "mapped_status": "DELIVERED"
+                    },
+                    "items7": {
+                    "magento_status": "complete",
+                    "mapped_status": "DELIVERED"
+                    },
+                    "items8": {
+                    "magento_status": "cancelled",
+                    "mapped_status": "CANCELLED"
+                    },
+                    "items9": {
+                    "magento_status": "new",
+                    "mapped_status": "RECEIVED"
+                    }
+                    }
+                </shipment_mapping>
+                <instore_fedex_shipment_service_types>
+                    {
+                    "item1": {
+                    "service_type": "FEDEX_OFFICE_LOCAL_DELIVERY"
+                    },
+                    "item2": {
+                    "service_type": "LOCAL_DELIVERY_AM"
+                    },
+                    "item3": {
+                    "service_type": "LOCAL_DELIVERY_PM"
+                    }
+                    }
+                </instore_fedex_shipment_service_types>
+            </instore_group_toggles>
+        </instore_toggle_configuration>
+    </default>
+    <stores>
+        <IN_STORE_RETAIL_STORE_VIEW>
+            <instore_toggle_configuration>
+                <instore_group_toggles>
+                    <instore_rate_quote_product_association_enabled>1</instore_rate_quote_product_association_enabled>
+                </instore_group_toggles>
+            </instore_toggle_configuration>
+        </IN_STORE_RETAIL_STORE_VIEW>
+    </stores>
+</config>

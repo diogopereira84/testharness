@@ -1,0 +1,6 @@
+<?php if ($assign_template = $block->getCurrentCategory()->getAssignTemplate()): ?>
+    <div class="category-template">
+        <?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Output')
+        ->categoryAttribute($block->getCurrentCategory(), $assign_template, 'assign_template') ?>
+    </div>
+<?php endif; ?>

@@ -1,0 +1,815 @@
+//Variables
+@borderRadius: 100px;
+@height-15px: 15px;
+@height-32px: 32px;
+@height-48px: 48px;
+@width-123px: 123px;
+@width-130px: 130px;
+@width-1024px: 1024px;
+@width-270px: 270px;
+@fontSize16px: 16px;
+@fontSize14px: 14px;
+@fontSize12px: 12px;
+@fontFamilyRegular: 'FedEx Sans Regular';
+@fontFamilyBold: 'FedEx Sans Bold';
+@fontFamilyLight: 'Fedex Sans Light';
+@width32Percentage: 32%;
+@width65Percentage: 65%;
+@width68Percentage: 68%;
+@width100Percentage: 100%;
+@margin16px: 16px 0 10px 0;
+@color: @fx-grey-1100;
+@colorWhite: @fx-white-100;
+@colorBlack: #000;
+@colorBlue: #0078B4;
+@colorRed: #FF0000;
+@colorOrange: @fx-orange-500;
+@bold: bold;
+@letterSpacing: 0.75px;
+@upperCase: uppercase;
+@marginTop0: 0px;
+@margin0Auto: 0px auto;
+@marginLeft22px: 22px;
+@border3px: 3px solid #f3f3f3;
+@border1pxGrey: 1px solid grey;
+@webAnimation: spin 1s linear infinite;
+@borderTop3px: 3px solid #555;
+@borderRadius50: 50%;
+@borderRightTransparent: 0px solid transparent;
+@25-px: -25px;
+@30px: 30px;
+@left38: 38%;
+@left-5Per: -6%;
+@top: 11%;
+@positionAbs: absolute;
+@positionRel: relative;
+@paddingRight1Per: 1%;
+@displayNone: none;
+@displayBlock: block;
+@cursorPointer: pointer;
+@focusBorderColor: #0078B4;
+@continueBorderDisabled: #cccccc;
+@continueBackgroundColor: #e1e1e1;
+@continueButtonColor: @fx-grey-500;
+
+.cart-summary {
+  .secondary.continue-button-container {
+    button.cart-continue-shopping-btn:disabled {
+      background: @continueBackgroundColor;
+      border: 1px solid @continueBorderDisabled;
+      color: @continueButtonColor;
+    }
+  }
+}
+.promo-account {
+	.cart-summary {
+		.discount {
+      .plus {
+        font-size: 27px;
+        font-weight: 400;
+        line-height: 23px;
+      }
+			strong.discount-heading {
+        margin: 0;
+			}
+      >.title,
+      >.account-title {
+        height: auto;
+        padding: 20px 0;
+        box-sizing: border-box;
+      }
+		}
+	}
+}
+.checkout-cart-index {
+  .warning-message-container.promo-warning:before {
+    background: @colorWhite;
+    content: "";
+    height: 8px;
+    position: absolute;
+    right: -3px;
+    top: -9px;
+    width: 100%;
+  }
+  .warning-message-container.promo-warning {
+    margin-bottom: 0;
+    margin-top: 10px;
+  }
+  .warningmesage {
+    margin: 0px -5%;
+    position: relative;
+  }
+  .warning-message-container.promo-warning:after {
+    margin: auto;
+    height: 8px;
+    width: 100%;
+    content: "";
+    position: absolute;
+    background: @colorWhite;
+    top: -9px;
+    left: -4px;
+  }
+}
+
+.promo-account .control .input-text.apply {
+    border-radius: @borderRadius;
+}
+.fedex-account-container.discount-block-container .fedex-account-error .input-text, 
+.promo-code-container.discount-block-container .coupon-code-error .input-text {
+  border-color: @colorRed;
+}
+.promo-account .account-number-input-container {
+  display: none !important;
+}
+.promo-account .discount-block .apply-account:focus {
+  border: 1px solid @focusBorderColor !important;
+}
+.promo-account .discount-block.applied div.apply-account p#apply-account-loader {
+  top: 50%;
+}
+.promo-account .cart-summary .block .actions-toolbar > .primary .action.primary,
+.promo-account .cart-summary .block .actions-toolbar > .primary .apply.promo-code {
+    border: 1px solid #6F7F87;
+    border-radius: 0px;
+}
+.promo-account .discount-block .apply-account:focus, 
+.promo-account .cart-summary .block .actions-toolbar > .primary .apply.promo-code:focus {
+  border: 1px solid @focusBorderColor !important;
+}
+/** CSS added by Ayush */
+.promo-account .applied .control.account {
+  display: flex !important;
+  flex-direction:row;
+  justify-content: flex-start;
+  align-items: center
+}
+.promo-account .control.account label{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 16px;
+  font-family: 'FedEx Sans Light';
+}
+.promo-account .control.account .input-text.apply {
+  border: none;
+  width: auto;
+  background-color: #f7f9fa;
+  background-image: none;
+  padding: 4px;
+}
+.promo-account .action.apply-account.primary.account-no {
+  height: 48px;
+}
+.promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  margin-top: 30px;
+  height: 69px;
+  color: #0078B4;
+  font-family: 'FedEx Sans Bold';
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-align: center;
+  box-shadow: none;
+}
+.promo-account .discount-block.account-no.applied div#coupon-code-error-message {
+  display: none;
+}
+/** End of Ayush's CSS */
+.promo-account .applied-discount .apply, .promo-account .applied-discount {
+    height: @height-32px;
+    width: @width-123px;
+    font-size: @fontSize16px !important;
+    font-family: @fontFamilyRegular;
+}
+.promo-account .applied-discount {
+    padding: 0px;
+    border: none;
+}
+.promo-account .block.discount .control {
+    width: 100%; //@width65Percentage;
+    margin-bottom: auto;
+}
+.promo-account .block.discount .control.account {
+    display: inline-block;
+    padding-bottom: 10px;
+}
+.promo-account .discount-block {
+    margin: @margin16px;
+}
+.promo-account .apply-after-discount {
+    color: @color;
+    font-family: @fontFamilyBold;
+    font-size: @fontSize12px;
+    font-weight: @bold;
+    letter-spacing: @letterSpacing;
+    text-transform: @upperCase;
+    margin-top: @marginTop0;
+}
+.promo-account .loadersmall {
+    border: @border3px;
+    -webkit-animation: @webAnimation;
+    animation:@webAnimation;
+    border-top: @borderTop3px;
+    border-radius: @borderRadius50;
+    width: @30px;
+    height: @30px;
+    margin-left: @marginLeft22px;
+    left: @left38;
+    position: @positionAbs;
+    top: @top;
+    margin: @margin0Auto;
+    display: @displayNone;
+}
+.promo-account .apply-promo {
+   position: @positionRel;
+}
+.promo-account .discount-text {
+    width: @width-270px;
+    height: @height-48px !important;
+    border-right: @borderRightTransparent !important;
+}
+.promo-account .cart-container .form-cart {
+    width: @width68Percentage;
+    padding-right: @paddingRight1Per;
+}
+.promo-account .cart-summary {
+    width: @width32Percentage;
+}
+.promo-account .action.apply.primary.promo-code {
+    background: @colorWhite !important;
+    color: @colorBlack;
+    border: @border1pxGrey;
+    height: @height-48px;
+}
+.promo-account .action.apply.primary.promo-code:hover {
+    background: @colorWhite !important;
+    color: @colorBlue !important;
+}
+.promo-account .discount {
+    position: @positionRel;
+}
+.promo-account div.block.discount:before {
+    background: @colorWhite;
+    height: @height-15px;
+    content: "";
+    width: @width100Percentage;
+    position: @positionRel;
+    top: @marginTop0;
+    display: @displayBlock;
+    left: @left-5Per;
+    right: @marginTop0;
+}
+.promo-account div.block.discount:after {
+    background: @colorWhite;
+    height: @height-15px;
+    content: "";
+    width: @width100Percentage;
+    position: @positionAbs;
+    top: @marginTop0;
+    display: @displayBlock;
+    margin-left: @25-px;
+    margin-right: 0;
+    right: @25-px;
+}
+@media (max-width: 1024px) {
+    .promo-account .discount-text {
+        width: @width-130px;
+    }
+    #coupon-code-error-message {
+      width: 165% !important;
+  }
+}
+@media (max-width: 1440px) {
+  #coupon-code-error-message {
+    width: 150%;
+  }
+}
+
+
+/*Seprate for Account*/
+.promo-account #account-no-error {
+    color:@colorRed;
+    display: @displayNone;
+    font-family: @fontFamilyLight;
+}
+.promo-account .cart-summary .block .account-title strong {
+    cursor: @cursorPointer;
+}
+.promo-account .action.apply-account.primary.account-no {
+    background: @colorWhite !important;
+    color: @colorBlack;
+    border: @border1pxGrey;
+    width: @width100Percentage !important;
+    height: @height-48px;
+}
+.promo-account .action.apply-account.primary.account-no:hover {
+    background: @colorWhite !important;
+    color: @colorBlue !important;
+}
+//Promo account responsive style
+@media (max-width: 1024px) {
+    .promo-account .cart-summary div.block.discount strong.discount-heading {
+        text-align: left;
+    }
+    .promo-account .cart-summary div.block.discount:before {
+      margin: 0px;
+    }
+    .promo-account .cart-summary div.block.discount:after {
+      margin: 0px;
+    }
+  
+    .promo-account .cart-summary div.discount-block .cancel-field .control .input-text {
+      width: 100%;
+    }
+    .promo-account .cart-summary div.discount-block .actions-toolbar {
+      margin-left: 0px;
+    }
+    .promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+        padding-top: 2px;
+        width: 30px;
+        font-size: 12px;
+    }
+    
+  }
+// new style
+body:not(.promo-account) .checkout-cart-summary-actions-container {
+    display: none;
+}
+.promo-account .checkout-cart-summary-actions-container ul.checkout.methods.items.checkout-methods-items {
+    padding-left: 0px;
+    margin-top: 0px;
+    list-style: none;
+    display: block;
+}
+.promo-account .checkout-cart-summary-actions-container button.cart-to-checkout {
+    text-transform: uppercase;
+    line-height: 2.2rem !important;
+    border: @fx-orange-500;
+    background: @fx-orange-500;
+    padding: 14px 50px 15px 50px !important;
+    width: 100%;
+    border-radius: 0;
+    display: block !important;
+}
+.promo-account .checkout-cart-summary-actions-container .cart-to-checkout > span {
+    font-size: 19px !important;
+    font-weight: bold !important;
+    color: @fx-white-100;
+    font-family: "FedEx Sans Bold";
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: 0;
+    line-height: 25px;
+    text-align: center;
+    position: relative;
+    top: 2px;
+}
+.promo-account .checkout-cart-summary-actions-container .shipping-note {
+    width: 293px;
+    color: @fx-grey-500;
+    font-family: 'FedEx Sans Light';
+    font-size: 10px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 13px;
+    text-align: center;
+    text-align: center;
+    margin: 21px auto 26px auto;
+    display: block !important;
+}
+.promo-account .form-cart .action.clear {
+    display: none;
+}
+.promo-account .form-cart button.action.update {
+    color: #0078B4;
+    width: 100%;
+    height: auto !important;
+    border: 2px solid #0078B4 !important;
+    font-weight: 700;
+    border-radius: 0;
+    font-family: 'FedEx Sans Bold';
+    padding: 15px 0;
+}
+.promo-account .checkout-cart-summary-actions-container button.cart-continue-shopping-btn {
+    padding: 15px 0;
+    height: auto;
+    color: #007AB7;
+    font-family: "FedEx Sans Bold";
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    outline-style: none;
+    border: 2px solid #007AB7;
+    display: block !important;
+    width: 100%;
+    border-radius: 0;
+    margin: 0px auto;
+    text-transform: uppercase;
+}
+.promo-account { 
+  .cart-summary {
+    .checkout-cart-summary-actions-container {
+      .view-my-project-container {
+        .view-my-project-btn {
+          padding: 11px 24px;
+          font-weight: bold;
+          letter-spacing: 1.188px;
+          outline-style: none;
+          display: block !important;
+          width: 100%;
+          border-radius: 0;
+          text-transform: uppercase;
+          color: @colorOrange; 
+          font-family: @fontFamilyBold; 
+          font-size: 19px; 
+          font-style: normal; 
+          line-height: 24px; 
+          text-align: center;
+          margin-top: 24px; 
+          margin-bottom: 24px; 
+          border: 2px solid @colorOrange; 
+          background: @colorWhite;  
+        }
+      }
+    }
+  }
+.checkout-cart-summary-actions-container button.cart-continue-shopping-btn:hover {
+    background: #e1e1e1;
+    border: 2px solid #cccccc;
+    color: @fx-grey-500;
+  }
+}
+
+.upload-to-quote.promo-account {
+	.cart-summary {
+		.checkout-cart-summary-actions-container {
+			.view-my-project-container {
+				.view-my-project-btn {
+					padding: 16px 24px;
+				}
+			}
+		}
+	}
+}
+
+.promo-account .checkout-cart-summary-actions-container {
+    clear: both;
+    flex-direction: row;
+    margin-bottom: 0;
+    margin-left: -20px;
+    margin-right: -20px;
+    background: #fff;
+    padding-top: 15px;
+    padding-bottom: 52px;
+}
+.promo-account .cart-summary .checkout-methods-items, 
+.promo-account .cart-summary br, 
+.promo-account .cart-summary .shipping-note.text-center {
+    display: none !important;
+}
+.promo-account .cart-summary .checkout-cart-summary-actions-container .checkout-methods-items,
+.promo-account .cart-summary .checkout-cart-summary-actions-container .shipping-note.text-center {
+    display: block !important;
+}
+.promo-account .cart-summary {
+    padding-bottom: 0;
+    margin-bottom: 92px;
+}
+body.promo-account button.cart-continue-shopping-btn {
+    display: none !important;
+}
+
+@media (max-width: 1023px) {
+    .promo-account .cart-container .form-cart .actions.main {
+        text-align: center;
+    }
+    .promo-account .form-cart button.action.update {
+        height: auto !important;
+    }
+    .promo-account .checkout-cart-summary-actions-container {
+        margin-left: -30px;
+        margin-right: -30px;
+        margin-bottom: -22px;
+    }
+    body.promo-account div.columns div.column div.cart-container div.cart-summary {
+        padding: 22px 30px !important;
+    }
+    .promo-account .cart-summary div.block.discount strong.discount-heading {
+        text-align: center;
+        width: 100%;
+        padding-bottom: 0;
+    }
+    .promo-account div.block.discount:after {
+        right: -31px !important;
+        height: 13px;
+    }
+    .promo-account div.block.discount:before {
+        left: -31px !important;
+        height: 13px;
+    }
+    .promo-account .cart-summary .discount-block {
+        padding: 0 60px;
+    }
+    .promo-account {
+      .cart-summary {
+        > .title {
+          display: block;
+          font-family: @fontFamilyLight;
+          font-size: 24px;
+        }
+        .checkout-methods-items {
+          padding: 0;
+        }
+      }
+    }
+    .promo-account .cart-summary div.discount-block .apply-account.primary.account-no {
+      margin: 0;
+    }
+    .promo-account .cart-summary .block .field {
+        margin: 0;
+    }
+    .discount-breakdown #shopping-cart-table tbody tr td.col.subtotal {
+        display:table-cell !important;
+    }
+    .promo-account .form-cart th.col.subtotal, .promo-account .form-cart td.col.subtotal {
+        display: none;
+    }
+    .promo-account .cart-summary div.block.discount strong.discount-heading {
+      font-size: 14px;
+    }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .checkout-cart-index.promo-account  {
+    .cart-container {
+      flex-flow: wrap;
+    }
+  }
+  .promo-account .coupon.applied .actions-toolbar {
+    top: 3px !important;
+    right: 11px !important;
+  }
+
+  .discount-breakdown #shopping-cart-table thead tr th.col.subtotal {
+    display:table-cell !important;
+  }
+  
+  .promo-account .form-cart th.col.subtotal {
+    display: none !important;
+  }
+  .promo-account .cart-summary .block .actions-toolbar > .primary .action.cancel.primary > span {
+    font-size: 12px;
+    position: relative;
+    top: -4px;
+    padding: 3px;
+  }
+  /* Promo container UI fixes-checkout page - Explorer team */
+  .is-fcl-global.checkout-index-index .checkout-promo-account-container .field._required.apply-field-group label.label {
+    width: 100%;
+  }
+  /* Promo container UI fixes-checkout page - Explorer team */
+}
+// new style
+  @media (max-width: 768px) {
+    .promo-account .columns .column .cart-container .form-cart {
+      width: 100%!important;
+    }
+   body.promo-account div.columns div.column div.cart-container div.cart-summary {
+      top: 0px !important;
+      width: 100%;
+      margin: 0px auto;
+      float: none;
+      clear: both;
+   }
+   .promo-account .cart-summary .block.discount form {
+      display: flex;
+   }
+   .promo-account .cart-summary .discount-block {
+      width: 100%;
+   }
+   .promo-account .cart-summary div.discount-block .apply-account.primary.account-no {
+      border-radius: 0px !important;
+    }
+    .promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+      padding-top: 4px;
+      width: 54px;
+      font-size: 14px;
+  }
+}
+  @media (max-width: 767px) {
+    .warningmesage {
+      margin: 0px -7%;
+      position: relative;
+    }
+    .promo-account .columns .column .cart-container .form-cart {
+       width: 100%!important;
+    }
+   body.promo-account div.columns div.column div.cart-container div.cart-summary {
+      top: 0px !important;
+      width: 91%;
+      margin: 0px auto;
+      float: none;
+      clear: both;
+   }
+    .promo-account .cart-summary div.discount-block .cancel-field .control {
+      margin: 0px auto;
+    }
+    body.promo-account .cart-summary div.discount-block .cancel-field .control input {
+      border-right: 0px solid transparent !important;
+    }
+    body.promo-account .cart-summary div.discount-block .action.apply.primary.promo-code {
+      width: 100% !important;
+      height: 40px;
+    }
+    .promo-account .cart-summary div.discount-block .apply-account.primary.account-no {
+      height: 40px;
+      margin-top: 0px !important;
+    }
+    .promo-account .coupon.applied .actions-toolbar {
+      right: 10px !important;
+      top: 4px !important;
+    }
+    .promo-account .cart-summary .block .coupon.applied .field {
+      width: 123px;
+    }
+    .promo-account .cart-summary .discount-block .apply-promo {
+      height: auto;
+    }
+    .promo-account .cart-summary .discount-block {
+      padding: 0;
+    }
+    .promo-account .cart-summary .checkout-methods-items .action.primary.checkout > span {
+      font-size: 19px !important;
+    }
+    .promo-account .checkout-cart-summary-actions-container .checkout-methods-items .action.primary.checkout {
+      border-radius: 3px;
+    }
+    .cart-summary .block .actions-toolbar > .primary.apply-promo button, 
+    .promo-account .checkout-cart-summary-actions-container button.cart-continue-shopping-btn, 
+    .promo-account .form-cart button.action.update {
+      border-radius: 0px;
+    }
+    .promo-account .discount-block.account-no.applied .promo-account .loadersmall {
+      top: 50%;
+    }
+    .promo-account .discount-block.account-no #coupon-code-error-message {
+      white-space: inherit;
+    }
+   .promo-account .columns .column .cart-container .form-cart {
+      width: 90%!important;
+      float: left;
+      margin: 0px auto;
+      padding: 0px;
+  }
+  .promo-accoun .cart-container .form-cart .item-text {
+      margin-top: 12px;
+      margin-bottom: 0px;
+  }
+  .promo-account .block.discount .discount-block.account-no .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+    margin-top: 0;
+    margin-right: 0;
+    font-size: 14px;
+    height: auto;
+    box-shadow: none;
+  }
+  .promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primarysss:focus {
+    box-shadow: 0 0 3px 1px #00699d;
+  }
+  .promo-account .discount-block.account-no.applied .field {
+    display: block;
+    width: 100%;
+  }
+  .promo-account .discount-block.account-no.applied .field .primary.cancel-promo {
+    height: auto;
+  }
+  .promo-account .discount-block.account-no.applied .field button.action.cancel-account {
+    height: auto;
+    width: auto;
+    box-shadow: none;
+  }
+
+  .promo-account .cart-summary div.discount-block.account-no.applied .actions-toolbar {
+    position: inherit;
+  }
+  .promo-account .cart-summary div.discount-block.account-no.applied .actions-toolbar {
+    height: auto;
+  }
+  .promo-account .cart-summary > .title {
+    display: block;
+  }
+  .promo-account .form-cart button.action.update, 
+  .promo-account .checkout-cart-summary-actions-container button.cart-continue-shopping-btn {
+    height: auto !important;
+    width: 100% !important;
+  }
+  // new code 
+  .promo-account .cart-summary .discount-heading {
+    margin: 0;
+  }
+  .promo-account .columns .column .cart-container .form-cart {
+    order: 0;
+  }
+  body.promo-account div.columns div.column div.cart-container div.cart-summary {
+      order: 1;
+      margin-top: 32px;
+      padding: 17px !important;
+  }
+  body.promo-account div.columns div.column div.cart-container div.cart-summary .cart-totals {
+      padding-left: 0;
+      padding-right: 0;
+  }
+  .promo-account .checkout-cart-summary-actions-container {
+      margin-left: -18px;
+      margin-right: -17px;
+      margin-bottom: -22px;
+      padding-bottom: 24px;
+  }
+  .promo-account .checkout-cart-summary-actions-container ul.checkout.methods.items.checkout-methods-items {
+      padding-right: 0;
+  }
+  .promo-account .cart-summary > .title {
+    display: block;
+  }
+  .promo-account .form-cart button.action.update,
+  .promo-account .checkout-cart-summary-actions-container button.cart-continue-shopping-btn {
+      width: 100% !important;
+      height: auto !important;
+  }
+  //new code
+  .promo-account .cart-summary .block .actions-toolbar > .primary .action.cancel.primary > span {
+    font-size: 12px;
+    position: relative;
+    top: -4px;
+    padding: 3px;
+  }
+}
+
+/* Code to resolve email field design in checkout and my account sidebar issue */
+#shipping-new-address-form {
+    div[name="shippingAddress.custom_attributes.email_id"] label {
+        width: 100%;
+    }
+}
+.is-fcl.account.page-layout-1column {
+    .page-main {
+        .sidebar.sidebar-main {
+            display:none !important;
+        }
+    } 
+}
+.is-fcl-global.account.page-layout-1column {
+    .page-main {
+        .sidebar.sidebar-main {
+            display:none !important;
+        }
+    } 
+} 
+/* Code to resolve email field design in checkout and my account sidebar issue */
+.checkout-cart-index.promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+  width: auto;
+}
+
+.checkout-cart-index.promo-account .control.account .input-text.apply {
+  max-width: 100%;
+  width: auto;
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .checkout-cart-index.promo-account .block.discount .discount-block .actions-toolbar .primary.cancel-promo .action.cancel-account.primary {
+    margin-top: 38px;
+  }
+  .checkout-cart-index.promo-account .cart-summary .discount-block {
+    padding: 0 0 !important     
+  }
+}
+.no-disk{
+  list-style-type :none;
+}
+/* Promo container UI fixes-checkout page - Explorer team */
+@media (min-width: 1200px) and (max-width: 1350px){
+  .is-fcl-global.checkout-index-index .checkout-promo-account-container .promo-code-block .field._required.apply-field-group .control,
+  .is-fcl-global.checkout-index-index .checkout-promo-account-container .fedex-account-block .field._required.apply-field-group .control {
+    width: ~"calc(100% - 96px)";
+  }
+}
+/* Promo container UI fixes-checkout page - Explorer team */
+//
+//  Mobile
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+  .promo-account {
+    .cart-summary {
+      div.block.discount {
+        strong.discount-heading {
+          padding-top: 0;
+        }
+      }
+    }
+  }
+  
+}

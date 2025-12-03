@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_GraphQl
+ * @copyright    Copyright (c) 2022 Fedex
+ * @author       Eduardo Diogo Dias <edias@mcfadyen.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\GraphQl\Controller\GraphQl">
+        <plugin name="oauth_graphql_token_validation" type="Fedex\GraphQl\Plugin\Controller\GraphQlPlugin"/>
+    </type>
+    <preference for="Magento\Authorization\Model\UserContextInterface"
+                type="Fedex\GraphQl\Model\CompositeUserContext"/>
+    <preference for="Magento\Search\Model\Search\PageSizeProvider" type="Fedex\GraphQl\Model\Search\PageSizeProvider"/>
+    <type name="Magento\Framework\GraphQl\Query\QueryProcessor">
+        <plugin name="exception_message_plugin_processor" type="Fedex\GraphQl\Plugin\ValidateCartIdExceptionChange" />
+    </type>
+    <type name="Fedex\GraphQl\Model\Resolver\CreateRequestToken">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-access-token" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateRequestToken</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\GraphQl\Model\Resolver\CreateAccessToken">
+        <arguments>
+            <argument name="validations" xsi:type="array">
+                <item name="validate-input" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateInput</item>
+                <item name="validate-access-token" xsi:type="object">Fedex\GraphQl\Model\Validation\Validate\BatchValidateAccessToken</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

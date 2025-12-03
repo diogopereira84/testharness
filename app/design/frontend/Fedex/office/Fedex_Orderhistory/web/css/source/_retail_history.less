@@ -1,0 +1,3539 @@
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+@summaryTotalColor: @fx-grey-1200;
+@discountGreenColor: @fx-green-100;
+@discountfontFamilyLight: 'Fedex Sans Light';
+@fontFamilyRegular: 'FedEx Sans Regular';
+@popupModelBorderColor: #00001945;
+@fujitsuErrorModelBorderColor: @fx-red-100;
+@fujitsuErrorModelBackgroundColor: @fx-white-100;
+
+.retail-my-orders-search-advanced .fieldset.info .search-sku .control{
+    position: relative;
+    display: inline;
+}
+.retail-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"]{
+    height: 45px;
+    width: 45px;
+    right: 0;
+    border-left: 1px solid #6F7F87;
+}
+.retail-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn,#filter-close-btn){
+    border-color: rgb(111, 127, 135);
+    border-radius: 0px;
+    background: rgb(255, 255, 255);
+    text-transform: uppercase;
+    height: 45px;
+    font-size: 16px;
+    padding: 0 25px;
+}
+.retail-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn,#filter-close-btn) img{
+    width: 20px;
+    vertical-align: bottom;
+    margin-right: 5px;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search {
+    background: #F7F9FA;
+    padding: 30px;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+    display: flex;
+    justify-content: space-between;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div{
+    width: 31%;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field .label{
+    font-weight: bolder;
+    font-size: 13px;
+    color: @fx-grey-1200;
+    padding-bottom: 10px;
+    display: inline-block;
+}
+a.show-properties-view-order, .hide-properties-view-order {
+  color: #007AB7;
+  font-family: 'FedEx Sans Bold';
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.75px;
+  line-height: 24px;
+  text-align: center;
+}
+a.show-properties-view-order {
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 97% 2px;
+  padding-right: 24px;
+}
+
+.hide-properties-view-order {
+  position: relative;
+  left: -8px;
+  background-size: 15px;
+  background-repeat: no-repeat;
+  background-position: 97% 2px;
+  padding-right: 24px;
+}
+.retail-my-orders-search-advanced .control input.input-text {
+    font-size: 15px !important;
+    height: 45px !important;
+    width: 100%;
+}
+/* B-1130641 */
+.retail-my-orders-search-advanced .control #product-name-sku  {
+    width: 65% !important;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary {
+    background: @fx-white-100;
+    border-color: #0078B4;
+    border-radius: 0;
+    height: 45px;
+    padding: 0 30px;
+    text-transform: uppercase;
+    color: #0078B4;
+    font-size: 16px;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary-retail{
+    background: @fx-orange-500;
+    border-color: @fx-orange-500;
+    padding: 0 30px;
+    height: 45px;
+    font-size: 19px;
+    color: @fx-white-100;
+    line-height: 46px;
+    letter-spacing: .75px;
+    font-family: 'FedEx Sans Bold';
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar .primary button.primary{
+    background: #0078B4;
+    border-color: #0078B4;
+    padding: 0 30px;
+    height: 45px;
+    font-size: 16px;
+    margin-left: 15px !important;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar{
+    margin-right: 0;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field #order-status{
+    height: 45px;
+    border-color: #6F7F87;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field .range.fields{
+    position: relative;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field .range.fields img{
+    position: absolute;
+    width: 35px;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 5px;
+    cursor: pointer;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .range.fields.d-flex{
+    justify-content: space-between;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .control .sub-label{
+    margin: 0 10px 0 0;
+    text-transform: uppercase;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .field-order-total{
+    width: 47%;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .control{
+    align-items: center;
+}
+.retail-my-orders-search-advanced{
+    margin-bottom: 50px;
+}
+/* B-1060632 - RT-ECVS- View Order Details */
+.retail-order-history ~ .page-wrapper .page-main .columns .order-links {
+    list-style-type: none;
+    margin-left: -15px !important;
+    margin-bottom: 1px !important;
+    font-family: 'FedEx Sans Light';
+    font-size: 18px;
+}
+.retail-order-history ~ .page-wrapper .page-title-wrapper .order-references{
+    display: none;
+}
+.retail-order-history ~ .page-wrapper .page-title-wrapper .order-status{
+    margin-top: 23px !important;
+}
+.table-wrapper.order-items.retail-print-order img.preview-product-img {
+    width: 77px;
+}
+.table-wrapper.order-items.retail-print-order .product-image-container {
+    margin-left: 32px;
+}
+.table-wrapper.order-items.retail-print-order tr.show-hide-detail td {
+    border: 0px;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .block-order-details-view .box-content{
+    font-family: 'FedEx Sans Light';
+    font-size: 16px;
+    padding-right: 5px;
+}
+
+.reorder-items-not-available-title {
+    color: @fx-red-100;
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+    padding-top: 15px;
+    text-align: left;
+}
+.reorder-items-not-available-description {
+    color: @fx-red-100;
+    font-family: 'FedEx Sans Light Italic';
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 8px;
+    text-align: left;
+}
+.reorder-items-not-available-msg-cantainer {
+    display: flex;
+    padding-left: 78px;
+}
+.reorder-items-not-available-msg-cantainer img.warning-mes-img {
+    height: 16px;
+    left: -18px;
+    position: relative;
+    top: 18px;
+}
+tr.reorder-items-not-available-row td {
+    border-width: 0 !important;
+}
+img.product-engine-loader {
+    left: 0;
+    margin: 0px auto;
+    position: absolute;
+    right: 0;
+}
+td.order-items-table .table.order-item {
+    position: relative;
+}
+
+.sales-order-view {
+    .retail-view-order.discount-added {
+        .table tfoot > tr.totals-tax {
+            transform: translateY(39px);
+        }
+        .table tfoot > tr.shipping {
+            transform: translateY(-44px);
+        }
+    }
+    .retail-view-order {
+        .table tfoot td {
+            background:#F7F9FA;
+        }
+        .table tfoot {
+            background:#F7F9FA;
+        }
+        table th {
+            font-size: 16px;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+        }
+        .table .col.name {
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .table td.col.sku {
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+            line-height: 24px;
+        }
+        .table .col.price .price-excluding-tax {
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .table .col.subtotal .price-excluding-tax {
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            line-height: 24px;
+        }
+        .table td.col.qty {
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+            line-height: 24px;
+        }
+        .table tfoot > tr th {
+            font-family: 'FedEx Sans Light';
+        }
+        .table tfoot > tr.grand_total th {
+            font-family: 'FedEx Sans Bold';
+        }
+        .table tfoot > tr.grand_total {
+            font-family: 'FedEx Sans Bold';
+        }
+        .table-order-items tbody+tbody {
+            border-top:none;
+        }
+        .table-order-print-items thead {
+          color: @fx-grey-1100;
+          font-family: "FedEx Sans Bold";
+          font-size: 12px;
+          line-height:24px;
+        }
+        .table-order-print-items td:nth-child(4) {
+          color: @fx-grey-1200;
+          font-family: "FedEx Sans Bold";
+          font-size: 16px;
+          line-height:24px;
+        }
+    }
+    .order-actions-toolbar .print {
+        float: left;
+        color: @fx-orange-500;
+        border: 2px solid @fx-orange-500;
+        border-radius: 0;
+        background: @fx-white-100;
+        padding: 12px 50px;
+        cursor: pointer;
+        margin-top: 13px;
+        font-size: 19px;
+        margin-left: 0;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        font-weight: 700;
+        span {
+            position: relative;
+            top: 1px;
+        }
+        &:before {
+            display: none !important;
+        }
+    }
+    .order-actions-toolbar .actions {
+      padding-bottom: 8px;
+      width: 100%;
+      display: block;
+      margin: 0px auto;
+      float: left;
+    }
+}
+
+.retail-order-history ~ .page-wrapper .breadcrumbs {
+    margin-bottom: 7px;
+    margin: 0px auto;
+    max-width: 1344px;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+.retail-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar {
+    max-width: 100%;
+}
+.retail-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar .action.print {
+    float: left;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced .reset-btn {
+  border-color: #6f7f87;
+  border-radius: 0px;
+  background: @fx-white-100;
+  text-transform: uppercase;
+  height: 45px;
+  font-size: 16px;
+  padding-top: 9px;
+  width: 135px;
+  margin-right: 10px;
+}
+.retail-my-orders-search-advanced input::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #6F7F87;
+    opacity: 1; /* Firefox */
+    font-family: 'FedEx Sans Light';
+}
+.retail-my-orders-search-advanced input:-ms-input-placeholder { /* Internet Explorer 10-11 */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+}
+.retail-my-orders-search-advanced input::-ms-input-placeholder { /* Microsoft Edge */
+    color: #6F7F87;
+    font-family: 'FedEx Sans Light';
+}
+.retail-my-orders-search-advanced .field-order-total .mage-error[generated]{
+    position: absolute;
+    top: 45px;
+    width: 50%;
+}
+tr.retail-product-attributes > td {
+    padding: 0px;
+}
+tr.document-detail {
+    border-bottom: 1px solid #CED5D9;
+}
+.retail-sales-order-history{
+    #my-orders-table{
+        tr{
+            th{
+                text-transform: uppercase;
+                font-family: 'FedEx Sans Bold';
+                color: #57676e;
+                letter-spacing: 1px;
+                width: 23%;
+            }
+
+            th.col.active{
+                color: @fx-purple-500;
+
+                .sort-order-table{
+                    margin-left:5px;
+                    font-size: 12px;
+                    cursor: pointer;
+                }
+            }
+
+            td.status{
+                text-transform: uppercase;
+                letter-spacing: 1px;
+            }
+
+            td.status,
+            td.total {
+                color: #36464d;
+            }
+        }
+    }
+}
+.order-products-toolbar {
+    color: @fx-grey-500;
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px;
+    .pager {
+        .pages-items {
+            strong.page {
+                font-size: 14px;
+                font-weight: 400;
+                background: @fx-white-100;
+            }
+            a.page {
+                color: #007AB7;
+                font-size: 14px;
+            }
+            .action {
+                background: @fx-white-100;
+                border: 1px solid #ccc;
+                width: 32px;
+                height: 32px;
+                box-shadow: unset;
+                border-radius: unset;
+                padding: 0;
+            }
+        }
+        .limiter {
+            .limiter-options {
+                border: solid 1px @fx-grey-100;
+                height: 40px;
+                width: 64px;
+                background-color: @fx-white-100;
+                box-shadow: unset;
+                border-radius: unset;
+            }
+        }
+    }
+}
+/** B-1047968 | Print Order Receipt **/
+.sales-order-print {
+    .retail-print-order.discount-added{
+        .table tfoot > tr.totals-tax{
+            transform: translateY(39px);
+        }
+        .table tfoot > tr.shipping{
+            transform: translateY(-44px);
+        }
+    }
+    .retail-print-order {
+        .order-status{
+            padding: 12px 18px;
+            margin-top: 21px;
+            border: 1px solid #cccccc;
+            border-radius: 0px;
+        }
+        .table tfoot td{
+            background:#F7F9FA;
+        }
+        .table tfoot{
+            background:#F7F9FA;
+        }
+        h1.page-title{
+            font-size: 24px;
+            font-family: 'FedEx Sans Regular';
+            margin-right: 18px !important;
+        }
+        .block-title{
+            max-width: none !important;
+        }
+        .order-date{
+            font-family: 'FedEx Sans Light';
+        }
+        .order-date strong{
+            font-family: 'FedEx Sans Bold';
+        }
+        table > caption {
+            border-bottom: 1px solid #cccccc;
+            width: 100%;
+            text-align: left;
+            font-size: 24px;
+            color: @fx-grey-1200;
+            letter-spacing: 0;
+            line-height: 32px;
+            clip: inherit;
+            height: inherit;
+            margin: inherit;
+            overflow: inherit;
+            padding: inherit;
+            position: inherit;
+        }
+        table th {
+            font-size: 16px;
+            letter-spacing: 0;
+            line-height: 24px;
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+        }
+        .table .col.name{
+            font-size: 16px;
+        }
+        .table td.col.sku{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+        }
+        .table .col.price .price-excluding-tax{
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+        }
+        .table .col.subtotal .price-excluding-tax{
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+        }
+        .table td.col.qty{
+            font-size: 16px;
+            font-family: 'FedEx Sans Light';
+        }
+        .table tfoot > tr th{
+            font-family: 'FedEx Sans Light';
+        }
+        .table tfoot > tr.grand_total th{
+            font-family: 'FedEx Sans Bold';
+        }
+        .table tfoot > tr.grand_total{
+            font-family: 'FedEx Sans Bold';
+        }
+        .box-content {
+            font-family: 'FedEx Sans Light';
+            font-size: 16px;
+            padding-right: 5px;
+        }
+        .box-title>span{
+            letter-spacing: 0.8px;
+        }
+        table {
+            border-collapse:unset;
+        }
+    }
+}
+.retail-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+    position: inherit;
+    z-index: 9;
+    right: 25px;
+    top: 0;
+    bottom: 0;
+}
+.retail-my-orders-search-advanced .fieldset.info .search-sku .control {
+    display: flex;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+    flex-wrap: wrap;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+    padding-bottom: 20px;
+}
+.retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+    padding-top: 25px;
+}
+.retail-sales-order-history #my-orders-table tr th.sort-order-table-heading {
+    cursor: pointer;
+}
+@media (min-width: 1200px) {
+    body.sales-order-history .sidebar-main {
+        padding-right: 0px;
+    }
+}
+@media (max-width:991px) {
+    .retail-my-orders-search-advanced .control #product-name-sku {
+        width: 70% !important;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 48%;
+        padding-bottom: 15px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 25px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 28px;
+    }
+}
+@media (max-width:767px) {
+    .my-orders-search-advanced {
+        .fieldset {
+            .search-sku {
+                width: 100% !important;
+            }
+            .control {
+                #product-name-sku {
+                    width: 100% !important;
+                }
+            }
+            .reset-btn {
+                padding-top: 0px !important;
+                width: 140px !important;
+                margin-top: 15px;
+            }
+        }
+    }
+    .retail-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn, #filter-close-btn) {
+        margin-top: 15px;
+    }
+    .retail-sales-order-history.retail-reorder #my-orders-table tr td.total .data-class {
+        float: right;
+    }
+    .orders-history .col {
+        text-transform: uppercase;
+    }
+    .orders-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        border-bottom: 1px solid #cccccc;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .upper-container-options > div {
+        display: inline-block;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: block;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search {
+        padding: 20px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        margin-bottom: 0px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .range.fields.d-flex {
+        display: block;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .field-order-total {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .my-orders-search-advanced .fieldset .reset-btn {
+        padding-top: 10px !important;
+    }
+    .retail-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+        position: absolute;
+        right: 0px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 0px;
+    }
+
+    //Product Configuration not available style
+    .reorder-items-not-available-msg-cantainer img.warning-mes-img {
+        top: 20px;
+        padding-right: 8px;
+        left: -10px;
+    }
+    .reorder-items-not-available-msg-cantainer {
+        padding-left: 10px;
+    }
+}
+
+// B-900127 - Expand Order Details
+.sales-order-history {
+    .retail-order-history-enhancement ~ .page-wrapper {
+        tr.row-active {
+            background: #f7f7f7;
+        }
+        tr.reorder-disabled {
+            background: #f5f7f7;
+        }
+        .order-items-row {
+            display: none;
+            .order-items-table {
+                padding: 0;
+                table {
+                    width: 100%;
+                    padding: 0;
+                    border-left: 1px solid #ccc;
+                    border-right: 1px solid #ccc;
+                    tr {
+                        th {
+                            width: 14%;
+                            text-align: center;
+                            font-size: 12px;
+                            line-height: 16px;
+                            &:first-of-type {
+                                width: 55%;
+                                text-align: left;
+                            }
+                            &:nth-of-type(2) {
+                                width: 15%;
+                                text-align: center;
+                            }
+                        }
+                        td {
+                            font-size: 14px;
+                            line-height: 24px;
+                            .item-img {
+                                max-width: 140px;
+                                float: left;
+                                margin-right: 15px;
+                                img {
+                                    width: 100%;
+                                    max-height: 160px;
+                                }
+                            }
+                            .item-detail {
+                                width: 70%;
+                                float: left;
+                                p.product-item-name {
+                                    font-size: 14px;
+                                    margin-bottom: 20px;
+                                    font-weight: normal;
+                                    font-family: "FedEx Sans Light";
+                                    line-height: 24px;
+                                    color: @fx-grey-1200;
+                                    margin-top: 0px;
+                                }
+                                p.size-info {
+                                    font-size: 10px;
+                                    line-height: 24px;
+                                    color: @fx-grey-1200;
+                                    margin-top: 0px;
+                                    font-family: 'FedEx Sans Light';
+                                }
+                            }
+                            button {
+                                float: right;
+                                color: @fx-white-100;
+                                border: 1px solid @fx-orange-500;
+                                border-radius: 0;
+                                background: @fx-orange-500;
+                                padding: 10px 20px 4px;
+                                cursor: pointer;
+                                span {
+                                    text-transform: uppercase;
+                                    letter-spacing: 0.75px;
+                                    font-size: 14px;
+                                    line-height: 24px;
+                                    font-family: 'FedEx Sans Bold';
+                                }
+                            }
+                        }
+                        td.total {
+                            font-family: "FedEx Sans Medium" !important;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td .item-img {
+    max-width: 80px !important;
+}
+.sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td .item-detail p.product-item-name {
+    margin-bottom: 0px;
+}
+.sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td {
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td button span {
+    font-size: 14px !important;
+    font-weight: bold;
+}
+
+@media (min-width: 767px) and (max-width: 991px) {
+    .retail-my-orders-search-advanced .control #product-name-sku {
+        width: 70% !important;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 48%;
+        padding-bottom: 15px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: flex;
+        flex-wrap: wrap;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 25px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 28px;
+    }
+    .sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td .item-img {
+        max-width: 80px !important;
+    }
+    .sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td .item-detail p.product-item-name {
+        margin-bottom: 0px;
+    }
+    .sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr th:nth-of-type(2) {
+        width: 15%;
+    }
+    .sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td {
+        padding-bottom: 10px;
+        padding-top: 10px;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 0px !important;
+    }
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+    .my-orders-search-advanced {
+        .fieldset {
+            .search-sku {
+                width: 100% !important;
+            }
+            .control {
+                #product-name-sku {
+                    width: 100% !important;
+                }
+            }
+            .reset-btn {
+                padding-top: 0px !important;
+                width: 140px !important;
+                margin-top: 15px;
+            }
+        }
+    }
+    .retail-my-orders-search-advanced .fieldset.info .filters-collapse :is(#filter-show-btn, #filter-close-btn) {
+        margin-top: 15px;
+    }
+    .retail-sales-order-history.retail-reorder #my-orders-table tr td.total .data-class {
+        float: right;
+    }
+    .orders-history .col {
+        text-transform: uppercase;
+    }
+    .orders-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        border-bottom: 1px solid #cccccc;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options > div {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        display: block;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search {
+        padding: 20px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .upper-container-options {
+        margin-bottom: 0px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .range.fields.d-flex {
+        display: block;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .field-order-total {
+        width: 100%;
+        padding-bottom: 15px;
+    }
+    .my-orders-search-advanced .fieldset .reset-btn {
+        padding-top: 10px !important;
+    }
+    .retail-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+        position: absolute;
+        right: 0px;
+    }
+    .retail-my-orders-search-advanced .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 0px;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td > table > thead {
+        display: none;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td > table .item-info {
+        display: flex;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td {
+        padding: 0px;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td {
+        padding-top: 5px !important;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.reorder-order-label-check {
+        padding-top: 5px !important;
+        padding-bottom: 5px !important;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:first-child {
+        padding-top: 0px;
+    }
+    .retail-sales-order-history {
+        .table {
+            &:not(.totals) {
+                &:not(.cart) {
+                    &:not(.table-comparison) {
+                        >tbody {
+                            .view-receipt {
+                                text-align: center;
+                                padding-top: 0px;
+                                border-top: 1px solid #ccc;
+                                td.view-action {
+                                    padding: 24px 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td button {
+        float: none;
+        width: 90%;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table .expend-order td {
+        padding-left: 10px;
+        padding-top: 5px !important;
+    }
+    .retail-sales-order-history #my-orders-table .order-items-row .order-items-table {
+        padding-left: 0px;
+        padding-right: 0px;
+        padding-top: 0px;
+        padding-bottom: 15px;
+    }
+    .retail-sales-order-history #my-orders-table tr .item-total-col {
+        display: none;
+    }
+    .retail-sales-order-history #my-orders-table tr td.item-total-data {
+        display: none;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 11px;
+    }
+    .retail-sales-order-history #my-orders-table .order-items-row .order-items-table .expend-order .unit-price .price {
+        float: right;
+    }
+    .retail-sales-order-history #my-orders-table .order-items-row .order-items-table .expend-order .qty .item-qty {
+        float: right;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr.order-row {
+        border-bottom: 1px solid #cccccc;
+        padding-bottom: 15px;
+    }
+    .sales-order-history .retail-order-history-enhancement~.page-wrapper .order-items-row .order-items-table table tr td .item-img {
+        max-width: 80px !important;
+        padding-top: 10px;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td > table .item-info {
+        border-top: 1px solid #ccc;
+    }
+    .retail-sales-order-history .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr.order-items-row {
+	      display: none;
+    }
+}
+
+.sales-order-view .retail-order-print .print {
+  float: left !important;
+  color: @fx-orange-500;
+  border: 1px solid @fx-orange-500;
+  border-radius: 0;
+  background: @fx-white-100;
+  padding: 10px 20px 4px;
+  cursor: pointer;
+  margin-top: 32px !important;
+  margin-left: -103px !important;
+  &:before {
+      display: none;
+  }
+}
+.sales-order-view .retail-order-print .print
+
+.page-main .block.block-order-details-views.retail-print-order {
+    margin-bottom: 0px;
+}
+.cart-block-content h2 {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .block-order-details-views {
+    width: 100%;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .block-order-details-view {
+	  margin-top: 38px;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .block-order-details-view .cart-block-content {
+    font-family: 'FedEx Sans Light';
+    font-size: 12px;
+    color: @fx-grey-1200;
+}
+.account .column.main .block .block-order-details-views .box-retail-order-view {
+    width: 45% ;
+}
+.box-retail-order-view .box-order-shipping-address {
+    margin-right: 10px;
+}
+.box-retail-order-view {
+    border: 1px solid #CED5D9;
+    padding: 40px;
+    margin-right: 14px;
+    min-height: 268px;
+    font-family: FedEx Sans Light;
+    font-size: 16px;
+    line-height: 24px;
+    flex: 3;
+    width: auto
+}
+.box-retail-order-view .box-content span.sub-heading-order-view {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Bold";
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    width: 100%;
+    float: left;
+}
+.sales-order-print .box-retail-order-view .box-content span.payment-information {
+    position: relative;
+    top: -22px;
+}
+.box-retail-order-view .box-content span.payment-information {
+    position: relative;
+    top: -22px;
+    span.payment-details {
+        color: #6C777F;
+        font-size: 16px;
+        font-family: "FedEx Sans Light Italic";
+        line-height: 24px;
+    }
+}
+#html-body .page-main .box-retail-order-view strong.box-title {
+    margin-bottom: 0px;
+}
+.box-retail-order-view .box-content address {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0;
+}
+.retail-order-view-bottom-div {
+    display: flex;
+}
+
+.retail-order-view-bottom-div .question_about_order {
+    width: 60%;
+    height:  50%;
+    float: left;
+    padding-top: 10px;
+}
+#question_about_order {
+    width: 60%;
+    height: 50%;
+    float: left;
+}
+.breadcrumbs li.item.myoreder {
+    &:after {
+        color: @fx-grey-1200;
+    }
+}
+li.item.myoreder a {
+    color: @fx-grey-1200;
+    font-size: 16px;
+    font-family: 'FedEx Sans Light';
+    font-weight: normal;
+}
+.extra-attributes tbody > tr > td {
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+    letter-spacing: 0;
+}
+li.item.orderid strong {
+    color: @fx-grey-1200;
+    font-size: 16px;
+    font-family: 'FedEx Sans Light';
+    font-weight: normal;
+}
+.retail-print-order .block-content {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.order-retail-view {
+    clear: both;
+    margin-top: 32px;
+}
+.retail-print-order-enhancement {
+    margin-bottom: 9px;
+    h1.page-title {
+        font-family: "FedEx Sans Light";
+        font-size: 48px;
+        font-weight: 300;
+        letter-spacing: 0;
+        line-height: 56px;
+        margin: 4px 0px;
+    }
+}
+.sales-order-view table.row-active {
+    background: #f7f7f7;
+}
+.box-retail-order-view dl.payment-method dt {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 16px;
+    font-weight: 300;
+    letter-spacing: 0;
+}
+.sales-order-view .cart.table-wrapper .col.price, .order-items.table-wrapper .col.price, .cart.table-wrapper .col.qty, .order-items.table-wrapper .col.qty, .cart.table-wrapper .col.subtotal, .order-items.table-wrapper .col.subtotal, .cart.table-wrapper .col.msrp, .order-items.table-wrapper .col.msrp {
+    text-align: left;
+}
+.sales-order-view .retail-order-view-bottom-div {
+    width: 100%;
+}
+.sales-order-view .question_about_order p:nth-child(1) {
+    width: 277px;
+    font-family: 'FedEx Sans Regular';
+    font-size: 20px !important;
+    text-align: left;
+    color:  @fx-grey-1200;
+    height: 32px;
+}
+.sales-order-view .question_about_order p:nth-child(2) {
+    width: 287px;
+    font-family: 'FedEx Sans Light';
+    font-size: 16px !important;
+    text-align: left;
+    color: @fx-grey-1200;
+    height: 24px;
+}
+.sales-order-view .question_about_order p:nth-child(2) span {
+    color: #0078B4;
+    text-decoration: underline;
+}
+.sales-order-view .retail-order-view-subtotal {
+    background-color: #F7F9FA;
+    padding: 19px 32px 23px 32px;
+    width: 446px;
+}
+.sales-order-view .retail-order-view-subtotal-view td {
+    font-family: 'FedEx Sans Light';
+    font-size: 16px;
+    line-height: 24px;
+    text-align: left;
+    color:  @fx-grey-1200;
+    padding-left: 0px;
+}
+.sales-order-view .retail-order-view-subtotal-view td span {
+    font-family: 'FedEx Sans Bold' !important;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: right;
+    color:  @fx-grey-1200;
+}
+.sales-order-print .retail-order-view-subtotal-view td span {
+    font-family: 'FedEx Sans Bold' !important;
+    font-size: 16px;
+    line-height: 24px;
+    text-align: right;
+    color:  @fx-grey-1200;
+}
+.sales-order-view .retail-order-view-subtotal-view tr:nth-child(3) {
+    border-bottom: 1px solid #CED5D9;
+    width: 382px;
+}
+.sales-order-print table.row-active {
+    background: #f7f7f7;
+}
+.sales-order-print .cart.table-wrapper .col.price, .order-items.table-wrapper .col.price, .cart.table-wrapper .col.qty, .cart.table-wrapper .col.subtotal, .cart.table-wrapper .col.msrp{
+    text-align: left;
+}
+.sales-order-print .retail-order-view-bottom-div {
+    width: 100%;
+}
+.sales-order-print .question_about_order p:nth-child(1) {
+    width: 277px;
+    font-family: 'FedEx Sans Regular';
+    font-size: 20px !important;
+    text-align: left;
+    color:  @fx-grey-1200;
+    height: 32px;
+}
+.sales-order-print .question_about_order p:nth-child(2) {
+    width: 287px;
+    font-family: 'FedEx Sans Light';
+    font-size: 16px !important;
+    text-align: left;
+    color: @fx-grey-1200;
+    height: 24px;
+}
+.sales-order-print .question_about_order p:nth-child(2) span {
+ 	  color: #0078B4;
+}
+.sales-order-print .retail-order-view-subtotal {
+    background-color: #F7F9FA;
+    padding: 19px 32px 23px 32px;
+    width: 446px;
+}
+.sales-order-print .retail-order-view-subtotal-view td {
+    font-family: 'FedEx Sans Light';
+    font-size: 16px;
+    line-height: 24px !important;
+    text-align: left;
+    color:  @fx-grey-1200;
+}
+.sales-order-print .retail-order-view-subtotal-view td .value {
+    font-family: 'FedEx Sans Light';
+    font-size: 16px;
+    line-height: 24px !important;
+    text-align: right;
+    color:  @fx-grey-1200;
+    font-weight: bold;
+}
+.sales-order-print .retail-order-view-subtotal-view tr:nth-child(3) {
+    border-bottom: 1px solid #CED5D9;
+    width: 382px;
+}
+.extra-attributes {
+    line-height: 16px;
+    font-family: 'FedEx Sans Regular';
+    background-color: #F7F9FA;
+}
+.extra-attributes .attributes-item-name {
+    color: @fx-grey-1200;
+    text-align:left;
+    width: 217px;
+    height: 24px;
+    font-size: 14px;
+    line-height: 16px;
+    font-family: 'FedEx Sans Light';
+}
+.sales-order-view .retail-print-order .product-name {
+    position: relative;
+    top: -58px;
+    bottom: 50%;
+    left: 17px;
+}
+.table-order-print-items thead {
+    color: @fx-grey-1100;
+    font-family: "FedEx Sans Bold";
+    font-size: 12px;
+    line-height:24px;
+}
+.table-wrapper.order-items.retail-print-order .col.name {
+    width: 50%;
+}
+span.retail-order-item-name {
+    color: @fx-grey-1200;
+    font-family: 'FedEx Sans Regular';
+    font-size: 18px;
+    font-weight: 300;
+    letter-spacing: 0;
+    line-height: 32px;
+    position: relative;
+    top: -35px;
+    left: 12px;
+}
+.table-order-print-items td:nth-child(4){
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Regular";
+    font-size: 14px;
+    line-height: 24px;
+}
+.righttext {
+    text-align: right !important;
+}
+.centertext {
+    text-align: left !important;
+    padding-left: 60px;
+    color: #0E1D24;
+}
+.retail-print-order tr.retail-product-attributes > td {
+    padding-right: 0px!important;
+}
+.block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > thead > tr > th:last-child,
+ .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td:last-child {
+    padding-right: 33px;
+}
+.block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td:last-child  {
+    font-family: "FedEx Sans Bold";
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 0;
+    line-height: 24px;
+    text-align: right;
+}
+table.retail-order-view-subtotal-view td.value {
+    text-align: right;
+    padding-right: 0px;
+}
+.block.block-order-details-view.retail-print-order tr.show-hide-detail td,
+.block.block-order-details-view.retail-print-order .hide-show-button {
+    text-align: left !important;
+}
+.block.block-order-details-view.retail-print-order {
+    margin-bottom: 24px;
+}
+.sales-order-print .footer-container, .sales-order-print small.copyright {
+    display: none;
+}
+.sales-order-print .widget-promo-banner-container {
+    display: none;
+}
+
+/* Ankit- B-1147200- RT-ECVS - Correct Tab order for all new pages*/
+.retail-sales-order-history #my-orders-table tr th.col a.active {
+    color: @fx-purple-500;
+    text-decoration: none;
+}
+.retail-sales-order-history #my-orders-table tr th a {
+    color: #57676e;
+    text-decoration: none;
+}
+
+/* Brajmohan - B-1163682-RT-ECVS- Ability to save/print order receipt on click of Print Receipt button - Mobile */
+.order-retail-view .retail-order-view-bottom-div .question_about_order_mobile {
+    display: none;
+}
+.order-retail-view .retail-order-view-bottom-div .question_about_order {
+    display: block;
+}
+.order-retail-view .table-wrapper.order-items.retail-print-order .items-description {
+    display: none;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.qty {
+    text-align: right;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.discount {
+    text-align: right;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+    text-align: right !important;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .sales-order-print .retail-print-order-enhancement h1.page-title {
+        font-size: 32px;
+    }
+    .sales-order-view .retail-print-order-enhancement h1.page-title {
+        font-size: 32px;
+    }
+    .order-retail-view .table-wrapper.order-items.retail-print-order .items-description {
+        display: none;
+    }
+    .order-retail-view .box-retail-order-view {
+        width: 50%;
+        display: block;
+        margin-bottom: 15px;
+        padding: 31px 25px;
+        min-height: auto;
+    }
+    .order-retail-view .order-retail-view .block-order-details-views {
+        margin-bottom: 25px;
+    }
+    .order-retail-view .retail-print-order .box-content {
+        width: 50%;
+        display: unset;
+    }
+    .order-retail-view .retail-print-order .box-content.billing-address {
+        padding-left: 100px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.qty {
+        text-align: right;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.discount {
+        text-align: right;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+        text-align: right !important;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .discount-breakdown .order-retail-view .retail-order-view-bottom-div .retail-order-view-subtotal {
+        width: auto;
+        padding: 15px 15px 0px 15px;
+    }
+}
+/* for mobile view */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .page-print.sales-order-print .logo {
+        display: contents;
+    }
+    .sales-order-print .retail-print-order-enhancement {
+        padding-top: 15px;
+    }
+    .sales-order-view .retail-print-order-enhancement {
+        padding-top: 15px;
+    }
+    .sales-order-print .retail-print-order-enhancement h1.page-title {
+        font-size: 20px;
+        line-height: 25px;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+    .sales-order-view .retail-print-order-enhancement h1.page-title {
+        font-size: 20px;
+        line-height: 25px;
+        font-weight: bold;
+        padding-top: 10px;
+    }
+    .order-retail-view {
+        margin-top: 0px;
+    }
+    .order-retail-view .box-retail-order-view {
+        padding: 30px 45px;
+        margin-right: 0px;
+        min-height: auto;
+        margin-top: 25px;
+    }
+    .order-retail-view .box-retail-order-view.box-order-shipping-method {
+        padding-right: 0px !important;
+    }
+    .retail-print-order table {
+        border-collapse: collapse;
+    }
+    .account .order-retail-view .table-wrapper:last-child {
+        border: none;
+    }
+    .account .column.main .cart-block-content h2 {
+        margin-bottom: 5px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .items-description {
+        border-bottom: 1px solid #CED5D9;
+        display: flex;
+        font-family: FedEx Sans Bold;
+        font-size: 12px;
+        line-height: 24px;
+        text-align: left;
+        padding-left: 0px;
+        color: @fx-grey-1100;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order span.retail-order-item-name {
+        font-family: "FedEx Sans Light";
+        font-size: 18px;
+        line-height: 24px;
+        top: -45px;
+        left: 15px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .table-wrapper.order-items.retail-print-order img.preview-product-img {
+        height: 74px;
+    }
+    .sales-order-print .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td:last-child {
+        padding-right: 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .table-wrapper.order-items.retail-print-order .product-image-container {
+        margin-left: 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr td {
+        padding-left: 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td {
+        text-align: left;
+        font-size: 12px;
+        line-height: 16px;
+        font-family: FedEx Sans Bold;
+        color: @fx-grey-1100;
+        padding: 8px 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.item-qty {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.item-discount {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.item-total {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: FedEx Sans Bold;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.attributes-item-name {
+        float: left;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        line-height: 16px;
+        padding-bottom: 8px;
+        padding-top: 5px;
+        font-family: 'FedEx Sans Regular';
+        width: 100%;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+        text-align: left !important;
+        padding-bottom: 5px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.attribute-item-base-price {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+        line-height: 16px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.attribute-item-qty {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+        line-height: 16px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.attribute-item-discount {
+        float: right;
+        color: @fx-green-100;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+        line-height: 16px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.attribute-total {
+        padding-bottom: 10px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td span.attribute-item-total {
+        float: right;
+        color: @fx-grey-1200;
+        font-size: 14px;
+        font-family: 'FedEx Sans Regular';
+        line-height: 16px;
+    }
+    .order-retail-view .retail-order-view-bottom-div .question_about_order {
+        display: none;
+    }
+    .order-retail-view .retail-order-view-bottom-div .question_about_order_mobile {
+        width: 60%;
+        height: 50%;
+        float: left;
+        padding-top: 10px;
+    }
+    .order-retail-view .question_about_order_mobile p:nth-child(1) {
+        width: 277px;
+        font-family: 'FedEx Sans Regular';
+        font-size: 20px !important;
+        text-align: left;
+        color: @fx-grey-1200;
+        height: 32px;
+    }
+    .order-retail-view .question_about_order_mobile p:nth-child(2) {
+        width: 287px;
+        font-family: 'FedEx Sans Light';
+        font-size: 16px !important;
+        text-align: left;
+        color: @fx-grey-1200;
+        height: 24px;
+    }
+    .order-retail-view .question_about_order_mobile p:nth-child(2) span {
+        color: #0078B4;
+    }
+    .order-retail-view .retail-order-view-bottom-div .question_about_order_mobile {
+        padding-top: 30px;
+        display: block;
+    }
+    .order-retail-view .retail-order-view-bottom-div {
+        display: block;
+    }
+    .order-retail-view .retail-order-view-bottom-div .retail-order-view-subtotal {
+        width: auto;
+        padding: 15px 35px 0px 25px;
+    }
+    .order-retail-view .retail-order-view-subtotal-view td.value {
+        font-family: FedEx Sans Bold;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.qty {
+        text-align: left;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.discount {
+        text-align: left;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+        text-align: left;
+    }
+    .table-order-print-items td:nth-child(4) {
+        color: @fx-grey-1200;
+        font-family: 'FedEx Sans Regular';
+        font-size: 12px;
+        line-height: 16px;
+    }
+    .extra-attributes tbody > tr > td {
+        font-size: 12px;
+        letter-spacing: 0.75px;
+        padding-left: 10px !important;
+        line-height: 16px;
+        font-family: 'FedEx Sans Regular';
+        padding-bottom: 8px !important;
+        padding-top: 8px !important;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        border-bottom: 0;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr.item-partition {
+        border-bottom: 1px solid #cccccc;
+    }
+    .retail-print-order .extra-attributes tbody > tr:last-child {
+        border-bottom: 0;
+    }
+    .retail-print-order .extra-attributes tbody > tr.attribute-row {
+        border-bottom: 1px solid #cccccc;
+    }
+    .retail-print-order .extra-attributes tbody > .attribute-row:nth-last-child(2) {
+        border-bottom: 0 !important;
+    }
+    .hide-properties-view-order {
+        left: 0px;
+    }
+    .order-retail-view .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:first-child {
+        padding-top: 15px;
+    }
+    .order-retail-view .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) tbody > tr > td:last-child {
+        padding-bottom: 10px;
+    }
+    .order-retail-view .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr.product-item-detail td[data-th]:before {
+        color: @fx-grey-1100;
+        font-size: 12px;
+        line-height: 16px;
+        font-family: 'FedEx Sans Bold';
+        letter-spacing: 0.75px;
+    }
+    .order-retail-view .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody > tr td[data-th]:before {
+        color: @fx-grey-1100;
+        font-size: 12px;
+        line-height: 16px;
+        font-family: 'FedEx Sans Regular';
+        letter-spacing: 0.75px;
+    }
+    .sales-order-print .retail-print-order table {
+        border-collapse: collapse;
+    }
+    .sales-order-print .retail-print-order .box-title > span {
+        letter-spacing: 0;
+    }
+}
+
+/* Attri-Kumar - B-1140769 -RT-ECVS- Ability to display receipts when clicking on View Receipts for delivery */
+.retail-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar .action.print {
+    width: 15%;
+    padding: 10px 40px;
+    text-align: center;
+}
+/* End of the Code */
+.order-actions-toolbar .retail-continue-shopping {
+    float: left;
+    color: @fx-white-100;
+    border: 2px solid @fx-orange-500;
+    border-radius: 0;
+    background: @fx-orange-500;
+    padding: 10px 40px;
+    margin-left: 20px;
+    cursor: pointer;
+    margin-top: 13px;
+    font-size: 19px;
+    font-family: 'FedEx Sans Bold';
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.order-actions-toolbar .retail-reorder-action {
+    float: left;
+    color: @fx-white-100;
+    border-radius: 0;
+    background: @fx-orange-500;
+    padding: 13px;
+    margin-left: 20px;
+    cursor: pointer;
+    margin-top: 13px;
+    font-size: 19px;
+    font-family: 'FedEx Sans Bold';
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 160px;
+    text-align: center;
+}
+.order-actions-toolbar .retail-reorder-action.disable-link {
+    pointer-events: none;
+    float: left;
+    color: @fx-white-100;
+    border-radius: 0;
+    background: #cccccc;
+    padding: 13px;
+    margin-left: 20px;
+    margin-top: 13px;
+    font-size: 19px;
+    font-family: 'FedEx Sans Bold';
+    text-transform: uppercase;
+    font-weight: bold;
+    width: 160px;
+    text-align: center;
+    opacity: .5;
+}
+
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td:last-child {
+    text-align: left;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order .hide-show-button {
+    padding-left: 23px;
+}
+.extra-attributes tbody > tr > td {
+    padding-left: 15px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order .extra-attributes tbody > tr.attribute-heading {
+    display: table-row;
+    font-family: 'FedEx Sans Light';
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    color: @fx-grey-1100;
+}
+.sales-order-print .retail-print-order table.extra-attributes th {
+    font-family: 'FedEx Sans Light';
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    color: @fx-grey-1100;
+}
+.box-retail-order-view strong.box-title span {
+    color: @fx-grey-1200;
+    font-family: "FedEx Sans Light";
+    font-size: 24px !important;
+    font-weight: 300;
+    letter-spacing: 0;
+    margin-bottom: 0px;
+}
+.sales-order-print .retail-print-order tr.show-hide-detail {
+    display: none;
+}
+.retail-print-order .extra-attributes .hide-details-btn {
+    display: none;
+}
+.sales-order-print .retail-print-order tr.retail-product-attributes {
+    display: table-row !important;
+}
+.order-retail-view .retail-print-order table.extra-attributes th.attribute-style-name {
+    width: 25%;
+}
+.order-retail-view .retail-print-order table.extra-attributes th.attribute-style-qty {
+    width: 7%;
+}
+.order-retail-view .retail-print-order table.extra-attributes th.attribute-style {
+    width: 12%;
+}
+.retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary-retail {
+    width: 135px;
+    background: @fx-white-100;
+    border-color: @fx-grey-1200;
+    padding: 0 30px;
+    height: 45px;
+    font-size: 19px;
+    color: @fx-grey-1200;
+    line-height: 46px;
+    letter-spacing: .75px;
+    margin-left: 0px !important;
+    font-family: 'FedEx Sans Bold';
+}
+
+/*
+Show Details and Hide Details in retail History
+*/
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-discount {
+    color: green;
+    padding-right: 30px;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-base-price {
+	padding-left: 34px;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-qty {
+	width: 100px;
+    padding-left: 42px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes th.col.attribute-name.attribute-style-name {
+    width: auto !important;
+	display: flex;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes {
+    background-color: @fx-white-100;
+	border-left-width: 0px;
+    border-right-width: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td {
+	border-top-width: 0px;
+    border-bottom-width: 0px;
+    padding-bottom: 10px;
+    padding-top: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr#hideDetails td {
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	padding-bottom: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order {
+	border-bottom-width: 0px !important;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order tr {
+	border-bottom-width: 0px !important;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table td.showDetails {
+	border-top-width: 0px;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table tr.retail-product-attributes + tr > td {
+    border-top-width: 0px;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table tr.retail-product-attributes > td {
+    padding-bottom: 0px !important;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table td.hide-show-button {
+    padding-top: 0px;
+    padding-left: 25px;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes div.configurater-product-attr hr {
+	margin-top: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes div.configurater-product-attr span {
+	font-family: 'FedEx Sans Regular';
+    font-size: 15px;
+    color: #6a7a81;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes div.configurater-product-attr {
+    padding-top: 10px;
+    color: @fx-grey-1200;
+    font-size: 14px;
+    font-family: 'FedEx Sans Light';
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item.active tr.expend-order + tr > td {
+	padding-top: 0px !important;
+	padding-bottom: 0px !important;
+}
+
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes > td {
+    padding-top: 0px !important;
+}
+sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details-space {
+    border-top-width: 0px !important;
+}
+ .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details {
+    border-top-width: 0px !important;
+    padding-top: 0px;
+    padding-bottom: 10px;
+    padding-left: 0;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details a.show-properties-view-order {
+    height: 24px;
+    width: 110px;
+    color: #007AB7;
+    font-family: 'FedEx Sans Bold';
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.75px;
+    line-height: 24px;
+    text-align: center;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.hide-details a.hide-properties-view-order {
+    height: 24px;
+    width: 110px;
+    color: #007AB7;
+    font-family: 'FedEx Sans Bold';
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.75px;
+    line-height: 24px;
+    text-align: center;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-base-price {
+    padding-left: 200px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details-space {
+    border-top-width: 0px !important;
+    padding-bottom: 0px;
+    padding-top: 0px
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.hide-details {
+    padding-left: 24px;
+    padding-top: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-total {
+    padding-right: 18px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes div.configurater-product-attr hr.additional-details-hr {
+	margin-bottom: 10px;
+    border: 0px;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details hr {
+    display: none;
+	margin: 0px;
+}
+
+//tablet View
+
+@media only screen and (min-width: 426px) and (max-width: 768px) {
+
+	.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes th.col.attribute-name.attribute-style-name {
+		width: 200px !important;
+	}
+
+	.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-qty {
+		padding-left: 83px;
+		padding-right: 0px;
+	}
+
+	.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-discount {
+		width: 64px;
+	}
+
+	.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-total {
+		padding-left: 15px;
+		padding-right: 17px;
+	}
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-base-price {
+        padding-left: 100px !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-name {
+        width: 200px !important;
+
+    }
+}
+
+// For mobile view
+
+@media only screen and (max-width: 425px) {
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes td.col.base-price.attribute-style {
+        display: none !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row td.col.attribute-total {
+        padding-right: 10px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row td.col.attribute-total span.price {
+        float: right;
+    }
+	.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row td.col.attribute-qty span.attribute-item-qty {
+        float: right;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row td.col.attribute-qty {
+        width: auto !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row span.attribute-item-discount {
+        float: right;
+        padding-left: 0px;
+    }
+    /* sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row span.attribute-item-qty {
+        float: right;
+    } */
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.extra-attributes .attribute-row td.col.attribute-discount {
+        padding-right: 12px !important
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-base-price {
+        padding-left: 10px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.col.attribute-base-price span.price {
+        float: right;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details-space {
+        display: none !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.hide-details-space {
+        display: none !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details a.show-properties-view-order span {
+        padding-left: 10px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr.retail-product-attributes td.retail-product-attribute-space {
+        display: none;
+    }
+}
+
+// end of show details and hide details
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary-retail {
+        width: 146px;
+        background: @fx-white-100;
+        border-color: @fx-grey-1200;
+        padding: 0 30px;
+        height: 45px;
+        font-size: 19px;
+        color: @fx-grey-1200;
+        line-height: 46px;
+        letter-spacing: .75px;
+        margin-left: 0px !important;
+        font-family: 'FedEx Sans Bold';
+    }
+    .retail-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar .action.print {
+        width: 28%;
+        padding: 10px 41px;
+        display: block;
+    }
+    .retail-order-history ~ .page-wrapper .breadcrumbs {
+        margin-left: 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .extra-attributes tbody > tr.attribute-heading {
+        display: table-row;
+        font-family: 'FedEx Sans Light';
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.75px;
+        color: @fx-grey-1100;
+    }
+    .sales-order-print .retail-print-order table.extra-attributes th {
+        font-family: 'FedEx Sans Light';
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.75px;
+        color: @fx-grey-1100;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style-name {
+        width: 30%;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style-qty {
+        width: 10%;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style {
+        width: 15%;
+    }
+}
+
+/* for mobile view */
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .retail-order-history ~ .page-wrapper .page-title-wrapper .order-actions-toolbar .action.print {
+        width: 70%;
+        padding: 10px 41px;
+        display: block;
+        margin-top: 20px;
+    }
+    .order-actions-toolbar .retail-continue-shopping {
+        float: left;
+        width: max-content;
+        color: @fx-white-100;
+        border: 2px solid @fx-orange-500;
+        border-radius: 0;
+        background: @fx-orange-500;
+        padding: 10px 40px;
+        cursor: pointer;
+        margin-top: 13px;
+        margin-left: 0px;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+    }
+    .order-actions-toolbar .retail-reorder-action {
+        float: left;
+        color: @fx-white-100;
+        border-radius: 0;
+        background: @fx-orange-500;
+        padding: 10px 40px;
+        cursor: pointer;
+        margin-top: 13px;
+        margin-left: 0px;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        width: 209px;
+        text-align: center;
+    }
+    .order-actions-toolbar .retail-reorder-action.disable-link {
+        pointer-events: none;
+        float: left;
+        color: @fx-white-100;
+        border: 0;
+        border-radius: 0;
+        background: #cccccc;
+        padding: 10px 40px;
+        margin-top: 13px;
+        margin-left: 0px;
+        font-size: 19px;
+        font-weight: bold;
+        font-family: 'FedEx Sans Bold';
+        text-transform: uppercase;
+        width: 209px;
+        text-align: center;
+        opacity: .5;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order .extra-attributes tbody > tr.attribute-heading {
+        display: none;
+    }
+    .sales-order-print .retail-print-order table.extra-attributes th {
+        font-family: 'FedEx Sans Light';
+        font-size: 12px;
+        line-height: 16px;
+        letter-spacing: 0.75px;
+        color: @fx-grey-1100;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style-name {
+        width: 0;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style-qty {
+        width: 0;
+    }
+    .order-retail-view .retail-print-order table.extra-attributes th.attribute-style {
+        width: 0;
+    }
+    .sales-order-print .extra-attributes {
+        width: 29rem;
+    }
+}
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media (min-width: 320px) and (max-width: 767px) {
+        .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .field .action.retail-reorder-btn {
+            width: 138px;
+            height: 45px;
+            font-size: 19px;
+            border-radius: 0;
+            margin-left: 10px;
+            text-align: center;
+            color: @fx-grey-100;
+            border: 1px solid @fx-grey-700;
+            background: @fx-grey-700;
+            line-height: 32px;
+            letter-spacing: 1.19px;
+            font-family: 'FedEx Sans Bold';
+            pointer-events: none;
+            margin-top: 25px;
+        }
+        .sales-order-history .page-wrapper {
+            .enabled-marketplace-customer.retail-sales-order-history.retail-reorder {
+                .order-items-row .order-items-table table tr td {
+                    .item-img img.preview-product-img {
+                        height: 40px;
+                        width: 40px;
+                    }
+                }
+            }
+        }
+        .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .field .action.retail-reorder-btn.active {
+            width: 138px;
+            height: 45px;
+            font-size: 19px;
+            font-weight: bold;
+            border-radius: 0;
+            margin-left: 10px;
+            text-align: center;
+            color: @fx-white-100;
+            border: 1px solid @fx-orange-500;
+            background: @fx-orange-500;
+            line-height: 32px;
+            letter-spacing: 1.19px;
+            font-family: 'FedEx Sans Bold';
+            pointer-events: unset;
+            margin-top: 25px;
+        }
+        .sales-order-history .retail-reorder .order-items-row .order-items-table table tr td .action.view {
+            color: #007AB7;
+            border: 2px solid #007AB7;
+            border-radius: 40px;
+            background: @fx-white-100;
+            cursor: pointer;
+            padding: 0px;
+            height: 40px;
+        }
+        .sales-order-history .retail-reorder .order-items-row .order-items-table table tr td .action.view span {
+            font-size: 14px;
+            line-height: 16px;
+            letter-spacing: 1px;
+            text-align: center;
+            color: #007AB7;
+        }
+        .sales-order-history .retail-sales-order-history.retail-reorder .view-receipt .view-action {
+            padding-bottom: 32px;
+            padding-top: 32px;
+            padding-right: 16px;
+        }
+        .sales-order-history .retail-reorder .order-label, .sales-order-history .retail-reorder .item-label {
+            display: block;
+            width: 24px;
+            height: 24px;
+            padding-left: 55px;
+        }
+        .sales-order-history .retail-reorder .checkbox-order, .sales-order-history .retail-reorder .checkbox-item {
+            box-shadow: none;
+            margin: 0;
+            width: 24px;
+            height: 24px;
+            top: 0;
+        }
+        .sales-order-history .retail-reorder .order-checked-icon {
+            position: relative;
+            left: 0;
+            display: none;
+            cursor: pointer;
+            padding: 0;
+            top: 0;
+        }
+        .sales-order-history .retail-reorder .item-checked-icon {
+            position: relative;
+            left: 0;
+            display: none;
+            cursor: pointer;
+        }
+        .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .actions-toolbar .primary button.secondary-retail {
+            width: 100% !important;
+            background: @fx-white-100;
+            border-color: @fx-grey-1200;
+            padding: 0 30px;
+            height: 50px;
+            font-size: 19px;
+            color: @fx-grey-1200;
+            line-height: 46px;
+            letter-spacing: 1.19px;
+            margin-left: 0px !important;
+            font-family: 'FedEx Sans Bold';
+            margin-bottom: 20px;
+        }
+    }
+}
+@media (min-width: 767px) {
+    // Start B-1227397: Retail- RT-ECVS- Reorder placement
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search {
+        padding-top: 10px;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .actions-toolbar div.primary {
+        display: flex;
+        height: 0;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .actions-toolbar div.primary .action {
+        margin: 0 0px 0 0;
+        height: 40px !important;
+        font-size: 14px !important;
+        line-height: 45px !important;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .actions-toolbar {
+        padding-top: 28px;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .action-close-div {
+        text-align: right;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .filter-close {
+        border: 0;
+        border-radius: 0;
+        background: none;
+        padding: 0px;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .field .action.retail-reorder-btn {
+        width: 145px;
+        height: 45px;
+        font-size: 19px;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid #cccccc;
+        background: #cccccc;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: none;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .field .action.retail-reorder-btn.active {
+        width: 145px;
+        height: 45px;
+        font-size: 19px;
+        font-weight: bold;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @fx-white-100;
+        border: 1px solid @fx-orange-500;
+        background: @fx-orange-500;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: 'FedEx Sans Bold';
+        pointer-events: unset;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.reorder-checkbox {
+        width: 10% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.reorder-hide {
+        width: 4% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.order-item {
+        width: 50% !important;
+        vertical-align: middle;
+        text-align: initial;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.item-unit-price {
+        width: 15%;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.item-qty {
+        width: 12% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder #my-orders-table tr th.item-total-col {
+        width: 13% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+        width: 10% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.item {
+        width: 50% !important;
+        vertical-align: middle;
+        text-align: initial;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.unit-price {
+        width: 15%;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.qty {
+        width: 12% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .order-items-row .order-items-table table tr td.item-total-data {
+        width: 13% !important;
+        vertical-align: middle;
+        text-align: center;
+    }
+    .sales-order-history .retail-reorder .order-label {
+        display: block;
+        width: 24px;
+        height: 24px;
+        padding-left: 35px;
+    }
+    .sales-order-history .retail-reorder .order-label.disable-checkbox {
+        padding-left: 0px;
+        margin-left: 35px;
+        background-color: @fx-grey-900;
+    }
+    .sales-order-history .retail-reorder .item-label {
+        display: block;
+        width: 24px;
+        height: 24px;
+        padding-left: 35px;
+        margin-top: 15px;
+    }
+    .sales-order-history .retail-reorder .item-label {
+        padding-left: 0px;
+        margin-left: 35px;
+        background-color: @fx-grey-900;
+    }
+    .sales-order-history .retail-reorder .checkbox-order, .sales-order-history .retail-reorder .checkbox-item {
+        box-shadow: none;
+        margin: 0;
+        width: 24px;
+        height: 24px;
+        top: 0;
+    }
+    .sales-order-history .retail-reorder .order-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+        padding: 0;
+        top: 0;
+    }
+    .sales-order-history .retail-reorder .item-checked-icon {
+        position: relative;
+        left: 0;
+        display: none;
+        cursor: pointer;
+    }
+    .sales-order-history .retail-reorder .order-items-row .order-items-table table tr td .action.view {
+        float: right;
+        color: #007AB7;
+        border: 2px solid #007AB7;
+        border-radius: 40px;
+        background: @fx-white-100;
+        cursor: pointer;
+        padding: 0px;
+        width: 168px;
+        height: 50px;
+        margin: 22px 0 23px 0;
+    }
+    .sales-order-history .retail-reorder .order-items-row .order-items-table table tr td .action.view span {
+        font-size: 14px;
+        line-height: 16px;
+        letter-spacing: 1px;
+        text-align: center;
+        color: #007AB7;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .view-receipt .view-action {
+        padding-bottom: 32px;
+        padding-top: 32px;
+        padding-right: 16px;
+    }
+    //End B-1227397: Retail
+    .retail-reorder th.col.actions, .retail-reorder .view-order-action {
+        display: none;
+    }
+    .retail-reorder	th[sortby="ext_order_id"] {
+        padding-left: 52px;
+    }
+    .page-wrapper .retail-reorder th.col.sort-order-table-heading.id[sortby="ext_order_id"] {
+        padding-left: 45px;
+    }
+    .retail-reorder	th[sortby="created_at"], .retail-reorder td.date,
+    .retail-reorder	th[sortby="status"], .retail-reorder td.status {
+        text-align: center;
+    }
+    .retail-reorder	th[sortby="grand_total"], .retail-reorder td.total {
+        text-align: right;
+    }
+    .page-wrapper .retail-reorder .view-order-carrot-toggle {
+        vertical-align: middle;
+        margin: 0 9px 0 0px;
+        padding-left: 9px;
+        padding-top: 6px;
+    }
+    .retail-reorder a.view-order-carrot-toggle:hover {
+        text-decoration: none;
+    }
+    .retail-reorder a.view-order-carrot-toggle:before {
+        color: @fx-grey-1200;
+        content: '\e904';
+        font-family: 'FedEx Icons';
+        font-size: 20px;
+    }
+}
+
+
+// 29 june
+.retail-my-orders-search-advanced.retail-reorder-button .control #product-name-sku  {
+    width: 75% !important;
+}
+.retail-sales-order-history.retail-reorder #my-orders-table tr th.total a {
+    padding-right: 40px;
+}
+.retail-sales-order-history.retail-reorder #my-orders-table tr td.total .data-class {
+    padding-right: 45px;
+}
+.sales-order-history .retail-sales-order-history.retail-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+    padding-top: 2px !important;
+}
+.retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced.retail-reorder-button .reset-btn {
+    margin-right: 20px;
+    margin-left: 0% !important;
+    width: 135px !important;
+    height: 40px !important;
+    font-size: 14px !important;
+    letter-spacing: .75px !important;
+    line-height: 24px !important;
+    font-family: 'FedEx Sans Bold';
+}
+.reorder-item-label-check {
+    display: none;
+}
+.reorder-checkbox-item {
+    display: block;
+}
+.col.reorder-checkbox-item {
+    border: none;
+}
+.col.reorder-checkbox {
+    border-bottom: 1px solid #ccc !important;
+}
+td.col.reorder-order-label-check {
+    display: none !important;
+}
+.sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order {
+    border-bottom: 1px solid #ccc;
+}
+.sales-order-view .retail-print-order-enhancement .action.return {
+    display: none !important;
+}
+.sales-order-history .retail-sales-order-history.retail-reorder .order-items-row .order-items-table table tr td .item-img img {
+    width: 65px;
+    height: 65px;
+    max-width: 65px;
+    max-height: 65px;
+    object-fit: cover;
+}
+@media(max-width: 1137px) and (min-width: 1063px){
+    .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: -20px !important;
+        position:relative !important;
+    }
+    .account{
+        .sidebar-main{
+        position:relative !important;
+        }
+    }
+    .cms-sde-home{
+        .sidebar.sidebar-main .block.block-collapsible-nav {
+            margin-top: 105px !important;
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .retail-my-orders-search-advanced.retail-reorder-button .control #product-name-sku {
+        width: 80% !important;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 4px !important;
+        padding: 0;
+    }
+    .retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced.retail-reorder-button .reset-btn {
+        margin-right: 20px;
+        margin-left: 0% !important;
+        width: 146px !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr td .item-detail {
+        float: none;
+    }
+    .reorder-item-label-check {
+        display: none;
+    }
+    .reorder-checkbox-item {
+        display: block;
+    }
+    .col.reorder-checkbox-item {
+        border: none;
+    }
+    .col.reorder-checkbox {
+        border-bottom: 1px solid #ccc !important;
+    }
+    td.col.reorder-order-label-check {
+        display: none !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom: 1px solid #ccc;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .field .range.fields.d-flex{
+        position: relative;
+        display: block;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .field.order-total .field-order-total {
+        width: 100%;
+        display: flex;
+        margin-bottom: 15px;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .field.order-total .control {
+        display: contents;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .field.order-total .control .sub-label {
+        padding-top: 13px;
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced.retail-reorder-button .reset-btn {
+        width: 118px !important;
+        margin-left: 0% !important;
+        margin-top: 0;
+        margin-right: 10px;
+    }
+    .retail-sales-order-history.retail-reorder #my-orders-table tr td.total .data-class {
+        padding-right: 0px;
+    }
+    .retail-sales-order-history #my-orders-table .order-items-row .order-items-table {
+        border-bottom: 0;
+    }
+    .table-wrapper.retail-sales-order-history {
+        border: 0 !important;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .action-close-div {
+        text-align: right;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .filter-close {
+        border: 0;
+        border-radius: 0;
+        background: none;
+        padding: 0px;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td.id {
+        padding-top: 8px !important;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+       display: none !important;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .order-items-row .order-items-table table tr td.reorder-checkbox-item {
+        display: inline-block;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .order-items-row .order-items-table table tr td .item-img img {
+        padding-left: 10px;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .reorder-item-label-check .item-checked-icon {
+        width: 24px !important;
+        height: 24px !important;
+        max-width: none;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .col.reorder-item-label-check {
+        background: @fx-white-100;
+        position: relative;
+        border-color: lightgray;
+        padding-left: 10px;
+        padding-top: 15px !important;
+        border-top: 1px solid #ccc !important;
+        border-left: 1px solid #ccc !important;
+        border-right: 1px solid #ccc !important;
+        border-bottom: 0 !important;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .order-label-items {
+        width: 24px;
+        height: 24px;
+        display: block;
+        position: relative;
+        margin-left: 10px;
+        margin-top: 10px;
+    }
+    .sales-order-history .retail-sales-order-history.retail-reorder .order-label-items.disable-checkbox {
+        background-color: @fx-grey-900;
+    }
+    .sales-order-history .retail-reorder .item-label {
+        padding-left: 0px;
+    }
+    .item-label-text {
+        padding-top: 5px;
+        padding-left: 0px;
+    }
+    .sales-order-history .retail-reorder .item-label-text {
+        padding-top: 14px;
+        padding-left: 10px;
+    }
+    .sales-order-history .retail-reorder .reorder-item-label-check {
+        display: block !important;
+        width: 24px;
+        height: 24px;
+        margin-top: 20px;
+    }
+    .sales-order-history .retail-reorder .reorder-item-label-check.disable-checkbox {
+        background-color: @fx-grey-900;
+    }
+    td.col.reorder-order-label-check {
+        display: none;
+        background: @fx-white-100;
+        position: relative;
+        border-color: lightgray;
+        padding-left: 10px;
+        padding-top: 15px !important;
+        border-top: 1px solid #ccc !important;
+        border-left: 1px solid #ccc !important;
+        border-right: 1px solid #ccc !important;
+        border-bottom: 0 !important;
+    }
+    .retail-sales-order-history tr.table-row {
+        border-top: 1px solid #ccc !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order {
+        border-bottom: 0px !important;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order td.unit-price {
+        padding-left: 20px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table .expend-order td.qty {
+        padding-left: 20px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr td .item-detail {
+        padding-top: 15px;
+    }
+    .retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced .reset-btn {
+        margin-right: 8px !important;
+    }
+    .retail-order-history ~ .page-wrapper .page-main .columns .retail-my-orders-search-advanced.retail-reorder-button .reset-btn {
+        width: 100% !important;
+        height: 50px !important;
+        font-size: 19px !important;
+        letter-spacing: 1.19px !important;
+        line-height: 24px !important;
+        font-family: 'FedEx Sans Bold';
+        margin-bottom: 15px;
+    }
+    .page-wrapper .page-main .columns #my-orders-search-advanced-form {
+        .field-action {
+            width: 100%;
+            padding-top: 25px;
+            display: inline-block;
+            button {
+                height: 45px;
+
+                &.reset-btn {
+                    width: 100% !important;
+                    height: 50px !important;
+                    font-size: 19px !important;
+                    letter-spacing: 1.19px !important;
+                    line-height: 24px !important;
+                    font-family: 'FedEx Sans Bold';
+                    margin-bottom: 15px !important;
+                }
+                &.action {
+                    width: 100% !important;
+                    padding: 0 30px;
+                    font-size: 19px;
+                    height: 50px;
+                    line-height: 46px;
+                    letter-spacing: 1.19px;
+                    margin-left: 0px !important;
+                    font-family: 'FedEx Sans Bold';
+                    margin-bottom: 20px;
+                }
+            }
+        }
+    }
+}
+
+.sales-order-history .page-layout-1column #block-collapsible-nav {
+    display: none;
+}
+
+.sales-order-history #block-collapsible-nav {
+    color: #000000;
+    line-height: 29px;
+    font-family: 'FedEx Sans Regular';
+    font-size: 12px;
+    text-align: left;
+}
+
+.sales-order-history #block-collapsible-nav ul.nav.items {
+    height: auto;
+    margin-bottom: 0;
+    padding: 12px 0 13px 0;
+}
+
+.sales-order-history .block-collapsible-nav .item {
+    margin: 0;
+}
+.sales-order-history .block-collapsible-nav .item.current > strong {
+    border-color: @fx-purple-500;
+    font-family: 'FedEx Sans Regular';
+    color: #000000;
+    line-height: 22px;
+    font-weight: 400;
+    height: 14px;
+    padding-left: 16px;
+}
+.sales-order-history .block-collapsible-nav .item a {
+    color: #000000;
+}
+.sales-order-history .sidebar-main {
+    padding-left: 48px;
+}
+
+@media only screen and (min-width: 767px) {
+    .page-wrapper .page-main .columns #my-orders-search-advanced-form .field-action .actions-toolbar .primary {
+        display: flex;
+        button {
+            display: inline-block;
+            font-size: 14px !important;
+            width: 50% !important;
+            height: 45px !important;
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
+    .sales-order-history.page-layout-2columns-left .retail-print-order-enhancement h1.page-title {
+        padding: 0 0 32px 0px !important;
+        margin-top: 48px;
+        margin-bottom: -7px;
+    }
+    .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: -27px;
+    }
+    .account .sidebar-main {
+        z-index: 9;
+    }
+    .retail-order-history ~ .page-wrapper .breadcrumbs {
+        margin-left: 0px;
+    }
+    .cms-sde-home .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: 110px !important;
+    }
+}
+
+.sales-order-history.page-layout-2columns-left .retail-print-order-enhancement h1.page-title {
+	padding: 0 0 10px 0px;
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .retail-print-order-enhancement h1.page-title {
+        padding-left: 17px;
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 1199px) {
+    .sales-order-history.page-layout-2columns-left .retail-order-history-enhancement ~ .page-wrapper .page-main {
+        .columns {
+            position: relative;
+            .sidebar.sidebar-main .block.block-collapsible-nav {
+                top: 0;
+                left: 0;
+                background-color: @fx-white-100;
+            }
+            .block-collapsible-nav-title {
+                border: 1px solid #6F7F87;
+            }
+        }
+    }
+    .sales-order-history .sidebar-main {
+        padding-left: 0px;
+    // For media query dropdown
+        .title.block-collapsible-nav-title {
+            background-color: @fx-white-100;
+            box-sizing: border-box;
+            height: 48px;
+            padding: 12px 16px 12px 12px;
+        }
+        .block-collapsible-nav .item a {
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+            font-size: 16px;
+            font-weight: 300;
+            height: 24px;
+            letter-spacing: 0;
+            line-height: 24px;
+            font-family: 'FedEx Sans Light';
+            padding: 12px 0 12px 9px;
+        }
+        .block-collapsible-nav .item.current > strong {
+            color: @fx-grey-1200;
+            background: @fx-grey-1000;
+            font-family: 'FedEx Sans Light';
+            font-size: 16px;
+            border: 0;
+            font-weight: 300;
+            height: 24px;
+            letter-spacing: normal;
+            line-height: 24px;
+            padding: 16px 0 16px 17px;
+        }
+        .title.block-collapsible-nav-title strong {
+            color: @fx-grey-1200;
+            font-family: 'FedEx Sans Light';
+            font-size: 19px;
+            font-weight: 300;
+            height: 24px;
+            letter-spacing: normal;
+            line-height: 24px;
+            width: 152px;
+        }
+        .block-collapsible-nav .block-collapsible-nav-title.active {
+            border: 1px solid @fx-purple-500 !important;
+        }
+        .block-collapsible-nav-content .nav.items {
+            border: 1px solid #ced5d9;
+            box-sizing: border-box;
+            height: auto;
+            margin: 0;
+            padding: 12px 0 12px 0;
+            width: 100%;
+        }
+        .block-collapsible-nav .content.active {
+            padding-top: 0;
+        }
+        #block-collapsible-nav ul.nav.items {
+            height: auto;
+        }
+        #block-collapsible-nav {
+            background-color: @fx-white-100;
+            text-align: left;
+        }
+    }
+}
+
+@media only screen and (min-width: 767px) and (max-width: 1199px) {
+    .sales-order-history.page-layout-2columns-left .retail-order-history-enhancement ~ .page-wrapper .page-main {
+        .columns {
+            .title-format.page-title-wrapper.retail-print-order-enhancement {
+                margin-left: 14px;
+            }
+            .sidebar.sidebar-main .block.block-collapsible-nav {
+                margin-left: 14px;
+                width: 705px;
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .sales-order-history.page-layout-2columns-left .retail-order-history-enhancement ~ .page-wrapper .page-main {
+        .columns {
+            position: relative;
+            display: flex;
+            flex-direction: row;
+            .title-format.page-title-wrapper.retail-print-order-enhancement {
+                margin-top: 46px;
+                clear: both;
+                order: 1;
+            }
+            .column .main {
+                order: 2;
+            }
+        }
+    }
+
+    .cms-sde-home .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: -5px !important;
+    }
+    .catalog-mvp-customer-admin .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-top: 16px !important;
+    }
+}
+.sales-order-history .retail-my-orders-search-advanced .fieldset.info .search-sku .control button[type="submit"] {
+    z-index: 0 !important;
+}
+@media only screen and (min-width: 1024px) and (max-width: 1119px) {
+  .sales-order-history.page-layout-2columns-left .retail-order-history-enhancement ~ .page-wrapper .page-main .columns .sidebar.sidebar-main .block.block-collapsible-nav {
+        margin-left: 14px;
+        width: 965px;
+    }
+}
+
+.is-fcl-global .reorder-success {
+    width: 646px;
+    height: 83px;
+    background: @fx-white-100;
+    border: 1px solid @fx-green-100;
+    display: -webkit-inline-box;
+    position: absolute;
+    z-index: 999;
+    margin: 0px auto;
+    left: 0;
+    right: 0;
+    top: 172px;
+    box-shadow: 0 2px 6px #00001945;
+}
+.is-fcl-global .reorder-success .reorder-success-box-inner {
+    background-color: @fx-green-100;
+    width: 48px;
+}
+.is-fcl-global .reorder-success .reorder-success-box-inner img {
+    transform: translate3d(-50%,-50%,0);
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: 28px;
+    width: 28px;
+    z-index: 999;
+}
+.is-fcl-global .reorder-success .reorder-success-msg {
+    width: 532px;
+    padding-left: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.is-fcl-global .reorder-success .reorder-success-msg a {
+    font-size: 14px;
+    margin: 0px;
+    font-family: 'FedEx Sans Bold';
+    color: #0078B4;
+    line-height: 24px;
+    text-transform: uppercase;
+    text-align: left;
+}
+.is-fcl-global .reorder-success .reorder-close-icon {
+    width: 36px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 999;
+    position: static;
+    padding-top: 10px;
+    padding-left: 16px;
+    float: right;
+    text-align: end;
+}
+.is-fcl-global .reorder-success .container {
+    width: 90%;
+}
+.is-fcl-global .reorder-success .reorder-close-icon:before {
+    color: @fx-grey-1200;
+    content: "\e616";
+    font-family: "luma-icons";
+}
+.is-fcl-global .reorder-error {
+    width: 646px;
+    height: 83px;
+    background: @fx-white-100;
+    border: 1px solid @fx-red-100;
+    display: -webkit-inline-box;
+    position: absolute;
+    z-index: 999;
+    margin: 0px auto;
+    left: 0;
+    right: 0;
+    top: 172px;
+    box-shadow: 0 2px 6px #00001945;
+}
+.is-fcl-global .reorder-error .reorder-error-box-inner {
+    background-color: @fx-red-100;
+    width: 48px;
+}
+.is-fcl-global .reorder-error .reorder-error-box-inner img {
+    transform: translate3d(-50%,-50%,0);
+    position: relative;
+    top: 50%;
+    left: 50%;
+    height: 40px;
+    width: 40px;
+    z-index: 999;
+}
+.is-fcl-global .reorder-error .reorder-error-msg {
+    width: 532px;
+    padding-left: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+}
+.is-fcl-global .reorder-error .reorder-error-close-icon {
+    width: 36px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 999;
+    position: static;
+    padding-top: 10px;
+    padding-left: 16px;
+}
+.is-fcl-global .reorder-error .reorder-error-close-icon:before {
+    color: @fx-grey-1200;
+    content: "\e616";
+    font-family: "luma-icons";
+}
+// B-1223182 - RT-ECVS- Error scenario for Order History that encounters a 'mixed cart'
+.is-fcl-global .reorder-error-order-view {
+    width: 646px;
+    height: 94px;
+    background: @fx-white-100;
+    border: 1px solid @fx-red-100;
+    display: -webkit-inline-box;
+    position: absolute;
+    z-index: 999;
+    margin: 0px auto;
+    left: 0;
+    right: 0;
+    top: 172px;
+    box-shadow: 0 2px 6px #00001945;
+}
+.is-fcl-global .reorder-error-order-view .reorder-error-order-view-box-inner {
+    background-color: @fx-red-100;
+    width: 55px;
+}
+.is-fcl-global .reorder-error-order-view .reorder-error-order-view-box-inner img {
+    transform: translate3d(-50%,-50%,0);
+    position: relative;
+    height: 40px;
+    width: 40px;
+    top: 50%;
+    left: 50%;
+    z-index: 999;
+}
+.is-fcl-global .reorder-error-order-view .reorder-error-order-view-msg {
+    width: 532px;
+    padding-left: 16px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    .reorder-error-message-heading {
+        margin-bottom: 0;
+    }
+    .unable-to-add-cart {
+        font-family: 'FedEx Sans Bold';
+        font-size: 14px;
+        line-height: 24px;
+        letter-spacing: normal;
+        color: @fx-red-100;
+    }
+}
+.is-fcl-global .reorder-error-order-view .reorder-error-order-view-close-icon {
+    width: 52px;
+    padding-left: 18px;
+    padding-top: 13px;
+    font-size: 14px;
+    cursor: pointer;
+    z-index: 999;
+}
+.is-fcl-global .reorder-error-order-view-msg .reorder-error-order-view-notification-msg {
+    width: 532px;
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: normal;
+}
+.is-fcl-global .reorder-error-order-view .reorder-error-order-view-close-icon:before {
+    color: @fx-grey-1200;
+    content: "\e616";
+    font-family: "luma-icons";
+}
+
+.is-fcl-global.sales-order-view .fujitsu-receipt-error-order-view {
+    top: 172px;
+}
+.selfreg-store.sales-order-view .fujitsu-receipt-error-order-view {
+    top: 135px;
+}
+.cms-sde-home.sales-order-view .fujitsu-receipt-error-order-view {
+    top: 135px;
+}
+//Mobile Screen
+@media only screen and (max-width:767px) {
+    .is-fcl-global.sales-order-history .reorder-success {
+        width: 90% !important;
+        top: 110px !important;
+        height: auto !important;
+        .reorder-success-box-inner {
+            width: 48px;
+        }
+        .reorder-success-msg {
+            width: 180px !important;
+        }
+        .reorder-close-icon {
+            text-align: left;
+            padding-right: 8px;
+        }
+    }
+    .is-fcl-global.sales-order-view .reorder-success {
+        width: 90% !important;;
+        top: -47px;
+        height: auto;
+        .reorder-success-box-inner {
+            width: 48px;
+        }
+        .reorder-success-msg {
+            width: 180px !important;;
+        }
+        .reorder-close-icon {
+            text-align: left;
+            padding-right: 8px;
+        }
+    }
+    .is-fcl-global.sales-order-history .reorder-error {
+        width: 90%;
+        top: 110px;
+        height: auto;
+        .reorder-error-box-inner {
+            width: 48px;
+        }
+        .reorder-error-msg {
+            width: 180px;
+        }
+    }
+    .is-fcl-global.sales-order-view .reorder-error {
+        width: 90%;
+        top: -47px;
+        height: auto;
+        .reorder-error-box-inner {
+            width: 48px;
+        }
+        .reorder-error-msg {
+            width: 180px;
+        }
+    }
+    .is-fcl-global.sales-order-history .reorder-error-order-view {
+        width: 90%;
+        top: 110px;
+        height: auto;
+        .reorder-error-order-view-box-inner {
+            width: 55px;
+        }
+        .reorder-error-order-view-msg {
+            width: 190px;
+            .reorder-error-order-view-notification-msg {
+                width: auto;
+            }
+        }
+        .reorder-error-order-view-close-icon {
+            padding-left: 0;
+        }
+    }
+    .is-fcl-global.sales-order-view .reorder-error-order-view {
+        width: 90%;
+        top: -47px;
+        height: auto;
+        .reorder-error-order-view-box-inner {
+            width: 55px;
+        }
+        .reorder-error-order-view-msg {
+            width: 190px;
+            .reorder-error-order-view-notification-msg {
+                width: auto;
+            }
+        }
+        .reorder-error-order-view-close-icon {
+            padding-left: 0;
+        }
+    }
+    .is-fcl-global.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -67px;
+    }
+    .selfreg-store.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -76px;
+    }
+    .cms-sde-home.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -81px;
+    }
+    .sales-order-view .fujitsu-receipt-error-order-view {
+        width: 90%;
+        height: auto;
+        .fujitsu-receipt-error-order-view-box-inner {
+            width: 55px;
+        }
+        .fujitsu-receipt-error-order-view-msg {
+            width: 190px;
+            .fujitsu-receipt-error-order-view-notification-msg {
+                width: auto;
+            }
+        }
+        .fujitsu-receipt-error-order-view-close-icon {
+            padding-left: 0;
+        }
+    }
+}
+//Small laptop Screen
+@media (min-width: 767px) and (max-width:1024px) {
+    .is-fcl-global.sales-order-history .reorder-success {
+        top: 62px;
+    }
+    .is-fcl-global.sales-order-view .reorder-success {
+        top: -67px;
+    }
+    .is-fcl-global.sales-order-history .reorder-error {
+        top: 62px;
+    }
+    .is-fcl-global.sales-order-view .reorder-error {
+        top: -67px;
+    }
+    .is-fcl-global.sales-order-history .reorder-error-order-view {
+        top: 62px;
+    }
+    .is-fcl-global.sales-order-view .reorder-error-order-view {
+        top: -67px;
+    }
+    .is-fcl-global.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -82px;
+    }
+    .selfreg-store.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -97px;
+    }
+    .cms-sde-home.sales-order-view .fujitsu-receipt-error-order-view {
+        top: -122px;
+    }
+}
+
+@media print {
+    .order-retail-view .payment-information .sub-heading-order-view {
+        clear:both;
+        width:100%;
+        margin-bottom:20px;
+    }
+}
+
+//Product Configuration not available style
+.view-receipt .reorder-unavailable {
+    text-align: left;
+    color: @fx-red-100;
+    font-family: 'FedEx Sans Regular';
+    font-size: 14px;
+    line-height: 19px;
+    padding-left: 68px;
+    padding-top: 30px !important;
+}
+.view-receipt .reorder-unavailable p {
+    text-align:left;
+    color: @fx-red-100;
+    font-family: "FedEx Sans Light Italic";
+    font-size: 12px;
+    line-height: 15px;
+    margin-top: 8px;
+    padding-left: 33px;
+}
+.view-receipt .reorder-unavailable img {
+    width: 16px;
+    height: 16px;
+    padding-right: 14px;
+    margin-bottom: -5px;
+}
+@media (min-width: 320px) and (max-width: 767px) {
+    .view-receipt .reorder-unavailable {
+        padding-bottom: 30px !important;
+    }
+}
+@media (min-width: 768px) and (max-width: 1199px) {
+    .view-receipt .reorder-unavailable p {
+        padding-right: 70px;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset .filters-collapse .filters-collapse {
+        margin-left: 0;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset:first-of-type {
+        margin-bottom: 0px;
+        display: flex;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info .retails-sku {
+        width: 60% !important;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info .filters-collapse {
+        width: 40% !important;
+    }
+    .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search {
+        padding-top: 10px;
+        margin-top: 25px;
+        padding-bottom: 15px;
+    }
+}
+.account.is-fcl-global.sales-order-view .column.main {
+    margin-top: -16px;
+}
+.order-actions-toolbar .retail-reorder-action.disable-link .reorder-btn-view {
+    pointer-events: none;
+    border: 0;
+    background: #cccccc;
+    color: @fx-white-100;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: 'FedEx Sans Bold';
+    opacity: unset;
+}
+.order-actions-toolbar .retail-reorder-action .reorder-btn-view {
+    border: 0;
+    background: @fx-orange-500;
+    color: @fx-white-100;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: 'FedEx Sans Bold';
+}
+@media (min-width: 320px) and (max-width: 767px) {
+    .retail-orders .pages {
+        display:none;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table tr td .item-img {
+        padding-left: 10px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.show-details {
+        border-bottom: 0px;
+    }
+    .sales-order-history .retail-order-history-enhancement ~ .page-wrapper .retail-reorder .order-items-row .order-items-table table.table.order-item td.hide-details {
+        border-bottom: 0px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.qty {
+        padding-top: 0px !important;
+        padding-bottom: 12px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.discount {
+        padding-top: 0px !important;
+        padding-bottom: 12px;
+    }
+    .order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+        padding-top: 0px !important;
+        padding-bottom: 15px;
+    }
+    .view-receipt .reorder-unavailable {
+        padding-bottom: 15px !important;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .fieldset #filter-close-btn {
+        margin-top: 0px !important;
+    }
+    .sales-order-history .retail-my-orders-search-advanced.retail-reorder-button .fieldset.info.extra-order-search .upper-container-options .field-action {
+        padding-top: 25px;
+    }
+}
+.retail-orders select {
+    border: 0;
+}
+.retail-orders .pages .action {
+    border: 0;
+}
+.table-wrapper.order-items.retail-print-order img.preview-product-img {
+    height: 74px !important;
+}
+.table-wrapper.order-items.retail-print-order .options {
+    padding-bottom: 0px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.price {
+    padding-top: 35px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.qty {
+    padding-top: 35px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.discount {
+    padding-top: 35px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr > td.total {
+    padding-top: 35px;
+}
+.order-retail-view .block.block-order-details-view.retail-print-order table.data.table.table-order-print-items > tbody > tr.show-hide-detail > td {
+    padding-top: 0px;
+}
+//B-1311179 Order print view fixes
+.cms-sde-home.sales-order-print {
+	.product-image-container {
+        border: none;
+        .preview-product-img {
+            width: 54px !important;
+            height: 69px !important;
+        }
+		span.retail-order-item-name {
+			left: 70px;
+			top: -60px;
+		}
+	}
+    .epro-order-history-enhancement ~ .page-wrapper h1.page-title {
+        margin-top: 30px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .account.sales-order-history .block-collapsible-nav .title {
+        height: 50px !important;
+    }
+    .retail-print-order-enhancement h1.page-title {
+        font-family: "FedEx Sans Light";
+        font-size: 32px;
+        font-weight: 300;
+        letter-spacing: 0;
+        line-height: 40px;
+        margin: 4px 0px;
+    }
+}
+//B-1316868: Include estimated shipping total in order history and print view
+@media print {
+    .sales-order-print {
+        .estimated-shipping-total {
+            border-top: none !important;
+
+            .label.shipping {
+                border-top: 1px solid #ced5d9;
+            }
+        }
+    }
+}
+
+.sales-order-view {
+    .estimated-shipping-total {
+        border-top: 1px solid #ced5d9;
+    }
+}
+
+.sales-order-print {
+    .estimated-shipping-total {
+        border-top: 1px solid #ced5d9;
+    }
+}
+
+.discount-breakdown {
+    .retail-order-view-subtotal-view {
+	td span#discdrop {
+	    font-family: 'FedEx Sans Light' !important;
+	    font-size: 16px;
+	    line-height: 24px;
+	    text-align: right;
+	    color:  @fx-grey-1200;
+	}
+        .arrow-down {
+            transform: rotate(-180deg);
+           -webkit-transform: rotate(-180deg);
+        }
+        .up {
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            display: inline-block;
+            border-bottom: 10px solid black;
+            border-top:0px;
+            margin-left: 10px;
+        }
+        tr.discount_breakdown td {
+            padding-right:0px !important;
+        }
+        .discount_breakdown_table tr:last-child {
+            border-bottom: 1px solid #CED5D9;
+        }
+        .discount_breakdown_table th {
+            font-family: @discountfontFamilyLight;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            color: @summaryTotalColor;
+            font-weight: 400;
+        }
+        .discount_breakdown_table td.amount {
+            padding-right:0px;
+            text-align: right;
+            color: @discountGreenColor;
+            font-weight: bold;
+        }
+        .discount_breakdown_table td.amount span {
+            color: @discountGreenColor !important;
+            font-weight:bold;
+        }
+        .total-disc td.price-total-discount {
+            font-weight:bold;
+        }
+        .total-disc td span#discdrop {
+            font-family: @discountfontFamilyLight !important;
+            font-size: 16px;
+            line-height: 24px;
+            text-align: left;
+            color: @summaryTotalColor;
+        }
+    }
+}
+
+.fujitsu-receipt-error-order-view {
+    width: 500px;
+    height: 50px;
+    background: @fujitsuErrorModelBackgroundColor;
+    border: 1px solid @fujitsuErrorModelBorderColor;
+    display: -webkit-inline-box;
+    position: absolute;
+    z-index: 999;
+    margin: 0px auto;
+    left: 0;
+    right: 0;
+    box-shadow: 0 2px 6px @popupModelBorderColor;
+    .fujitsu-receipt-error-order-view-msg {
+        width: 400px;
+        padding: 12px 0px 12px 16px;
+        .fujitsu-receipt-error-order-view-notification-msg {
+            width: 380px;
+            font-family: @fontFamilyRegular;
+            font-size: 14px;
+            line-height: 24px;
+            letter-spacing: normal;
+        }
+    }
+    .fujitsu-receipt-error-order-view-box-inner {
+        background-color: @fujitsuErrorModelBorderColor;
+        width: 55px;
+        img {
+            transform: translate3d(-50%,-50%,0);
+            position: relative;
+            height: 40px;
+            width: 40px;
+            top: 50%;
+            left: 50%;
+            z-index: 999;
+        }
+    }
+    .fujitsu-receipt-error-order-view-close-icon {
+        padding-top: 12px;
+        font-size: 14px;
+        cursor: pointer;
+        z-index: 999;
+    }
+    .fujitsu-receipt-error-order-view-close-icon:before {
+        color: @summaryTotalColor;
+        content: "\e616";
+        font-family: "luma-icons";
+    }
+}

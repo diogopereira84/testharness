@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+    <!-- Schedule Cron once a day at 4 AM update order due to script time out pending to New-->
+    <group id="fedex_oms_crongroup">
+        <job name="magento_order_pending_status" instance="Fedex\SubmitOrderSidebar\Cron\PendingOrderCollectionCron" method="getPendingStatusOrderCollection">
+            <config_path>fedex/cron_configuration/orders_pending_status_cron</config_path>
+        </job>
+    </group>
+</config>

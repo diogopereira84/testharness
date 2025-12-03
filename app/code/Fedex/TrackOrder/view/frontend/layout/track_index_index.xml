@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <link src="Fedex_TrackOrder::js/navigation.js"/>
+        <link src="Fedex_TrackOrder::js/handleTrackOrderForm.js"/>
+    </head>
+    <body>
+        <attribute name="class" value="track-order-module"/>
+        <move element="page.main.title" destination="columns" before="-" />
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="template" xsi:type="string">Order Tracking</argument>
+            </action>
+        </referenceBlock>
+        <referenceBlock name="account-and-credit-cards-link" remove="true" />
+        <referenceBlock name="preferences-link" remove="true" />
+        <referenceBlock name="customer-account-navigation-delimiter-b2b" remove="true" />
+        <referenceBlock name="customer-account-navigation-delimiter-1" remove="true" />
+        <referenceBlock name="customer-account-navigation-account-link" remove="true" />
+        <referenceBlock name="company-customer-account-navigation-orders-link" remove="true" />
+        <referenceBlock name="customer-account-navigation-quotes-link" remove="true" />
+        <referenceBlock name="customer_account_navigation" remove="true" />
+        <referenceContainer name="customer_account_navigation" remove="true" />
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" before="main">
+                <block class="Fedex\TrackOrder\Block\Link\TrackOrder" name="track-order-link">
+                    <arguments>
+                        <argument name="path" xsi:type="string">track</argument>
+                        <argument name="label" xsi:type="string">Track My Print Order</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Fedex\TrackOrder\Block\Order\OrderDetails" name="trackorder_home_index" template="Fedex_TrackOrder::track_order_home.phtml" >
+                <arguments>
+                    <argument name="track_order_home_view_model" xsi:type="object">Fedex\TrackOrder\ViewModel\TrackOrderHome</argument>
+                </arguments>
+                <block class="Fedex\TrackOrder\Block\Order\OrderDetails" name="trackorder_order_details_page" template="Fedex_TrackOrder::order_details_page.phtml">
+                    <arguments>
+                        <argument name="track_order_home_view_model" xsi:type="object">Fedex\TrackOrder\ViewModel\TrackOrderHome</argument>
+                    </arguments>
+                </block>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

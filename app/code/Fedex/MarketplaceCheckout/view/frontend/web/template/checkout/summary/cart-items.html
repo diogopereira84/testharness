@@ -1,0 +1,125 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="block items-in-cart" data-bind="mageInit: {'collapsible':{'openedState': 'active', 'active': true}}">
+    <div class="title" data-role="title" data-testid="order-summary-button-collapsible-items-in-cart">
+        <strong role="heading" aria-level="1">
+            <translate args="maxCartItemsToDisplay" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <translate args="'of'" if="maxCartItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span data-bind="text: getCartSummaryItemsCount().toLocaleString(window.LOCALE)"></span>
+            <translate args="'Item in Cart'" if="getCartSummaryItemsCount() === 1"></translate>
+            <translate args="'Items in Cart'" if="getCartSummaryItemsCount() > 1"></translate>
+        </strong>
+    </div>
+    <div class="content minicart-items" data-role="content" data-bind="visible: Boolean( getCartSummaryItemsCount() )">
+        <div class="minicart-items-wrapper" aria-hidden="true">
+
+            <!-- ko if: hasSpecificDeliveryMethodProducts('pick-up')-->
+            <div class="summary-pickup-delivery-method-wrapper">
+                <!-- ko ifnot: isQuotePriceDashable() -->
+                <h3 class="shipping-method-title"><span data-bind="i18n: 'In-store pickup'"></span></h3>
+                <!-- /ko -->
+                <each args="items()">
+                    <!-- ko if: shipping_method === 'pick-up' -->
+                    <h4 class="seller-title">
+                        <span data-bind="text: name"></span>
+                        <!-- ko if: qtyPerSeller === 1 -->
+                        <span data-bind="text: '('+ qtyPerSeller + ' item)'"></span>
+                        <!-- /ko -->
+                        <!-- ko if: qtyPerSeller > 1 -->
+                        <span data-bind="text: '(' + qtyPerSeller + ' items)'"></span>
+                        <!-- /ko -->
+                    </h4>
+                    <div class="wrapper">
+                        <ol class="minicart-items" data-bind="foreach: products">
+                            <li class="product-item">
+                                <div class="product">
+                                    <each args="$parents[1].elems()" render=""></each>
+                                </div>
+                            </li>
+                        </ol>
+                    </div>
+                    <!-- /ko -->
+                </each>
+            </div>
+            <!-- /ko -->
+
+            <!-- ko if: hasSpecificDeliveryMethodProducts('shipping' )-->
+            <div class="summary-shipping-delivery-method-wrapper">
+                <!-- ko ifnot: isQuotePriceDashable() -->
+                <h3 class="shipping-method-title"><span data-bind="i18n: 'Shipping'"></span></h3>
+                <!-- /ko -->
+                <each args="items()">
+                    <!-- ko if: shipping_method === 'shipping' -->
+                    <h4 class="seller-title">
+                        <span data-bind="text: name"></span>
+                        <!-- ko if: qtyPerSeller === 1 -->
+                        <span data-bind="text: '(' + qtyPerSeller + ' item)'"></span>
+                        <!-- /ko -->
+                        <!-- ko if: qtyPerSeller > 1 -->
+                        <span data-bind="text: '(' + qtyPerSeller + ' items)'"></span>
+                        <!-- /ko -->
+                    </h4>
+                    <div class="wrapper">
+                        <ol class="minicart-items" data-bind="foreach: products">
+                            <li class="product-item">
+                                <div class="product">
+                                    <each args="$parents[1].elems()" render=""></each>
+                                </div>
+                            </li>
+                        </ol>
+                        <!-- ko ifnot: $parent.isQuotePriceDashable() -->
+                        <div class="shipping-method">
+                            <div class="wrapper d-flex v-center">
+                                <span data-bind="i18n: 'Shipping:'"></span>
+                                <span class="method weight-300 fs-0 fs-16 fedex-light " data-bind="text: shipping"></span>
+                            </div>
+                            <!-- ko if: $parent.enableShippingFreeText() -->
+                            <span class="" data-bind="text: shippingPrice, class: $parent.shippingCostClass(shippingPrice)"></span>
+                            <!-- /ko -->
+                            <!-- ko ifnot: $parent.enableShippingFreeText() -->
+                            <span class="price weight-300 fs-0 fs-16 fedex-light" data-bind="text: shippingPrice"></span>
+                            <!-- /ko -->
+                        </div>
+                        <!-- ko if: $parent.isMarketplaceFreightShippingEnabled && surcharge -->
+                        <div class="shipping-method">
+                            <div class="wrapper d-flex v-center ml-25">
+                                <span class="method weight-400 fs-12 text-italic fedex-italic" data-bind="text: $parent.marketplaceFreightSurchargeText"></span>
+                                <span class="method weight-400 fs-12 fedex-regular" data-bind="html: surcharge"></span>
+                            </div>
+                        </div>
+                        <!-- /ko -->
+                        <!-- ko if: $parent.isExpectedDeliveryDateEnabled -->
+                        <div class="expected-delivery-date">
+                            <div class="wrapper d-flex v-center">
+                                <span data-bind="i18n: 'Expected Delivery:'"></span>
+                                <span class="method weight-300 fs-0 fs-16 fedex-light" data-bind="text: expectedDelivery"></span>
+                            </div>
+                            <span class="price weight-300 fs-0 fs-16 fedex-light" data-bind="text: defaultExpectedDelivery"></span>
+                        </div>
+                        <!-- /ko -->
+                        <div if="(name === 'FedEx Office' || seller_ship_account_enabled) && $parent.isLocalDeliveryShippingAccount()" class="estimated-shipping-message">
+                            <div>To be charged to your FedEx Shipping account ending in *<span class="masked-shipping-account-number"></span> and is excluded from the total order cost.</div>
+                        </div>
+                        <div  if="!seller_ship_account_enabled && name !== 'FedEx Office' && $parent.isLocalDeliveryShippingAccount() && $parent.shouldDisplayShippingAccountDisclaimerFor3P()" class="estimated-shipping-message">
+                            <div data-bind="text: $parent.vendorShippingAccountDisclaimer"></div>
+                        </div>
+                        <!-- /ko -->
+                    </div>
+                    <!-- /ko -->
+                </each>
+            </div>
+            <!-- /ko -->
+        </div>
+    </div>
+    <div class="actions-toolbar" if="maxCartItemsToDisplay < getCartLineItemsCount()">
+        <div class="secondary">
+            <a class="action viewcart" data-bind="attr: {href: cartUrl}">
+                <span data-bind="i18n: 'View and Edit Cart'"></span>
+            </a>
+        </div>
+    </div>
+</div>

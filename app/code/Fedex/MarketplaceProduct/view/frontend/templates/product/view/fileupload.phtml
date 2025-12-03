@@ -1,0 +1,110 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var Magento\Catalog\Block\Product\View $block*/
+
+$product   = $block->getProduct();
+$viewModel = $block->getData('view_model');
+
+/**@var Fedex\MarketplaceProduct\ViewModel\Product\Attribute $mktpProductViewModel*/
+$mktpProductViewModel = $block->getData('viewModel');
+$productViewModel = $block->getData('product_availability_view_model');
+
+$ctaValue = $product->getData('cta_value') ?: 'Explore Options';
+
+$hasOffers = $mktpProductViewModel->hasAvailableOffersForProduct();
+
+$url = $sku = '';
+
+if ($hasOffers)
+{
+    $productInfo = $mktpProductViewModel->getMarketplaceInfo();
+
+    $url = $productInfo['url'];
+    $punchoutEnabled = $productInfo['punchout_enable'];
+    $punchoutUrl = $productInfo['punchout_url'];
+    $skuInfo = $productInfo['sku_info'];
+    $cbbToggleEnabled = $productInfo['cbb_toggle'];
+
+    $offer = $mktpProductViewModel->getBestOffer();
+    list($minQty, $maxQty, $punchoutDisabled) = $mktpProductViewModel->getMinMaxPunchoutInfo($offer, $product);
+    $sku = $offer->getProductSku();
+}
+
+$isUnavailable = !$productViewModel->checkProductAvailable($product);
+$isD228743ToggleEnabled = $productViewModel->isTigerTeamD228743ToggleEnabled();
+$unavailableMessageCssClass = $isUnavailable ? 'disabled-button' : '';
+
+if ($isD228743ToggleEnabled || $isUnavailable) {
+    echo $block->getChildHtml('pdp.unavailable.message');
+}
+
+$categoriesData = [];
+
+if ($mktpProductViewModel->isMoveReferenceFromStoreToCategoryToggleEnabled()) {
+    $categoriesData = $mktpProductViewModel->getCategoryAttributes($product);
+}
+
+if($mktpProductViewModel->isEssendantToggleEnabled() && $mktpProductViewModel->isConfigurableProduct())
+{
+    $sku = $product->getSku();
+}
+?>
+
+<?php if ($hasOffers && $punchoutDisabled && $mktpProductViewModel->isEssendantToggleEnabled()): ?>
+    <form class="file-upload-container" method="post" action="<?= $block->getUrl('marketplaceproduct/addtocart/index') ?>">
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey(); ?>" />
+        <input id="hidden-product-sku" type="hidden" name="sku" value="<?= $sku ?>"/>
+        <input id="hidden-product-punchout" type="hidden" name="punchout_disabled" value="<?= (int)$punchoutDisabled ?>"/>
+        <input id="hidden-product-qty" type="hidden" name="qty" value="1" />
+        <input id="hidden-product-offer-id" type="hidden" name="offer_id" value="<?= $offer->getOfferId() ?>"/>
+        <input id="hidden-product-super_attribute" type="hidden" name="super_attribute" value=""/>
+        <input class="btn-primary mb-16 <?= $unavailableMessageCssClass;?>" id="add-to-cart-button" type="button" value="<?= $ctaValue ?>"
+               data-testid="marketplace-configuration-button"/>
+    </form>
+<?php elseif ( $hasOffers ): ?>
+    <form class="file-upload-container">
+
+        <input name="form_key" type="hidden" value="<?php echo $block->getFormKey(); ?>" />
+
+        <input
+            class="btn-primary mb-20 <?= $unavailableMessageCssClass;?>"
+            id="upload-a-file-button"
+            <?php if (!$cbbToggleEnabled || !$punchoutEnabled): ?>
+                onclick="window.location='<?php echo $url ?>'"
+            <?php endif; ?>
+            type="button"
+            value="<?= $ctaValue ?>"
+            data-testid="marketplace-configuration-button"
+        />
+
+        <?php if ($cbbToggleEnabled && $punchoutEnabled): ?>
+            <script type="text/x-magento-init">
+                {
+                    "#upload-a-file-button": {
+                        "Fedex_MarketplacePunchout/js/pdp-punchout": {
+                            "payload": {
+                                "sku":"<?= $skuInfo['sku'] ?>",
+                                "offer_id":"<?= $skuInfo['offer_id'] ?>",
+                                "seller_sku":"<?= $skuInfo['seller_sku'] ?>",
+                                "source": "PDP"
+                            },
+                            "form_action": "<?= $escaper->escapeUrl($punchoutUrl) ?>",
+                            "error_url":"<?= $escaper->escapeUrl($block->getBaseUrl()) ?>"
+                        }
+                    }
+                }
+            </script>
+        <?php endif; ?>
+
+        <?php if ( $mktpProductViewModel->productHasCanvaDesign() ): ?>
+            <input
+                class="btn-secondary mb-20 <?= $unavailableMessageCssClass;?>"
+                id="browse-template-button"
+                onclick=""
+                type="button"
+                value="BROWSE DESIGN TEMPLATES"
+            />
+        <?php endif; ?>
+
+    </form>
+<?php endif; ?>

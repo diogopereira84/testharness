@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\WebAnalytics\Api\Data\NewRelicInterface" type="Fedex\WebAnalytics\Model\NewRelic"/>
+    <preference for="Fedex\WebAnalytics\Api\Data\ContentSquareInterface" type="Fedex\WebAnalytics\Model\ContentSquare"/>
+    <preference for="Fedex\WebAnalytics\Api\Data\AppDynamicsConfigInterface" type="Fedex\WebAnalytics\Model\AppDynamicsConfigConfig"/>
+    <preference for="Fedex\WebAnalytics\Api\Data\GDLConfigInterface" type="Fedex\WebAnalytics\Model\GDLConfig"/>
+    <preference for="Fedex\WebAnalytics\Model\CmsPage\PageTypeResolverInterface" type="Fedex\WebAnalytics\Model\CmsPage\PageTypeResolver"/>
+    <preference for="Fedex\WebAnalytics\Api\Data\NuanceInterface" type="Fedex\WebAnalytics\Model\Nuance"/>
+
+    <type name="Magento\Widget\Model\Widget\Instance">
+        <plugin name="conversion_tracking_plugin_after_get_widget_parameters" type="Fedex\WebAnalytics\Plugin\Model\Widget\Instance\AfterGetWidgetParameters" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Widget\Model\Widget">
+        <plugin name="conversion_tracking_plugin_before_get_widget_declaration" type="Fedex\WebAnalytics\Plugin\Model\Widget\BeforeGetWidgetDeclaration" sortOrder="10" disabled="false"/>
+    </type>
+</config>

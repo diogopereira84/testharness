@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\FXOPricing\Api\Data\AlertInterface" type="Fedex\FXOPricing\Model\Data\Alert"/>
+    <preference for="Fedex\FXOPricing\Api\Data\AlertCollectionInterface" type="Fedex\FXOPricing\Model\Data\Alert\Collection"/>
+
+    <preference for="Fedex\FXOPricing\Api\Data\RateInterface" type="Fedex\FXOPricing\Model\Data\Rate"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDiscountInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\Discount"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDiscountCollectionInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\Discount\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDetailInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDetailCollectionInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDeliveryLineInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\DeliveryLine"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDeliveryLineCollectionInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\DeliveryLine\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDeliveryLineDiscountInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\DeliveryLine\Discount"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateDeliveryLineDiscountCollectionInterface" type="Fedex\FXOPricing\Model\Data\Rate\Detail\DeliveryLine\Discount\Collection"/>
+
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteInterface" type="Fedex\FXOPricing\Model\Data\RateQuote"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDiscountInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\Discount"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDiscountCollectionInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\Discount\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDetailInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDetailCollectionInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDeliveryLineInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\DeliveryLine"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDeliveryLineCollectionInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\DeliveryLine\Collection"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDeliveryLineDiscountInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\DeliveryLine\Discount"/>
+    <preference for="Fedex\FXOPricing\Api\Data\RateQuoteDeliveryLineDiscountCollectionInterface" type="Fedex\FXOPricing\Model\Data\RateQuote\Detail\DeliveryLine\Discount\Collection"/>
+
+    <preference for="Fedex\FXOPricing\Api\RateAlertBuilderInterface" type="Fedex\FXOPricing\Model\RateAlertBuilder"/>
+
+    <preference for="Fedex\FXOPricing\Api\RateBuilderInterface" type="Fedex\FXOPricing\Model\RateBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateDetailBuilderInterface" type="Fedex\FXOPricing\Model\Rate\DetailBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateDiscountBuilderInterface" type="Fedex\FXOPricing\Model\Rate\Detail\DiscountBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateDeliveryLineBuilderInterface" type="Fedex\FXOPricing\Model\Rate\Detail\DeliveryLineBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateDeliveryLineDiscountBuilderInterface" type="Fedex\FXOPricing\Model\Rate\Detail\DeliveryLine\DiscountBuilder"/>
+
+    <preference for="Fedex\FXOPricing\Api\RateQuoteBuilderInterface" type="Fedex\FXOPricing\Model\RateQuoteBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateQuoteDetailBuilderInterface" type="Fedex\FXOPricing\Model\RateQuote\DetailBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateQuoteDiscountBuilderInterface" type="Fedex\FXOPricing\Model\RateQuote\Detail\DiscountBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateQuoteDeliveryLineBuilderInterface" type="Fedex\FXOPricing\Model\RateQuote\Detail\DeliveryLineBuilder"/>
+    <preference for="Fedex\FXOPricing\Api\RateQuoteDeliveryLineDiscountBuilderInterface" type="Fedex\FXOPricing\Model\RateQuote\Detail\DeliveryLine\DiscountBuilder"/>
+
+    <type name="Magento\Quote\Model\Quote\Item\Option">
+        <plugin name="fedex_fxopricing_quote_item_option" type="Fedex\FXOPricing\Plugin\QuoteItemOptionPlugin" />
+    </type>
+</config>

@@ -1,0 +1,213 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="block-title">
+    <strong>
+        <span class="text" translate="'My Cart'"></span>
+        <span
+            class="qty empty"
+            text="getCartParam('summary_count')"
+            data-bind="css: { empty: !!getCartParam('summary_count') == false },
+                       attr: { title: $t('Items in Cart') }">
+        </span>
+    </strong>
+</div>
+
+<div class="block-content" data-bind="attr: {class: getDiscountBreakdownClass()}">
+    <button type="button"
+            id="btn-minicart-close"
+            class="action close"
+            data-action="close"
+            data-bind="
+                attr: {
+                    title: $t('Close')
+                },
+                click: closeMinicart
+            ">
+        <span translate="'Close'"></span>
+    </button>
+
+    <if args="getCartParam('summary_count')">
+        <div class="items-total">
+            <span class="count" if="maxItemsToDisplay < getCartLineItemsCount()" text="maxItemsToDisplay"></span>
+            <translate args="'of'" if="maxItemsToDisplay < getCartLineItemsCount()"></translate>
+            <span class="count" text="getCartParam('summary_count').toLocaleString(window.LOCALE)"></span>
+                <!-- ko if: (getCartParam('summary_count') > 1) -->
+                    <span translate="'Items in Cart'"></span>
+                <!--/ko-->
+                <!-- ko if: (getCartParam('summary_count') == 1) -->
+                    <span translate="'Item in Cart'"></span>
+                <!--/ko-->
+        </div>
+
+        <each args="getRegion('subtotalContainer')" render=""></each>
+        <each args="getRegion('extraInfo')" render=""></each>
+
+        <div class="actions" if="getCartParam('possible_onepage_checkout')">
+            <div class="primary">
+                <!-- ko if: isFclCustomer() && !isCheckoutQuotePriceDashable() -->
+                <button
+                    id="mini-cart-express-checkout"
+                    type="button"
+                    class="action primary checkout checkout-mini express-checkout-cart-button"
+                    data-bind="
+                        attr: {
+                            title: $t('Express Checkout'),
+                            disabled: hasDisabledProducts() || !isBundleFullySetup()
+                        },
+                        css: hasDisabledProducts() ? 'disabled' : ''  + (isProductUnavailable() ? ' disabled-button' : '')
+                    "
+                    translate="'Express Checkout'"
+                >
+                </button>
+                <!-- /ko -->
+                <!-- ko if: !isCheckoutQuotePriceDashable() -->
+                <button
+                        id="top-cart-btn-checkout"
+                        type="button"
+                        class="action primary checkout checkout-mini non-express-checkout-cart"
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Proceed to Checkout'),
+                                disabled: hasDisabledProducts() || !isBundleFullySetup()
+                            },
+                            click: closeMinicart,
+                            css: (getCartParam('expired_msg') || hasDisabledProducts()) || isLegacyProduct() ? 'disabled' : '' + (isProductUnavailable() || !isBundleFullySetup() ? ' disabled-button' : ''),
+                        "
+                        translate="'Proceed to Checkout'">
+                </button>
+                <!-- /ko -->
+                <!-- ko if: isCheckoutQuotePriceDashable() -->
+                <button
+                        id="top-cart-btn-checkout"
+                        type="button"
+                        class="action primary checkout checkout-mini non-express-checkout-cart"
+                        data-action="close"
+                        data-bind="
+                            attr: {
+                                title: $t('Proceed With Quote Request')
+                            },
+                            click: closeMinicart,
+                            css: getCartParam('expired_msg') || isLegacyProduct() ? 'disabled' : '' + (isProductUnavailable() || !isBundleFullySetup() ? ' disabled-button' : '')
+                        "
+                        translate="'Proceed With Quote Request'" tabindex="0">
+                </button>
+                <!-- /ko -->
+                <div data-bind="html: getCartParamUnsanitizedHtml('extra_actions')"></div>
+            </div>
+        </div>
+        <!-- ko if: isProductUnavailable() -->
+        <div class="cart-error-message d-flex mb-24">
+            <span class="info-icon"></span>
+            <div class="cl-error">
+                <i class="fs-14 lh-24" data-bind="html: getCartParamUnsanitizedHtml('unavailable_cart_msg')"></i>
+            </div>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: isLegacyProduct() -->
+        <div class="cart-error-message d-flex mb-24">
+            <div class="cl-error">
+                <i class="fs-18 lh-24" data-bind="html: getCartParamUnsanitizedHtml('getCartItemExpiredMessage')"></i>
+            </div>
+        </div>
+        <!-- /ko -->
+        <!-- ko if: !isCheckoutQuotePriceDashable() -->
+        <div class="promotional-msg">
+            <!-- ko i18n: 'Promotional discounts will appear in your cart summary during checkout.' --><!-- /ko -->
+        </div>
+        <!-- /ko -->
+    </if>
+
+    <if args="getCartParam('summary_count')">
+        <strong class="subtitle" translate="'Recently added item(s)'"></strong>
+        <div class="minicart-msg-wrapper">
+            <!-- ko if: (getCartParam('is_expired') === true && getCartParam('expired_msg')) && !hasDisabledProducts() -->
+            <div class="minicart-expireditem-err-msg-outer-most-info">
+                <div class="minicart-expired-err-msg-outer-info-container">
+                    <div class="icon-container">
+                        <span>
+                            <img class="img-info-icon" alt="Check icon" data-bind="attr: { src: window.mediaJsImgpath + 'wysiwyg/images/expired-icon.png' }">
+                        </span>
+                    </div>
+                    <div class="message">
+                        <span data-bind="html: getCartParamUnsanitizedHtml('expired_msg')"></span>
+                    </div>
+                </div>
+            </div>
+            <!--/ko-->
+            <!-- ko if: (getCartParam('is_expiry') === true && getCartParam('expiry_msg') && !getCartParam('expired_msg')) && !hasDisabledProducts() -->
+            <div class="minicart-expiryitem-warning-msg-outer-most-info">
+                <div class="minicart-expiry-warning-msg-outer-info-container">
+                    <div class="icon-container">
+                        <span>
+                            <img class="img-info-icon" alt="Check icon" data-bind="attr: { src: window.mediaJsImgpath + 'wysiwyg/images/expiring-icon.png' }">
+                        </span>
+                    </div>
+                    <div class="message">
+                        <span data-bind="html: getCartParamUnsanitizedHtml('expiry_msg')"></span>
+                    </div>
+                </div>
+            </div>
+            <!--/ko-->
+            <!-- ko if: hasDisabledProducts() -->
+            <div class="minicart-expireditem-err-msg-outer-most-info">
+                <div class="minicart-expired-err-msg-outer-info-container">
+                    <div class="icon-container">
+                        <span>
+                            <img class="img-info-icon" alt="Check icon" data-bind="attr: { src: window.mediaJsImgpath + 'wysiwyg/images/expired-icon.png' }">
+                        </span>
+                    </div>
+                    <div class="message">
+                        <span data-bind="html: getCartParamUnsanitizedHtml('product_engine_expired')"></span>
+                    </div>
+                </div>
+            </div>
+            <!-- /ko -->
+        </div>
+        <div data-action="scroll" class="minicart-items-wrapper">
+            <!-- ko foreach: {data: cartItems(), as: 'sellers'} -->
+            <div data-bind="attr: {class: 'mini-cart seller-' + $index()}">
+                <div class="seller-name-area">
+                    <p class="seller-name" data-bind="text: sellers.quantityContent"></p>
+                </div>
+                <ol class="minicart-items" data-bind="foreach: { data: sellers.products, as: 'item' }, attr: {id: 'mini-cart-' + $index()}">
+                    <each args="$parents[1].getRegion($parents[1].getItemRenderer(item.product_type))"
+                        render="{name: getTemplate(), data: item, afterRender: function() {$parents[2].initSidebar()}}"></each>
+                </ol>
+            </div>
+            <!-- /ko -->
+        </div>
+    </if>
+
+    <ifnot args="getCartParam('summary_count')">
+        <strong class="subtitle empty"
+                translate="'You have no items in your shopping cart.'"></strong>
+        <if args="getCartParam('cart_empty_message')">
+            <p class="minicart empty text" text="getCartParam('cart_empty_message')"></p>
+            <div class="actions">
+                <div class="secondary">
+                    <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                        <span translate="'View and Edit Cart'"></span>
+                    </a>
+                </div>
+            </div>
+        </if>
+    </ifnot>
+
+    <div class="actions" if="getCartParam('summary_count')">
+        <div class="secondary">
+            <a class="action viewcart" data-bind="attr: {href: shoppingCartUrl}">
+                <span translate="'View and Edit Cart'"></span>
+            </a>
+        </div>
+    </div>
+
+    <div id="minicart-widgets" class="minicart-widgets" if="regionHasElements('promotion')">
+        <each args="getRegion('promotion')" render=""></each>
+    </div>
+</div>
+<each args="getRegion('sign-in-popup')" render=""></each>

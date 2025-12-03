@@ -1,0 +1,49 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$defaultSiteLogoIcon = $block->getViewFileUrl('Fedex_EnhancedProfile::images/sitelogo.png');
+$companyLogoImage = $this->getCompanyLogo();
+if ($companyLogoImage) {
+    $defaultSiteLogoIcon = $companyLogoImage;
+}
+?>
+<li class="site-logo-content">
+    <h3 class="site-logo-label">
+        <?= $escaper->escapeHtml(__("Preview for Site Logo")) ?>
+    </h3>
+    <div class="site-logo-img">
+        <img src="<?= $escaper->escapeHtmlAttr($defaultSiteLogoIcon) ?>"
+            id="site-logo-img-preview" class="site-logo-img-preview" alt="" />
+    </div>
+    <p class="max-size-allow-site-logo-warning">
+        <?= $escaper->escapeHtml(__("The file is bigger than the max size 2MB.")) ?>
+    </p>
+    <p class="upload-site-logo-warning" style="display:none;">
+        <?= $escaper->escapeHtml(__("Please upload the file")) ?>
+    </p>
+    <p class="allow-logo-type-warning">
+        <?= $escaper->escapeHtml(__("Allowed file types: JPG, PNG.")) ?>
+    </p>
+    <p class="site-logo-size-label">
+        <?= $escaper->escapeHtml(__("The container size of the site logo is  142 x 40 px.")) ?>
+    </p>
+    <p class="site-logo-file-type-label">
+        <?= $escaper->escapeHtml(__("Maximum file size: 2MB. Allowed file types: JPG. PNG.")) ?>
+    </p>
+    <div class="site-logo-button">
+        <input type="file" id="upload-site-logo" name="company_logo" class="upload-site-logo"
+        accept=".png, .jpg, .jpeg"></input>
+        <p class="upload-site-logo-image">
+            <button type="button" class="upload-site-logo-btn" id="upload-site-logo-btn">
+                <?= $escaper->escapeHtml(__("UPLOAD NEW IMAGE")) ?>
+            </button>
+        </p>
+        <p class="revert-site-logo-image">
+            <button type="button" class="revert-site-logo-btn disable" id="revert-site-logo-btn">
+                <?= $escaper->escapeHtml(__("REVERT")) ?>
+            </button>
+        </p>
+    </div>
+</li>

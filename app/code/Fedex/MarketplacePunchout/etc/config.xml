@@ -1,0 +1,79 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <fedex>
+            <navink_configuration>
+                <url>https://ufprgbdatasvccuat.navitor.com/api/punchout/fedexoffice</url>
+                <sender_shared_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted" />
+                <navitor_auth_url><![CDATA[https://ufpbrokersvccuat.navitor.com/api/taylorpunchout]]></navitor_auth_url>
+                <navitor_product_info_url><![CDATA[https://ufprgbdatasvccuat.navitor.com/api/Configuration]]></navitor_product_info_url>
+                <navitor_reorder_url><![CDATA[https://ufpconfigreordersvccuat.navitor.com/api/Reorder/bulk]]></navitor_reorder_url>
+            </navink_configuration>
+            <marketplace_configuration>
+                <marketplace_downtime_message_title>This Marketplace Seller site is undergoing maintenance</marketplace_downtime_message_title>
+                <marketplace_downtime_message_body>Customizations to this product are temporarily unavailable. Return to this product later or continue shopping. We appreciate your patience.</marketplace_downtime_message_body>
+                <mock_payload_enabled>0</mock_payload_enabled>
+                <mock_payload_skus></mock_payload_skus>
+                <mock_payload><![CDATA[<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<cXML xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" payloadID="8378c7ed-6c82-42be-ae52-09c1cae7f194" timestamp="9/27/2024 3:03 PM" xml:lang="en-US">
+	<Header>
+		<From>
+			<Credential domain="DUNS">
+				<Identity>964849165</Identity>
+			</Credential>
+		</From>
+		<To>
+			<Credential domain="DUNS">
+				<Identity>123456789</Identity>
+			</Credential>
+		</To>
+		<Sender>
+			<Credential domain="NetworkId">
+				<Identity/>
+				<SharedSecret>397752FExO!</SharedSecret>
+			</Credential>
+			<UserAgent>navINK 1.0</UserAgent>
+		</Sender>
+	</Header>
+	<Message>
+		<PunchOutOrderMessage>
+			<BuyerCookie>aeaab1de25866ba44987dbec926e366f</BuyerCookie>
+			<PunchOutOrderMessageHeader operationAllowed="edit">
+				<Total>
+					<Money currency="USD">6.78</Money>
+				</Total>
+			</PunchOutOrderMessageHeader>
+			<ItemIn itemType="item" lineNumber="1" quantity="20">
+				<ItemID>
+					<SupplierPartID>RACC6-C1-FF-FED3</SupplierPartID>
+					<SupplierPartAuxiliaryID>8378c7ed-6c82-42be-ae52-09c1cae7f194</SupplierPartAuxiliaryID>
+				</ItemID>
+				<ItemDetail>
+					<Description xml:lang="en-US">
+						<ShortName>5x7 Flat Holiday Card - Color Text - Two Sided w/Envelope</ShortName>
+					</Description>
+					<UnitOfMeasure>Cards</UnitOfMeasure>
+					<Classification domain="domain1">NA</Classification>
+					<UnitPrice>
+						<Money currency="USD">6.78</Money>
+					</UnitPrice>
+					<Extrinsic name="AccountNumber">397752D</Extrinsic>
+					<Extrinsic name="Customized">True</Extrinsic>
+					<Extrinsic name="ConfigurationCost">0.0000</Extrinsic>
+					<Extrinsic name="UnitPrice">0.3390</Extrinsic>
+					<Extrinsic name="UnitCost">0.0000</Extrinsic>
+					<Extrinsic name="ConfigEngine">UFPv1</Extrinsic>
+					<Extrinsic name="ProductionTime">2 Business Days</Extrinsic>
+					<Extrinsic name="Aspect">
+						<Extrinsic name="Name">Product Type</Extrinsic>
+						<Extrinsic name="Value">Mock Box</Extrinsic>
+					</Extrinsic>
+					<URL>https://www.office.fedex.com/media/wysiwyg/earlockmailer_customboxes_300x200_1.jpg</URL>
+				</ItemDetail>
+			</ItemIn>
+		</PunchOutOrderMessage>
+	</Message>
+</cXML>]]></mock_payload>
+            </marketplace_configuration>
+        </fedex>
+    </default>
+</config>

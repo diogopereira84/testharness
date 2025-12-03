@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="SimpleSearchTest">
+        <annotations>
+            <!-- Add feature and user story info from V1 -->
+            <features value=""/>
+            <stories value="Create Product"/>
+            <title value="Simply Search for a Product."/>
+            <description value="This tests visits the FXO Magento Marketplace Homepage and searches for flyers."/>
+            <severity value="MAJOR"/>
+            <group value="Search"/>
+        </annotations>
+        <before>
+            <!-- Visit the Magento Marketplace Homepage -->
+            <amOnPage url="default/home" stepKey="openHomepagePage" />
+            <waitForPageLoad stepKey="waitForHomePageOpened" />
+            <fillField selector="input#search.input-text.max-cart-limit" userInput="flyers" stepKey="fillSearchField" />
+            <click selector="button.action.search" stepKey="clickSearchButton" />
+        </before>
+        <after>
+            <!-- Logout from Admin panel -->
+        </after>
+    </test>
+</tests>
+

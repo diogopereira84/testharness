@@ -1,0 +1,267 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<section class="pickup-content new-pickup-selector pickup-location-list-container" aria-labelledby="pickup-heading"
+    data-bind="visible: pickupSearchResults().length > 0, attr: { 'aria-hidden': pickupSearchResults().length === 0 }">
+    <!-- Search Results -->
+    <header class="new-pickup-header border-top-iron mt-24">
+        <h2 id="pickup-heading" data-bind="text: checkoutPickupFormTitle">Pick up location</h2>
+
+        <div class="heading-flex">
+            <!-- ko if: isEproUploadtoQuoteToggle() -->
+            <p class="fs-16 fedex-light weight-500 ls-0 lh-24">Select the store you would like to receive the quote.</p>
+            <!-- /ko -->
+            <!-- ko ifnot: isEproUploadtoQuoteToggle() -->
+            <p class="fs-16 fedex-italic fedex-light weight-300 ls-0 lh-24">Select a FedEx store for pickup.</p>
+            <!-- /ko -->
+            <div class="toggle-container">
+                <span id="show-map" class="toggle-text">Show map</span>
+                <label class="toggle-switch" for="toggle-map-input">
+                    <input id="toggle-map-input" class="toggle-input" type="checkbox" role="switch" data-bind="
+                        checked: showMap,
+                        attr: { 'aria-checked': showMap() ? 'true' : 'false' }
+                        " data-testid="toggle-show-map" />
+                    <span class="slider round" aria-labelledby="show-map" tabindex="0"></span>
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <div class="map-canvas" id="googleMap" role="region" aria-label="Google Map for Pickup Locations"
+        data-bind="visible: showMap"></div>
+
+    <!-- HCO Info Message -->
+    <div class="hco-info-msg" role="alert"
+        data-bind="attr: { 'aria-hidden': !selectedPickupIsHCO() }, style: { display: selectedPickupIsHCO() ? 'block' : 'none' }">
+        <div class="hco-img">
+            <img class="img-hco-info" data-bind="attr: { src: hcoInfoIcon}" alt="HCO Info Icon" />
+        </div>
+        <div class="info-msg-hco">
+            <span class="hco-info-text">The location you have selected is within a hotel or convention center. Higher
+                rates may apply to products and services.</span>
+        </div>
+    </div>
+
+    <!-- Pickup Locations List -->
+    <ul class="pickup-location-item-container radius-pickup-location-item-container border-bottom-iron"
+        data-bind="foreach: visiblePickupLocations">
+        <li class="pickup-location-container mb-0">
+            <article class="box-container"
+                data-bind="attr: {'data-location-id': location.id}, css: { 'd-flex flex-col': $parent.isPromiseTimePickupOptionsToggle() }">
+                <!-- Location Selection Radio -->
+                <div class="custom-radio-btn pick-up-button">
+                    <input type="radio" name="pickup-location-radio" tabindex="0"
+                        data-testid="pickup-location-container-input-radio-option" data-bind="
+                            value: location.id,
+                            attr: {
+                                id: 'pickup-location-' + location.id,
+                                checked: $parent.selectedPickupLocation() && $parent.selectedPickupLocation().id === location.id
+                            },
+                            event: { change: $parent.selectPickupLocation.bind($parent, $data) }
+                        " />
+
+                    <label class="radio-label cursor-pointer" tabindex="0"
+                        data-bind="attr: { for: 'pickup-location-' + location.id }">
+                        <span class="mr-5 location-name" data-bind="text: location.name"></span>
+                    </label>
+
+                    <!-- Labels for Earliest/Closest -->
+                    <!-- ko if: $parent.isPromiseTimePickupOptionsToggle() -->
+                    <span class="fs-14 fedex-medium mr-15 ml-auto d-inline-block self-center cl-white earliest-label"
+                        data-bind="visible: $index() === $parent.koEarliestPickupLabelIndex()">Earliest
+                        Pickup</span>
+                    <span class="fs-14 fedex-medium mr-15 d-inline-block self-center cl-white closest-label"
+                        data-bind="visible: $index() === $parent.koClosestPickupLabelIndex(), css: { 'ml-auto': $parent.koEarliestPickupLabelIndex() !== $parent.koClosestPickupLabelIndex() }">Closest
+                        to You</span>
+                    <!-- /ko -->
+                    <span class="d-inline-block fedex-bold mt-10"
+                        data-bind="text: distance, css: { 'ml-auto': $parent.isPromiseTimePickupOptionsToggle() && $index() !== $parent.koEarliestPickupLabelIndex() && $index() !== $parent.koClosestPickupLabelIndex() }"></span>
+                </div>
+
+                <!-- Pickup Address -->
+                <address class="pickup-address"
+                    data-bind="css: { 'selected-item': $parent.selectedPickupLocation() && $parent.selectedPickupLocation().id === location.id }">
+                    <!-- Removed redundant hidden spans; assume JS can access data directly from bindings -->
+                    <span class="pickup-location-estimate-date sr-only"
+                        data-bind="text: estimatedDeliveryLocalTime"></span>
+                    <div class="pickup-location-address d-flex">
+                        <span class="fa fa-map-marker icon-grey">
+                            <img data-bind="attr: { src: $parent.mapMarkerIcon()}" alt="Map Marker Icon" />
+                        </span>
+                        <span class="pickup-location-address-data">
+                            <span class="pickup-location-street"
+                                data-bind="text: location.address.streetLines[0]"></span><span>,</span>
+                            <span class="pickup-location-city"
+                                data-bind="text: location.address.city"></span><span>,</span>
+                            <span class="pickup-location-state"
+                                data-bind="text: location.address.stateOrProvinceCode"></span><span>,</span>
+                            <span class="pickup-location-zipcode" data-bind="text: location.address.postalCode"></span>
+                        </span>
+                    </div>
+                    <!-- ko ifnot: $parent.isPromiseTimePickupOptionsToggle() -->
+                    <span class="earlist-label"
+                        data-bind="visible: $index() == $parent.koEarliestPickupLabelIndex() && !$parent.isEproUploadtoQuoteToggle()">Earliest
+                        Pickup</span>
+                    <!-- /ko -->
+                </address>
+
+                <!-- Recommended Store Label -->
+                <div class="recommended-store-label-pickup"
+                    data-bind="visible: ($index() === $parent.koEarliestPickupLabelIndex() || $index() === $parent.koClosestPickupLabelIndex() || is_recommended)">
+                    <span class="fa fa-star recommended-store-label-pickup-star" aria-hidden="true"></span>
+                    <span class="recommended-store-label-pickup-text">Recommended Store</span>
+                </div>
+
+                <!-- HCO Store Label -->
+                <div class="hco-store-label-pickup" data-bind="visible: location.premium == true">
+                    <span class="hco-luggage-icon">
+                        <img class="hco-luggage-icon-img"
+                            data-bind="attr: { src: window.mediaJsImgpath + 'wysiwyg/images/HCO_Luggage.png' }"
+                            alt="HCO Location Icon" />
+                    </span>
+                    <span class="hco-store-label-pickup-text">Hotel & Convention Location</span>
+                </div>
+
+                <!-- Pickup Options (if toggle enabled) -->
+                <!-- ko if: $parent.isPromiseTimePickupOptionsToggle() -->
+                <fieldset class="pickup-options-container border-0">
+                    <ul class="pickup-options-list">
+                        <!-- Priority Print Pickup -->
+                        <!-- ko if: priorityPrintPickup -->
+                        <li>
+                            <input type="radio" id="pickup_option_priority" class="pickup-option-type-button"
+                                name="pickup_option_type" value="" />
+                            <label for="pickup_option_priority" class="fs-14 lh-24 weight-600 fedex-regular"
+                                tabindex="0" data-bind="text: priorityPrintPickup.orderPriorityText"></label>
+                            <div class="pick-up-time-description">
+                                <span class="fedex-italic fs-14 lh-24"
+                                    data-bind="text: priorityPrintPickup.estimatedPickupLocalTime"></span>
+                            </div>
+                            <!-- ko if: $parent.isPriorityPrintLimitedTimeToggle() -->
+                            <div class="d-flex priority-print-pickup-limited-time-section">
+                                <span class="fedex-italic fs-14">*Adds $0.00 to the total</span>
+                                <p>
+                                    <img class="mr-5 ml-5 limited-time-image"
+                                        data-bind="attr: { src: $parent.limitedTimeIconUrl }" alt="Limited Time Icon" />
+                                </p>
+                                <span class="fedex-medium limited-time-tag">Limited Time Only!</span>
+                            </div>
+                            <!-- /ko -->
+                        </li>
+                        <!-- /ko -->
+                        <!-- ko ifnot: priorityPrintPickup -->
+                        <li>
+                            <input type="radio" id="pickup_option_priority_disabled" class="pickup-option-type-button"
+                                name="pickup_option_type" value="" disabled />
+                            <label for="pickup_option_priority_disabled"
+                                class="fs-14 lh-24 weight-600 fedex-regular disabled-state" tabindex="0">Priority Print
+                                Pickup</label>
+                            <div class="d-flex priority-print-pickup-limited-time-section">
+                                <span class="fedex-italic fs-14 disabled-state">Unavailable at this location</span>
+                            </div>
+                        </li>
+                        <!-- /ko -->
+
+                        <!-- Standard Priority Pickup -->
+                        <!-- ko if: standardPriorityPickup -->
+                        <li>
+                            <input type="radio" id="pickup_option_standard" data-testid=""
+                                class="pickup-option-type-button standard-pickup-button" name="pickup_option_type"
+                                value="" />
+                            <label for="pickup_option_standard" class="pickup-option-type-button-label" tabindex="1"
+                                data-bind="text: standardPriorityPickup.orderPriorityText"></label>
+                            <div class="pick-up-time-description">
+                                <span class="fedex-italic fs-14 lh-24"
+                                    data-bind="text: standardPriorityPickup.estimatedPickupLocalTime"></span>
+                            </div>
+                        </li>
+                        <!-- /ko -->
+
+                        <!-- Pickup Later -->
+                        <li>
+                            <input type="radio" id="pickup_option_later" data-testid=""
+                                class="pickup-option-type-button pickup-later-button" name="pickup_option_type"
+                                value="" />
+                            <label for="pickup_option_later" class="pickup-option-type-button-label" tabindex="2">Pickup
+                                Later</label>
+                            <div class="pick-up-time-description" id="pickup_later_date" style="display: none;">
+                                <span data-bind="text: $parent.koFormattedPickupLaterDate()"></span>
+                                <span class="pickup-later-change-time">Change</span>
+                            </div>
+                        </li>
+                    </ul>
+                </fieldset>
+                <!-- /ko -->
+
+                <!-- Show/Hide Details -->
+                <div class="show-details-container">
+                    <div class="show-details-button"
+                        data-bind="visible: $parent.enableCenterDetails && $parent.center().Id !== location.id">
+                        <button type="button" class="show-detail-button fs-14"
+                            data-testid="pickup-location-container-button-option-show-details" tabindex="0"
+                            data-bind="click: $parent.showCenterDetails.bind($parent, location)">SHOW DETAILS</button>
+                        <span class="pickup-location-id sr-only" data-bind="text: location.id"></span>
+                        <span class="fa fa-angle-down" aria-hidden="true"></span>
+                    </div>
+                    <!-- ko if: $parent.enableCenterDetails -->
+                    <!-- ko if: $parent.center().Id === location.id -->
+                    <div class="center-details">
+                        <div>
+                            <span class="fa fa-phone icon-grey" aria-hidden="true"></span>
+                            <span data-bind="text: $parent.center().phone"></span>
+                        </div>
+                        <div>
+                            <span class="fa fa-envelope-square icon-grey" aria-hidden="true"></span>
+                            <span data-bind="text: $parent.center().email"></span>
+                        </div>
+                        <div>
+                            <span class="fa fa-clock-o icon-grey" aria-hidden="true"></span>
+                            <span>Hours Of Operation</span>
+                        </div>
+                        <div data-bind="foreach: $parent.center().hoursOfOperation">
+                            <div class="shedule-container"> <!-- Fixed typo: shedule -> schedule -->
+                                <div class="day" data-bind="text: day"></div>
+                                <div data-bind="text: range"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <div class="hide-details-button"
+                        data-bind="visible: $parent.enableCenterDetails && $parent.center().Id === location.id">
+                        <button class="hide-detail-button" type="button"
+                            data-testid="pickup-location-container-button-option-hide-details" tabindex="0"
+                            data-bind="click: $parent.hideCenterDetails.bind($parent)">HIDE DETAILS</button>
+                        <span class="pickup-location-id sr-only" data-bind="text: location.id"></span>
+                        <span class="fa fa-angle-up" aria-hidden="true"></span>
+                    </div>
+                    <div class="date">
+                        <span class="pickup-date"
+                            data-bind="text: date, visible: !$parent.isPromiseTimePickupOptionsToggle() && !$parent.isEproUploadtoQuoteToggle()"></span>
+                        <span class="pickup-date-hidden d-none" data-bind="text: datehidden"></span>
+                    </div>
+                </div>
+
+                <div class="earlist-label visible-xs"
+                    data-bind="visible: $index() == $parent.koEarliestPickupLabelIndex()">
+                    <!-- ko if: $parent.koAssignedPickupLabelIndex() -->Assigned Store<!-- /ko -->
+                    <!-- ko if: ($parent.koAssignedPickupLabelIndex() === false && $parent.isPromiseTimePickupOptionsToggle() === false) -->Earliest
+                    Pickup<!-- /ko -->
+                </div>
+            </article>
+        </li>
+        <!-- Load More Button (as last item) -->
+        <!-- ko if: $index() === $parent.visiblePickupLocations().length - 1 && $parent.shouldShowLoadMoreButton() -->
+        <li class="m-0">
+            <div class="d-flex border-gray pb-20 pt-20 border-top-0 border-bottom-0 h-center">
+                <button class="cl-aster-blue fedex-medium fs-16 text-uppercase bg-transparent border-0 show-more-btn"
+                    type="button" title="Show More Locations"
+                    data-bind="click: $parent.loadMorePickupLocations.bind($parent)">Show More Locations</button>
+            </div>
+        </li>
+        <!-- /ko -->
+    </ul>
+</section>

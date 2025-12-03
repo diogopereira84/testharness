@@ -1,0 +1,11 @@
+<?php
+/** @var Magento\Catalog\Block\Product\View $block */
+$product = $block->getProduct();
+$attributeSet = $product->getAttributeSetId();
+?>
+<?php if($attributeSet): ?>
+    <div class="in-store-only-tag mb-32 fedex-medium fs-16 bg-cl-violet pt-7 pb-7">
+            <img class="img-auto valign-text-bottom ml-15 mr-5" src="<?php echo $this->getViewFileUrl('images/store.png');?>" alt="store icon">
+            <span>In-store only</span>            
+    </div>
+<?php endif; ?>

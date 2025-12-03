@@ -1,0 +1,33 @@
+<?php
+/**
+ * Copyright ©FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+
+<div class="manage-user-groups-container">
+    <div class="fedex-light fs-32">Manage User Groups</div>
+    <div class="manage-user-group-search-control border-rollingstone ml-auto">
+        <input type="text" name="manage-user-group-search"
+            value=""
+            id="keyword"
+            minlength="3"
+            placeholder="<?=$escaper->escapeHtmlAttr(__('Search')); ?>"
+            class="input-text user-group-search-field"
+        />
+        <div class="clear-all">
+            <a href="javascript:void(0);" id="manager_user_groups_clear_all" style="display:none;">Clear All</a>
+        </div>
+        <button type="submit" class="manage-user-group-search-button" aria-label="User Group Search" id="user-group-search">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect opacity="0.01" width="32" height="32" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                    d="M18.026 18.9688C16.7543 20.0289 15.1182 20.6667 13.3333 20.6667C9.28348 20.6667 6 17.3832 6 13.3333C6 9.28292 9.2832 6 13.3333 6C17.3835 6 20.6667 9.28292 20.6667 13.3333C20.6667 15.1182 20.0289 16.7543 18.9688 18.026L25.8047 24.8619C26.0651 25.1223 26.0651 25.5444 25.8047 25.8047C25.5444 26.0651 25.1223 26.0651 24.8619 25.8047L18.026 18.9688ZM19.3333 13.3333C19.3333 10.0193 16.6471 7.33333 13.3333 7.33333C10.0196 7.33333 7.33333 10.0193 7.33333 13.3333C7.33333 16.6468 10.0199 19.3333 13.3333 19.3333C16.6468 19.3333 19.3333 16.6468 19.3333 13.3333Z" fill="#333333"/>
+            </svg>
+        </button>
+    </div>
+    <div id="warning-message-selfreg-user" class="mage-error-selfreg-user"></div>
+    <div class="new-user-group-button-container">
+        <button type="button" class="new-user-group-button d-block ml-auto" id="new_user_group_button">+ NEW USER GROUP</button>
+    </div>
+</div>

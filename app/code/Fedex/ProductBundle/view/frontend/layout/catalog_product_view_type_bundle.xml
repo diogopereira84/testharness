@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <container name="bundle.tag" after="page.main.title-first-party">
+                <block class="Magento\Framework\View\Element\Template" name="bundle.tag.block"
+                       template="Fedex_ProductBundle::product/view/bundleTag.phtml"/>
+            </container>
+        </referenceContainer>
+        <referenceBlock name="bundle.summary">
+            <container name="bundle.price.container" htmlTag="div" htmlClass="bundle-price-container">
+                <block class="Magento\Framework\View\Element\Template" name="bundle.price.label" template="Fedex_ProductBundle::product/view/bundlePriceLabel.phtml" before="-"/>
+                <block class="Magento\Framework\View\Element\Template" name="bundle.price.disclaimer" template="Fedex_ProductBundle::product/view/bundlePriceDisclaimer.phtml" after="-"/>
+            </container>
+        </referenceBlock>
+        <referenceBlock name="product.info.addtocart.bundle" template="Fedex_ProductBundle::product/view/addtocart.phtml">
+            <arguments>
+                <argument name="bundleProductHandlerViewModel" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="product.info.bundle.options" template="Fedex_ProductBundle::catalog/product/view/type/bundle/options.phtml">
+            <arguments>
+                <argument name="submitOnLoad" xsi:type="number">0</argument>
+            </arguments>
+        </referenceBlock>
+        <move element="bundle.options.container" destination="product.info.main" after="-"/>
+        <move element="product.info.addtocart.bundle" destination="bundle.summary" after="-"/>
+        <move element="product.price.render.bundle.customization" destination="bundle.price.container"
+              after="bundle.price.label"/>
+
+        <referenceBlock name="product.info.fileupload" remove="true"/>
+    </body>
+</page>
+

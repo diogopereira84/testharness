@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ /** @var Fedex\SharedCatalogCustomization\Block\Adminhtml\Display $block */
+?>
+
+<?php
+$viewSuccessModel = $block->getData('environmentManager_view_model');
+$catalogSyncQueueData = $block->getCatalogSyncQueueDetails();
+?>
+<div class="page-main-actions">
+   <div class="page-actions" >
+      <div class="page-actions-inner">
+         <div class="page-actions-buttons">
+            <button id="back" title="Back" type="button" class="action- scalable back"
+            onclick="window.location='<?= /* @noEscape */ $catalogSyncQueueData['back_url'] ?>'">
+            <span>Back</span>
+            </button>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="admin__data-grid-wrap" data-role="grid-wrapper">
+   <table class="data-grid data-grid-draggable">
+      <thead>
+         <tr>
+            <th class="data-grid-th _sortable _draggable">
+               <strong>
+               <span class="data-grid-cell-content" >Status</span>
+               </strong>
+            </th>
+            <th class="data-grid-th _sortable _draggable">
+               <strong>
+               <span class="data-grid-cell-content" align="center">Count Data</span>
+               </strong>
+            </th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr class="data-row">
+            <td>
+               <strong>
+                  <div class="data-grid-cell-content" >New Items Added</div>
+               </strong>
+            </td>
+            <td align="center">
+               <div class="data-grid-cell-content"><?= /* @noEscape */ $catalogSyncQueueData['newItem'] ?></div>
+            </td>
+         </tr>
+         <tr class="data-row _odd-row">
+            <td>
+               <strong>
+                  <div class="data-grid-cell-content" >Updated Items</div>
+               </strong>
+            </td>
+            <td align="center">
+               <div class="data-grid-cell-content"><?= /* @noEscape */ $catalogSyncQueueData['updateItem'] ?></div>
+            </td>
+         </tr>
+         <tr class="data-row">
+            <td>
+               <strong>
+                  <div class="data-grid-cell-content" >Deleted Items</div>
+               </strong>
+            </td>
+            <td align="center">
+               <div class="data-grid-cell-content"><?= /* @noEscape */ $catalogSyncQueueData['deleteItem'] ?></div>
+            </td>
+         </tr>
+         <tr class="data-row _odd-row">
+            <td>
+               <strong>
+                  <div class="data-grid-cell-content" >Failed Items</div>
+               </strong>
+            </td>
+            <td align="center">
+               <div class="data-grid-cell-content"><?= /* @noEscape */ $catalogSyncQueueData['failedItem'] ?></div>
+            </td>
+         </tr>
+      </tbody>
+   </table>
+</div>
+
+

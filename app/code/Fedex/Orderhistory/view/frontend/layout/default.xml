@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+  <body>
+      <referenceBlock name="top.links">
+		  <!--B-900085 Sanchit Bhatia RT-ECVS-ePro - Accessing Order History and Remove left navigation bar -->
+          <block class="Fedex\Orderhistory\Block\Link\OrderHistory" name="order-history-top-link" after="wish-list-link" ttl="120">
+              <arguments> 
+                  <argument name="path" xsi:type="string">sales/order/history</argument>
+                  <argument name="label" xsi:type="string" translate="true">My Orders</argument>
+              </arguments>
+          </block>          
+            <!-- B-1053017 | Access My Quotes -->
+          <block class="Fedex\Orderhistory\Block\Link\NegotiableQuote" name="negotiable-quote-history-link" after="order-history-top-link">
+             <arguments>
+				<argument name="label" xsi:type="string" translate="true">My Quotes</argument>
+				<argument name="path" xsi:type="string" translate="true">negotiable_quote/quote</argument>
+			 </arguments>
+         </block>
+      </referenceBlock>     
+  </body>
+</page>

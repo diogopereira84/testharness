@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="marketplace.invoice.creation" type="topic" connection="amqp">
+        <binding id="createInvoiceMarketplaceOnlyOrders" topic="createInvoiceMarketplaceOnlyOrders"
+                 destinationType="queue" destination="createInvoiceMarketplaceOnlyOrders"/>
+    </exchange>
+    <exchange name="marketplace.delivery.notification" type="topic" connection="amqp">
+        <binding id="sendDeliveryNotification" topic="sendDeliveryNotification"
+                 destinationType="queue" destination="sendDeliveryNotification"/>
+    </exchange>
+
+    <exchange name="marketplace.miraklwebhook.processor" type="topic" connection="amqp">
+        <binding id="miraklWebhookProcessor" topic="miraklWebhookProcessor"
+                 destinationType="queue" destination="miraklWebhookProcessor"/>
+    </exchange>
+</config>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento.category" type="topic" connection="amqp">
+        <binding id="magento.category.categoryQueue" topic="category" destinationType="queue"
+    destination="categoryQueue"/>
+    </exchange>
+    <exchange name="magento.product" type="topic" connection="amqp">
+        <binding id="magento.product.productQueue" topic="product" destinationType="queue"
+    destination="productQueue"/>
+    </exchange>
+    <exchange name="magento.catalogCleanup" type="topic" connection="amqp">
+        <binding id="magento.catalogCleanup.catalogCleanupQueue" topic="catalogCleanup" destinationType="queue"
+    destination="catalogCleanupQueue"/>
+    </exchange>
+    <exchange name="magento.catalogEnableStore" type="topic" connection="amqp">
+        <binding id="magento.catalogEnableStoreQueue" topic="catalogEnableStore" destinationType="queue" destination="catalogEnableStoreQueue"/>
+    </exchange>
+</config>

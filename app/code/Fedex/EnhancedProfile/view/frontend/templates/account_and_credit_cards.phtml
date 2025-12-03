@@ -1,0 +1,708 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/**@var Fedex\EnhancedProfile\ViewModel\EnhancedProfile $enhancedProfile*/
+$enhancedProfile = $block->getData('enhanced_profile');
+$validateFdxLogin = $enhancedProfile->validateFdxLogin();
+$enhancedProfile->setProfileSession();
+$enhancedProfile->setDefaultShippingMethod();
+$profileInfo = $enhancedProfile->getLoggedInProfileInfo();
+$preferredPaymentMethod = '';
+$mediaUrl = $enhancedProfile->getMediaUrl();
+if (isset($profileInfo->output->profile->payment->preferredPaymentMethod)) {
+    $preferredPaymentMethod = $profileInfo->output->profile->payment->preferredPaymentMethod;
+}
+
+$creditCardList = [];
+if (isset($profileInfo->output->profile->creditCards)) {
+    $creditCardList = $profileInfo->output->profile->creditCards;
+}
+
+$accountsList = [];
+if (isset($profileInfo->output->profile->accounts)) {
+    $accountsList = $profileInfo->output->profile->accounts;
+}
+?>
+<div class="block" id="profile-payment-methods">
+    <div class="block-title stored-credit-cards">
+        <h2><?= $block->escapeHtml(__('Stored Credit Cards')) ?></h2>
+    </div>
+    <div class="store-credit-card payment-method-container">
+        <button class="first-cocus main" tabindex="-1">
+            <div class="custom-radio-btn">
+                <input type="radio" id="credit-cards-option" class="payment-type credit-cards-radio-button"
+                name="credit_card_option" value="CREDIT_CARD"
+                <?php if ($preferredPaymentMethod == 'CREDIT_CARD'): echo 'checked';
+    endif; ?> />
+                <label class="credit-card-save" for="credit-cards-option">
+                    <?= $block->escapeHtml(__("Set credit card as preferred payment method")) ?>
+                </label>
+            </div>
+        </button>
+        <div class="msg-credit-card" style="display:none"></div>
+        <div class="save-credit-card-changes save-changes-container">
+            <button type="button" class="btn-submit payment-method-save-changes ceditcard"
+            <?php if ($preferredPaymentMethod == 'CREDIT_CARD'):
+                echo 'disabled="disabled"';
+                endif; ?>>
+                <?= $block->escapeHtml(__(" save changes")) ?>
+            </button>
+        </div>
+        <?php foreach ($creditCardList as $cardInfo): ?>
+            <?php
+                $cardId = $cardInfo->profileCreditCardId;
+                $isPrimary = $cardInfo->primary;
+                $isTokenExpiry = $enhancedProfile->getTokenIsExpired($cardInfo->tokenExpirationDate);
+            ?>
+            <div class="credit-cart-content">
+                <div class="credit-card-head">
+                    <div class="head-left">
+                        <div class="left">
+                            <?php $cardIcon = str_replace(' ', '_', strtolower($cardInfo->creditCardType)).'.png' ?>
+                            <img src="<?= $block->getViewFileUrl('Fedex_EnhancedProfile::images/'.$cardIcon) ?>"
+                            alt="<?= $block->escapeHtmlAttr($cardInfo->creditCardType) ?>" />
+                        </div>
+                        <div class="right">
+                            <div class="card-type">
+                                <span><?= $block->escapeHtml($cardInfo->creditCardType) ?></span>
+                            </div>
+                            <div class="card-number">
+                                <span>
+                                    <?= $block->escapeHtml(__('ending in ')) ?>
+                                    <?= /* @noEscape */ '*'.substr($cardInfo->maskedCreditCardNumber, -4) ?>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="head-mid">
+                        <?php if ($isTokenExpiry): ?>
+                            <div class="card-expired">
+                                <span>
+                                    <?= $block->escapeHtml(__('Expired')) ?>
+                                </span>
+                            </div>
+                        <?php else: ?>
+                            <div class="card-expires">
+                                <span>
+                                    <?= $block->escapeHtml(__('Expires ')) ?>
+                                    <?= /* @noEscape */
+                                    $cardInfo->expirationMonth . '/' . substr($cardInfo->expirationYear, -2) ?>
+                                </span>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <div class="head-right"  data-cardId="<?= /* @noEscape */ $cardId ?>">
+                        <?php if (!$isTokenExpiry): ?>
+                            <?php if ($isPrimary): ?>
+                                <div class="cart-status-default-content">
+                                    <div class="cart-status-default">
+                                        <span class="default"><?= $block->escapeHtml(__('Default')) ?></span>
+                                    </div>
+                                </div>
+                            <?php else: ?>
+                                <div class="cart-status-make-content">
+                                    <div class="cart-status-make">
+                                        <span class="default">
+                                            <?= $block->escapeHtml(__(' Make Default')) ?>
+                                        </span>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <div class="credit-card-body">
+                    <?= $block->escapeHtml($cardInfo->creditCardLabel) ?> <br/>
+                    <div class="credit-card-name">
+                        <div class="name-content">
+                            <div class="name-title">
+                                <span><?= $block->escapeHtml(__('Name on card')) ?></span>
+                            </div>
+                            <div class="name">
+                                <span><?= $block->escapeHtml($cardInfo->cardHolderName) ?></span>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <div class="action-edit" data-cardId="<?= /* @noEscape */ $cardId ?>"
+                            data-profilecreditid="<?= /* @noEscape */ $cardInfo->profileCreditCardId ?>">
+                                <span class="edit" data-primary="<?= /* @noEscape */ $isPrimary ?>">
+                                    <?= $block->escapeHtml(__('Edit')) ?>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="credit-card-address">
+                        <div class="address-content">
+                            <div class="address-title">
+                                <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                            </div>
+                            <div class="content">
+                                <div class="name">
+                                    <?= $block->escapeHtml($cardInfo->cardHolderName) ?>
+                                </div>
+                                <span>
+                                    <?php
+                                    $companyName = '';
+                                    if (isset($cardInfo->billingAddress->company->name)) {
+                                        $companyName = $cardInfo->billingAddress->company->name;
+                                    }
+
+                                    $countryName = '';
+                                    if ($cardInfo->billingAddress->countryCode == 'US') {
+                                        $countryName = "United States of America";
+                                    } else {
+                                        $countryName = $cardInfo->billingAddress->countryCode;
+                                    }
+                                    $stateTitle = '';
+                                    foreach ($enhancedProfile->getRegionsOfCountry('us') as $state) {
+                                        if ($cardInfo->billingAddress->stateOrProvinceCode == $state['label']) {
+                                            $stateTitle = $state['title'];
+                                        }
+                                    }
+                                    ?>
+                                    <?= /* @noEscape */ implode(' ', $cardInfo->billingAddress->streetLines) ?>,
+                                    <?= $block->escapeHtml($companyName) ?>
+                                    <?= $block->escapeHtml($cardInfo->billingAddress->city) ?>
+                                    <?= $block->escapeHtml($stateTitle) ?>
+                                    <?= $block->escapeHtml($cardInfo->billingAddress->postalCode) ?>
+                                    <?= $block->escapeHtml($countryName) ?>
+                                </span>
+                            </div>
+                            <div class="mobile-edit" tabindex="0">
+                                <span><?= $block->escapeHtml(__('Edit')) ?></span>
+                            </div>
+                        </div>
+                        <div class="action">
+                            <span class="remove" data-cardId="<?= /* @noEscape */ $cardId ?>">
+                                <?= $block->escapeHtml(__('Remove')) ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="block-content">
+        <div class="box-add-new-card">
+            <strong class="box-title">
+                <a href="">
+                    <span class="plus-sign"><?= $block->escapeHtml(__('+')) ?></span>
+                    <span><?= $block->escapeHtml(__('Add New Card')) ?></span></a>
+            </strong>
+        </div>
+        <div class="box-credit-card-form-container" style="display: none;">
+            <form name="cc-form" id="cc-form" class="cc-form" method="post" autocomplete="off">
+                <!-- Hidden form key field after <form> tag -->
+                <input name="validation_key" id="validation_key" type="hidden"
+                    value="<?= $block->escapeHtmlAttr($enhancedProfile->getLoginValidationKey());?>">
+                <h3 class="credit-card-inforimation"><?= $block->escapeHtml("Credit Card Information") ?></h3>
+                <div class="input-container">
+                    <label class="input-label" for="name_card"><?= $block->escapeHtml("CARDHOLDER NAME") ?></label>
+                    <input class="input-textbox"
+                    placeholder="Cardholder Name" type="text" name="name_card" id="name_card"
+                    maxlength="40">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="card_number"><?= $block->escapeHtml("Card Number") ?></label>
+                    <input class="input-textbox card-number" type="text" name="card_number"
+                    id="card_number" placeholder="Card Number" maxlength="19">
+                    <?php
+
+                    $imgBlankCard = $block->getViewFileUrl('Fedex_EnhancedProfile::images/Generic.png');
+
+                    ?>
+                    <p class="account-credit-card-error error"></p>
+                    <img class="img-card" alt="card" src="<?= $block->escapeHtmlAttr($imgBlankCard) ?>">
+                    <i class="fa fa-check check-icon" style="display:none;"></i>
+                </div>
+                <div class="expiration-date-container">
+                    <label class="input-label" for="expiration_month">
+                        <?= $block->escapeHtml(__("expiration date")) ?></label>
+                    <div class="expiration-month-container">
+                        <select class="expiration-month" name="expiration_month" id="expiration_month">
+                            <option value="" disabled="disabled" selected="selected">
+                            <?= $block->escapeHtml(__("0 - Month")) ?></option>
+                            <option value="01"><?= $block->escapeHtml(__("1 - January")) ?></option>
+                            <option value="02"><?= $block->escapeHtml(__("2 - February")) ?></option>
+                            <option value="03"><?= $block->escapeHtml(__("3 - March")) ?></option>
+                            <option value="04"><?= $block->escapeHtml(__("4 - April")) ?></option>
+                            <option value="05"><?= $block->escapeHtml(__("5 - May")) ?></option>
+                            <option value="06"><?= $block->escapeHtml(__("6 - June")) ?></option>
+                            <option value="07"><?= $block->escapeHtml(__("7 - July")) ?></option>
+                            <option value="08"><?= $block->escapeHtml(__("8 - August")) ?></option>
+                            <option value="09"><?= $block->escapeHtml(__("9 - September")) ?></option>
+                            <option value="10"><?= $block->escapeHtml(__("10 - October")) ?></option>
+                            <option value="11"><?= $block->escapeHtml(__("11 - November")) ?></option>
+                            <option value="12"><?= $block->escapeHtml(__("12 - December")) ?></option>
+                        </select>
+                        <p class="account-credit-card-error error"></p>
+                    </div>
+                    <div class="expiration-year-container">
+                        <select class="expiration-year" id="expiration_year" aria-label="expiration year dropdown">
+                            <option value="">Year</option>
+                            <?php  foreach (range(date("Y"), date('Y')+10) as $year): ?>
+                                <option value="<?=$block->escapeHtmlAttr($year); ?>">
+                                <?= $block->escapeHtml($year) ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="cvv-container">
+                    <label class="input-label" for="cvv">
+                        <?= $block->escapeHtml("CVV") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="cvv" id="cvv"
+                    placeholder="<?=$block->escapeHtmlAttr("CVV")?>" maxlength="5">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="nick_name">
+                        <?= $block->escapeHtml("Nickname (Optional)") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="nick_name" id="nick_name"
+                    placeholder="<?= $block->escapeHtmlAttr('e.g. Primary Card') ?>" maxlength="40">
+                    <p class="account-credit-card-error error nick-name"></p>
+                </div>
+                <h4 class="billing-address-heading"><?= $block->escapeHtml("Billing Address") ?></h4>
+                <div class="input-container">
+                    <label class="input-label" for="company_name">
+                        <?= $block->escapeHtml("Company (Optional)") ?>
+                    </label>
+                    <input class="input-textbox" type="text" name="company_name"
+                    id="company_name" placeholder="<?=$block->escapeHtmlAttr('Enter company name')?>" maxlength="40">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="country"><?= $block->escapeHtml("Country")?></label>
+                    <select class="input-textbox"name="country" id="country">
+                        <option value="US" selected="selected">
+                        <?= $block->escapeHtml("United States of America")?></option>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="address_line_one">
+                        <?= $block->escapeHtml("Address Line 1") ?></label>
+                    <input class="input-textbox" type="text" name="address_line_one" id="address_line_one"
+                    placeholder="<?=$block->escapeHtmlAttr('Enter your address')?>" maxlength="50">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="second-address-line-link">
+                    <strong class="box-title">
+                        <a href="" class="add-address-line-two">
+                            <span class="plus-sign"><?= $block->escapeHtml(__('+')) ?></span>
+                            <span><?= $block->escapeHtml(__('Add a Second Address Line')) ?></span></a>
+                    </strong>
+                </div>
+                <div class="input-container input-container-toogle" style="display:none;">
+                    <label class="input-label" for="address_line_two">
+                        <?= $block->escapeHtml("ADDRESS LINE 2 (OPTIONAL)") ?></label>
+                    <input class="input-textbox" type="text" name="address_line_two"
+                    id="address_line_two" maxlength="50">
+                </div>
+                <div class="zipcode-container">
+                    <label class="input-label" for="zipcode"><?= $block->escapeHtml("Zipcode") ?></label>
+                    <input class="input-textbox" type="text" name="zipcode" id="zipcode" maxlength="10">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="city-container">
+                    <label class="input-label" for="city">
+                        <?= $block->escapeHtml("City") ?></label>
+                    <input class="input-textbox" type="text" name="city" id="city">
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <?php
+                $states = $enhancedProfile->getRegionsOfCountry('us');
+                ?>
+                <div class="state-container">
+                    <label class="input-label" for="state">
+                        <?= $block->escapeHtml("State") ?></label>
+                    <select class="input-textbox"name="state" id="state">
+                        <option value=""></option>
+                        <?php
+                        foreach ($states as $state) {?>
+                            <option value="<?=$block->escapeHtmlAttr($state['label']); ?>">
+                                <?= $block->escapeHtml($state['label']); ?>
+                            </option>
+                            <?php
+                        }?>
+                    </select>
+                    <p class="account-credit-card-error error"></p>
+                </div>
+                <div class="checkmark-container">
+                    <div class="alternate-check-container">
+                    <label class="alternate-checkbox-container" for="set_as_default">
+                        <?php $creditCardCount = 'false'; ?>
+                        <?php if (count($creditCardList)>0): ?>
+                            <?php $creditCardCount = 'true'; ?>
+                            <input type="checkbox" name="set_as_default" id="set_as_default"
+                            aria-label="set as default" value="">
+                            <span class="checkmark"></span>
+                        <?php else: ?>
+                            <input type="checkbox" name="set_as_default" id="set_as_default"
+                            checked="checked" disabled="disabled" value="1">
+                            <span class="checkmark disabled"></span>
+                        <?php endif ;?>
+                    </label>
+                    <input id="credit-card-count" type='hidden'
+                    value="<?= $block->escapeHtmlAttr($creditCardCount) ?>" />
+                    <div class="set-as-default">Set as default credit card</div>
+                  </div>
+                </div>
+                <div class="checkmark-terms-condition-container">
+                    <div class="alternate-check-container">
+                        <label class="alternate-checkbox-container" for="is_term_and_conditions">
+                          <input type="checkbox" name="is_term_and_conditions" id="is_term_and_conditions"
+                          aria-label="terms and condition" value="1">
+                          <span class="checkmark"></span>
+                        </label>
+                        <div class="set-as-default">
+                            <?php
+                            $termsAndConditionsUrl = $enhancedProfile->getConfigValue(
+                                'fedex/enhanced_profile_group/terms_and_condition_url'
+                            );
+                            ?>
+                            I accept the <a href="<?= $block->escapeHtmlAttr($termsAndConditionsUrl) ?>" target="_blank"
+                                class="terms-and-conditions">terms and conditions</a>
+                        </div>
+                        <input type="hidden" name="edit_status" id="edit_status" value="1" />
+                        <input type="hidden" name="save_status" id="save_status" value="" />
+                        <input type="hidden" name="profile_credit_card_id" id="profile_credit_card_id" value="" />
+                    </div>
+                </div>
+                <p class="account-credit-card-error error set-default"></p>
+                <div class="btns-container">
+                    <div class="btn-cancel-container">
+                        <button type="button" class="btn-cancel"><?= $block->escapeHtml(__('Cancel')) ?></button>
+                    </div>
+                    <div class="btn-submit-container">
+                        <button type="button" class="btn-submit"
+                        disabled="disabled"><?= $block->escapeHtml(__('save changes')) ?></button></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="block-title fedex-account-title"> <!-- added here--->
+        <h3><?= $block->escapeHtml(__('FedEx Accounts')) ?></h3>
+    </div>
+    <div class="block-content">
+        <div class="content-abount">
+        <?php
+            $faqurl = $enhancedProfile->getConfigValue(
+                'fedex/enhanced_profile_group/faq_url'
+            );
+            ?>
+        <?= $block->escapeHtml(
+            __('To learn more about the different account types, please see what we offer in the')
+        ) ?>
+         <a href="<?= $block->escapeHtmlAttr($faqurl) ?>" target="_blank"
+            class="online-printing-faqs"><?= $block->escapeHtml(__("Online Printing FAQs.")) ?></a>
+        </div>
+        <?php 
+            $enableShippingAccount = false;
+            if($enhancedProfile->isE464167SSOCustomerEnabled()){
+                $enableShippingAccount = true;
+                if($enhancedProfile->isSSOLogin() && !$enhancedProfile->isSSOGroup()){
+                    $enableShippingAccount = false;
+                }
+            } else {
+                $enableShippingAccount = true;
+            }
+        ?>
+        <?php if($enableShippingAccount): ?>
+        <div class="shipping-account-container">
+            <h4><?= $block->escapeHtml(__("Shipping Accounts")) ?></h4>
+            <?php
+                $emptyShippingAccount = false;
+            if (empty($accountsList)) {
+                $emptyShippingAccount = true;
+            } else {
+                foreach ($accountsList as $account):
+                    if (isset($account->accountType) && (strtolower($account->accountType) != 'shipping')):
+                        $emptyShippingAccount = true;
+                        break;
+                    endif;
+                endforeach;
+            }
+            ?>
+            <?php if ($emptyShippingAccount) { ?>
+                <div class="content-abount">
+                    <?php
+                        $addShippingAccountUrl = $enhancedProfile->getConfigValue(
+                            'fedex/enhanced_profile_group/add_shipping_account_url'
+                        );
+                    ?>
+                    <?= $block->escapeHtml(__('A shipping account allows you to receive discounts on
+                    shipping and access tools like address book, online billing, reporting and more.')) ?>
+                    <a href="<?= $block->escapeHtmlAttr($addShippingAccountUrl) ?>"
+                    target="_blank" class="add-shipping-account">
+                        <?= $block->escapeHtml(__('Sign up for one today')) ?>
+                    </a>
+                    <?= $block->escapeHtml(__('or')) ?>
+                    <a href="<?= $block->escapeHtmlAttr($addShippingAccountUrl) ?>"
+                    target="_blank" class="add-shipping-accounts">
+                        <?= $block->escapeHtml(__('add an existing account.')) ?>
+                    </a>
+                </div>
+            <?php } ?>
+        </div>
+        <?php endif;?>
+        <?php foreach ($accountsList as $account):
+            if (isset($account->accountType) && (strtolower($account->accountType) == 'shipping')):?>
+                <div class="shipping-account-list" tabindex="0">
+                    <div class="shipping-account-container">
+                        <h3><?= $block->escapeHtml(__('SHIPPING ACCOUNTS')) ?></h3>
+                        <div class="mask-account">
+                            <?= $block->escapeHtml(__('ending in ')) ?>
+                            <?= $block->escapeHtml($account->maskedAccountNumber); ?>
+                        </div>
+                    </div>
+                    <div class="default-container">
+                        <?php /* For shipping acount make as default functionality */ ?>
+                        <?php if (isset($account->primary) && $account->primary):?>
+                            <span class="default shipping-default"
+                            data-account-number="<?= $block->escapeHtmlAttr($account->accountNumber) ?>"
+                            data-masked-account-number="<?= $block->escapeHtmlAttr($account->maskedAccountNumber) ?>"
+                            data-account-label="<?= $block->escapeHtmlAttr($account->accountLabel) ?>"
+                            data-account-type="<?= $block->escapeHtmlAttr($account->accountType) ?>"
+                            ><?= $block->escapeHtml(__('Default')) ?></span>
+                        <?php else: ?>
+                            <span class="make-default-link shipping-make-default"
+                            data-account-number="<?= $block->escapeHtmlAttr($account->accountNumber) ?>"
+                            data-masked-account-number="<?= $block->escapeHtmlAttr($account->maskedAccountNumber) ?>"
+                            data-account-label="<?= $block->escapeHtmlAttr($account->accountLabel) ?>"
+                            data-account-type="<?= $block->escapeHtmlAttr($account->accountType) ?>"
+                            ><?= $block->escapeHtml(__('Make Default')) ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            <?php endif; ?>
+        <?php endforeach; ?>
+    </div>
+    <div class="block-content fedex-account-container payment-method-container">
+        <div class ="payment-account-container">
+            <h4><?= $block->escapeHtml(__("Payment Accounts")) ?></h4>
+        </div>
+        <button class="first-cocus" tabindex="-1">
+            <div class="custom-radio-btn">
+                <input type="radio" id="fedex-account-option" class="payment-type"
+                name="credit_card_option" value="ACCOUNT"
+                <?php if ($preferredPaymentMethod == 'ACCOUNT'): echo 'checked';
+endif; ?> />
+                <label for="fedex-account-option">
+                    <?=$block->escapeHtml(__("Set FedEx account as preferred payment method")) ?>
+                </label>
+            </div>
+        </button>
+        <div class="msg" style="display:none"></div>
+        <div class="save-fedex-account-changes save-changes-container">
+            <button type="button" class="btn-submit payment-method-save-changes"
+            <?php if ($preferredPaymentMethod == 'ACCOUNT'): echo 'disabled="disabled"';
+endif; ?>>
+                <?= $block->escapeHtml(__('save changes')) ?>
+            </button>
+        </div>
+
+      <div class="block-content">
+        <?php
+        $i = 0;
+        foreach ($accountsList as $account):
+            if (isset($account->accountType) && (strtolower($account->accountType) != 'shipping')):?>
+                <?php
+                    $accountSummary = $enhancedProfile->getAccountSummary($account->accountNumber);
+                ?>
+                <div class="payment-account-list" id="payment_account_list_<?= $block->escapeHtmlAttr($i+1); ?>">
+                    <div class="payment-account-top">
+                        <div class="shipping-account-container">
+                            <h3><?= $block->escapeHtml($account->accountLabel) ?></h3>
+                            <div class="mask-account"><?= $block->escapeHtml(__('Ending in ')) ?>
+                            <?= $block->escapeHtml($account->maskedAccountNumber); ?></div>
+                        </div>
+                        <div class="default-container">
+                            <?php if (strtolower($accountSummary['account_status']) != 'inactive'): ?>
+                                <?php if ($account->primary):?>
+                                    <span class="default payment-default"
+                                    data-profile-account-id="<?= $block->escapeHtmlAttr($account->profileAccountId) ?>"
+                                    data-account-number="<?= $block->escapeHtmlAttr($account->accountNumber) ?>"
+                                    data-masked-account-number
+                                    ="<?= $block->escapeHtmlAttr($account->maskedAccountNumber) ?>"
+                                    data-account-label="<?= $block->escapeHtmlAttr($account->accountLabel) ?>"
+                                    data-account-type="<?= $block->escapeHtmlAttr($account->accountType) ?>"
+                                    data-billing-reference="<?= $block->escapeHtmlAttr($account->billingReference) ?>"
+                                    ><?= $block->escapeHtml(__('Default')) ?></span>
+                                <?php else: ?>
+                                    <span class="make-default-link shipping-make-default"
+                                    data-profile-account-id="<?= $block->escapeHtmlAttr($account->profileAccountId) ?>"
+                                    data-account-number="<?= $block->escapeHtmlAttr($account->accountNumber) ?>"
+                                    data-masked-account-number
+                                    ="<?= $block->escapeHtmlAttr($account->maskedAccountNumber) ?>"
+                                    data-account-label="<?= $block->escapeHtmlAttr($account->accountLabel) ?>"
+                                    data-account-type="<?= $block->escapeHtmlAttr($account->accountType) ?>"
+                                    data-billing-reference="<?= $block->escapeHtmlAttr($account->billingReference) ?>"
+                                    ><?= $block->escapeHtml(__('Make Default')) ?></span>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <div class="payment-account-info-container">
+                        <div class="status-container">
+                            <h4><?= $block->escapeHtml(__('Status')) ?></h4>
+                            <?php if ($accountSummary): ?>
+                                <?php if ($accountSummary['account_status']): ?>
+                                    <p><i class="fa fa-circle"></i>
+                                        <?= $block->escapeHtml(
+                                            ucfirst(strtolower($accountSummary['account_status']))
+                                        ) ?>
+                                    </p>
+                                <?php else: ?>
+                                    <span><?= $block->escapeHtml(__('NA')) ?></span>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="eligible-for-container">
+                            <h4><?= $block->escapeHtml(__('Eligible For')) ?></h4>
+                            <?php if ($accountSummary): ?>
+                                <?php if ($accountSummary['account_type'] == "PAYMENT"): ?>
+                                    <p>
+                                        <?php $img = $block->getViewFileUrl('Fedex_EnhancedProfile::images/dollar.png');
+                                         ?>
+                                        <img src="<?= $block->escapeHtmlAttr($img) ?>" class="dollar-icon" alt="dollor
+                                        <?= $block->escapeHtmlAttr($account->accountLabel) ?>">
+                                        <?= $block->escapeHtml(__('Payment')) ?>
+                                    </p>
+                                <?php elseif ($accountSummary['account_type'] == "DISCOUNT"):?>
+                                    <p>
+                                        <?php $img = $block->getViewFileUrl('Fedex_EnhancedProfile::images/tag.png'); ?>
+                                        <img src="<?= $block->escapeHtmlAttr($img) ?>" class="dollar-icon"
+                                        alt="tag <?= $block->escapeHtmlAttr($account->accountLabel) ?>">
+                                        <?= $block->escapeHtml(__('Discount')) ?>
+                                    </p>
+                                <?php else: ?>
+                                    <span><?= $block->escapeHtml(__('NA')) ?></span>
+                                <?php endif; ?>
+                                <?php if ($accountSummary['account_tax_certificates'] == "TAX"): ?>
+                                    <p class="tax-exempt-desc">
+                                        <?php $img = $block->getViewFileUrl('Fedex_EnhancedProfile::images/tax.png'); ?>
+                                        <img src="<?= $block->escapeHtmlAttr($img) ?>" class="tax-exempt-icon"
+                                        alt="tax exempt <?= $block->escapeHtmlAttr($account->accountLabel) ?>">
+                                        <?= $block->escapeHtml(__('Tax exempt')) ?>
+                                    </p>
+                                <?php endif; ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="action-container">
+                            <p class="action-edit">
+                                <span class="btn-edit"
+                                data-profile-account-id="<?= $block->escapeHtmlAttr($account->profileAccountId) ?>"
+                                data-account-number="<?= $block->escapeHtmlAttr($account->accountNumber) ?>"
+                                data-masked-account-number
+                                ="<?= $block->escapeHtmlAttr($account->maskedAccountNumber) ?>"
+                                data-account-label="<?= $block->escapeHtmlAttr($account->accountLabel) ?>"
+                                data-account-type="<?= $block->escapeHtmlAttr($account->accountType) ?>"
+                                data-billing-reference="<?= $block->escapeHtmlAttr($account->billingReference) ?>"
+                                >Edit</span>
+                            </p>
+                            <p class="action-remove">
+                                <span class="remove-link"
+                                data-profile-account-id="<?= $block->escapeHtmlAttr($account->profileAccountId) ?>"
+                                >Remove</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                $i++;
+            endif; ?>
+        <?php endforeach; ?>
+      </div>
+      <div class="add-new-fedex-account">
+        <strong class="add-fedex-account">
+            <a href="javascript:void(0)" class="new-fedex-account">
+                <span class="plus-sign"><?= $block->escapeHtml(__('+ ')) ?></span>
+                <span><?= $block->escapeHtml(__('Add New FedEx Account')) ?></span></a>
+        </strong>
+      </div>
+      <div class="fedex-new-account-form" style="display:none">
+        <div class="account-heading">
+            <span><?= $block->escapeHtml(__('Add New Account')) ?></span>
+        </div>
+        <form class="form fedex-account-form" id="fedex-account-form" method="post" autocomplete="off">
+            <input type="hidden" name="container_id" id="container_id" value="">
+            <input type="hidden" name="profile_account_id" id="profile_account_id" value="">
+            <input type="hidden" name="masked_account_number" id="masked_account_number" value="">
+            <input type="hidden" name="account_type" id="account_type" value="">
+            <input type="hidden" name="primary_account" id="primary_account" value="">
+            <div class="fieldset">
+                <div class="field name">
+                    <label class="label" for="account-number">
+                        <span><?= $block->escapeHtml(__('FedEx Office Print Account')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input name="account_number" id="account-number" title="Fedex- Account Number" value=""
+                        class="input-text account-number" type="text" maxlength="20"
+                        placeholder="<?= $block->escapeHtmlAttr(__('Enter FedEx Office Print Account Number')) ?>" />
+                        <div class="account-credit-card-error account-error"></div>
+                    </div>
+                </div>
+                <div class="field name">
+                    <label class="label" for="nickname">
+                        <span><?= $block->escapeHtml(__('Nickname (Optional)')) ?> </span>
+                    </label>
+                    <div class="control">
+                        <input name="nickname" id="nickname" title="Nickname" value="" class="input-text"
+                        type="text" placeholder="<?= $block->escapeHtmlAttr(__('e.g. Company Account')) ?>" />
+                    </div>
+                    <div class="account-credit-card-error error account-nick-name"></div>
+                </div>
+                <div class="field name">
+                    <label class="label" for="billing-reference">
+                        <span><?= $block->escapeHtml(__('Billing Reference (Optional)')) ?></span>
+                    </label>
+                    <div class="control">
+                        <input name="billing_reference" id="billing-reference" title="Billing Reference" value=""
+                        type="text"
+                        class="input-text with-icon" placeholder="<?= $block->escapeHtmlAttr(__('e.g P.O Number')) ?>"/>
+                        <div class="info-icon">
+                            <?php
+                                $iconUrl = $block->getViewFileUrl('Fedex_EnhancedProfile::images/info-icon.png');
+                            ?>
+                            <img src="<?= $block->escapeHtmlAttr($iconUrl) ?>" alt="Information" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="button" title="Cancel" class="action cancel primary">
+                        <span><?= $block->escapeHtml(__('Cancel')) ?></span>
+                    </button>
+                    <button type="button" id="btn_payment_save_changes" title="Save Changes"
+                    class="action submit primary" disabled>
+                        <span><?= $block->escapeHtml(__('Save Changes')) ?></span>
+                    </button>
+                </div>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>
+<script>
+    require(['accountandcreditcards', "Fedex_Recaptcha/js/reCaptcha", "sharedcreditcards"], function(accountandcreditcards, reCaptcha, sharedcreditcards) {
+        reCaptcha.renderReCaptcha('profile-payment-methods');
+    });
+    window.mediaPath = "<?= $mediaUrl .'wysiwyg'; ?>";
+    window.preferredPaymentMethod = "<?= $block->escapeHtml($preferredPaymentMethod) ?>";
+    <?php if (isset($profileInfo->output->profile->userProfileId)) {?>
+    window.userProfileId  = "<?= $block->escapeHtml($profileInfo->output->profile->userProfileId) ?>";
+    <?php } ?>
+    require(['preferences'], function(references) {
+    });
+    <?php if (!$validateFdxLogin): ?>
+        window.validateFdxLogin  = "<?= $block->escapeHtml($validateFdxLogin) ?>";
+    <?php endif; ?>
+</script>

@@ -1,0 +1,25 @@
+type Mutation {
+  cancelOrderShipments(input: ShipmentItemsInput): CreateOrderShipmentOutput @resolver(class: "\\Fedex\\Shipment\\Model\\Resolver\\CancelOrderShipment") @doc(description: "The CancelOrderShipments query cancel fedex and mirakl product order. returns status")
+}
+
+input ShipmentItemsInput {
+  fxoWorkOrderNumber: String!
+  shipmentItems: [ShipmentsToCancel!]!
+}
+
+input ShipmentsToCancel {
+  shipmentId: String!
+  status: String!
+  reasonCode: String!
+  user: UserInfoInput!
+}
+
+input UserInfoInput {
+  name: String
+  reference: String!
+  source: String!
+}
+
+type CreateOrderShipmentOutput {
+  result: String
+}

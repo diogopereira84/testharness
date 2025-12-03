@@ -1,0 +1,279 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer */
+
+$item = $block->getItem();
+$product = $item->getProduct();
+$isVisibleProduct = $product->isVisibleInSiteVisibility();
+/** @var \Magento\Msrp\Helper\Data $helper */
+$helper = $this->helper(\Magento\Msrp\Helper\Data::class);
+$canApplyMsrp = $helper->isShowBeforeOrderConfirm($product) && $helper->isMinimalPriceLessMsrp($product);
+/** @var \Magento\NegotiableQuote\Helper\Quote $quoteHelper */
+$quoteHelper = $this->helper(\Magento\NegotiableQuote\Helper\Quote::class);
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productinfo_handler_view_model');
+
+$baseCurrency = $item->getQuote()->getCurrency()->getBaseCurrencyCode();
+$quoteCurrency = $item->getQuote()->getCurrency()->getQuoteCurrencyCode();
+$productUrl = $block->hasProductUrl() ? $block->getProductUrl() : '';
+/* B-1112160 - View Quote Details. */
+$productHelper = $this->helper('Fedex\Delivery\Helper\Data');
+$additionalOption = $item->getOptionByCode('info_buyRequest');
+$additionalOptions = $additionalOption->getValue();
+$product_json = $productInfoHandler->getItemExternalProd($item);
+
+$id = isset($product_json['id']) ? $product_json['id'] : '';
+$version = isset($product_json['version']) ? $product_json['version'] : '';
+$features = $product_json['features'] ?? [];
+$contentAssociations = $product_json['contentAssociations'] ?? [];
+
+$colorImageStyle = "width: 55px; height:90px;";
+foreach ($features as $feature) {
+    if (
+        $feature->name == 'Print Color' && 
+        isset($feature->choice->properties[0]->value) && 
+        $feature->choice->properties[0]->value == 'B/W'
+    ) {
+        $colorImageStyle = "-webkit-filter: grayscale(100%); filter: grayscale(100%);";
+        break;
+    }
+}
+$attributeSetId = $product->getAttributeSetId();
+$isCustomize = $productHelper->getProductCustomAttributeValue($product->getId(), 'customizable');
+$attribute_set_name = $productHelper->getProductAttributeName($attributeSetId);
+$orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+/* D-128037 - Loading animation visible on Quote, Order Receipt and in pdf instead of Product image. */
+$productImgSrc = "";
+if(isset($product_json['preview_url'])) {
+    $productImgSrc = $orderHistoryHelper->getQuoteProductImage($block->escapeHtml($product_json['preview_url']));
+}
+
+$labelPrintProduct = 'Product Name';
+
+?>
+<tbody class="cart item">
+    <tr class="item-info">
+    <!-- B-1112160 - View Quote Details. -->
+    <!-- B-1148619 Print Quote Receipt -->
+    <?php if ($orderHistoryHelper->isEnhancementEnabeled()): ?>
+    <?php if (($attribute_set_name == 'FXOPrintProducts') || ($isCustomize)): ?>
+        <td data-th="<?=$block->escapeHtml(__($labelPrintProduct))?>" class="col item custom-print-item">
+    <?php else: ?>
+        <td data-th="<?=$block->escapeHtml(__($labelPrintProduct))?>" class="col item">
+        <?php endif;?>
+
+            <?php if (($attribute_set_name == 'FXOPrintProducts') || ($isCustomize)): ?>
+                <!--D-128037 - Loading animation visible on Quote, Order Receipt and in pdf instead of Product image.-->
+                <?php if ($productImgSrc): ?>
+                    <img src="<?= $productImgSrc; ?>"
+                        style="<?=$block->escapeHtml($colorImageStyle);?>"
+                        alt="Product Image"
+                        class="preview-product-img" aria-label="Preview product image" />
+                <?php else: ?>
+                <span class="product-image-container prev-img-loader" >
+                    <div data-bind="if: productPreviewImg">
+                        <img src="<?=$block->escapeUrl($block->getViewFileUrl('images/loader-2.gif'))?>"
+                        aria-label="Product loader" class="product-loader" alt="" />
+                        <img style="<?=$block->escapeHtml($colorImageStyle);?>" alt= ""
+                         class="preview-product-img" aria-label="Preview product image"
+                         data-bind="attr:{onload: productPreviewImg.getPreviewImg('<?=
+                         $block->escapeHtml($product_json['preview_url']);?>', $element)}" />
+                    </div>
+                    <!-- B-1234552- Validate all new component follow ADA compliance Order/Quote History -->
+                    <div data-bind="ifnot: productPreviewImg">
+                        <img src="#" alt="Product Image" class="product-empty-image" aria-label="Product empty image" />
+                    </div>
+                </span>
+                <?php endif; ?>
+            <?php else: ?>
+                <?php if ($block->hasProductUrl()): ?>
+                    <a title="<?=$block->escapeHtml($block->getProductName())?>"
+                        tabindex="-1"
+                        class="product-item-photo">
+                <?php else: ?>
+                    <span class="product-item-photo">
+                <?php endif;?>
+                    <?=$block->getImage($block->getProductForThumbnail(), 'cart_page_product_thumbnail')->toHtml()?>
+                <?php if ($block->hasProductUrl()): ?>
+                    </a>
+                <?php else: ?>
+                    </span>
+                <?php endif;?>
+            <?php endif;?>
+            <?php if (($attribute_set_name == 'FXOPrintProducts') || ($isCustomize)): ?>
+                <div class="product-item-details" style="margin-top: -82px; margin-left: 65px;">
+            <?php else: ?>
+                <div class="product-item-details" style="margin-top: -51px; margin-left: 65px;">
+            <?php endif;?>
+                <strong class="product-item-name">
+                <?php if ($attribute_set_name == 'FXOPrintProducts' && isset($product_json['userProductName'])) {?>
+                    <?php echo $product_json['userProductName']; ?>
+                <?php } elseif ($isCustomize && isset($product_json['fxo_product'])) {?>
+                    <?php
+                $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? [];
+                     $productName = $fxoProduct ? $fxoProduct->name : $block->getProductName();
+                    echo $productName;
+                    ?>
+                <?php } else {?>
+                    <?=$block->escapeHtml($block->getProductName())?>
+                <?php }?>
+                </strong>
+                <span class="product-name-quote-epro">
+                <?php
+                if (!empty($product_json['features'])) {
+                    foreach ($product_json['features'] as $configAttribute) {
+                        if (!empty($configAttribute->name)) {
+                            echo "<span>" . $configAttribute->name . ": " . $configAttribute->choice->name . "</span>";
+                            break;
+                        }
+
+                    }
+                }
+                ?>
+                </span>
+                <?php if ($options = $block->getOptionList()): ?>
+                    <dl class="item-options">
+                        <?php foreach ($options as $option): ?>
+                            <?php $formatedOptionValue = $block->getFormatedOptionValue($option)?>
+                            <dt><?=$block->escapeHtml($option['label'])?></dt>
+                            <dd>
+                                <?php if (isset($formatedOptionValue['full_view'])): ?>
+                                    <?=/* @noEscape */$formatedOptionValue['full_view']?>
+                                <?php else: ?>
+                                    <?=/* @noEscape */$formatedOptionValue['value']?>
+                                <?php endif;?>
+                            </dd>
+                        <?php endforeach;?>
+                    </dl>
+                <?php endif;?>
+                <?php if ($messages = $block->getMessages()): ?>
+                    <?php foreach ($messages as $message): ?>
+                        <div class="cart item message <?=$block->escapeHtmlAttr($message['type'])?>">
+                            <div><?=$block->escapeHtml($message['text'])?></div>
+                        </div>
+                    <?php endforeach;?>
+                <?php endif;?>
+                <?php $addInfoBlock = $block->getProductAdditionalInformationBlock();?>
+                <?php if ($addInfoBlock): ?>
+                    <?=$addInfoBlock->setItem($item)->toHtml()?>
+                <?php endif;?>
+            </div>
+        </td>
+        <?php else: ?>
+            <td data-th="<?=$block->escapeHtmlAttr(__('Product Name'))?>" class="col item">
+            <?php if ($block->hasProductUrl()): ?>
+                <a href="<?=$block->escapeUrl($productUrl)?>"
+                   title="<?=$block->escapeHtmlAttr($block->getProductName())?>"
+                   tabindex="-1"
+                   class="product-item-photo">
+            <?php else: ?>
+                <span class="product-item-photo">
+            <?php endif;?>
+            <?php if ($block->hasProductUrl()): ?>
+                </a>
+            <?php else: ?>
+                </span>
+            <?php endif;?>
+            <div class="product-item-details">
+                <strong class="product-item-name">
+                    <?php if ($block->hasProductUrl()): ?>
+                        <a href="<?=$block->escapeUrl($productUrl)?>">
+                            <?=$block->escapeHtml($block->getProductName())?>
+                        </a>
+                    <?php else: ?>
+                        <?=$block->escapeHtml($block->getProductName())?>
+                    <?php endif;?>
+                </strong>
+                <?php if ($options = $block->getOptionList()): ?>
+                    <dl class="item-options">
+                        <?php foreach ($options as $option): ?>
+                            <?php $formatedOptionValue = $block->getFormatedOptionValue($option)?>
+                            <dt><?=$block->escapeHtml($option['label'])?></dt>
+                            <dd>
+                                <?php if (isset($formatedOptionValue['full_view'])): ?>
+                                    <?=/* @noEscape */$formatedOptionValue['full_view']?>
+                                <?php else: ?>
+                                    <?=/* @noEscape */$formatedOptionValue['value']?>
+                                <?php endif;?>
+                            </dd>
+                        <?php endforeach;?>
+                    </dl>
+                <?php endif;?>
+                <?php if ($messages = $block->getMessages()): ?>
+                    <?php foreach ($messages as $message): ?>
+                        <div class="cart item message <?=$block->escapeHtmlAttr($message['type'])?>">
+                            <div><?=$block->escapeHtml($message['text'])?></div>
+                        </div>
+                    <?php endforeach;?>
+                <?php endif;?>
+                <?php $addInfoBlock = $block->getProductAdditionalInformationBlock();?>
+                <?php if ($addInfoBlock): ?>
+                    <?=$addInfoBlock->setItem($item)->toHtml()?>
+                <?php endif;?>
+            </div>
+        </td>
+        <?php endif;?>
+        <?php if (($attribute_set_name == 'FXOPrintProducts') || ($isCustomize)): ?>
+        <td class="col sku" data-th="<?=$block->escapeHtmlAttr(__('SKU'))?>">
+            <?=$block->escapeHtml($product->getSku())?>
+        </td>
+        <?php else: ?>
+            <td class="col sku-catalog" data-th="<?=$block->escapeHtmlAttr(__('SKU'))?>">
+            <?=$block->escapeHtml($product->getSku())?>
+            </td>
+        <?php endif;?>
+        <td class="col price" data-th="<?=$block->escapeHtmlAttr(__('Price'))?>">
+            <?=/* @noEscape */$quoteHelper->getFormattedCatalogPrice($item, $quoteCurrency, $baseCurrency)?>
+        </td>
+
+	<!-- D-105467 | View/print/Pdf Quote UI is Breaking -->
+        <td class="col stock" data-th="<?=$block->escapeHtmlAttr(__('Stock'))?>">
+            <?=/* @noEscape */$quoteHelper->getStockForProduct($item) !== null ?
+           number_format($quoteHelper->getStockForProduct($item)) : 0?>
+        </td>
+
+        <td class="col qty" data-th="<?=$block->escapeHtmlAttr(__('Qty'))?>">
+            <div class="field qty">
+
+                <div class="control qty">
+                    <?=(int) $block->getQty()?>
+
+                </div>
+            </div>
+        </td>
+
+        <td class="col subtotal" data-th="<?=$block->escapeHtmlAttr(__('Subtotal'))?>">
+            <?php if ($canApplyMsrp): ?>
+                <span class="cart msrp subtotal">--</span>
+            <?php else: ?>
+                <?=/* @noEscape */$quoteHelper->getItemTotal($item, $quoteCurrency, $baseCurrency)?>
+            <?php endif;?>
+        </td>
+        <td class="col delete">
+            <div class="actions-toolbar<?=/* @noEscape */$quoteHelper->isSubmitAvailable() ? '' : ' _disabled'?>">
+                <?=/* @noEscape */$block->getActions($item)?>
+            </div>
+        </td>
+    </tr>
+</tbody>
+<!-- B-1234552 - Validate all new component follow ADA compliance Order/Quote History -->
+<script type="text/javascript">
+            require(['jquery', 'jquery/ui'], function($){
+              $(document).ready( function() {
+                    $('th.delete').remove();
+                    $('td.delete').remove();
+                    $('.table-caption').removeAttr("role");
+                    $('.table-caption').removeAttr("aria-level");
+                    $('.product-image-photo').removeAttr('alt');
+                    var prodName = $('.product-item-name').text();
+                    $('.product-image-photo').attr("aria-label","Product Image "+prodName.trim());
+              });
+            });
+</script>

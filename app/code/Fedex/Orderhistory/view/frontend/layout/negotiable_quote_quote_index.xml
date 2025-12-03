@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- B-1027092 -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <title>My Quotes</title>
+    </head>
+<!-- B-1053021 - Sanchit Bhatia - RT-ECVS - ePro - Search Capability for Quotes  -->
+     <referenceBlock name="breadcrumbs">
+        <action method="addCrumb">
+            <argument name="crumbName" xsi:type="string">My Profile</argument>
+            <argument name="crumbInfo" xsi:type="array">
+                <item name="title" xsi:type="string" translate="true">My Profile</item>
+                <item name="label" xsi:type="string" translate="true">My Profile</item>
+                <item name="link" xsi:type="string" >{{baseUrl}}customer/account/</item>
+            </argument>
+        </action>
+        <action method="addCrumb">
+            <argument name="crumbName" xsi:type="string">My Quotes</argument>
+            <argument name="crumbInfo" xsi:type="array">
+                <item name="title" xsi:type="string" translate="true">My Quotes</item>
+                <item name="label" xsi:type="string" translate="true">My Quotes</item>
+            </argument>
+        </action>
+    </referenceBlock>
+    <body>
+        <referenceContainer name="content">
+           <block name="epro_quote_search" before="-"
+                   class="Magento\Framework\View\Element\Template"
+                   template="Fedex_Orderhistory::search.phtml"/>
+        </referenceContainer>
+    </body>
+</page>

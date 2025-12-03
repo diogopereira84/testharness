@@ -1,0 +1,116 @@
+/* LESS generator for font-size, line-height and letter-spacing. */
+@_font_size: 12,13,14,15,16,18,19,20,24,32,40;
+@_line_height: 0,9,11,16,19,21,22,24,25,26,28,30,32,38,40,56,65;
+@_letter_spacing: 0,1,56;
+
+.font-utility(@param, @index) when (@index > 0) {
+    & when(@param = "font-size") {
+        @_fs_value: extract(@_font_size, @index);
+        .fs-@{_fs_value}   { font-size:~"@{_fs_value}px"; }
+    }
+  	& when(@param = "line-height") {
+        @_lh_value: extract(@_line_height, @index);
+        .lh-@{_lh_value}   { line-height:~"@{_lh_value}px"; }
+    }
+  	& when(@param = "letter-spacing") {
+        @_ls_value: extract(@_letter_spacing, @index);
+        .ls-@{_ls_value}   { letter-spacing:~"@{_ls_value}px"; }
+    }
+    .font-utility(@param, @index - 1);
+}
+
+.font-utility("font-size", length(@_font_size));
+.font-utility("line-height", length(@_line_height));
+.font-utility("letter-spacing", length(@_letter_spacing));
+
+.lh-normal {
+    line-height: normal;
+}
+
+/* Letter spacing utility classes with decimal values */
+.ls--0-09 {
+    letter-spacing: -0.09px;
+}
+.ls--0-07 {
+    letter-spacing: -0.07px;
+}
+.ls--0-06 {
+    letter-spacing: -0.06px;
+}
+.ls--0-4 {
+    letter-spacing: -0.4px;
+}
+.ls--0-1 {
+    letter-spacing: -0.1px;
+}
+.ls--1-11 {
+    letter-spacing: -1.11px;
+}
+.ls-0-11 {
+    letter-spacing: 0.11px;
+}
+.ls-0-56 {
+    letter-spacing: 0.56px;
+}
+.ls-0-75 {
+    letter-spacing: 0.75px;
+}
+.ls-1-19 {
+    letter-spacing: 1.19px;
+}
+
+/* Font family and weight utility classes */
+.fedex-regular {
+    font-family: "FedEx Sans Regular";
+}
+.fedex-bold {
+    font-family: 'FedEx Sans Bold';
+}
+.fedex-medium {
+    font-family: 'FedEx Sans Medium';
+}
+.fedex-italic {
+    font-family: 'FedEx Sans Italic';
+    font-style: italic;
+}
+.fedex-light {
+    font-family: 'FedEx Sans Light';
+}
+.luma-icon {
+    &:after {
+        font-family: 'luma-icons';
+    }
+}
+.fedex-icon {
+    &:after {
+        font-family: 'FedEx Icons';
+    }
+    &.lens {
+        &:after {
+            content: '\e900';
+        }
+    }
+    &.close {
+        &:after {
+            content: '\e91c';
+        }
+    }
+}
+.text-italic {
+    font-style: italic;
+}
+.weight-300 {
+    font-weight: 300;
+}
+.weight-500 {
+    font-weight: 500;
+}
+.weight-600 {
+    font-weight: 600;
+}
+.weight-700 {
+    font-weight: 700;
+}
+.weight-bold {
+    font-weight: bold;
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	<preference for="Fedex\CIDPSG\Api\GenericEmailInterface" type="Fedex\CIDPSG\Model\GenericEmail" />
+    <preference for="Fedex\CIDPSG\Api\MessageInterface" type="Fedex\CIDPSG\Model\Message" />
+    <preference for="Fedex\CIDPSG\Api\SubscriberInterface" type="Fedex\CIDPSG\Model\Subscriber" />
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="psgcustomers_index_listing_data_source" xsi:type="string">Fedex\CIDPSG\Model\ResourceModel\Customer\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Fedex\CIDPSG\Model\ResourceModel\Customer\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">psg_customer</argument>
+            <argument name="resourceModel" xsi:type="string">Fedex\CIDPSG\Model\ResourceModel\Customer</argument>
+        </arguments>
+    </virtualType>
+</config>

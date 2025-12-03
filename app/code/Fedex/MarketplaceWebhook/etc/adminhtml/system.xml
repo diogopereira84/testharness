@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <label>fedex</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="marketplacewebhook" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>Authorization Marketplace Webhook Key</label>
+                <field id="authorization_code" translate="label" type="password" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Authorization Code</label>
+                    <comment>Enter the authorization code for  Mirakl for webhook validation.</comment>
+                </field>
+                <field id="enable_webhook_payload_logs" translate="label comment" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enable Webhook Payload Logs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="webhook_duplicate_block_ttl" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Webhook Duplicate Block TTL (seconds)</label>
+                    <comment>Defines how long to block identical webhook payloads (default is 600 seconds).</comment>
+                    <validate>validate-number</validate>
+                </field>
+            </group>
+            <group id="general" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>Delivery Notification</label>
+                <field id="delivery_notification_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Delivery Notification URL</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,104 @@
+//
+// Common (styles-m.css)
+//
+
+& when (@media-common = true) {
+    .faq {
+        max-width: 940px;
+        margin: 0 auto;
+
+        .accordion {
+            border-top: none;
+
+            .collapsible {
+                .icons {
+                    width: min-content;
+                    height: min-content;
+                    background-image: none;
+
+                    &::before {
+                        content: "\e904";
+                        display: block;
+                        font-size: 40px;
+                        font-family: "FedEx Icons";
+                    }
+                }
+
+                [data-role="trigger"] {
+                    justify-content: space-between;
+                }
+
+                [data-role="content"] {
+                    font-size: 16px;
+                }
+            }
+        }
+    }
+}
+
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .faq {
+        .accordion {
+            .label {
+                font-size: 24px;
+            }
+
+            .collapsible {
+                [data-role="trigger"] {
+                    min-height: 80px;
+                    padding: 0 30px;
+                }
+
+                [data-role="content"] {
+                    padding: 0 30px 30px;
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 1200px) {
+        .faq {
+            padding: 50px 0;
+        }
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 1199px) {
+        .faq {
+            padding: 35px 20px;
+        }
+    }
+}
+
+//
+// Mobile (styles-m.css)
+//
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .faq {
+        padding: 15px;
+
+        .accordion {
+            .label {
+                font-size: 18px;
+            }
+
+            .collapsible {
+                [data-role="trigger"] {
+                    padding: 5px 0;
+                }
+
+                [data-role="content"] {
+                    font-size: 14px;
+                    padding-bottom: 15px;
+                }
+            }
+        }
+    }
+}

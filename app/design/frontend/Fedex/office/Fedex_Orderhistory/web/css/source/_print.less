@@ -1,0 +1,45 @@
+
+
+@media print {
+
+    //
+    //  All (styles-m.css)
+    //  _____________________________________________
+    & when (@media-common =true) {
+        body.sales-order-view {
+            header, 
+            .sections.nav-sections, 
+            .widget-promo-banner-container,
+            .top-container, 
+            .breadcrumbs, 
+            footer, 
+            .footer-container, 
+            .copyright {
+                display: none;
+           }
+        }
+    }
+
+    // Mobile, @screen__m: 768px
+    //  _____________________________________________
+
+    .media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+        body.sales-order-view {}
+    }
+
+    //  Tablet, @screen__m: 768px
+    //  _____________________________________________
+
+    .media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__m) {
+        body.sales-order-view {}
+    }
+
+    //  Desktop, @screen__l: 1024px (styles-l.css)
+    //  _____________________________________________
+
+    .media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+        body.sales-order-view {}
+    }
+
+}
+

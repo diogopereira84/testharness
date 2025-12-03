@@ -1,0 +1,25 @@
+<!-- B-1112160 - View Quote Details.  -->
+<?php
+$quoteid = $block->getCustomerDetails()->getId();
+$orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+?>
+<?php if ($orderHistoryHelper->isEnhancementEnabeled()): ?>
+<!-- B-1234552- Validate all new component follow ADA compliance Order/Quote History -->
+<h1 class="quote-id-title">
+    <span class="quote-id-text"><?=$block->escapeHtml(__('Quote ID '))?></span>
+    <span class="quote-id"><?='#' . $quoteid . '-SEPO';?></span>
+</h1>
+<!-- B-1148619 Print Quote Receipt -->
+<script>
+    require(['jquery'
+    ],function($){
+    $(".negotiable_quote-quote-print a.logo img").attr(
+        "src","<?=$this->getViewFileUrl('images/order-history/fedexlogo.png');?>"
+        );
+    /** B-1234552- Validate all new component follow ADA compliance Order/Quote History **/
+    $(window).on('load', function() {
+        $(".negotiable_quote-quote-print tr.grand_total th").html("Quote Grand Total");
+    });
+});
+</script>
+<?php endif;?>

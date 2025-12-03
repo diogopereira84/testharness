@@ -1,0 +1,27 @@
+<?php $orders = $block->getOrders(); ?>
+<table class="email-items" aria-label="">
+    <thead>
+        <tr>
+            <th class="item-info" style="text-align:center;">
+                <?= $escaper->escapeHtml(__('Order Number')); ?>
+            </th>
+            <th class="item-qty" style="text-align:center;">
+                <?= $escaper->escapeHtml(__('Order received date/time')); ?>
+            </th>
+            <th class="item-price" style="text-align:center;">
+                <?= $escaper->escapeHtml(__('Order Status')); ?>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+    <?php if (is_array($orders) || is_object($orders)): ?>
+    <?php foreach ($orders as $order): ?>
+        <tr>
+            <td style="text-align:center;"><?= $escaper->escapeHtml(__($order->getIncrementId())); ?></td>
+            <td style="text-align:center;"><?= $escaper->escapeHtml(__($order->getCreatedAt())); ?></td>
+            <td style="text-align:center;"><?= $escaper->escapeHtml(__($order->getStatus())); ?></td>
+        </tr>
+    <?php endforeach; ?>
+    <?php endif; ?>
+    </tbody>
+</table>

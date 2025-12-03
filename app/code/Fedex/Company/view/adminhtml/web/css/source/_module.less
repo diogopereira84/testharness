@@ -1,0 +1,309 @@
+@import '_plocationadmin.less';
+@import '_company-data-import-handler.less';
+
+/* B-1205796 : API integration for CC details and Billing details in Magento Admin */
+.cc-modal {
+    #img-card {
+        content: '';
+        background-repeat: no-repeat;
+        height: 30px;
+        width: 60px;
+        position: absolute;
+        top: 4px;
+        left: auto;
+        background-size: contain;
+        margin-left: 5px;
+    }
+
+    .generic {
+        background-image: url(../images/generic.png);
+    }
+
+    .visa {
+        background-image: url(../images/visa.png);
+    }
+
+    .mastercard {
+        background-image: url(../images/mastercard.png);
+    }
+
+    .amex {
+        background-image: url(../images/amex.png);
+    }
+
+    .discover {
+        background-image: url(../images/discover.png);
+    }
+
+    .diners-club {
+        background-image: url(../images/diners.png);
+    }
+
+    .check-icon {
+        color: #109a10;
+        font-size: 32px;
+        position: absolute;
+        right: 26%;
+        top: 3px;
+        display: none;
+    }
+
+    .check-icon:before {
+        content: "\f00c" !important;
+    }
+
+    .card-number .admin__control-text {
+        padding-left: 60px;
+    }
+
+    .admin__fieldset-wrapper-content {
+        .admin__fieldset {
+            .admin__field.cvv-number {
+                width: inherit;
+                padding: 0 10px 0 0;
+                margin-left: 0;
+                float: left;
+                max-width: 80px;
+
+                .admin__field-label {
+                    width: 100%;
+                    display: inline-block;
+                    margin: 0;
+                    padding: 0;
+                    text-align: left;
+                }
+
+                .admin__field-control {
+                    padding: 0;
+                    margin: 0;
+                    width: 100%;
+                }
+            }
+
+            .admin__field.expiration-month {
+                display: inline-block;
+                width: auto;
+                padding: 0 10px 0 0;
+                max-width: 18%;
+                float: left;
+                margin-left: calc(~' (100%) * .25 - -7px ');
+
+                .admin__field-label {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    text-align: left;
+                    float: left;
+                    white-space: normal;
+                }
+
+                .admin__field-control {
+                    padding: 0;
+                    margin: 0;
+                    width: 100%;
+
+                    select.admin__control-select {
+                        min-height: 38px;
+                        width: 100%;
+                    }
+                }
+            }
+
+            .admin__field.expiration-year {
+                width: auto;
+                padding: 0 10px 0 0;
+                float: left;
+                margin-left: 0;
+                max-width: 20%;
+                box-sizing: border-box;
+
+                .admin__field-label {
+                    width: 100%;
+                    margin: 0;
+                    padding: 0;
+                    text-align: left;
+                    float: left;
+                    white-space: normal;
+                }
+
+                .admin__field-control {
+                    padding: 0;
+                    margin: 0;
+                    width: 100%;
+
+                    select.admin__control-select {
+                        min-height: 38px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    .credit-cart-content {
+        width: 70%;
+        margin-left: 15%;
+
+        .credit-card-head {
+            border: 1px solid #ced5d9;
+            box-sizing: border-box;
+            display: flex;
+            height: 72px;
+            padding: 0 24px 0 24px;
+
+            .head-left {
+                display: flex;
+                width: 50%;
+
+                .left {
+                    #cc-image {
+                        background-repeat: no-repeat;
+                        min-height: 40px;
+                        width: 65px;
+                        background-size: contain;
+                        top: 22%;
+                        position: relative;
+                    }
+                }
+
+                .right {
+                    padding: 16px 0 16px 8px;
+                }
+            }
+
+            .head-mid {
+                padding: 24px 0 24px 0;
+                margin-left: 30%;
+            }
+
+            .head-right {
+                display: none;
+            }
+        }
+
+        .credit-card-body {
+            background-color: #f7f9fa;
+            border: 1px solid #ced5d9;
+            box-sizing: border-box;
+            margin-bottom: 16px;
+            padding: 23px 23px 33px 64px;
+
+            .credit-card-name {
+                display: flex;
+                padding-bottom: 24px;
+
+                .name-content {
+                    width: 40%;
+
+                    .name-title {
+                        font-size: 12px;
+                        font-weight: bold;
+                        letter-spacing: 1px;
+                        padding: 0 0 8px 0;
+                        text-transform: uppercase;
+                    }
+
+                    .name {
+                        font-size: 18px;
+                        font-weight: 300;
+                    }
+                }
+
+                .action {
+                    margin-left: 39%;
+
+                    .action-edit {
+                        border: 1px solid #6f7f87;
+                        box-sizing: border-box;
+                        cursor: pointer;
+                        height: 32px;
+                        letter-spacing: .75px;
+                        padding: 4px 29px !important;
+                        text-transform: uppercase;
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .credit-card-address {
+                display: flex;
+
+                .address-content {
+                    width: 40%;
+                    word-break: break-word;
+
+                    .address-title {
+                        font-size: 12px;
+                        font-weight: bold;
+                        letter-spacing: 1px;
+                        padding-bottom: 8px;
+                        text-transform: uppercase;
+                    }
+
+                    .content {
+                        font-weight: 300;
+                        line-height: 24px;
+                        font-size: 16px;
+                    }
+                }
+
+                .action {
+                    color: #0078b4;
+                    font-weight: bold;
+                    letter-spacing: .75px;
+                    text-transform: uppercase;
+                    margin-left: 42%;
+                    margin-top: 12%;
+
+                    .remove {
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+
+    .message {
+        margin-bottom: 10px;
+    }
+}
+
+.confirmation-note {
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.open-cc-form {
+    position: relative;
+    left: 35%;
+    bottom: 19px;
+}
+
+div[data-index="custom_billing_shipping"] div.admin__field-label {
+    width: auto !important;
+}
+
+.change-admin-button {
+    margin-bottom: 3rem;
+    margin-left: 25.5%;
+    width: 150px;
+}
+
+.make-admin-disabled {
+    text-decoration: none;
+    color: inherit;
+    cursor: default;
+    pointer-events: none;
+}
+
+.change-admin-action {
+    cursor: pointer;
+}
+
+.payment-config-group {
+    .admin__field-control {
+        .admin__control-text {
+            min-width: 265px;
+        }
+    }
+}

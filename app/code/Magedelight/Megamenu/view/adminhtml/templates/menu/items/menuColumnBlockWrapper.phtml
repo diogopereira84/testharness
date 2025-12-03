@@ -1,0 +1,98 @@
+<?php
+$menuItemId = $block->getData('menu_item_id');
+$category_checkbox = $block->getData('category_checkBox');
+$category_vertical_menu_checkbox = $block->getData('category_vertical_menu_checkbox');
+$category_vertical_bg_color = $block->getData('category_vertical_bg_color');
+$currentItem = $block->getData('current_item');
+?>
+<div class="menuColumnBlockWrapper" style="margin:10px 0;">
+    <div class="col-m-4 category_checkbox_wrapper">
+        <input class="admin__control-checkbox checkbox category_checkbox"
+               id="menu_data_<?= $menuItemId ?>_subcat"
+               type="checkbox"
+               name="menu_data[<?= $menuItemId ?>][subcat]" <?= $category_checkbox ?> >
+        <label for="menu_data_<?= $menuItemId ?>_subcat"
+               class="admin__field-label"
+               style="line-height:16px;"><?= __('Display all subcategories') ?></label>
+    </div>
+    <div class="col-m-4 category_checkbox_wrapper">
+        <input id="menu_data_<?= $menuItemId ?>_verticalsubcat"
+               class="admin__control-checkbox checkbox vertical_category_checkbox"
+               type="checkbox"
+               name="menu_data[<?= $menuItemId ?>][verticalsubcat]" <?= $category_vertical_menu_checkbox ?>>
+        <label for="menu_data_<?= $menuItemId ?>_verticalsubcat"
+               class="admin__field-label"
+               style="line-height:16px;"><?= __('Display Vertical Menu') ?></label>
+    </div>
+    <div class="col-m-4 vertical_category_color_wrapper">
+        <label for="menu_data_<?= $menuItemId ?>_verticalcatcolor"
+               class="admin__field-label"
+               style="line-height:16px;"><?= __('Vertical Menu Background Color') ?></label>
+        <input id="menu_data_<?= $menuItemId ?>_verticalcatcolor"
+               class="jscolor admin__control-text vertical_category_color"
+               type="text"
+               name="menu_data[<?= $menuItemId ?>][verticalcatcolor]"
+               value="<?= $category_vertical_bg_color ?>">
+    </div>
+</div>
+<div class="cf"></div>
+<?php $hidden = ""; ?>
+<?php if(!$category_checkbox): ?>
+    <?php $hidden = "hidden"; ?>
+<?php endif; ?>
+<div class="menuColumnBlockWrapper child-category-settings <?= $hidden ?>" style="margin:10px 0;">
+    <div class="col-m-3 category_checkbox_wrapper">
+        <div class="verical_category_child">
+            <label for="menu_data_<?= $menuItemId ?>_verticalcatexclude"
+                   class="admin__field-label"
+                   style="line-height:16px;"><?= __('Exclude child category') ?></label>
+            <input id="menu_data_<?= $menuItemId ?>_verticalcatexclude"
+                   class="admin__control-text vertical_category_exclude"
+                   type="text"
+                   name="menu_data[<?= $menuItemId ?>][verticalcatexclude]"
+                   value="<?= $currentItem->getData('vertical_cat_exclude') ?>">
+            <p>Enter comma seperated category ids eg. 25,26,27</p>
+        </div>
+    </div>
+    <div class="col-m-3 category_checkbox_wrapper">
+        <div class="verical_category_child">
+            <label for="menu_data_<?= $menuItemId ?>_verticalcatsortby"
+                   class="admin__field-label"
+                   style="line-height:16px;"><?= __('Category Sort By') ?></label>
+            <select id="menu_data_<?= $menuItemId ?>_verticalcatsortby"
+                class="admin__control-select vertical_category_sortby"
+                name="menu_data[<?= $menuItemId ?>][verticalcatsortby]">
+                <option value="position" <?= $currentItem->getData('vertical_cat_sortby') == 'position' ? "selected" : ""?>>Position</option>
+                <option value="name" <?= $currentItem->getData('vertical_cat_sortby') == 'name' ? "selected" : ""?>>Name</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-m-3 category_checkbox_wrapper">
+        <div class="verical_category_child">
+            <label for="menu_data_<?= $menuItemId ?>_verticalcatsortorder"
+                   class="admin__field-label"
+                   style="line-height:16px;"><?= __('Category Sort Order') ?></label>
+            <select id="menu_data_<?= $menuItemId ?>_verticalcatsortorder"
+                    class="admin__control-select vertical_category_sortorder"
+                    name="menu_data[<?= $menuItemId ?>][verticalcatsortorder]">
+                <option value="asc" <?= $currentItem->getData('vertical_cat_sortorder') == 'asc' ? "selected" : ""?>>ASC</option>
+                <option value="desc" <?= $currentItem->getData('vertical_cat_sortorder') == 'desc' ? "selected" : ""?>>DESC</option>
+            </select>
+        </div>
+    </div>
+    <div class="col-m-3 category_checkbox_wrapper">
+        <div class="verical_category_child">
+            <label for="menu_data_<?= $menuItemId ?>_verticalcatlevel"
+                   class="admin__field-label"
+                   style="line-height:16px;"><?= __('Child Category Depth') ?></label>
+            <select id="menu_data_<?= $menuItemId ?>_verticalcatlevel"
+                    class="admin__control-select vertical_category_level"
+                    name="menu_data[<?= $menuItemId ?>][verticalcatlevel]">
+                <option value="2" <?= $currentItem->getData('vertical_cat_level') == '2' ? "selected" : ""?>>2</option>
+                <option value="3" <?= $currentItem->getData('vertical_cat_level') == '3' ? "selected" : ""?>>3</option>
+                <option value="4" <?= $currentItem->getData('vertical_cat_level') == '4' ? "selected" : ""?>>4</option>
+                <option value="5" <?= $currentItem->getData('vertical_cat_level') == '5' ? "selected" : ""?>>5</option>
+            </select>
+        </div>
+    </div>
+</div>

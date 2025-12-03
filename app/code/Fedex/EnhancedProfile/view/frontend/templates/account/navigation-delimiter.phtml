@@ -1,0 +1,10 @@
+<?php
+/** @var \Magento\Customer\Block\Account\Delimiter $block */
+/** @var \Fedex\SSO\ViewModel\SsoConfiguration $fclLogin */
+$SSOViewModel = $block->getData('SSO_view_model');
+?>
+<?php if(!$SSOViewModel->isSSOlogin()): ?>
+<li class="nav item">
+    <span class="delimiter"></span>
+</li>
+<?php endif; ?>

@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="shared_catalog" resource="default" engine="innodb" comment="Shared Catalog Table">
+        <column xsi:type="varchar" name="legacy_catalog_root_folder_id" nullable="true" length="255" comment="Legacy Catalog Root Folder Id" disabled = "true"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" comment="Legacy Category Id" disabled = "true"/>
+    </table>
+	<table name="catalog_sync_queue" resource="default" engine="innodb" comment="Catalog Sync Queue">
+		<column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Queue Id"/>
+		<column xsi:type="int" name="company_id" padding="10" unsigned="true" nullable="false" comment="Company Id"/>
+        <column xsi:type="int" name="store_id" padding="10" unsigned="true" nullable="false" comment="Store Id"/>
+		<column xsi:type="varchar" name="legacy_catalog_root_folder_id" nullable="true" length="255" comment="Legacy Catalog Root Folder Id"/>
+        <column xsi:type="int" name="shared_catalog_id" padding="10" unsigned="true" nullable="false" comment="Shared Catalog Id"/>
+		<column xsi:type="varchar" name="status" nullable="false" length="255"  comment="Description"/>
+        <column xsi:type="smallint" name="email_sent" unsigned="true" nullable="false" identity="false"                   comment="Email Sent"/>
+		<column xsi:type="varchar" name="created_by" nullable="false" length="255"  comment="Customer Id"/>
+        <column xsi:type="varchar" name="email_id" nullable="false" length="255"  comment="Email Id"/>
+		<column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+         <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+	</table>
+    <table name="catalog_sync_queue_process" resource="default" engine="innodb" comment="Catalog Sync Queue Process">
+		<column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Catalog Sync Queue Process Id"/>
+		<column xsi:type="int" name="catalog_sync_queue_id" padding="10" unsigned="true" nullable="false" comment="Catalog Sync Queue Id"/>
+        <column xsi:type="int" name="shared_catalog_id" padding="10" unsigned="true" nullable="true" comment="Shared Catalog Id"/>
+        <column xsi:type="int" name="store_id" padding="10" unsigned="true" nullable="false" comment="Store Id"/>
+        <column xsi:type="varchar" name="category_id" nullable="true" length="255" comment="Category id field to store more than one categories"/>
+        <column xsi:type="longtext" name="json_data" nullable="false" comment="root category or product json"/>
+        <column xsi:type="text" name="error_msg" nullable="true" comment="Contains error message"/>
+		<column xsi:type="varchar" name="status" nullable="false" length="255"  comment="Status"/>
+		<column xsi:type="varchar" name="catalog_type" nullable="false" length="255" comment="Catalog Type"/>
+        <column xsi:type="varchar" name="action_type" nullable="true" length="255" comment="Action Types (new, updated, delete)"/>
+		<column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CATALOG_SYNC_QUEUE_ID_CATALOG_SYNC_QUEUE_PROCESS_CATALOG_SYNC_QUEUE_ID" table="catalogSyncQueueProcess" column="catalog_sync_queue_id" referenceTable="catalog_sync_queue" referenceColumn="id"/>
+	</table>
+    <table name="catalog_sync_queue_cleanup_process" resource="default" engine="innodb" comment="Catalog Sync Queue Cleanup Process">
+		<column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Catalog Sync Queue Process Id"/>
+        <column xsi:type="int" name="catalog_sync_queue_id" padding="10" unsigned="true" nullable="false" comment="Catalog Sync Queue Id"/>
+        <column xsi:type="int" name="shared_catalog_id" padding="10" unsigned="true" nullable="true" comment="Shared Catalog Id"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" comment="Category Id"/>
+        <column xsi:type="text" name="json_data" nullable="false" comment="root category or product json"/>
+        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" comment="Product Id"/>
+        <column xsi:type="varchar" name="sku" nullable="false" length="255" comment="Product Sku"/>
+        <column xsi:type="varchar" name="catalog_type" nullable="false" length="255" comment="Catalog Type"/>
+        <column xsi:type="text" name="error_msg" nullable="true" comment="Contains error message"/>
+        <column xsi:type="varchar" name="status" nullable="false" length="255"  comment="Status"/>
+		<column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="CATALOG_SYNC_QUEUE_ID_CATALOG_SYNC_QUEUE_PROCESS_CATALOG_SYNC_QUEUE_ID" table="catalogSyncQueueProcess" column="catalog_sync_queue_id" referenceTable="catalog_sync_queue" referenceColumn="id"/>
+	</table>
+    <table name="shared_catalog_sync_queue_configuration" resource="default" engine="innodb" comment="Shared Catalog Sync Queue Configuration">
+        <column xsi:type="int" name="id" padding="10" identity="true" unsigned="true" nullable="false" comment="Shared Catalog Sync Id"/>
+        <column xsi:type="int" name="shared_catalog_id" padding="10" unsigned="true" nullable="false" comment="Shared Catalog Id"/>
+        <column xsi:type="varchar" name="legacy_catalog_root_folder_id" nullable="false" length="255" comment="Legacy Catalog Root Folder Id"/>
+        <column xsi:type="int" name="category_id" padding="10" unsigned="true" nullable="false" comment="Category Id"/>
+        <column xsi:type="int" name="status" padding="10" unsigned="true" nullable="false"  comment="Status"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP" comment="Updated At"/>
+         <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+         <constraint xsi:type="foreign" referenceId="SHARED_CATALOG_ENTITY_ID_SHARED_CATALOG_SYNC_QUEUE_CONFIGURATION_SHARED_CATALOG_ID" table="shared_catalog_catalog_sync_queue_configuration" column="shared_catalog_id" referenceTable="shared_catalog" referenceColumn="entity_id"/>
+    </table>
+</schema>

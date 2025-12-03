@@ -1,0 +1,76 @@
+
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+ <!-- ko if: shouldShowPromoCodeField() -->
+        <div class="promo-code-container discount-block-container promo-show-for-all">
+            <div data-bind="visible: !isCouponCode()" class="promo-code-title discount-title" data-role="fedex account number title">
+                <button type="button" tabindex="0"
+                        data-bind="visible: !isCouponCode(), text: promoCodeMainLabelText(), click: showAddPromoCodeField"
+                        class="promo-code-label label-text promo-code-button"
+                        data-testid="order-summary-button-add-promo-code-if-discount-toggle-enabled"
+                ></button>
+            </div>
+            <form id="discount-coupon-form form"
+                    action=""
+                    method="post" data-bind="attr: {'data-hasrequired': $t('* Required Fields')}">
+                <input type="hidden" name="remove" id="remove-coupon" value="0" />
+                <div class="fieldset promo-code-block field-wrap" data-bind="visible: isHideApplyField()">
+                    <div class="field _required apply-field-group">
+                        <label class="label" data-bind="attr: { for: uid()}">
+                            <!-- ko if: label -->
+                                <span data-bind="i18n: label"></span>
+                            <!-- /ko -->
+                        </label>
+                        <div class="control">
+                            <input class="input-text" type="text"
+                            class="coupon_code disocunt-text-field"
+                            id="coupon_code"
+                            placeholder="Ex. SAVE20"
+                            aria-required="true"
+                            name="coupon_code"
+                            data-testid="checkout-order-summary-input-promo-code-if-discount-toggle-is-enabled"/>
+                        </div>
+                        <div class="actions-toolbar discount-actions-toolbar">
+                            <div class="primary">
+                                <button
+                                    type="submit"
+                                    title="Apply"
+                                    class="action submit primary promo-code-submit-button"
+                                    data-bind="click: applyPromoCode"
+                                    data-testid="checkout-order-summary-button-promo-code-apply-if-discount-toggle-is-enabled">
+                                    <span data-bind="i18n: applyButtonLabel()"></span>
+                                </button>
+                                <p id="apply-promo-loader" class="loadersmall"></p>
+                            </div>
+                        </div>
+                        <p class="form-error-message"></p>
+                    </div>
+                </div>
+
+                <div class="fieldset promo-code-block-applied field-wrap" data-bind="visible: isCouponCode()" >
+                    <div class="field _required apply-field-group">
+                        <label class="label" data-bind="attr: { for: uid()}">
+                            <!-- ko if: label -->
+                                <span data-bind="i18n: label"></span>
+                            <!-- /ko -->
+                        </label>
+                        <div class="control">
+                            <div class="applied-code">
+                                <div class="applied-code-text" data-bind="text: couponCode"></div>
+                                <button
+                                    class="removed_promo"
+                                    id="removed_promo"
+                                    aria-label="remove promo"
+                                    data-bind="click: applyPromoCode"
+                                    data-testid="checkout-order-summary-button-promo-code-applied-remove-if-discount-toggle-enabled"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+<!-- /ko -->

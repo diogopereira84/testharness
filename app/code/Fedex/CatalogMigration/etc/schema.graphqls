@@ -1,0 +1,13 @@
+type Mutation {
+	importCatalogs(input: [CatalogInput!]): CatalogOutput @resolver(class: "Fedex\\CatalogMigration\\Model\\Resolver\\ImportCatalogResolver") @doc(description:"Upload files by to pub/media/import static folder")
+}
+
+input CatalogInput {
+	company_url_ext: String! @doc(description:"Add company url extensions")
+	base64_encoded_file: String! @doc(description:"Add base64 code format's csv file")
+}
+
+type CatalogOutput {
+	status: Boolean @doc(description: "Catalog file import status")
+	message: String @doc(description: "Catalog file import message")
+}

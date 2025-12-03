@@ -1,0 +1,44 @@
+<div class="campaign-ad-disclosure" data-bind="visible: shouldDisplayInlineEproQuestionnaire">
+    <div class="campaign-ad-disclosure__header">
+      <h2 class="title fs-24 cl-gray" data-bind="i18n: 'Political Campaign Disclosure'"></h2>
+      <hr class="border--gray"/>
+    </div>
+  
+    <div class="campaign-ad-disclosure__question">
+        <div>
+            <span class="fs-16 lh-24 fedex-regular cl-gray mb-4" data-bind="i18n: 'Is your order related to a campaign ad?'"></span>
+            <span tabindex="0" aria-label="More information" class="my-tooltip">
+                <img aria-describedby="info-contact" data-bind="attr: { src: infoUrl}"
+                    class="tooltip-toggle tooltip-icon" alt="Alternate contact icon" />
+
+                <span id="info-contact" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                   This is a tooltip message.
+                </span>
+            </span>
+        </div>
+
+        <div class="ddt-custom-control">
+            <input id="campaign-ad-disclosure-yes"
+                type="radio"
+                class="ddt-custom-control-input"
+                name="campaign-ad-disclosure"
+                data-bind="checked: disclosureModel.isCampaignAd, checkedValue: true, click: openModal">
+            <label for="campaign-ad-disclosure-yes" class="ddt-custom-control-label v-center">
+                <span class="indicator radio-circle"></span>
+                Yes, this order is related to a campaign ad.
+            </label>
+        </div>
+
+        <div class="ddt-custom-control">
+            <input id="campaign-ad-disclosure-no"
+                type="radio"
+                class="ddt-custom-control-input"
+                name="campaign-ad-disclosure"
+                data-bind="checked: disclosureModel.isCampaignAd, checkedValue: false">
+            <label for="campaign-ad-disclosure-no" class="ddt-custom-control-label v-center">
+                <span class="indicator radio-circle"></span>
+                No, this order is not related to a campaign ad.
+            </label>
+        </div>
+    </div>
+</div>

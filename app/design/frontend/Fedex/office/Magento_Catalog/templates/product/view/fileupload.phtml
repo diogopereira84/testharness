@@ -1,0 +1,101 @@
+<?php
+$product = $block->getProduct();
+$deliveryHelper = $this->helper('Fedex\Delivery\Helper\Data');
+$siteName = $deliveryHelper->getCompanySite();
+$hasCanvaDesign = $product->getData('has_canva_design');
+$productViewModel = $block->getData('product_availability_view_model');
+$dyesubViewModel = $block->getData('dyesub_view_model');
+
+if ($siteName) {
+    /** @var $viewModel \Fedex\Punchout\ViewModel\TazToken */
+    $viewModel = $block->getViewModel();
+    $tazToken = $viewModel->getTazToken($siteName ? false : true);
+} else {
+    $tazToken = null;
+}
+
+?>
+<?php
+$unavailableMessageCssClass = '';
+if($productViewModel->isE441563ToggleEnabled() &&
+    !$productViewModel->checkProductAvailable($product)
+){
+    $unavailableMessageCssClass = $productViewModel->getUnavailableButtonCssClass();
+    echo $block->getChildHtml('pdp.unavailable.message');
+ }
+
+?>
+<div class="file-upload-section text-center">
+	<div class="file-upload-container text-left">
+        <?php if(!$product->getData('is_customer_canvas')):?>
+	    <button id="upload-a-file-button" type="button" class="btn-primary d-none mb-20 <?= $unavailableMessageCssClass;?>"
+                onclick="openIframe.uploadPrintProduct(event)('<?php echo $product->getSku(); ?>', '<?= $siteName ?>', '<?= $tazToken; ?>', window.contentAssociation())">
+	        UPLOAD A FILE
+	    </button>
+        <?= $block->getChildHtml('product.info.shipping.alert');?>
+        <?= $block->getChildHtml('product.info.shipping');?>
+        <?php endif;?>
+        <?php if($dyesubViewModel->isDyeSubEnabled() && $product->getData('is_customer_canvas')):?>
+            <button id="btn-start-design" type="button" class="btn-primary d-none mb-20 <?= $unavailableMessageCssClass;?>" disabled="disabled">
+                START DESIGNING
+            </button>
+        <?php endif;?>
+        <input type="hidden" id="isDyeSubProduct" value="<?= ($dyesubViewModel->isDyeSubEnabled() && $product->getData('is_customer_canvas')) ? '1' : '0' ?>">
+    </div>
+
+    <button type="button" class="old-1p-layout btn-secondary mt-25" data-trigger="trigger-shippingmodal">
+        GET SHIPPING ESTIMATE
+    </button>
+
+    <?php if ($hasCanvaDesign): ?>
+        <button type="button" class="new-1p-layout canva-modal-link btn-primary-outline w-100 <?= $unavailableMessageCssClass;?>">
+            BROWSE CANVA DESIGN TEMPLATES
+        </button>
+    <?php endif;?>
+</div>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/modal",
+        "eventActions",
+        'ko',
+        'fedex/storage',
+        'product',
+        'Magento_Customer/js/customer-data',
+    ], function($, modal, canvasEvent, ko, fxoStorage, product, customerData) {
+        $(document).ready(function () {
+            let dyeSubParams = false;
+            <?php if($dyesubViewModel->isDyeSubEnabled() && $product->getIsCustomerCanvas()): ?>
+                customerData.get('dyesub_section').subscribe(function (dyeSubSection) {
+                    dyeSubParams = dyeSubSection;
+                    $('#btn-start-design').prop('disabled', !dyeSubParams);
+                });
+                customerData.reload(['dyesub_section'], false)
+            <?php endif; ?>
+            window.contentAssociation.subscribe(function(value) {
+                $('.file-upload-section .btn-primary').removeClass('d-none');
+            });
+            $('#pod-upload-warning').modal({
+                buttons: [],
+                trigger: '[data-trigger=pod-upload-warning]'
+            });
+            if (window.tiger_E_478196_dye_sub_pod_2_updates && document.getElementById('isDyeSubProduct').value === '1') {
+                const skuID = '<?= $product->getSku(); ?>';
+                const siteName = '<?= $siteName ?>';
+                const tazToken = '<?= $tazToken; ?>';
+
+                function setDyeSubParams() {
+                    const contentAssociation = window.contentAssociation();
+                    Object.assign(contentAssociation.vendorTemplate, dyeSubParams);
+                    openIframe.uploadPrintProduct(event)(skuID, siteName, tazToken, contentAssociation);
+                }
+
+                $('#btn-start-design').on('click', function(event) {
+                    if (dyeSubParams) {
+                        setDyeSubParams();
+                    }
+                });
+            }
+        });
+    });
+</script>

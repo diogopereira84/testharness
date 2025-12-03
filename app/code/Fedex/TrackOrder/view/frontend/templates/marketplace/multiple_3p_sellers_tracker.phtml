@@ -1,0 +1,395 @@
+<?php
+/** @var \Fedex\TrackOrder\Block\Order\OrderDetails $block */
+/** @var \Fedex\TrackOrder\ViewModel\TrackOrderHome $trackOrderViewModel */
+
+$trackOrderViewModel = $trackOrderViewModel ?? $block->getTrackOrderHomeViewModel();
+if($trackOrderViewModel && $trackOrderViewModel->toggleCodeImprovementLogic()) {
+    $orderData = $block->getData('order_data');
+    $key = $block->getData('order_key');
+    $miraklItemCount = count($orderData[$key]['orderMktItems']);
+    $fedexItemsCount = count($orderData[$key]['orderItems']);
+    $isMktOrderDelayed = $block->isMktOrderDelayed($orderData, $key);
+    $notificationBannerImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Notification-banner.png');
+    $upArrowImage = $this->getViewFileUrl('Fedex_TrackOrder::images/up-arrow.png');
+    $downArrowImage = $this->getViewFileUrl('Fedex_TrackOrder::images/down-arrow.png');
+    $orderedIconImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Ordered-icon.png');
+    $orderedIconDelayImage = $this->getViewFileUrl('Fedex_TrackOrder::images/Delay-icon.png');
+}
+?>
+
+<div class="multiple-3p-tracker-wrapper">
+    <?php $thirdPartySellers = $orderData[$key]['orderMktItems'] ?? false ?>
+
+    <?php if($miraklItemCount > 0 && $thirdPartySellers): ?>
+
+        <?php foreach($thirdPartySellers as $sellerId => $seller): ?>
+
+            <?php $dayOfWeek = $seller['delivery_date'][0] ?>
+            <?php if($trackOrderViewModel->isOrderTrackingDeliveryDateUpdateEnable()): ?>
+                <?php $miraklOrderData =   $trackOrderViewModel->getMktOrderData($key, $sellerId)?>
+                <?php $extendedDeliveryDate = $trackOrderViewModel->getExtendedDeliveryDate($miraklOrderData); ?>
+                <?php $orderMktStatusDetail = $trackOrderViewModel->getMktOrderStatusDetailEnhancement($orderData, $key, $sellerId, $miraklOrderData['status']->getData('state')) ?>
+            <?php else: ?>
+                <?php $orderMktStatusDetail = $trackOrderViewModel->getMktOrderStatusDetailEnhancement($orderData, $key, $sellerId) ?>
+            <?php endif ?>
+            <?php $date = $seller['delivery_date'][1] ?>
+            <?php $timeOfDay = $seller['delivery_date'][2] ?>
+            <?php $orderMktStatusDetailImage = $this->getViewFileUrl('Fedex_TrackOrder::images/'.$orderMktStatusDetail.'-icon.png'); ?>
+            <?php $orderId = $orderData[$key]['order_id'] ?>
+            <?php $hasUpdatedDeliveryDate = !empty($extendedDeliveryDate) && $trackOrderViewModel->isOrderTrackingDeliveryDateUpdateEnable() && $orderMktStatusDetail != 'Cancelled' ?>
+            <!-- Header with Seller Name & Shipping Method -->
+            <div class="marketplace-order-type-heading orderTypeHeading">
+
+                <div class="seller-name fs-20 lh-32 mb-8">
+                    <?= __("Shipment")." ( ".$seller['mirakl_shop_name']." )" ?? 'Marketplace Seller'." )" ?>
+                </div>
+
+                <div class="makertplace-method-name fs-18">
+                    <?php $item           = $seller['items'][0] ?>
+                    <?php $hasShipped     = $item['status'] == 'shipped' ?>
+                    <?php $trackerUrl     = $seller['track_order_url'] ?>
+                    <?php $trackingNumber = $seller['tracking_number'] ?>
+                    <?php $hasShippingMethod = $item['mkt_shipping_method'] ?? false ?>
+
+                    <?php if($orderMktStatusDetail == 'Cancelled'): ?>
+
+                        <div class="order-cancelled">
+                            <?= __('Cancelled'); ?>
+                        </div>
+
+                    <?php else: ?>
+
+                        <?php if( $hasShipped ): ?>
+
+                            <div class="shipped">
+                                <?php $url = $trackerUrl.$trackingNumber ?>
+                                <?= 'FedEx Tracking # <a href="'.$url.'">'.$trackingNumber.'</a>' ?>
+                            </div>
+
+                        <?php elseif ( $hasShippingMethod ): ?>
+
+                            <div class="shipping-method">
+                                <?= $hasShippingMethod.'<sup class="reg fs-18">®</sup>' ?>
+                            </div>
+
+                        <?php endif ?>
+
+                    <?php endif ?>
+                </div>
+
+            </div>
+
+            <!-- Order Delay Notification -->
+            <div class="delay-notification-wrapper">
+                <?php
+                $isOngoingOrder = ($orderMktStatusDetail != 'Cancelled' && $orderMktStatusDetail != 'Shipped') ?? false;
+                ?>
+                <?php if ($hasUpdatedDeliveryDate): ?>
+                    <!-- Expected delivery updated Notification -->
+                    <div class="date-notification-wrapper mb-24 p-12 border-violet">
+                        <button class="close-date-notification text-right" onclick="closeDelayBanner(this)">X</button>
+                        <div class="date-notification-icon">
+                            <img src="<?php echo $infoImage; ?>" alt="Info"/>
+                        </div>
+                        <h3 class="fs-14 lh-24 m-0"><?= __('Expected delivery updated') ?></h3>
+                        <p class="fs-14 lh-24 m-0"><?= __('The expected delivery date of your order has changed. You can view the updated delivery information below.') ?></p>
+                    </div>
+                <?php elseif( $isMktOrderDelayed && $isOngoingOrder ): ?>
+                    <div class="orderDelayBanner">
+                        <div class="delay_Notification_icon">
+                            <img src="<?= $notificationBannerImage; ?>" alt="Notification Banner"/>
+                        </div>
+
+                        <div class="delay_notification_text">
+                            <span class="delay_heading">
+                                <?= __("Order Delayed") ?>
+                            </span>
+
+                            <span class="delay_description">
+                                <?= __("Due to unforeseen circumstances, this order is
+                                expected to be delayed. No scheduled delivery/availability date is known at this time.
+                                You'll receive an email when the order status is updated.") ?>
+                            </span>
+                        </div>
+
+                        <button class="close_delay_banner" onclick="closeDelayBanner(this)">X</button>
+
+                    </div>
+                <?php endif ?>
+            </div>
+            <!-- Items Table -->
+            <div class="orderItemDetails">
+                <div class="orderItemDetailsHeading pb-10 fs-18">
+                    <div class="heading1">Items</div>
+                    <div class="heading2">Status</div>
+                    <div class="heading3">Expected Delivery</div>
+                    <div class="heading4"></div>
+                </div>
+                <div class="orderItemDetailsContent" id="mktOrderItemDetailsContentFor<?= $orderId.$sellerId; ?>">
+                    <div class="content1"><?= count( $seller['items'] ) ?></div>
+                    <div class="content2">
+                        <?php if (!$isMktOrderDelayed && ($orderMktStatusDetail == 'Processing' ||
+                                $orderMktStatusDetail == 'Shipped')) { ?>
+                            <img src="<?= $orderedIconImage; ?>" alt="Ordered Icon"/>
+                        <?php } elseif ($isMktOrderDelayed) {
+                            ?><img src="<?= $orderedIconDelayImage; ?>" alt="Ordered Icon"/>
+                        <?php } else { ?>
+                            <img src="<?= $orderMktStatusDetailImage; ?>" alt="3P Order Status Detail Image"/>
+                        <?php }
+
+                        if ($isMktOrderDelayed && $orderMktStatusDetail != 'Shipped' && $orderMktStatusDetail != 'Ordered') {
+                            echo 'Processing';
+                        } else {
+                            echo $orderMktStatusDetail;
+                        } ?>
+                    </div>
+                    <div class="content3">
+                        <?php if ($orderMktStatusDetail == 'Cancelled' && !empty($orderData[$key]['cancelled_date'][1])) {
+                            echo $orderData[$key]['cancelled_date'][1];
+                        } elseif($hasUpdatedDeliveryDate && !empty($extendedDeliveryDate['dateFormatted']) ) {
+                            echo $extendedDeliveryDate['dateFormatted'];
+                        }
+                        elseif ($orderMktStatusDetail != 'Cancelled' && !empty($date)) {
+                            echo $date;
+                        } ?>
+                    </div>
+                    <div class="content4">
+                        <img src="<?= $downArrowImage; ?>"
+                            id="mktproductrow<?= $orderId.$sellerId; ?>" class="productImage chevron-down"
+                            alt="Down arrow Icon"
+                            onClick="ShowProducthide(
+                                'MktProductDtlSec<?= $orderId.$sellerId; ?>',
+                                'mktOrderItemDetailsContentFor<?= $orderId.$sellerId; ?>',
+                                'mktproductrow<?= $orderId.$sellerId; ?>'
+                            );"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div class="orderItemDetailsContentSmall" id="mktOrderItemDetailsContentForSmall<?= $orderId.$sellerId; ?>">
+                <div class="itemDetailsSmall">
+                    <div class="heading1">Items</div>
+                    <div class="content1"><?= $miraklItemCount; ?></div>
+                </div>
+                <div class="statusDetailsSmall">
+                    <div class="heading1">Status</div>
+                    <div class="statusDetailsSmallIcon">
+                        <?php if ($orderMktStatusDetail == 'Processing' || $orderMktStatusDetail == 'Shipped') { ?>
+                            <img src="<?= $orderedIconImage; ?>" alt="Ordered Icon"/>
+                        <?php } else { ?>
+                            <img src="<?= $orderMktStatusDetailImage; ?>" alt="3P Order Status Detail Image"/>
+                        <?php }
+
+                        if (
+                            $isMktOrderDelayed &&
+                            ($orderMktStatusDetail != 'Shipped') && ($orderMktStatusDetail != 'Ordered')
+                        ) {
+                            echo 'Processing';
+                        } else {
+                            echo $orderMktStatusDetail;
+                        } ?>
+                    </div>
+                </div>
+                <div class="deliveryDetailsSmall">
+                    <div class="heading1">Expected Delivery</div>
+                    <div class="content1">
+                        <?php if ($orderMktStatusDetail == 'Cancelled' && !empty($orderData[$key]['cancelled_date'][1])) {
+                            echo $orderData[$key]['cancelled_date'][1];
+                        } elseif ($orderMktStatusDetail != 'Cancelled' && !empty($date)) {
+                            echo $date;
+                        } ?>
+                    </div>
+                </div>
+                <div class="showHideIconSmall">
+                    <img src="<?= $downArrowImage; ?>" alt="Down arrow Icon"
+                        id="mktproductrow<?= $orderId.$sellerId; ?>"
+                        onClick="ShowProducthide(
+                            'MktProductDtlSecSmall<?= $orderId.$sellerId; ?>',
+                            'mktOrderItemDetailsContentForSmall<?= $orderId.$sellerId; ?>',
+                            'mktproductrow<?= $orderId.$sellerId; ?>'
+                        );"
+                    />
+                </div>
+            </div>
+            <div class="orderDetailsSectionSmall" id="MktProductDtlSecSmall<?= $orderId.$sellerId; ?>">
+
+                <div class="detailedItemDetailsSmall">
+                    <div class="heading1">
+                        <?php __("Items") ?>
+                    </div>
+
+                    <?php foreach($seller['items'] as $itemData): ?>
+                        <div class="row1ItemDetailsSmall">
+                            <div class="itemImageSmall">
+                                <img src="<?= $itemData['imgurl']; ?>" alt="Order Item Image">
+                            </div>
+                            <div class="itemNameQtySmall">
+                                <span><?= $itemData['name']; ?></span>
+                                <span>x<?= $itemData['qty']; ?></span>
+                            </div>
+                        </div>
+                    <?php endforeach ?>
+                </div>
+
+                <div class="detailedItemStatusSmall">
+                    <div class="heading1">Status</div>
+                    <?php if($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+                        <?= $block->getTrackorderMktOrderStatusComponent($orderData, $key, $sellerId, $seller, 'first'); ?>
+                    <?php else: ?>
+                        <?php include $mktOrderStatusComponent ?>
+                    <?php endif; ?>
+                </div>
+                <div class="detailedItemDeliverySmall">
+                    <div class="heading1">Expected Delivery</div>
+                    <div class="contentSmall">
+
+                        <?php if ($orderMktStatusDetail == 'Cancelled') {
+                            if (!empty($orderData[$key]['cancelled_date'][0])) { ?>
+                                <p><?= /* @noEscape */
+                                    $orderData[$key]['cancelled_date'][0]; ?></p>
+                            <?php }
+                            if (!empty($orderData[$key]['cancelled_date'][1])) { ?>
+                                <p class="expected_order_delivery_date">
+                                    <?= /* @noEscape */
+                                    $orderData[$key]['cancelled_date'][1]; ?></p>
+                            <?php }
+                            if (!empty($orderData[$key]['cancelled_date'][2])) { ?>
+                                <p> at <?= /* @noEscape */
+                                    $orderData[$key]['cancelled_date'][2]; ?></p>
+                            <?php }
+                        } elseif($hasUpdatedDeliveryDate) { ?>
+                            <h3 class="cl-primary text-uppercase weight-500 fedex-medium fs-16 lh-32 mt-0"><?= __('UPDATED') ?></h3>
+                            <?php if (!empty($extendedDeliveryDate['dayOfWeek'])) { ?>
+                                <p><?= /* @noEscape */
+                                    $extendedDeliveryDate['dayOfWeek']; ?></p>
+                            <?php }
+                            if (!empty($extendedDeliveryDate['dateFormatted'])) { ?>
+                                <p class="expected_order_delivery_date"><?= /* @noEscape */
+                                    $extendedDeliveryDate['dateFormatted']; ?></p>
+                            <?php }
+                            if (!empty($extendedDeliveryDate['timeFormatted'])) { ?>
+                                <p> by <?= /* @noEscape */
+                                    $extendedDeliveryDate['timeFormatted']; ?></p>
+                            <?php }
+                        }
+                        else {
+                            if (!empty($dayOfWeek)) { ?>
+                                <p><?= /* @noEscape */
+                                    $dayOfWeek; ?></p>
+                            <?php }
+                            if (!empty($date)) { ?>
+                                <p class="expected_order_delivery_date"><?= /* @noEscape */
+                                    $date; ?></p>
+                            <?php }
+                            if (!empty($timeOfDay)) { ?>
+                                <p> by <?= /* @noEscape */
+                                    $timeOfDay; ?></p>
+                            <?php }
+                        } ?>
+                    </div>
+                </div>
+                <div class="showHideIconSmall">
+                    <img src="<?= $upArrowImage; ?>" id="mktproductrow<?= $orderId.$sellerId; ?>"
+                        alt="Up arrow Icon"
+                        onClick="ShowProducthide(
+                            'MktProductDtlSecSmall<?= $orderId.$sellerId; ?>',
+                            'mktOrderItemDetailsContentForSmall<?= $orderId.$sellerId; ?>',
+                            'mktproductrow<?= $orderId.$sellerId; ?>'
+                        );"
+                    />
+                </div>
+            </div>
+            <div class="orderDetailsSection" id="MktProductDtlSec<?= $orderId.$sellerId; ?>">
+                <div class="detailedItemDetails">
+                    <div class="orderItemrow">
+                        <div class="rowItem1">
+                            <?php foreach ($seller['items'] as $index => $itemData) { ?>
+                                <div class="rowItem1Details">
+                                    <div class="itemImage">
+                                        <img src="<?= $itemData['imgurl']; ?>" alt="3P Order Item Image">
+                                    </div>
+                                    <div class="itemNameQty">
+                                        <span><?= $itemData['name']; ?></span>
+                                        <span>x<?= $itemData['qty']; ?></span>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                        <div class="rowItem2">
+                            <?php if($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+                                <?= $block->getTrackorderMktOrderStatusComponent($orderData, $key, $sellerId, $seller, 'second'); ?>
+                            <?php else: ?>
+                                <?php include $mktOrderStatusComponent ?>
+                            <?php endif; ?>
+                        </div>
+                        <div class="rowItem3">
+                            <?php if ($orderMktStatusDetail == 'Cancelled') {
+                                if (!empty($orderData[$key]['cancelled_date'][0])) { ?>
+                                    <p> <?= $orderData[$key]['cancelled_date'][0]; ?> </p>
+                                <?php }
+                                if (!empty($orderData[$key]['cancelled_date'][1])) { ?>
+                                    <p class="expected_order_delivery_date">
+                                        <?= $orderData[$key]['cancelled_date'][1]; ?>
+                                    </p>
+                                <?php }
+                                if (!empty($orderData[$key]['cancelled_date'][2])) { ?>
+                                    <p> at <?= $orderData[$key]['cancelled_date'][2]; ?> </p>
+                                <?php }
+                            } elseif($hasUpdatedDeliveryDate) { ?>
+                                <h3 class="cl-primary text-uppercase weight-500 fedex-medium fs-16 lh-32 mt-0"><?= __('UPDATED') ?>
+                                </h3>
+                                <?php if (!empty($extendedDeliveryDate['dayOfWeek'])) { ?>
+                                    <p><?= /* @noEscape */
+                                        $extendedDeliveryDate['dayOfWeek']; ?></p>
+                                <?php }
+                                if (!empty($extendedDeliveryDate['dateFormatted'])) { ?>
+                                    <p class="expected_order_delivery_date"><?= /* @noEscape */
+                                        $extendedDeliveryDate['dateFormatted']; ?></p>
+                                <?php }
+                                if (!empty($extendedDeliveryDate['timeFormatted'])) { ?>
+                                    <p> by <?= /* @noEscape */
+                                        $extendedDeliveryDate['timeFormatted']; ?></p>
+                                <?php }
+                            }else {
+                                if (!empty($dayOfWeek)) { ?>
+                                    <p> <?= $dayOfWeek; ?> </p>
+                                <?php }
+                                if (!empty($date)) { ?>
+                                    <p class="expected_order_delivery_date">
+                                        <?= $date; ?>
+                                    </p>
+                                <?php }
+                                if (!empty($timeOfDay)) { ?>
+                                    <p>
+                                        by <?= $timeOfDay; ?>
+                                    </p>
+                                <?php }
+                            } ?>
+                        </div>
+                        <div class="rowItem4">
+                            <img src="<?= $upArrowImage; ?>"
+                                alt="Up arrow Icon"
+                                id="mktproductrow<?= $orderId.$sellerId; ?>" class="productImage chevron-up"
+                                onClick="ShowProducthide(
+                                    'MktProductDtlSec<?= $orderId.$sellerId; ?>',
+                                    'mktOrderItemDetailsContentFor<?= $orderId.$sellerId; ?>',
+                                    'mktproductrow<?= $orderId.$sellerId; ?>'
+                                );"
+                            />
+                        </div>
+                    </div>
+                    <div class="delivery_note">
+                        <?php if($trackOrderViewModel->isOrderTrackingDeliveryDateUpdateEnable()): ?>
+                            <?= __('Expected delivery may be affected by weather and other service disruptions including production or transit delays.') ?>
+                        <?php else: ?>
+                        Delivery estimation may be effected by weather and other service disruptions including
+                        production or transit delays.
+                        <?php endif ?>
+                    </div>
+                </div>
+            </div>
+
+        <?php endforeach ?>
+    <?php endif ?>
+</div>

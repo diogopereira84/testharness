@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_MarketplaceCheckout
+ * @copyright    Copyright (c) 2023 Fedex
+ * @author       Eduardo Diogo Dias <eduardodias.osv@fedex.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <fedex>
+            <marketplace_configuration>
+                <promo_code_message><![CDATA[Discounts cannot be applied to products from Marketplace Sellers. The discount has been applied to all applicable FedEx Office products in your cart.]]></promo_code_message>
+                <cart_quantity_tooltip><![CDATA[Quantities for Marketplace Seller cannot be edited in the cart. Click "Edit" to adjust the quantity for this Item.]]></cart_quantity_tooltip>
+                <reorder_error_message><![CDATA[We are unable to combine this item with items in your cart or with other items selected for reorder.]]></reorder_error_message>
+                <vendor_shipping_account_number_disclaimer><![CDATA[This seller does not accept FedEx Shipping Accounts for shipping charges.]]></vendor_shipping_account_number_disclaimer>
+                <review_and_submit_and_order_confirmation_cancellation_message><![CDATA[Due to the customization of your order, no changes or cancellations are available after order submission.]]></review_and_submit_and_order_confirmation_cancellation_message>
+            </marketplace_configuration>
+            <transactional_email>
+                <order_ready_for_pickup_enable>1</order_ready_for_pickup_enable>
+                <order_shipment_delivery_enable>1</order_shipment_delivery_enable>
+                <order_shipment_multiple_delivery_enable>1</order_shipment_multiple_delivery_enable>
+                <order_confirmed_enable>1</order_confirmed_enable>
+                <order_cancelled_enable>1</order_cancelled_enable>
+                <phone_number_one><![CDATA[1.800.GoFedEx]]></phone_number_one>
+                <phone_number_two><![CDATA[1.800.463.3339]]></phone_number_two>
+            </transactional_email>
+        </fedex>
+        <environment_toggle_configuration>
+            <environment_toggle>
+                <vendor_shipping_account_number>0</vendor_shipping_account_number>
+            </environment_toggle>
+        </environment_toggle_configuration>
+    </default>
+</config>

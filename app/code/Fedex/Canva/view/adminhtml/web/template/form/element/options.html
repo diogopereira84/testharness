@@ -1,0 +1,80 @@
+<fieldset class="admin__fieldset fieldset">
+    <div class="admin__control-table-wrapper" id="manage-options-panel" data-index="attribute_options_select_container">
+        <input class="admin__control-text" type="hidden" data-form-part="product_form" name="product[canva_size]" data-bind='value: value'/>
+        <table class="admin__control-table" data-index="attribute_options_select">
+            <thead>
+            <tr id="attribute-options-table">
+                <th class="col-draggable"></th>
+                <th class="col-default _required control-table-actions-th" >
+                    <span>Is Default</span>
+                </th>
+                <th class="_required">
+                    <span>Product MappingId</span>
+                </th>
+                <th class="_required">
+                    <span>Display Width</span>
+                </th>
+                <th class="_required">
+                    <span>Display Height</span>
+                </th>
+                <th class="_required">
+                    <span>Orientation</span>
+                </th>
+                <th class="col-delete">&nbsp;</th>
+            </tr>
+            </thead>
+            <tbody data-role="options-container" data-bind='foreach: options, sortableList: options'>
+                <tr data-bind="sortableItem: { item: $data, parentList: $data.parentList }">
+                    <td class="col-draggable">
+                        <div data-role="draggable-handle" class="draggable-handle"
+                             title="Sort Option">
+                        </div>
+                        <input data-role="order" type="hidden" data-bind='value: sort_order' />
+                    </td>
+                    <td class="col-default control-table-actions-cell">
+                        <input class="input-radio" type="radio"  data-bind='value: id, checked: $parent.defaultOption, attr: { name: "product[canva_size][is_default]"}, event:{ change: $parent.changeOnRadioButton}' />
+                    </td>
+                    <td class="col-1">
+                        <input class="input-text required-entry admin__control-text" type="text"  data-form-part="product_form" data-bind='value: product_mapping_id, attr: { name: "product[canva_size_additional]["+sort_order+"][product_mapping_id]"}, event:{ change: $parent.changeInformation}'/>
+                    </td>
+                    <td class="col-2">
+                        <input class="input-text required-entry admin__control-text" type="text"  data-form-part="product_form" data-bind='value: display_width, attr: { name: "product[canva_size_additional]["+sort_order+"][display_width]"}, event:{ change: $parent.changeInformation}' />
+                    </td>
+                    <td class="col-3">
+                        <input class="input-text required-entry admin__control-text" type="text"  data-form-part="product_form" data-bind='value: display_height, attr: { name: "product[canva_size_additional]["+sort_order+"][display_height]"}, event:{ change: $parent.changeInformation}' />
+                    </td>
+                    <td class="col-4">
+                        <input class="input-text required-entry admin__control-text" type="text"  data-form-part="product_form" data-bind='value: orientation, attr: { name: "product[canva_size_additional]["+sort_order+"][orientation]"}, event:{ change: $parent.changeInformation}' />
+                    </td>
+                    <td id="delete_button_container_1" class="col-delete">
+                        <button id="delete_button_" title="Delete" type="button"
+                                class="action- scalable delete delete-option"
+                                data-bind='click: $parent.removeOption'>
+                        <span>Delete</span>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+            <tfoot>
+            <tr>
+                <th class="validation" colspan="4">
+                    <input type="hidden" class="required-dropdown-attribute-entry" name="dropdown_attribute_validation"/>
+                    <input type="hidden" class="required-dropdown-attribute-unique" name="dropdown_attribute_validation_unique"/>
+                </th>
+            </tr>
+            <tr>
+                <th class="col-actions-add" colspan="7">
+                    <button id="add_new_option_button"
+                            data-action="add_new_row"
+                            title=""
+                            type="button" class="action- scalable add"
+                            data-bind='click: addNewOption'>
+                        <span>Add Option</span>
+                    </button>
+                </th>
+            </tr>
+            </tfoot>
+        </table>
+        <input type="hidden" id="option-count-check" value="" />
+    </div>
+</fieldset>

@@ -1,0 +1,17 @@
+<div id="shipping_account_number_acknowledgement" 
+      class="relative pt-12"
+      data-bind="if: displayShippingAccountCheckbox(), css: { 'show-error': displayShippingAccountAcknowledgementError()}">
+  <div class="choice field d-flex">
+    <input id="share_fedex_account_number" type="checkbox" class="checkbox d-no-shrink" data-bind="checked: shippingAccountCheckboxValue" />
+    <label class="label ml-4 pointer" for="share_fedex_account_number">
+      <span class="fedex-regular fs-14 cl-gray" data-bind="text: shippingAccountAcknowledgementMessage"></span>
+    </label>
+  </div>
+  <div class="error-warning mt-8 d-flex ml-8" data-bind="if: displayShippingAccountAcknowledgementError()">
+    <div class="error-icon">
+      <img class="icon-error"
+          data-bind="attr: { src: infoErrorIconUrl }" alt="Error Icon" />
+    </div>
+    <span class="ml-10 fs-12 fedex-regular cl-error" data-bind="text: shippingAccountAcknowledgementErrorMessage"></span>
+  </div>
+</div>

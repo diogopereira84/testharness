@@ -1,0 +1,99 @@
+@btn-blue-pill__height: 50px;
+@btn-blue-pill__width: 161px;
+@btn-blue-pill__border-radius: 40px;
+@btn-blue-pill__color:#0079B4;
+@btn-blue-pill__bg-color:#f7f9fa;
+@btn-blue-pill__font-size: 14px;
+@btn-blue-pill__letter-spacing: 1px;
+@btn-blue-pill__line-height: 2.2rem;
+@btn-blue-pill__font-family:"FedEx Sans Bold";
+@btn-blue-pill__margin: 0 10px 10px 0;
+@btn-blue-pill__padding: 14px 17px;
+
+//
+//  Default appearance styles
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .third-party-sub-category-row, .third-party-promo-banner, .product-highlight-design-1, .product-highlight-design-2, .product-highlight-design-3, .tabbed-display, .hero-banner  {
+        .pagebuilder-button-primary {
+            &, &:active, &:focus, &:hover {
+                background-color: @color-orange-red1;
+                border: 1px solid @color-orange-red2;
+                color: @color-white;
+                font-size: 14px;
+                font-family: 'FedEx Sans Bold';
+                padding: 10px 15px 6px;
+            }
+
+            &:hover {
+                background-color: darken(@color-orange-red1, 5%);
+                border: 1px solid darken(@color-orange-red2, 5%);
+            }
+        }
+
+        .pagebuilder-button-secondary, .pagebuilder-button-link {
+            &, &:active, &:focus, &:visited &:hover {
+                color: @color-fedex-blue !important;
+                text-transform: uppercase;
+            }
+        }
+
+        .pagebuilder-button-link {
+            &, &:active, &:focus, &:visited &:hover {
+                font-family: 'FedEx Sans Medium';
+                font-size: 16px;
+                font-weight: 400;
+            }
+        }
+    }
+
+    div.pagebuilder-btn-blue-pill {
+        .pagebuilder-button-secondary {
+            text-align: center;
+            box-sizing: border-box;
+            font-weight: bold;
+            display: inline-block;
+            box-shadow: none;
+            text-decoration: none;
+            width: auto;
+            border: 2px solid @btn-blue-pill__color;
+            border-radius: @btn-blue-pill__border-radius;
+            height: @btn-blue-pill__height;
+            color: @btn-blue-pill__color;
+            background-color: @btn-blue-pill__bg-color;
+            font-size: @btn-blue-pill__font-size;
+            letter-spacing: @btn-blue-pill__letter-spacing;
+            line-height: @btn-blue-pill__line-height;
+            font-family: @btn-blue-pill__font-family;
+            margin: @btn-blue-pill__margin;
+            padding: @btn-blue-pill__padding;
+            &:hover {
+                transform: scale(1.012);
+                border: 2px solid @btn-blue-pill__color;
+                color: @btn-blue-pill__color;
+
+            }
+        }
+    }
+
+    .tabbed-display {
+        .pagebuilder-button-link {
+            &, &:active, &:focus, &:hover {
+                font-size: 14px;
+                font-family: 'FedEx Sans Bold';
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .third-party-sub-category-row, .third-party-promo-banner, .product-highlight-design-1, .product-highlight-design-2, .product-highlight-design-3, .tabbed-display, .hero-banner  {
+        .pagebuilder-button-primary {
+            &, &:active, &:focus, &:hover {
+                padding: 17px 28px;
+                font-size: 19px;
+            }
+        }
+    }
+}

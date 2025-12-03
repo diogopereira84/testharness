@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+	<body>
+		<referenceContainer name="checkout.cart.container">
+			<container name="checkout.item.section.cart.container" htmlTag="div" htmlClass="cart-item-section form form-cart">
+				<block name="checkout.cart.expiry.msg" before="-" template="Fedex_ExpiredItems::cart/expiry_message.phtml">
+					<arguments>
+						<argument name="cart.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+						<argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+					</arguments>
+				</block>
+				<block name="checkout.cart.expired.msg" before="-" template="Fedex_ExpiredItems::cart/expired_message.phtml">
+					<arguments>
+						<argument name="cart.msg.view.model" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+						<argument name="product_availability_view_model" xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+					</arguments>
+				</block>
+		    </container>
+		</referenceContainer>
+		<move element="checkout.cart.form" destination="checkout.item.section.cart.container" />
+	</body>
+</page>

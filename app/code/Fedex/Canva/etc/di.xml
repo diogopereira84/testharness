@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\Canva\Api\Data\SizeCollectionInterface" type="Fedex\Canva\Model\SizeCollection"/>
+    <preference for="Fedex\Canva\Api\Data\SizeInterface" type="Fedex\Canva\Model\Size"/>
+    <preference for="Fedex\Canva\Api\TemplateImageConverterInterface" type="Fedex\Canva\Model\TemplateImageConverter"/>
+    <preference for="Magento\PageBuilder\Api\TemplateRepositoryInterface" type="Magento\PageBuilder\Model\TemplateRepository"/>
+    <preference for="Magento\PageBuilder\Api\Data\TemplateInterface" type="Magento\PageBuilder\Model\Template"/>
+    <preference for="Fedex\Canva\Api\Data\ConfigInterface" type="Fedex\Canva\Model\Config"/>
+    <preference for="Fedex\Canva\Api\Data\LoginConfigInterface" type="Fedex\Canva\Model\LoginConfig"/>
+    <preference for="Fedex\SSO\Api\Data\ConfigInterface" type="Fedex\SSO\Model\Config"/>
+    <preference for="Fedex\Canva\Gateway\Request\BuilderInterface" type="Fedex\Canva\Gateway\Request\Builder"/>
+    <preference for="Fedex\Canva\Gateway\Response\HandlerInterface" type="Fedex\Canva\Gateway\Response\Handler"/>
+    <type name="Magento\Cms\Model\Page\DataProvider">
+        <plugin sortOrder="1" name="fedexCanvaDataProvider" type="Fedex\Canva\Plugin\Model\Page\DataProviderPlugin"/>
+    </type>
+</config>

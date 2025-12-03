@@ -1,0 +1,98 @@
+& when (@media-common = true) {
+    .product-highlight-design-1 {
+        margin-left: 16px !important;
+        margin-right: 16px !important;
+        .pagebuilder-column {
+            h2 {
+                margin: 0 0 10px;
+            }
+        }
+        :first-child.pagebuilder-column {
+            figure {
+                height: 100%;
+    
+                > img {
+                    width: 100%;
+                    height: 100% !important;
+                    object-fit: cover;
+                }
+            }
+        }
+    }
+}
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 1200px) and (max-width: 1439px) {
+        .product-highlight-design-1 {
+            .pagebuilder-column {
+                width: 50% !important;
+    
+                [data-content-type='text']span {
+                    font-size: 20px;
+                }
+            }
+    
+            :first-child.pagebuilder-column {
+                min-height: 200px;
+            }
+    
+            :not(:first-child).pagebuilder-column {
+                padding: 65px 150px 70px 70px !important;
+            }
+        }
+    
+        div[data-content-type='row'] {
+            .product-highlight-design-1 {
+                margin-left: 0 !important;
+                margin-right: 0 !important;
+            }
+        }
+    }
+}
+
+//
+// Tablet
+//
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 768px) and (max-width: 1199px) {
+        .product-highlight-design-1 {
+            [data-content-type='text'].fedex-font-light {
+                span {
+                    font-size: 20px !important;
+                }
+            }
+
+            :not(:first-child).pagebuilder-column {
+                padding: 40px 40px 25px 27px !important;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .product-highlight-design-1 {
+        &:not(.photobook) {
+            :not(:first-child).pagebuilder-column {
+                padding: 25px 15px 40px 15px !important;
+            }
+        }
+
+        &.photobook {
+            [data-content-type='button-item'] {
+                width: 100%;
+    
+                .pagebuilder-button-secondary {
+                    &, &:active, &:focus, &:hover {
+                        width: 100%;
+                        max-width: 100%;
+                    }
+                }
+            }
+
+            :not(:first-child).pagebuilder-column {
+                padding: 25px 16px 48px !important;
+            }
+        }
+    }
+}

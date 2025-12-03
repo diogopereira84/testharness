@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$cartMsgViewModel = $block->getData('cart.msg.view.model');
+$configInstance = $cartMsgViewModel->getConfig();
+$canvaPath = $cartMsgViewModel->isCanvaPage();
+?>
+<?php if (!$canvaPath && $cartMsgViewModel->isCustomerLoggedIn()): ?>
+    <div id="expired-modal-popup" class="expired-model-popup" style="display: none">
+        <div class="modal-body-content">
+        <div class="expired-popup-modal-icon">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/expired-items/expired-icon.png'))?>"
+        alt="">
+        </div>
+            <h3 class="expired-popup-heading">
+                <?= $escaper->escapeHtml(__($configInstance->getPopUpExpiredTitle())) ?>
+            </h3>
+            <p class="note-description">
+                <?= $escaper->escapeHtml(__($configInstance->getPopUpExpiredMessage())) ?>
+            </p>
+            <div class="row-1">
+                <div class="btn-container-left">
+                    <a href="javascript:void(0);"
+                        class="btn-popup-cancel-button close-popup">
+                        <span class="span-popup-cancel-button">
+                            <?= $escaper->escapeHtml(__('Cancel')) ?>
+                        <span>
+                    </a>
+                </div>
+                <div class="btn-container-right">
+                    <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('checkout/cart')); ?>"
+                    class="btn-popup-cart">
+                        <span class="span-popup-cart">
+                            <?= $escaper->escapeHtml(__('Go to Cart'))?>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="expiry-modal-popup" class="expired-model-popup" style="display: none">
+        <div class="modal-body-content">
+        <div class="expired-popup-modal-icon">
+        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/expired-items/expiring-icon.png'))?>"
+        alt="">
+        </div>
+            <h3 class="expired-popup-heading">
+                <?= $escaper->escapeHtml(__($configInstance->getPopUpExpiryTitle())) ?>
+            </h3>
+            <p class="note-description">
+                <?= $escaper->escapeHtml(__($configInstance->getPopUpExpiryMessage())) ?>
+            </p>
+            <div class="row-1">
+                <div class="btn-container-left">
+                    <a href="javascript:void(0);"
+                        class="btn-popup-cancel-button close-expiry-popup">
+                        <span class="span-popup-cancel-button">
+                            <?= $escaper->escapeHtml(__('Cancel')) ?>
+                        <span>
+                    </a>
+                </div>
+                <div class="btn-container-right">
+                    <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('checkout/cart')); ?>"
+                    class="btn-popup-cart">
+                        <span class="span-popup-cart">
+                            <?= $escaper->escapeHtml(__('Go to Cart'))?>
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_ExpiredItems/js/cart_expiry_modal": {
+                    "isLoggedIn": <?= (int)$cartMsgViewModel->isCustomerLoggedIn()?>
+                }
+            }
+        }
+    </script>
+<?php endif;?>

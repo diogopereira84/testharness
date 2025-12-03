@@ -1,0 +1,209 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\OrderApprovalB2b\ViewModel\ReviewOrderViewModel $reviewOrderViewModel */
+$reviewOrderViewModel = $block->getData('reviewOrderViewModel');
+
+$arrowIcon = 'Down';
+$arrowImgPath = 'images/commercial-order-approval/'.$arrowIcon.'.svg';
+$orders = $block->getAllOrderHirory();
+$noOfRecords = count($orders);
+$limit = $block->getRequest()->getParam('limit') ?? '10';
+$orderBy = $block->getRequest()->getParam('orderby') ?? 'DESC';
+$search = $block->getRequest()->getParam('search') ?? '';
+$orderByValue = 'ASC';
+$arrowRotateClass = '';
+if ($orderBy == 'ASC') {
+    $orderByValue = 'DESC';
+    $arrowRotateClass = 'rotate-up';
+}
+
+$toastMsgData = $reviewOrderViewModel->getSuccessErrorData();
+$toastMsg = $toastMsgData['msg'] ?? '';
+if (!empty($toastMsgData['success']) && !empty($toastMsg)) {
+    $successStyle = "display:block;";
+    $erroStyle = "display:none;";
+} elseif (empty($toastMsgData['success']) && !empty($toastMsg)) {
+    $successStyle = "display:none;";
+    $erroStyle = "display:block;";
+} else {
+    $successStyle = "display:none;";
+    $erroStyle = "display:none;";
+}
+$reviewOrderViewModel->unsetSuccessErrorData();
+
+?>
+<div class="b2b-order-success-toast-msg"
+style="<?= $escaper->escapeHtml($successStyle) ?>"
+ role="region" aria-label="message">
+    <div class="succ-msg">
+        <span class="icon-container">
+            <span>
+                <img class="img-check-icon" alt="Check icon"
+                     src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/enhanced-profile/check-icon.png'));?>">
+            </span>
+        </span>
+        <span class="message" id="order-success-msg">
+        <?= $escaper->escapeHtml(__($toastMsg)) ;?>
+        </span>
+        <img id="succ_msg_close" class="img-close-msg" alt="close icon"
+             src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/enhanced-profile/close-button.png'));?>"
+             tabindex="0">
+    </div>
+</div>
+<div class="b2b-order-error-toast-msg decline-toast-msg"
+style="<?= $escaper->escapeHtml($erroStyle) ?>" role="region" aria-label="message">
+    <div class="err-msg">
+                <span class="icon-container">
+                    <span>
+                        <img class="img-check-icon" alt="Close Circle Icon"
+                            src="<?=$escaper->escapeUrl(
+                                $block->getViewFileUrl('images/enhanced-profile/close-circle.png')
+                            );?>">
+                    </span>
+                </span>
+        <span class="message"><?= $escaper->escapeHtml(__($toastMsg)) ;?></span>
+        <img id="decline_err_msg_close" class="img-close-msg" alt="close icon"
+             src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/enhanced-profile/close-button.png'));?>"
+        />
+    </div>
+</div>
+<div class="order-approval-b2b-review-listing-container">
+    <div class="order-approval-b2b-search-filter-container">
+        <div class="order-approval-search-inner-container">
+            <input class="order-approval-search-bar" id ="order-search-textbox" type="text" maxlength="30"
+                   placeholder="<?= $escaper->escapeHtml(__('Search by order number')) ?>"
+                   value="<?= $escaper->escapeHtml($search) ?>"/>
+            <?php if ($search): ?>
+                <a href="javascript:void(0)" id="reset-cross" class="reset-cross-icon" tabindex="-1">
+                    <img class="search-clear-icon" alt="Clear the search value" tabindex="0"
+                         src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/upload-to-quote/close.png')); ?>"/>
+                </a>
+            <?php endif; ?>
+            <button id="search-quote-btn" class="order-approval-b2b-search-button" type="button"
+                    aria-label="search-button"></button>
+            <div class="error-message"></div>
+        </div>
+    </div>
+    <?php if ($noOfRecords): ?>
+    <table class="commercial-b2b-review-order-table">
+        <thead>
+        <tr>
+            <th class="col order-number">
+                <?= $escaper->escapeHtml(__('Order Number')) ?>
+            </th>
+            <th class="col order-date">
+                <?php if (!$search): ?>
+                    <a href="javascript:void(0)"
+                       date-href="<?= $escaper->escapeUrl($block->getUrl().'orderb2b/revieworder/history/?limit='.$limit.'&sortby=created_at&orderby='.$orderByValue) ?>"
+                       id="sort-by-order-date" tabindex="-1" class="sort-by-column">
+                        <?= $escaper->escapeHtml(__('Order Date')) ?>
+                        <img src="<?=$escaper->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                             alt="<?= $escaper->escapeHtml($arrowIcon) ?>-arrow-icon"
+                             class="sort-position-icon <?= $escaper->escapeHtml($arrowRotateClass) ?>"/>
+                    </a>
+                <?php else: ?>
+                    <?= $escaper->escapeHtml(__('Order Date')) ?>
+                <?php endif; ?>
+            </th>
+            <th class="col order-total">
+                <?= $escaper->escapeHtml(__('Total')) ?>
+            </th>
+            <th class="col order-action">
+                <?= $escaper->escapeHtml(__('Action')) ?>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($orders as $order): ?>
+                <tr>
+                    <td class="col id">
+                        <?= $escaper->escapeHtml($order->getIncrementId()) ?>
+                    </td>
+                    <td class="col date">
+                        <?= $escaper->escapeHtml($reviewOrderViewModel->getFormattedDate($order->getCreatedAt())) ?>
+                    </td>
+                    <td class="col total">
+                        <?= $escaper->escapeHtml($reviewOrderViewModel->getFormattedPrice($order->getGrandTotal())) ?>
+                    </td>
+                    <td class="col status">
+                        <a href='javascript:void(0)'
+                           id="order-approve-link"
+                           class="order-approve-link"
+                           data-itemid="<?= $escaper->escapeHtml($order->getId())?>"
+                           data-order-price="<?= $escaper->escapeHtml($order->getGrandTotal())?>">
+                            <?= $escaper->escapeHtml(__('Approve')) ?>
+                        </a>
+                        <span class="vertical-line"></span>
+                        <a href='javascript:void(0)' data-itemid="<?= $escaper->escapeHtml($order->getId()) ?>"
+                        id="order-decline-link" class="order-decline-link">
+                            <?= $escaper->escapeHtml(__('Decline')) ?>
+                        </a>
+                        <span class="vertical-line"></span>
+                        <a href='<?= $escaper->escapeUrl($block->getUrl().'sales/order/view/order_id/'.$order->getId().'/action/review') ?>'
+                        id="order-review-link" class="order-review-link">
+                            <?= $escaper->escapeHtml(__('Review')) ?>
+                        </a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+    <?php endif;?>
+
+    <!-- Review order listing for Mobile -->
+    <div class="mobile-order-apprval-b2b-listing" style="display:none">
+    <?php if ($noOfRecords): ?>
+        <table aria-describedby="order-table" class="my-order-review-table-mob">
+            <?php foreach ($orders as $order): ?>
+                    <tr class="col order">
+                        <th><?= $escaper->escapeHtml(__('Order Number')) ?></th>
+                        <td><?= $escaper->escapeHtml($order->getIncrementId()) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Order Date')) ?></th>
+                        <td>
+                            <?= $escaper->escapeHtml($reviewOrderViewModel->getFormattedDate($order->getCreatedAt())) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Total')) ?></th>
+                        <td>
+                            <?=$escaper->escapeHtml($reviewOrderViewModel->getFormattedPrice($order->getGrandTotal()))?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?= $escaper->escapeHtml(__('Action')) ?></th>
+                        <td>
+                            <a href='<?= $escaper->escapeUrl($block->getUrl().'sales/order/view/order_id/'.$order->getId().'/action/review') ?>'
+                            class='order-action'><?= $escaper->escapeHtml(__('Review')) ?>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+        </table>
+        <?php endif;?>
+    </div>
+
+    <?php if (!$search && !$noOfRecords): ?>
+        <div class="message info empty">
+            <span><?= $escaper->escapeHtml(__("Records not available")); ?></span>
+        </div>
+    <?php elseif (!$search && $noOfRecords): ?>
+        <?php if ($block->getChildHtml('pager')): ?>
+            <div class="review-order-paging-container order-products-toolbar toolbar bottom">
+                <?= $block->getChildHtml('pager'); ?>
+            </div>
+        <?php endif; ?>
+    <?php elseif ($search && !$noOfRecords): ?>
+        <div class="message info empty search-result-empty">
+            <span><?= $escaper->escapeHtml(__("Your search did not return any results.")); ?></span>
+        </div>
+    <?php endif; ?>
+</div>
+<script>
+    require(['revieworders'], function(revieworders) {
+    });
+</script>

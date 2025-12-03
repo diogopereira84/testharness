@@ -1,0 +1,134 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$states = $block->getData('states');
+
+?>
+<div class="block-title">
+    <h2><?= $block->escapeHtml(__('Tax Exempt Status')) ?></h2>
+    <p><?= $block->escapeHtml(__('Please indicate if this new account will be tax exempt.
+    Selecting this option will display additional fields for you to enter exemption information.')) ?>
+    </p>
+</div>
+<div class="grey-background">
+    <div id="tax_exempt_status_container" class="form-section-container">
+        <div class="checkmark-container">
+            <div class="alternate-check-container">
+                <label class="alternate-checkbox-container" for="tax_exempt_set_as_default">
+                    <input type="checkbox" name="tax_exempt_set_as_default" id="tax_exempt_set_as_default"
+                    aria-label="set as default" class="tax-exempt-check-input" value="0" tabindex="-1"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-tax-exempt-set-default">
+                    <span class="checkmark tax-exe-check" id="tax_exe_check" tabindex="0">
+                </span>
+                </label>
+                <input id="tax_exempt_checkbox" name="tax_exempt_checkbox_val" type='hidden' value="0" />
+                <div class="set-as-default">
+                    <?= $block->escapeHtml(__('Account will be tax exempt')) ?>
+                </div>
+                <div class="my-tooltip">
+                    <img class="tooltip-toggle tooltip-icon" alt="Account tax exempt"
+                src="<?= $block->escapeUrl($block->getViewFileUrl('images/cid-psg/tool-tip-grey-icon.png')); ?>"
+                tabindex="0"/>
+                    <span id="tax-exempt-tooltip" class="tooltip-content alternate-tooltip-text">
+                        <?= $block->escapeHtml(__('An Account is tax exempt when not required to pay taxes for
+                            reasons such as Non Profit group or purchasing goods for re-sale')) ?>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="tax-exempt-section" id="tax_exempt_section" style="display:none;">
+            <p class="application-req-para"><?= $block->escapeHtml(__('Applications requesting tax exemption will
+                not be tax exempt until a valid certificate is received.')) ?>
+            </p>
+            <div id="tax_exempt_row1" class="tax-exempt-row1">
+                <div id="tax_exempt_col1" class="left-col-content">
+                    <div class="input-container">
+                        <label class="input-label" for="name_on_certificate">
+                            <?= $block->escapeHtml(__('Name on certificate')) ?>
+                        </label>
+                        <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+                        validate-name-on-certificate"
+                        type="text" name="name_on_certificate" id="name_on_certificate"
+                        data-testid="E-349679-B-1755654-TK-2969058-foa-tax-exempt-status-name-on-certificate"
+                        maxlength="70"
+                        data-msg-required="Name on certificate is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container exemption-state">
+                        <label class="input-label v-validate" for="state_of_exemption">
+                            <?= $block->escapeHtml(__('State of Exemption')) ?>
+                        </label>
+                        <select class="input-container v-validate"
+                        name="state_of_exemption[]" multiple
+                        id="state_of_exemption"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-tax-exempt-state-exemption"
+                        data-msg-required="State of exemption is required."
+                        data-validate="{required:true}"
+                        >
+                            <?php foreach ($states as $state): ?>
+                            <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                            ><?= $block->escapeHtml($state['title']); ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <span id="state_of_exemption-error"
+                        class="mage-error" style="display:none">
+                        <?= $block->escapeHtml(__('State of Exemption is required.')) ?></span>
+                    </div>
+                </div>
+                <div id="tax_exempt_col2" class="right-col-content">
+                    <div class="input-container">
+                        <label class="input-label" for="no_of_certificate">
+                            <?= $block->escapeHtml(__('Number on certificate (if applicable) (optional)')) ?>
+                        </label>
+                        <input class="input-textbox v-validate validate-num-on-certificate-aphanumeric
+                        set-maximum-characters-limit-seventy"
+                        type="text" name="no_of_certificate" id="no_of_certificate"
+                        data-testid="E-349679-B-1755654-TK-2969058-foa-tax-exempt-status-number-on-certificate"
+                        maxlength="70"
+                        data-validate="{required:false}"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div id="tax_exempt_row2" class="tax-exempt-row2">
+                <p class="certify-para"><?= $block->escapeHtml(__('I/we certify that if any
+                tax-free purchases are used by our firm
+                in such a way as to subject them to Sales or Use Tax, I/we inform FedEx Office so the proper
+                tax can be assessed, or our firm will pay the tax due directly to the proper taxing authority
+                as state law provides. This certification applies each time a purchase is made on our account.')) ?>
+                </p>
+                <div id="tax_exempt_initial_col1" class="initials-container">
+                    <div class="input-container">
+                        <label class="input-label" for="initials">
+                            <?= $block->escapeHtml(__('Initials')) ?>
+                        </label>
+                        <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+                        validate-initials-name"
+                        type="text" name="initials" id="initials"
+                        data-testid="E-349679-B-1755654-TK-2969058-foa-tax-exempt-status-initials"
+                        maxlength="70"
+                        data-msg-required="Initials is required."
+                        data-validate="{required:true, 'validate-length':true}"
+                        >
+                    </div>
+                </div>
+                <p class="note-para"><?= $block->escapeHtml(
+                    __('Note: Tax Exempt Certificates must be faxed to FedEx Office Tax Compliance at ')
+                )?>
+                    <a href="tel:+1.469.986.2262"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-tax-exempt-call">
+                        <?= $block->escapeHtml(__('1.469.986.2262')) ?>
+                    </a>
+                    <?= $block->escapeHtml(__('or emailed to '))?>
+                    <a href="mailto:ams.taxattributes@fedex.com" class="email-link" target="_blank"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-tax-exempt-email">
+                        <?= $block->escapeHtml(__('ams.taxattributes@fedex.com.')) ?>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\Canva\ViewModel\ConfigAdapter $config */
+$config = $block->getConfig();
+?>
+<?php if ($config->isEnabled()): ?>
+<div id="canva-login-modal"
+     data-mage-init='{"canva-login-modal":
+     {
+        "target": "#canva-login-modal",
+        "title": "<?= $escaper->escapeHtml(__($config->getTitle()))?>",
+        "icon": "<?= $escaper->escapeHtml(__($config->getWarningIcon()))?>",
+        "buttons": <?php
+            echo $escaper->escapeHtml(json_encode(
+                [
+                    'register' => [
+                        $config->getLabelText() => $escaper->escapeHtml(__($config->getRegisterButtonLabel())),
+                        $config->getHrefText() => $escaper->escapeHtml(__($config->getRegisterButtonHref()))
+                    ],
+                    'login' => [
+                        $config->getLabelText() => $escaper->escapeHtml(__($config->getLoginButtonLabel())),
+                        $config->getHrefText() => $escaper->escapeHtml(__($config->getLoginButtonHref()))
+                    ],
+                    'continue' => [
+                        $config->getLabelText() => $escaper->escapeHtml(__($config->getContinueButtonLabel()))
+                    ]
+                ]
+            ));
+                    ?>
+     }
+     }'
+>
+    <div class="modal-body-content">
+        <p class="description">
+            <?= $escaper->escapeHtml(__($config->getDescription())) ?>
+        </p>
+    </div>
+</div>
+<?php endif; ?>

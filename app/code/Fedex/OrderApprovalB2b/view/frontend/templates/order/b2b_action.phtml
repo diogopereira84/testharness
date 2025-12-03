@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$_order = $block->getOrder();
+
+/** @var Fedex\OrderApprovalB2b\ViewModel\ReviewOrderViewModel $reviewOrderViewModel */
+$reviewOrderViewModel = $block->getData('review_order_view_model');
+?>
+<?php
+if ($reviewOrderViewModel->isOrderApprovalB2bEnabled() && $reviewOrderViewModel->checkIsReviewActionSet() &&
+$_order->getStatus() == "pending_approval" && $reviewOrderViewModel->checkIfUserHasReviewOrderPermission()): ?>
+    <div class="review-order-action-container">
+        <div class="order-approval-action-container">
+            <div class="btn-approve-container">
+                <button
+                 class="btn-order-approve" tabindex="-1"
+                 data-order-price="<?= $escaper->escapeHtmlAttr($_order->getGrandTotal())?>"
+                 data-itemid="<?= $escaper->escapeHtmlAttr($_order->getEntityId()) ?>">
+                 <?= $escaper->escapeHtml(__('Approve')) ?>
+                </button>
+            </div>
+            <div class="btn-decline-container">
+                <button
+                class="btn-order-decline" tabindex="-1"
+                data-itemid="<?= $escaper->escapeHtmlAttr($_order->getEntityId()) ?>">
+                <?= $escaper->escapeHtml(__('Decline')) ?>
+                </button>
+            </div>
+        </div>
+        <div class="order-approval-message">
+            <?= $escaper->escapeHtml(__('Upon approval, this order will begin processing.')) ?>
+        </div>
+    </div>
+    <script>
+        require(['orderViewDetail'], function(orderViewDetail) {
+        });
+    </script>
+<?php endif; ?>

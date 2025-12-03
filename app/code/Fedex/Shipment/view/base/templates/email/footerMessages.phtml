@@ -1,0 +1,34 @@
+<?php $data = $this->getData(); ?>
+<?php $status = $this->getStatus(); ?>
+<?php if(in_array($status, ['cancelled', 'ready_for_pickup'])) {
+    $data['is_expected_delivery_enabled'] = false;
+} ?>
+<?php if (!empty($data)): ?>
+
+    <?php if((empty($data["is_full_1p_order"]) || !$data["is_full_1p_order"])
+        && !empty($data["essendant_toggle"]) && !empty($data["contact_support_url"])): ?>
+        <p>
+            If you have questions about your order, please visit <a href="<?= $data["contact_support_url"] ?>">Customer Support</a> page so we may direct you to the correct place to receive help. We look forward to working with you again soon!
+        </p>
+    <?php else: ?>
+        <p>
+            If you have questions about your order, please call
+            <?php if(!empty($data["producingstore_phonenumber"]) && isset($data['producingstore_phonenumber'])): ?>
+                <a style="color: #333;text-decoration: none;" href='tel:<?= $data['producingstore_phonenumber'] ?>'><?= $data['producingstore_phonenumber'] ?></a>
+            <?php else: ?>
+                <a style="color: #333;text-decoration: none;" href='tel:1.800.463.3339'>1.800.463.3339</a>.
+            <?php endif; ?>
+            <?php if(!empty($data["producingstore_email_address"]) && isset($data['producingstore_email_address'])): ?>
+                or email us at <a style="color: #333;text-decoration: none;" href='mailto:<?= $data['producingstore_email_address'] ?>'><?= $data['producingstore_email_address'] ?></a>.
+            <?php endif; ?>
+            <?php if(!empty($data["is_expected_delivery_enabled"]) && $data['is_expected_delivery_enabled']): ?>
+                 We look forward to working with you again soon!
+            <?php endif; ?>
+        </p>
+    <?php endif; ?>
+    <?php if (!empty($data["is_expected_delivery_enabled"]) && $data["is_expected_delivery_enabled"] && !$data['only_non_customizable']): ?>
+        <p style="color: #E3002D;">
+            Note: Due to the customization of your order, no changes or cancellations are available after order submission.
+        </p>
+    <?php endif; ?>
+<?php endif; ?>

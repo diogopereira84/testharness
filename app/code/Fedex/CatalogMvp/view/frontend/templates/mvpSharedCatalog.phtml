@@ -1,0 +1,224 @@
+<?php
+$recentlyAddedCollection = $block->getRecentProductCollection();
+
+$tazToken = $block->getTazToken();
+$siteName = $block->getSiteName();
+$isCustomDocEnabled = $block->isCatalogMvpCustomDocEnable();
+$currencySymbol = $block->getCurrencySymbol();
+
+$companyType = $block->getCompanyType();
+if ($block->getCatalogOnlyOption()) : ?>
+    <?php if( $block->isTigerE424573OptimizingProductCardsEnabled() ): ?>
+        <?= $block->getLayout()
+            ->createBlock("Fedex\SelfReg\Block\EproHome")
+            ->setTemplate("Fedex_CatalogMvp::sharedCatalog/products-catalog.phtml")
+            ->toHtml() ?>
+
+    <?php else: ?>
+        <div class="shared-company-catalog">
+            <h2><?= $escaper->escapeHtml(__('Shared Catalog')); ?></h2>
+            <div class="mvp-shared-catalog-container desktop-view">
+                <div class="tab-container">
+                    <span class="recently-added-tab tab-title active" data-content="recently-added">
+                        <?= $escaper->escapeHtml(__('Recently Added')); ?>
+                    </span>
+                    <a href="<?= $block->getBrowseCatalogUrl(); ?>" class="view-catalog">
+                        <?= __('View Catalog') ?> </a>
+                </div>
+                <div class="seprator"></div>
+                <div class="tab-content-wrapper">
+                    <div class="recently-added-content tab-content active" id="owlslider">
+                        <?php
+                        $productFound = false; ?>
+                        <?php if ($recentlyAddedCollection && $recentlyAddedCollection->getSize()) : ?>
+                            <?php foreach ($recentlyAddedCollection as $customDocItem) : ?>
+                                <?php
+                                $attributeSetId = $customDocItem->getAttributeSetId();
+                                $attribute_set_name = $block->getAttributeSetName($attributeSetId);
+                                $customizable = (bool) $customDocItem->getData('customizable');
+                                $catalogProductId = "";
+                                if($attribute_set_name == 'PrintOnDemand'
+                                    && $customDocItem->getData('external_prod') !== null) {
+                                    $externalProdData= $customDocItem->getData('external_prod');
+                                    $externalProdData= json_decode($externalProdData,true);
+
+                                    $catalogProductId=(isset($externalProdData['catalogReference']['catalogProductId'])) ?
+                                    $externalProdData['catalogReference']['catalogProductId'] : "";
+                                }
+                                // code added for eprp for migrated custom doc to pass value
+                                if (empty($catalogProductId)) {
+                                    $catalogProductId = $customDocItem->getData('sku');
+                                }
+                                ?>
+                                <?php if (
+                                    $block->getCatalogOnlyOption() &&
+                                    ($attribute_set_name == 'PrintOnDemand' ||
+                                        $attribute_set_name == 'FXOPrintProducts')
+                                ) : ?>
+                                    <?php $productFound = true; ?>
+                                    <?php
+                                    $categoryIds = $customDocItem->getCategoryIds();
+                                    if($block->checkFolderPermission($categoryIds)):
+                                    ?>
+                                    <div class="product-details">
+                                        <div class="product-img">
+                                            <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                            alt="<?= 'Image_' . $customDocItem->getName(); ?>" class="preview-image-container" datashowpreview="<?= $customDocItem->getData('pod2_0_editable')?>" datasku="<?= $customDocItem->getSku()?>">
+                                        </div>
+
+                                        <!-- B-1569506 -->
+                                        <div class="add-to-cart">
+                                            <?php if($companyType && $companyType == "epro" && $customizable) : ?>
+                                                <input type="button"
+-                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadCustomDocProduct(event)('<?php echo $tazToken; ?>', '<?php echo $siteName; ?>', '<?php echo $catalogProductId; ?>') : event.preventDefault()"
+-                                                    value="CUSTOMIZE"
+-                                                    class="btn-add-to-cart" />
+
+                                            <?php elseif($companyType != "sde" && $customizable) : ?>
+
+                                                <input type="button" data-action='<?php echo $this->getUrl('catalogmvp/configurator/index').'?sku='.$customDocItem->getSku().'&configurationType=customize'; ?>' value="CUSTOMIZE" class="btn-add-to-cart btn-customize-shared-catalog" />
+                                            <?php else :?>
+                                                <input type="button"
+                                                    data-id="<?= $customDocItem->getId() ?>"
+                                                    data-sku="<?= $customDocItem->getSku() ?>"
+                                                    data-action="<?= $block->getAddToCartUrl($customDocItem); ?>"
+                                                    data-form-key="<?= $block->getFormKey(); ?>"
+                                                    value="ADD TO CART"
+                                                    class="btn-add-to-cart">
+                                            <?php endif;?>
+                                            <?php echo $block->getBlockHtml('formkey')?>
+                                        </div>
+                                        <div class="product-title">
+                                            <strong><?= $customDocItem->getName(); ?></strong>
+                                        </div>
+                                        <div class="created-at">
+                                            <span>
+                                                <?= $block->getFormattedDate($customDocItem->getCreatedAt()); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                                <?php else: ?>
+                                    <div class="product-details">
+                                        <div class="product-img">
+                                            <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                            alt="<?= 'Image_' . $customDocItem->getName(); ?>" class="preview-image-container" datashowpreview="<?= $customDocItem->getData('pod2_0_editable')?>" datasku="<?= $customDocItem->getSku()?>">
+                                        </div>
+
+                                        <!-- B-1569506 -->
+                                        <div class="add-to-cart">
+                                            <?php if($companyType && $companyType == "epro" && $customizable) : ?>
+                                                <input type="button"
+-                                                    onclick="typeof openIframe != 'undefined' ? openIframe.uploadCustomDocProduct(event)('<?php echo $tazToken; ?>', '<?php echo $siteName; ?>', '<?php echo $catalogProductId; ?>') : event.preventDefault()"
+-                                                    value="CUSTOMIZE"
+-                                                    class="btn-add-to-cart" />
+                                            <?php elseif($companyType != "sde" && $customizable) : ?>
+                                                <input type="button" data-action='<?php echo $this->getUrl('catalogmvp/configurator/index').'?sku='.$customDocItem->getSku().'&configurationType=customize'; ?>' value="CUSTOMIZE" class="btn-add-to-cart btn-customize-shared-catalog" />
+                                            <?php else :?>
+                                                <input type="button"
+                                                    data-id="<?= $customDocItem->getId() ?>"
+                                                    data-sku="<?= $customDocItem->getSku() ?>"
+                                                    data-action="<?= $block->getAddToCartUrl($customDocItem); ?>"
+                                                    data-form-key="<?= $block->getFormKey(); ?>"
+                                                    value="ADD TO CART"
+                                                    class="btn-add-to-cart">
+                                            <?php endif;?>
+                                            <?php echo $block->getBlockHtml('formkey')?>
+                                        </div>
+                                        <div class="product-title">
+                                            <strong><?= $customDocItem->getName(); ?></strong>
+                                        </div>
+
+
+                                        <div class="created-at">
+                                            <span>
+                                                <?= $block->getFormattedDate($customDocItem->getCreatedAt()); ?> </span>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <script>
+        require(['jquery', 'owlcarousel', 'domReady'], function($) {
+            $('.owl-carousel').owlCarousel({
+                loop: false,
+                items: 1,
+                dots: true,
+                autoplay: false,
+                autoplayHoverPause: false,
+                margin: 20,
+                autoWidth: false
+            });
+            $(".mvp-shared-catalog-container .owl-nav").remove();
+        });
+    </script>
+    <?php endif; ?>
+<?php endif; ?>
+
+    <script type="text/javascript">
+        require(['jquery', 'Magento_Customer/js/customer-data','inBranchWarning', 'domReady','mage/cookies'], function($, customerData, inBranchWarning) {
+
+            $('.close-icon').on('click', function() {
+                $('.toast-msg-container').css('display', 'none');
+                $('.toast-msg-container-error').css('display', 'none');
+            });
+
+            $('.redirect-on-cart').on('click', function() {
+                setTimeout(function() {
+                    $('.toast-msg-container').css('display', 'none');
+                    $('.toast-msg-container-error').css('display', 'none');
+                }, 5000); // Delay of 5000 milliseconds (5 seconds)
+            });
+
+            $('.btn-add-to-cart').on('click', function() {
+                if ($(this).hasClass('btn-customize-shared-catalog')) {
+                    window.location.href = $(this).attr('data-action');
+                    return false;
+                }
+
+                var pid = $(this).attr('data-id');
+                var sku = $(this).attr('data-sku');
+                var action = $(this).attr('data-action');
+                var formKey = $(this).next("[name='form_key']").val();
+
+                $.ajax({
+                    url: action,
+                    showLoader: true,
+                    type: 'POST',
+                    data: {
+                        'product': pid,
+                        'qty': 1,
+                        'isAjax': true,
+                        'form_key': formKey
+                    },
+                    dataType: 'json',
+                }).done(function(response) {
+                     if(response.inBranchProductExist!== undefined && response.inBranchProductExist){
+                        $('.commercial-epro-store .page.messages').css('display', 'none');
+                        inBranchWarning.inBranchWarningPopup();
+                        return false;
+                    }
+                    customerData.reload();
+                    $('.commercial-epro-store .page.messages').css('display', 'none');
+                    if (response.fxo_rate_error !== undefined && response.fxo_rate_error === true) {
+                        $('.toast-msg-container-error').css('display', 'flex');
+                        var targetElementOffset = $('#add-cart-error-toast-msg').offset().top;
+                        $('html, body').animate({
+                            scrollTop: targetElementOffset
+                        }, 500);
+                    } else if (response.backUrl !== undefined && response.backUrl) {
+                        $('.view-cart .redirect-on-cart').attr('href', response.backUrl);
+                        $('.toast-msg-container').css('display', 'flex');
+                        var targetElementOffset = $('#add-cart-success-toast-msg').offset().top;
+                        $('html, body').animate({
+                            scrollTop: targetElementOffset
+                        }, 500);
+                    }
+                });
+            })
+        });
+ </script>

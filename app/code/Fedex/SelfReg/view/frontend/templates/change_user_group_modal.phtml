@@ -1,0 +1,56 @@
+<?php
+/** @var \Fedex\SelfReg\Block\UserGroupsList $block */
+$userGroups = $block->getCurrentUserGroupsList();
+$imageURL = $this->getViewFileUrl('images/user-group/UserGroups-icon.png');
+
+$data = json_encode([
+    'changeUserGroupModal' => [
+        'groups' => $userGroups,
+        'imageURL' => $imageURL
+    ]
+]);
+$jsonData = htmlspecialchars($data, ENT_QUOTES, 'UTF-8');
+?>
+
+<div class="change-user-group-modal-container" id="change-user-group-modal-container" data-mage-init='<?php echo $jsonData; ?>' style="display: none;">
+    <h2>Change User Group</h2>
+    <div class="user-group-container">
+        <span class="user-groups-title">User Groups</span>
+        <div class="user-search-control">
+            <input type="text"
+            value=""
+            id="user-group-search"
+            minlength="2"
+            placeholder="<?=$escaper->escapeHtmlAttr(__('Search for user group...')); ?>"
+            class="user-group-search-field"/>
+            <button type="submit" class="user-group-search-submit-button" aria-label="User Group Search" id="user-group-search-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+                <rect opacity="0.01" width="32" height="32" fill="white"/>
+                <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M18.026 18.9688C16.7543 20.0289 15.1182 20.6667 13.3333 20.6667C9.28348 20.6667 6 17.3832 6 13.3333C6 9.28292 9.2832 6 13.3333 6C17.3835 6 20.6667 9.28292 20.6667 13.3333C20.6667 15.1182 20.0289 16.7543 18.9688 18.026L25.8047 24.8619C26.0651 25.1223 26.0651 25.5444 25.8047 25.8047C25.5444 26.0651 25.1223 26.0651 24.8619 25.8047L18.026 18.9688ZM19.3333 13.3333C19.3333 10.0193 16.6471 7.33333 13.3333 7.33333C10.0196 7.33333 7.33333 10.0193 7.33333 13.3333C7.33333 16.6468 10.0199 19.3333 13.3333 19.3333C16.6468 19.3333 19.3333 16.6468 19.3333 13.3333Z" fill="#333333"/>
+                </svg>
+            </button>
+        </div>
+        <div class="field-name-usergroups">
+            <div id="user_groups_list_container">
+                <ul class="user_groups_list">
+                    <?php foreach ($userGroups as $customerGroupId => $customerGroupCode): ?>
+                        <li>
+                            <input type="radio" id="user_group_name_<?=$customerGroupId?>"
+                            data-testid=""
+                            class="user-group-name-button" name="user_group_name" value=""/>
+                            <img src="<?=$this->getViewFileUrl('images/user-group/UserGroups-icon.png');?>" alt="User Groups Icon">
+                            <label for="user_group_name_<?=$customerGroupId?>" class="user-group-name-button-label" tabindex="0">
+                                <?=$block->escapeHtml(__(trim(preg_replace('/<.*?>\s*/', '', $customerGroupCode))))?>
+                            </label>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+        </div>        
+        <div class="user-group-modal-buttons">
+            <button class="user-group-cancel-button" id="user_group_cancel_button" type="button"><span>CANCEL</span></button>
+            <button class="user-group-update-button" id="user_group_update_button" type="button"><span>UPDATE</span></button>
+        </div>
+    </div>
+</div>

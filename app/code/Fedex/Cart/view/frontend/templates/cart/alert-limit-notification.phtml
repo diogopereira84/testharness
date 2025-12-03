@@ -1,0 +1,28 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+$isLoggedIn = $helperData->isCommercialCustomer();
+$cartLineItemLimitConfHelper = $this->helper('\Fedex\Cart\Helper\Data');
+$cartHelperData = $this->helper('\Magento\Checkout\Helper\Cart');
+$cartItemConf = $cartLineItemLimitConfHelper->getMaxCartLimitValue();
+$cartItemLimitNum = (int) $cartItemConf['maxCartItemLimit'];
+?>
+<?php if ($isLoggedIn): ?>
+    <div id="fedex-cart-modal-box" style="display:none;">
+        <div class="fedex-cart-modal-inner-content">
+            <p>You may add up to <?=$cartItemLimitNum;?> items to the cart per order.</p>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_Cart/js/cart/alert-limit-notification": {
+                    "cartUrl": "<?= $cartHelperData->getCartUrl() ?>"
+                }
+            }
+        }
+    </script>
+<?php endif;?>

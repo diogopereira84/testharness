@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+?>
+<?php
+$commercialViewModel = $block->getData('view_model');
+$isCommercialStore = $commercialViewModel->isGlobalCommercialCustomerRequest();
+$queryLength = $commercialViewModel->getVmMinQueryLength();
+
+$blockObj= $block->getLayout()->createBlock('Fedex\PopularSearchTermsFilter\Block\PopularSearch');
+$popularTerms = $blockObj->getPopularSearchTerms();
+
+if ($isCommercialStore):
+    $mobileTag = $this->getData('mobile-only') ? '-mobile' : '';
+    ?>
+    <div class="quick-search d-flex flex-grow-1 relative qs-xs-md-hide">
+        <div class="search-field flex-grow-1">
+            <input type="text" class="search-input cl-white search-controls" placeholder="Search all products" aria-autocomplete="list" aria-haspopup="listbox" autocomplete="off" role="textbox">
+            <div class="custom-search search-suggestions absolute bg-cl-white d-none" aria-hidden="true">
+                <div class="product-list result-list fancy-scroll" role="listbox" aria-label="Product Suggestions"></div>
+                <a data-url="<?=$block->escapeUrl($blockObj->getProductRedirectUrl(''))?>" class="view-all btn-view-srp d-none fs-14 lh-24 fedex-bold ls-0-75 no-underline">VIEW ALL RESULTS</a>
+            </div>
+
+            <!-- Block for Popular Search Starts -->
+            <div class="popular-search search-suggestions absolute bg-cl-white d-none">
+                <div class="search-header product-result d-flex fedex-bold fs-16 lh-24 v-center">
+                    POPULAR SEARCHES
+                </div>
+                <div class="popular-terms result-list fancy-scroll">
+                    <?php if(count($popularTerms) > 0):
+                        foreach($popularTerms as $term){
+                            ?>
+                            <a class="product-result d-flex fs-16 lh-24 no-underline v-center" href="<?=$block->escapeUrl($blockObj->getProductRedirectUrl($term['productName']??''))?>" >
+                                <span class="product-name cl-gray fedex-light">
+                                    <?= $block->escapeHtmlAttr($term['productName']??'');?>
+                                </span>
+                            </a>
+                        <?php } endif;?>
+                </div>
+            </div>
+            <!-- Popular Search block ends -->
+
+        </div>
+<?php if ($commercialViewModel->isEnableStopRedirectMvpAddToCart()): ?>
+        <div class="toast-msg-container" id="add-to-cart-toast-message-search">
+            <div class="add-to-cart-toast-msg" role="dialog" aria-label="welcome-to-our-beta-site">
+                <div class="add-to-cart-toast-box-inner ">
+                    <span>
+                        <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Success Icon')) ?>">
+                    </span>
+                </div>
+                <div class="success-toast-msg">
+                    <p></p>
+                    <span class="view-cart">
+                        <a class="redirect-on-cart" href="<?= $block->getUrl('checkout/cart')?>"><?= $block->escapeHtml(__('VIEW CART')) ?></a>
+                    </span>
+                </div>
+                <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt="<?= $block->escapeHtml(__('close button Icon')) ?>">
+                </span>
+            </div>
+        </div>
+ <?php endif;?>       
+        <div class="d-flex">
+            <button class="btn-search btn-view-srp search-controls fs-32 fedex-icon lens lh-normal p-0 weight-300" aria-label="Search">
+            </button>
+        </div>
+    </div>
+<?php endif;?>

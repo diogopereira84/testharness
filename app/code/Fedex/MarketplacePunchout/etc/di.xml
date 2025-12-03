@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_MarketplacePunchout
+ * @copyright    Copyright (c) 2023 Fedex
+ * @author       Eduardo Diogo Dias <eduardodias.osv@fedex.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Fedex\MarketplacePunchout\Model\Xml\PunchoutBuilder" type="Fedex\MarketplacePunchout\Model\Xml\Builder">
+        <arguments>
+            <argument name="request" xsi:type="object">Fedex\MarketplacePunchout\Model\Xml\PunchoutBuilder\Request</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Fedex\MarketplacePunchout\Model\Xml\AuthRequestBuilder" type="Fedex\MarketplacePunchout\Model\Xml\Builder">
+        <arguments>
+            <argument name="request" xsi:type="object">Fedex\MarketplacePunchout\Model\Xml\AuthRequestBuilder\Request</argument>
+        </arguments>
+    </virtualType>
+    <type name="Fedex\MarketplacePunchout\Model\Marketplace">
+        <arguments>
+            <argument name="xmlBuilder" xsi:type="object">Fedex\MarketplacePunchout\Model\Xml\PunchoutBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Fedex\MarketplacePunchout\Model\Authorization">
+        <arguments>
+            <argument name="xmlBuilder" xsi:type="object">Fedex\MarketplacePunchout\Model\Xml\AuthRequestBuilder</argument>
+        </arguments>
+    </type>
+    <preference for="Fedex\MarketplacePunchout\Api\ReorderApiInterface" type="Fedex\MarketplacePunchout\Model\Reorder\Marketplace\ReorderApi" />
+    <preference for="Fedex\MarketplacePunchout\Api\Data\CustomerPunchoutUniqueIdInterface"
+                type="Fedex\MarketplacePunchout\Model\CustomerPunchoutUniqueId"/>
+    <preference for="Fedex\MarketplacePunchout\Api\Data\CustomerPunchoutUniqueIdSearchResultInterface"
+                type="Fedex\MarketplacePunchout\Model\CustomerPunchoutUniqueIdSearchResult"/>
+    <preference for="Fedex\MarketplacePunchout\Api\CustomerPunchoutUniqueIdRepositoryInterface"
+                type="Fedex\MarketplacePunchout\Model\ResourceModel\CustomerPunchoutUniqueIdRepository"/>
+
+    <type name="Fedex\MarketplacePunchout\Controller\Index\Index">
+        <plugin name="mock_punchout_payload" type="Fedex\MarketplacePunchout\Plugin\PunchoutMockerPlugin" sortOrder="10" />
+    </type>
+</config>

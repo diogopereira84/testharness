@@ -1,0 +1,24 @@
+<div class="campaign-ad-address-box" data-bind="visible: isVisible">
+    <div class="campaign-ad-address-box__header d-flex">
+        <div class="fedex-bold fs-12 lh-16 text-uppercase mt-8">Political Campaign Information:</div>
+        <button type="button" class="campaign-ad-address-box__edit-btn fs-14 fedex-bold text-uppercase" data-bind="click: openModal">Edit Info</button>
+    </div>
+    <hr class="campaign-ad-address-box__divider mb-16" />
+
+    <div class="campaign-ad-address-box__content">
+        <div>
+            <div class="fedex-regular fs-14 lh-24">Address:</div>
+            <!-- ko foreach: addressLines -->
+            <div class="fedex-light fs-14 lh-24" data-bind="text: $data"></div>
+            <!-- /ko -->
+        </div>
+        <div>
+            <div class="fedex-regular fs-14 lh-24">Election date:</div>
+            <div class="fedex-light fs-14 lh-24" data-bind="text: disclosureModel.electionDate"></div>
+        </div>
+        <div>
+            <div class="fedex-regular fs-14 lh-24">Candidate/ PAC / Ballot Issue:</div>
+            <div class="fedex-light fs-14 lh-24" data-bind="text: disclosureModel.candidatePacBallotIssue"></div>
+        </div>
+    </div>
+</div>

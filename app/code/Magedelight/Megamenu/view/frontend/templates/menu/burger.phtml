@@ -1,0 +1,45 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @noinspection PhpUnhandledExceptionInspection */
+/**
+ * Top menu for store
+ *
+ * @var $block \Magedelight\Megamenu\Block\Topmenu
+ */
+$burgerStatus = $block->getConfigBurgerStatus();
+$columnsLimit = $block->getColumnsLimit() ?: 0;
+$_menuHtml = $block->getHtml('level-top', 'submenu', $columnsLimit)
+?>
+
+<nav class="navigation" id="md-megamenu-burger" data-action="navigation" style="display: none;">
+    <ul data-mage-init='{"menu":{"responsive":true, "expanded":true, "position":{"my":"left top","at":"left bottom"}}}'>
+        <span class="md-menu-close-btn"><?php echo __('Close Btn'); ?></span>
+        <?= /* @noEscape */ $_menuHtml?>
+        <?= $block->getChildHtml() ?>
+    </ul>
+</nav>
+
+
+<script type="text/javascript">
+    require(['jquery'], function ($) {
+        $(document).ready(function(){
+                /*alert('fkfsakdlf');*/
+
+                $('#md-megamenu-burger').css('display','block');
+
+        });
+        /* Check burger menu is enable */
+        var burgerStatus = <?php echo $burgerStatus; ?>;
+        var html = $('html');
+        if (burgerStatus) {
+            html.addClass('md-burger-menu');
+        } else {
+            html.removeClass('md-burger-menu');
+        }
+
+        }
+    );
+</script>

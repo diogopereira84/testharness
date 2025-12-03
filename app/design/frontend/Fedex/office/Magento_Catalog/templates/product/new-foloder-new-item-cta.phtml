@@ -1,0 +1,169 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+ if ($block->getData('mvphelper_mvp_item-folder_cta')->isSharedCatalogPermissionEnabled() &&
+ (!$block->getData('mvphelper_mvp_item-folder_cta')->checkPrintCategory()) && $block->getData('mvphelper_mvp_item-folder_cta')->isMvpSharedCatalogEnable() ) {
+    $charLimitToggle = $block->getData('mvphelper_mvp_item-folder_cta')->getCharLimitToggle();
+
+?>
+<?php $configuratorUrl = $block->getUrl('catalogmvp/configurator/index');?>
+<div class="shared-catalog-cta-container mvp-breadcrumb-label" data-bind="scope:'add-folder-item'">
+    <button class="btn-primary-outline shared-catalog-new-folder-btn" data-bind="click: newFolder"
+    type="button">New Folder</button>
+    <button class="btn-primary shared-catalog-new-item-btn"
+    data-bind="click: openAddItemPopup" type="button">New Item</button>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "add-folder-item": {
+                        "component": "Fedex_CatalogMvp/js/folder-item-handler",
+                        "currentCategoryId": "<?php echo $block->getData('mvphelper_mvp_item-folder_cta')->currentCategory(); ?>"
+                    }
+                }
+            }
+        }
+    }
+</script>
+<script>
+    require(['jquery'], function($) {
+        var beforeRenameValue;
+        function activateRename(container, elementId, type){
+            container.attr('contentEditable',true);
+            container.attr('data-rename-type',type);
+            container.attr('data-rename-id',elementId);
+            beforeRenameValue = $.trim(container.html());
+            container.focus();
+            var charLimit = 50;
+            if ("<?= $charLimitToggle?>" == "1") {
+               var charLimit = 100;
+            }
+            var text1 = $.trim($('#right-panel-item-title').text());
+            $('#right-panel-item-title').html('<input class="rename-editable" data-rename-id='+elementId+' id="product-'+type+'-'+elementId+'" value="'+text1+'" maxlength="'+charLimit+'" contenteditable="true" data-rename-type="'+type+'" />');
+            $(".rename-editable").select();
+        }
+        function activateRenameList(container, elementId, type){
+            container.attr('contentEditable',true);
+            container.attr('data-rename-type',type);
+            container.attr('data-rename-id',elementId);
+            beforeRenameValue = $.trim(container.html());
+            container.focus();
+            var charLimit = 50;
+            if ("<?= $charLimitToggle?>" == "1") {
+               var charLimit = 100;
+            }
+               var text1 = $.trim($('#product-'+type+'-'+elementId).text());
+               $('#product-'+type+'-'+elementId).html('<input class="rename-editable" data-rename-id='+elementId+' id="product-'+type+'-'+elementId+'" value="'+text1+'" maxlength="' + charLimit + '" contenteditable="true" data-rename-type="'+type+'" />');
+            $(".rename-editable").select();
+        }
+        function applyRename(){
+            if($(".rename-editable").length) {
+                var renameType = $(".rename-editable").attr("data-rename-type");
+                var renameId = $(".rename-editable").attr("data-rename-id");
+                var renameValue = $(".rename-editable").val();
+                
+                renameValue = renameValue.replace(/&nbsp;/g, '');
+                renameValue = renameValue.replace(/(\r\n|\n|\r)/gm, "");
+                renameValue = $.trim(renameValue);
+                var renameItemUrl = "<?= $block->getUrl('catalogmvp/index/renameItem')?>";
+                var renameFolderUrl = "<?= $block->getUrl('catalogmvp/index/renameFolder')?>";
+                var ajaxRenameUrl = "<?= $block->getUrl('catalogmvp/index/renameItem')?>";
+                if(renameType == "folder") {
+                    var ajaxRenameUrl = "<?= $block->getUrl('catalogmvp/index/renameFolder')?>";
+                }
+                if(renameValue.length == 0) {
+                    $(".rename-editable").attr('contentEditable',false);
+                    $(".rename-editable").blur();
+                    $(".rename-editable").html(beforeRenameValue);
+                    $(".rename-editable").removeClass("rename-editable");
+                    return false;
+                }
+
+                $(".rename-editable").removeClass("rename-editable");
+                $.ajax({
+                    url: ajaxRenameUrl,
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        id: renameId,
+                        name: renameValue,
+                    },
+                    showLoader: true,
+                    complete: function(response) {
+                        if(response.responseJSON.status !== undefined && response.responseJSON.status == "success"){
+                            location.reload(true);
+                        }
+                    },
+                    error: function (xhr, status, errorThrown) {
+                        console.log('Error happens. Try again.');
+                    }
+                });
+            }
+        }
+        $(document).on('click', ".action_kebab_folder_rename a", function() {
+           var folderId = $(this).attr("data-folder-id");
+           activateRenameList($("#product-folder-"+folderId), folderId, "folder");
+        });
+        $(document).on('click', ".action_kebab_item_rename a", function() {
+           var itemId = $(this).attr("data-item-id");
+           activateRenameList($("#product-item-"+itemId), itemId, "item");
+        });
+        $(document).on('click', ".action_kebab_right_item_rename", function() {
+            var selectedProductId;
+            $('.product-item-checkbox:checked').each(function() {
+                selectedProductId = $(this).attr('name');
+            });
+            if(selectedProductId){
+                activateRename($("#right-panel-item-title"), selectedProductId, "item");
+            }
+        });
+
+        $(document).on('click', ".action_kebab_right_item_edit", function() {
+            var selectedProductSku;
+            $('.product-item-checkbox:checked').each(function() {
+                selectedProductSku = $(this).attr('data-item-sku');
+            });
+            if(selectedProductSku){
+                window.location.replace("<?= $configuratorUrl?>"+"sku/"+selectedProductSku);
+            }
+        });
+
+        
+        $(document).on("dblclick", ".dbclick-item-rename", function(){
+            document.getSelection().empty();
+            var selectedProductId = $(this).attr("data-item-id");
+            activateRenameList($(this), selectedProductId, "item");
+            $(this).focus();
+            $(".rename-editable").select();
+        });
+        $('body').click(function(event) {
+            if ($(event.target).hasClass('rename-editable')){
+                event.preventDefault();
+            }
+            else {
+                applyRename();
+            }
+        });
+        $(document).on("keypress", ".rename-editable", function(event){
+            var key = event.which;
+            if(key == 13) {
+                applyRename();
+                event.preventDefault();
+            }
+            else if($.trim($(this).val()).length == 50){
+                event.preventDefault();
+                return false;
+            }
+        });
+    });
+</script>
+<?php
+}
+?>

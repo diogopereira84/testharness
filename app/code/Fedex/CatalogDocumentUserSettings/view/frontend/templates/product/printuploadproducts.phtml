@@ -1,0 +1,12 @@
+<?php
+
+$companyConfiguration = $this->helper('Fedex\CatalogDocumentUserSettings\Helper\Data')->getCompanyConfiguration();
+$allowUploadDocument = (bool) $companyConfiguration->getAllowOwnDocument();
+
+if($allowUploadDocument){
+	echo $this->getLayout()
+	->createBlock('Magento\Cms\Block\Block')
+	->setBlockId('upload_print_products')
+	->toHtml();
+}
+?>

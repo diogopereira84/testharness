@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/queue.xsd">
+    <broker topic="customer_export.email" exchange="magento">
+        <queue name="customer_export" consumer="customerExportProcessor" handler="Fedex\CustomerExportEmail\Model\Export\Consumer::process"/>
+    </broker>
+</config>

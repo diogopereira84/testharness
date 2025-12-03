@@ -1,0 +1,164 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<style>
+    .pdf-container {
+        width: 100%;
+        max-width: 900px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: arial;
+    }
+    .pdf-header {
+        text-align: center;
+    }
+    .pdf-header .logo-container {
+        background-color: #4D148C;
+        padding: 30px 15px;
+    }
+    .pdf-header .auto-response {
+        color: #333;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        margin:30px 15px;
+    }
+    .pdf-header img{
+        width: 146px;
+    }
+    .pdf-footer {
+        width: 100%;
+        max-width: 612px;
+        margin-left: auto;
+        margin-right: auto;
+        color: #333;
+        font-size: 14px;
+        font-weight: 400;
+        line-height: 24px;
+        padding: 0;
+        overflow:hidden;
+    }
+    .pdf-body {
+        width: 100%;
+        max-width: 612px;
+        margin-left: auto;
+        margin-right: auto;
+        overflow:hidden;
+    }
+    .pdf-body .transaction {
+        width: 100%;
+        margin-left:0;
+        border-top: 1px solid #8E8E8E;
+        border-bottom: 1px solid #8E8E8E;
+        border-spacing: 0;
+    }
+    .pdf-body .quote-items {
+        width: 100%;
+        margin-left:0;
+        border-spacing: 0;
+    }
+    .blue-text {
+        color: #0078B4;
+    }
+    .pdf-body .quote-items tr th:nth-child(1) {
+        width: auto !important;
+    }
+    .pdf-body .quote-items tr th:nth-child(2) {
+        width: 78px !important;
+        text-align: right;
+        padding: 8px !important;
+    }
+    .pdf-body .quote-items tr th:nth-child(3) {
+        width: 78px !important;
+        text-align: right;
+        padding: 8px !important;
+    }
+    .pdf-body .quote-items tr td:nth-child(2) {
+        text-align: right;
+        padding: 8px !important;
+    }
+    .pdf-body .quote-items tr td:nth-child(3) {
+        text-align: right;
+        padding: 8px !important;
+    }
+    .pdf-body .transaction tr td:nth-child(1) {
+        text-align: right;
+        width: auto;
+    }
+    .pdf-body .transaction tr td:nth-child(2) {
+        width: 96px !important;
+        text-align: right;
+        padding-left: 0 !important
+    }
+    .pdf-body hr{
+       display: none;
+    }
+    .pdf-body .email-total {
+        padding-bottom: 20px;
+    }
+    .pdf-body .email-items {
+        padding-top: 16px !important;
+    }
+    .pdf-body .email-subtotal {
+        padding-top: 16px !important;
+    }
+    .pdf-body .email-tax {
+        padding-top: 8px !important;
+    }
+    .pdf-body .email-taxTotal {
+        padding-top: 8px !important;
+    }
+    .pdf-body .email-discount {
+        padding-top: 8px !important;
+    }
+    .pdf-body .email-discountTotal {
+        padding-top: 8px !important;
+    }
+    .pdf-body .email-total {
+        padding-top: 8px !important;
+        padding-bottom: 16px !important;
+    }
+    .pdf-body .email-total-to {
+        padding-top: 8px !important;
+        padding-bottom: 16px !important;
+    }
+    .pdf-body .quote-place-date {
+        margin-top: 16px;
+    }
+    .pdf-body .email-solutation {
+        border-bottom: 1px solid #8E8E8E;
+        padding-bottom: 35px;
+        margin-bottom: 35px !important;
+    }
+    .nbc-footer-margin {
+        margin-top: 150px;
+    }
+</style>
+<?php
+$quoteData = $block->getQuoteData();
+?>
+<div class="pdf-container">
+    <div class="pdf-header">
+        <div class="logo-container">
+            <img src="<?= $block->getMediaPath();?>wysiwyg/pdf-logo.png" />
+        </div>
+        <div class="auto-response">
+            <?= $escaper->escapeHtml(__(' ## This is an automated response. Please do not reply to this email. ##')) ?>
+        </div>
+    </div>
+    <div class="pdf-body">
+        <?= $block->getEmailTemplate($quoteData);?>
+    </div>
+    <?php
+    $nbcClass = (isset($quoteData['nbc']) && $quoteData['nbc']) ? 'nbc-footer-margin' : '';
+    ?>
+    <div class="pdf-footer <?= $escaper->escapeHtmlAttr($nbcClass) ?>">
+        <div class="footer-content">
+            <p><?= __("This email has been sent to: <a href='javascript:void(0)' class='blue-text'>".$block->getCutomerEmail()."</a>.") ?></p>
+            <p>&copy;<?= $escaper->escapeHtml(date('Y')) ?> <?= __("FedEx. The content of this message is protected by copyright and trademark laws under U.S. and international law. Review our <a class='blue-text' href='https://www.office.fedex.com/default/privacy-notice'>privacy policy</a>. Find information on fraud and security. All rights reserved.") ?></p>
+        </div>
+    </div>
+</div>

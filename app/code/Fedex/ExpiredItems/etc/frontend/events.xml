@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+	<event name="user_logout_success">
+		<observer instance="Fedex\ExpiredItems\Observer\Frontend\LogoutSuccessAfter" name="customer_logout_after"/>
+	</event>
+	<event name="controller_action_predispatch_checkout_index_index">
+		<observer name="expired_checkout" instance="Fedex\ExpiredItems\Observer\Frontend\Checkout\ExpiredCheckout" />
+	</event>
+</config>

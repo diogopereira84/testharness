@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Company\Api\Data\CompanyInterface">
+        <attribute code="company_payment_options" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>company_payment_options</field>
+            </join>
+        </attribute>
+        <attribute code="creditcard_options" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>creditcard_options</field>
+            </join>
+        </attribute>
+        <attribute code="fedex_account_options" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>fedex_account_options</field>
+            </join>
+        </attribute>
+        <attribute code="default_payment_method" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>default_payment_method</field>
+            </join>
+        </attribute>
+        <!-- B-1216115 : When the CC is configured in Admin , Payment screen prepopulate the CC details -->
+        <attribute code="cc_token" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>cc_token</field>
+            </join>
+        </attribute>
+        <attribute code="cc_data" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>cc_data</field>
+            </join>
+        </attribute>
+        <!-- B-1359540 : For Credit card configured in Magento Admin , expiration date should be validated -->
+        <attribute code="cc_token_expiry_date_time" type="string">
+            <join reference_table="company_additional_data" reference_field="company_id" join_on_field="entity_id">
+                <field>cc_token_expiry_date_time</field>
+            </join>
+        </attribute>
+        <attribute code="companyAdditionalData" type="Fedex\Company\Api\Data\AdditionalDataInterface">
+        </attribute>
+    </extension_attributes>
+</config>

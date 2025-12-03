@@ -1,0 +1,135 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <!-- B-1145910 Validate all new components follow ADA compliance - Upload Only -->
+    <head>
+        <link src="Magento_Theme::js/remove_id_myaccount.js"/>
+        <!-- D-137046 RT-ECVS-Internal-Styling of sorting options is not coming as per UX -->
+        <css src="Magento_Theme::css/select2.min.css" />
+    </head>
+    <body>
+        <referenceBlock name="logo">
+            <arguments>
+                <argument name="logo_img_width" xsi:type="number">148</argument>
+                <argument name="logo_img_height" xsi:type="number">43</argument>
+            </arguments>
+        </referenceBlock>
+        <referenceBlock name="category.view.container" remove="true" />
+        <referenceBlock name="category.image" remove="true" />
+        <referenceBlock name="product_recommendations_category_before_content" remove="true" />
+        <referenceBlock name="product_recommendations_category_below_content" remove="true" />
+
+        <referenceBlock name="head.additional">
+            <block class="Magento\Framework\View\Element\Template"
+                name="custom.header.upload.to.quote.listner"
+                template="Magento_Theme::html/upload-to-quote-listener.phtml" />
+        </referenceBlock>
+
+        <referenceBlock name="theme.active.editor" remove="true" />
+        <referenceBlock name="company_notice_blocked" remove="true" />
+        <referenceBlock name="magento_advancedcheckout_page_head_components" remove="true" />
+
+        <referenceBlock name="wishlist_page_head_components" remove="true" />
+        <referenceBlock name="magento_giftcardaccount_head_components" remove="true" />
+
+        <referenceBlock name="store_language" remove="true" />
+        <referenceBlock name="top.search" remove="true" />
+        <referenceBlock name="sale.reorder.sidebar" remove="true"/>
+        <referenceBlock name="catalog.compare.sidebar" remove="true"/>
+        <referenceBlock name="catalog.compare.link" remove="true"/>
+        <referenceBlock name="related.product.addto.compare" remove="true"/>
+        <referenceBlock name="category.product.addto.compare" remove="true"/>
+        <referenceBlock name="view.addto.compare" remove="true" />
+        <referenceBlock name="upsell.product.addto.compare" remove="true"/>
+        <referenceBlock name="catalogsearch.product.addto.compare" remove="true"/>
+        <referenceBlock name="catalogsearch.product.addto.compare" remove="true"/>
+        <referenceBlock name="crosssell.product.addto.compare" remove="true"/>
+        <referenceBlock name="top.links">
+            <block class="Magento\Framework\View\Element\Html\Link" name="erp-homepage-link">
+                <arguments>
+                    <argument name="label" xsi:type="helper" helper="Fedex\Header\Helper\Data::getLabel"></argument>
+                    <argument name="path" xsi:type="helper" helper="Fedex\Header\Helper\Data::getLink"></argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+
+        <referenceContainer name="header.container">
+            <container name="header.nav.top.panel" label="Page Header Nav Panel" htmlTag="div" htmlClass="panel header-top" after="header.panel.wrapper">
+                <container name="header.nav.panel" label="Header Nav Panel" htmlTag="div" htmlClass="header-nav-pannel" after="quick.search">
+                    <container name="right.top.header.links" label="Header Right Top Links" htmlTag="div" htmlClass="right-top-header-links"/>
+                </container>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="header.nav.panel">
+            <block class="Magento\Framework\View\Element\Template" name="header.top-nav.back.link" template="Fedex_CustomizedMegamenu::header/back.phtml" before="-"/>
+        </referenceContainer>
+        <referenceContainer name="right.top.header.links">
+            <block class="Magento\Framework\View\Element\Template" name="header.top.location" template="Fedex_CustomizedMegamenu::header/location.phtml"></block>
+        </referenceContainer>
+        <referenceContainer name="right.top.header.links">
+            <block class="Magento\Checkout\Block\Cart\Sidebar" name="minicart.retail" as="minicartretail" after="header.top.location" template="Fedex_CustomizedMegamenu::header/retail_minicart.phtml">
+                <arguments>
+                    <argument name="fcl_login_mobile" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="toggle_config_mobile" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="types" xsi:type="array"/>
+                        <item name="components" xsi:type="array">
+                            <item name="minicart_content" xsi:type="array">
+                                <item name="component" xsi:type="string">Magento_Checkout/js/view/minicart</item>
+                                <item name="config" xsi:type="array">
+                                    <item name="template" xsi:type="string">Magento_Checkout/minicart/content</item>
+                                </item>
+                                <item name="children" xsi:type="array">
+                                    <item name="subtotal.container" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">subtotalContainer</item>
+                                        </item>
+                                        <item name="children" xsi:type="array">
+                                            <item name="subtotal" xsi:type="array">
+                                                <item name="component" xsi:type="string">uiComponent</item>
+                                                <item name="config" xsi:type="array">
+                                                    <item name="template" xsi:type="string">Magento_Checkout/minicart/subtotal</item>
+                                                </item>
+                                            </item>
+                                        </item>
+                                    </item>
+                                    <item name="extra_info" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">extraInfo</item>
+                                        </item>
+                                    </item>
+                                    <item name="promotion" xsi:type="array">
+                                        <item name="component" xsi:type="string">uiComponent</item>
+                                        <item name="config" xsi:type="array">
+                                            <item name="displayArea" xsi:type="string">promotion</item>
+                                        </item>
+                                    </item>
+                                </item>
+                            </item>
+                        </item>
+                    </argument>
+                </arguments>
+                <container name="minicart.addons" label="Mini-cart promotion block"/>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="before.body.end">
+            <block class="Fedex\Delivery\Block\Footer" name="absolute_footer" template="Magento_Theme::html/absolute_footer.phtml"/>
+        </referenceContainer>
+        <referenceBlock name="product.info.form.content" remove="true" />
+        <referenceBlock name="product.info.options.wrapper.bottom" remove="true" />
+        <referenceBlock name="category.product.list.additional.wishlist_addto" remove="true" />
+        <referenceBlock name="catalog.topnav">
+            <arguments>
+                <argument name="ttl" xsi:type="string">0</argument>
+            </arguments>
+        </referenceBlock>
+         <referenceBlock name="footer-container" remove="true" />
+    </body>
+</page>

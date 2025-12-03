@@ -1,0 +1,46 @@
+<div id="category-form">
+    <form
+        action="#"
+        id="category-form"
+        method="post"
+        data-hasrequired="<?php echo __('* Required Fields') ?>"
+        data-mage-init='{"validation":{}}'>
+        <fieldset class="fieldset">
+            <legend class="legend"><span><?= $block->escapeHtml(__("Select category to remove duplicate auto assigned products from parent categories")) ?></span></legend><br />
+            <div class="field category required">
+                <div class="control">
+                    <label class="label" for="category"><span><?php echo __('Select category:') ?></span></label>
+                    <select class="category_ids" data-validate="{required:true, 'validate-select':true}">
+                        <option value=""><?php echo __('Please Select') ?></option>
+                        <?php
+                        $categories = $block->getCategories();
+                        foreach ($categories as $category) {
+                            ?>
+                            <option value="<?= $category['value'] ?>"><?= $category['label'] ?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <br />
+            <div class="actions-toolbar">
+                <div class="primary">
+                    <button type="button" title="<?php echo __('Update') ?>" class="update-category submit primary">
+                        <span><?php echo __('Update') ?></span>
+                    </button>
+                </div>
+            </div>
+        </fieldset> 
+    </form>
+</div>
+<?php echo $this->getBlockHtml('formkey'); ?>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "categoryDataHandler"
+    ], function($, categoryDataHandler){
+        let categoryRequestUrl = '<?= $block->getUrl('/index/update') ?>';
+        categoryDataHandler.init(categoryRequestUrl);
+    });
+</script>

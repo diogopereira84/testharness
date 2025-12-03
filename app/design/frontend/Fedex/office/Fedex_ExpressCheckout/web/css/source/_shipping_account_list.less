@@ -1,0 +1,160 @@
+.is-fcl-global {
+    .shipping-account-hidden {
+        float: left;
+        height: 0 !important;
+        visibility: hidden;
+    }
+    .account-number-list-label {
+        color: @express-label-title;
+        font-family: @express-fedex-sans-bold;
+        font-size: 12px;
+        font-weight: bold;
+        letter-spacing: .75px;
+        line-height: 16px;
+        text-transform: uppercase;
+    }
+    .shipping-account-list-container {
+        margin-bottom: 23px;
+    }
+    .shipping-account-list-container.shipping-account-hidden-parent {
+        margin-bottom: 0;
+    }
+    .shipping-account-list {
+        color: @credit-card-type-color;
+        font-family: @fedex-sans-light;
+        position: relative;
+        user-select: none;
+        width: 100%;
+        .custom-select {
+            border: 1px solid @express-color-light-grey;
+            box-sizing: border-box;
+            display: block;
+            height: 48px;
+            position: relative;
+            width: 540px;
+        }
+        .custom-select__trigger {
+            align-items: center;
+            background: none;
+            border: none;
+            display: flex;
+            font-size: 16px;
+            font-weight: 300;
+            height: 22px;
+            justify-content: space-between;
+            line-height: 24px;
+            overflow: hidden;
+            padding: 12px 40px 12px 8px;
+            position: relative;
+        }
+        .custom-options {
+            background: @express-color-white;
+            border: 2px solid @express-color-grey;
+            border-top: 0;
+            display: block;
+            left: 0;
+            opacity: 0;
+            pointer-events: none;
+            position: absolute;
+            right: 0;
+            top: 100%;
+            transition: all .5s;
+            visibility: hidden;
+            z-index: 2;
+        }
+        .custom-select.open .custom-options {
+            border: 1px solid @express-grey-border;
+            left: -1px;
+            margin-top: 1px;
+            max-width: 100%;
+            opacity: 1;
+            padding: 10px 0;
+            pointer-events: all;
+            visibility: visible;
+            width: 540px;
+        }
+        .custom-option {
+            color: @express-color-dark-grey;
+            cursor: pointer;
+            display: block;
+            font-size: 16px;
+            font-weight: 300;
+            letter-spacing: 0;
+            line-height: 48px;
+            padding: 0 8px;
+            position: relative;
+            transition: all .5s;
+            &:hover {
+                cursor: pointer;
+            }
+        }
+        .arrow {
+            background: @express-color-white;
+            height: 8px;
+            position: absolute;
+            right: 1px;
+            width: 20px;
+        }
+        .arrow::before,
+        .arrow::after {
+            bottom: 0;
+            content: '';
+            height: 100%;
+            position: absolute;
+            width: 1px;
+        }
+        .arrow::before {
+            background-color: @express-color-dark-grey;
+            left: -4px;
+            transform: rotate(-45deg);
+        }
+        .arrow::after {
+            background-color: @express-color-dark-grey;
+            left: 2px;
+            transform: rotate(45deg);
+        }
+        .open .arrow::before {
+            left: -4px;
+            transform: rotate(45deg);
+        }
+        .open .arrow::after {
+            left: 2px;
+            transform: rotate(-45deg);
+        }
+    }
+    @media (min-width: 992px) {
+        .shipping_account_number.child-box {
+            left: 570px;
+            margin-left: 16px;
+            margin-top: 25px;
+            position: absolute;
+            width: 250px;
+        }
+    }
+    @media (max-width: 991px) {
+        .opc-shipping-account-number {
+            .container {
+                flex-direction: column;
+                flex-wrap: nowrap !important;
+            }
+        }
+        .shipping-account-list {
+            .custom-select {
+                max-width: 100%;
+            }
+        }
+        .fedex_account_number {
+            .fedex_account_number-field {
+                width: 415px;
+            }
+        }
+    }
+    @media (min-width: 768px) {
+        .fedex_account_number {
+            .fedex_account_number-field {
+                width: 415px;
+            }
+        }
+    }
+
+}

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <title>Site Settings</title>
+        <css src="Fedex_EnhancedProfile::css/company-setting.css"/>
+    </head>
+    <body>
+        <move element="page.main.title" destination="columns" before="-" />
+        <move element="sidebar.main" destination="customer.left.nav" before="-" />
+        <move element="customer.left.nav" destination="columns" after="page.main.title" />
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            </container>
+        </referenceContainer>
+        <referenceBlock name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="account.error_messages" template="Fedex_EnhancedProfile::error_messages.phtml" after="page.builder.promo.banner.widget"/>
+        </referenceBlock>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Site Settings</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="company-settings" template="Fedex_EnhancedProfile::company_settings.phtml">
+                <arguments>
+                    <argument name="company_settings" xsi:type="object">Fedex\EnhancedProfile\ViewModel\CompanySettings</argument>
+                    <argument name="enhanced_profile" xsi:type="object">Fedex\EnhancedProfile\ViewModel\EnhancedProfile</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

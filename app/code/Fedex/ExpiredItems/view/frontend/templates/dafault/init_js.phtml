@@ -1,0 +1,17 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$cartMsgViewModel = $block->getData('cart.msg.view.model');
+?>
+<?php if ($cartMsgViewModel->isCustomerLoggedIn()): ?>
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_ExpiredItems/js/minicart-expiry-message": {}
+            }
+        }
+    </script>
+<?php endif;?>

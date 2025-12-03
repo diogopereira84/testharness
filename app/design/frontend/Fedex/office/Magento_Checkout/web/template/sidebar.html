@@ -1,0 +1,54 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div id="opc-sidebar"
+     data-bind="afterRender:setModalElement, mageInit: {
+    'Magento_Ui/js/modal/modal':{
+        'type': 'custom',
+        'modalClass': 'opc-sidebar opc-summary-wrapper',
+        'wrapperClass': 'checkout-container',
+        'parentModalClass': '_has-modal-custom',
+        'responsive': true,
+        'responsiveClass': 'custom-slide',
+        'overlayClass': 'modal-custom-overlay',
+        'buttons': []
+    }}">
+
+    <!-- ko foreach: getRegion('summary') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+    <!--/ko-->
+
+    <div class="opc-block-shipping-information">
+        <!-- ko foreach: getRegion('shipping-information') -->
+        <!-- ko template: getTemplate() --><!-- /ko -->
+        <!--/ko-->
+        <style> body.shipkey .alertbox{ display: flex!important; } </style>
+        <div class="alertbox" style="display:none;">
+            <div class="warning-box-inner">
+               <img data-bind="attr: { src: window.alertImgPath }" />
+            </div>
+            <div class="warning-msg">
+                <p><b>Attention</b></p>
+                <p>The recipient and address information from the purchase order will be used for shipment. That information will override the address entered on this page.</p>
+            </div>
+        </div>
+
+    </div>
+    <!--pickup store-->
+    <!-- <button id="place-pickup-order-mobile" class="place-pickup-order place-pickup-order-disabled btn-xs-mdevice mx-0 w-100-imp" disabled="disabled">
+        <span id="checkout-button-title"></span>
+    </button> -->
+
+    <!--shipping-->
+    <!-- <div class="actions-toolbar mt-50" id="shipping-method-sidebar-container" style="display: none;">
+        <div class="primary">
+            <button data-role="opc-continue" id="checkout-ship-button" type="submit" class="button action continue primary create_quote btn-xs-mdevice mx-0 w-100-imp">
+                <span id="checkout-ship-button-title"></span>
+            </button>
+        </div>
+    </div> -->
+</div>

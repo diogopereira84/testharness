@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Checkout\CustomerData\Cart" type="Fedex\ExpiredItems\CustomerData\MiniCartItem" />
+    <type name="Magento\Checkout\CustomerData\Cart">
+        <plugin name="Fedex_MiniCart_Expiry_Messagess" type="Fedex\ExpiredItems\Plugin\CustomerData\CartPlugin" sortOrder="50" disabled="false"/>
+    </type>
+    <type name="Fedex\Delivery\Controller\Quote\Create">
+        <plugin name="Fedex_Expire_Modal_Popup_Cookie" type="Fedex\ExpiredItems\Plugin\Controller\Quote\QuoteCreateAfter" sortOrder="50" disabled="false"/>
+    </type>
+    <type name="Magento\Checkout\Block\Cart">
+        <plugin name="Cart_Summary_Filter" type="Fedex\ExpiredItems\Plugin\Checkout\Block\CartItems"/>
+    </type>
+    <type name="Magento\Checkout\Model\Session">
+        <plugin name="checkout_load_customer_quote" type="Fedex\ExpiredItems\Plugin\Model\Session"/>
+    </type>
+    <type name="Magento\Checkout\Block\Cart\Item\RendererPool">
+        <arguments>
+            <argument name="renderers" xsi:type="array">
+                <item name="commercial" xsi:type="array">
+                    <item name="block" xsi:type="string">checkout.cart.item.renderers.commercial</item>
+                    <item name="template" xsi:type="string">Magento_Checkout::cart/item/default.phtml</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+</config>

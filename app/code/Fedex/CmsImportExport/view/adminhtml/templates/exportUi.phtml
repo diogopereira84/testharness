@@ -1,0 +1,179 @@
+<?php
+   $cmsdata = $block->getPages();
+   $cmsblock = $block->getBlocks();
+   $pageTemplate = $block->getPageTemplate();
+   $getInstanceWidget = $block->getInstanceWidget();
+?>
+<div class="page-container-cms">
+      <div>
+         <form id="search_contents">
+         <div class="cms-heading"><h3 class="content-heading-main"><?php echo __('Entity Type') ?></h3></div>
+            <div class="form-content">
+               <select id="cms_content" class="choose-cms-content">
+                  <option value="Page">Page</option>
+                  <option value="Block">Block</option>
+                  <option value="Widget">Widget</option>
+                  <option value="Template">Page Template</option>
+               </select>
+            </div>
+         </form>
+      </div>
+</div>
+<div>
+    <div id ="row_export" style="float: right; width: 50%; margin-right:-2%;"></div>
+</div>
+<div class="float-container" >
+   <div class="column_1">
+      <table id="table1">
+         <tr>
+            <th style="width:14%;">Select</th>
+            <th style="width:19%;">Type</th>
+            <th style="width:9%;">Id</th>
+            <th style="width:20%;">Title</th>
+            <th style="width:25%;">Updated Date</th>
+         </tr>
+            <?php
+            foreach ($cmsdata as $page) {
+                ?>
+         <tr class="cms-page" id="page_grid">
+            <td class ="choice Page" ><input class = "check-tab1" type="checkbox" name="check-tab1"></td>
+            <td><input type="hidden" name="cms-type[]" value="<?php echo "cms_page"; ?>"/></td>
+            <td><input type="hidden" name="content-id[]" value="<?php echo $page->getPageId(); ?>" /></td>
+            <td class ="choice Page"><?php echo "cms_page"; ?></td>
+            <td class ="choice Page"><?php echo $page->getId(); ?></td>
+            <td class ="choice Page"><?php echo $page->getTitle(); ?></td>
+            <td class ="choice Page"><?php echo $page->getUpdateTime(); ?></td>
+         </tr>
+                <?php
+            } ?>
+        <?php
+        foreach ($cmsblock as $blockdata) {
+            ?>
+         <tr class="cms-block" id="block_grid">
+            <td class ="choice Block"><input class = "check-tab1" type="checkbox" name="check-tab1"></td>
+            <td><input type="hidden" name="type-block[]" value="<?php echo "cms_block"; ?>"/></td>
+            <td><input type="hidden" name="content-block-id[]" value="<?php echo $blockdata->getBlockId(); ?>"/></td>
+            <td class ="choice Block"><?php echo "cms_block"; ?></td>
+            <td class ="choice Block"><?php echo $blockdata->getId(); ?></td>
+            <td class ="choice Block"><?php echo $blockdata->getTitle(); ?></td>
+            <td class ="choice Block"><?php echo $blockdata->getUpdateTime(); ?></td>
+         </tr>
+            <?php
+        } ?>
+       <?php
+        foreach ($pageTemplate as $getTemplate) {
+            ?>
+         <tr class="cms-template" id="temp_grid">
+            <td class ="choice Template"><input class = "check-tab1" type="checkbox" name="check-tab1"></td>
+            <td><input type="hidden" name="type-template[]" value="<?php echo "template"; ?>"/>
+            </td>
+            <td><input type="hidden" name="content-template-id[]"
+            value="<?php echo $getTemplate->getTemplateId(); ?>" /></td>
+            <td class ="choice Template"><?php echo "template"; ?></td>
+            <td class ="choice Template"><?php echo $getTemplate->getTemplateId(); ?></td>
+            <td class ="choice Template"><?php echo $getTemplate->getName(); ?></td>
+            <td class ="choice Template"><?php echo $getTemplate->getUpdatedAt(); ?></td>
+         </tr>
+            <?php
+        }
+        ?>
+      <?php
+        foreach ($getInstanceWidget as $getWidget) {
+            ?>   
+         <tr class="cms-widget" id="widget_grid">
+            <td class ="choice Widget"><input class = "check-tab1" type="checkbox" name="check-tab1"></td>
+            <td><input type="hidden" name="type-widget[]" value="<?php echo "widget"; ?>"/></td>
+            <td><input type="hidden" name="content-widget-id[]"
+            value="<?php echo $getWidget->getInstanceId(); ?>" /></td>
+            <td class ="choice Widget"><?php echo "widget"; ?></td>
+            <td class ="choice Widget"><?php echo $getWidget->getInstanceId(); ?></td>
+            <td class ="choice Widget"><?php echo $getWidget->getTitle(); ?></td>
+            <td class ="choice Widget"><?php echo "NA" ; ?></td>
+         </tr>
+            <?php
+        } ?>
+      </table>
+   </div>
+   </td>
+   <td>
+      <div class="column1" >
+         <button class="action- primary left-to-right-drag"></button>
+         <button class="action- primary right-to-left-drag"></button>
+      </div>
+   </td>
+  
+   <td >
+      <div class="column2">
+         <form class="form post reply" action="<?php /* @escapeNotVerified */ echo $block->getSaveUrl(); ?>"
+         id="post_reply_form" name="postReplyForm" method="post"
+         data-hasrequired="<?php /* @escapeNotVerified */ echo __('* Required Fields') ?>"
+         data-mage-init='{"validation":{}}' >
+         <?php echo $block->getBlockHtml('formkey') ?>
+            <table id="table2" >
+            <caption></caption>
+               <tr>
+                  <th style="width:14%;">Select</th>
+                  <th style="width:19%;">Type</th>
+                  <th style="width:9%;">Id</th>
+                  <th style="width:20%;">Title</th>
+                  <th style="width:25%;">Updated Date</th>
+               </tr>
+            </table>
+         </form>
+      </div>
+   </td>
+</div>
+<div><input type="submit" value="Export"  form="post_reply_form" class="csv-btn action- primary"
+style="width:15%;"></div>
+<script>
+   require(["jquery", "Magento_Ui/js/modal/alert"], function($, alert){
+      $( ".importexportcms-cmsexport-index #post_reply_form" ).on( "submit", function(e) {
+         var dataString = $(e).serialize();
+         $.ajax({
+            type: "POST",
+            url: $(this).attr('action'),
+            data: {form_key: window.FORM_KEY, dataString},
+            success: function () {
+               alert({
+                  title: "Success",
+                  content: "CSV has been downloaded successfully",
+                  autoOpen: true,
+                  clickableOverlay: false,
+                  focus: "",
+                  actions: {
+                     always: function(){
+                           window.location.reload();
+                     }
+                  }
+               });
+            },
+            error: function (data) {
+               alert({
+                  title: "Error",
+                  content: "There is an issue to download issue",
+                  autoOpen: true,
+                  clickableOverlay: false,
+                  focus: "",
+                  actions: {
+                     always: function(){
+                           window.location.reload();
+                     }
+                  }
+               });
+            }
+         });
+      });
+
+      $(".importexportcms-cmsexport-index .csv-btn").on("click", function(event){
+         event.preventDefault();
+         $(".page-content").prepend('<div class="export-data-validate message-error message"
+         style="font-size:15px;">No data selected to export</div>');
+         var exportData = $(".importexportcms-cmsexport-index #post_reply_form #table2 tr").length;
+
+         if(exportData>=2) {
+            $( ".importexportcms-cmsexport-index #post_reply_form" ).submit();
+            $(".export-data-validate").remove();
+         }
+      });
+   });
+</script>

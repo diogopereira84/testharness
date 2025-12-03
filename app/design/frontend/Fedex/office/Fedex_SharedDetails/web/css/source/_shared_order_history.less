@@ -1,0 +1,1118 @@
+@exportTextColor: @fx-grey-500;
+@exportPopupModelTitleColor: @fx-grey-1200;
+@exportPopupModelInputBorderColor: @fx-grey-100;
+@exportDateDisableContrastColor: #767774;
+@exportButtonBackgroundColor: @fx-orange-500;
+@cancelButtonBackgroundColor: @fx-white-100;
+@dateRangeInputBackgroundColor: @fx-grey-700;
+@dateRangeTextColor: @fx-purple-500;
+@dateRangeTextBackgroundColor: @fx-grey-600;
+@dateRangeCancelButtonColor: #0078B4;
+@emailTagBorderColor: @fx-white-200;
+@fontFamilyLight: 'Fedex Sans Light';
+@fontFamilyRegular: 'FedEx Sans Regular';
+@fontFamilyMedium: 'FedEx Sans Medium';
+@fontFamilyBold: 'FedEx Sans Bold';
+@fontFamilyDownArrow: 'FedEx Icons';
+@boxShadowColor: #00699d;
+@blackColor: #333333;
+@timeframeHoverOptionBackgroundColor: #00699d;
+@selectTimeframeColor: #747683;
+@selectedTimeframeOptionColor: #656970;
+
+.shared-order-history {
+    .daterangepicker {
+        .calendar-table {
+            table {
+                td {
+                    border-left-width: 0px;
+                    border-right-width: 0px;
+                }
+            }
+        }
+    }
+    .reorder-success {
+        p.reorder-notification-msg {
+            b {
+                font-family: @fontFamilyBold;
+            }
+        }
+    }
+
+    .fieldset.info.extra-order-search {
+		.actions-toolbar {
+			.primary {
+				button.reset-btn:hover {
+					border-color: @exportButtonBackgroundColor;
+					color: @exportButtonBackgroundColor;
+				}
+			}
+		}
+	}
+    .sales-order-history.marketplace-history.epro-order-history-reorder .epro-order-history-enhancement ~ .page-wrapper .page-title {
+        margin-bottom: 30px !important;
+    }
+    .export-commercial-reporting-section {
+        display: none;
+        .export-order-history-title {
+            height: 25px;
+            padding-top: 20px;
+            letter-spacing: 0px;
+            text-align: center;
+            color: @exportPopupModelTitleColor;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: @fontFamilyLight;
+            font-size: 32px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 40px;
+        }
+        .model-form-data {
+            width: 560px;
+            padding-bottom: 20px;
+            margin: 0px auto;
+            .email-address-label {
+                text-align: left;
+                color: @exportTextColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyRegular;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 16px; /* 133.333% */
+                letter-spacing: 0.75px;
+                text-transform: uppercase;
+            }
+            .recipients-email-address {
+                border: 1px solid @exportPopupModelInputBorderColor;
+                background-color: @cancelButtonBackgroundColor;
+                padding-left: 0px;
+                padding-right: 0px;
+                margin-bottom: 8px;
+                .email-input-text::placeholder {
+                    color: @exportPopupModelInputBorderColor;
+                }
+                .email-input-text {
+                    color: @exportTextColor;
+                    font-family: @fontFamilyLight;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 300;
+                    outline: 0px;
+                    padding-left: 10px;
+                    padding-bottom: 0px;
+                    padding-top: 0px;
+                    width: 100%;
+                    height: 45px;
+                    border: none;
+                }
+                span.email-ids {
+                    float: left;
+                    display: flex;
+                    overflow-wrap: anywhere;
+                    align-items: center;
+                    padding: 4px 5px 4px 12px;
+                    border-radius: 50px;
+                    gap: 4px;
+                    margin-left: 8px;
+                    margin-right: 8px;
+                    margin-top: 8px;
+                    color: @exportTextColor;
+                    background: @dateRangeInputBackgroundColor;
+                    border: 1px solid @emailTagBorderColor;
+                }
+                span.email-ids:last-child {
+                    margin-bottom: 8px;
+                }
+                span.cancel-email {
+                    display: flex;
+                    float: right;
+                    text-align: center;
+                    cursor: pointer;
+                }
+            }
+            .email-address-note {
+                letter-spacing: 0px;
+                text-align: left;
+                color: @exportTextColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyRegular;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+            }
+            .export-actions-toolbar {
+                height: 56px;
+                padding-top: 25px;
+                .cancel-export {
+                    &:hover {
+                        border-color: @exportButtonBackgroundColor;
+                        span {
+                            color: @exportButtonBackgroundColor;
+                        }
+                    }
+                    width: 272px;
+                    padding: 14px 24px 14px 24px;
+                    border: 2px solid @exportTextColor;
+                    border-radius: 0px;
+                    background: @cancelButtonBackgroundColor;
+                    span {
+                        text-align: center;
+                        color: @exportTextColor;
+                        font-feature-settings: 'clig' off, 'liga' off;
+                        font-family: @fontFamilyMedium;
+                        font-size: 19px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 24px;
+                        letter-spacing: 1.188px;
+                        text-transform: uppercase;
+                    }
+                }
+                .export-data {
+                    width: 272px;
+                    height: 56px;
+                    margin-left: 12px;
+                    border: 2px solid @exportButtonBackgroundColor;
+                    border-radius: 0px;
+                    background: @exportButtonBackgroundColor;
+                    padding: 16px 24px;
+                    span {
+                        text-align: center;
+                        color: @cancelButtonBackgroundColor;
+                        font-feature-settings: 'clig' off, 'liga' off;
+                        font-family: @fontFamilyMedium;
+                        font-size: 19px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 24px;
+                        letter-spacing: 1.188px;
+                        text-transform: uppercase;
+                    }
+                }
+                .export-data.disable {
+                    width: 272px;
+                    height: 56px;
+                    margin-left: 12px;
+                    border: 2px solid @dateRangeInputBackgroundColor;
+                    border-radius: 0px;
+                    background: @dateRangeInputBackgroundColor;
+                    padding: 16px 24px;
+                    span {
+                        text-align: center;
+                        color: @exportPopupModelInputBorderColor;
+                        font-feature-settings: 'clig' off, 'liga' off;
+                        font-family: @fontFamilyMedium;
+                        font-size: 19px;
+                        font-style: normal;
+                        font-weight: 700;
+                        line-height: 24px;
+                        letter-spacing: 1.188px;
+                        text-transform: uppercase;
+                    }
+                }
+            }
+        }
+        .field-export-timeframe {
+            padding-bottom: 67px;
+            .timeframe-label {
+                text-align: left;
+                color: @exportTextColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyRegular;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 16px;
+                letter-spacing: 0.75px;
+                text-transform: uppercase;
+            }
+            .field-export-timeframe-section {
+                position: relative;
+                .timeframe-dropdown-hidden {
+                    display: none;
+                }
+                .timeframe-ul {
+                    list-style: none inside;
+                    border: 1px solid @exportPopupModelInputBorderColor;
+                    color: @exportPopupModelInputBorderColor;
+                    font-feature-settings: 'clig' off, 'liga' off;
+                    font-family: @fontFamilyLight;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 24px;
+                    margin: 0;
+                    padding: 0;
+                    position: absolute;
+                    top: 0;
+                    width: 100%;
+                    background: white;
+                    z-index: 999;
+                }
+                .timeframe-ul-li-ul {
+                    list-style: none inside;
+                    position: absolute;
+                    width: 99.5%;
+                    background: white;
+                    top: 48px;
+                    padding: 0;
+                    border: 1px solid @exportPopupModelInputBorderColor;
+                    z-index: 9;
+                }
+                .timeframe-down-icon {
+                    float: right;
+                    padding-top: 8px;
+                    padding-right: 8px;
+                    cursor: pointer;
+                }
+                .timeframe-ul .timeframe-li {
+                    padding-top: 0;
+                    padding-right: 0;
+                    padding-bottom: 0;
+                    margin-bottom: 0;
+                    line-height: 48px;
+                    color: @selectTimeframeColor;
+                    font-size: 16px;
+                    font-weight: normal;
+                }
+                .timeframe-li-ul-li {
+                    margin-bottom: 0;
+                    line-height: 48px;
+                    padding-left: 15px;
+                }
+                .timeframe-li-ul-li:hover {
+                    cursor: pointer;
+                    color: @selectedTimeframeOptionColor;
+                    border-top: 0;
+                    border-right: 0;
+                    border-left: 0;
+                    box-shadow: 0 0 2px 1px @timeframeHoverOptionBackgroundColor;
+                }
+                .timeframe-li-ul-li img.timeframe-down-icon {
+                    display: none;
+                }
+                .timeframe-li-ul-li.selected {
+                    cursor: pointer;
+                    color: @selectedTimeframeOptionColor;
+                    border: 0;
+                    box-shadow: 0 0 2px 1px @timeframeHoverOptionBackgroundColor;
+                }
+                .timeframe-ul .timeframe-li:not(.init) {
+                    display: none;
+                }
+                .init {
+                    cursor: pointer;
+                    padding-left: 3%;
+                }
+                .init:focus {
+                    box-shadow: rgb(0, 105, 157) 0px 0px 3px 1px;
+                }
+            }
+        }
+        .field-export-date-range {
+            padding-bottom: 13px;
+            .range.fields {
+                height: 48px;
+                border: 1px solid @exportPopupModelInputBorderColor;
+            }
+            label {
+                text-align: left;
+                color: @exportTextColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyRegular;
+                font-size: 12px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 16px;
+                letter-spacing: 0.75px;
+                text-transform: uppercase;
+            }
+            .order-date-range-field {
+                width: 558px;
+                height: 46px;
+                color: @exportPopupModelInputBorderColor;
+                background: @dateRangeInputBackgroundColor;
+                border: 1px solid @exportPopupModelInputBorderColor;
+                display: flex;
+                margin-bottom: 3px;
+                .date-range-filter-field::placeholder {
+                    color: @exportPopupModelInputBorderColor;
+                    background: @cancelButtonBackgroundColor;
+                }
+                .date-range-filter-field {
+                    height: 46px;
+                    letter-spacing: 0px;
+                    text-align: left;
+                    border: none;
+                    color: @exportTextColor;
+                    font-feature-settings: 'clig' off, 'liga' off;
+                    font-family: @fontFamilyLight;
+                    font-size: 16px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 24px;
+                    background: @dateRangeInputBackgroundColor;
+                }
+                img {
+                    height: 32px;
+                    padding-top: 7px;
+                    padding-right: 7px;
+                }
+            }
+            .date-range-note {
+                letter-spacing: 0px;
+                text-align: left;
+                color: @exportTextColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyRegular;
+                font-size: 12px;
+                font-style: italic;
+                font-weight: 400;
+                line-height: 16px;
+            }
+        }
+    }
+	.epro-my-orders-search-advanced {
+		.fieldset.info.extra-order-search {
+			.actions-toolbar {
+				.primary {
+					button.primary {
+						background: @exportButtonBackgroundColor;
+						border-color: @exportButtonBackgroundColor;
+                        font-size: 19px !important;
+                        font-weight: bold !important;
+					}
+				}
+			}
+		}
+	}
+    .shared-order-btn {
+        width: 150px;
+        height: 45px;
+        font-size: 19px;
+        font-weight: bold;
+        border-radius: 0;
+        margin-left: 10px;
+        text-align: center;
+        color: @cancelButtonBackgroundColor;
+        border: 1px solid @exportButtonBackgroundColor;
+        background: @exportButtonBackgroundColor;
+        line-height: 32px;
+        letter-spacing: 1.19px;
+        font-family: @fontFamilyMedium;
+        pointer-events: unset;
+        margin-top: 0px;
+        float: right;
+        text-transform: uppercase;
+    }
+    .modals-wrapper {
+        .modal-popup.export-commerical-reporting-poup-model {
+            .modal-footer {
+                display: none;
+            }
+            .modal-inner-wrap {
+                background: @cancelButtonBackgroundColor;
+                width: 650px !important;
+            }
+            .action-close {
+                right: 10px;
+                top: 0px;
+            }
+            .action-close:before {
+                color: @exportTextColor;
+                font-size: large;
+            }
+        }
+    }
+
+    form {
+        div.search-sku.retails-sku {
+            button {
+                &:focus {
+                    box-shadow: 0 0 3px 1px @boxShadowColor;
+                }
+            }
+        }
+    }
+
+    .daterangepicker.export-date-range-calendar {
+        .calendar-table {
+            .prev span, .next span {
+                border-width: 0 1px 1px 0;
+                padding: 5px;
+            }
+            .prev:hover, .next:hover {
+                background: none;
+            }
+            th.month {
+                width: auto;
+                color: @exportTextColor;
+                text-align: center;
+                font-family: @fontFamilyLight;
+                font-size: 20px;
+                font-style: normal;
+                font-weight: 300;
+                line-height: 32px;
+            }
+            td {
+                font-family: @fontFamilyRegular;
+                border-radius: 0px;
+                height: 32px;
+                color: @exportTextColor;
+                text-align: center;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                background: @cancelButtonBackgroundColor;
+                border-width: 0;
+                position: relative;
+            }
+            td.off.ends.in-range.available {
+                visibility: hidden;
+            }
+            td.active.start-date.active.end-date.in-range.available {
+                &:after {
+                    visibility: hidden;
+                }
+                &:before {
+                    visibility: hidden;
+                }
+            }
+            td.off.ends.active.start-date.available , td.off.ends.active.start-date.available {
+                visibility: hidden;
+            }
+            td.active.start-date.in-range.available {
+				&:after {
+					content: "";
+					display: block !important;
+					margin: 0 auto !important;
+					width: 50% !important;
+					left: 50% !important;
+					position: absolute;
+				}
+			}
+            td.active.start-date.in-range.available {
+				&:before {
+					content: "";
+					display: block !important;
+					margin: 0 auto !important;
+					width: 50% !important;
+					left: 50% !important;
+					position: absolute;
+				}
+			}
+            td.active.start-date.available:before {
+                content: "";
+                display: block;
+                margin: 0 auto;
+                width: 50%;
+                bottom: 0px;
+                left: 50%;
+                border-bottom: 1px solid #4d148c;
+                position: absolute;
+                z-index: 1;
+            }
+            td.active.start-date.available:after {
+                content: "";
+                display: block;
+                margin: 0 auto;
+                width: 50%;
+                top: -1px;
+                left: 50%;
+                border-bottom: 1px solid #4d148c;
+                position: absolute;
+            }
+            td.active.end-date.in-range.available {
+				&:after {
+					content: "";
+					display: block !important;
+					margin: 0 auto !important;
+					width: 50% !important;
+					right: 50% !important;
+					position: absolute;
+				}
+			}
+            td.active.end-date.in-range.available {
+				&:before {
+					content: "";
+					display: block !important;
+					margin: 0 auto !important;
+					width: 50% !important;
+					right: 50% !important;
+					position: absolute;
+				}
+			}
+            td:hover {
+                font-family: @fontFamilyRegular;
+                border-radius: 0px;
+                height: 32px;
+                color: @exportTextColor;
+                text-align: center;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+                background: @cancelButtonBackgroundColor;
+            }
+            td:not(.in-range):hover {
+                border-bottom-color: transparent;
+                border-top-color: transparent;
+            }
+            td.in-range, td.in-range:hover {
+                color: @dateRangeTextColor;
+                border-bottom-color: @dateRangeTextColor;
+                border-top-color: @dateRangeTextColor;
+                border-top-style: double;
+                background: @dateRangeTextBackgroundColor;
+                border-radius: 0px;
+            }
+            td.in-range.available {
+                &:after {
+                    content: "";
+                    display: block;
+                    margin: 0 auto;
+                    width: 100%;
+                    top: -1px;
+                    left: 0;
+                    border-bottom: 1px solid @dateRangeTextColor;
+                    position: absolute;
+                }
+                &:before {
+                    content: "";
+                    display: block;
+                    margin: 0 auto;
+                    width: 100%;
+                    bottom: 0px;
+                    left: 0;
+                    border-bottom: 1px solid @dateRangeTextColor;
+                    position: absolute;
+                    z-index: 1;
+                }
+            }
+            .table-condensed {
+                thead {
+                    tr:last-child {
+                        th {
+                            color: @cancelButtonBackgroundColor;
+                            font-family: @fontFamilyRegular;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: 16px;
+                            letter-spacing: 0.75px;
+                            text-transform: uppercase;
+                            text-align: right;
+                        }
+                        th::first-letter {
+                            display: block;
+                            color: @exportTextColor;
+                            font-family: @fontFamilyRegular;
+                            font-size: 14px;
+                            font-style: normal;
+                            font-weight: 700;
+                            line-height: 16px;
+                            letter-spacing: 0.75px;
+                            text-transform: uppercase;
+                        }
+                    }
+                }
+            }
+            td.off.disabled {
+                color: @exportDateDisableContrastColor;
+                text-decoration: none;
+            }
+            td.active.start-date, td.active.start-date:hover, td.active.end-date, td.active.end-date:hover {
+                height: 32px;
+                background: inherit;
+                border-bottom: 0px;
+                border-top: 0px;
+                color: @cancelButtonBackgroundColor;
+                text-align: center;
+                font-family: @fontFamilyRegular;
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 24px;
+            }
+            td.ends.off.disabled {
+                display: none;
+            }
+            td.off.ends.available, td.off.ends.available:hover, td.off.ends.in-range.available, td.off.ends.in-range.available:hover, td.off.ends.available.in-range:hover {
+                border-bottom: 0px;
+                border-top: 0px;
+                background: @cancelButtonBackgroundColor;
+                pointer-events: none;
+                border-radius: 0px;
+            }
+        }
+        td.today.active.start-date.active.end-date.in-range.available > span {
+            display: none;
+        }
+        .drp-calendar.left {
+            td.active.end-date.in-range.available, td.active.start-date.in-range.available {
+                position: relative;
+            }
+        }
+        .drp-calendar {
+            .date-circle {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                line-height: 1.2;
+                box-sizing: border-box;
+                border-radius: 999px;
+                border: 0 solid;
+                background-color: @dateRangeTextColor;
+                color: @cancelButtonBackgroundColor;
+                border-width: 1px !important;
+                border-color: @dateRangeTextColor !important;
+            }
+        }
+        .drp-calendar.right {
+            td.active.end-date.in-range.available, td.active.start-date.in-range.available {
+                position: relative;
+            }
+        }
+        .drp-selected {
+            display: none;
+        }
+        .drp-buttons {
+            .export-cancel-btn {
+                background: @cancelButtonBackgroundColor;
+                border: none;
+                text-transform: uppercase;
+                float: left;
+                margin-left: 0px;
+                padding: 7px 10px;
+                color: @dateRangeCancelButtonColor;
+                font-feature-settings: 'clig' off, 'liga' off;
+                font-family: @fontFamilyMedium;
+                font-size: 19px;
+                font-style: normal;
+                font-weight: 700;
+                line-height: 24px;
+                letter-spacing: 1.188px;
+            }
+            .export-apply-btn {
+                background: @exportButtonBackgroundColor;
+                border-color: @dateRangeInputBackgroundColor;
+                color: @cancelButtonBackgroundColor;
+                font-family: @fontFamilyMedium;
+                font-size: 19px;
+                font-weight: 700;
+                letter-spacing: 1.188px;
+                text-transform: uppercase;
+                margin-left: 0px;
+                margin-right: 10px;
+                padding: 12px 16px;
+                border-radius: 0px;
+                border-width: 0;
+            }
+        }
+    }
+    button.reset-btn {
+        padding-top: 10px;
+        margin-right: 20px;
+        margin-left: 0%;
+        width: 135px;
+        height: 43px;
+        font-size: 16px;
+        letter-spacing: .75px;
+        line-height: 24px;
+        font-family: @fontFamilyBold;
+        border-color: #6f7f87;
+        border-radius: 0px;
+        background: @fx-white-100;
+        text-transform: uppercase;
+    }
+    tr.order-items-row.order-row {
+        display: none;
+    }
+    .reorder-unavailable {
+        visibility: hidden;
+    }
+    .breadcrumbs {
+        display: none;
+    }
+}
+.shared-order-history .epro-order-history-enhancement ~ .page-wrapper .epro-reorder .order-items-row .order-items-table table .expend-order {
+    border-top: 0px solid;
+}
+.sales-order-history.shared-order-history .fieldset.info.extra-order-search .actions-toolbar .primary button.reset-btn {
+    border-radius: unset;
+    width: 50%;
+    text-transform: uppercase;
+    height: 43px;
+    font-size: 16px;
+    margin-left: 0px !important;
+}
+.sales-order-history.shared-order-history .fieldset.info.extra-order-search .actions-toolbar .primary button.primary {
+    padding: 0 36px;
+}
+.sales-order-history.shared-order-history .page-wrapper #my-orders-table tbody .order-items-table tbody .expend-order .col.item {
+    padding-left: 30px !important;
+}
+.account.shared-order-history #my-orders-table {
+    tr {
+        th {
+            color: @exportTextColor !important;
+        }
+    }
+    th.col.active {
+        color: @exportTextColor;
+    }
+}
+.account.shared-order-history .field.field-50.filters-collapse #filter-show-btn:hover {
+    color: @exportButtonBackgroundColor;
+    border-color: @exportButtonBackgroundColor;
+}
+.sales-order-history.shared-order-history .page-wrapper #my-orders-table .order-items-table tbody .product-details-row .retail-product-attributes thead .col.item-base-price {
+    width: 20% !important;
+}
+.sales-order-history.shared-order-history.account.page-layout-2columns-left .sidebar-main {
+    width: 16% !important;
+    padding-left: 0px;
+}
+.sales-order-history.shared-order-history.account.page-layout-2columns-left .column.main {
+    width: 84% !important;
+    padding-left: 50px;
+}
+
+@media only screen and (min-width: 1023px) {
+    .modals-wrapper {
+        .modal-popup.export-commerical-reporting-poup-model {
+            .modal-inner-wrap {
+                top: 50%;
+                transform: translate(0%, -50%);
+                margin-top: 0px;
+                padding-bottom: 20px;
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1023px) {
+    .shared-order-history {
+        .modals-wrapper {
+            .modal-popup.export-commerical-reporting-poup-model {
+                left: 0;
+                top: 0 !important;
+                .modal-inner-wrap {
+                    top: 50%;
+                    transform: translateY(-50%);
+                    margin-top: 0px;
+                    position: absolute;
+                    height: auto;
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) {
+    .shared-order-history {
+        .shared-order-btn {
+            width: 132px;
+        }
+        .page-wrapper {
+            .fieldset.info .filters-collapse :is(#filter-show-btn,#filter-close-btn) {
+                padding: 0 18px;
+            }
+            .fieldset.info.extra-order-search .actions-toolbar div.primary {
+                display: flex;
+            }
+            .fieldset.info.extra-order-search .actions-toolbar .primary button.reset-btn {
+                width: 45% !important;
+                margin-right: 10px;
+                height: 45px;
+            }
+            .fieldset.info.extra-order-search .actions-toolbar .primary button.primary {
+                padding: 0 35px;
+            }
+
+            .enabled-marketplace-customer #my-orders-table tbody .order-items-table tbody .expend-order {
+                &.bundle-child {
+                    .col.desktop {
+                        display: none;
+                    }
+
+                    .col.item {
+                        padding-left: 90px !important;
+
+                        &::before {
+                            left: 88px !important;
+                        }
+                    }
+
+                    + .product-details-row > td {
+                        padding-left: 112px !important;
+                    }
+                }
+            }
+        }
+        #my-orders-table {
+            .order-items-table tbody .product-details-row > td {
+                padding-left: 40px !important;
+                padding-right: 30px !important;
+            }
+        }
+        .order-items-table table tr.attribute-row td.item-sku {
+            text-align: left !important;
+        }
+        .configurater-product-attr {
+            text-align: left;
+        }
+        .page-wrapper #my-orders-table > tbody .col.view-order-action {
+            padding-bottom: 10px;
+        }
+    }
+}
+@media only screen and (min-width: 1200px) {
+    .sales-order-history.shared-order-history .epro-my-orders-search-advanced .control #product-name-sku {
+        width: 100% !important;
+    }
+}
+@media only screen and (max-width: 1024px) {
+    .shared-order-history {
+        .page-title {
+            margin-top: 80px;
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1119px) {
+    .sales-order-history.shared-order-history.account.page-layout-2columns-left .column.main {
+        padding-left: 0px;
+    }
+    .sales-order-history.shared-order-history.marketplace-history .page-wrapper .enabled-marketplace-customer #my-orders-table .order-items-table table tbody .expend-order .col.unit-price {
+        text-align: center;
+    }
+    .sales-order-history.shared-order-history.marketplace-history .page-wrapper .enabled-marketplace-customer #my-orders-table .order-items-table table tbody .expend-order .col.qty {
+        text-align: center;
+    }
+    .sales-order-history.shared-order-history.marketplace-history .page-wrapper .enabled-marketplace-customer #my-orders-table .order-items-table table tbody .expend-order .col.total {
+        text-align: center;
+    }
+    .account.shared-order-history #my-orders-table tr th.col.item-total {
+        text-align: center !important;
+    }
+    .account.shared-order-history #my-orders-table .extra-attributes tr th.col.item-total {
+        text-align: right !important;
+    }
+    .shared-order-history #my-orders-table .order-items-table tbody .product-details-row > td {
+        padding-left: 35px !important;
+    }
+    .sales-order-history.shared-order-history #maincontent .columns {
+        flex-direction: unset;
+    }
+    .sales-order-history.shared-order-history .my-orders-search-advanced .fieldset.info.extra-order-search .field.order-total .order-filter-max {
+        margin-top: 0px;
+    }
+    .sales-order-history.shared-order-history .order-products-toolbar .toolbar-amount {
+        float: left;
+    }
+    .sales-order-history.shared-order-history .order-products-toolbar .pages {
+        position: absolute;
+        width: 100%;
+        z-index: 0;
+    }
+    .sales-order-history.shared-order-history .order-products-toolbar .limiter {
+        float: right;
+    }
+    .epro-company-user#html-body #maincontent .pages .items {
+        display: block;
+    }
+}
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .shared-order-history {
+        .shared-order-btn {
+            width: 138px;
+            height: 45px;
+            margin-top: 24px;
+        }
+        .page-title {
+            margin-top: 70px !important;
+        }
+        .modals-wrapper {
+            .modal-popup.export-commerical-reporting-poup-model {
+                left: 10px;
+                right: 10px;
+                top: 10px;
+                h2.export-order-history-title {
+                    font-size: 24px;
+                    height: auto;
+                    padding: 0;
+                }
+                .modal-inner-wrap {
+                    top: unset;
+                    transform: none;
+                    margin-top: 20px;
+                    margin-bottom: 30px;
+                    padding: 15px 5% 5% 5%;
+                    width: 100% !important;
+                    max-height: unset;
+                }
+                .action-close {
+                    right: 0px;
+                    top: 0px;
+                }
+                .model-form-data {
+                    width: 100%;
+                    padding-bottom: 4px;
+                    .field.recipients-email {
+                        margin-top: 8px;
+                    }
+                }
+                .field-export-timeframe {
+                    padding-bottom: 67px;
+                }
+                .field-export-date-range {
+                    padding-bottom: 5px;
+                    .order-date-range-field {
+                        width: 99%;
+                    }
+                }
+                .export-actions-toolbar {
+                    display: flex;
+                    gap: 16px;
+                    padding-top: 20px;
+                    button.cancel-export {
+                        width: 47%;
+                        padding: 16px 20px;
+                    }
+                    button.export-data {
+                        margin-left: 0%;
+                        width: 47%;
+                        padding: 16px 20px;
+                    }
+                    button.export-data.disable {
+                        margin-left: 0%;
+                        width: 47%;
+                        padding: 16px 20px;
+                    }
+                }
+            }
+        }
+        .page-wrapper {
+            table.table:not(.totals):not(.cart):not(.table-comparison) td:not(.data-grid-actions-cell.col.actions):before {
+                display: inline-block !important;
+                position: static;
+                width: auto;
+            }
+            .fieldset.info.extra-order-search {
+                height: 650px;
+            }
+            .fieldset.info {
+                .filters-collapse :is(#filter-show-btn,#filter-close-btn) {
+                    padding: 0px 0px !important;
+                    margin-top: 16px !important;
+                }
+                .filters-collapse :is(#filter-show-btn,#filter-close-btn) img {
+                    width: 20px;
+                    margin-right: 5px;
+                    position: relative;
+                    top: -2px;
+                }
+            }
+            .view-order-carrot-toggle {
+                display: none;
+            }
+            .search-sku ~ .filters-collapse {
+                display: inline-flex;
+            }
+            .page-main {
+                .title-format {
+                    .page-title span.base {
+                        text-transform: capitalize;
+                        color: @exportTextColor;
+                        font-family: @fontFamilyLight;
+                        font-size: 28px;
+                        font-style: normal;
+                        font-weight: 300;
+                        line-height: 40px;
+                    }
+                }
+            }
+            #my-orders-table {
+                .order-items-table {
+                    border-left: 1px solid @emailTagBorderColor;
+                    border-right: 1px solid @emailTagBorderColor;
+                    .table.order-item > tbody tr:last-child > td {
+                        text-align: left;
+                    }
+                    tbody .additional.details li {
+                        font-size: 14px;
+                    }
+                }
+            }
+        }
+        .sidebar-main .block-collapsible-nav {
+            margin-top: 40px;
+        }
+        .table:not(.totals):not(.cart):not(.table-comparison) tbody > .table-row > td {
+            padding-top: 0px !important;
+            padding-bottom: 8px !important;
+        }
+        .actions-toolbar .primary button.reset-btn {
+            width: 100% !important;
+            height: 45px !important;
+            font-size: 19px !important;
+            margin-bottom: 15px;
+        }
+    }
+    .sales-order-history.shared-order-history .page-wrapper .enabled-marketplace-customer #my-orders-table .order-items-table tbody .product-details-row .retail-product-attributes .attribute-row:nth-last-child(2) td.col {
+        padding-bottom: 7px !important;
+    }
+    .sales-order-history.shared-order-history.account.page-layout-2columns-left .column.main {
+        padding-left: 0px;
+    }
+    .sales-order-history.shared-order-history .epro-reorder-button .fieldset.info.extra-order-search .actions-toolbar .primary button.action.primary {
+        background: @exportButtonBackgroundColor;
+        border-color: @exportButtonBackgroundColor;
+        color: @cancelButtonBackgroundColor;
+    }
+    .sales-order-history.shared-order-history .page-wrapper #my-orders-table .order-items-table table tbody .product-details-row {
+        border-bottom: 1px solid #ccc !important;
+    }
+    .sales-order-history.shared-order-history .table-wrapper .table:not(.totals):not(.cart):not(.table-comparison) > tbody .view-receipt {
+        border-top: none !important;
+        border-bottom: none !important;
+    }
+    .sales-order-history.shared-order-history #maincontent .columns {
+        flex-direction: unset;
+    }
+    .cms-sde-home.sales-order-history.shared-order-history .fieldset.info.extra-order-search .actions-toolbar .primary button.primary {
+        width: 100% !important;
+        margin-left: 0px !important;
+    }
+    .sales-order-history.shared-order-history .my-orders-search-advanced .fieldset #order-total-max {
+        margin-top: 0px;
+    }
+    .epro-company-user#html-body #maincontent .pages .items {
+        display: block;
+    }
+    .epro-order-history-reorder.sales-order-history .epro-sales-order-history.epro-reorder #my-orders-table tr td.total {
+        display: block;
+        text-align: left;
+    }
+    .shared-order-history .modals-wrapper .modal-popup.export-commerical-reporting-poup-model.modal-slide .modal-inner-wrap {
+        max-height: unset !important;
+    }
+
+    .sales-order-history.shared-order-history .page-wrapper #my-orders-table .order-items-table table tbody .bundle-child + .product-details-row {
+        border-bottom: none !important;
+    }
+}
+@media only screen and (max-width: 639px) {
+    .shared-order-history {
+        .shared-order-btn {
+            margin-top: 15px;
+        }
+    }
+}

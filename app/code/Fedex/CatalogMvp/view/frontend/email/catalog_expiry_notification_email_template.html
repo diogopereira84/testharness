@@ -1,0 +1,59 @@
+<!--@subject Catalog Expiration Email Template @-->
+<!--@vars {
+"var admin_name":"Admin Name",
+"var image":"image src",
+"var catalog_items":"Catalog Items"
+} @-->
+
+<div class="email-container" style="width:612px;">
+	<div class="content-section">
+        
+        <p style="font-size:16px">Hi {{var admin_name}},</p>
+		<div>
+            <p style="font-size:16px">We wanted to let you know the following catalog items have not been ordered in over a year, and are scheduled to be deleted next month.</p>
+            <p style="margin-bottom:48px;font-size:16px">To extend the availability of the following catalog item(s), select “Renew” within the action menu in the shared catalog.</p>
+            <table class="expiry-data-table" cellspacing="0" cellpadding="0" style="width:100%;">
+                <thead style="background-color:#F2F2F2;font-size:16px;font-weight:700;">
+                    <tr class="expiry-header-row" style="color:#333333;">
+                        <th id="name" style="text-align:left;padding:8px;">Catalog Item(s)</th>
+                        <th id="date" style="text-align:right;padding:8px;">Expiration Date</th>
+                        <th id="link" style="padding:8px;">Link</th>
+                    </tr>
+                </thead>
+                <tbody class="expiry-data-body">
+                {{for item in catalog_items}}
+                   <tr style="color:#333333;font-size:16px">
+                    <td style="text-align:left;padding:8px;">{{var item.name}}</td>
+                    <td style="text-align:right;padding:8px;">{{var item.catalog_expiration_date}}</td>
+                    <td style="text-align:center;padding:8px;">
+                        <a class="expiry-folder-path" href='{{var item.folder_path}}' style="color:#000000;">
+                            <img src="{{var image}}" alt="" height="24" width="24">
+                        </a>
+                    </td>
+                </tr>
+                {{/for}}
+            </tbody>
+            </table>
+        </div>
+	</div>
+</div>
+<style>
+    .expiry-data-table .expiry-header-row {
+        font-family: 'FedEx Sans Bold';
+    }
+    .email-container .content-section .expiry-data-table .expiry-header-row #name {
+        border-bottom-style: solid !important;
+        border-bottom-color: #8E8E8E !important;
+        border-bottom: 2px;
+    }
+    .email-container .content-section .expiry-data-table .expiry-header-row #date {
+        border-bottom-style: solid !important;
+        border-bottom-color: #8E8E8E !important;
+        border-bottom: 2px;
+    }
+    .email-container .content-section .expiry-data-table .expiry-header-row #link {
+        border-bottom-style: solid !important;
+        border-bottom-color: #8E8E8E !important;
+        border-bottom: 2px;
+    }
+</style>

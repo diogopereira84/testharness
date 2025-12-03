@@ -1,0 +1,28 @@
+//
+//  Email extend styles
+//  _____________________________________________
+
+//  This file should be used for theme-specific styles for emails that extend or modify the styles in _email.less
+//  This will allow you to edit email styles without copying and editing the _email.less file
+
+//  Custom fonts are declared here, rather than in _email-base.less, as it allows for custom fonts to be changed/removed
+//  in custom themes.
+
+//  Importing fonts from an external CSS file, rather than embedding @font-face declarations inside the <style> tag,
+//  as the latter will cause font rendering issues if the web fonts are inaccessible.
+@media-common: true;
+
+& when (@media-common = true) {
+    .lib-font-face(
+        @family-name: 'FedEx Sans',
+        @font-path: '@{baseDir}Fedex_MarketplaceCheckout/fonts/fedex-sans/FedExSans-Regular',
+        @font-weight: 400,
+        @font-display: swap
+    );
+    .lib-font-face(
+        @family-name: 'FedEx Sans',
+        @font-path: '@{baseDir}Fedex_MarketplaceCheckout/fonts/fedex-sans/FedExSans-Bold',
+        @font-weight: 700,
+        @font-display: swap
+    );    
+}

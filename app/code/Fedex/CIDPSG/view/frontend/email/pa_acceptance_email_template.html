@@ -1,0 +1,49 @@
+<!--@subject PA Acceptance Email Template @-->
+<!--@vars {
+"var company_name":"Company Name",
+"var participation_agreement|raw":"Participation Agreement",
+"var items":"Items"
+} @-->
+
+<div class="email-container">
+	<div class="content-section">
+		<div class="participation-agreement">
+			{{if company_name}}
+				<h2 style='text-align:center'>{{var company_name}}</h2>
+			{{/if}}
+			<h3>{{var pa_heading}}</h3>
+			{{var participation_agreement|raw}}
+		</div>
+		<div class='field-container'>
+			{{layout handle="email_pa_agreement_items" items=$items area="frontend"}}
+		</div>
+	</div>
+</div>
+<style>
+	.email-container {
+		width: 612px;
+	}
+	.participation-agreement h3 {
+		font-family: 'FedEx Sans Light';
+		font-size: 24px;
+		font-weight: 300;
+		line-height: 32px;
+		letter-spacing: -0.4px;
+		text-align: left;
+		color: #333333;
+		padding: 23px 0 26px 0;
+	}
+	.participation-agreement p {
+		color: #333333;
+		font-size: 16px;
+		font-style: normal;
+		font-weight: 400;
+		letter-spacing: -0.1px;
+		line-height: 24px;
+	}
+	.field-container {
+		width: auto;
+		margin-left: 37px;
+		margin-top: 48px;
+	}
+</style>

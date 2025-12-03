@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+ /** @var \Fedex\CustomizedMegamenu\Block\Html\CategoryList $block */
+
+ $sharedCatalogOpenIconUrl = $block->getViewFileUrl('Fedex_CustomizedMegamenu::images/shared_catalog_open_icon.png');
+ $sharedCatalogClosedIconUrl = $block->getViewFileUrl('Fedex_CustomizedMegamenu::images/shared_catalog_closed_icon.png');
+?>
+<?= /* @noEscape */ $block->getLeftNavigationCategories(); ?>
+
+<script>
+    window.imgpaths = {
+        openIconUrl: "<?php echo $sharedCatalogOpenIconUrl; ?>",
+        closedIconUrl: "<?php echo $sharedCatalogClosedIconUrl; ?>"
+    };
+    require(['jquery','domReady!'], function ($) {
+        $(".sidebar-main .expend-class, .sidebar-main .has-child-image").each(function(){
+            if(jQuery(this).parent().next().children().length === 0){
+                jQuery(this).hide();
+            }
+            $(this).on('click', function() {
+                    var $img = $(this);
+                    var $closestLi = $img.closest("li");
+                    var isActive = $closestLi.hasClass("active");
+
+                    function closeChildrenNav($li) {
+                        // Close all children that are open
+                        $li.find("ul").find("li").removeClass("active").find("ul").slideUp(700)
+                            .end().find('.has-child-image').attr('src', window.imgpaths.closedIconUrl);
+                    }
+
+                    // Function to open or close navigation elements
+                    function toggleNav($li, isOpen) {
+                        var action = isOpen ? 'slideDown' : 'slideUp';
+                        var newSrc = isOpen ? window.imgpaths.openIconUrl : window.imgpaths.closedIconUrl;
+
+                        // Slide the current list's child UL up or down based on isOpen
+                        $li.children("ul")[action](700).end().toggleClass("active", isOpen);
+
+                        // Handle sibling elements: close all, reset their icons
+                        $li.siblings().removeClass("active").find("ul").slideUp(700)
+                            .end().find('.has-child-image').attr('src', window.imgpaths.closedIconUrl);
+
+                        // Update the icon for the current list
+                        $li.find(".has-child-image:first").attr('src', newSrc);
+
+                        // If closing, also close all nested active lists
+                        if (!isOpen) {
+                            closeChildrenNav($li);
+                        }
+                    }
+
+                    toggleNav($closestLi, !isActive);
+            });
+        });
+       
+        if($('body.epro-store .sidebar .category-tree ul li').length == 0){
+            $('body.epro-store .sidebar .category-tree').hide();
+        }
+    });
+</script>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <head>
+	    <link src="Fedex_Cart::js/iframe-cookie.js"/>
+    </head>
+    <!--D-99570: Cart summary continue button redirect issue fix-->
+    <body>
+        <referenceBlock name="cart.summary.actions">
+            <arguments>
+                <argument
+                    name="cart_summary_view_model"
+                    xsi:type="object">Fedex\Cart\ViewModel\CartSummary</argument>
+                <argument
+                    name="express_checkout_view_model"
+                    xsi:type="object">Fedex\ExpressCheckout\ViewModel\ExpressCheckout</argument>
+                <argument name="expiredItemViewModal" xsi:type="object">Fedex\ExpiredItems\ViewModel\ExpiryMessages</argument>
+                <argument name="upload-to-quote-view-model" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+
+            </arguments>
+        </referenceBlock>
+        <referenceContainer name="columns">
+            <block class="Magento\Framework\View\Element\Template" template="Fedex_Cart::cart/unfinished-project-notification.phtml" name="checkout.cart.unfinished.popup" before="-">
+                <arguments>
+                    <argument name="viewModelInfinishedProject" xsi:type="object">
+                        Fedex\Cart\ViewModel\UnfinishedProjectNotification
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

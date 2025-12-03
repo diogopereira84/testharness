@@ -1,0 +1,28 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<tr class="grand totals">
+    <th class="mark" colspan="1" scope="row">
+        <!-- ko if: window.checkoutConfig.is_sde_store !== true &&
+                window.checkoutConfig.is_commercial !== true -->
+        <strong data-bind="i18n: 'Estimated Total'"></strong>
+        <!-- /ko -->
+        <!-- ko ifnot: window.checkoutConfig.is_sde_store !== true &&
+                window.checkoutConfig.is_commercial !== true -->
+        <strong data-bind="i18n: title"></strong>
+        <!-- /ko -->
+    </th>
+    <!-- ko if: isQuotePricIsDashable() == 1 -->
+    <td class="amount" data-th="Order Total">
+        <strong><span class="price">$--.--</span></strong>
+    </td>
+    <!-- /ko -->
+    <!-- ko if: isQuotePricIsDashable() == 0 -->
+    <td class="amount" data-th="Order Total">
+        <strong><span class="price" data-bind="text: getCartValue()"></span></strong>
+    </td>
+    <!-- /ko -->
+</tr>

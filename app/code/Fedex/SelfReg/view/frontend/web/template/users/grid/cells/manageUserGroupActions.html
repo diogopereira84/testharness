@@ -1,0 +1,23 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<div class="manageusergroups-dropdown">
+    <div indextab="0">
+        <a class="kebab-image category-list"
+           href="javascript:void(0)" 
+           aria-label="Manage Users Groups Actions" 
+           click="toogleMenu.bind(event)" 
+           attr="'data-test-id': 'E-404291-B-2010873-TK-3436949-manage-user-row-action-kebab-' + $row()[$col.indexField]">
+        </a>
+    </div>
+    <div class="manageusergroups-dropdown-content">
+        <a class="action" 
+           repeat="foreach: $col.getVisibleActions($row()._rowIndex), item: '$action'"
+           click="applyAction.bind($action())" text="$action().label"
+           attr="href: $action().href, 'data-action': 'item-' + $action().index">
+        </a>
+    </div>
+</div>

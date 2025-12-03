@@ -1,0 +1,320 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$itemDetails = $block->getSiItems();
+$message = $block->getRequestChangeMessage();
+$cancelCtaLabel = $block->getRequestChangeCancelCTALabel();
+$requestChangeCtaLabel = $block->getRequestChangeCTALabel();
+$totalItems = count($itemDetails);
+$i = 1;
+?>
+<form name="review-request-form" id="review-request-form">
+    <div class="request-change-icon-container request-change-row">
+        <img class="request-change-icon" alt="Request Change"
+            src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/request-change.png'));?>"/>
+    </div>
+    <h3 class="request-change-title request-change-row">
+        <?= $block->escapeHtml('Review items') ?>
+    </h3>
+    <div class="request-change-message request-change-row">
+        <?= $block->escapeHtml($message) ?>
+    </div>
+    <?php foreach ($itemDetails as $item): ?>
+        <?php $flagBorder = $totalItems != $i ? true : false; ?>
+        <div class="review-request-item-row <?=$flagBorder ? "review-req-item-border":"";?>">
+            <div class="product-img-container">
+                <img alt="Product Preview" class="preview-product-img item-img"
+                src="<?= $block->escapeHtmlAttr($item['productImgUrl']) ?>" />
+            </div>
+            <input type="hidden" name="si" id="si_<?= $block->escapeHtmlAttr($item['productId']) ?>"
+            value="<?= $block->escapeHtmlAttr($item['si']) ?>"/>
+            <input type="hidden" name="item_id"
+            id="quote_item_id_<?= $block->escapeHtmlAttr($item['productId']) ?>"
+            value="<?= $block->escapeHtmlAttr($item['productId']) ?>"/>
+            <div class="prod-detail-container">
+                <div class="prod-name"><?= $block->escapeHtml($item['productName']) ?></div>
+                <div class="request-change-txt"><?= $block->escapeHtml('Requested change: "'.$item['si']).'"' ?>
+                </div>
+                <div class="review-item-action-btn">
+                    <a id="edit-item-<?= $block->escapeHtmlAttr($item['productId']) ?>"
+                    href="javascript:void(0)"
+                    data-itemid="<?= $block->escapeHtmlAttr($item['productId']) ?>"
+                    data-productname="<?= $block->escapeHtmlAttr($item['productName']) ?>"
+                    data-si="<?= $block->escapeHtmlAttr($item['si']) ?>"
+                    data-productimgurl="<?= $block->escapeHtmlAttr($item['productImgUrl']) ?>"
+                    class="edit-si-item review-request-item-action review-req-edit-link">
+                        <?= $block->escapeHtml(__('Edit')) ?>
+                    </a>
+                    <span class="devider"> | </span>
+                    <a id="delete-item-<?= $block->escapeHtmlAttr($item['productId']) ?>"
+                    tabindex="<?= ($totalItems < 2) ? -1 : 0 ?>"
+                    href="javascript:void(0)" data-itemid="<?= $block->escapeHtmlAttr($item['productId']) ?>"
+                    class="delete-si-item review-request-item-action review-req-delete-link
+                    <?= count($itemDetails) < 2 ? 'disable-delete-link' : ''?>">
+                        <?= $block->escapeHtml(__('Delete')) ?>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <?php
+        $i++;
+    endforeach; ?>
+    <div class="request-change-row request-change-popup-btn-container">
+        <button type="button" class="btn-review-request-cancel">
+            <?= $block->escapeHtml(__($cancelCtaLabel)) ?></button>
+        <button type="button" class="btn-review-request">
+            <?= $block->escapeHtml(__($requestChangeCtaLabel)) ?></button>
+    </div>
+    <div class="request-change-row another-item-request-change">
+        <a href="javascript:void(0)" class="review-request-another-item">
+            <img class="plus-img" alt="<?= $block->escapeHtmlAttr('Request Change for Another Item') ?>"
+                src="<?= $block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/plus-icon.png'));?>"/>
+            <?= $block->escapeHtml(__('Request Change for Another Item')) ?>
+        </a>
+    </div>
+</form>
+
+<script>
+require([
+    'jquery',
+    'Magento_Ui/js/modal/modal',
+    'mage/url',
+    'uploadToQuoteQueueListener',
+    'uploadToQuoteDetail'
+], function (
+    $,
+    modal,
+    urlBuilder,
+    uploadToQuoteQueueListener,
+    uploadToQuoteDetail
+) {
+    'use strict';
+    
+    /**
+     * Request Change model options
+     */
+    let requestChangeModelOptions = {
+        type: 'popup',
+        innerScroll: true,
+        modalClass: 'request-change-popup',
+        buttons: []
+    };
+
+    /**
+     * Request Change model options
+     */
+     let reviewRequestModelOptions = {
+        type: 'popup',
+        innerScroll: true,
+        modalClass: 'review-request-popup',
+        buttons: []
+    };
+
+    /**
+     * Set data on click of 'review pop up' Edit button
+     */
+     $(".edit-si-item").on('click',function() {
+        let _this = this;
+        let productId = $(_this).attr("data-itemid");
+        let productName = $(_this).attr("data-productname");
+        let si = $(_this).attr("data-si");
+        let productImgUrl = $(_this).attr("data-productimgurl");
+        $("#review_request_popup").modal('closeModal');
+        $("#request_change_popup").modal(requestChangeModelOptions).modal('openModal');
+        //set values in modal pop up select
+        $("#quoted_product").val(productName);
+        //set value in si textarea
+        $("#print_instructions").val(si);
+        //change name of top line
+        $("#product_name").text('Request Change for ' + productName);
+        //set values data attr
+        $("#product_detail").attr("data-productid", productId);
+        $("#product_detail").attr("data-productname", productName);
+        $("#quoted_product").attr("data-productname", productName);
+        $("#product_detail").attr("data-productimgurl", productImgUrl);
+ 
+    });
+
+    /**
+     * Trigger request change on click of request change CTA
+     */
+    $(".review-request-another-item").on('click',function(){
+        $("#request_change_popup").modal(requestChangeModelOptions).modal('openModal');
+        $("#review_request_popup").modal('closeModal');
+    });
+
+    /**
+     * Remove elelemnt on delete link click
+     */
+    $('.delete-si-item').on('click', function(){
+        let _this = this;
+        let itemId = $(_this).attr("data-itemid");
+        $(_this).closest(".review-request-item-row").remove();
+        if($(".review-request-item-row").length < 2) {
+            $(".review-request-item-row").find(".delete-si-item").addClass('disable-delete-link');
+            $(".review-request-item-row").find(".delete-si-item").attr('tabindex', '-1');
+        }
+    });
+
+    /**
+     * Function to clear local storage
+     */
+    function clearProductDetail() {
+        localStorage.removeItem('siProductItems');
+        $("#print_instructions").val('');
+    }
+
+    /**
+     * To clear localstorage on click
+     */
+    $('body').on('click', '.btn-review-request-cancel, .action-close', function () {
+        clearProductDetail();
+        $("#review_request_popup").modal('closeModal');
+    });
+
+    /**
+     * Trigger request change on click of request change CTA -repeated
+     */
+    $(".btn-review-request").on('click',function(){
+        let _this = this;
+        let formData = $('#review-request-form');
+        triggerReviewRequestChange(_this, formData);
+    });
+
+    /**
+     * Trigger request change
+     */
+    function triggerReviewRequestChange(btnObj, formData){
+        let submitBtn = $(btnObj);
+        submitBtn.prop('disabled', true);
+
+        let setQueueUrl = urlBuilder.build('uploadtoquote/index/setqueue');
+        let quoteId = $("#uploadtoquote_quoteid").attr("data-quote-id");
+        let items = formData.serializeArray();
+        let currentdate = new Date();
+        let changeRequestedDate = currentdate.getFullYear() + "-"
+                            + (currentdate.getMonth()+1)  + "-"
+                            + currentdate.getDate() + " "
+                            + currentdate.getHours() + ":"
+                            + currentdate.getMinutes() + ":"
+                            + currentdate.getSeconds();
+        let changeRequestedTime = currentdate.toLocaleString(['en-US'], {
+                hour: '2-digit',
+                minute: '2-digit'
+            }).toLowerCase();
+        let quoteActionSuccMsg = $("#quote-action-succ-msg").attr("data-change-request-undo-msg");
+        let uploadtoQuoteActionQueue = {
+            action: 'changeRequested',
+            quoteId: quoteId,
+            items: items,
+            changeRequestedDate: changeRequestedDate,
+            changeRequestedTime: changeRequestedTime
+        };
+        $.ajax({
+            type: 'post',
+            url: setQueueUrl,
+            showLoader: true,
+            data: uploadtoQuoteActionQueue,
+            dataType: 'json',
+            cache: false,
+            success: function(result) {
+                $('.btn-review-request-cancel').trigger('click');
+                if (result.Queue) {
+                    let requestedTime = new Date();
+                    localStorage.setItem("uploadToQuoteActionQueueResquestedTime", requestedTime.getTime());
+                    $('#quote-action-succ-msg').text(quoteActionSuccMsg);
+                    $('#undo_quote').attr("data-undo-action", "changeRequested");
+                    $('#undo_quote').attr("data-change-requested-item-ids", result.Queue[0].itemIds);
+                    $('.succ-msg').show();
+                    $('.err-msg').hide();
+                    $('.progessbar-status-title').text("Change requested");
+                    $('.email-notification').text(result.requestChangeProgessBarMsg);
+                    $('.btn-quote-approve').hide();
+                    $('.btn-quote-decline').hide();
+                    $('.preview_btn').hide();
+                    $('#undo_quote').attr("data-undo-action", "declined");
+                    $('.progress-bar').css({'width':'62%'});
+                    $('.store-review').addClass('quote-status-submitted-customer');
+                    $('.store-review').removeClass('quote-status-created');
+                    $('.store-review').removeClass('quote-status-submitted-admin');
+                    $('.quote-note-container').remove();
+                    $('.btn-action-container').removeClass('quote-note-visible');
+                    uploadToQuoteDetail.addGreenCheckmark('.next-steps-div-one');
+                    changeQuoteDetailsView(result.Queue[0].items);
+                    uploadToQuoteQueueListener.initiateUploadToQuoteActionQueue();
+                } else {
+                    $('.succ-msg').hide();
+                    $('.err-msg').show();
+                }
+                $('html, body').animate({scrollTop: 0}, 1000);
+            }
+        });
+    }
+
+    /**
+     * To show and hide 'Save Draft' message
+     */
+    function changeQuoteDetailsView(items) {
+        let priceDashformat = '$--.--';
+        let itemRowIdInit = '#item_row_id_';
+        let orderSummaryClass = '.order-transaction-summary';
+        let itemRequestMsg = '<tr class="quote-req-change-inline-msg"><td colspan="5">'+
+                '<div class="quote-req-change-info">'+
+                '<div class="request-info-icon-container">'+
+                '<img class="request-info-change-icon" alt="Request Change" src="'+
+                $('#undo_quote').attr("data-request-chnage-msg-icon")+'">'+
+                '</div><p class="quote-req-change-msg">You requested a change: "';
+        let itemRequestMsgOpen = '<div class="quote-request-change-inline-msg-info">'+
+                '<div class="request-info-icon-container">'+
+                '<img class="request-info-change-icon" alt="Request Change" src="'+
+                $('#undo_quote').attr("data-request-chnage-msg-icon")+'">'+
+                '</div><p class="quote-req-change-msg">You requested a change: "';
+        let itemRequestMsgMob = '<div class="quote-request-change-inline-msg-info-mobile">'+
+                '<div class="request-info-icon-container">'+
+                '<img class="request-info-change-icon" alt="Request Change" src="'+
+                $('#undo_quote').attr("data-request-chnage-msg-icon")+'">'+
+                '</div><p class="quote-req-change-msg">You requested a change: "';
+        $(orderSummaryClass).find('#column_item_total').find('.price').text(priceDashformat);
+        $(orderSummaryClass).find('#column_discount').text('-');
+        $(orderSummaryClass).find('#column_total').find('.price').text(priceDashformat);
+        $(orderSummaryClass).find('#column_tax').find('.price').text('TBD');
+        $.each(items, function (i, e) {
+            let itemrowId = itemRowIdInit+items[i].item_id;
+            $(itemrowId).find('.product-item-name').
+            after('<div class="upload-to-quote-details-store-review-lable">Needs Store Review</div>');
+            $(itemrowId).find('.detail-action-btn').hide();
+            $(".configurater-product-attr-"+items[i].item_id).find(".cart-table-sku").hide();
+            $(itemrowId).find('.product-price').find('.price').remove();
+            $(itemrowId).find('.product-price').find('.quote-product-price').after(priceDashformat);
+            $(itemrowId).find('.product-total').find('.price').remove();
+            $(itemrowId).find('.product-total').find('.quote-product-subtotal').after(priceDashformat);
+            $(itemrowId).find('.product-dis').find('.quote-product-discount').after('-');
+            if ($(window).width() <= 320) {
+                $(itemrowId).next('tr.quote-req-change-inline-msg').hide();
+                $(itemrowId).find('.product-img-div').after(itemRequestMsgMob+items[i].si+'"</p></div>');
+            }
+            else {
+                $(itemrowId).find('.product-img-div').find('.quote-request-change-inline-msg-info-mobile').hide();
+                $(itemrowId).after(itemRequestMsg+items[i].si+'"</p></div></td></tr>');
+                $('#configurater-product-attr-'+items[i].item_id+' > ul').
+                after(itemRequestMsgOpen+items[i].si+'"</p></div>');
+            }
+        });
+    }
+
+    /**
+     * Modal close to clear local storage 'siProductItems' data
+     */
+    $("body").click(function(e){
+        let checkclass = e.target.className;
+        if (checkclass == "modals-overlay"){
+            clearProductDetail();
+            $("#review_request_popup").modal('closeModal');
+        }
+    });
+});
+
+</script>

@@ -1,0 +1,36 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<select multiple class="admin__control-multiselect" data-bind="
+    attr: {
+        name: inputName,
+        id: uid,
+        size: size ? size : '6',
+        disabled: disabled,
+        'aria-describedby': noticeId,
+        placeholder: placeholder
+    },
+    hasFocus: focused,
+    optgroup: options,
+    selectedOptions: value,
+    optionsValue: 'value',
+    optionsText: 'label'"></select>
+<div data-bind="attr: {name: inputName,id: uid + '-default'}">
+    <label data-bind="attr: {for: uid + '-selected'}"><p data-bind="i18n: label + ' - ' + defaultLabelTitle"></p></label>
+    <div>
+        <select class="admin__control-select" data-bind="
+            attr: {
+                name: inputName + '[selected]',
+                id: uid + '-selected',
+            },
+            hasFocus: focused,
+            optgroup: optionsSelected,
+            value: defaultOption,
+            optionsCaption: 'Select Default Value',
+            optionsValue: 'value',
+            optionsText: 'label'"></select>
+    </div>
+</div>

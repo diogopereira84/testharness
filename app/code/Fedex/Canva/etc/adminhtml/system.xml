@@ -1,0 +1,91 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+            <group id="canva_design" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>Canva Design</label>
+                <field id="base_url" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Base URL</label>
+                    <comment/>
+                </field>
+                <field id="path" type="text" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Path</label>
+                    <comment/>
+                </field>
+                <field id="canva_logo" type="image" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" canRestore="1" translate="label">
+                    <label>Canva Logo</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">canva/canva_design/canva_logo</upload_dir>
+                    <base_url type="media" scope_info="1">canva/canva_design/canva_logo</base_url>
+                    <comment>Logo displayed in the PDP link to Canva editor. Recomended size: 48x48.</comment>
+                </field>
+                <field id="partner_id" type="text" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Partner Id</label>
+                    <comment>Api URL to fetch client id and access token to use in canva SDK</comment>
+                </field>
+                <field id="partnership_sdk_url" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Partnership SDK URL</label>
+                    <comment>Partnership SDK URL to be inserted on canva design page</comment>
+                </field>
+                <field id="user_token_api_url" type="text" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>User token API</label>
+                    <comment>Api URL to fetch client id and access token to use in canva SDK</comment>
+                </field>
+                <field id="tutorial_custom_url" translate="label" type="text"  sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tutorials URL</label>
+                    <validate>validate-url</validate>
+                    <comment>Redirect URL for Tutorials</comment>
+                </field>
+                <field id="tutorial_new_tab" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tutorials URL Open in new tab</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>This will enable the URL for Tutorials to be open in a new tab</comment>
+                </field>
+            </group>
+        </section>
+        <section id="sso" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="canva_login" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Canva Login Modal Configuration</label>
+                <field id="title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Modal Message Heading</label>
+                    <comment>Please enter login modal message heading.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="description" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Modal Message</label>
+                    <comment>Please enter login modal message.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="register_button_label" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Create User Button Text</label>
+                    <comment>Please enter create user button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="login_button_label" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Button Text</label>
+                    <comment>Please enter login button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="continue_button_label" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Continue Button Text</label>
+                    <comment>Please enter continue button text for button to display.</comment>
+                </field>
+            </group>
+        </section>
+        <!-- feature toggle-->
+        <section id="environment_toggle_configuration" translate="label">
+            <group id="environment_toggle" translate="label">
+                <field id="enable_canva_buttons_new_flow" translate="label" type="select" sortOrder="21" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Enable Canva Buttons Update</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>This will enable what was developed in B-1226367 - Development for Canva Editor Back Button, Browser Back Button, Publish Button</comment>
+                </field>
+                <field id="tiger_e424480" translate="label" type="select" sortOrder="720" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-424480 Canva Template Carousel Widget</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <!-- feature toggle-->
+    </system>
+</config>

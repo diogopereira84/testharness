@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<!-- /* B-1060632 - RT-ECVS- View Order Details */ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="header.top.reorder.notification" template="Fedex_Orderhistory::order/reorder-notification.phtml" before="-"/>
+            <container name="order.actions.container.container" htmlTag="div" htmlClass="actions-toolbar order-actions-toolbar">
+                <block class="Magento\Sales\Block\Order\Info\Buttons" as="buttons" name="sales.order.info.buttons" cacheable="false"/>
+            </container>
+        </referenceContainer>
+        <referenceBlock name="order.actions.container" remove="true"/>
+        <referenceContainer name="page.wrapper">
+            <block class="Fedex\Orderhistory\Block\Order\Orderviewbreadcrumbs" name="order_view_breadcrubs"  before="main.content" template="Fedex_Orderhistory::orderviewbreadcrumbs.phtml">
+                <arguments>
+                    <argument name="order_b2b_view_modal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\ReviewOrderViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Sales\Block\Order\View" name="order.comments" template="Magento_Sales::order/order_comments.phtml" before="sales.order.info.links"/>
+            <block class="Magento\Sales\Block\Order\View" name="sales.order.view" cacheable="false" after="sales.order.info.links">
+                <block class="Magento\Sales\Block\Order\Items" name="order_items" template="Fedex_Orderhistory::order/items.phtml">
+                    <arguments>
+                        <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                        <argument name="productinfo_handler_view_model" xsi:type="object">
+                            Fedex\Cart\ViewModel\ProductInfoHandler
+                        </argument>
+                    </arguments>
+                    <block class="Magento\Framework\View\Element\RendererList" name="sales.order.items.renderers" as="renderer.list"/>
+                    <block class="Magento\Theme\Block\Html\Pager" name="sales_order_item_pager"/>
+                    <block class="Magento\Sales\Block\Order\Totals" name="order_totals" template="Fedex_Orderhistory::order/totals.phtml">
+                        <arguments>
+                            <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                            <argument name="order_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderView</argument>
+                            <argument name="label_properties" xsi:type="string">colspan="4" class="mark"</argument>
+                            <argument name="value_properties" xsi:type="string">class="amount"</argument>
+                        </arguments>
+                        <block class="Magento\Tax\Block\Sales\Order\Tax" name="tax" template="Magento_Tax::order/tax.phtml"/>
+                    </block>
+                </block>
+            </block>
+            <block class="Magento\Sales\Block\Order\Info" as="info" name="sales.order.info" after="sales.order.view" template="Fedex_Orderhistory::order/info.phtml">
+                <arguments>
+                    <argument name="order_enhancement_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement</argument>
+                    <argument name="order_view_model" xsi:type="object">Fedex\Orderhistory\ViewModel\OrderView</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Sales\Block\Order\Info" as="B2BAction" name="sales.order.b2baction" after="sales.order.info" ifconfig="environment_toggle_configuration/environment_toggle/xmen_order_approval_b2b" template="Fedex_OrderApprovalB2b::order/b2b_action.phtml">
+                <arguments>
+                    <argument name="review_order_view_model" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\ReviewOrderViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="decline-modal-popup" ifconfig="environment_toggle_configuration/environment_toggle/xmen_order_approval_b2b" template="Fedex_OrderApprovalB2b::decline_modal_popup.phtml">
+                <arguments>
+                    <argument name="orderApprovalViewModal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="approve-modal-popup" ifconfig="environment_toggle_configuration/environment_toggle/xmen_order_approval_b2b" template="Fedex_OrderApprovalB2b::approve_modal_popup.phtml">
+                <arguments>
+                    <argument name="orderApprovalViewModal" xsi:type="object">Fedex\OrderApprovalB2b\ViewModel\OrderApprovalViewModel</argument>
+                </arguments>
+            </block>
+            <block class="Fedex\Orderhistory\Block\Order\RetailInfo" as="retail.info" name="sales.order.retail.info">
+                <arguments>
+                    <argument name="productinfo_handler_view_model" xsi:type="object">
+                        Fedex\Cart\ViewModel\ProductInfoHandler
+                    </argument>
+                    <argument name="order_enhancement_view_model" xsi:type="object">
+                        Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement
+                    </argument>
+                    <argument name="orderview_view_model" xsi:type="object">
+                        Fedex\Orderhistory\ViewModel\OrderView
+                    </argument>
+                    <argument name="item_renderer_provider" xsi:type="object">
+                        Fedex\ProductBundle\ViewModel\ItemRendererProvider
+                    </argument>
+                    <argument name="bundleProductHandler" xsi:type="object">
+                        Fedex\ProductBundle\ViewModel\BundleProductHandler
+                    </argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</config>

@@ -1,0 +1,437 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+// B-1145896
+
+$submittedOrderViewLink = $this->getSubmittedOrderViewLink();
+$inProgressOrderViewLink = $this->getInProgressOrderViewLink();
+$completedOrderViewLink = $this->getCompletedOrderViewLink();
+$recentlyAddedCollection = $block->getRecentProductCollection();
+$customDocCollection = $block->getCustomDocCollection();
+$orderCountUrl = $block->getUrl('sde/customer/orderCount');
+$loaderImagePath = 'images/loader-2.gif';
+$errorMsg = 'We can\'t find products matching the selection.';
+?>
+<!--B-1255699 Ajax implementation of order count-->
+<div class="home-container-new">
+    <div class="home-wrapper-new">
+    <!-- B-1160235:Home Page renders only option for Catalog only -->
+    <div class="new-project-container">
+            <?php if ($block->getCatalogOnlyOption()) : ?>
+                <div class="new-project-catalog">
+                    <div class="project-content">
+                        <div class="title-main">
+                            <span class="new-project-title">
+                                <?= $escaper->escapeHtml(__('Want to order from your catalog?')); ?>
+                            </span>
+                        </div>
+                        <div class="subtitle">
+                            <!-- D-94137 - Self-Reg- Update the text for catalog -->
+                            <span class="new-project-subtitle">
+                                <?= $escaper->escapeHtml(__('Browse your catalog.')); ?>
+                            </span>
+                        </div>
+                        <div class="get-started">
+                            <button class="upload-project"
+                            onclick="location.href='<?= $block->getBrowseCatalogUrl(); ?>'">
+                            <?= $block->escapeHtml(__('GET STARTED')) ?>
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+            <!-- B-1145888:Home Page renders only option for Upload only -->
+            <?php if ($block->getUploadOnlyOption()) : ?>
+                <div class="new-project-print sde">
+                    <div class="project-content">
+                        <div class="title-main">
+                            <span class="new-project-title">
+                                <?= $escaper->escapeHtml(__('Get Started')); ?>
+                            </span>
+                        </div>
+                        <div class="subtitle">
+                            <span class="new-project-subtitle">
+                                <?= $escaper->escapeHtml(__('Select an option below to begin your project.')); ?>
+                            </span>
+                        </div>
+                        <div class="get-started">
+                            <button class="upload-project"
+                            onclick="location.href='<?= $block->getPrintProductUrl(); ?>'">
+                            <?= $block->escapeHtml(__('BROWSE PRINT PRODUCTS')) ?>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            <?php endif; ?>
+        </div>
+        <h1 class = "page-tittle-my-orders desktop-view">My Orders</h1>
+        <div class="self-reg-order-counts desktop-view">
+            <div class="self-reg-order-count-row">
+                <h2><?= $block->escapeHtml(__('Submitted')) ?></h2><!-- B-1145910 -->
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                        class="product-loader" alt="" />
+                    </div>
+                    <span class="order-count-submitted"></span>
+                </div>
+                <div class="order-view-link submitted-view-link" style="display: none;">
+                    <a href="<?= $submittedOrderViewLink; ?>"><?= __('View Orders') ?></a>
+                </div>
+            </div>
+            <!-- B-1145900 - View Order  for In-Progress -->
+            <div class="self-reg-order-count-row">
+                <h2><?= $block->escapeHtml(__('In Progress')) ?></h2><!-- B-1145910 -->
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                        alt="" class="product-loader" />
+                    </div>
+                    <span class="order-count-progress"></span>
+                </div>
+                <div class="order-view-link progress-view-link" style="display: none;">
+                    <a href="<?= $inProgressOrderViewLink; ?>"><?= __('View Orders') ?></a>
+                </div>
+            </div>
+
+            <!-- B-1145903 - Show Order History with only shipped, ready for pickup or delivered -->
+            <div class="self-reg-order-count-row">
+                <h2><?= $block->escapeHtml(__('Completed')) ?></h2><!-- B-1145910 -->
+                <div class="order-count">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                        alt="" class="product-loader" />
+                    </div>
+                    <span class="order-count-completed"></span>
+                </div>
+                <div class="order-view-link completed-view-link" style="display: none;">
+                    <a href="<?= $completedOrderViewLink; ?>"><?= __('View Orders') ?></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- B-1178397 - Ability to implement responsiveness for Self Reg Upload Only screen -->
+        <div class="self-reg-order-mobile-view">
+        <h1 class = "page-tittle-my-orders-mobile-view">My Orders</h1>
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $submittedOrderViewLink; ?>" class="mobile-order-view-link-submitted">
+                        <h2><?= $block->escapeHtml(__('Submitted')) ?></h2><!-- B-1145910 -->
+                    </a>
+                    <div class="order-count-link">
+                        <div class="order-count-loader">
+                            <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                            alt="" class="product-loader" />
+                        </div>
+                            <span class="order-count-submitted"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $inProgressOrderViewLink; ?>" class="mobile-order-view-link-progress">
+                        <h2><?= $block->escapeHtml(__('In Progress')) ?></h2><!-- B-1145910 -->
+                    </a>
+                    <div class="order-count-link">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                        alt="" class="product-loader" />
+                    </div>
+                    <span class="order-count-progress"></span>
+                </div>
+                </div>
+            </div>
+            <div class="self-reg-order-count-mobile">
+                <div class="count-info">
+                    <a href="<?= $completedOrderViewLink; ?>" class="mobile-order-view-link-completed">
+                        <h2><?= $block->escapeHtml(__('Completed')) ?></h2><!-- B-1145910 -->
+                    </a>
+                    <div class="order-count-link">
+                    <div class="order-count-loader">
+                        <img src="<?= $block->escapeUrl($block->getViewFileUrl($loaderImagePath)) ?>"
+                        alt="" class="product-loader" />
+                    </div>
+                        <span class="order-count-completed"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- B-1160241:Display recently added products in shared company catalog section -->
+        <?php if ($block->getCatalogOnlyOption() && !$block->isMvpCatalogEnble()) : ?>
+            <div class="shared-company-catalog">
+                <h2><?= $escaper->escapeHtml(__('Shared company catalog')); ?></h2>
+                <div class="shared-catalog-container desktop-view">
+
+                    <!-- B-1172285 - Custom documents tab should have the custom docs -->
+                    <div class="tab-container">
+                         <span class="recently-added-tab tab-title active" data-content="recently-added" tabindex="0">
+                            <?= $escaper->escapeHtml(__('Recently added')); ?>
+                        </span>
+
+                        <?php if ($customDocCollection && $customDocCollection->getSize()) : ?>
+                            <span class="custom-document-tab tab-title" data-content="custom-document" tabindex="0">
+                                <?= $escaper->escapeHtml(__('Customizable documents')); ?>
+                            </span>
+                        <?php endif; ?>
+
+                        <a href="<?= $block->getBrowseCatalogUrl(); ?>" class="view-catalog">
+                            <?= __('View catalog') ?>
+                        </a>
+                    </div>
+                    <div class="seprator"></div>
+                    <div class="tab-content-wrapper">
+                        <div class="recently-added-content tab-content active" id="owlslider">
+                            <?php
+                            $productFound = false; ?>
+                            <?php if ($recentlyAddedCollection && $recentlyAddedCollection->getSize()) : ?>
+                                <?php foreach ($recentlyAddedCollection as $customDocItem) : ?>
+                                    <?php
+                                    $attributeSetId = $customDocItem->getAttributeSetId();
+                                    $attribute_set_name = $block->getAttributeSetName($attributeSetId);
+                                    $customizable = (bool)$customDocItem->getData('customizable');
+                                    ?>
+                                    <?php if ($block->getCatalogOnlyOption()
+                                    && ($attribute_set_name == 'PrintOnDemand')) : ?>
+                                        <?php $productFound = true; ?>
+                                        <div class="product-details">
+                                            <!-- B-1160236 - RT-ECVS - Validate all new
+                                            components follow ADA compliance - Catalog Only -->
+                                            <a href="javascript:void(0)">
+                                                <div class="product-img">
+                                                    <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                                        alt="<?= 'Image_' . $customDocItem->getName(); ?>">
+                                                </div>
+                                                <div class="product-title"><strong><?= $customDocItem->getName(); ?>
+                                                </strong>
+                                            </div>
+                                            </a>
+                                            <div class="created-at">
+                                                <span>
+                                                    <?= $block->getFormattedDate($customDocItem->getCreatedAt());?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            <?php if (!$productFound) : ?>
+                                <div>
+                                    <?= $escaper->escapeHtml(__($errorMsg)) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+
+                        <!-- B-1172285 - Custom documents tab should have the custom docs -->
+                        <div class="custom-document-content tab-content">
+                            <?php $customDocFound = false; ?>
+                            <?php if ($customDocCollection && $customDocCollection->getSize()) : ?>
+                                <?php foreach ($customDocCollection as $customDocItem) : ?>
+                                    <?php $customDocFound = true; ?>
+                                    <div class="product-details">
+                                        <!-- B-1160236 - RT-ECVS - Validate all new components
+                                        follow ADA compliance - Catalog Only -->
+                                        <a href="javascript:void(0)">
+                                            <div class="product-img">
+                                                <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                                alt="<?= 'Image_' . $customDocItem->getName(); ?>">
+                                            </div>
+                                            <div class="product-title">
+                                                <strong><?= $customDocItem->getName(); ?></strong>
+                                            </div>
+                                        </a>
+                                        <div class="created-at">
+                                            <span>
+                                                <?= $block->getFormattedDate($customDocItem->getCreatedAt()); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
+                            <?php if (!$customDocFound) : ?>
+                                <div>
+                                    <?= $escaper->escapeHtml(__($errorMsg)) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- B-1200202 | Ability to implement responsiveness for Self Reg Catalog Only screen -->
+                <div class="shared-catalog-container mobile-view">
+                    <select class="shared-catalog-options">
+                        <option value="recently-added" tabindex="0">
+                            <?= $escaper->escapeHtml(__('Recently added')); ?>
+                        </option>
+                        <option value="custom-document" tabindex="0">
+                            <?= $escaper->escapeHtml(__('Customizable documents')); ?>
+                        </option>
+                    </select>
+
+                    <div class="recently-added-mobile dropdown-content active">
+                        <div class="recently-added-mobile-content owl-carousel">
+                            <?php $productFoundMobile = false; ?>
+                            <?php $i = 0;
+                            if ($recentlyAddedCollection && $recentlyAddedCollection->getSize()) :
+                                foreach ($recentlyAddedCollection as $customDocItem) : ?>
+                                    <?php
+                                    $attributeSetId = $customDocItem->getAttributeSetId();
+                                    $attribute_set_name = $block->getAttributeSetName($attributeSetId);
+                                    $customizable = (bool)$customDocItem->getData('customizable');
+
+                                    if ($i > 3) {
+                                        break;
+                                    }
+                                    ?>
+                                    <?php if ($block->getCatalogOnlyOption()
+                                    && ($attribute_set_name == 'PrintOnDemand')) : ?>
+                                        <?php $productFoundMobile = true;
+                                        $i++; ?>
+                                        <div class="product-details">
+                                            <!-- B-1160236 - RT-ECVS - Validate all new components
+                                            follow ADA compliance - Catalog Only -->
+                                            <a href="javascript:void(0)">
+                                                <div class="product-img">
+                                                    <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                                    alt="<?= 'Image_' . $customDocItem->getName(); ?>">
+                                                </div>
+                                                <div class="product-title">
+                                                    <strong><?= $customDocItem->getName(); ?></strong>
+                                                </div>
+                                            </a>
+                                            <div class="created-at">
+                                                <span>
+                                                    <?= $block->getFormattedDate($customDocItem->getCreatedAt()); ?>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+                            <?php if (!$productFoundMobile) : ?>
+                                <div>
+                                    <?= $escaper->escapeHtml(__($errorMsg)) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div class="custom-document-mobile dropdown-content tab-content">
+                        <div class="custom-document-mobile-content owl-carousel owl-hidden">
+                            <?php $customDocFoundMobile = false;
+                            $j = 0; ?>
+                            <?php if ($customDocCollection && $customDocCollection->getSize()) : ?>
+                                <?php foreach ($customDocCollection as $customDocItem) : ?>
+                                    <?php
+                                    if ($j > 3) {
+                                        break;
+                                    }
+
+                                    $customDocFoundMobile = true;
+                                    $j++ ?>
+                                    <div class="product-details item">
+                                        <!-- B-1160236 - RT-ECVS - Validate all new components follow
+                                        ADA compliance - Catalog Only -->
+                                        <a href="javascript:void(0)">
+                                            <div class="product-img">
+                                                <img src="<?= $block->getProductImage($customDocItem); ?>"
+                                                alt="<?= 'Image_' . $customDocItem->getName(); ?>">
+                                            </div>
+                                            <div class="product-title">
+                                                <strong><?= $customDocItem->getName(); ?></strong>
+                                            </div>
+                                        </a>
+                                        <div class="created-at">
+                                            <span>
+                                                <?= $block->getFormattedDate($customDocItem->getCreatedAt()); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endforeach; ?>
+                            <?php endif; ?>
+
+                            <?php if (!$customDocFoundMobile) : ?>
+                                <div>
+                                    <?= $escaper->escapeHtml(__($errorMsg)) ?>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
+
+    </div>
+</div>
+
+<!-- B-1172285 - Custom documents tab should have the custom docs -->
+<?php if ($block->getCatalogOnlyOption()) : ?>
+    <script>
+        require(['jquery', 'owlcarousel', 'domReady'], function($) {
+
+            // add tab functionality on desktop
+            jQuery(document).on('click', '.shared-catalog-container .tab-container .tab-title', function() {
+                var content = $(this).attr('data-content');
+                if (!$(this).hasClass('active')) {
+                    // active tab
+                    $('.shared-catalog-container .tab-container .tab-title').removeClass('active');
+                    $(this).addClass('active');
+
+                    // active tab content
+                    $('.shared-catalog-container .tab-content-wrapper .tab-content').removeClass('active');
+                    $('.' + content + '-content').addClass('active');
+                }
+            });
+
+            // B-1200202 - adding drop-down functionality in mobile
+            jQuery(document).on('change', '.shared-catalog-container.mobile-view .shared-catalog-options', function() {
+                var val = $(this).val();
+                $('.dropdown-content').removeClass('active');
+                $('.' + val + '-mobile').addClass('active');
+            });
+
+            // B-1200202 - carousel for mobile view
+            $('.owl-carousel').owlCarousel({
+                loop: false,
+                items: 1,
+                dots: true,
+                autoplay: false,
+                autoplayHoverPause: false,
+                margin: 20,
+                autoWidth: false
+            });
+            $(".shared-catalog-container .owl-nav").remove();
+        });
+    </script>
+<?php endif; ?>
+<?php //B-1255699 Ajax display of order count in sde home page?>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "domReady!"
+    ], function($) {
+        var url = '<?= $orderCountUrl ?>';
+        $('.order-view-link').hide();
+        $.ajax({
+            url: url,
+            type: 'POST',
+            dataType: 'json',
+        }).done(function(response) {
+            $('.order-count-loader').hide();
+            if (response) {
+                $.each(response, function(index, value) {
+                    if (value !== 'undefined' && value > 0) {
+                        $('.order-count-' + index).html(value);
+                        $('.' + index + '-view-link').show();
+                    } else {
+                        $('.order-count-' + index).html('0');
+                        $('.mobile-order-view-link-' + index).attr("href", "javascript:void(0)")
+                    }
+                });
+
+            }
+        });
+    });
+</script>

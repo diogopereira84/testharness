@@ -1,0 +1,382 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/** @var Fedex\UploadToQuote\Block\QuoteDetails $block */
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$quoteDetailsViewModel = $block->getData('quoteDetailsViewModel');
+$isUploadToQuoteEnabled = $quoteDetailsViewModel->isUploadToQuoteEnabled();
+$quote = $quoteDetailsViewModel->getQuoteBySessionQuoteId();
+$quoteStatus = $quoteDetailsViewModel->getQuoteStatusKeyByQuoteId($quote->getId());
+$isEproUploadToQuoteEnabled = $quoteDetailsViewModel->isEproUploadToQuoteEnable();
+if ($isEproUploadToQuoteEnabled) {
+    $companyConfiguration = $block->getCompanyConfiguration();
+    $isEproU2qCompanySetting = $companyConfiguration->getData('is_epro_u2q_enabled');
+    $isEproCustomer = $block->isEproCustomer();
+}
+
+/** @var Fedex\Cart\ViewModel\ProductInfoHandler $productInfoHandler */
+$productInfoHandler = $block->getData('productInfoHandler');
+
+/** @var Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$uploadToQuoteViewModel = $block->getData('uploadToQuoteViewModal');
+$nextStepContentFromStore = $uploadToQuoteViewModel->getUploadToQuoteConfigValue('quote_submit_next_steps');
+$nextStepContentFromCompany = $block->getNextStepContent();
+$allowNextStepContent = $block->getAllowNextStepContent();
+$statusData = $quoteDetailsViewModel->getStatusDataByQuoteId($quote->getId());
+
+$isUploadToQuoteSubmitDateEnabled = $quoteDetailsViewModel->toggleUploadToQuoteSubmitDate();
+$quoteSubmitDate = $quoteDetailsViewModel->getSubmitDate($quote->getId());
+
+$nextStepContent = '';
+if ($allowNextStepContent) {
+    if ($nextStepContentFromCompany) {
+        $nextStepContent = $nextStepContentFromCompany;
+    } elseif ($nextStepContentFromStore) {
+        $nextStepContent = $nextStepContentFromStore;
+    }
+}
+$basePrice = 'BASE PRICE';
+$eproReturnUrl = $quoteDetailsViewModel->getReturnToEproUrl();
+$companyExtentionUrl = $uploadToQuoteViewModel->getCompanyExtentionUrl($quote);
+$quoteItem = $block->getData('quote_item');
+?>
+<?php
+$attributeSetId = $quoteItem->getProduct()->getAttributeSetId();
+$attributeSetName = $quoteDetailsViewModel->getProductAttributeName($attributeSetId);
+$infoBuyRequest = $quoteItem->getOptionByCode('info_buyRequest');
+$infoBuyRequestValue = $infoBuyRequest->getValue();
+$decodeProductValue = json_decode($infoBuyRequestValue, true);
+$productLineDetails = !empty($decodeProductValue['productRateTotal'][0]['productLineDetails']) ?
+    $decodeProductValue['productRateTotal'][0]['productLineDetails']:[];
+$productJson = $productInfoHandler->getItemExternalProd($quoteItem);
+$discount = $quoteItem->getDiscount();
+$hasDiscount = $discount > 0 ? true : false;
+$features = $productJson['features'] ?? [];
+$colorImageStyle = "width: 165px;";
+$previewUrl = $productJson['preview_url'] ?? '';
+$userProductName = $productJson['userProductName'] ?? '';
+$pricebale = $uploadToQuoteViewModel->isProductLineItems($productJson);
+$specialInstruction = $uploadToQuoteViewModel->isProductLineItems($productJson, true);
+$isNonStandardFile = $uploadToQuoteViewModel->isNonStandardFile($infoBuyRequestValue);
+foreach ($features as $feature):
+    if (
+        $feature->name == 'Print Color' &&
+        isset($feature->choice->properties[0]->value) &&
+        $feature->choice->properties[0]->value == 'B/W'
+    ):
+        $colorImageStyle = "-webkit-filter: grayscale(100%); filter: grayscale(100%);";
+        break;
+    endif;
+endforeach;
+?>
+<tr id="item_row_id_<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>" class="bundle-child item-info-parent-<?= $quoteItem->getParentItemId(); ?>">
+    <td data-th="Item" class="product-block">
+        <div class="product-img-div">
+    <span class="product-image-container">
+        <div class="product-img">
+            <?php if($attributeSetName == 'FXOPrintProducts'):?>
+                <?php if ($isNonStandardFile): ?>
+                    <img alt="Product Preview" class="preview-product-img" src=
+                    "<?=$block->escapeUrl($uploadToQuoteViewModel->getNonStandardImageUrl());?>"/>
+                <?php else: ?>
+                    <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                         class="product-loader" alt=""/>
+                    <img alt="Product Preview" class="preview-product-img"
+                         src="<?= $block->escapeUrl($block
+                             ->getViewFileUrl('images/upload-to-quote/empty-image.png')) ?>"
+                         data-bind="attr:{onload: productPreviewImg.
+                        getPreviewImg('<?= $block->escapeHtml($previewUrl); ?>', $element)}"/>
+                <?php endif;?>
+            <?php else: ?>
+                <img alt="Product Preview" class="preview-product-img"
+                     src="<?= $block->escapeUrl($quoteDetailsViewModel->productImageUrl($quoteItem->getProduct(), 72, 72));?>"/>
+            <?php endif;?>
+        </div>
+    </span>
+            <div class="product-item-details">
+                <strong class="product-item-name">
+                    <?= $block->escapeHtml($userProductName) ?>
+                </strong>
+                <?php if ($uploadToQuoteViewModel->isUploadToQuoteEnable() && !$pricebale): ?>
+                    <div class="upload-to-quote-details-store-review-lable">
+                        <?= $block->escapeHtml(__('Needs Store Review')) ?>
+                    </div>
+                <?php endif; ?>
+                <a href="#" aria-expanded="false"
+                   aria-controls=
+                   "configurater-product-attr-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>"
+                   class="show-product-detail-lable show-detail"
+                   data-item-id="<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>"
+                   id="show-detail-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>">
+                    <?= $block->escapeHtml(__('Show details')) ?>
+                </a>
+            </div>
+        </div>
+        <!-- SKU detail 320px-->
+        <table aria-describedby="cart-table-for-mobile-success"
+               id="sku-tbl" style="display:none" class="show-squ-div configurater-product-attr-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>">
+            <tr class="table-row">
+                <td colspan="5" class="product-sku">
+                    <div class="configurater-product-attr" id="configurater-product-attr-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>">
+                        <?php if ($productLineDetails) { ?>
+                            <table aria-describedby="cart-table-sku"
+                                   class="cart-table cart-table-sku">
+                                <tr class="sku-cart-table-row-th table-row-top">
+                                    <th scope="col" class="col item-sku">
+                                        <?= $block->escapeHtml(__('SKU')) ?>
+                                    </th>
+                                    <th scope="col" class="col item-base-price">
+                                        <?= $block->escapeHtmlAttr($basePrice) ?>
+                                    </th>
+                                    <th scope="col" class="col item-qty">
+                                        <?= $block->escapeHtml(__('QTY')) ?>
+                                    </th>
+                                    <th scope="col" class="col item-discount">
+                                        <?= $block->escapeHtml(__('DISCOUNT')) ?>
+                                    </th>
+                                    <th scope="col" class="col item-total">
+                                        <?= $block->escapeHtml(__('TOTAL')) ?>
+                                    </th>
+                                </tr>
+
+                                <?php  foreach ($productLineDetails as $lineItem):
+                                    $detailDiscountPrice =  str_replace(
+                                        [ '(', ')' ],
+                                        '',
+                                        $lineItem['detailDiscountPrice']
+                                    );
+                                    ?>
+                                    <tr class="table-row-sku">
+                                        <td class="product-sku-td quote-sku-top">
+                                                <span class="quote-product-sku"
+                                                      style="display:none">
+                                                    <?= $block->escapeHtml(__('SKU')) ?>
+                                                </span>
+                                            <span class="quote-product-sku-name">
+                                                    <?= $block->
+                                                    escapeHtml(__($lineItem['detailCode'])) ?> -
+                                                    <?=  /* @noEscape */ $lineItem['description'] ?>
+                                                </span>
+                                        </td>
+                                        <td class="product-sku-td">
+                                                <span class="quote-product-sku"
+                                                      style="display:none">
+                                                    <?= $block->escapeHtmlAttr($basePrice) ?>
+                                                </span>
+                                            <span>
+                                                    <?=  /* @noEscape */ $lineItem['detailPrice'] ?>
+                                                </span>
+                                        </td>
+                                        <td class="product-sku-td">
+                                                <span class="quote-product-sku"
+                                                      style="display:none">
+                                                    <?= $block->escapeHtml(__('QTY')) ?>
+                                                </span>
+                                            <span>
+                                                    <?=  /* @noEscape */
+                                                    $lineItem['unitQuantity'] ?>
+                                                </span>
+                                        </td>
+                                        <td class="product-sku-td">
+                                                <span class="quote-product-sku"
+                                                      style="display:none">
+                                                    <?= $block->escapeHtml(__('DISCOUNT')) ?>
+                                                </span>
+                                            <span>
+                                                    <?= /* @noEscape */ $detailDiscountPrice ?>
+                                                </span>
+                                        </td>
+                                        <td class="product-sku-td">
+                                                <span class="quote-product-sku"
+                                                      style="display:none">
+                                                    <?= $block->escapeHtml(__('TOTAL')) ?>
+                                                </span>
+                                            <span>
+                                                    <?= /* @noEscape */ $lineItem['detailPrice'] ?>
+                                                </span>
+                                        </td>
+                                    </tr>
+                                <?php endforeach ?>
+                                <tr class="table-row"></tr>
+                            </table>
+                        <?php } ?>
+                        <?php if (!$isNonStandardFile): ?>
+                            <span class="additional-info">
+                                    <?= $block->escapeHtml(__('Additional Detail')) ?>
+                                </span>
+                            <ul role="listbox"
+                                aria-labelledby
+                                ="show-detail-<?=$block->escapeHtmlAttr($quoteItem->getId())
+                                ?>">
+                                <?php
+                                if (!empty($productJson['features'])):
+                                    foreach ($productJson['features'] as $configAttribute):
+                                        if (!empty($configAttribute->name)):?>
+                                            <?= /* @noEscape */ "<li
+                                                class='detail-li' tabindex='0' role='option'>"
+                                            .$configAttribute->name . ": "
+                                            .$configAttribute->choice->name . "</li>";
+                                        endif;
+                                    endforeach;
+                                endif;
+                                ?>
+                            </ul>
+                        <?php endif;?>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </td>
+    <td class="product-price">
+        <span class="quote-product-price" style="display:none">
+            <?= $block->escapeHtml(__('PRICE')) ?>
+        </span>
+        <?php
+        if ($uploadToQuoteViewModel->isItemPriceable($infoBuyRequestValue)):?>
+            <?= /* @noEscape */ $quoteDetailsViewModel->
+            convertPrice($quoteItem->getBaseRowTotal(), true) ?>
+        <?php else: ?>
+            <?= $block->escapeHtml($uploadToQuoteViewModel->getPriceDash()) ?>
+        <?php endif; ?>
+    </td>
+    <td class="product-qty">
+        <span class="quote-product-qty" style="display:none">
+            <?= $block->escapeHtml(__('QTY')) ?>
+        </span>
+        <?= $block->escapeHtml($quoteItem->getQty()) ?></td>
+    <td class="product-dis">
+        <span class="quote-product-discount" style="display:none">
+            <?= $block->escapeHtml(__('DISCOUNT')) ?>
+        </span>
+        <?php $discount = $hasDiscount
+            ? $quoteDetailsViewModel->convertPrice("-" . $discount, true) : "-"; ?>
+        <?= /* @noEscape */ $discount ?>
+    </td>
+    <td class="product-total">
+        <span class="quote-product-subtotal" style="display:none">
+            <?= $block->escapeHtml(__('SUBTOTAL')) ?>
+        </span>
+        <?php
+        if ($uploadToQuoteViewModel->isItemPriceable($infoBuyRequestValue)):
+            $row_total = str_replace(',', '', $quoteItem->getRowTotal());
+            $item_discount = str_replace(',', '', (string)$quoteItem->getDiscount());
+            $final_line_total = floatval($row_total - ($item_discount == ""
+                    ? 0 : $item_discount));?>
+            <?= /* @noEscape */ $quoteDetailsViewModel->convertPrice($final_line_total, true); ?>
+        <?php else: ?>
+            <?= $block->escapeHtml($uploadToQuoteViewModel->getPriceDash()) ?>
+        <?php endif; ?>
+    </td>
+</tr>
+<?php
+$siClass = '';
+if (!$productLineDetails) {
+    if (!$pricebale) {
+        $siClass = 'additional-info-tab-success';
+    } else {
+        $siClass = 'additional-tab-success';
+    }
+}
+?>
+<!-- SKU detail 1440px-->
+<tr class="table-row hide-squ-div configurater-product-attr-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>" style="display:none;">
+    <td colspan="5" class="product-sku">
+        <div class="<?= $block->escapeHtmlAttr($siClass) ?>
+        configurater-product-attr" id="configurater-product-attr-<?= $block->escapeHtmlAttr($quoteItem->getId()) ?>">
+            <?php if ($productLineDetails) { ?>
+                <table aria-describedby="cart-table-sku"
+                       class="cart-table cart-table-sku">
+                    <tr class="sku-cart-table-row-th table-row-top">
+                        <th scope="col" class="col item-sku">
+                            <?= $block->escapeHtml(__('SKU')) ?>
+                        </th>
+                        <th scope="col" class="col item-base-price">
+                            <?= $block->escapeHtmlAttr($basePrice) ?>
+                        </th>
+                        <th scope="col" class="col item-qty">
+                            <?= $block->escapeHtml(__('QTY')) ?>
+                        </th>
+                        <th scope="col" class="col item-discount">
+                            <?= $block->escapeHtml(__('DISCOUNT')) ?>
+                        </th>
+                        <th scope="col" class="col item-total">
+                            <?= $block->escapeHtml(__('TOTAL')) ?>
+                        </th>
+                    </tr>
+
+                    <?php  foreach ($productLineDetails as $lineItem):
+                        $detailDiscountPrice =  str_replace([ '(', ')' ], '', $lineItem
+                        ['detailDiscountPrice']); ?>
+                        <tr class="table-row-sku">
+                            <td class="product-sku-td quote-sku-top">
+                                    <span class="quote-product-sku" style="display:none">
+                                        <?= $block->escapeHtml(__('SKU')) ?>
+                                    </span>
+                                <span class="quote-product-sku-name">
+                                        <?= $block->escapeHtml(__($lineItem['detailCode'])) ?> -
+                                        <?=  /* @noEscape */ $lineItem['description'] ?>
+                                    </span>
+                            </td>
+                            <td class="product-sku-td">
+                                    <span class="quote-product-sku" style="display:none">
+                                        <?= $block->escapeHtmlAttr($basePrice) ?>
+                                    </span>
+                                <span>
+                                        <?=  /* @noEscape */ $lineItem['detailPrice'] ?>
+                                    </span>
+                            </td>
+                            <td class="product-sku-td">
+                                    <span class="quote-product-sku" style="display:none">
+                                        <?= $block->escapeHtml(__('QTY')) ?>
+                                    </span>
+                                <span>
+                                        <?=  /* @noEscape */ $lineItem['unitQuantity'] ?>
+                                    </span>
+                            </td>
+                            <td class="product-sku-td">
+                                    <span class="quote-product-sku" style="display:none">
+                                        <?= $block->escapeHtml(__('DISCOUNT')) ?>
+                                    </span>
+                                <span>
+                                        <?= /* @noEscape */ $detailDiscountPrice ?>
+                                    </span>
+                            </td>
+                            <td class="product-sku-td">
+                                    <span class="quote-product-sku" style="display:none">
+                                        <?= $block->escapeHtml(__('TOTAL')) ?>
+                                    </span>
+                                <span>
+                                        <?= /* @noEscape */ $lineItem['detailPrice'] ?>
+                                    </span>
+                            </td>
+                        </tr>
+                    <?php endforeach ?>
+                    <tr class="table-row"></tr>
+                </table>
+            <?php } ?>
+            <?php if (!$isNonStandardFile): ?>
+                <span class="additional-info">
+                        <?= $block->escapeHtml(__('Additional Detail')) ?>
+                    </span>
+                <ul role="listbox"
+                    aria-labelledby="show-detail-<?=$block->escapeHtmlAttr($quoteItem->getId()) ?>">
+                    <?php
+                    if (!empty($productJson['features'])):
+                        foreach ($productJson['features'] as $configAttribute):
+                            if (!empty($configAttribute->name)):?>
+                                <?= /* @noEscape */ "<li
+                                    class='detail-li' tabindex='0' role='option'>"
+                                .$configAttribute->name . ": "
+                                .$configAttribute->choice->name . "</li>";
+                            endif;
+                        endforeach;
+                    endif;
+                    ?>
+                </ul>
+            <?php endif; ?>
+        </div>
+    </td>
+</tr>

@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="recaptcha_frontend">
+            <group id="type_for" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="1">
+                <field id="checkout_order" translate="label" type="select" sortOrder="103" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Checkout Submit Order</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="checkout_cc" translate="label" type="select" sortOrder="104" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Checkout Save CC</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="checkout_fedex_account" translate="label" type="select" sortOrder="105" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Checkout Save Fedex Account</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="checkout_shipping_account_validation" translate="label" type="select" sortOrder="106" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Checkout Validate Fedex Shipping Account</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="profile_cc" translate="label" type="select" sortOrder="107" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Profile CC</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="profile_fedex_account" translate="label" type="select" sortOrder="108" showInDefault="1"
+                       showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Enable for Profile Fedex Account</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+                <field id="shared_cc" translate="label" type="select" sortOrder="109" showInDefault="1"
+                       showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enable for Shared Credit Cards</label>
+                    <source_model>Fedex\Recaptcha\Model\OptionSource\Type</source_model>
+                </field>
+            </group>
+            <group id="type_recaptcha_v3">
+                <field id="public_key" translate="label" type="obscure" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0"/>
+                <field id="private_key" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="0"/>
+                <field id="score_threshold" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="0"
+                       showInStore="1" canRestore="1"/>
+                <field id="debug" translate="label" type="multiselect" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Debug</label>
+                    <source_model>Fedex\Recaptcha\Model\Config\Source\RecaptchaFormNames</source_model>
+                    <comment>This will log Recaptcha Request Result under var/recaptcha.log</comment>
+                </field>
+                <group id="printful" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Printful Recaptcha Configuration</label>
+                    <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>This configuration will enable the exclusive for Printful's reCaptcha Transaction Block logic.</comment>
+                        <config_path>recaptcha_frontend/printful/enabled</config_path>
+                    </field>
+                    <field id="score_threshold" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Printful Minimum Score Threshold</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>This score threshold configuration is exclusive for Printful's reCaptcha Transaction Block logic.</comment>
+                        <config_path>recaptcha_frontend/printful/score_threshold</config_path>
+                    </field>
+                    <field id="line_qty" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Line Qty</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>This quantity will be used to compare amount of printful product in cart, quantity will be compared for each product individually.</comment>
+                        <config_path>recaptcha_frontend/printful/line_qty</config_path>
+                    </field>
+                </group>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration">
+            <group id="environment_toggle">
+                <field id="tiger_b2384493" translate="label" type="select" sortOrder="440" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2384493 - Integrate Google reCaptcha V3 for Checkout Review Order in Adobe Commerce (NFR)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

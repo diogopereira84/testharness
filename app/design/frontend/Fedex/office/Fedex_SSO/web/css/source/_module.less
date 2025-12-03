@@ -1,0 +1,1241 @@
+//variables
+@log-out-top-border: #ced5d9;
+@customer-menu-hover-color: #529ac1;
+@color-white: #fff;
+@promo-banner-text-color: @fx-grey-1200;
+@login-popup-button-color: @fx-orange-500;
+@login-popup-continue-as-guest: #0078b4;
+@login-popup-note-description: @fx-grey-1200;
+@login-popup-button: #fff;
+@dashboard-color: @fx-grey-1200;
+@phone-color: #3c4547;
+@profile-border-bottom-color:  #ced5d9;
+@orange-color : #f60;
+@white-color : #fff;
+@grey-color : @fx-grey-1200;
+@profile_color : @fx-grey-1100;
+@account_background_color :#4d148c;
+@fcl_border_color :#7f7f7f;
+@fcl_popup_error_color : @fx-red-100;
+@fcl_popup_error_text_color :@fx-grey-1200;
+@fcl_popup_error_retry_login :#0078b4;
+@fcl_popup_error_box_shadow  :#000019;
+html {
+    body._has-modal {
+        overflow: unset;
+    }
+}
+.wlgn-enable-page-header {
+    .right-top-header-links {
+        padding-top: 0 !important;
+    }
+}
+.right-top-header-links {
+    position: relative;
+    ul,
+    ol {
+        margin-bottom: -2rem;
+    }
+
+    .fcl-login {
+        color: @color;
+        font-family: 'FedEx Sans Regular';
+        font-size: 12px;
+        margin-right: 15px;
+
+        .links-container {
+            align-items: center;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-evenly;
+            margin-right: 5px;
+            margin-top: -2px;
+
+            .customer-dropdown {
+                padding: 5px 12px 0 12px;
+            }
+
+            .customer-dropdown.active {
+                background: @color-white;
+                box-shadow: 0 3px 3px @color-white;
+                box-sizing: border-box;
+                text-align: center;
+                z-index: 101;
+            }
+
+            .customer-name {
+                font-family: 'FedEx Sans Regular';
+                margin-right: 4px;
+            }
+            .customer-name:hover {
+                text-decoration: underline;
+            }
+            .customer-fcl-login:hover {
+                text-decoration: none !important;
+            }
+            .customer-menu {
+                .header.links {
+
+                    li {
+                        a:hover {
+                            color: @customer-menu-hover-color !important;
+                            text-decoration: underline !important;
+                        }
+                    }
+
+                    .my-profile {
+                        a {
+                            color: @promo-banner-text-color !important;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 14px;
+                            height: 24px;
+                            letter-spacing: 0;
+                            line-height: 24px !important;
+                            width: 120px;
+                        }
+                    }
+
+                    .log-out {
+                        a {
+                            border-top: 1px solid @log-out-top-border;
+                            color: @promo-banner-text-color;
+                            display: block;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 14px;
+                            letter-spacing: 0;
+                            line-height: 24px;
+                            padding-top: 19px !important;
+                            width: 100% !important;
+                        }
+                    }
+
+                    .sso-order-history, .my-design-templates, .my-projects {
+                        a {
+                            border-top: 1px solid @log-out-top-border;
+                            color: @promo-banner-text-color;
+                            display: block;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 14px;
+                            letter-spacing: 0;
+                            line-height: 14px;
+                            padding-top: 19px !important;
+                            width: 100% !important;
+                        }
+                    }
+                    .login_url a {
+                        font-size: 14px;
+                        line-height: 14px;
+                    }
+
+                    &.header-style-uniform {
+                        padding: 12px 0;
+                        li {
+                            height: 40px;
+                            a {
+                                line-height: 24px;
+                                font-size: 14px;
+                                border: 0;
+                                margin: 8px 12px !important;
+                                width: 100%;
+                                padding: 0 !important;
+                                color: @fx-grey-500;
+                                height: 24px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .header.links {
+                background-color: @color-white;
+                height: auto;
+                min-width: 200px !important;
+                padding: 12px 16px 5px 16px;
+                width: 200px;
+                border: 0px solid #fff;
+            }
+
+            ul {
+                border: none;
+                margin-top: 0;
+
+                li {
+                    padding: 0px;
+                    width: 100%;
+                    display: flex;
+
+                    &:hover {
+                        background: transparent;
+                        cursor: pointer;
+                    }
+                }
+            }
+
+            ul:before,
+            ul:after {
+                content: none;
+            }
+        }
+
+        .login-icon {
+            height: 25.33px;
+            width: 25.33px;
+
+            .img {
+                margin-top: 1px;
+            }
+        }
+    }
+}
+
+/* FCL Login Popup */
+
+html {
+    .modals-wrapper {
+        .cart-warning-notification,
+        .login-poup-model {
+            .modal-inner-wrap {
+                margin: 50px auto !important;
+                width: 288px !important;
+            }
+            .action-close {
+                &:before {
+                    color: @promo-banner-text-color;
+                    font-size: 16px;
+                    line-height: normal;
+                    margin-right: -1px;
+                    margin-top: -3px;
+                    position: relative;
+                }
+            }
+        }
+        .checkout-login-poup-model {
+            .modal-inner-wrap {
+                margin: 50px auto !important;
+                width: 288px !important;
+            }
+            .action-close {
+                &:before {
+                    color: @promo-banner-text-color;
+                    font-size: 16px;
+                    line-height: normal;
+                    margin-right: -1px;
+                    margin-top: -3px;
+                    position: relative;
+                }
+            }
+        }
+    }
+}
+@media(max-width: 767px) {
+    .modal-inner-wrap {
+        .login-top-popup {
+            padding: 0 0 35px !important;
+            .note-description {
+                padding: 0 0 10px 0 !important;
+            }
+            .row-1 {
+                margin: 10px 0 45px 0;
+            }
+        }
+    }
+}
+.login-top-popup {
+    padding: 15px 0 35px !important;
+    .note-heading {
+        color: @promo-banner-text-color;
+        font-family: 'FedEx Sans Light';
+        font-size: 24px !important;
+        font-weight: 300;
+        height: 64px;
+        letter-spacing: 0;
+        line-height: 32px;
+        margin: 61px 0 3px 0;
+        padding: 0 25px 0 25px;
+        text-align: center;
+        width: auto;
+    }
+    .note-description {
+        color: @promo-banner-text-color;
+        font-size: 16px !important;
+        height: 120px;
+        line-height: 24px !important;
+        margin: 20px auto 0 !important;
+        padding: 0 0 20px 0;
+        width: 258px;
+    }
+    .row-1 {
+        display: flex;
+        flex-wrap: wrap;
+        float: left;
+        justify-content: space-between;
+        margin: 20px 0 55px 0;
+        text-align: center;
+        width: 100%;
+    }
+    .row-2 {
+        float: left;
+        margin: 0 0 25px 0;
+        text-align: center;
+        width: 100%;
+    }
+    .continue-as-guest {
+        color: @login-popup-continue-as-guest;
+        cursor: pointer;
+        font-family: 'FedEx Sans Bold';
+        font-size: 14px;
+        letter-spacing: .75px;
+        line-height: 24px;
+        text-transform: uppercase;
+    }
+    .btn-popup-create-user {
+        border: 1px solid @login-popup-button-color;
+        color: @login-popup-button-color;
+        display: inline-block;
+        float: none;
+        font-family: 'FedEx Sans Bold';
+        font-size: 16px;
+        height: 58px;
+        letter-spacing: .3px;
+        line-height: 24px;
+        position: relative;
+        text-align: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        width: 255px;
+    }
+    .span-popup-create-user {
+        position: relative;
+        top: 17.5px;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .btn-popup-login {
+        background-color: @login-popup-button-color;
+        border: 1px solid @login-popup-button-color;
+        color: @color-white;
+        display: inline-block;
+        float: none;
+        font-family: 'FedEx Sans Bold';
+        font-size: 16px;
+        height: 58px;
+        letter-spacing: .3px;
+        line-height: 24px;
+        text-align: center;
+        text-decoration: none;
+        text-transform: uppercase;
+        width: 255px;
+        &:hover {
+            text-decoration: none;
+        }
+    }
+    .span-popup-login {
+        position: relative;
+        top: 17.5px;
+    }
+    .btn-container-left {
+        float: right;
+        margin: 0 0 0 0;
+        order: 2;
+        padding-right: 0;
+        text-align: center;
+        width: 100%;
+    }
+    .btn-container-right {
+        float: left;
+        margin: 0 0 18px 0;
+        order: 1;
+        padding-left: 0;
+        text-align: center;
+        width: 100%;
+    }
+}
+
+@media(min-width: 768px) {
+    .selfreg-landing-index .modal-inner-wrap {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+    }
+
+    .login-top-popup {
+        .row-1 {
+            display: block;
+            flex-wrap: wrap;
+            float: left;
+            justify-content: space-between;
+            justify-content: center;
+            margin: 20px 0 64px 0;
+            text-align: center;
+            width: 100%;
+        }
+        .btn-popup-create-user {
+            border: 1px solid @login-popup-button-color;
+            color: @login-popup-button-color;
+            display: block;
+            float: right;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+            width: 272px;
+        }
+        .btn-popup-login {
+            background-color: @login-popup-button-color;
+            border: 1px solid @login-popup-button-color;
+            color: @color-white;
+            display: block;
+            float: left;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 272px;
+        }
+        .note-heading {
+            color: @promo-banner-text-color;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px !important;
+            font-weight: 300;
+            height: 32px;
+            letter-spacing: 0;
+            line-height: 32px;
+            margin: 61px 20.4px 3px 0;
+            padding: 0;
+            text-align: center;
+            width: 100%;
+        }
+        .note-description {
+            color: @promo-banner-text-color;
+            font-size: 16px !important;
+            height: 72px;
+            line-height: 24px;
+            margin: 20px auto 0 !important;
+            padding: 0 0 16px 0;
+            width: 480px;
+        }
+        .btn-container-left {
+            float: left;
+            margin: 0;
+            padding-right: 9px;
+            text-align: right;
+            width: 48.5%;
+        }
+        .btn-container-right {
+            float: right;
+            margin: 0;
+            padding-left: 9px;
+            text-align: left;
+            width: 48.5%;
+        }
+    }
+    html {
+        .modals-wrapper {
+            .cart-warning-notification,
+            .login-poup-model {
+                .modal-inner-wrap {
+                    width: 704px !important;
+                }
+            }
+            .checkout-login-poup-model {
+                .modal-inner-wrap {
+                    width: 704px !important;
+                }
+            }
+        }
+    }
+    .fcl-login-mobile-toggle .header.links > div {
+        border-bottom: 1px solid @log-out-top-border;
+        padding: 18px 18px 13px 18px;
+    }
+
+    .fcl-login-mobile-toggle .header.links > div:last-child {
+        border-bottom: 0px solid @color-white;
+    }
+
+}
+@media (max-width: 767px) {
+    .cart-warning-notification,
+    .login-poup-model {
+        .modal-inner-wrap {
+            -webkit-transform: translateY(-50%);
+            margin: 50% auto;
+            transform: translateY(-50%);
+        }
+    }
+    .checkout-login-poup-model {
+        .modal-inner-wrap {
+            -webkit-transform: translateY(-50%);
+            margin: 50% auto;
+            transform: translateY(-50%);
+        }
+    }
+}
+@media(min-width: 1200px) {
+    .login-top-popup {
+        .btn-popup-create-user {
+            border: 1px solid @login-popup-button-color;
+            color: @login-popup-button-color;
+            display: block;
+            float: right;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+            width: 234px;
+        }
+        .btn-popup-login {
+            background-color: @login-popup-button-color;
+            border: 1px solid @login-popup-button-color;
+            color: @color-white;
+            display: block;
+            float: left;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 234px;
+        }
+    }
+    html {
+        .modals-wrapper {
+            .cart-warning-notification,
+            .login-poup-model {
+                .modal-inner-wrap {
+                    width: 610px !important;
+                }
+            }
+            .checkout-login-poup-model {
+                .modal-inner-wrap {
+                    width: 610px !important;
+                }
+            }
+        }
+    }
+}
+
+@media(min-width: 1440px) {
+    .login-top-popup {
+        .btn-popup-create-user {
+            border: 1px solid @login-popup-button-color;
+            color: @login-popup-button-color;
+            display: block;
+            float: right;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            position: relative;
+            text-align: center;
+            text-transform: uppercase;
+            width: 252px;
+        }
+        .btn-popup-login {
+            background-color: @login-popup-button-color;
+            border: 1px solid @login-popup-button-color;
+            color: @color-white;
+            display: block;
+            float: left;
+            font-family: 'FedEx Sans Bold';
+            font-size: 16px;
+            height: 54px;
+            letter-spacing: .3px;
+            line-height: 24px;
+            text-align: center;
+            text-transform: uppercase;
+            width: 252px;
+        }
+    }
+    html {
+        .modals-wrapper {
+            .cart-warning-notification,
+            .login-poup-model {
+                .modal-inner-wrap {
+                    width: 656px !important;
+                }
+            }
+            .checkout-login-poup-model {
+                .modal-inner-wrap {
+                    width: 656px !important;
+                }
+            }
+        }
+    }
+}
+
+/* End FCL Login Popup */
+
+
+
+/* Profile changes */
+
+.account {
+    .block-title {
+        max-width: 560px;
+    }
+
+    .block.block-dashboard-info {
+        margin-bottom: 17px;
+    }
+
+    .block-dashboard-info {
+        color: @dashboard-color;
+        font-family: 'FedEx Sans';
+        margin-left: 131.5px;
+
+        .my-profile {
+            .profile-title {
+                font-family: 'FedEx Sans Light';
+                font-size: 40px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 52px;
+            }
+
+            .profile-redirect {
+                font-family: 'FedEx Sans Regular';
+                font-size: 16px;
+                height: 62px;
+                letter-spacing: .38px;
+                line-height: 24px;
+                margin-top: 13px;
+            }
+
+        }
+
+        .block-title {
+            border-bottom: 1px solid @profile-border-bottom-color !important;
+            font-family: 'FedEx Sans Light';
+            font-size: 23px;
+            font-weight: 300 !important;
+            letter-spacing: .42px;
+            line-height: 30px;
+            margin-bottom: 24px !important;
+            margin-top: 5px;
+        }
+
+        strong.box-title {
+            font-family: 'FedEx Sans Bold';
+            letter-spacing: .2px;
+        }
+
+        .box-content {
+            font-family: 'FedEx Sans Regular';
+            font-size: 14px !important;
+            letter-spacing: .17px;
+        }
+
+        .box-actions {
+            font-family: 'FedEx Sans Regular';
+            font-size: 14px;
+            margin-top: 7px;
+        }
+    }
+
+    .block.block-dashboard-addresses {
+        margin-bottom: 0;
+    }
+
+    .block-dashboard-addresses {
+        color: @dashboard-color;
+        font-family: 'FedEx Sans';
+        margin-left: 131.5px;
+
+        .block-title {
+            border-bottom: 1px solid @profile-border-bottom-color !important;
+            font-family: 'FedEx Sans Light';
+            letter-spacing: .42px;
+            line-height: 30px;
+        }
+
+        .box.box-shipping-address {
+            margin-bottom: 18px;
+
+            .box-title {
+                font-family: 'FedEx Sans Bold';
+                font-size: 16px;
+                letter-spacing: .2px;
+                line-height: 24px;
+            }
+
+            .box-content {
+                font-family: 'FedEx Sans Regular';
+                font-size: 14px !important;
+                letter-spacing: .17px;
+
+                a,
+                .alink {
+                    color: @phone-color;
+                    text-decoration: none;
+                }
+            }
+
+            .box-actions {
+                font-family: 'FedEx Sans Regular';
+                letter-spacing: .17px;
+                line-height: 24px;
+            }
+        }
+    }
+
+    @media screen and (max-width: 1440px) {
+        .messages {
+            margin-bottom: 6px;
+        }
+
+        .block-dashboard-info,
+        .block-dashboard-addresses {
+            margin-left: 111.5px !important;
+        }
+    }
+
+    @media only screen and (min-width: 1200px) and (max-width: 1439px) {
+        .messages {
+            margin-bottom: 9px;
+        }
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 1199px) {
+        .page-main {
+            padding-top: 36px;
+        }
+
+        .nav-sections {
+            margin-bottom: 0;
+        }
+
+        .block-dashboard-info,
+        .block-dashboard-addresses {
+            margin-left: 84.5px !important;
+        }
+    }
+
+    @media only screen and (min-width: 320px) and (max-width: 767px) {
+        .page-main {
+            padding-top: 14px !important;
+        }
+
+        .block.block-dashboard-addresses {
+            margin-bottom: 47px !important;
+        }
+
+        .columns,
+        .column.main {
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .block-dashboard-info,
+        .block-dashboard-addresses {
+            margin-left: 1px !important;
+        }
+    }
+}
+
+
+/* End Profile changes */
+
+/* Profile referesh popup changes */
+
+.account {
+    .modals-wrapper {
+        .profile-refresh-popup {
+            h2 {
+                font-size: 24px;
+                line-height: 24px;
+                margin: 0 0 42px;
+            }
+            .modal-header {
+                .action-close:before {
+                    font-size: 19px !important;
+                }
+            }
+            .modal-inner-wrap {
+                height: 325px !important;
+                margin-top: 0;
+                padding: 105px 116px 98px;
+                transform: translateY(50%);
+                width: 656px !important;
+            }
+            .modal-content {
+                text-align: center;
+                .modal-body-content {
+                    color: @login-popup-note-description;
+                }
+            }
+            .modal-footer {
+                border: none;
+                padding: 0;
+            }
+            .modal-footer {
+                button {
+                    background: @login-popup-button-color;
+                    border: none;
+                    border-radius: none;
+                    color: @white-color;
+                    font-size: 16px;
+                    letter-spacing: 1px;
+                    margin: auto;
+                    padding: 20px 95px;
+                    text-transform: uppercase;
+                    span {
+                        font-family: 'Fedex Sans Bold';
+                    }
+                }
+                text-align: center !important;
+            }
+        }
+    }
+}
+
+@media (min-width: 1200px) and (max-width: 1439px) {
+    .account {
+        .modals-wrapper {
+            .profile-refresh-popup {
+                .modal-header {
+                    .action-close:before {
+                        font-size: 17px !important;
+                    }
+                }
+                .modal-inner-wrap {
+                    height: 302px !important;
+                    margin-top: 0;
+                    padding: 94px 93px 87px;
+                    transform: translateY(50%);
+                    width: 610px !important;
+                }
+            }
+        }
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1199px) {
+    .account {
+        .modals-wrapper {
+            .profile-refresh-popup {
+                .modal-header {
+                    .action-close:before {
+                        font-size: 20px !important;
+                    }
+                }
+                .modal-inner-wrap {
+                    height: 349px !important;
+                    margin-top: 0;
+                    padding: 117px 140px 110px;
+                    transform: translateY(50%);
+                    width: 704px !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .account {
+        .modals-wrapper {
+            .profile-refresh-popup {
+                .modal-header {
+                    .action-close:before {
+                        font-size: 16px !important;
+                    }
+                }
+                .modal-inner-wrap {
+                    height: 275px !important;
+                    left: 16px;
+                    margin-top: 0;
+                    max-width: 100% !important;
+                    padding: 100px 10px 55px;
+                    transform: translateY(50%);
+                    width: ~'calc(100% - 32px)' !important;
+                }
+                .modal-footer {
+                    padding-left: 0;
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 471px) {
+    .account {
+        .modals-wrapper {
+            .profile-refresh-popup {
+                .modal-inner-wrap {
+                    padding: 65px 25px 55px;
+                }
+                h2 {
+                    font-size: 24px;
+                    line-height: 32px;
+                    margin: 0 0 30px;
+                }
+            }
+        }
+    }
+}
+@media (max-width: 400px) {
+    .account {
+        .modals-wrapper {
+            .profile-refresh-popup {
+                .modal-footer button {
+                    font-size: 19px;
+                    line-height: 24px;
+                    padding: 18px 64px;
+                    width: 100%;
+                }
+                .action-close:before {
+                    font-size: 18px;
+                }
+                .modal-inner-wrap {
+                    padding: 64px 15px 56px !important;
+                }
+            }
+        }
+    }
+}
+
+
+/* End profile popup referesh popup changes */
+
+/* Fcl Login For Mobile */
+
+.nav-profile {
+    float: right;
+    height: 24px;
+    left: 0;
+    padding-bottom: 16px;
+    padding-right: 11px;
+    padding-top: 16px;
+    position: relative;
+    top: 3px;
+    width: 24px;
+
+    img {
+        margin-top: 3px;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 1024px) {
+    .nav-profile {
+        padding-right: 14px !important;
+        top: 6px;
+        img {
+            margin-top: 1px;
+        }
+    }
+    .minicart-wrapper.active {
+        #minicart-content-wrapper {
+            .action.close {
+                top: 7px;
+                right: 7px;
+            }
+
+        }
+    }
+
+    .fcl-login-mobile-toggle {
+        .customer-menu {
+            background-color: @color-white;
+            box-shadow: -1px 0 5px 0 @fcl_border_color;
+            float: right;
+            width: 383px !important;
+        }
+
+        .header.links {
+            .li.my-account {
+                margin: 0 !important;
+
+                .my-account-hi {
+                    padding-left: 18px !important;
+                }
+            }
+            .my-profile {
+                padding-bottom: 16px !important;
+                padding-top: 15px !important;
+            }
+            .log-out {
+                padding-bottom: 16px !important;
+                padding-top: 16px !important;
+            }
+            .sso-order-history, .my-design-templates {
+                padding-bottom: 16px !important;
+                padding-top: 16px !important;
+            }
+            .li {
+                margin-left: 18px !important;
+                margin-right: 11px !important;
+                padding-left: 12px !important;
+            }
+            .sign-up {
+                padding-bottom: 18px;
+                padding-top: 15px;
+            }
+        }
+    }
+    .fcl-login-mobile-toggle .header.links > div {
+        border-bottom: 1px solid @log-out-top-border;
+        padding: 18px 18px 13px 18px;
+    }
+
+    .fcl-login-mobile-toggle .header.links > div:last-child {
+        border-bottom: 0px solid @color-white;
+    }
+
+}
+
+.fcl-login-mobile-toggle {
+    float: left;
+    height: 178px;
+    position: absolute;
+    width: 100%;
+    z-index: 999;
+
+    .my-account-hi {
+        padding-left: 0;
+    }
+
+    .customer-menu {
+        background-color: @color-white;
+        box-shadow: -1px 0 5px 0 @fcl_border_color;
+        float: right;
+        width: 272px;
+    }
+
+    .li {
+        margin-left: 13px;
+        margin-right: 7px;
+        padding-bottom: 16px;
+        padding-left: 18px;
+        padding-right: 114px;
+        padding-top: 16px;
+    }
+
+    .sign-up {
+        padding-bottom: 20px;
+        padding-top: 13px;
+
+        a {
+            color: @profile_color;
+            font-family: 'FedEx Sans Medium';
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0;
+            line-height: 24px;
+            padding-bottom: 20px;
+            padding-top: 13px;
+        }
+    }
+
+    .my-account {
+        background-color: @account_background_color;
+        border-top: 1px solid @log-out-top-border;
+        color: @color-white;
+        margin: 0;
+        padding-left: 31px;
+    }
+
+    .my-account span {
+        color: @color-white;
+        font-family: 'FedEx Sans Medium';
+        font-size: 14px;
+        font-weight: 500;
+        height: 24px;
+        letter-spacing: 0;
+        line-height: 24px;
+        width: 120px;
+    }
+
+    .my-profile {
+        padding-bottom: 13px;
+        padding-top: 18px;
+    }
+
+    .my-profile a {
+        color: @profile_color;
+        font-family: 'FedEx Sans Medium';
+        font-size: 14px;
+        font-weight: 500;
+        height: 24px;
+        letter-spacing: 0;
+        line-height: 24px;
+        text-decoration: none;
+        width: 120px;
+    }
+
+    .log-out {
+        padding-bottom: 23px;
+        padding-top: 19px;
+    }
+
+    .log-out a {
+        color: @profile_color;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        height: 24px;
+        letter-spacing: 0;
+        line-height: 24px;
+        text-decoration: none;
+        width: 120px;
+    }
+
+    .sso-order-history, .my-design-templates {
+        padding-bottom: 23px;
+        padding-top: 19px;
+        border-bottom: 1px solid @log-out-top-border;
+    }
+
+    .sso-order-history a, .my-design-templates a, .my-projects a {
+        color: @profile_color;
+        font-family: 'FedEx Sans Regular';
+        font-size: 14px;
+        height: 24px;
+        letter-spacing: 0;
+        line-height: 24px;
+        text-decoration: none;
+        width: 120px;
+    }
+
+
+
+    .my-profile a:hover,
+    .log-out a:hover,
+    .sso-order-history a:hover,
+    .my-design-templates a:hover,
+    .my-profile a:active,
+    .sso-order-history a:active,
+    .my-design-templates a:active,
+    .log-out a:active {
+        color: @login-popup-continue-as-guest;
+        text-decoration: underline;
+    }
+
+}
+.fcl-login-mobile-toggle .header.links > div {
+    border-bottom: 1px solid @log-out-top-border;
+    padding: 18px 18px 13px 18px;
+}
+
+.fcl-login-mobile-toggle .header.links > div:last-child {
+    border-bottom: 0px solid @color-white;
+}
+
+/* End Here */
+
+/* Login error popup design */
+
+.top-container {
+    position: relative;
+}
+
+.fcl-login-error-popup {
+    background: @color-white;
+    border: 1px solid @fcl_popup_error_color;
+    box-shadow: 0 2px 6px @fcl_popup_error_box_shadow 45;
+    display: flex;
+    left: 0;
+    margin: 0 auto;
+    max-width: 646px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 50%;
+    z-index: 999;
+    .fcl-login-error-popup-warning {
+        background-color: @fcl_popup_error_color;
+        width: 55px;
+        position: relative;
+        left: -1px;
+        img {
+            transform: translate3d(-50%, -50%, 0);
+            position: relative;
+            top: 50%;
+            left: 50%;
+            z-index: 999;
+            width: 26.67px;
+        }
+    }
+    .fcl-login-error-popup-warning::before {
+        content: '';
+        width: 100%;
+        height: 1px;
+        background: @fx-red-100;
+        position: relative;
+        left: 0px;
+        right: 0;
+        display: block;
+        top: -1px;
+    }
+    .fcl-login-error-popup-container {
+        padding: 16px;
+        padding-right: 16px;
+        width: 100%;
+        .heading {
+            color: @fcl_popup_error_color;
+            font-family: 'FedEx Sans Bold';
+            font-size: 14px;
+            line-height: 24px;
+        }
+        .text-section {
+            color: @fcl_popup_error_text_color;
+            font-family: 'FedEx Sans Regular';
+            font-size: 14px;
+            line-height: 24px;
+        }
+    }
+    .retry-login-link {
+        margin-top: 10px;
+        a {
+            color: @fcl_popup_error_retry_login;
+            font-family: 'FEDEX SANS BOLD';
+            font-size: 14px;
+            line-height: 24px;
+            text-transform: uppercase;
+        }
+    }
+    .login-error-popup-error-close {
+        cursor: pointer;
+        font-size: 16px;
+        padding: 9px 12px;
+        position: static;
+        z-index: 999;
+    }
+    .login-error-popup-error-close:before {
+        color: @fcl_popup_error_text_color;
+        content: '\e616';
+        font-family: 'luma-icons';
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    fcl-login-error-popup {
+        width: 92%;
+    }
+}
+/* End Login error popup design */
+
+.session-modal {
+    .expired-content,
+    .session-expired .alert-content {
+        display: none;
+    }
+    .session-expired .expired-content {
+        display: block;
+    }
+}

@@ -1,0 +1,8 @@
+<?php $sdkUrl = $block->getData('view_model')->getSdkUrl();
+$fxoCmToggle = $block->getData('view_model')->isIframeSDKEnable();
+
+if ($sdkUrl && $fxoCmToggle) { ?>
+<script type="text/javascript" src="<?= $sdkUrl ?>"></script>
+<?php
+}
+?>

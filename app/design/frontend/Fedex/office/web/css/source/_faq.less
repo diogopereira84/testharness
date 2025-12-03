@@ -1,0 +1,781 @@
+/**
+* Copyright © FedEx, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+/* variables */
+@banner-background-color: @fx-white-100;
+@online-printing-faq-font-color: @fx-grey-1200;
+@faq-banner-text-color: @fx-white-100;
+@faq-category-section-background-color: #f5f5f5;
+@faq-content-section-header-color: @fx-grey-500;
+@faq-content-section-hr-background-color: @fx-white-200;
+@active-border-color: @fx-purple-500;
+@faq-content-link-color: #000;
+
+/* FAQ Category design */
+:root {
+    --space: 1rem;
+}
+
+.page-layout-faq-template-full-width {
+    .faq-container {
+        padding: 10px 0 0 !important;
+        .pagebuilder-column-group {
+            flex-wrap: wrap;
+        }
+        .pagebuilder-column.faq-category-section {
+            --offset: var(--space);
+            align-self: start !important;
+            flex-grow: 1;
+            height: auto !important;
+            position: sticky;
+            top: var(--offset);
+        }
+        .pagebuilder-column.faq-content-section {
+            flex-basis: 0;
+            flex-grow: 999;
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 1199px) {
+    .faq-template-full-width {
+        .faq-container {
+            padding: 0 !important;
+            .faq-category-section {
+                display: none !important;
+            }
+        }
+        .faq-container {
+            .faq-content-section {
+                width: 100% !important;
+            }
+        }
+    }
+}
+
+/* Banner design */
+@media(min-width: 1440px) {
+    .faq-template-full-width {
+        .faq-container {
+            .pagebuilder-banner-wrapper {
+                height: 250px;
+                margin-bottom: 59px;
+            }
+            .pagebuilder-overlay.pagebuilder-poster-overlay {
+                display: inherit !important;
+                justify-content: left !important;
+                .pagebuilder-poster-content {
+                    .message {
+                        color: @faq-banner-text-color;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 38px;
+                        font-weight: 300;
+                        height: auto;
+                        letter-spacing: 0;
+                        line-height: 49px;
+                        padding: 10px 211px 61px 54px;
+                        width: 393px;
+                        p {
+                            margin: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 1200px) and (max-width: 1439px) {
+    .faq-template-full-width {
+        .faq-container {
+            .pagebuilder-banner-wrapper {
+                height: 250px;
+                margin-bottom: 59px;
+                .pagebuilder-overlay.pagebuilder-poster-overlay {
+                    display: inherit !important;
+                    justify-content: right !important;
+                    .pagebuilder-poster-content {
+                        .message {
+                            color: @faq-banner-text-color;
+                            font-family: 'FedEx Sans Light';
+                            font-size: 38px;
+                            font-weight: 300;
+                            height: auto;
+                            letter-spacing: 0;
+                            line-height: 49px;
+                            padding: 10px 211px 61px 54px;
+                            width: 393px;
+                            p {
+                                margin: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .faq-template-full-width {
+        .faq-container {
+            .pagebuilder-banner-wrapper {
+                height: 250px !important;
+                .pagebuilder-overlay.pagebuilder-poster-overlay {
+                    float: left;
+                    padding: 42px 0 0 0 !important;
+                    .pagebuilder-poster-content {
+                        color: @online-printing-faq-font-color;
+                        float: left;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 36px;
+                        font-weight: 300;
+                        height: auto;
+                        letter-spacing: 0;
+                        line-height: 47px;
+                        margin-top: 206px;
+                        padding: 31px 0 44px 0;
+                        width: 372px;
+                        .message {
+                            font-family: 'FedEx Sans Light';
+                            p {
+                                margin: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+@media only screen and (min-width: 320px) and (max-width: 767px) {
+    .faq-template-full-width {
+        .page-main {
+            padding: 0;
+            .faq-container {
+                .pagebuilder-banner-wrapper {
+                    height: 215px;
+                    .pagebuilder-overlay.pagebuilder-poster-overlay {
+                        padding: 0 !important;
+                        float: left;
+                        .pagebuilder-poster-content {
+                            margin: 215px 28px 0 27px;
+                            .message {
+                                color: @online-printing-faq-font-color;
+                                font-family: 'FedEx Sans Light';
+                                font-size: 36px;
+                                font-weight: 300;
+                                height: auto;
+                                letter-spacing: 0;
+                                line-height: 42px;
+                                overflow: visible;
+                                padding: 33px 0 45px 0;
+                                width: 267px;
+                                p {
+                                    margin: 0;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Banner design end */
+
+/* Category Sticky */
+
+.pagebuilder-column.faq-category-section {
+    left: 0;
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+}
+
+/* Category Sticky */
+
+/* Slide functionality */
+.faq-content-section {
+    .tabs-content {
+        [data-content-type='text'] {
+            display: none;
+            padding-right: 17px;
+        }
+        [data-content-type='text'].showTab {
+            display: block !important;
+        }
+        h2 {
+            span.carrot {
+                float: right;
+            }
+        }
+        h2:not(.active) {
+            span.carrot {
+                -moz-transform: rotate(180deg);
+                -ms-transform: rotate(180deg);
+                -webkit-transform: rotate(180deg);
+                transform: rotate(180deg);
+                transition: .25s;
+            }
+        }
+    }
+}
+/* Slide functionality end */
+
+/* Faq Left Side Navigator Start */
+.faq-template-full-width {
+    .faq-category-section {
+        padding-left: 0 !important;
+        h2 {
+            cursor: pointer;
+            padding-left: 13px;
+        }
+        h2.active {
+            border-left: 3px solid @active-border-color !important;
+            font-weight: bold;
+            font-weight: bold;
+            line-height: 26px;
+            margin-bottom: 0;
+            margin-top: 0;
+            padding-left: 10px;
+        }
+    }
+}
+/* Faq Left Side Navigator End */
+
+/*FAQ Template Content Section Except Banner*/
+@media (min-width: 1440px) { /**For 1440px*/
+    .faq-container {
+        margin-bottom: 0 !important;
+        .pagebuilder-column.faq-category-section {
+            background-color: @faq-category-section-background-color;
+            height: 254px !important;
+            margin-left: 195px !important;
+            margin-top: 10px !important;
+            padding-bottom: 19.2px !important;
+            padding-right: 62px !important;
+            padding-top: 13px !important;
+            width: 222px !important;
+            h2 {
+                color: @online-printing-faq-font-color;
+                font-family: 'FedEx Sans Regular';
+                font-size: 14px;
+                line-height: 19px;
+                margin-bottom: 5px;
+                margin-right: 0;
+                margin-top: 3px;
+                width: 147px !important;
+            }
+        }
+        .pagebuilder-column.faq-content-section {
+            h2 {
+                color: faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 20px;
+                font-weight: 300;
+                line-height: 30px;
+                margin-bottom: 7px;
+                margin-top: 7px;
+                width: auto !important;
+            }
+        }
+    }
+    .faq-container {
+        .pagebuilder-column.faq-content-section {
+            margin-right: 158px !important;
+            padding-left: 18px !important;
+            .tab-align-left.ui-tabs.ui-widget.ui-widget-content {
+                .ui-corner-bottom {
+                    margin-left: 30px !important;
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                    padding-top: 38px !important;
+                    div[data-content-type='text'] {
+                        ul {
+                            margin-bottom: 15px !important;
+                            li {
+                                a {
+                                    color: @faq-content-link-color;
+                                }
+                            }
+                        }
+                        ol {
+                            margin-bottom: 15px !important;
+                            li {
+                                a {
+                                    color: @faq-content-link-color;
+                                }
+                            }
+                        }
+                    }
+                    hr {
+                        background-color: @faq-content-section-hr-background-color;
+                        border: none;
+                        height: 1px !important;
+                        margin-bottom: 0 !important;
+                        margin-left: -48px !important;
+                        margin-top: 0 !important;
+                        width: 703px !important;
+                    }
+                }
+            }
+            .ui-corner-all {
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 16px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 26px;
+                .tabs-content {
+                    width: 671px !important;
+                    border: 0 !important;
+                    min-height: 0 !important;
+                    div[data-content-type='divider'] {
+                        padding-bottom: 5px !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-top: 0 !important;
+                    }
+                }
+                li.tab-header.ui-state-default.ui-corner-top.ui-tabs-active.ui-state-active {
+                    border: 0 !important;
+                    a.tab-title {
+                        border: 0;
+                        color: @online-printing-faq-font-color;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 32px !important;
+                        font-weight: 300;
+                        line-height: 40px;
+                        padding-bottom: 0 !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-top: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+}
+/*For 1200px-1439px*/
+@media (min-width: 1200px) and (max-width: 1439px) {
+    .faq-container {
+        margin-bottom: 0 !important;
+        .pagebuilder-column.faq-category-section {
+            background-color: @faq-category-section-background-color;
+            height: 254px !important;
+            margin-left: 99px !important;
+            margin-top: 10px !important;
+            padding-bottom: 19.2px !important;
+            padding-right: 62px !important;
+            padding-top: 13px !important;
+            width: 222px !important;
+            h2 {
+                color: @online-printing-faq-font-color;
+                font-family: 'FedEx Sans Regular';
+                font-size: 14px;
+                line-height: 19px;
+                margin-bottom: 5px;
+                margin-right: 0;
+                margin-top: 3px;
+                width: 147px !important;
+            }
+        }
+        .pagebuilder-column.faq-content-section {
+            h2 {
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 20px;
+                font-weight: 300;
+                line-height: 30px;
+                margin-bottom: 7px;
+                margin-top: 7px;
+                width: auto !important;
+            }
+        }
+    }
+    .faq-container {
+        .pagebuilder-column.faq-content-section {
+            margin-right: 39px !important;
+            padding-left: 18px !important;
+            .tab-align-left.ui-tabs.ui-widget.ui-widget-content {
+                .ui-corner-bottom {
+                    margin-left: 30px !important;
+                    padding-left: 0 !important;
+                    padding-right: 36px !important;
+                    padding-top: 38px !important;
+                    div[data-content-type='text'] {
+                        ul {
+                            margin-bottom: 15px !important;
+                            li {
+                                a {
+                                    color: @faq-content-link-color;
+                                }
+                            }
+                        }
+                        ol {
+                            margin-bottom: 15px !important;
+                            li {
+                                a {
+                                    color: @faq-content-link-color;
+                                }
+                            }
+                        }
+                    }
+                    hr {
+                        background-color: @faq-content-section-hr-background-color;
+                        border: none;
+                        height: 1px !important;
+                        margin-bottom: 0 !important;
+                        margin-left: -48px !important;
+                        margin-top: 0 !important;
+                        width: 703px !important;
+                    }
+                }
+            }
+            .ui-corner-all {
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 16px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 26px;
+                .tabs-content {
+                    border: 0 !important;
+                    width: 671px !important;
+                    min-height: 0 !important;
+                    div[data-content-type='divider'] {
+                        padding-bottom: 5px !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-top: 0 !important;
+                    }
+                }
+                li.tab-header.ui-state-default.ui-corner-top.ui-tabs-active.ui-state-active {
+                    border: 0 !important;
+                    a.tab-title {
+                        border: 0;
+                        color: @online-printing-faq-font-color;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 32px !important;
+                        font-weight: 300;
+                        line-height: 40px;
+                        padding-bottom: 0 !important;
+                        padding-left: 0 !important;
+                        padding-right: 0 !important;
+                        padding-top: 0 !important;
+                    }
+                }
+            }
+        }
+    }
+}
+/*FAQ Template Content Section Except Banner (End Here)*/
+
+/*---FAQ content from 320px to 767px (Start here)-----*/
+@media screen and (min-width: 320px) and (max-width: 767px) {
+    .page-layout-faq-template-full-width {
+        .faq-content-section {
+            .tab-align-left.ui-tabs.ui-corner-all:not(:first-child) {
+                margin-top: 50px !important;
+            }
+        }
+        .tabs-navigation {
+            li {
+                background-color: @banner-background-color !important;
+                border: 0 !important;
+                a {
+                    padding: 0 0 0 16px !important;
+                    margin-top: 10px;
+                    .tab-title {
+                        color: @online-printing-faq-font-color;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 26px;
+                        font-weight: 300;
+                        height: 40px;
+                        letter-spacing: 0;
+                        line-height: 40px;
+                        width: auto;
+                    }
+                }
+            }
+        }
+        .tabs-content {
+            background-color: @banner-background-color !important;
+            border: 0 !important;
+            min-height: auto !important;
+            h2 {
+                height: auto;
+                width: auto;
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 20px;
+                font-weight: 300;
+                letter-spacing: -.33px;
+                line-height: 30px;
+                padding: 0 16px 0 16px;
+                margin-top: 28px;
+                margin-bottom: 27px;
+                position: relative;
+                button {
+                    max-width: 215px !important;
+                }
+            }
+            span.carrot {
+                position: absolute;
+                right: 18px;
+                top: 0;
+            }
+            div[data-content-type='tab-item'] {
+                padding: 0 !important;
+            }
+            p {
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 14px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 26px;
+                margin: 0;
+                padding: 0 16px 15px 16px;
+            }
+            ul {
+                margin-bottom: 28px;
+                padding: 0 16px 0 36px;
+                li {
+                    color: @faq-content-section-header-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 26px;
+                    margin: 0;
+                    width: auto;
+                    a {
+                        color: @faq-content-link-color;
+                    }
+                }
+            }
+            ol {
+                margin-bottom: 28px;
+                padding: 0 16px 0 36px;
+                li {
+                    color: @faq-content-section-header-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 26px;
+                    margin: 0;
+                    width: auto;
+                    a {
+                        color: @faq-content-link-color;
+                    }
+                }
+            }
+            div[data-content-type='divider'] {
+                padding: 0 10px !important;
+                hr {
+                    display: block !important;
+                    margin-bottom: 0;
+                    margin-top: 0;
+                }
+            }
+        }
+        .faq-content-section {
+            padding: 0 !important;
+        }
+    }
+}
+/*---FAQ content from 320px to 767px (End here)-----*/
+
+/*---FAQ content from 768px to 1199px (Start here)-----*/
+@media(min-width: 768px) and (max-width: 1199px) {
+    .page-layout-faq-template-full-width {
+        .faq-content-section {
+            .tab-align-left.ui-tabs.ui-corner-all:not(:first-child) {
+                margin-top: 50px !important;
+            }
+        }
+        .tabs-navigation {
+            li {
+                background-color: @banner-background-color !important;
+                border: 0 !important;
+                a {
+                    padding: 0 !important;
+                    margin-bottom:8px;
+                    margin-top: 10px;
+                    .tab-title {
+                        color: @online-printing-faq-font-color;
+                        font-family: 'FedEx Sans Light';
+                        font-size: 32px;
+                        font-weight: 300;
+                        height: 40px;
+                        letter-spacing: 0;
+                        line-height: 40px;
+                        width: auto;
+                    }
+                }
+            }
+        }
+        .tabs-content {
+            background-color: @banner-background-color !important;
+            border: 0 !important;
+            min-height: auto !important;
+            h2 {
+                height: auto;
+                width: 644px;
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 20px;
+                font-weight: 300;
+                letter-spacing: -.33px;
+                line-height: 30px;
+                margin: 22px 0 27px 30px;
+                padding: 0;
+                span.carrot {
+                    right: 20px !important;
+                    position: absolute;
+                }
+            }
+            div[data-content-type='tab-item'] {
+                padding: 0 !important;
+            }
+            p {
+                color: @faq-content-section-header-color;
+                font-family: 'FedEx Sans Light';
+                font-size: 14px;
+                font-weight: 300;
+                letter-spacing: 0;
+                line-height: 26px;
+                margin: 0;
+                padding: 0 0 15px 30px;
+                width: auto;
+            }
+            ul {
+                margin-bottom: 26px;
+                padding: 0 0 0 50px;
+                li {
+                    color: @faq-content-section-header-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 26px;
+                    margin: 0;
+                    width: auto;
+                    a {
+                        color: @faq-content-link-color;
+                    }
+                }
+            }
+            ol {
+                margin-bottom: 26px;
+                padding: 0 0 0 50px;
+                li {
+                    color: @faq-content-section-header-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    letter-spacing: 0;
+                    line-height: 26px;
+                    margin: 0;
+                    width: auto;
+                    a {
+                        color: @faq-content-link-color;
+                    }
+                }
+            }
+            div[data-content-type='divider'] {
+                padding: 0 10px !important;
+                hr {
+                    display: block !important;
+                    margin-bottom: 0;
+                    margin-top: 0;
+                }
+            }
+        }
+        .faq-content-section {
+            padding: 0 !important;
+        }
+
+    }
+}
+/*---FAQ content from 768px to 1199px (End here)-----*/
+
+/* ADA  complaint from 1200px to 1400px */
+.faq-template-full-width {
+    .faq-content-section {
+        .tabs-content {
+            button {
+                background: none;
+                border: none;
+                color: @faq-content-section-header-color;
+                cursor: pointer;
+                font-family: 'FedEx Sans Light';
+                font-size: 20px;
+                font-weight: 300;
+                line-height: 30px;
+                margin: 0;
+                outline: none;
+                padding: 0;
+                text-align: left;
+                width: 100% !important;
+                &:hover {
+                    background: none;
+                    border: none;
+                    color: @faq-content-section-header-color;
+                    cursor: pointer;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 20px;
+                    font-weight: 300;
+                    line-height: 30px;
+                    margin: 0;
+                    outline: none;
+                    padding: 0;
+                    text-align: left;
+                    width: 100% !important;
+                }
+            }
+        }
+    }
+
+    .faq-category-section {
+        .active {
+            button {
+                font-weight: bold;
+                font-weight: bold;
+            }
+        }
+        button {
+            background: none;
+            border: none;
+            color: @online-printing-faq-font-color;
+            font-family: 'FedEx Sans Regular';
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 19px;
+            margin: 0;
+            outline: none;
+            padding: 0;
+            text-align: left;
+            width: 100%;
+        }
+        &:hover {
+            border: none;
+            color: @online-printing-faq-font-color;
+            font-family: 'FedEx Sans Regular';
+            font-size: 14px;
+            font-weight: 300;
+            line-height: 19px;
+            margin: 0;
+            outline: none;
+            padding: 0;
+            text-align: left;
+            width: 100%;
+        }
+    }
+}
+
+/* END ADA  complaint from 1200px to 1400px */

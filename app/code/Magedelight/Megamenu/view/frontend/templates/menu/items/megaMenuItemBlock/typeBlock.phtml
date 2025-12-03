@@ -1,0 +1,22 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $menuItem \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $this->getData('menu_block');
+$menuItems = $this->getData('menu_items');
+$key = $this->getData('items_key');
+$menuManagement = $this->getData('menu_management');
+$cmsBlock = $menuManagement->loadCmsBlock($menuItems[$key]->value);
+?>
+<li class="megaStaticBlock">
+    <?php if ($menuItems[$key]->showtitle == '1'): ?>
+        <h2><?= __($cmsBlock->getTitle()) ?></h2>
+    <?php endif; ?>
+    <ul>
+        <li>
+            <?= $menuBlock->getBlockObjectHtml($menuItems[$key]->value); ?>
+        </li>
+    </ul>
+</li>

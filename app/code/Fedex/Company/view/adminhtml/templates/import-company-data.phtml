@@ -1,0 +1,20 @@
+<div class="admin__field-label">
+    <label>
+        <span><?= $block->escapeHtml(__('Import Existing Site Settings')); ?></span>
+    </label>
+</div>
+<div class="admin__field-control">
+    <input class="admin__control-text file-name-input" type="text" readonly/>
+    <button class="browse-btn"><span><?= $block->escapeHtml(__('Browse')); ?></span></button>
+    <input class="admin__control-file browse-file" type="file" style="display: none;"/>
+</div>
+<?php echo $this->getBlockHtml('formkey'); ?>
+<script type="text/javascript">
+    require([
+        "jquery",
+        "importCompanyDataHandler"
+    ], function($, importCompanyDataHandler){
+        let importRequestUrl = '<?= $block->getUrl('/import/import') ?>';
+        importCompanyDataHandler.init(importRequestUrl);
+    });
+</script>

@@ -1,0 +1,188 @@
+@tooltip-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.3);
+@triangle-size: 8px;
+@triangle-position: calc((100% - @triangle-size) / 2);
+
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+    .tooltip-text {
+        color: var(--Grays-Gray-50, #333);
+        font-family: @sitemap-font-family-light;
+        margin: 0;
+    }
+
+    .tooltip-title {
+        .tooltip-text;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 24px;
+        letter-spacing: 0.75px;
+        text-transform: uppercase;
+        margin-bottom: 8px;
+        font-family: "FedEx Sans Bold";
+    }
+
+    .tooltip-message {
+        .tooltip-text;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 24px;
+    }
+
+    .tooltip-small-message {
+        .tooltip-text;
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        font-family: @sitemap-font-family-regular;
+        white-space: nowrap;
+    }
+
+    .base-tooltip {
+        position: absolute;
+        background-color: @fx-white-100;
+        box-shadow: @tooltip-shadow;
+        box-sizing: border-box;
+        display: none;
+        z-index: 1;
+    }
+
+    .tooltip-multiple-lines {
+        .base-tooltip;
+        max-width: 480px;
+        width: max-content;
+        padding: 16px;
+    }
+
+    .tooltip-single-line {
+        .base-tooltip;
+        width: auto;
+        min-width: 209px;
+        max-height: 40px;
+        padding: 8px 12px;
+    }
+
+    .tooltip-small {
+        .base-tooltip;
+        width: auto;
+        min-width: 166px;
+        height: 32px;
+        padding: 8px 12px;
+    }
+
+    .triangle {
+        height: @triangle-size;
+        overflow: hidden;
+        width: 17px;
+        z-index: 1;
+        position: absolute;
+        display: block;
+        &::after {
+            background-color: @fx-white-100;
+            content: "";
+            height: @triangle-size;
+            left: 50%;
+            position: absolute;
+            transform: translate(-50%, -50%) rotate(45deg);
+            box-shadow: @tooltip-shadow;
+            width: @triangle-size;
+        }
+    }
+
+    .bottom-middle {
+        .triangle;
+        bottom: -@triangle-size;
+        left: @triangle-position;
+    }
+
+    .top-middle {
+        .triangle;
+        top: -8px;
+        left: @triangle-position;
+        transform: rotate(180deg);
+    }
+
+    .bottom-left {
+        .triangle;
+        bottom: -@triangle-size;
+        left: 16px;
+    }
+
+    .middle-left {
+        .triangle;
+        left: -12px;
+        top: @triangle-position;
+        transform: rotate(90deg);
+    }
+
+    .middle-right {
+        .triangle;
+        right: -12px;
+        top: @triangle-position;
+        transform: rotate(270deg);
+    }
+
+    .top-left {
+        .triangle;
+        top: -8px;
+        left: 16px;
+        transform: rotate(180deg);
+    }
+
+    .tooltip-toggle-container {
+        position: relative;
+        display: inline-block;
+    }
+
+    // Tooltip position for alternate contact shipping method
+    .tooltip-position-alternate-contact {
+        left: 160px !important;
+        bottom: 25px !important;
+    }
+
+    // Tooltip position for livesearch
+    .tooltip-position-livesearch {
+        left: -16px;
+        bottom: 23px;
+    }
+
+    // Tooltip styles for shipping tab on PDP page
+    .pickup-instore, .estimate-delivery-time {
+        left: -17px;
+        bottom: 33px;
+    }
+}
+
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (max-width: 600px) {
+        .tooltip-multiple-lines {
+            padding: 8px;
+        }
+        .tooltip-text{
+            font-size: 14px;
+        }
+        .tooltip-position-alternate-contact {
+            width: 30vw;
+        }
+    }
+
+    @media only screen and (min-width: 300px) and (max-width: 419px) {
+        .pickup-instore, .estimate-delivery-time {
+            width: 60vw;
+        }
+    }
+
+    @media only screen and (min-width: 419px) and (max-width: 600px) {
+        .estimate-delivery-time {
+            left: auto;
+            right: -10px;
+            width: 40vw;
+        }
+
+        .estimate-delivery-time .bottom-left {
+            left: auto;
+            right: 10px;
+        }
+    }
+}

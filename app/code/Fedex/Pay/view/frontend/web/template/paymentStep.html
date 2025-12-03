@@ -1,0 +1,315 @@
+<!-- ko ifnot: isCheckoutQuotePriceDashable() -->
+<ul class="no-disk">
+<li id="step_code" data-bind="fadeVisible: isVisible()">
+   <div role="dialog" class="error-container api-error-hide pickup-error-hide">
+      <div class="icon-container">
+         <img alt="Error icon" data-bind="attr: { src: crossUrl}"></img>
+      </div>
+      <div class="message-container">
+         <p>System error. Please Try Again</p>
+      </div>
+      <img class="img-close-pop" data-bind="attr: { src: crossIcon}" alt="Close error message"></img>
+   </div>
+
+   <div role="dialog" class="api-error-hide error-container checkout-error absolute bg-cl-white d-flex mx-auto hide">
+      <div class="icon d-flex d-no-shrink v-center">
+          <img alt="Error icon" data-bind="attr: { src: crossUrl}"></img>
+      </div>
+      <div tabindex="0" class="error-response fs-14 lh-24">
+          <div class="error-title cl-error fedex-bold"></div>
+          <div class="error-details cl-stonegray"></div>
+          <div class="error-transaction cl-stonegray"></div>
+      </div>
+      <div class="ml-auto d-no-shrink">
+         <button class="img-close-pop mt-15 p-0" aria-label="Close error message"
+                  data-testid="checkout-review-and-submit-button-close-icon">
+         <img class="close-image" data-bind="attr: { src: crossIcon}" alt="Close icon"></img>
+         </button>
+      </div>
+  </div>
+   <div class="pickup-title-checkout">
+      <h2 data-bind="i18n: checkoutPaymentPageTitle" class="checkout-heading"></h2>
+
+      <!-- ko if: isFullFirstPartyQuote() -->
+      <div class="heading-main" data-bind="visible:isHidePicupStore()">
+         <div class="change-delivery-method-wrapper">
+                  <a class="checkout-sub edit_pickup checkout-pickup-step" data-bind="visible: isDelivery(),
+                     click: changeToPickup.bind($data, 'change2pickup'),
+                     text: getChangeToPickupLabel()">
+               CHANGE TO PICK UP IN STORE
+            </a>
+
+            <a class="checkout-sub edit_ship checkout-shipping-step" data-bind="visible: !isDelivery(),
+                     click: changeToDelivery.bind($data, 'change2shipping')">
+               CHANGE TO SHIPPING
+            </a>
+         </div>
+      </div>
+      <!-- /ko -->
+
+   </div>
+   <hr>
+   <!-- ko if: !isFuseBidding() -->
+   <ul class="checkout-breadcrumb">
+      <li role="link" data-bind="click: goToCart"><span>Cart</span></li>
+
+      <li data-bind="visible: marketplaceInStorePickupShippingCombo(), click: goToPickup">
+         <span>In-store pickup</span>
+      </li>
+
+      <!-- ko if: chosenDeliveryMethod() === "shipping" || isFullMarketplaceCart() || marketplaceInStorePickupShippingCombo() -->
+      <li role="link" data-bind="click: goToShipping">
+         <span>Shipping</span>
+      </li>
+      <!-- /ko -->
+
+      <!-- ko if: isFullFirstPartyQuote() && chosenDeliveryMethod() === "pick-up"  -->
+      <li role="link" data-bind="visible: !isDelivery(), click: goToPickup" class="go-to-pickup">
+         <span>Store Pickup</span>
+      </li>
+      <!-- /ko -->
+      <li>
+         <span>Payment</span>
+      </li>
+   </ul>
+   <!-- /ko -->
+   <div class="payment-container">
+      <div class="method-selection-container">
+         <div class="select-credit-card pointer" tabindex="0" role="button" aria-label="credit-card" data-testid="button-div-payment-select-credit-card" data-bind="visible: showCcPayment()">
+            <span class="checkSymbol1" style="display: none;"><i class="fa fa-check blue-checkmark"></i></span>
+            <p class="credit-card-text">Credit card</p>
+         </div>
+         <div class="select-fedex-acc pointer" tabindex="0" role="button" aria-label="fedex-office-account" data-testid="button-div-payment-select-fedex-office-account" data-bind="visible: showAccountPayment()">
+            <span class="checkSymbol2" style="display: none;"><i class="fa fa-check blue-checkmark"></i></span>
+            <p class="fedex-account-text">FedEx Office Print Account</p>
+         </div>
+      </div>
+      <div class="payment-forms-container" id="payments-list" data-bind="visible: isPaymentOptionSelected()" afterRender="renderReCaptcha('payments-list')">
+         <div class="credit-card-form" data-bind="visible: isCreditCardSelected()">
+            <div class="title-container">
+               <h2 data-bind="i18n: checkoutPaymentFormTitle" class="payment-title-text"></h2>
+               <p class="payment-title-subtext">How will you be paying for your order?</p>
+            </div>
+            <div role="form" aria-label="Credit Card Information" class="cc-form-container">
+               <input name="validation_key" id="validation_key" type="hidden"
+                  data-bind="value: loginValidationKey">
+               <div class="name-card-container" data-bind="visible: showCardNameField()">
+                  <label class="name-card-label required-field" for="name-card">CARDHOLDER NAME</label>
+                  <input class="name-card" type="text" placeholder="Cardholder Name" id="name-card" maxlength="40" data-testid="payment-credit-card-name-input">
+                  <p class="name-card-error" style="display:none;"></p>
+               </div>
+               <div class="card-number-container" data-bind="visible: showCardNumberField()">
+                  <label class="card-number-label required-field" for="card-number">CARD NUMBER</label>
+                  <input class="card-number" type="text" placeholder="Card Number" id="card-number" maxlength="19" data-testid="payment-credit-card-number-input">
+                  <img alt="Credit card icon" data-bind="attr: { src: greenCheckUrl}" />
+                  <p class="card-number-error"></p>
+               </div>
+               <div class="expiration-cvv-container" data-bind="visible: showExpCvvFields()">
+                  <div class="expiration-month-container">
+                     <label class="expiration-month-label">EXPIRATION DATE</label>
+                     <select aria-label="Expiration Month" class="expiration-month" id="expiration-month" data-testid="payment-credit-card-expiration-month-select">
+                        <option value="" disabled selected>0 - Month</option>
+                        <option value="1">1 - January</option>
+                        <option value="2">2 - February</option>
+                        <option value="3">3 - March</option>
+                        <option value="4">4 - April</option>
+                        <option value="5">5 - May</option>
+                        <option value="6">6 - June</option>
+                        <option value="7">7 - July</option>
+                        <option value="8">8 - August</option>
+                        <option value="9">9 - September</option>
+                        <option value="10">10 - October</option>
+                        <option value="11">11 - November</option>
+                        <option value="12">12 - December</option>
+                     </select>
+                     <p class="exp-date-error"></p>
+                  </div>
+                  <div class="expiration-year-container">
+                     <select aria-label="Expiration Year" data-bind="options: years,
+                       optionsValue:'value',
+                       optionsText: 'text',
+                       optionsCaption: 'Year',
+                       value: selectedYear" class="expiration-year" id="expiration-year"
+                             data-testid="payment-credit-card-expiration-year-select"></select>
+                     <p class="exp-year-error"></p>
+                  </div>
+                  <div class="cvv-number-container">
+                     <label class="cvv-number-label" for="cvv-number">CVV</label>
+                     <input class="cvv-number" type="number" id="cvv-number" placeholder="CVV" data-testid="payment-credit-cvv-number-input">
+
+                     <p class="cvv-card-error"></p>
+                  </div>
+               </div>
+              <div class="fedex-account-list-container profile-terms-condition" data-bind="if: isFclCustomer()">
+                  <div class="checkmark-container">
+                     <div class="alternate-check-container">
+                        <label class="alternate-checkbox-container" for="set-credit-card-checkbox">
+                           <input type="checkbox" name="set-credit-card-checkbox" class="set-credit-card-checkbox" id="set-credit-card-checkbox" tabindex="-1">
+                           <span class="checkmark" tabindex="0"></span>
+                        </label>
+                        <div class="set-as-credit-card-text">Save credit card to profile (Optional)</div>
+                     </div>
+                  </div>
+                  <div class="checkmark-terms-condition-container">
+                     <div class="alternate-check-container">
+                        <label class="alternate-checkbox-container" for="terms-and-condition-checkbox">
+                           <input type="checkbox" name="terms-and-condition-checkbox" id="terms-and-condition-checkbox" class="terms-and-condition-checkbox" disabled="disabled"  tabindex="-1">
+                           <span class="checkmark" tabindex="0" disabled="disabled"></span>
+                        </label>
+                        <div class="terms-and-condition-checkbox-text">
+                           I accept the <a  target="_blank" class="is-terms-and-conditions" data-bind="attr: {href:termsAndConditionUrl}">terms and conditions</a>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="different-cc-checkbox-container" data-bind="visible: isCompanyCreditCardAvailable() && !isFclCustomer()">
+                  <label class=" different-cc-checkbox">
+                     <input aria-labelledby="different-cc-text" class="cc-checkbox" type="checkbox"
+                        data-bind="checked : companyCreditCard" />
+                     <span class="checkmark"></span>
+                  </label>
+                  <div id="different-cc-text" class="different-cc-text">Use site credit card</div>
+               </div>
+               <div class="account-number-input-container" data-bind="visible: isFedexAccount()">
+                  <div class="account-number-container">
+                     <label class="account-label" for="account-number">ACCOUNT NUMBER</label>
+                     <input class="account-number" type="text" id="account-number" maxlength="20">
+                     <span class="invalid-account-error"></span>
+                  </div>
+                  <button class="apply-account">APPLY</button>
+
+                  <div class="applied-fedex-container" data-bind="visible: isFedexAccountApplied()">
+                     <p class="applied-fedex-text">FedEx account</p>
+                     <div class="remove-button-container">
+                        <p class="applied-fedex-value"></p><a class="fedex-acc-remove-button">Remove</a>
+                     </div>
+                  </div>
+               </div>
+               <p class="billing-address-heading">Billing Address</p>
+               <div class="billing-address-checkbox-container" data-bind="visible: showBillingCheckbox()">
+                  <label class="billing-address-checkbox">
+                      <input aria-labelledby="same-address"
+                             class="billing-checkbox"
+                             type="checkbox"
+                             checked
+                             data-testid="input-checkbox-billing-address-same-as-shipping">
+                     <span class="checkmark"></span>
+                  </label>
+                  <div id="same-address" class="billing-add-text">Same as shipping address</div>
+               </div>
+               <div class="billing-address-form-container" data-bind="visible: isBillingAddress()">
+                  <div class="company-name-container">
+                     <label class="company-name-label" for="company-name">COMPANY NAME</label>
+                      <input class="company-name"
+                             type="text"
+                             id="company-name"
+                             maxlength="30"
+                             data-testid="input-text-billing-address-company-name">
+                  </div>
+                  <div class="address-one-container">
+                     <label class="address-one-label required-field" for="address-one">ADDRESS</label>
+                      <input class="address-one"
+                             type="text"
+                             id="address-one"
+                             maxlength="50"
+                             data-testid="input-text-billing-address-address">
+                     <div id="geocoder-results-billing" class="google-maps-results google-suggestion"></div>
+                     <p class="address-one-error"></p>
+                  </div>
+                  <div class="address-two-container">
+                     <label class="address-two-label" for="address-two">ADDRESS LINE 2</label>
+                      <input class="address-two"
+                             type="text"
+                             id="address-two"
+                             maxlength="50"
+                             data-testid="input-text-billing-address-address-2">
+                      <p class="address-two-error"></p>
+                  </div>
+                  <div class="city-state-container">
+                     <div class="add-city-container">
+                        <label class="add-city-label required-field" for="add-city">CITY</label>
+                        <input class="add-city city-field-validation" type="text" id="add-city" maxlength="40" data-testid="input-text-add-city">
+                        <p class="add-city-error"></p>
+                     </div>
+                     <div class="add-state-container">
+                        <label class="add-state-label required-field" for="add-state">STATE</label>
+                        <select data-bind="options: states,
+                       optionsValue:'value',
+                       optionsText: 'label',
+                       optionsCaption: 'State',
+                       value: selectedState" class="add-state" id="add-state" data-testid="select-add-state"></select>
+                        <p class="add-state-error"></p>
+                     </div>
+                     <div class="add-zip-container">
+                        <label class="add-zip-label required-field" for="add-zip">ZIP CODE</label>
+                        <input class="add-zip" type="text" id="add-zip" maxlength="10" data-testid="input-number-add-zip">
+                        <p class="add-zip-error"></p>
+                     </div>
+                  </div>
+               </div>
+               <div class="shipping-address"
+                  data-bind="visible: showBillingCheckbox() && !isBillingAddress() && !companyCreditCard()">
+                  <div class="shipping-name">
+                     <span class="shipping-firstname"></span> <span class="shipping-lastname"></span>
+                  </div>
+                  <div class="shipping-address-line-one"></div>
+                  <div class="shipping-address-line-two"></div>
+                  <div class="shipping-city-zip">
+                     <span class="shipping-city"></span> <span class="shipping-postal"></span>
+                  </div>
+               </div>
+               <div class="shipping-address site-credit-card"
+                  data-bind="visible: showBillingCheckbox() && !isBillingAddress() && companyCreditCard()">
+                  <div class="shipping-address-line-one"></div>
+                  <div class="shipping-address-line-two"></div>
+                  <div class="shipping-city-zip">
+                     <span class="shipping-city"></span> <span class="shipping-postal"></span>
+                  </div>
+               </div>
+               <div class="additional-billing-info custom-credit-card-fields" data-bind="visible: isCommercialCustomer()">
+                  <p style="visibility: hidden" class="aditional-billing-heading custom-billing-heading-cc">Additional Billing Information</p>
+                  <div class="custom-billing-fields-container"></div>
+               </div>
+               <button type="button" class="credit-card-review-button" disabled="disabled" data-testid="button-credit-card-review-order">REVIEW ORDER</button>
+            </div>
+         </div>
+         <div class="fedex-account-form" data-bind="visible: !isCreditCardSelected()">
+            <div class="title-container">
+               <h2 data-bind="i18n: checkoutPaymentFormTitle" class="payment-title-text"></h2>
+               <p class="payment-title-subtext">How will you be paying for your order?</p>
+            </div>
+            <div class="fedex-account-list-container fcl-fedex-account-list" data-bind="if: isFclCustomer()">
+               <div class="fedex-account-list-outer-container" data-bind="html: getFedexAccountListWithHtml()"></div>
+            </div>
+            <div class="account-num-container">
+               <label class="account-number-label required-field" for="fedex-account-number">FEDEX OFFICE PRINT ACCOUNT</label>
+               <input class="fedex-account-number" type="text" id="fedex-account-number" name="fedex-account-number"
+                  maxlength="20" data-testid="payment-fedex-account-number-input-text" placeholder="Enter FedEx Office Print Account Number" />
+               <span class="fedex-account-number-error"></span>
+            </div>
+            <div class="save-fedex-account-chk-container" data-bind="if: isFclCustomer()" style="display:none;">
+               <div class="alternate-check-container">
+                  <label class="alternate-checkbox-container" for="save_fedex_account_number">
+                    <input type="checkbox" name="save_fedex_account_number" id="save_fedex_account_number" aria-label="Save FedEx Office Print Account Number" value="1">
+                    <span id="save_fedex_account_checkmark" class="checkmark" tabindex="0"></span>
+                  </label>
+                  <div class="set-as-default">Save FedEx Office Print Account Number to profile (Optional)</div>
+               </div>
+            </div>
+            <div class="additional-billing-info" data-bind="visible:isHidePoReferenceId()">
+               <p class="aditional-billing-heading custom-billing-heading">Additional Billing Information</p>
+               <p class="po-reference-label fedex-acc" for="Po Reference Label">Po/Reference Id (Optional)</p>
+               <input class="po-reference-id fedex-acc" aria-label="PO Reference Id" type="text" maxlength="25"
+                      data-testid="payment-fedex-additional-billing-info-input-text-ko-if" />
+               <div class="custom-billing-fields-container"></div>
+             </div>
+            <button class="fedex-account-number-review-button fedex-account-number-review-button-disabled"
+                    data-testid="payment-fedex-account-number-review-button"
+               disabled="disabled">REVIEW ORDER</button>
+         </div>
+         <span data-bind="afterRender: afterTemplateRender"></span>
+      </div>
+   </div>
+</li>
+</ul>
+<!-- /ko -->

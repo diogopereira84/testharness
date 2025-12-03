@@ -1,0 +1,270 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$states = $block->getAllStates('US');
+$templateClass = \Magento\Framework\View\Element\Template::class;
+$confirmationPopupMsg = $block->getAuthorizedUserPopupMessage();
+$confirmationMsgData = [
+    'msg' => $confirmationPopupMsg,
+    'title' => 'Request Submitted'
+];
+?>
+
+<div class="block">
+    <form name="au-form" id="au-form" class="au-form" method="post" autocomplete="off"
+    data-mage-init='{"validation": {}}'
+    >
+        <div class="grey-background">
+            <div class="authorized-user-account-info-container">
+                <h5><?=$block->escapeHtml(__("Account Information"))?></h5>
+                <hr>
+                <div class="authorize-user-column-left">
+                    <div class="input-container">
+                        <label class="input-label"
+                        for="office_account_no"><?=$block->escapeHtml(__("FEDEX OFFICE ACCOUNT NO."))?></label>
+                        <input class="input-textbox v-validate
+                        auth-validate-fedex-account-no"
+                        type="text"
+                        name="office_account_no" id="office_account_no"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-fedex-account-no"
+                        maxlength="10"
+                        onkeypress="allowOnlyNumbers(event)"
+                        data-msg-required="FedEx office account no. is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                </div>
+                <div class="authorize-user-column-right">
+                    <div class="input-container">
+                        <label class="input-label"
+                        for="account_user_name">
+                        <?=$block->escapeHtml(__("FEDEX OFFICE NEW AUTHORIZED USER NAME"))?></label>
+                        <input
+                        class="input-textbox
+                        v-validate authorized-office-name-validation validate-fedex-account-name
+                        minimum-characters-limit-two"
+                        type="text"
+                        name="account_user_name" id="account_user_name"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-fedex-office-new-authorized-user-name"
+                        maxlength="30"
+                        data-msg-required="FedEx office new authorized user name is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                </div>
+            </div>
+            <div class="authorized-user-address-info-container">
+                <h5><?=$block->escapeHtml(__("Address Information"))?></h5>
+                <hr class="authorized-user-line">
+                <p class="authorize-paragraph">
+                    <?=$block->escapeHtml(__("This is where account communications will be sent."))?></p>
+                <div class="authorize-user-column-left">
+                    <div class="input-container">
+                        <label class="input-label" for="country"><?=$block->escapeHtml("COUNTRY")?>
+                        </label>
+                        <div>
+                            <select name="country" id="country"
+                            data-testid="E-349679-B-1755654-TK-2969057-au-information-country"
+                            class="input-textbox" onchange="getAllStates(this, 'state')">
+                                <option value="US">
+                                    <?=$block->escapeHtml(__("United States"))?></option>
+                                <option value="CA"><?=$block->escapeHtml(__("Canada"))?></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="company_name">
+                            <?=$block->escapeHtml(__("COMPANY NAME"))?></label>
+                        <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+                        validate-company-name-auth"
+                        type="text"
+                        name="company_name" id="company_name"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-company-name"
+                        maxlength="70"
+                        data-msg-required="Company name is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="street_address">
+                            <?=$block->escapeHtml(__("STREET ADDRESS"))?></label>
+                        <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+                        validate-street-address"
+                        type="text"
+                        name="street_address" id="street_address"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-street-address"
+                        data-msg-required="Street address is required."
+                        maxlength="70"
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="suite">
+                            <?=$block->escapeHtml(__("SUITE/OTHER (OPTIONAL)"))?></label>
+                        <input class="input-textbox v-validate
+                        set-maximum-characters-limit-seventy"
+                        type="text" name="suite" id="suite"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-suite-other"
+                        maxlength="70"
+                        data-validate="{required:false,'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="address_line_two">
+                            <?=$block->escapeHtml(__("ADDRESS LINE 2 (OPTIONAL)"))?></label>
+                        <input class="input-textbox v-validate
+                        set-maximum-characters-limit-seventy"
+                        type="text" name="address_line_two"
+                        id="address_line_two"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-address-line2"
+                        maxlength="70"
+                        data-validate="{'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="city"><?=$block->escapeHtml(__("CITY"))?></label>
+                        <input class="input-textbox v-validate allow-only-thirty-eight-characters
+                        account-user-city-validation"
+                        type="text" name="city"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-city"
+                        id="city"
+                        maxlength="38"
+                        data-msg-required="City is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                </div>
+
+                <div class="authorize-user-column-right">
+                    <div class="input-container">
+                        <label class="input-label state-lable" for="state">
+                            <?=$block->escapeHtml(__("STATE"))?>
+                        </label>
+                        <select name="state" id="state"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-state"
+                        class="input-textbox v-validate set-maximum-characters-limit-seventy"
+                        data-msg-required="State is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                        <option value=""><?=$block->escapeHtml(__('Select an option'))?></option>
+                        <?php foreach ($states as $state): ?>
+                        <option value="<?=$block->escapeHtmlAttr($state['label']);?>"
+                        ><?=$block->escapeHtml($state['title']);?></option>
+                        <?php endforeach;?>
+                        </select>
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label zipcode-lable" for="zipcode">
+                            <?=$block->escapeHtml(__("ZIP CODE"))?>
+                        </label>
+                        <input class="input-textbox v-validate validate-zip-code"
+                        type="text" name="zipcode" id="zipcode"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-zip-code"
+                        maxlength="10"
+                        onkeypress="allowOnlyNumbers(event);formatZipCodeValue(event)"
+                        data-msg-required="Zip code is required."
+                        data-validate="{required:true,'validate-length':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="email"><?=$block->escapeHtml(__("EMAIL"))?></label>
+                        <input class="input-textbox v-validate set-maximum-characters-limit-seventy"
+                        type="text" name="email" id="email"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-email"
+                        maxlength="70"
+                        data-msg-required="Email is required."
+                        data-msg-validate-email="Please enter a valid email address (Ex: johndoe@domain.com)."
+                        data-validate="{required:true,'validate-length':true, 'validate-email':true}"
+                        >
+                    </div>
+                    <div class="input-container">
+                        <label class="input-label" for="phone"><?=$block->escapeHtml(__("PHONE NO."))?></label>
+                        <input class="input-textbox v-validate validate-user-phone"
+                        type="text" name="phone" id="phone"
+                        data-testid="E-349679-B-1755654-TK-2969057-au-information-phone-no"
+                        placeholder="<?=$block->escapeHtml("(___) ___-____")?>"
+                        maxlength="14"
+                        data-msg-required="Phone No. is required."
+                        data-validate="{required:true, 'validate-length':true}"
+                        >
+                    </div>
+                    <div class="para-container">
+                        <p><?=$block->escapeHtml(__("FedEx only requires an account number be given at the time of
+                            purchase; however if your company requires a physical card be shown,
+                            select"))?>
+                            <span><?=$block->escapeHtml(__("yes"))?></span>.
+                        </p>
+                    </div>
+                    <div class="custom-radio-btn custome-radio-btn-no">
+                        <input type="radio" id="account_no_radio_no"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-authorized-fedex-account-no-radio-btn"
+                        class="account_no_radio_no" name="account_no_radio" value="NO" checked/>
+                        <label for="account_no_radio_no" tabindex="0">
+                            <?=$block->escapeHtml(__("No"))?>
+                        </label>
+                    </div>
+                    <div class="custom-radio-btn custome-radio-btn-yes">
+                        <input type="radio" id="account_no_radio_yes"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-authorized-fedex-account-yes-radio-btn"
+                        class="account_no_radio_yes" name="account_no_radio" value="YES"/>
+                        <label for="account_no_radio_yes" tabindex="0">
+                            <?=$block->escapeHtml(__("Yes (Recommended for self service users)"))?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="checkmark-container">
+                <div class="alternate-check-container">
+                    <label class="alternate-checkbox-container" for="is_agree">
+                        <input type="checkbox" name="is_agree" id="is_agree"
+                        class="v-validate required required-entry"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-authorized-is-agree"
+                        aria-label="set as default"
+                        value="1" tabindex="-1"
+                        data-msg-required="Only the account owner or
+                    person authorized to act on his/her behalf
+                    is allowed to add an additional user to this account."
+                        data-validate="{required:true}"
+                        >
+                        <span class="checkmark authorize-user-is-agree" tabindex="0"></span>
+                    </label>
+                    <div class="authorized-is-agree">
+                        <?=$block->escapeHtml(__("I certify that I am the account owner or
+                            have been authorized to act on his/her
+                            behalf to add an additional user to this account."))?>
+                    </div>
+                    <span
+                    id="is_agree-error"
+                    class="mage-error is-agree-error"
+                    style="display:none"><?=$block->escapeHtml(__("Only the account owner or
+                    person authorized to act on his/her behalf
+                    is allowed to add an additional user to this account."))?>
+                     </span>
+                </div>
+            </div>
+        </div>
+        <div class="authorize-btn-container">
+            <button type="button" id="btn_save_changes" title="Submit" class="btn-orage-submit"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-authorized-btn-save-changes" disabled="disabled">
+                <?=$block->escapeHtml(__('SUBMIT'))?>
+            </button>
+        </div>
+    </form>
+    <?= $block->getLayout()->createBlock($templateClass)
+    ->setTemplate("Fedex_CIDPSG::confirmation_popup.phtml")
+    ->setData('confirmation_popup_msg', $confirmationMsgData)
+    ->toHtml() ?>
+</div>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "cidpsgaccount": {}
+    },
+    ".v-validate": {
+        "Fedex_CIDPSG/js/cid_custom_validation": {}
+    }
+}
+</script>

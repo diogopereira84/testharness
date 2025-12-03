@@ -1,0 +1,306 @@
+& when (@media-common = true) {
+    .photobook-content {
+        img {
+            width: 100%;
+        }
+
+        .slick-dots {
+            padding: 5px 0;
+
+            li {
+                height: 10px;
+                width: 10px;
+
+                button {
+                    width: 12px;
+                    height: 12px;
+
+                    border: none;
+
+                    background-color: #D8D8D8;
+
+                }
+
+                &.slick-active {
+                    button {
+                        background-color: #55656C;
+                    }
+                }
+            }
+        }
+
+
+        .slick-arrow {
+            width: 48px;
+            height: 48px;
+
+            background: none;
+
+
+            &.slick-next {
+                right: -48px;
+                
+                &::before {
+                    content: '\e901';
+                    transform: rotateZ(180deg);
+                    display: block;    
+                }
+
+                &:focus,
+                &:not(.primary) {
+                    background: none;
+                }
+            }
+
+            &.slick-prev {
+                left: -48px;
+                
+                &::before {
+                    content: '\e901';
+                }
+                
+                &:focus,
+                &:not(.primary) {
+                    background: none;
+                }
+            }
+
+            &::before {
+                font-size: 24px;
+                padding: 12px;
+
+                color: @fx-grey-1200;
+            }
+        }
+
+        .pagebuilder-button-primary {
+            &, &:active, &:focus, &:hover {
+                background-color: @color-orange-red1;
+                border: 1px solid @color-orange-red2;
+                color: @color-white;
+                font-size: 14px;
+                font-family: 'FedEx Sans Bold';
+                padding: 10px 15px 6px;
+            }
+
+            &:hover {
+                background-color: darken(@color-orange-red1, 5%);
+                border: 1px solid darken(@color-orange-red2, 5%);
+            }
+        }
+
+        .pagebuilder-button-secondary, .pagebuilder-button-link {
+            &, &:active, &:focus, &:visited &:hover {
+                color: @color-fedex-blue !important;
+                text-transform: uppercase;
+            }
+        }
+
+        .pagebuilder-button-link {
+            &, &:active, &:focus, &:visited &:hover {
+                font-family: 'FedEx Sans Medium';
+                font-size: 16px;
+                font-weight: 400;
+            }
+        }
+    }
+    .hero-banner {
+        .pagebuilder-banner-wrapper {
+            .message {
+                min-height: 0;
+                overflow: visible;
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .photobook-content {
+        margin: 30px 50px;
+
+        .pagebuilder-mobile-only {
+            display: none;
+        }
+
+        .slick-slide {
+            display: flex;
+            justify-content: center;
+
+            .pagebuilder-column {
+                padding-right: 27px;
+                padding-left: 27px;
+            }     
+        }
+
+        .photobook-content-header {
+            margin: 26px 32px 0 0;
+        }
+        .photobook-content-body {
+            margin: 5px 32px 0 0;
+        }
+
+        div[data-content-type='buttons'] {
+            padding: 15px 32px 25px 0px;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1199px) {
+    .photobook-content {
+        .pagebuilder-column {
+            max-width: 500px;
+        }
+    }
+}
+
+@media only screen and (max-width: 1199px) {
+    .photobook-content {
+        div[data-content-type='row'] {
+    
+            .product-highlight-design-2 {
+                margin: 25px 20px !important;
+            }
+            &.product-highlight-design-2 {
+                margin: 25px 20px !important;
+            }
+        }
+    }
+}
+
+//
+//  Mobile style for all fedex row appearence (style-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .photobook-content {
+        margin: 30px 15px;
+
+        p {
+            text-align: center;
+        }
+
+        .pagebuilder-column {
+            margin: 0 0 15px 0 !important;
+        }
+
+        .slick-slide {
+            display: flex;
+            justify-content: center;
+
+            margin: 0 33px;
+        }
+
+        .slick-arrow {
+            position: absolute;
+            
+            &.slick-next {
+                right: -15px;
+            }
+
+            &.slick-prev {
+                left: -15px;
+            }
+        }
+
+        // .slick-dots {
+        //     position: absolute;
+        // }
+
+        div[data-content-type='buttons'] {
+            display: flex;
+            justify-content: center;
+        }
+
+        .photobook-content-header {
+            margin: 44px 20px 10px;
+        }
+
+        .photobook-content-body {
+            margin: 10px 20px;
+        }
+    
+        .pagebuilder-button-primary {
+            &, &:active, &:focus, &:hover {
+                padding: 17px 28px;
+                font-size: 19px;
+            }
+        }
+    }
+
+    div[data-content-type='row'] {
+
+        .photobook-content {
+            margin: 15px;
+        }
+
+        &.photobook-content {
+            margin: 15px;
+        }
+    }
+}
+/* Stacking image changes for Design Punchout template  */
+
+@media only screen and (max-width: 467px) {
+    
+    .block-static-block {
+        .hero-banner {
+            padding-bottom: 48px !important;
+        }
+    }
+    .hero-banner {
+        .canva-modal-link{
+            .pagebuilder-banner-wrapper {
+                min-height: 213px !important;
+                height: 213px;
+            }
+            .pagebuilder-banner-wrapper {
+                .pagebuilder-overlay {
+                    padding: 214px 0 0 0 !important;
+                    width: 100%;
+                    span {
+                        color:@fx-grey-1200 !important ;
+                    }
+                    .message {
+                        margin-top: 24px;
+                        margin-right: 40px;
+                        margin-bottom: 23px;
+                        margin-left: 16px;
+                        width: 264px;
+                        h1 {
+                            margin-bottom: 0;
+                            font-size: 36px;
+                            color: @fx-grey-1200 !important;
+                        }
+                    }
+                    .pagebuilder-banner-button.pagebuilder-button-primary {
+                        margin: 0 62px 10px 16px;
+                        margin-right: 42px;
+                        border-radius: 0;
+                    }
+                }
+                .pagebuilder-poster-content {
+                    margin-top: 13px;
+                }
+            }
+        }
+    }
+}
+@media only screen and (max-width: 319px) {
+    .hero-banner {
+        .canva-modal-link{
+            .pagebuilder-banner-wrapper {
+                .pagebuilder-overlay {
+                    .message {
+                        width: auto;
+                        height: auto;
+                    }
+                    .pagebuilder-banner-button.pagebuilder-button-primary {
+                        width: auto;
+                        padding: 10.95px 28px 17.95px 31px;
+                    }
+                }
+            }
+        }
+    }
+}
+/* End stacking image change */

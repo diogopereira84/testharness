@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <head>
+        <script src="Fedex_CatalogMvp::js/custom-date-validation.js"/>
+        <script src="Fedex_CatalogMvp::js/configure-popup/main.js"/>
+    </head>
+   <body>
+        <referenceContainer name="content">
+	       <block class="Magento\Catalog\Block\Adminhtml\Product\Composite\Configure" name="product_new_timezone_info" template="Fedex_CatalogMvp::admin_timezone.phtml"/>
+            <block class="Fedex\CatalogMvp\Block\Adminhtml\Catalog\Product\ModelPopup" name="catalog-product-popup" template="Fedex_CatalogMvp::catalog/product/modelpopup.phtml" >
+                <arguments>
+                        <argument name="fxo_cm_view_model" xsi:type="object">Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper</argument>
+                </arguments>
+            </block>
+
+            <block class="Magento\Framework\View\Element\Template"
+                   name="custom.configure.popup"
+                   template="Fedex_CatalogMvp::catalog/product/configure-popup.phtml">
+                <arguments>
+                    <argument name="mvphelper_setting_popup" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

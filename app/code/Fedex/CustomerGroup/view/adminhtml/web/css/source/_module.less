@@ -1,0 +1,269 @@
+@import '_popup-dropdown.less';
+@import '_select-dropdown.less';
+@required_field_icon_color: #de002e;
+@tooltip_background: #fff;
+@cancel_button_text: #514943;
+@searched_users_color: #333;
+@predictive_search_placeholder: #0078b4;
+
+div[data-index="customergroup_general"] {
+.fieldset-wrapper-title {
+    display: none;
+    }
+}
+div[data-index="customergroup_catalog_permission"] {
+    padding-left: 205px;
+    .fieldset-wrapper-title {
+        display: none;
+    }
+}
+#tab_customergroup_general {
+    .admin__page-nav-item-messages {
+        display: none;
+    }
+}
+.customergroup-default-permission-wrapper {
+    display: flex;
+}
+.customergroup-default-permission-wrapper {
+    div[data-index="category_ids"] {
+        padding-right: 20px;
+        width: 600px;
+        display: flex;
+        .admin__field-label{
+            width: 200px;
+            padding-right: 24px;
+            margin-left: -100px;
+        }
+        .admin__field-control{
+            width: 900px;
+            height:40px;
+            padding-left: 8px;
+        }
+        }
+}
+.open-insert-new-category-form-modal-button{
+    width: 150px;
+    height:33px;
+    margin-left: 5px;
+}
+& when (@media-common = true) {
+    .assign-permissions-modal-cancel {
+        background-color: @tooltip_background;
+        border-color: @tooltip_background;
+        color: @cancel_button_text;
+    }
+    .assign-permissions-save-disabled {
+        background-color: @cancel_button_text;
+        color: @tooltip_background;
+        cursor: not-allowed;
+        pointer-events: none;
+    }
+    .assign-permissions-modal-container {
+        .modal-inner-wrap {
+            width: 750px;
+            .modal-content {
+                overflow-y: unset !important;
+            }
+        }
+
+        .assign-permissions-modal {
+            .admin-permissions-label {
+                width: 15rem !important;
+                &:after {
+                    color: @required_field_icon_color;
+                    content: '*';
+                    font-feature-settings: 'clig' off, 'liga' off;
+                    margin-left: 1rem;
+                    position: relative;
+                    top: 5px;
+                }
+            }
+            .admin-permissions-email-label {
+                width: 15rem !important;
+                &:after {
+                    color: @required_field_icon_color;
+                    content: '*';
+                    font-feature-settings: 'clig' off, 'liga' off;
+                    margin-left: 1rem;
+                    position: relative;
+                    top: 27px;
+                }
+            }
+            .admin-permissions-bold {
+                font-weight: 600;
+                width: 100%;
+            }
+
+            .admin-permissions-users-container {
+                margin-left: 35px !important;
+                width: 450px;
+
+                .dropdown-active {
+                    &:after {
+                        transform: rotate(180deg);
+                    }
+                }
+
+                .dropdown-inactive {
+                    height: 33.31px;
+                }
+
+                .customer-ids-multiselect {
+                    display: flex;
+                    flex-direction: row;
+                    flex-wrap: wrap;
+                    .selected-users-section {
+                        flex: 0 0 content;
+                        max-width: 350px;
+                    }
+                    .selected-users-section-dropdown {
+                        display: flex;
+                        flex: 0 0 content;
+                        flex-direction: row;
+                        flex-wrap: wrap;
+                        max-width: 415px;
+                    }
+                    .add-users-section {
+                        display: flex;
+                        flex: 1 0 0;
+                        min-width: 62px;
+                    }
+                    .selected-user-assign-permissions {
+                        margin-right: 0px !important;
+                    }
+                    .assign-permissions-search {
+                        display: block;
+                        flex: 1 1 auto;
+                        height: 33.3px;
+                        margin-left: auto;
+                        min-width: 0;
+                        .ap-search-area {
+                            border: none;
+                            box-sizing: border-box;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 1.2rem;
+                            height: inherit;
+                            margin-left: 3px;
+                            width: 100%;
+                        }
+                        .ap-search-area::placeholder {
+                            color: @predictive_search_placeholder;
+                        }
+                    }
+
+                    .ap-search-dropdown-wrapper {
+                        align-items: flex-start;
+                        background: @tooltip_background;
+                        display: flex;
+                        filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+                        flex-direction: column;
+                        height: 200px;
+                        isolation: isolate;
+                        overflow-x: hidden;
+                        overflow-y: auto;
+                        position: absolute;
+                        width: 198px;
+                        z-index: 3;
+                        .ap-search-dropdown {
+                            ul {
+                                padding: 0px;
+                                padding-top: 5px;
+                                width: 200px;
+                            }
+                            li {
+                                background: @tooltip_background;
+                                color: @searched_users_color;
+                                cursor: pointer;
+                                font-family: 'FedEx Sans Regular';
+                                font-size: 14px;
+                                font-style: normal;
+                                font-weight: 400;
+                                height: 25px;
+                                line-height: 24px;
+                                margin-bottom: 5px;
+                                overflow: hidden;
+                                padding: 7px 20px;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                width: 159px;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .admin-permissions-options-container {
+                display: grid;
+                grid-template-columns: max-content 1fr;
+                margin-left: 35px !important;
+                margin-top: -8px;
+
+                .admin-permissions-users-container {
+                    margin-left: 35px !important;
+                    width: 450px;
+                }
+
+                .admin-permissions-option {
+                    display: flex;
+                    padding-top: 1rem;
+
+                    &:nth-child(2n) {
+                        margin-left: 6rem;
+                    }
+
+                    .admin-permission-text {
+                        white-space: nowrap;
+                    }
+
+                    .admin__field-tooltip,
+                    .admin-permissions-tooltip {
+                        padding-left: .5rem;
+
+                        &:hover .admin-permissions-tooltip-content {
+                            display: block;
+                        }
+
+                        .admin-permissions-tooltip-content {
+                            @_shadow: 0 2px 8px 0 rgba(0, 0, 0, .3);
+                            .lib-css(box-shadow, @_shadow);
+                            background: @tooltip_background;
+                            border: 1px solid @field-tooltip-content__border-color;
+                            border-radius: 1px;
+                            bottom: @field-tooltip-icon__size + @field-tooltip-content-arrow__size;
+                            display: none;
+                            font-family: 'FedEx Sans Light';
+                            font-size: 16px;
+                            line-height: 24px;
+                            padding: @field-tooltip-content__padding;
+                            position: absolute;
+                            right: -29rem;
+                            width: @field-tooltip-content__width;
+                            z-index: @field-tooltip-content__z-index;
+
+                            &:after,
+                            &:before {
+                                .lib-arrow(down, @field-tooltip-content-arrow__size, @field-tooltip-content__border-color);
+                                content: '';
+                                display: block;
+                                position: absolute;
+                                top: 100%;
+                                z-index: 3;
+                            }
+
+                            &:after {
+                                border-top-color: @tooltip_background;
+                                margin-top: -1px;
+                                z-index: 4;
+                            }
+                        }
+                    }
+                }
+            }
+
+            .admin-permissions-email-options-container {
+                margin-left: 35px !important;
+            }
+        }
+    }
+}

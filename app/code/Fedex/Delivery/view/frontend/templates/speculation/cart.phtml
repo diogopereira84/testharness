@@ -1,0 +1,17 @@
+<?php
+/** @var \Fedex\Cart\ViewModel\CartSummary $viewModel */
+$viewModel = $this
+    ->getViewModel();
+
+if (!$viewModel->isAddToCartPerformanceOptimizationEnabled()) {
+    return;
+}
+
+?>
+<script type="text/x-magento-init">
+    {
+        "body": {
+            "Fedex_Delivery/js/speculation/cart": {}
+        }
+    }
+</script>

@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="hedare_promo_banner_tab" translate="label" sortOrder="100">
+            <label>Promo Banner</label>
+        </tab>
+        <section id="header_promo_banner" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <class>separator-top</class>
+            <label>Settings</label>
+            <tab>hedare_promo_banner_tab</tab>
+            <resource>Fedex_Header::promobanner_config</resource>
+            <group id="promobanner_group" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Promo Banner Configuration</label>
+                    <field id="promo_banner_url" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Promo Banner URL</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Promo Banner URL</comment>
+                    </field>
+                    <field id="promo_banner_is_new_tab" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Open in New Tab</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    </field>
+                </group>
+        </section>
+    </system>
+</config>

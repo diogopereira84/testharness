@@ -1,0 +1,72 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+$sdeHelper = $this->helper(Fedex\SDE\Helper\SdeHelper::class);
+?>
+<?php if ($crumbs && is_array($crumbs)) : ?>
+<?php 
+	$helperData = $this->helper(Fedex\CatalogDocumentUserSettings\Helper\Data::class);
+	$currentActionName = $helperData->getActionName();
+
+	$isCategoryPage = false;
+	if($currentActionName === "catalog_category_view" || $currentActionName == "selfreg_ajax_productlistajax"){
+		$isCategoryPage = true;
+	}
+
+    $orderHistoryHelperData = $this->helper(Fedex\Orderhistory\Helper\Data::class);
+    //D-97122 Sde breadcrumb issue fix
+    $deliveryHelper = $this->helper(Fedex\Delivery\Helper\Data::class);
+    $catalogMvpHelper = $this->helper(Fedex\CatalogMvp\Helper\CatalogMvp::class);
+    $isRetailCustomer = !$deliveryHelper->isCommercialCustomer();
+    $sharedCatName = "";
+    if (!$isRetailCustomer) {
+        $sharedCatName = $catalogMvpHelper->getCompanySharedCatName();
+    }
+    $isOrderHistoryPage = false;
+	if($currentActionName === "sales_order_history" && $isRetailCustomer){
+		$isOrderHistoryPage = true;
+	}
+?>
+
+<div class="breadcrumbs mvp-breadcrumb-label" role="navigation" aria-label="breadcrumbs">
+    <ul class="items">
+        <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
+            <?php   
+                if($isOrderHistoryPage == true): 
+                    continue; 
+                endif;
+            ?>
+            <?php
+                $crumbInfoLabel = $crumbInfo['label'];
+                $sharedCatalogChnagesStatus = 0;
+                if (!$isRetailCustomer && $sharedCatName) {
+                    if ($sharedCatName == $crumbInfo['label']) {
+                        $sharedCatalogChnagesStatus = 1;
+                    }
+                }
+                if($isCategoryPage && ($crumbInfo['label'] === "Browse Catalog"
+                    || !empty(strpos($crumbInfo['label'], "Browse Catalog")) || $sharedCatalogChnagesStatus)){
+                    $crumbInfoLabel = "Browse Catalog";
+                    if (!$isRetailCustomer) {
+                        $crumbInfoLabel = "Shared Catalog";
+                    }
+                }
+		    ?>
+            <li class="item <?= /* @escapeNotVerified */ $crumbName ?>">
+            <?php if ($crumbInfo['link']) : ?>
+                <a href="<?= /* @escapeNotVerified */ $crumbInfo['link'] ?>" title="<?= $block->escapeHtml($crumbInfo['title']) ?>"><?= $block->escapeHtml($crumbInfoLabel) ?></a>
+            <?php elseif ($crumbInfo['last']) : ?>
+                <strong><?= $block->escapeHtml($crumbInfoLabel) ?></strong>
+            <?php else: ?>
+                <?= $block->escapeHtml($crumbInfoLabel) ?>
+            <?php endif; ?>
+            </li>
+        <?php endforeach; ?>
+    </ul>
+</div>
+<?php endif; ?>

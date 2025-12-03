@@ -1,0 +1,300 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="fedex_sso" translate="label" sortOrder="10">
+            <label>Login</label>
+        </tab>
+        <section id="sso" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_sso</tab>
+            <resource>Fedex_SSO::sso_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                <field id="is_enable_auth" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Authentication Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="is_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Method</label>
+                    <source_model>Fedex\SSO\Model\Config\Source\LoginType</source_model>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                    </depends>
+                </field>
+                <field id="wlgn_login_page_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WLGN Login Page URL</label>
+                    <comment>Please enter WLGN login page URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="query_parameter" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Query parameter</label>
+                    <comment>Please enter query parameter.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="register_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WREG URL</label>
+                    <comment>Please enter WREG URL.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="register_url_param" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WREG URL Param</label>
+                    <comment>Please enter WREG URL param.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="profile_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Profile API URL</label>
+                    <comment>Please enter profile API URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                    </depends>
+                </field>
+                <field id="fcl_my_profile_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WLGN Profile Update URL</label>
+                    <comment>Please enter my profile URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="contact_information_profile_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Contact Information Profile URL</label>
+                    <comment>Please enter contact information URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="fcl_logout_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WLGN Logout URL</label>
+                    <comment>Please enter WLGN logout URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="fcl_logout_api" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>FCL Logout API URL</label>
+                    <validate>required-entry validate-url</validate>
+                </field>
+                <field id="fcl_logout_query_param" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>WLGN Logout Query Parameter</label>
+                    <comment>Please enter WLGN logout Query Parameter</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="profile_mockup_json" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Profile Mockup JSON</label>
+                    <comment>Please enter profile mockup JSON.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="sso_login_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login URL</label>
+                    <comment>Please enter login URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">2</field>
+                    </depends>
+                </field>
+                <field id="sso_logout_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Logout URL</label>
+                    <comment>Please enter logout URL.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">2</field>
+                    </depends>
+                </field>
+                <field id="idp_feild" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>IDP</label>
+                    <comment>Please enter IDP.</comment>
+                    <validate>required-entry validate-url</validate>
+                    <depends>
+                        <field id="sso/general/is_enable_auth">1</field>
+                        <field id="sso/general/is_enable">2</field>
+                    </depends>
+                </field>
+                <field id="fcl_cookie_name" translate="label comment" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>FCL Session cookie name</label>
+                    <comment>Add Cookie Name</comment>
+                </field>
+            </group>
+            <group id="login_popup" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Login Modal Configuration</label>
+                <field id="login_popup_message_heading" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Utility Nav Login Modal Header</label>
+                    <comment>Please enter login popup message heading.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="login_popup_message" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Utility Nav Login Modal Message</label>
+                    <comment>Please enter login popup message.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="create_user_button_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Call to Action 1</label>
+                    <comment>Please enter create user button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="login_button_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Call to Action 2</label>
+                    <comment>Please enter login button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="checkout_login_popup" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Checkout Login Modal Configuration</label>
+                <field id="checkout_login_popup_message_heading" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Checkout Login Modal Header</label>
+                    <comment>Please enter checkout login popup message heading.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="checkout_login_popup_message" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Checkout Login Modal Message</label>
+                    <comment>Please enter checkout login popup message.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="checkout_create_user_button_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Call to Action 1</label>
+                    <comment>Please enter create user button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="checkout_login_button_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Call to Action 2</label>
+                    <comment>Please enter login button text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="checkout_guest_action_text" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Call to Action 3</label>
+                    <comment>Please enter guest action text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="login_error_popup" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Login Error Popup Configuration</label>
+                <field id="login_error_popup_heading" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Error Popup Heading</label>
+                    <comment>Please enter login popup error message heading.</comment>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="login_error_popup_message" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Error Popup Message</label>
+                    <!-- /** B-1805640 */ -->
+                    <comment>Please enter login error popup message. Maximum length 200 characters</comment>
+                    <validate>required-entry validate-length maximum-length-200</validate>
+                    <!-- /** B-1805640 */ -->
+                </field>
+                <field id="login_error_popup_retry_login" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Error Popup Retry Login</label>
+                    <comment>Please enter retry login link text.</comment>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <!-- B-1216135: this field value will be taken for idle session timeout -->
+            <group id="login_session" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Login Session</label>
+                <field id="login_session_idle_timeout" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Login Session Idle Timeout</label>
+                    <comment>Login session will be deleted after this idle time</comment>
+                </field>
+                <field id="active_session_timeout" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Active Session Timeout</label>
+                    <comment>Login Active Session will be deleted after this time</comment>
+                </field>
+            </group>
+            <!--  B-1387449 Toggle Creation – Session Timeout Messaging in POD 2.0-->
+            <group id="session_general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Session Timeout Settings</label>
+                <field id="session_warning_time" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Session Warning Time</label>
+                    <comment>Enter the Session Warning in seconds prior to the session timeout</comment>
+                </field>
+                <field id="session_warning_primary_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Session Warning Primary Message</label>
+                    <comment>Enter the Session Warning Primary Message.</comment>
+                </field>
+                <field id="session_warning_secondary_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Session Warning Secondary Message</label>
+                    <comment>Enter the Session Warning Secondary Message.</comment>
+                </field>
+                <field id="session_expired_primary_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Session Expired Primary Message</label>
+                    <comment>Enter the Session Expired Primary Message.</comment>
+                </field>
+                <field id="session_expired_secondary_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Session Expired Secondary Message</label>
+                    <comment>Enter the Session Expired Secondary Message.</comment>
+                </field>
+            </group>
+            <!-- B-1387449 Toggle Creation – Session Timeout Messaging in POD 2.0-->
+        </section>
+        <!-- Display user login icon toggle D-122657-->
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="hawks_remove_duplicate_login_calls" translate="label" type="select" sortOrder="385" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Hawks Remove Duplicate Login Calls(D-103864)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1918154 Toggle Creation - Enable Commercial SSO Group Authentication Method-->
+                <field id="xmen_enable_sso_group_authentication_method" translate="label" type="select" sortOrder="581" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>XMEN - Enable Commercial SSO Group Authentication Method</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1916069 Toggle Creation - FCL Cookie Names/Endpoint -->
+                <field id="xmen_enable_fcl_cookie_name" translate="label" type="select" sortOrder="581" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>XMEN E-391561 - FCL Session Cookie Name</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1946910 Toggle Creation - XMEN - Remove Expired Fedex Login Cookie -->
+                <field id="remove_expired_fedex_login_cookie" translate="label" type="select" sortOrder="581" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>XMEN B-1946910 - Remove Expired Fedex Login Cookie</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- D-201662 - Hawks Toggle - Fix return Type -->
+                <field id="d_201662_fix_return_type" translate="label" type="select" sortOrder="1000" showInDefault="1" canRestore="0">
+                    <label>Hawks D-201662 - Fix return type</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- Tiger Team - B-2260777 Access to Workspace -->
+                <field id="b_2260777_access_to_workspace" translate="label" type="select" sortOrder="1005" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2260777 Access to Workspace</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

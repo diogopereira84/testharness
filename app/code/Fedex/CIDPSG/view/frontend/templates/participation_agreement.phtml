@@ -1,0 +1,135 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$params = $block->getUrlParams();
+$clientId = isset($params['client_id']) ? $params['client_id'] : '';
+$customerInfo = $block->getCustomerInfo($clientId);
+$accountTypeArr = [0, 1];
+$paAgreementHeading = 'Participation Agreement';
+
+?>
+<?php if ($customerInfo->getSize()): ?>
+    <div class="psg-agreement">
+        <form name="psg-agreement-form" id="psg-agreement-form" class="psg-agreement-form" method="post"
+        data-mage-init='{"validation": {}}'>
+            <?php
+            $customerData = $customerInfo->getFirstItem();
+            if ($customerData->getClientId() == "fdxform") {
+                $paAgreementHeading = 'FedEx Business Account Setup Form';
+            }
+            $companyLogoInfo  = $customerData->getCompanyLogo();
+            if ($companyLogoInfo):
+                $companyLogoInfo = json_decode($companyLogoInfo);
+                ?>
+                <div class="company-logo-container">
+                    <div class="company-logo-inner-container">
+                        <img src="<?= $block->escapeUrl($companyLogoInfo->url); ?>" alt="">
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="participation-agreement">
+            <h3><?= $block->escapeHtml(__($paAgreementHeading)) ?></h3>
+            <?= $block->escapeHtml(__($customerData->getData('participation_agreement'))) ?>
+            <?php
+            $defaultAccountType = in_array($customerData->getData('support_account_type'), $accountTypeArr) ?
+            $customerData->getData('support_account_type') : 0;
+            $accountType = (isset($params['account']) && in_array($params['account'], $accountTypeArr)) ?
+            $params['account'] : $defaultAccountType;
+            ?>
+            </div>
+            <div class="psg-pa-fields">
+                <?php
+                foreach ($customerInfo as $index => $customerData):
+                    $clientId = $customerData->getClientId();
+                    $isRequired = $customerData->getIsRequired() ? 'required' : '';
+                    $fieldType = $customerData->getFieldType();
+                    $fieldLabel = trim($customerData->getFieldLabel() ?? '');
+                    $fieldValidationType = $customerData->getValidationType();
+                    $maxCharacterLength = $customerData->getMaxCharacterLength();
+                    $fieldLabel = ($fieldLabel === null) ? '' : $fieldLabel;
+                    $fieldDescription = $customerData->getFieldDescription();
+                    $fieldName = str_replace(' ', '_', trim(strtolower($fieldLabel)));
+                    $placeHolderField = $maxLength = $onKeyPress = $requiredMsg = $readOnly = $fieldValue = '';
+                   
+                    if (strtolower($fieldLabel) == 'participation code' &&
+                    !empty($customerData->getCompanyParticipationId())):
+                        $fieldValue =  $customerData->getCompanyParticipationId();
+                        $fieldValue = $block->getParticipationCodeMaskedLast4($fieldValue);
+                        $readOnly = 'readonly';
+                    elseif (strtolower($fieldLabel) == "contract holder's company name" && $clientId != 'default'):
+                        $fieldValue =  $customerData->getCompanyName();
+                        $readOnly = 'readonly';
+                    endif;
+                    if ($maxCharacterLength && ($fieldValidationType == 'text' ||
+                    $fieldValidationType == 'email' || $fieldValidationType == 'fedex_shipping_account')) {
+                        $maxLength = 'maxlength='.$maxCharacterLength;
+                    }
+                    if ($fieldValidationType == 'zipcode') {
+                        $maxLength = 'maxlength=10';
+                    }
+                    if ($fieldValidationType == 'fedex_account') {
+                        $maxLength = 'maxlength=24';
+                    }
+                    if ($fieldValidationType == 'telephone' || $fieldValidationType == 'fax') {
+                        $placeHolderField = '(___) ___-____';
+                    }
+                    if ($fieldValidationType == 'zipcode') {
+                        $onKeyPress = 'onkeypress= allowOnlyNumbers(event);formatZipCodeValue(event)';
+                    }
+                    if ($isRequired) {
+                        $requiredMsg = ucfirst(strtolower($fieldLabel)).' is required.';
+                    }
+                    ?>
+                    <?php if ($fieldLabel): ?>
+                        <div class="participation-agreement-input-container">
+                            <label class="input-label" for="participation-field-<?= $block->escapeHtml($index) ?>">
+                                <?= $block->escapeHtml(__($fieldLabel)) ?>
+                                <?= (!$isRequired)?$block->escapeHtml(__(' (Optional)')):"" ?>
+                            </label>
+                            <input class="input-textbox
+                            <?= $block->escapeHtml($block->getFieldValidationType($fieldValidationType))?>"
+                             type="<?= $block->escapeHtml($fieldType) ?>"
+                             placeholder="<?= $block->escapeHtml($placeHolderField) ?>"
+                             <?= $block->escapeHtml($onKeyPress) ?>
+                             <?= $block->escapeHtml($maxLength) ?>
+                             data-msg-required = "<?= $block->escapeHtml($requiredMsg) ?>"
+                            name=<?= $block->escapeHtml($fieldName) ?>
+                            id="participation-field-<?= $block->escapeHtml($index) ?>"
+                            data-testid="E-349679-B-1755654-TK-2969059-pa-<?= $block->escapeHtml($fieldName) ?>"
+                            <?= $block->escapeHtml($isRequired) ?>
+                            value="<?= $block->escapeHtml($fieldValue) ?>"
+                            <?= $block->escapeHtml($readOnly) ?>
+                            data-isrequired="<?= $block->escapeHtml($isRequired) ?>"
+                            >
+                            <p class="field-description"><?= $block->escapeHtml(__($fieldDescription)) ?> </p>
+                        </div>
+                     <?php endif;
+                endforeach;?>
+                <input id="account_type" name="account_type" type='hidden' value='<?= (int) $accountType ?>' />
+                <input id="client_id" name="clientId" type='hidden' value='<?= $block->escapeHtml($clientId) ?>' />
+            </div>
+            <div class="agreement-btn-container">
+                <button type="button" id="btn_agree_changes" title="Submit" class="btn-orange-submit"
+                    data-testid="E-349679-B-1653639-TK-2852853-psg-i-agree-button" disabled = "disabled">
+                    <?=$block->escapeHtml(__('I AGREE'))?>
+                </button>
+            </div>
+        </form>
+    </div>
+<?php endif; ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "cidpsgaccount": {},
+        "accountRequestValidate": {}
+        
+    },
+    ".v-validate": {
+        "Fedex_CIDPSG/js/cid_custom_validation": {}
+    }
+}
+</script>
+ 

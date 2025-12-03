@@ -1,0 +1,375 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$chargeAccData = $block->getData('charge_acc_data');
+$states = $chargeAccData[0];
+$statesBoth = $chargeAccData[1];
+$natureOfBusiness = $chargeAccData[2];
+?>
+<div class="block-title">
+    <h2><?= $block->escapeHtml(__('Charge Account Options')) ?></h2>
+    <p class="charge-account-para"><?= $block->escapeHtml(__('Please indicate if this new account will
+    be set up for charging and billing purposes. Selecting
+    this option will display additional fields for you to complete.
+    You will need to accept the charge account terms and conditions to submit this request.')) ?>
+    </p>
+</div>
+<div class="account-request-border-box">
+    <div id="charge_bill_invoice_add_container" class="form-section-container">
+        <div class="block-title-content">
+            <h5><?= $block->escapeHtml(__('Billing/Invoicing Address')) ?></h5>
+            <div data-content-type="divider" data-appearance="default" data-element="main">
+                <hr data-element="line" data-pb-style="PXRD72G">
+            </div>
+        </div>
+        <div class="checkmark-container">
+            <div class="alternate-check-container">
+                <label class="alternate-checkbox-container" for="charge_acc_set_as_default">
+                    <input type="checkbox" name="charge_acc_set_as_default" id="charge_acc_set_as_default"
+                    aria-label="set as default" class="charge-acc-bill-check-input"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-alternate-checkbox"
+                    value="0" tabindex="-1">
+                    <span class="checkmark charge-bill-checkbox" id="charge_bill_checkbox" tabindex="0"
+                    onclick="showHideSection(
+                        'charge_acc_set_as_default','charge_acc_bill_checkbox','charge_bill_section'
+                        );">
+                </span>
+                </label>
+                <input id="charge_acc_bill_checkbox" name="charge_acc_bill_checkbox_val" type="hidden" value="0" />
+                <div class="set-as-default">
+                    <?= $block->escapeHtml(__('This address is the same as the physical address entered above.')) ?>
+                </div>
+            </div>
+        </div>
+        <div class="charge-add-section" id="charge_bill_section">
+            <div id="charge_add_col1" class="left-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="charge_cid_psg_country">
+                        <?= $block->escapeHtml(__('Country')) ?>
+                    </label>
+                    <select class="dropdown-elem input-textbox"
+                    name="charge_cid_psg_country" id="charge_cid_psg_country"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-charge-cid-psg-country"
+                    onchange='getAllStates(this, "charge_cid_psg_state");'>
+                        <option value="US"><?= $block->escapeHtml(__('United States')) ?></option>
+                        <option value="CA"><?= $block->escapeHtml(__('Canada')) ?></option>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_fname">
+                        <?= $block->escapeHtml(__('First name')) ?>
+                    </label>
+                    <input
+                    class="input-textbox minimum-characters-limit-two v-validate
+                    account-user-first-name-validation"
+                    type="text"
+                    name="charge_fname" id="charge_fname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-fname"
+                    maxlength="20"
+                    data-msg-required="First name is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_lname">
+                        <?= $block->escapeHtml(__('Last name')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    account-user-last-name-validation minimum-characters-limit-two" type="text"
+                    name="charge_lname" id="charge_lname"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-lname"
+                    data-msg-required="Last name is required."
+                    maxlength="20"
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_street_add">
+                        <?= $block->escapeHtml(__('Street Address')) ?>
+                    </label>
+                    <input class="input-textbox v-validate
+                    validate-street-address"
+                    type="text" name="charge_street_add" id="charge_street_add"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-street-address"
+                    maxlength="60"
+                    data-msg-required="Street address is required."
+                    data-validate="{required:true,'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_add_line2">
+                        <?= $block->escapeHtml(__('Address Line 2 (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate"
+                    type="text" name="charge_add_line2" id="charge_add_line2"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-address-line2"
+                    maxlength="60"
+                    data-validate="{required:false, 'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_suite_other">
+                        <?= $block->escapeHtml(__('Suite/Other (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-street-address-suite
+                    set-maximum-characters-limit-seventy"
+                    type="text" name="charge_suite_other" id="charge_suite_other"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-suite-other"
+                    maxlength="70"
+                    data-validate="{required:false, 'validate-street-address-suite':true}"
+                    >
+                </div>
+            </div>
+            <div id="charge_add_col2" class="right-col-content">
+                <div class="input-container">
+                    <label class="input-label" for="charge_cid_psg_state"><?= $block->escapeHtml(__('State')) ?></label>
+                    <select class="dropdown-elem v-validate input-textbox"
+                    name="charge_cid_psg_state" id="charge_cid_psg_state"
+                    data-msg-required="State is required."
+                    data-validate="{required:true}"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-charge-cid-psg-state"
+                    >
+                        <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                        <?php foreach ($states as $state): ?>
+                        <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                        ><?= $block->escapeHtml($state['title']); ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_city">
+                        <?= $block->escapeHtml(__('City')) ?>
+                    </label>
+                    <input class="input-textbox v-validate set-maximum-characters-limit-seventy
+                    account-user-city-validation"
+                    type="text" name="charge_city" id="charge_city"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-city"
+                    maxlength="38"
+                    data-msg-required="City is required."
+                    data-validate="{required:true, 'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_postal_code">
+                        <?= $block->escapeHtml(__('Postal code')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-postal-code set-maximum-characters-limit-seventy"
+                    type="text" name="charge_postal_code" id="charge_postal_code"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-postal-code"
+                    maxlength="10"
+                    onkeypress="allowOnlyNumbers(event);formatZipCodeValue(event)"
+                    data-msg-required="Postal code is required."
+                    data-validate="{required:true, 'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_email">
+                        <?= $block->escapeHtml(__('Email')) ?>
+                    </label>
+                    <input class="input-textbox v-validate set-maximum-characters-limit-seventy"
+                    type="text" name="charge_email" id="charge_email"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-email"
+                    maxlength="70"
+                    data-msg-validate-email="Please enter a valid email address (EX:johndoe@domain.com)."
+                    data-msg-required="Email is required."
+                    data-validate="{required:true,'validate-length':true,'validate-email':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_phoneno">
+                        <?= $block->escapeHtml(__('Phone No.')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-user-phone"
+                    type="text" name="charge_phoneno" id="charge_phoneno"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-phone-no"
+                    placeholder="(___) ___-____"
+                    maxlength="14"
+                    data-msg-required="Phone No. is required."
+                    data-validate="{required:true, 'validate-length':true}"
+                    >
+                </div>
+                <div class="input-container">
+                    <label class="input-label" for="charge_fax">
+                        <?= $block->escapeHtml(__('Fax (Optional)')) ?>
+                    </label>
+                    <input class="input-textbox v-validate validate-user-fax" type="text"
+                    name="charge_fax" id="charge_fax" placeholder="(___) ___-____"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-fax"
+                    maxlength="14"
+                    data-validate="{'validate-length':true}"
+                    >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="charge_buiseness_special_info_container"
+    class="form-section-container">
+        <div id="business_info" class="left-col-content charge-business-special-info-container">
+            <div class="business-info-inner-container">
+                <div class="section-title">
+                    <h5><?= $block->escapeHtml(__('Business Information')) ?></h5>
+                    <div data-content-type="divider" data-appearance="default" data-element="main">
+                        <hr data-element="line" data-pb-style="PXRD72G">
+                    </div>
+                </div>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="business_acc_used_in">
+                    <?= $block->escapeHtml(__('This account will be used in')) ?>
+                </label>
+                <select class="input-textbox v-validate" name="business_acc_used_in" id="business_acc_used_in"
+                    onchange='getAllStates(this, "state_of_incorp", "state_of_business");'
+                    data-msg-required="State is required."
+                    data-validate="{required:true}"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-business-account-used-in"
+                    >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <option value="US"><?= $block->escapeHtml(__('United States')) ?></option>
+                    <option value="CA"><?= $block->escapeHtml(__('Canada')) ?></option>
+                    <option value="BOTH"><?= $block->escapeHtml(__('Both')) ?></option>
+                </select>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="nature_of_business">
+                    <?= $block->escapeHtml(__('Nature of business (Optional)')) ?>
+                </label>
+                <select class="input-textbox v-validate" name="nature_of_business" id="nature_of_business"
+                data-validate="{required:false}"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-nature-of-business"
+                >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <?php foreach ($natureOfBusiness as $business): ?>
+                    <option value="<?=$block->escapeHtmlAttr($business['label']); ?>"
+                    ><?= $block->escapeHtml($business['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="date_of_incorp">
+                    <?= $block->escapeHtml(__('Date of incorporation (Optional)')) ?>
+                </label>
+                <input class="input-textbox v-validate
+                set-maximum-characters-limit-seventy"
+                type="text" name="date_of_incorp" id="date_of_incorp"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-date-of-incorporation"
+                placeholder="mm/dd/yyyy"
+                data-msg-required="Date of incorporation is required."
+                data-validate="{required:false,'validate-length':true}"
+                readonly="true"
+                >
+                <div class="datepicker_date_of_incorp" id="datepicker_date_of_incorp" style="display:none;"></div>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="state_of_incorp">
+                    <?= $block->escapeHtml(__('State/Province of incorporation (Optional)')) ?>
+                </label>
+                <select class="input-textbox v-validate" name="state_of_incorp" id="state_of_incorp"
+                    data-msg-required="State/Province of incorporation is required."
+                    data-validate="{required:false}"
+                    data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-state-of-incorp"
+                    >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <?php foreach ($states as $state): ?>
+                    <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                    ><?= $block->escapeHtml($state['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="in_buiseness_since">
+                    <?= $block->escapeHtml(__('In Business since (Optional)')) ?>
+                </label>
+                <input class="input-textbox v-validate set-maximum-characters-limit-seventy"
+                type="text" name="in_buiseness_since" id="in_buiseness_since"
+                data-testid="E-349679-B-1755654-TK-2969058-foa-charge-account-options-in-business-since"
+                placeholder="mm/dd/yyyy"
+                data-msg-required="In buiseness since is required."
+                data-validate="{required:false,'validate-length':true}"
+                readonly="true"
+                >
+                <div class="datepicker_in_buiseness_since"
+                id="datepicker_in_buiseness_since" style="display:none;"></div>
+            </div>
+            <div class="input-container">
+                <label class="input-label" for="state_of_business">
+                    <?= $block->escapeHtml(__('State/Province of business (Optional)')) ?>
+                </label>
+                <select class="input-textbox v-validate" name="state_of_business" id="state_of_business"
+                data-msg-required="State/Province of business is required."
+                data-validate="{required:false}"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-state-of-business"
+                >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <?php foreach ($statesBoth as $state): ?>
+                    <option value="<?=$block->escapeHtmlAttr($state['label']); ?>"
+                    ><?= $block->escapeHtml($state['title']); ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
+        <div id="special_requirement_info" class="right-col-content special-requirement-info">
+            <div class="special-requirement-info-inner-container">
+                <div class="section-title">
+                    <h5><?= $block->escapeHtml(__('Special Requirements')) ?></h5>
+                    <div data-content-type="divider" data-appearance="default" data-element="main">
+                        <hr data-element="line" data-pb-style="PXRD72G">
+                    </div>
+                </div>
+                <div class="input-container">
+                    <div class="tooltip-conatiner">
+                        <label><?= $block->escapeHtml(__('Are there special requirements?')) ?></label>
+                        <div class="my-tooltip">
+                            <img class="tooltip-toggle tooltip-icon" alt="special requirements"
+                            src="
+                            <?= $block->escapeUrl($block->getViewFileUrl('images/cid-psg/tool-tip-white-icon.png')); ?>"
+                            tabindex="0"/>
+                            <span id="special-req-tooltip" class="tooltip-content alternate-tooltip-text">
+                                <?= $block->escapeHtml(__('Indicate whether a Purchase Order or Special
+                                Billing Requirements are required for use of the account.')) ?>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="custom-radio-btn custome-radio-btn-no">
+                        <input type="radio" id="charge_special_requirements_no" class="account_no_radio_no"
+                        name="charge_special_requirements" value="0" checked
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-charge-special-requirements-no"/>
+                        <label for="charge_special_requirements_no" tabindex="0"
+                        >
+                            <?=$block->escapeHtml(__("No")) ?>
+                        </label>
+                    </div>
+                    <div class="custom-radio-btn custome-radio-btn-yes">
+                        <input type="radio" id="charge_special_requirements_yes" class="account_no_radio_yes"
+                        name="charge_special_requirements" value="1"
+                        data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-chanrge-special-requirement-yes" />
+                        <label for="charge_special_requirements_yes" tabindex="0">
+                            <?=$block->escapeHtml(__("Yes"))?>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div id="application-req-container" class="input-container application-req-container" style="display:none">
+                <label class="input-label" for="applicable_requirements">
+                    <?= $block->escapeHtml(__('Applicable requirements')) ?>
+                </label>
+                <select class="input-textbox v-validate" name="applicable_requirements" id="applicable_requirements"
+                data-msg-required="Applicable requirements is required."
+                data-validate="{required:true}"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-applicable-requirements"
+                >
+                    <option value=""><?= $block->escapeHtml(__('Select an option')) ?></option>
+                    <option value="P001"><?= $block->escapeHtml(__('PO number')) ?></option>
+                    <option value="CSCT"><?= $block->escapeHtml(__('Cost Center')) ?></option>
+                    <option value="GLNM"><?= $block->escapeHtml(__('General ledger number')) ?></option>
+                    <option value="EMID"><?= $block->escapeHtml(__('Employee ID')) ?></option>
+                    <option value="FDX2"><?= $block->escapeHtml(__('Employee name')) ?></option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+

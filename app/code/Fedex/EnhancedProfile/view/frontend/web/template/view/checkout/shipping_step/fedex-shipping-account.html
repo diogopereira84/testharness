@@ -1,0 +1,109 @@
+<!-- ko if: toggleTigerE486666 -->
+    <!-- ko if: shouldShowShippingAccountDropdown() -->
+    <label for="fedExAccountNumber" class="fedex_account_number_label">FEDEX SHIPPING ACCOUNT NUMBER</label>
+    <div class="shipping_account_number-container">
+        <div class="fxo-select" data-bind="css: { 'is-open': isOpen }">
+            <div class="fxo-select-field pl-12 pt-12 pb-12 pr-48 fs-16 lh-24 fedex-light"
+                 role="combobox"
+                 aria-expanded="false"
+                 aria-haspopup="listbox"
+                 tabindex="0"
+                 data-bind="click: toggleDropdown,
+                            attr: { 'aria-expanded': isOpen },
+                            html: selectedShippingAccountNumberLabel() || 'I do not want to use a shipping account',
+                            event: { keydown: handleSelectKeydown }">
+            </div>
+
+            <div class="fxo-select-options pt-8"
+                 role="listbox"
+                 data-bind="visible: isOpen">
+
+                <!-- Company Account -->
+                <!-- ko if: companyShippingAccount() -->
+                <!-- ko if: isCommercial -->
+                <div role="group" aria-labelledby="company-header">
+                    <div id="company-header" class="fxo-select-option-header pl-12 pt-8 pb-8 pr-12 fs-14 lh-16 fedex-regular">
+                        <span data-bind="text: getCompanyAccountClassificationLabel()"></span>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <div class="fxo-select-option pl-12 pt-12 pb-12 pr-48 fs-16 lh-24 fedex-light"
+                     role="option"
+                     tabindex="-1"
+                     data-bind="html: getCompanyAccountNumberLabel(companyShippingAccount()),
+                                click: function(data, event) { selectAccount(companyShippingAccount()); },
+                                event: { keydown: function(data, event) { return handleOptionKeydown(companyShippingAccount(), event); } },
+                                attr: { id: 'company-shipping-account-option'}">
+                </div>
+                <!-- /ko -->
+
+                <!-- Personal Accounts -->
+                <!-- ko if: isCommercial -->
+                <div role="group" aria-labelledby="personal-header">
+                    <div id="personal-header" class="fxo-select-option-header pl-12 pt-8 pb-8 pr-12 fs-14 lh-16 fedex-regular">
+                        <span>Saved Shipping Account Number (Personal)</span>
+                    </div>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko foreach: personalShippingAccounts -->
+                <div class="fxo-select-option pl-12 pt-12 pb-12 pr-48 fs-16 lh-24 fedex-light"
+                     role="option"
+                     tabindex="-1"
+                     data-bind="click: function(data, event) { $parent.selectAccount($data); },
+                     event: { keydown: function(data, event) { return $parent.handleOptionKeydown($data, event); } },
+                     attr: { id: 'personal-shipping-account-option-'+$data.index}">
+                    <span class="account-number-masked" data-bind="html: shippingListLabel"></span>
+                </div>
+                <!-- /ko -->
+
+                <!-- ko if: personalShippingAccounts().length === 0 && isCommercial -->
+                <div class="fxo-select-option pl-12 pt-12 pb-12 pr-48 fs-16 lh-24 cl-grey-100 fedex-light disabled"
+                     role="option"
+                     aria-disabled="true"
+                     tabindex="-1">
+                    <span>You do not have a personal account linked to your profile.</span>
+                </div>
+                <!-- /ko -->
+
+                <!-- Other Section -->
+                <!-- ko if: isCommercial -->
+                <div role="group" aria-labelledby="other-header">
+                    <div id="other-header" class="fxo-select-option-header pl-12 pt-8 pb-8 pr-12 fs-14 lh-16 fedex-regular">
+                        <span>Other</span>
+                    </div>
+                </div>
+                <!-- /ko -->
+                <div class="fxo-select-option pl-12 pt-12 pb-12 pr-48 fs-16 lh-24 fedex-light"
+                     role="option"
+                     tabindex="-1"
+                     id="empty-shipping-account-option"
+                     data-bind="click: function(data, event) { selectAccount(''); },
+                                event: { keydown: function(data, event) { return handleOptionKeydown('', event); } },
+                                attr: { id: 'empty-shipping-account-option'}">
+                    <span>I do not want to use a shipping account</span>
+                </div>
+            </div>
+        </div>
+        <div id="fedExAccountNumber_validate" class="field-error"></div>
+
+        <!-- The hidden input is used to avoid breaking the shipping.js script that is tied to this field -->
+        <!-- TODO - Decouple full logic from shipping and shipping-refactored little by little. -->
+        <input id="fedExAccountNumber" type="hidden" data-bind="value: shippingAccountNumber" class="fedex_account_number-field" />
+    </div>
+    <!-- /ko -->
+    <!-- ko if: !isLoggedIn() || !customerHasAnyShippingAccount() -->
+    <div class="message-block message-info no-border d-flex mb-20">
+        <div class="message-icon icon d-no-shrink self-center info-icon">
+            <img alt="Alert icon" data-bind="attr: { src: infoUrl}" class="fa fa-info-circle icon-purple">
+        </div>
+        <div class="message-text">
+            <p class="message-title m-0" data-bind="text: shippingAccountBoxTitle"></p>
+            <p class="m-0" data-bind="text: shippingAccountBoxDescription"></p>
+        </div>
+    </div>
+    <!-- /ko -->
+    <!-- ko foreach: getRegion('shipping-account-acknowledgement') -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+<!-- /ko -->

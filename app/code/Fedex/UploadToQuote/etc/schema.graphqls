@@ -1,0 +1,251 @@
+# Copyright © Fedex, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type Query {
+  getAllQuotes(
+    filter: NegotiableQuoteFilterInput
+      @doc(
+        description: "The filter to use to determine which negotiable quotes to return."
+      )
+  ): GetAllQuotesResults
+    @resolver(class: "Fedex\\UploadToQuote\\Model\\Resolver\\GetAllQuotes")
+    @doc(
+      description: "The getAllQuotes query returns information about negotaible quotes")
+
+  getQuoteDetails(
+    uid: String @doc(description: "the unique uid of quote object.")
+  ): GetQuoteDetailsOutput
+    @resolver(class: "\\Fedex\\UploadToQuote\\Model\\Resolver\\GetQuoteDetails")
+    @doc(description: "get details of a quote")
+}
+input NegotiableQuoteFilterInput
+  @doc(
+    description: "Defines a filter to limit the negotiable quotes to return."
+  ) {
+  quote_id: String
+  quote_status: String
+  hub_centre_id: String
+  quote_creation_date: String
+  date_filter: DateFilterInput
+  price_filter: PriceFilterInput
+  contact_info: ContactInfoInput
+  nbc_required:Boolean
+  sort_by: String
+  order_by:String
+  order: String
+}
+
+input DateFilterInput {
+  type: String!
+  start_date: String!
+  end_date: String!
+}
+input PriceFilterInput {
+  min_price: String!
+}
+input NoteInput {
+  date: String
+  comment: String
+  created_by: String
+}
+input ContactInfoInput {
+  email: String
+  phone_number: String
+  first_name: String
+  last_name: String
+}
+type ContactInfo {
+  email: String
+  phone_number: String
+  first_name: String
+  last_name: String
+  retail_customer_id: String
+}
+
+type Notes @doc(description: "Defines the quote notes details.") {
+    date: String @doc(description: "The date of notes.")
+    comment: String @doc(description: "The comment on notes.")
+    created_by: String @doc(description: "The creator of notes.")
+    type: String @doc(description: "The type of notes.")
+}
+
+type GetAllQuotesResults {
+  quotes: [GetAllQuotes]! @doc(description: "A list of negotiable quotes")
+  total_count: Int!
+    @doc(description: "The number of negotiable quotes returned")
+}
+
+type GetAllQuotes
+  @doc(description: "Contains details about a negotiable quote.") {
+  uid: String @doc(description: "Quote uid")
+  quote_id: Int @doc(description: "Quote ID")
+  quote_creation_date: String @doc(description: "Quote Creation Date")
+  quote_updated_date: String @doc(description: "Quote updated Date")
+  quote_submitted_date: String @doc(description: "Quote submitted Date")
+  quote_expiration_date: String @doc(description: "Quote Expiration Date")
+  gross_amount: Float @doc(description: "Quote Gross Amount")
+  discount_amount: Float @doc(description: "Quote Discount Amount")
+  quote_total: Float @doc(description: "Quote Total")
+  quote_status: String @doc(description: "Quote Status")
+  hub_centre_id: String @doc(description: "Hub Centre ID")
+  location_id: String @doc(description: "location id")  #location_id will be same as hub_centre_id , hub_centre_id will be removed in future
+  contact_info: ContactInfo  @doc(description: "Contact information of customer")
+  activities: [Notes] @doc(description: "Quote commnets")
+  is_bid: Boolean @doc(description: "Is Bid Flag")
+  nbc_required: Boolean @doc(description: "NBC Required Flag")
+}
+
+type Alert {
+    code: String!
+    message: String!
+    alertType: String!
+}
+
+type GetQuoteDetailsOutput @doc(description: "Quote details output") {
+    alerts: [Alert] @doc(description: "List of errors and warnings encountered while processing the request.")
+    uid: String @doc(description: "The quote uid for a negotiable quote.")
+    quote_id: String @doc(description: "The quote id for a negotiable quote.")
+    quote_status: String @doc(description: "The quote status for a negotiable quote.")
+    hub_centre_id: String @doc(description: "Hub Centre ID")
+    location_id: String @doc(description: "location id")  #location_id will be same as hub_centre_id , hub_centre_id will be removed in future
+    quote_creation_date: String @doc(description: "Quote Creation Date")
+    quote_updated_date: String @doc(description: "Quote updated Date")
+    quote_submitted_date: String @doc(description: "Quote submitted Date")
+    quote_expiration_date: String @doc(description: "Quote Expiration Date")
+    rateSummary: RateSummary @doc(description: "Rate summary details")
+    contact_info: ContactInfo
+    line_items: [Items] @doc(description: "get the line items details.")
+    fxo_print_account_number: String @doc(description: "get the FXO print account number status details.")
+    company: String @doc(description: "get the company name details.")
+    activities : [Notes] @doc(description: "get the line items notes details.")
+    is_bid: Boolean @doc(description: "Is Bid Flag")
+    nbc_required: Boolean @doc(description: "NBC Required Flag")
+    coupon_code: String @doc(description: "Promo Code")
+    lte_identifier: String @doc(description: "LTE Identifier")
+}
+
+type Items @doc(description: "Defines the quote line items.") {
+    item_id: String @doc(description: "The item id of line item.")
+    quote_id: String @doc(description: "The quote id of line item.")
+    name: String @doc(description: "The name of line item.")
+    qty: Int @doc(description: "The qty of line item.")
+    price: String @doc(description: "The price of line item.")
+    editable: Boolean @doc(description: "False if the line item is a 3P product.")
+    discount_amount: String @doc(description: "The discount_amount of line item.")
+    base_price: String @doc(description: "The base_price of line item.")
+    row_total: String @doc(description: "The row_total of line item.")
+    product : String @doc(description: "product json object.")
+    original_files: String @doc(description: "original files json object")
+    lineItemRateDetails : LineItemRateDetails @doc(description: "Line Item Rate Details")
+}
+
+type Mutation {
+    updateNegotiableQuote(
+        input: UpdateNegotiableQuoteInput
+        @doc(description: "An input object that changes the line items details in a negotiable quote.")
+    ): GetQuoteDetailsOutput
+    @resolver(class: "Fedex\\UploadToQuote\\Model\\Resolver\\UpdateQuoteLineItem")
+    @doc(description: "Change line items for an existing negotiable quote.")
+}
+
+input UpdateNegotiableQuoteInput
+  @doc(
+    description: "Defines an input to update line items for a negotiable quote."
+  ) {
+  uid: String! @doc(description: "Quote ID")
+  quote_items: [QuoteItemsInput] @doc(description: "Quote details")
+  quote_action: String! @doc(description: "Action: save/sent_to_customer")
+  comment: String @doc(description: "comment to add on a particular quote")
+  nbc_required: Boolean @doc(description: "NBC Required Flag")
+  trigger_cancellation_email: Boolean @doc(
+    description: "Trigger cancellation email for bids. Defaults to true if not provided."
+  )
+  coupon_code: String @doc(description: "Promo Code")
+}
+input QuoteItemsInput {
+  item_id: String @doc(description: "Quote Item ID")
+  item_action: String! @doc(description: "Quote Item Action:update/delete")
+  product: String! @doc(description: "product json")
+}
+type RateSummary {
+  grossAmount: Float
+  discounts: [RateDiscount]
+  totalDiscountAmount: Float
+  netAmount: Float
+  taxableAmount: Float
+  taxAmount: Float
+  totalAmount: Float
+  totalFees: [Fee]
+  productsTotalAmount: Float
+  deliveriesTotalAmount: Float
+  estimatedVsActual: String
+}
+
+type RateDiscount {
+  type: String
+  amount: Float
+}
+
+type Fee {
+  feeAmount: Float
+  feeType: String
+}
+
+type LineItemRateDetails {
+  instanceId: String
+  productId: String
+  type: String
+  name: String
+  userProductName: String
+  unitQuantity: Int
+  unitOfMeasurement: String
+  priceable: Boolean
+  productRetailPrice: String
+  productLinePrice: String
+  productDiscountAmount: String
+  productLineDiscounts: [RateDiscount]
+  productLineDetails: [ProductLineDetail]
+  links: [Link]
+  specialInstructions: String
+  reorderCatalogReference: ReorderCatalogReference
+  lineReorderEligibility: String
+  vendorReference: VendorReference
+  productTaxAmount: String
+}
+
+type ProductLineDiscount {
+  type: String
+  amount: String
+}
+
+type ProductLineDetail {
+  detailCode: String
+  priceRequired: Boolean
+  priceOverridable: Boolean!
+  instanceId: Int
+  description: String
+  unitQuantity: Int
+  quantity: Int
+  detailPrice: String
+  detailDiscountPrice: String
+  detailUnitPrice: String
+  detailDiscountedUnitPrice: String
+  detailDiscounts: [RateDiscount]
+  detailCategory: String
+}
+
+type Link {
+  href: String!
+  rel: String!
+}
+
+type ReorderCatalogReference {
+  catalogProductId: String!
+  version: String!
+  editable: Boolean!
+}
+
+type VendorReference {
+  vendorId: String!
+  vendorProductName: String!
+  vendorProductDesc: String!
+}

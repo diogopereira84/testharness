@@ -1,0 +1,215 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">customergroup_form.customergroup_form_data_source</item>
+		</item>
+		<item name="label" xsi:type="string" translate="true">Group Information</item>
+		<item name="reverseMetadataMerge" xsi:type="boolean">true</item>
+	</argument>
+	<settings>
+		<namespace>customergroup_form</namespace>
+		<dataScope>data</dataScope>
+		<layout>
+            <navContainerName>left</navContainerName>
+            <type>tabs</type>
+        </layout>
+		<deps>
+			<dep>customergroup_form.customergroup_form_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource name="customergroup_form_data_source">
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Fedex_CustomerGroup/js/form/provider</item>
+			</item>
+		</argument>
+		<settings>
+			<submitUrl path="customergroup/index/save"/>
+		</settings>
+		<dataProvider name="customergroup_form_data_source" class="Fedex\CustomerGroup\Model\DataProvider">
+			<settings>
+				<requestFieldName>customer_group_code</requestFieldName>
+				<primaryFieldName>customer_group_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<fieldset name="customergroup_general">
+		<settings>
+			<label>Group Information</label>
+		</settings>
+		<field name="customer_group_code" formElement="input" sortOrder="1" class="Fedex\CustomerGroup\Ui\Component\Form\Field\CustomerGroup">
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Group Name</label>
+				<dataScope>code</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+					<rule name="max_text_length" xsi:type="number">200</rule>
+				</validation>
+				<notice>Maximum length must be less then 200 characters.</notice>
+			</settings>
+		</field>
+		<field name="customer_group_id" formElement="hidden" sortOrder="1" class="Fedex\CustomerGroup\Ui\Component\Form\Field\GroupId">
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Group ID</label>
+				<dataScope>id</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="parent_group_id" component="Fedex_CustomerGroup/js/form/components/parentgoup" sortOrder="20" formElement="select" class="Fedex\CustomerGroup\Ui\Component\Form\Field\ParentGroup">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="category_url" xsi:type="url" path="customergroup/categories/fetch"/>
+                    <item name="filterOptions" xsi:type="boolean">true</item>
+                    <item name="multiple" xsi:type="boolean">false</item>
+                    <item name="showCheckbox" xsi:type="boolean">false</item>
+                    <item name="disableLabel" xsi:type="boolean">true</item>
+                    <item name="levelsVisibility" xsi:type="number">1</item>
+                </item>
+            </argument>
+            <settings>
+                <elementTmpl>ui/grid/filters/elements/ui-select</elementTmpl>
+                <label translate="true">Parent Group</label>
+                <dataScope>data.parent</dataScope>
+                <componentType>field</componentType>
+                <listens>
+                    <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
+                </listens>
+            </settings>
+            <formElements>
+                <select>
+                    <settings>
+                        <options class="Fedex\CustomerGroup\Ui\Component\Form\ParentGroup\Options"/>
+                    </settings>
+                </select>
+            </formElements>
+        </field>
+		<field name="tax_class_id" formElement="select">
+					<argument name="data" xsi:type="array">
+						<item name="options" xsi:type="object">Magento\Tax\Model\TaxClass\Source\Customer</item>
+					</argument>
+					<settings>
+						<dataType>text</dataType>
+						<label translate="true">Tax Class</label>
+                        <validation>
+                        <rule name="required-entry" xsi:type="boolean">true</rule>
+                        </validation>
+			        </settings>
+		</field>
+		<field name="customer_group_excluded_website_ids" formElement="multiselect">
+					<argument name="data" xsi:type="array">
+						<item name="options" xsi:type="object">Fedex\CustomerGroup\Ui\Component\Form\ExcludedWebsites\Options</item>
+					</argument>
+					<settings>
+						<dataType>text</dataType>
+						<label translate="true">Excluded Website(s)</label>
+						<notice>Select websites you want to exclude from this customer group.</notice>
+					</settings>
+		</field>
+	</fieldset>
+	<fieldset name="customergroup_catalog_permission">
+		<settings>
+			<label>Folder Level Permissions</label>
+		</settings>
+        <container name="customergroup_catalog_permission_wrapper" template="Fedex_CustomerGroup/default-permission-wrapper">
+            <field name="category_ids" component="Fedex_CustomerGroup/js/components/categories" sortOrder="20" formElement="select" class="Fedex\CustomerGroup\Ui\Component\Form\Field\CategoryIds">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="scopeLabel" xsi:type="string" translate="true">[Global]</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="multiple" xsi:type="boolean">true</item>
+                        <item name="showCheckbox" xsi:type="boolean">true</item>
+                        <item name="disableLabel" xsi:type="boolean">true</item>
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <elementTmpl>Fedex_CustomerGroup/form/filters/elements/ui-select</elementTmpl>
+                    <label translate="true">Categories</label>
+                    <dataScope>data.categories</dataScope>
+                    <componentType>field</componentType>
+                    <listens>
+                        <link name="${ $.namespace }.${ $.namespace }:responseData">setParsed</link>
+                    </listens>
+                </settings>
+                <formElements>
+                    <select>
+                        <settings>
+                            <options class="Fedex\CustomerGroup\Ui\Component\Form\Categories\Options"/>
+                        </settings>
+                    </select>
+                </formElements>
+            </field>
+            <button name="create_category_button" component="Magento_Ui/js/form/components/button">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="formElement" xsi:type="string">container</item>
+                        <item name="buttonClasses" xsi:type="string">open-insert-new-category-form-modal-button</item>
+                        <item name="actions" xsi:type="array">
+                            <item name="0" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.parentName}.insert_new_category_form_modal.insert_new_category_form_loader</item>
+                                <item name="actionName" xsi:type="string">destroyInserted</item>
+                            </item>
+                            <item name="1" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.parentName}.insert_new_category_form_modal</item>
+                                <item name="actionName" xsi:type="string">openModal</item>
+                            </item>
+                            <item name="2" xsi:type="array">
+                                <item name="targetName" xsi:type="string">${ $.parentName}.insert_new_category_form_modal.insert_new_category_form_loader</item>
+                                <item name="actionName" xsi:type="string">render</item>
+                            </item>
+                        </item>
+                    </item>
+                </argument>
+                <settings>
+                    <title translate="true">New Category</title>
+                    <imports>
+                        <link name="parentId">${ $.provider}:data.customer_id</link>
+                    </imports>
+                </settings>
+            </button>
+            <modal name="insert_new_category_form_modal">
+                <settings>
+                    <options>
+                        <option name="title" xsi:type="string" translate="true">New Category</option>
+                    </options>
+                </settings>
+                <insertForm name="insert_new_category_form_loader" component="Fedex_CustomerGroup/js/insert-form">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="formProvider" xsi:type="string">${ $.provider}</item>
+                            <item name="categoryModalProvider" xsi:type="string">${ $.parentName }</item>
+                        </item>
+                    </argument>
+                    <settings>
+                        <formSubmitType>ajax</formSubmitType>
+                        <renderUrl path="mui/index/render_handle">
+                            <param name="handle">customergroup_insert_newcategory</param>
+                            <param name="buttons">1</param>
+                        </renderUrl>
+                        <loading>false</loading>
+                        <toolbarContainer>${ $.parentName }</toolbarContainer>
+                        <externalProvider>${ $.ns }.insert_new_category_form_data_source</externalProvider>
+                        <ns>insert_new_category_form</ns>
+                        <exports>
+                            <link name="parentId">${ $.externalProvider }:data.parent_id</link>
+                        </exports>
+                        <imports>
+                            <link name="parentId">${ $.provider}:data.customer_id</link>
+                        </imports>
+                    </settings>
+                </insertForm>
+            </modal>
+        </container>
+    </fieldset>
+</form>

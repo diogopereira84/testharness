@@ -1,0 +1,59 @@
+<?php
+    /** @var $viewModel Fedex\NotificationBanner\ViewModel\NotificationBanner  */
+    $notificationBannerViewModel = $block->getNotificationBannerViewModel();
+?>
+<!-- Notification Banner Start-->
+<?php //Toggle on behavior
+        $notificationBannerConf = $notificationBannerViewModel->getBannerConfiguration();
+        $isBannerEnabled = $notificationBannerConf['enabled'] ?? null;
+        $isPageNotFound = $notificationBannerConf['isPageNotFound'] ?? null;
+        if ($isBannerEnabled && !$isPageNotFound) {
+            $notificationTitle = $notificationBannerConf['banner_title'] ?? null;
+            $notificationIconType = $notificationBannerConf['iconography'] ?? null;
+            $notificationBannerIcon = $notificationBannerViewModel->getNotificationBannerIcon($notificationIconType);
+            $notificationBodyText = $notificationBannerConf['description'] ?? null;
+            $notificationCtaText = $notificationBannerConf['cta_text'] ?? null;
+            $notificationBannerCtaLink = $notificationBannerConf['cta_link'] ?? null;
+            // D-199639 URL fix
+            $hyperText = 'https://';
+            $hyperTextCheck = $notificationBannerCtaLink != null ? !str_contains($notificationBannerCtaLink, $hyperText) : false;
+            if ($hyperTextCheck) {
+                $notificationBannerCtaLink = $hyperText . '' .$notificationBannerCtaLink;
+            }
+            $notiBannerOpenInNewWindow = $notificationBannerConf['link_open_in_new_tab'] ?? null;
+            $notificationBannerBgColor = $notificationIconType == 'warning' ?
+            'style="background: #f9b200;"' : 'style="background: none;"';
+            $notificationBannerBorderColor = $notificationIconType == 'warning' ?
+            'border: 1px solid #f9b200;' : 'border: 1px solid #4D148C;';
+            ?>
+            <div class="notification-banner d-flex" id="notificationBanner" role="dialog"
+                aria-label="welcome-to-our-beta-site" style='display:none; <?= $notificationBannerBorderColor ?>'>
+                <div class="notification-banner-box-inner" <?= $notificationBannerBgColor ?>>
+                    <img src="<?= $block->escapeUrl($notificationBannerIcon);?>" alt="Notification Icon"/>
+                </div>
+                <div class="notification-banner-warning-msg">
+                    <h4><?= $notificationTitle ?></h4>
+                    <p class="notification-banner-content">
+                        <?= /* @noEscape */ $notificationBodyText; ?>
+                    </p>
+                    <p>
+                        <?php if ($notificationCtaText): ?>
+                        <a title="<?= $notificationBannerCtaLink ?>"
+                        href="<?= $block->escapeUrl($notificationBannerCtaLink) ?>"
+                        target="<?= $notiBannerOpenInNewWindow ? '_blank' : ''; ?>"
+                        role="button" rel="noopener" class="notification-banner-preview-button"><?= $notificationCtaText ?></a>
+                        <?php endif; ?>
+                    </p>
+                </div>
+                <span class="notification-banner-close-icon pointer" role="button" tabindex="0"
+                aria-label="Close Notification"></span>
+            </div>
+            <script type="text/x-magento-init">
+                {
+                    "*": {
+                        "Fedex_NotificationBanner/js/header/notification_banner": {}
+                    }
+                }
+            </script>
+        <?php } ?>
+<!-- Notification Banner End-->

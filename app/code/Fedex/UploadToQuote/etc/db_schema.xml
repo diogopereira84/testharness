@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+	<table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
+		<!--Create column to save location code-->
+		<column xsi:type="varchar" name="quote_mgnt_location_code" nullable="true" length="10" comment="Quote Mgnt Location Code"/>
+		<!--Create column to sent to Erp Quote code-->
+		<column xsi:type="boolean" name="sent_to_erp" nullable="true" default="false" comment="Sent to ERP Quote"/>
+		<!--Create column to Identify Epro quote-->
+		<column xsi:type="boolean" name="is_epro_quote" nullable="true" default="false" comment="Is Epro Quote"/>
+		<index referenceId="QUOTE_MGNT_LOCATION_CODE" indexType="btree">
+            <column name="quote_mgnt_location_code"/>
+        </index>
+		<index referenceId="QUOTE_MGNT_CREATED_AT" indexType="btree">
+            <column name="created_at"/>
+        </index>
+	</table>
+	<table name="negotiable_quote" resource="checkout" engine="innodb" comment="Sales Negotiable Quote">
+		<!--Create column to save location code-->
+		<column xsi:type="varchar" name="quote_mgnt_location_code" nullable="true" length="10" comment="Quote Mgnt Location Code"/>
+		<index referenceId="QUOTE_MGNT_LOCATION_CODE" indexType="btree">
+            <column name="quote_mgnt_location_code"/>
+        </index>
+		<index referenceId="QUOTE_MGNT_STATUS" indexType="btree">
+            <column name="status"/>
+        </index>
+	</table>
+    <table name="negotiable_quote_comment" resource="checkout" engine="innodb" comment="Negotiable quote comments">
+		<!--Create column to save quote comment type-->
+		<column xsi:type="varchar" name="type" nullable="true" length="255" comment="Quote Comment type"/>
+	</table>
+	<table name="quote_item" resource="checkout" engine="innodb" comment="Quote Item">
+		<!--Create column to SI type-->
+		<column xsi:type="varchar" name="si_type" nullable="false" length="40" comment="Save SI type of file"/>
+		<index referenceId="QUOTE_TIME_SI_TYPE" indexType="btree">
+            <column name="si_type"/>
+        </index>
+	</table>
+    <table name="sales_order_item">
+        <index referenceId="FEDEX_SALES_ORDER_ITEM_QUOTE_ITEM_ID_IDX" indexType="btree">
+            <column name="quote_item_id"/>
+        </index>
+
+    </table>
+</schema>

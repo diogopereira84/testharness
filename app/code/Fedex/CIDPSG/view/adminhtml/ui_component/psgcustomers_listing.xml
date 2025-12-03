@@ -1,0 +1,120 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">psgcustomers_listing.psgcustomers_index_listing_data_source</item>
+		</item>
+	</argument>
+	<settings>
+		<spinner>psg_customers_columns</spinner>
+		<deps>
+			<dep>psgcustomers_listing.psgcustomers_index_listing_data_source</dep>
+		</deps>
+		<buttons>
+			<button name="add">
+				<url path="*/*/new/psg/form"/>
+				<class>primary</class>
+				<label translate="true">Add New PSG Customer</label>
+			</button>
+		</buttons>
+	</settings>
+	<dataSource name="psgcustomers_index_listing_data_source" component="Magento_Ui/js/grid/provider">
+		<settings>
+			<updateUrl path="mui/index/render"/>
+		</settings>
+		<dataProvider name="psgcustomers_index_listing_data_source" class="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+			<settings>
+				<requestFieldName>id</requestFieldName>
+				<primaryFieldName>entity_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<listingToolbar name="listing_top">
+		<settings>
+			<sticky>true</sticky>
+		</settings>
+		<columnsControls name="columns_controls"/>
+		<filters name="listing_filters"/>
+		<bookmark name="bookmarks"/>
+		<paging name="listing_paging"/>
+		<filterSearch name="fulltext">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="provider" xsi:type="string">psgcustomers_listing.psgcustomers_index_listing_data_source</item>
+					<item name="chipsProvider" xsi:type="string">psgcustomers_listing.psgcustomers_listing.listing_top.listing_filters_chips</item>
+					<item name="storageConfig" xsi:type="array">
+						<item name="provider" xsi:type="string">psgcustomers_listing.psgcustomers_listing.listing_top.bookmarks</item>
+						<item name="namespace" xsi:type="string">current.search</item>
+					</item>
+				</item>
+			</argument>
+		</filterSearch>
+		<massaction name="listing_massaction" component="Magento_Ui/js/grid/tree-massactions">
+			<action name="delete">
+				<settings>
+					<confirm>
+						<message translate="true">Are you sure you want to delete the selected customers?</message>
+						<title translate="true">Delete items</title>
+					</confirm>
+					<url path="psgcustomers/index/massDelete"/>
+					<type>delete</type>
+					<label translate="true">Delete</label>
+				</settings>
+			</action>
+		</massaction>
+	</listingToolbar>
+	<columns name="psg_customers_columns">
+		<settings>
+		</settings>
+		<selectionsColumn name="ids" sortOrder="10">
+			<settings>
+				<indexField>entity_id</indexField>
+			</settings>
+		</selectionsColumn>
+		<column name="client_id" sortOrder="20">
+			<settings>
+				<filter>text</filter>
+				<sorting>desc</sorting>
+				<label translate="true">Client ID</label>
+			</settings>
+		</column>
+		<column name="company_participation_id" sortOrder="30">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Participant ID</label>
+			</settings>
+		</column>
+		<column name="company_name" sortOrder="40">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Contract Holder's Company Name</label>
+			</settings>
+		</column>
+		<column name="created_by" sortOrder="50">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Created By</label>
+			</settings>
+		</column>
+		<column name="updated_by" sortOrder="60">
+			<settings>
+				<filter>text</filter>
+				<label translate="true">Updated By</label>
+			</settings>
+		</column>
+		<actionsColumn name="actions" class="Fedex\CIDPSG\Ui\Component\Listing\Column\PsgCustomerActions" sortOrder="70">
+			<settings>
+				<indexField>entity_id</indexField>
+				<resizeEnabled>false</resizeEnabled>
+				<resizeDefaultWidth>107</resizeDefaultWidth>
+			</settings>
+		</actionsColumn>
+	</columns>
+</listing>

@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\HTTP\ClientInterface">
+        <plugin name="http_request_logger_magento_http" type="Fedex\HttpRequestLogger\Plugin\ClientInterfacePlugin"/>
+    </type>
+    <type name="Laminas\Http\Client">
+        <plugin name="http_request_logger_laminas_http" type="Fedex\HttpRequestLogger\Plugin\LaminasHttpClientPlugin"/>
+    </type>
+    <type name="GuzzleHttp\Client">
+        <plugin name="http_request_logger_guzzle_http" type="Fedex\HttpRequestLogger\Plugin\GuzzleHttpClientPlugin"/>
+    </type>
+    <preference for="Fedex\HttpRequestLogger\Api\ConfigInterface" type="Fedex\HttpRequestLogger\Model\Config"/>
+</config>

@@ -1,0 +1,78 @@
+<?php
+/**
+ * @category     Fedex
+ * @package      Fedex_Cart
+ * @copyright    Copyright (c) 2022 Fedex
+ * @author       Eduardo Diogo Dias <edias@mcfadyen.com>
+ */
+declare(strict_types=1);
+
+namespace Fedex\Cart\Test\Unit\Model\Quote;
+
+use Fedex\Cart\Model\Quote\IntegrationItem;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+
+class IntegrationItemTest extends TestCase
+{
+    private const INTEGRATION_ITEM_ID = 30;
+    private const QUOTE_ID = 89132;
+    private const ITEM_ID = 91;
+    // @codingStandardsIgnoreStart
+    private const ITEM_DATA = '{"fxoMenuId":"1614105200640-4","fxoProductInstance":{"id":"1641146269419","name":"Flyers","productConfig":{"product":{"productionContentAssociations":[],"userProductName":"Flyers","id":"1463680545590","version":1,"name":"Flyer","qty":50,"priceable":true,"instanceId":1641146269419,"proofRequired":false,"isOutSourced":false,"features":[{"id":"1448981549109","name":"Paper Size","choice":{"id":"1448986650332","name":"8.5x11","properties":[{"id":"1449069906033","name":"MEDIA_HEIGHT","value":"11"},{"id":"1449069908929","name":"MEDIA_WIDTH","value":"8.5"},{"id":"1571841122054","name":"DISPLAY_HEIGHT","value":"11"},{"id":"1571841164815","name":"DISPLAY_WIDTH","value":"8.5"}]}},{"id":"1448981549581","name":"Print Color","choice":{"id":"1448988600611","name":"Full Color","properties":[{"id":"1453242778807","name":"PRINT_COLOR","value":"COLOR"}]}},{"id":"1448981549269","name":"Sides","choice":{"id":"1448988124560","name":"Single-Sided","properties":[{"id":"1470166759236","name":"SIDE_NAME","value":"Single Sided"},{"id":"1461774376168","name":"SIDE","value":"SINGLE"}]}},{"id":"1448984679218","name":"Orientation","choice":{"id":"1449000016327","name":"Horizontal","properties":[{"id":"1453260266287","name":"PAGE_ORIENTATION","value":"LANDSCAPE"}]}},{"id":"1448981549741","name":"Paper Type","choice":{"id":"1448988664295","name":"Laser(32 lb.)","properties":[{"id":"1450324098012","name":"MEDIA_TYPE","value":"E32"},{"id":"1453234015081","name":"PAPER_COLOR","value":"#FFFFFF"},{"id":"1470166630346","name":"MEDIA_NAME","value":"32lb"},{"id":"1471275182312","name":"MEDIA_CATEGORY","value":"RESUME"}]}}],"pageExceptions":[],"contentAssociations":[{"parentContentReference":"12902125413169047140007771472401978681858","contentReference":"12901703829109282057207386197891193197015","contentType":"IMAGE","fileName":"nature1.jpeg","contentReqId":"1455709847200","name":"Front_Side","desc":null,"purpose":"SINGLE_SHEET_FRONT","specialInstructions":"","printReady":true,"pageGroups":[{"start":1,"end":1,"width":11,"height":8.5,"orientation":"LANDSCAPE"}]}],"properties":[{"id":"1453242488328","name":"ZOOM_PERCENTAGE","value":"50"},{"id":"1453243262198","name":"ENCODE_QUALITY","value":"100"},{"id":"1453894861756","name":"LOCK_CONTENT_ORIENTATION","value":false},{"id":"1453895478444","name":"MIN_DPI","value":"150.0"},{"id":"1454950109636","name":"USER_SPECIAL_INSTRUCTIONS","value":null},{"id":"1455050109636","name":"DEFAULT_IMAGE_WIDTH","value":"8.5"},{"id":"1455050109631","name":"DEFAULT_IMAGE_HEIGHT","value":"11"},{"id":"1464709502522","name":"PRODUCT_QTY_SET","value":"50"},{"id":"1459784717507","name":"SKU","value":"40005"},{"id":"1470151626854","name":"SYSTEM_SI","value":"ATTENTION TEAM MEMBER: Use the following instructions to produce this order.DO NOT use the Production Instructions listed above. Flyer Package specifications: Yield 50, Single Sided Color 8.5x11 32lb (E32), Full Page, Add Retail: SKU 40005"},{"id":"1494365340946","name":"PREVIEW_TYPE","value":"DYNAMIC"},{"id":"1470151737965","name":"TEMPLATE_AVAILABLE","value":"YES"},{"id":"1459784776049","name":"PRICE","value":null},{"id":"1490292304798","name":"MIGRATED_PRODUCT","value":"true"},{"id":"1558382273340","name":"PNI_TEMPLATE","value":"NO"},{"id":"1602530744589","name":"CONTROL_ID","value":"4"}]},"productPresetId":"1602518818916","fileCreated":"2022-01-02T17:58:49.452Z"},"productRateTotal":{"unitPrice":null,"currency":"USD","quantity":50,"price":"$34.99","priceAfterDiscount":"$34.99","unitOfMeasure":"EACH","totalDiscount":"$0.00","productLineDetails":[{"detailCode":"40005","description":"Full Pg Clr Flyr 50","detailCategory":"PRINTING","unitQuantity":1,"detailPrice":"$34.99","detailDiscountPrice":"$0.00","detailUnitPrice":"$34.9900","detailDiscountedUnitPrice":"$0.00"}]},"isUpdateButtonVisible":false,"link":{"href":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAABbCAYAgg=="},"quantityChoices":["50","100","250","500","1000"],"isEditable":true,"isEdited":false,"fileManagementState":{"availableFileItems":[{"file":{},"fileItem":{"fileId":"12902125413169047140007771472401978681858","fileName":"nature1.jpeg","fileExtension":"jpeg","fileSize":543986,"createdTimestamp":"2022-01-02T17:58:55.914Z"},"uploadStatus":"Success","errorMsg":"","uploadProgressPercentage":100,"uploadProgressBytesLoaded":544177,"selected":false,"httpRsp":{"successful":true,"output":{"document":{"documentId":"12902125413169047140007771472401978681858","documentName":"nature1.jpeg","documentSize":543984,"printReady":false}}}}],"projects":[{"fileItems":[{"uploadStatus":"Success","errorMsg":"","selected":false,"originalFileItem":{"fileId":"12902125413169047140007771472401978681858","fileName":"nature1.jpeg","fileExtension":"jpeg","fileSize":543986,"createdTimestamp":"2022-01-02T17:58:55.914Z"},"convertStatus":"Success","convertedFileItem":{"fileId":"12901703829109282057207386197891193197015","fileName":"nature1.jpeg","fileExtension":"pdf","fileSize":546132,"createdTimestamp":"2022-01-02T17:58:58.708Z","numPages":1},"orientation":"LANDSCAPE","conversionResult":{"parentDocumentId":"12902125413169047140007771472401978681858","originalDocumentName":"nature1.jpeg","printReadyFlag":true,"previewURI":"https://dunc6.dmz.fedex.com/document/fedexoffice/v1/documents/12901703829109282057207386197891193197015/preview","documentSize":546132,"documentType":"IMAGE","lowResImage":true,"documentId":"12901703829109282057207386197891193197015","metrics":{"pageCount":1,"pageGroups":[{"startPageNum":1,"endPageNum":1,"pageWidthInches":11,"pageHeightInches":8.5}]}},"contentAssociation":{"parentContentReference":"12902125413169047140007771472401978681858","contentReference":"12901703829109282057207386197891193197015","contentType":"IMAGE","fileSizeBytes":"546132","fileName":"nature1.jpeg","printReady":true,"pageGroups":[{"start":1,"end":1,"width":11,"height":8.5,"orientation":"LANDSCAPE"}],"contentReqId":"1455709847200","name":"Front_Side","desc":null,"purpose":"SINGLE_SHEET_FRONT","specialInstructions":""}}],"projectName":"Flyers","productId":"1463680545590","productPresetId":"1602518818916","productVersion":null,"controlId":"4","maxFiles":2,"productType":"Flyers","availableSizes":"8.5\"x11\"","convertStatus":"Success","showInList":true,"firstInList":false,"accordionOpen":true,"needsToBeConverted":false,"selected":false,"mayContainUserSelections":false,"supportedProductSizes":{"featureId":"1448981549109","featureName":"Size","choices":[{"choiceId":"1448986650332","choiceName":"8.5\"x11\"","properties":[{"name":"MEDIA_HEIGHT","value":"11"},{"name":"MEDIA_WIDTH","value":"8.5"},{"name":"DISPLAY_HEIGHT","value":"11"},{"name":"DISPLAY_WIDTH","value":"8.5"}]}]},"productConfig":{"product":{"productionContentAssociations":[],"userProductName":"Flyers","id":"1463680545590","version":1,"name":"Flyer","qty":50,"priceable":true,"instanceId":1641146269419,"proofRequired":false,"isOutSourced":false,"features":[{"id":"1448981549109","name":"Paper Size","choice":{"id":"1448986650332","name":"8.5x11","properties":[{"id":"1449069906033","name":"MEDIA_HEIGHT","value":"11"},{"id":"1449069908929","name":"MEDIA_WIDTH","value":"8.5"},{"id":"1571841122054","name":"DISPLAY_HEIGHT","value":"11"},{"id":"1571841164815","name":"DISPLAY_WIDTH","value":"8.5"}]}},{"id":"1448981549581","name":"Print Color","choice":{"id":"1448988600611","name":"Full Color","properties":[{"id":"1453242778807","name":"PRINT_COLOR","value":"COLOR"}]}},{"id":"1448981549269","name":"Sides","choice":{"id":"1448988124560","name":"Single-Sided","properties":[{"id":"1470166759236","name":"SIDE_NAME","value":"Single Sided"},{"id":"1461774376168","name":"SIDE","value":"SINGLE"}]}},{"id":"1448984679218","name":"Orientation","choice":{"id":"1449000016327","name":"Horizontal","properties":[{"id":"1453260266287","name":"PAGE_ORIENTATION","value":"LANDSCAPE"}]}},{"id":"1448981549741","name":"Paper Type","choice":{"id":"1448988664295","name":"Laser(32 lb.)","properties":[{"id":"1450324098012","name":"MEDIA_TYPE","value":"E32"},{"id":"1453234015081","name":"PAPER_COLOR","value":"#FFFFFF"},{"id":"1470166630346","name":"MEDIA_NAME","value":"32lb"},{"id":"1471275182312","name":"MEDIA_CATEGORY","value":"RESUME"}]}}],"pageExceptions":[],"contentAssociations":[{"parentContentReference":"12902125413169047140007771472401978681858","contentReference":"12901703829109282057207386197891193197015","contentType":"IMAGE","fileName":"nature1.jpeg","contentReqId":"1455709847200","name":"Front_Side","desc":null,"purpose":"SINGLE_SHEET_FRONT","specialInstructions":"","printReady":true,"pageGroups":[{"start":1,"end":1,"width":11,"height":8.5,"orientation":"LANDSCAPE"}]}],"properties":[{"id":"1453242488328","name":"ZOOM_PERCENTAGE","value":"50"},{"id":"1453243262198","name":"ENCODE_QUALITY","value":"100"},{"id":"1453894861756","name":"LOCK_CONTENT_ORIENTATION","value":false},{"id":"1453895478444","name":"MIN_DPI","value":"150.0"},{"id":"1454950109636","name":"USER_SPECIAL_INSTRUCTIONS","value":null},{"id":"1455050109636","name":"DEFAULT_IMAGE_WIDTH","value":"8.5"},{"id":"1455050109631","name":"DEFAULT_IMAGE_HEIGHT","value":"11"},{"id":"1464709502522","name":"PRODUCT_QTY_SET","value":"50"},{"id":"1459784717507","name":"SKU","value":"40005"},{"id":"1470151626854","name":"SYSTEM_SI","value":"ATTENTION TEAM MEMBER: Use the following instructions to produce this order.DO NOT use the Production Instructions listed above. Flyer Package specifications: Yield 50, Single Sided Color 8.5x11 32lb (E32), Full Page, Add Retail: SKU 40005"},{"id":"1494365340946","name":"PREVIEW_TYPE","value":"DYNAMIC"},{"id":"1470151737965","name":"TEMPLATE_AVAILABLE","value":"YES"},{"id":"1459784776049","name":"PRICE","value":null},{"id":"1490292304798","name":"MIGRATED_PRODUCT","value":"true"},{"id":"1558382273340","name":"PNI_TEMPLATE","value":"NO"},{"id":"1602530744589","name":"CONTROL_ID","value":"4"}]},"productPresetId":"1602518818916","fileCreated":"2022-01-02T17:58:49.452Z"}}],"catalogManageFilesToggle":true}},"productType":"PRINT_PRODUCT","instanceId":null}';
+    // @codingStandardsIgnoreEnd
+
+    /**
+     * @var IntegrationItem
+     */
+    private IntegrationItem $integrationItem;
+
+    /**
+     * @return void
+     */
+    public function setUp(): void
+    {
+        $contextMock = $this->createMock(Context::class);
+        $registryMock = $this->createMock(Registry::class);
+        $abstractResourceMock = $this->getMockBuilder(AbstractResource::class)
+            ->onlyMethods(['_construct', 'getConnection'])
+            ->addMethods(['getIdFieldName', 'saveInSetIncluding'])
+            ->getMockForAbstractClass();
+        $abstractDbMock = $this->createMock(AbstractDb::class);
+
+        $this->integrationItem = new IntegrationItem(
+            $contextMock,
+            $registryMock,
+            $abstractResourceMock,
+            $abstractDbMock
+        );
+
+        $this->setData();
+    }
+
+    public function testGetSet()
+    {
+        $this->assertEquals(
+            $this->integrationItem->getIntegrationItemId(),
+            self::INTEGRATION_ITEM_ID
+        );
+        $this->assertEquals(
+            $this->integrationItem->getItemId(),
+            self::ITEM_ID
+        );
+        $this->assertEquals(
+            $this->integrationItem->getItemData(),
+            self::ITEM_DATA
+        );
+    }
+
+    private function setData()
+    {
+        $this->integrationItem->setIntegrationItemId(self::INTEGRATION_ITEM_ID);
+        $this->integrationItem->setItemId(self::ITEM_ID);
+        $this->integrationItem->setItemData(self::ITEM_DATA);
+    }
+}

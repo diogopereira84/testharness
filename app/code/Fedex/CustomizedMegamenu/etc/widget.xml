@@ -1,0 +1,193 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<widgets xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Widget:etc/widget.xsd">
+    <!-- Widget for Megamenu button with Image -->
+    <widget class="Fedex\CustomizedMegamenu\Block\Widget\Printbutton" id="customizedmegamenu_customizedmegamenu_printbutton">
+        <label>Megamenu - Sub Menu Button</label>
+        <description>Megamenu Button Widget</description>
+        <parameters>
+            <parameter name="megabuttontitle" sort_order="30" visible="true" xsi:type="text">
+                <label>Title</label>
+            </parameter>
+            <parameter name="megabuttonicon" xsi:type="block" visible="true" sort_order="31">
+                <label translate="true">Image</label>
+                <description translate="true">Button Icon Image</description>
+                <block class="Fedex\CustomizedMegamenu\Block\Adminhtml\Widget\ImageChooser">
+                    <data>
+                        <item name="button" xsi:type="array">
+                            <item name="open" xsi:type="string">Choose icon image...</item>
+                        </item>
+                    </data>
+                </block>
+            </parameter>
+            <parameter name="megabuttonalttext" sort_order="32" visible="true" xsi:type="text">
+                <label>Alt Text</label>
+            </parameter>
+            <parameter name="megabuttonlink" sort_order="33" visible="true" xsi:type="text">
+                <label>Link</label>
+            </parameter>
+        </parameters>
+    </widget>
+    <!-- Widget for Megamenu static link -->
+    <widget class="Fedex\CustomizedMegamenu\Block\Widget\StaticLink" id="static_link">
+        <label>Megamenu - Static Link</label>
+        <description>Create static open same page or in new tab link</description>
+        <parameters>
+            <parameter name="static_link_title_conf" xsi:type="select" visible="true"
+                source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Add Second Level Category Link</label>
+                <options>
+                    <option name="no" value="0" selected="true">
+                        <label translate="true">No</label>
+                    </option>
+                    <option name="yes" value="1">
+                        <label translate="true">Yes</label>
+                    </option>
+                </options>
+            </parameter>
+            <parameter name="static_link_title" visible="true" required="true" xsi:type="text">
+                <label>Category Title</label>
+                <depends>
+                    <parameter name="static_link_title_conf" value="1"></parameter>
+                </depends>
+            </parameter>
+            <parameter name="static_link_url" visible="true" xsi:type="text">
+                <label>Category Link URL</label>
+                <depends>
+                    <parameter name="static_link_title_conf" value="1"></parameter>
+                </depends>
+            </parameter>
+            <parameter name="open_link_new_tab" xsi:type="select" visible="true"
+                source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Open Link in New Tab</label>
+                <depends>
+                    <parameter name="static_link_title_conf" value="1"></parameter>
+                </depends>
+            </parameter>
+            <parameter name="static_link_data_analytic" visible="true" xsi:type="text">
+                <label>Data Analytic Value</label>
+                <depends>
+                    <parameter name="static_link_title_conf" value="1"></parameter>
+                </depends>
+            </parameter>
+            <parameter name="second_level_categories" visible="true" xsi:type="text">
+                <label></label>
+                <description><![CDATA[<div class="admin__field-control" style="margin-top:50px;">
+                <div class="third-level-category-heading"><h3>Add Third Level Category Links</h3></div>
+    <div class="error_msg _error"></div>
+    <div class="admin__control-table-wrapper">
+        <table id="modulename_tbl_data" class="admin__dynamic-rows admin__control-table" cellspacing="0">
+ 
+            <tbody>
+                <tr class="header"><th class="class=" _required"="">Open In New Tab</th><th class="class=" _required"="">URL Link</th><th class="class=" _required"="">URL Text</th><th class="class=" _required"="">Sort Order</th><th class="class=" _required"="" colspan="2">Data Analytic Value</th></tr>
+                        <tr class="data-row">
+
+                            <td class="dynElemRow _required"><select id="external_link_config" name="parameters[external_link_config][0]" class="widget-option select admin__control-select valid" data-ui-id="wysiwyg-widget-options-fieldset-element-select-parameters-external-link-config">
+                                    <option value="1">Yes</option>
+                                    <option value="0"selected="selected">No</option>
+                            </select></td>
+                            <td class="dynElemRow _required"><input id="static_url_link" name="parameters[static_url_link][0]" value="" class="_required input-text required-option admin__control-text dynrule"/></td>
+
+                            <td class="dynElemRow _required input-text required-option"><input data-form-part="" id="static_url_text" name="parameters[static_url_text][0]" value="" class="_required input-text required-option admin__control-text dynrule"/></td>
+                            
+                            <td class="dynElemRow _required input-text"><input data-form-part="" id="static_url_sort_order" name="parameters[static_url_sort_order][0]" value="" class="_required input-text validate-digits validate-not-negative-number validate-digits-range digits-range-0-1000 admin__control-text dynrule"/></td>
+                            
+                            <td class="dynElemRow _required input-text"><input data-form-part="" id="static_url_data_analytic" name="parameters[static_url_data_analytic][0]" value="" class="_required input-text admin__control-text dynrule"/></td>
+                            <td class="col-delete data-grid-actions-cell"><button onclick="javascript:jQuery(this).parent().parent().remove();" class="action- scalable delete delete-option action-delete" type="button" title="Remove"><span>Remove</span></button></td>
+                        </tr>
+                
+            </tbody>
+            <tfoot><tr><td colspan="5"><button id="add_your_component" class="add" type="button" title="Add Link"><span>Add Link</span></button></td><td></td></tr></tfoot>   
+        </table>        
+    </div>
+</div>
+<script type="text/javascript">
+    require([
+    "jquery"
+], function($){
+    //Hide text field which not needed to display
+    $("input[name='parameters[second_level_categories]']").hide();
+    // Add more static links
+    $('#add_your_component').on('click', function() {     
+        var i = $('input.dynrule').length + 1;
+        var j = i-1;
+        var one = '<td class="dynElemRow _required"><select id="external_link_config_'+i+'" name="parameters[external_link_config]['+j+']" class="widget-option select admin__control-select valid" data-ui-id="wysiwyg-widget-options-fieldset-element-select-parameters-external-link-config"> <option value="1">Yes</option> <option value="0"selected="selected">No</option> </select></td> <td class="dynElemRow _required"><input  id="static_url_link_'+i+'" name="parameters[static_url_link]['+j+']" value="" class="_required input-text required-option admin__control-text dynrule"/></td> <td class="dynElemRow _required"><input data-form-part="" id="static_url_text_'+i+'" name="parameters[static_url_text]['+j+']" value="" class="_required input-text required-option admin__control-text dynrule"/></td> <td class="dynElemRow _required"><input data-form-part="" id="static_url_sort_order_'+i+'" name="parameters[static_url_sort_order]['+j+']" value="" class="_required input-text validate-digits validate-not-negative-number validate-digits-range digits-range-0-1000 admin__control-text dynrule"/></td> <td class="dynElemRow _required"><input data-form-part="" id="static_url_data_analytic_'+i+'" name="parameters[static_url_data_analytic]['+j+']" value="" class="_required input-text admin__control-text dynrule"/></td>';
+        var remove = '<button onclick="javascript:jQuery(this).parent().parent().remove();" class="action- scalable delete delete-option action-delete" type="button" title="Remove"><span>Remove</span></button>';
+        if(i==1){
+            var th = '<tr class="header"><th class="class=" _required"="">Open In new Tab</th><th class="class=" _required"="">Url Link</th><th class="class=" _required"="">Url Text</th><th class="class=" _required"="">Sort Order</th><th class="class=" _required"="" colspan="2">Data Analytic Value</th></tr></thead>';  
+            $('#modulename_tbl_data').append(th);
+        }        
+        var tr = '<tr class="data-row">'+one+'<td calspan="5" class="col-delete data-grid-actions-cell">'+remove+'</td></tr>';  
+        
+            $('#modulename_tbl_data').append(tr);
+        
+        i++; 
+    });
+});
+</script>]]></description>
+            </parameter>
+        </parameters>
+    </widget>
+    <!-- Widget for products link rendering -->
+    <widget id="products_list" class="Magento\CatalogWidget\Block\Product\ProductsList" is_email_compatible="true"
+            placeholder_image="Magento_CatalogWidget::images/products_list.png" ttl="86400">
+        <label>Megamenu - Product List</label>
+        <parameters>
+            <parameter name="products_count" xsi:type="text" required="true" visible="true">
+                <label translate="true">Number of Products to Display</label>
+                <value>5</value>
+            </parameter>
+            <parameter name="template" xsi:type="select" required="true" visible="true">
+                <label translate="true">Template</label>
+                <options>
+                    <option name="list_names"
+                            value="Fedex_CustomizedMegamenu::widget/products_list_names.phtml">
+                        <label translate="true">Products Names Only Template</label>
+                    </option>
+                </options>
+            </parameter>
+        </parameters>
+    </widget>
+    <!-- Widget for Featured Image -->
+    <widget class="Fedex\CustomizedMegamenu\Block\Widget\FeaturedImage" id="customizedmegamenu_customizedmegamenu_featuredimage">
+        <label>Megamenu - Featured Image</label>
+        <description>Featured Image Megamenu Widget</description>
+        <parameters>
+            <parameter name="featuredimage_title" sort_order="1" visible="true" xsi:type="text">
+                <label>Title</label>
+            </parameter>
+            <parameter name="featuredimage_description" xsi:type="block" visible="true" sort_order="2">
+                <label translate="true">Description</label>
+                <block class="Fedex\CustomizedMegamenu\Block\Adminhtml\Widget\TextField"/>
+            </parameter> 
+            <parameter name="featuredimage_icon" xsi:type="block" visible="true" sort_order="3">
+                <label translate="true">Image</label>
+                <block class="Fedex\CustomizedMegamenu\Block\Adminhtml\Widget\ImageChooser">
+                    <data>
+                        <item name="button" xsi:type="array">
+                            <item name="open" xsi:type="string">Choose Fetaured Image...</item>
+                        </item>
+                    </data>
+                </block>
+            </parameter>
+            <parameter name="featuredimage_alttext" sort_order="4" visible="true" xsi:type="text">
+                <label>Alt Text</label>
+            </parameter>
+            <parameter name="featuredimage_link_lable" sort_order="5" visible="true" xsi:type="text">
+                <label>Link Text</label>
+            </parameter>
+            <parameter name="featuredimage_link" sort_order="6" visible="true" xsi:type="text">
+                <label>Link href</label>
+            </parameter>
+            <parameter name="featured_link_open_new_tab" sort_order="7" xsi:type="select" visible="true"
+                       source_model="Magento\Config\Model\Config\Source\Yesno">
+                <label translate="true">Link Open In New Tab</label>
+            </parameter>
+        </parameters>
+    </widget>
+</widgets>

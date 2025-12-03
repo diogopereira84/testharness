@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\SaaSCommon\Model\Http\Command\SubmitFeed">
+        <plugin name="fedex_submit_feed_plugin" type="Fedex\SaaSCommon\Plugin\Model\Http\Command\SubmitFeedPlugin"/>
+    </type>
+    <preference for="Fedex\SaaSCommon\Api\ConfigInterface" type="Fedex\SaaSCommon\Model\Config"/>
+    <preference for="Fedex\SaaSCommon\Api\Data\AllowedCustomerGroupsRequestInterface" type="Fedex\SaaSCommon\Model\Data\AllowedCustomerGroupsRequest" />
+    <preference for="Fedex\SaaSCommon\Api\CustomerGroupAttributeHandlerInterface" type="Fedex\SaaSCommon\Model\CustomerGroupAttributeHandler" />
+    <preference for="Fedex\SaaSCommon\Api\CustomerGroupDiffServiceInterface" type="Fedex\SaaSCommon\Model\Service\CustomerGroupDiffService"/>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="fedex_allowed_customer_groups_update" xsi:type="object">Fedex\SaaSCommon\Console\Command\UpdateAllowedCustomerGroupsCommand</item>
+                <item name="fedex_allowed_customer_groups_options_update" xsi:type="object">Fedex\SaaSCommon\Console\Command\UpdateAllowedCustomerGroupsOptionsCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="checkout" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="before.body.end">
+            <block class="Fedex\SSO\Block\LoginInfo" name="checkout.session.timeout" template="Fedex_SSO::checkout_session_timeout.phtml">
+                <arguments>
+                    <argument name="checkout.session.timeout" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                </arguments>
+            </block>
+
+            <block class="Magento\Framework\View\Element\Template" name="header.top.fcl.quote.login.popup" template="Fedex_SSO::header/quote_login_popup.phtml">
+                <arguments>
+                    <argument name="fcl_login" xsi:type="object">Fedex\SSO\ViewModel\SsoConfiguration</argument>
+                    <argument name="upload_to_quote" xsi:type="object">Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel</argument>
+                </arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

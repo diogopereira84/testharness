@@ -1,0 +1,26 @@
+<?php
+/**@var Fedex\FXOCMConfigurator\ViewModel\FXOCMHelper $fxocmViewModel*/
+
+$fxoCmViewModel = $block->getData('fxo_cm_view_model');
+$isIframeSdkEnable = $fxoCmViewModel->isIframeSdkEnable();
+?>
+
+<?php if (!$isIframeSdkEnable): ?>
+<div data-mage-init='{ "iframe": { } }' class="container"></div>
+
+<div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+<?php else: ?>
+<?= $this->getLayout()
+    ->createBlock(
+        "Magento\Framework\View\Element\Template",
+        "fxo.cm.configurator",
+        [
+            'data' => [
+                'fxo_cm_vm' => $fxoCmViewModel
+            ]
+        ]
+    )
+    ->setTemplate("Fedex_FXOCMConfigurator::fxo_cm_configurator.phtml")
+    ->toHtml();
+?>
+<?php endif; ?>

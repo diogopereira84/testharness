@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex_shipping_estimator" translate="label" sortOrder="999" showInDefault="1" showInWebsite="1"
+                 showInStore="1">
+            <class>separator-top</class>
+            <label>Shipping Estimator</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_ShippingEstimator::settings</resource>
+            <group id="estimator" type="text" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
+                <label>Request Info</label>
+                <field id="delivery_reference" translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Delivery Reference</label>
+                </field>
+                <field id="address_classification" translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Address Classification</label>
+                </field>
+                <field id="cheapest_delivery_lbl" translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Cheapest Delivery Label</label>
+                </field>
+                <field id="fastest_delivery_lbl" translate="label" type="text" sortOrder="1" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Fastest Delivery Label</label>
+                </field>
+            </group>
+            <group id="state_filter" type="text" translate="label" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Excluded States From Shipping Estimator</label>
+                <field id="us_state_filter" translate="label comment" type="multiselect" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Disabled States for Shipping Estimator Purpose</label>
+                    <source_model>Fedex\ShippingEstimator\Model\Config\Region\RegionProvider</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

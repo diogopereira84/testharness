@@ -1,0 +1,295 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\UploadToQuote\ViewModel\QuoteHistory $quoteHistoryViewModel */
+$quoteHistoryViewModel = $block->getData('quoteHistoryViewModel');
+$isUploadToQuoteSubmitDateEnabled = $quoteHistoryViewModel->toggleUploadToQuoteSubmitDate();
+$isEproCustomer = $quoteHistoryViewModel->isEproCustomer();
+$allQuotes = $block->getAllNegotiableQuote();
+$noOfRecords = count($allQuotes);
+$isNegotiableQuotesCreated = $block->isNegotiableQuotesCreated();
+$inProgressUrl = "uploadtoquote/index/quotehistory";
+$quoteHistoryUrl = "uploadtoquote/index/quotehistory?dataset=2";
+$quoteDetailUrl = 'uploadtoquote/index/view/quote/';
+$currentUrl = $block->getCurrentUrl();
+$params = $block->getRequest()->getParams();
+$orderBy = $block->getRequest()->getParam('orderby') ? $block->getRequest()->getParam('orderby') : 'DESC';
+$sortBy = $block->getRequest()->getParam('sortby') ? $block->getRequest()->getParam('sortby') : 'created_at';
+$dataset = $block->getRequest()->getParam('dataset') ? $block->getRequest()->getParam('dataset') : '';
+$sortUrlParams = 'sortby='.$sortBy.'&orderby='.$orderBy;
+$arrowIcon = ($orderBy == 'ASC') ? 'Up': 'Down';
+$arrowImgPath = 'images/upload-to-quote/'.$arrowIcon.'.svg';
+$searchflag = false;
+
+if (array_key_exists('search', $params) && !empty($params['search'])) {
+    $searchflag = true;
+}
+if (empty($params)) {
+    $currentUrl = $currentUrl.'?'.$sortUrlParams;
+} elseif ((count($params) == 1 && array_key_exists('search', $params)) || array_key_exists('dataset', $params)) {
+    $currentUrl = $currentUrl.'&'.$sortUrlParams;
+} elseif ((array_key_exists('p', $params) || array_key_exists('limit', $params)) &&
+!array_key_exists('sortby', $params) && !array_key_exists('orderby', $params) &&
+!array_key_exists('search', $params)) {
+    $currentUrl = $currentUrl.'&'.$sortUrlParams;
+} elseif (count($params) == 1 && array_key_exists('dataset', $params)) {
+    $currentUrl = $currentUrl.'&'.$sortUrlParams;
+}
+$noRecordText = 'Records not available';
+$D206707Toggle = $quoteHistoryViewModel->isToggleD206707Enabled();
+?>
+<div class="upload-to-quote-my-quotes-history-container">
+    <div class="upload-to-quote-search-filter-container">
+        <input class="upload-to-quote-search-bar" id="search-quote-input" type="text" maxlength="30"
+        placeholder="<?= $block->escapeHtml(__('Search by quote number')) ?>"/>
+        <?php if ($searchflag): ?>
+        <a href="javascript:void(0)" id="reset-cross" tabindex="-1">
+            <img class="search-clear-icon" alt="Clear the search value" tabindex="0"
+    src="<?= $block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/close.png')); ?>"/>
+        </a>
+        <?php endif; ?>
+        <button id="search-quote-btn" class="upload-to-quote-search-button" type="button"
+        aria-label="search-button"></button>
+        <div class="error-message"></div>
+    </div>
+    <?php if ($isNegotiableQuotesCreated):?>
+        <div class="my-quotes-history-inprogress <?= $noOfRecords ? 'quote-table-container' : ''?>">
+            <?php if (!$searchflag): ?>
+                <div class="quotes-history-inprogress-tabs">
+                    <div class="in-progress tab-highlighter">
+                        <a class="inprogress-link" href="<?= $block->escapeUrl($block->getUrl().$inProgressUrl) ?>">
+                            <?= $block->escapeHtml(__('In Progress')) ?>
+                        </a>
+                    </div>
+                    <div class="order-history">
+                        <a  class="history-link" href="<?= $block->escapeUrl($block->getUrl().$quoteHistoryUrl) ?>">
+                            <?= $block->escapeHtml(__('Quote History')) ?>
+                        </a>
+                    </div>
+                </div>
+                <hr>
+            <?php endif; ?>
+            <?php if ($searchflag && $noOfRecords): ?>
+            <div class="show-search-result">
+                <?= $block->escapeHtml(__('Showing %1 result for: "%2"', $noOfRecords, $params['search'])) ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!$searchflag || ($searchflag && $noOfRecords)): ?>
+            <input type="hidden" id="previous_url" value="<?= $block->escapeHtml($currentUrl); ?>"/>
+            <input type="hidden" id="previous_sortby" value="<?= $block->escapeHtml($sortBy); ?>"/>
+            <input type="hidden" id="previous_orderby" value="<?= $block->escapeHtml($orderBy); ?>"/>
+            <input type="hidden" id="data_set" value="<?= $block->escapeHtml($dataset); ?>"/>
+            <table aria-describedby="order-table" class="my-quotes-history-table">
+                <tr>
+                    <th>&nbsp;</th>
+                    <th>
+                        <a href='javascript:void(0)' id="sort-by-quote-no" sortby="entity_id"
+                        class="sort-by-column <?= $sortBy == 'entity_id' ? 'sort-active' : ''?>"
+                        orderby="<?= ($sortBy == 'entity_id' && $orderBy == 'DESC') ? 'ASC' : 'DESC' ?>">
+                        <?= $block->escapeHtml(__('Quote Number')) ?>
+                            <?php if ($sortBy == 'entity_id'): ?>
+                            <img src="<?=$block->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                            alt="<?= $block->escapeHtml($arrowIcon) ?>-arrow-icon" class="sort-position-icon"/>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href='javascript:void(0)' id="sort-by-created" sortby="created_at"
+                        class="sort-by-column <?= $sortBy == 'created_at' ? 'sort-active' : ''?>"
+                        orderby="<?= ($sortBy == 'created_at' && $orderBy == 'DESC') ? 'ASC' : 'DESC' ?>">
+                            <?= $block->escapeHtml(__('Created')) ?>
+                            <?php if ($sortBy == 'created_at'): ?>
+                            <img src="<?=$block->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                            alt="<?= $block->escapeHtml($arrowIcon) ?>-arrow-icon" class="sort-position-icon"/>
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="javascript:void(0)" id="sort-by-expiration" class="sort-by-column" sortby="expiration"
+                        orderby="<?= ($sortBy == 'expiration' && $orderBy == 'DESC') ? 'ASC' : 'DESC' ?>">
+                            <?= $block->escapeHtml(__('Expiration')) ?>
+                            <?php if ($sortBy == 'expiration'): ?>
+                            <img src="<?=$block->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                            alt="<?= $block->escapeHtml($arrowIcon) ?>-arrow-icon" class="sort-position-icon" />
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="javascript:void(0)" id="sort-by-status" class="sort-by-column" sortby="status"
+                        orderby="<?= ($sortBy == 'status' && $orderBy == 'DESC') ? 'ASC' : 'DESC' ?>">
+                            <?= $block->escapeHtml(__('Status')) ?>
+                            <?php if ($sortBy == 'status'): ?>
+                            <img src="<?=$block->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                            alt="<?= $block->escapeHtml($arrowIcon) ?>-arrow-icon" class="sort-position-icon" />
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th>
+                        <a href="javascript:void(0)" id="sort-by-total" class="sort-by-column" sortby="grand_total"
+                        orderby="<?= ($sortBy == 'grand_total' && $orderBy == 'DESC') ? 'ASC' : 'DESC' ?>">
+                            <?= $block->escapeHtml(__('Total')) ?>
+                            <?php if ($sortBy == 'grand_total'): ?>
+                            <img src="<?=$block->escapeUrl($block->getViewFileUrl($arrowImgPath));?>"
+                            alt="<?= $block->escapeHtml($arrowIcon) ?>-arrow-icon" class="sort-position-icon" />
+                            <?php endif; ?>
+                        </a>
+                    </th>
+                    <th class="action-heading-column"><?= $block->escapeHtml(__('Action')) ?></th>
+                </tr>
+                <?php
+                if (!empty($allQuotes)):
+                    foreach ($allQuotes as $quote):
+                        $quoteStatus = $quoteHistoryViewModel->getStatusLabel(($D206707Toggle ? $quote : $quote->getEntityId()));
+                        $dataByStatusLabel = $quoteHistoryViewModel->getDataByStatusLebel($quoteStatus);
+                        ?>
+                        <tr>
+                            <td>
+                                <?php if ($dataByStatusLabel['dotIconClass']):?>
+                                    <span class="<?= $block->escapeHtmlAttr($dataByStatusLabel['dotIconClass']) ?>">
+                                    &bull;</span>
+                                <?php endif;?>
+                            </td>
+                            <td><?= $block->escapeHtml($quote->getEntityId()) ?></td>
+                            <td>
+                                <?php
+                                    if ($isUploadToQuoteSubmitDateEnabled){
+                                        $createdAt = $quoteHistoryViewModel->getSubmitDate($quote->getId());;
+                                    }else{
+                                        $createdAt = $quote->getCreatedAt();
+                                    }
+                                ?>
+                                <?= $block->escapeHtml($quoteHistoryViewModel->getFormattedDate($createdAt)) ?>
+                            </td>
+                            <td>
+                                <?= $block->escapeHtml(
+                                    $quoteHistoryViewModel->getExpiryDate($quote->getEntityId(), 'm/d/Y', ($D206707Toggle ? $quote : null))
+                                ) ?>
+                            </td>
+                            <td><?= $block->escapeHtml($quoteStatus) ?></td>
+                            <td>
+                            <?= $block->escapeHtml($quoteHistoryViewModel
+                            ->getFormattedPrice(($quote->getGrandTotal()), ($D206707Toggle ? $quote : $quote->getEntityId()))) ?>
+                            </td>
+                            <td class="action-column">
+                                <a href="<?= $block->escapeUrl($block->getUrl().$quoteDetailUrl.$quote->getEntityId()); ?>">
+                                    <?= $block->escapeHtml(__($dataByStatusLabel['linkText'])) ?>
+                                </a>
+                            </td>
+                        </tr>
+                        <?php
+                    endforeach;
+                endif;
+                ?>
+            </table>
+            <?php endif; ?>
+        </div>
+
+        <!-- Quote for Mobile -->
+        <div class="mobile-my-quotes-history-inprogress" style="display:none">
+            <?php if (!$searchflag): ?>
+                <div class="in-progress tab-highlighter">
+                    <a href="<?= $block->escapeUrl($block->getUrl().$inProgressUrl) ?>">
+                        <?= $block->escapeHtml(__('In Progress')) ?>
+                    </a>
+                </div>
+                <div class="order-history">
+                    <a href="<?= $block->escapeUrl($block->getUrl().$quoteHistoryUrl) ?>">
+                        <?= $block->escapeHtml(__('Quote History')) ?>
+                    </a>
+                </div>
+                <hr class="quote-table-container-line-top">
+                <hr>
+            <?php endif; ?>
+            <?php if ($searchflag && $noOfRecords): ?>
+            <div class="show-search-result-mob">
+                <?= $block->escapeHtml(__('Showing %1 result for: "%2"', $noOfRecords, $params['search'])) ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!$searchflag || ($searchflag && $noOfRecords)): ?>
+            <table aria-describedby="order-table" class="my-quotes-history-table-mob">
+                <?php foreach ($allQuotes as $quote):
+                    $quoteStatus = $quoteHistoryViewModel->getStatusLabel(($D206707Toggle ? $quote : $quote->getEntityId()));
+                    $dataByStatusLabel = $quoteHistoryViewModel->getDataByStatusLebel($quoteStatus);
+                    ?>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Quote Number')) ?></th>
+                        <td>
+                            <?php if ($dataByStatusLabel['dotIconClass']):?>
+                                <span class="<?= $block->escapeHtmlAttr($dataByStatusLabel['dotIconClass']) ?>">
+                                &bull;</span>
+                            <?php endif;?>
+                            <?= $block->escapeHtml($quote->getEntityId()) ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Created')) ?></th>
+                        <?php
+                            if ($isUploadToQuoteSubmitDateEnabled){
+                                $createdAt = $quoteHistoryViewModel->getSubmitDate($quote->getId());;
+                            }else{
+                                $createdAt = $quote->getCreatedAt();
+                            }
+                        ?>
+                        <td><?= $block->escapeHtml($quoteHistoryViewModel->getFormattedDate($createdAt)) ?></td>
+                    </tr>
+                    <tr>
+                        <th><?= $block->escapeHtml(__('Expiration')) ?></th>
+                        <td>
+                            <?= $block->escapeHtml(
+                                $quoteHistoryViewModel->getExpiryDate($quote->getEntityId(), 'm/d/Y', ($D206707Toggle ? $quote : null))
+                            ) ?>
+                        </td>
+                    </tr>
+                    <tr class="quote-table-status-column">
+                        <th><?= $block->escapeHtml(__('Status')) ?></th>
+                        <td><?= $block->escapeHtml($quoteStatus) ?></td>
+                    </tr>
+                    <tr class="quote-table-total-column">
+                        <th><?= $block->escapeHtml(__('Total')) ?></th>
+                        <td>
+                            <?= $block->escapeHtml($quoteHistoryViewModel
+                            ->getFormattedPrice(($quote->getGrandTotal() + $quote->getTax()), ($D206707Toggle ? $quote : $quote->getEntityId()))) ?>
+                        </td>
+                    </tr>
+                    <tr class="quote-table-action-colum">
+                        <th><?= $block->escapeHtml(__('Action')) ?></th>
+                        <td>
+                            <a href="<?= $block->escapeUrl($block->getUrl().$quoteDetailUrl.$quote->getEntityId()); ?>">
+                                <?= $block->escapeHtml(__($dataByStatusLabel['linkText'])) ?>
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </table>
+            <?php endif; ?>
+        </div>
+    <?php endif; ?>
+    <?php if (!$searchflag && $isNegotiableQuotesCreated): ?>
+        <?php if ($block->getChildHtml('pager')): ?>
+            <div class="order-products-toolbar toolbar bottom"><?= $block->getChildHtml('pager'); ?></div>
+        <?php else: ?>
+            <div class="message info empty">
+                <span><?= $block->escapeHtml(__($noRecordText)); ?></span>
+            </div>
+        <?php endif; ?>
+    <?php endif; ?>
+    <?php if (!$isNegotiableQuotesCreated && !$searchflag): ?>
+        <div class="message info empty search-result-empty">
+            <span><?= $block->escapeHtml(__($noRecordText)); ?></span>
+        </div>
+    <?php endif; ?>
+    <?php if ($searchflag && !$noOfRecords): ?>
+        <div class="message info empty search-result-empty">
+            <span><?= $block->escapeHtml(__("Your search did not return any results.")); ?></span>
+        </div>
+    <?php endif; ?>
+</div>
+<script>
+    require(['uploadToQuoteHistory'],
+        function(uploadToQuoteHistory){}
+    );
+</script>
+

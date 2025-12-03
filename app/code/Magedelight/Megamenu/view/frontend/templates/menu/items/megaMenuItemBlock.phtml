@@ -1,0 +1,35 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $this->getData('menu_block');
+$item = $this->getData('menu_item');
+$menuManagement = $this->getData('menu_management');
+$liClass = 'menu-dropdown-icon dropdown category-item nav-'.$item->getItemId().' '. $menuBlock->getActiveClass($item).' '.$item->getItemClass();
+$megaMenuLink = $item->getItemLink() ? : '#';
+$megaMenuName = $menuManagement->generateMenuItemName($item);
+?>
+<li class="<?= /* @noEscape */ $liClass ?>">
+    <a href="<?= /* @noEscape */ $megaMenuLink ?>">
+        <span class="megaitemicons"><?= /* @noEscape */ $item->getItemFontIcon() ?></span>
+        <?= /* @noEscape */ __($megaMenuName) ?>
+    </a>
+    <?php if (!empty($item->getItemColumns())): ?>
+        <?php $menuItems = json_decode($item->getItemColumns()); ?>
+            <ul class="animated <?= /* @noEscape */ $item->getAnimationOption() ?> column<?= /* @noEscape */ count($menuItems) ?>">
+                <?php for ($i = 0; $i < count($menuItems); $i++) { ?>
+                    <?php if ($menuItems[$i]->type == 'menu'): ?>
+                        <?= /* @noEscape */ $menuBlock->getChildColumnForMenuType($menuItems,$i) ?>
+                    <?php endif; ?>
+                    <?php if ($menuItems[$i]->type == 'block'): ?>
+                        <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeBlock($menuItems,$i) ?>
+                    <?php endif; ?>
+                    <?php if ($menuItems[$i]->type == 'category'): ?>
+                        <?= /* @noEscape */ $menuBlock->getChildColumnForMenuTypeCategory($menuItems,$i) ?>
+                    <?php endif; ?>
+                <?php } ?>
+            </ul>
+    <?php endif; ?>
+</li>

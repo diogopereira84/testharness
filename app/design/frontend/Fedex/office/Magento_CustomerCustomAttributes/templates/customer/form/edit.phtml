@@ -1,0 +1,166 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Customer\Block\Widget\Name;
+
+/** @var Magento\CustomerCustomAttributes\Block\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+$helper = $this->helper('Fedex\Header\Helper\Data');
+$customer=$helper->getCustomer($block->getCustomer()->getId());
+$explorersD193926FixToggleEnable = $helper->getToggleD193926Fix();
+$isEproCustomer = $this->helper('Fedex\Delivery\Helper\Data');
+$eproCustomer = $isEproCustomer->isEproCustomer();
+?>
+<form class="form form-edit-account" action="<?= /* @noEscape */ $block->getUrl('customer/account/editPost') ?>"
+      method="post" id="form-validate" enctype="multipart/form-data"
+      data-hasrequired="<?= $block->escapeHtml(__('* Required Fields')) ?>"
+      autocomplete="off">
+    <fieldset class="fieldset info">
+        <?= $block->getBlockHtml('formkey') ?>
+        <legend class="legend"><span><?= $block->escapeHtml(__('Edit Account Information')) ?></span></legend><br>
+        <?= $block->getLayout()->createBlock(Name::class)->setObject($block->getCustomer())->toHtml() ?>
+
+        <?php $_dob = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Dob::class) ?>
+        <?php $_taxvat = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Taxvat::class) ?>
+        <?php $_gender = $block->getLayout()->createBlock(\Magento\Customer\Block\Widget\Gender::class) ?>
+        <?php if ($_dob->isEnabled()): ?>
+            <?= $_dob->setDate($block->getCustomer()->getDob())->toHtml() ?>
+        <?php endif ?>
+        <?php if ($_taxvat->isEnabled()): ?>
+            <?= $_taxvat->setTaxvat($block->getCustomer()->getTaxvat())->toHtml() ?>
+        <?php endif ?>
+        <?php if ($_gender->isEnabled()): ?>
+            <?= $_gender->setGender($block->getCustomer()->getGender())->toHtml() ?>
+        <?php endif ?>
+
+        <?php $userDefinedAttributes = $block->getLayout()->getBlock('customer_form_user_attributes'); ?>
+        <?php if ($userDefinedAttributes): ?>
+            <?php $userDefinedAttributes->setEntityType('customer')->setShowContainer(false);?>
+            <?php $block->restoreSessionData($userDefinedAttributes->getMetadataForm());?>
+            <?= $userDefinedAttributes->toHtml() ?>
+        <?php endif;?>
+        <div class="field email required" data-container="change-email">
+            <label class="label" for="email"><span><?= $block->escapeHtml(__('Email Address')) ?></span></label>
+            <div class="control">
+            <?php if($explorersD193926FixToggleEnable && $eproCustomer):?>
+                <input type="email" autocomplete="email" name="email" id="email" data-input="change-email"
+                value="<?= $block->escapeHtml($customer->getData('email')) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                class="input-text"
+                data-validate="{required:true, 'validate-email':true}" />
+            <?php else:?>
+                <input type="email" autocomplete="email" name="email" id="email" data-input="change-email"
+                value="<?= $block->escapeHtml($block->getCustomer()->getEmail()) ?>"
+                title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                class="input-text"
+                data-validate="{required:true, 'validate-email':true}" />
+            <?php endif; ?>
+            </div>
+        </div>
+    </fieldset>
+
+    <?= /* @noEscape */ $block->getChildHtml('form_fields_before_in_form') ?>
+    <?= $block->getChildHtml('form_additional_info') ?>
+    <div class="actions-toolbar">
+        <div class="primary">
+            <button type="submit" class="action save primary" title="<?= $block->escapeHtmlAttr(__('Save')) ?>">
+                <span><?= $block->escapeHtml(__('Save')) ?></span>
+            </button>
+        </div>
+        <div class="secondary">
+            <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>">
+                <span><?= $block->escapeHtml(__('Go back')) ?></span>
+            </a>
+        </div>
+    </div>
+</form>
+<?php
+$isEnabledDobAttribute = $_dob->isEnabled();
+?>
+<?php $scriptString = '
+    require([
+        "jquery",
+        "mage/mage"
+    ], function($){
+        var dataForm = $(\'#form-validate\');
+        var ignore = ';
+    $scriptString .= $_dob->isEnabled() ? '\'input[id$="full"]\'' : 'null' ;
+    $scriptString .= ";
+        dataForm.mage('validation', {";
+if ($_dob->isEnabled()) {
+    $scriptString .= <<<script
+        errorPlacement: function(error, element) {
+            if (element.prop('id').search('full') !== -1) {
+                var dobElement = $(element).parents('.customer-dob'),
+                    errorClass = error.prop('class');
+                error.insertAfter(element.parent());
+                dobElement.find('.validate-custom').addClass(errorClass)
+                    .after('<div class="' + errorClass + '"></div>');
+            }
+            else {
+                error.insertAfter(element);
+            }
+        },
+        ignore: ':hidden:not(' + ignore + ')'
+script;
+} else {
+    $scriptString .= <<<script
+        ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
+script;
+}
+
+$scriptString .= '
+        });
+
+    });';
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_CustomerCustomAttributes/validation": {
+                "ignore": <?= (int) ($_dob->isEnabled() || $userDefinedAttributes->hasUserDefinedAttributes()) ?>,
+                "hasUserDefinedAttributes": <?= (int) $userDefinedAttributes->hasUserDefinedAttributes() ?>,
+                "isDobEnabled": <?= (int) $_dob->isEnabled() ?>,
+                "mixins": [
+                    "Magento_CustomerCustomAttributes/error-placement",
+                    "Magento_CustomerCustomAttributes/validation-ignore"
+                ]
+            }
+        }
+    }
+</script>
+<script>
+    require([
+        "jquery",
+        "Magento_Ui/js/lib/view/utils/dom-observer"
+    ], function($, $dom) {
+
+        // Update first name error message if less than 2 chars
+        $dom.get('#firstname-error', function() {
+            $("#firstname-error").bind("DOMSubtreeModified", updateErrorMessageFirstName);
+            updateErrorMessageFirstName(); // Update on initialization
+        });
+
+        // Update last name error message if less than 2 chars
+        $dom.get('#lastname-error', function() {
+            $("#lastname-error").bind("DOMSubtreeModified", updateErrorMessageLastName);
+            updateErrorMessageLastName(); // Update on initialization
+        });
+        
+        // Update first name error message if less than 2 chars
+        function updateErrorMessageFirstName() {
+            let $error = $("#firstname-error:contains(Please enter more or equal than 2 symbols.)");
+            $error.text('First Name must have at least 2 characters.');
+        }
+        
+        // Update last name error message if less than 2 chars
+        function updateErrorMessageLastName() {
+            let $error = $("#lastname-error:contains(Please enter more or equal than 2 symbols.)");
+            $error.text('Last Name must have at least 2 characters.');
+        }
+    });
+</script>

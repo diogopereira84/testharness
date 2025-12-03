@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="category-full-width" />
+    <referenceContainer name="columns.top.wrapper" htmlClass="page-main no-grow"/>
+    <referenceContainer name="columns.top">
+      <block class="Fedex\SDE\Block\SensitiveMessage" name="sensitive-block" template="Fedex_SDE::sensative_block.phtml" />
+      <block class="Fedex\AllPrintProducts\Block\AllPrintProducts" name="all_print_product_block"
+             template="Fedex_AllPrintProducts::allprintproducts.phtml"  after="breadcrumbs"/>
+    </referenceContainer>
+    <referenceContainer name="main.content">
+      <block class="Fedex\AllPrintProducts\Block\AllPrintProductsCmsHandler" name="all_print_special_product_block" after="livesearch.product.listing"/>
+    </referenceContainer>
+</layout>
+

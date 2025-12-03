@@ -1,0 +1,234 @@
+//
+//  All (styles-m.css)
+//  _____________________________________________
+& when (@media-common =true) {
+
+    .flex-mid-48 {
+        // Class to force inputs to be 48px height and all content centered
+        // This will help during the transition to the common input styles  
+
+        display: flex;
+        align-items: center;
+        height: 48px !important
+    }
+
+    .flex-mid-55 {
+        // Class to force inputs to be 55px height and all content centered
+        // This will help during the transition to the common input styles  
+
+        display: flex;
+        align-items: center;
+        height: 55px !important
+    }
+
+    .input-date-control {
+        position: relative;
+        &::after {
+            font-family: @font-family-fedex__icons;
+            content: @icon-calendar;
+            font-size: 32px;
+            position: absolute;
+            right: 8px;
+            top: 0;
+            color: @fx-grey-500;
+        }
+    }
+
+    .input-base-wrapper {
+        display: flex;
+        flex-direction: column;
+        font-family: @font-family-fedex__sans;
+        max-width: 288px;
+
+        &.full-width {
+            max-width: 100%;
+        }
+
+        &.required {
+            .base-label:after {
+                content: "*";
+                color: @fx-red-300;
+                margin-left: 5px;
+                font-size: 12px;
+            }
+        }
+
+        .base-label {
+            font-family: @font-family-fedex__sans-bold;
+            font-size: 12px;
+            line-height: 16px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            color: @fx-grey-500;
+        }
+
+        .base-input {
+            color: @fx-grey-500;
+            width: 100%;
+            background-color: @fx-white-100;
+            height: 48px;
+            font-size: 16px;
+            border: 1px solid @fx-grey-100;
+
+            &.fedex-light {
+                font-family: @font-family-fedex__sans-light;
+            }
+
+            &::placeholder {
+                color: @fx-grey-100;
+            }
+
+            &:focus {
+                box-shadow: none;
+                border-color: @fx-grey-500;
+                &::placeholder {
+                    color: @fx-grey-500;
+                }
+            }
+
+            &.mage-error {
+                border-color: @fx-red-300;
+            }
+        }
+
+        &.small-opt {
+            max-width: 200px;
+
+            > input {
+                height: 40px;
+            }
+        }
+
+        &.readonly-opt {
+            > input, textarea {
+                background: transparent;
+
+                &::placeholder {
+                    color: @fx-grey-500;
+                }
+            }
+        }
+
+        &.disabled-opt {
+            > label {
+                color: @fx-grey-100;
+            }
+            > input, textarea {
+                background: transparent;
+            }
+        }
+
+        &.textarea-opt {
+            max-width: 440px;
+            > textarea {
+                height: 154px;
+            }
+        }
+    }
+
+    .input-qty-wrapper {
+        display: flex;
+        max-width: 140px;
+        background: @fx-white-100;
+        border: 1px solid @fx-grey-100;
+        justify-content: space-evenly;
+        height: 48px;
+        align-items: center;
+
+        &.small-opt {
+            height: 40px;            
+        }
+
+        &.number-opt {
+            width: 75px;
+            height: 40px;  
+        }
+
+        .qty {
+            height: 48px;
+            text-align: center;
+            border: none;
+            font-size: 16px;
+            color: @fx-grey-500;
+
+            &::placeholder {
+                color: @fx-grey-100;
+            }
+
+            &:focus {
+                box-shadow: none;
+                border-color: @fx-grey-500;
+                &::placeholder {
+                    color: @fx-grey-500;
+                }
+            }
+        }
+
+        > button {
+            background: transparent;
+            border: none;
+            padding: 6px;
+
+            &.decrement {
+                padding-left: 12px;
+                padding-right: 0;
+                &::after {
+                    content:@decrement-icon;
+                }
+            }
+
+            &.increment {
+                padding-left: 0;
+                padding-right: 12px;
+                &::after {
+                    content: @increment-icon;
+                }
+            }
+
+            &::after {
+                font-family: @luma-icons;
+                position: relative;
+                top: 1px;
+            }
+
+            &:hover {
+                &::after {
+                    color: @fx-blue-500;
+                }
+            }
+        }
+
+        input[type="number"] {
+            height: 40px;
+            text-align: center;
+            width: 75px;
+        }
+    }
+
+    .mage-error {
+        line-height: 16px;
+        position: relative;
+        padding: 1.5px 27px;
+    }
+
+    .mage-error::before {
+        content: '\e928';
+        font-family: 'FedEx Icons';
+        font-size: 25px;
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+}
+
+// Mobile, @screen__m: 768px
+//  _____________________________________________
+
+& when (@media-target = 'mobile')  {
+
+    @media only screen and (max-width: (@screen__m)){  
+        .input-base-wrapper {
+            max-width: inherit;
+        }
+    }
+}

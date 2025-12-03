@@ -1,0 +1,13 @@
+<?php
+    $_helperCustomerData = $this->helper(Fedex\CustomerDetails\Helper\Data::class);
+    $helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+    $isLoggedIn = $helperData->isCommercialCustomer();
+?>
+
+<?php if ($isLoggedIn): ?>
+    <div>
+        <span style="font-size: 22px;font-weight: 300; color: #333333">
+            <?= $block->escapeHtmlAttr($_helperCustomerData->getLoggedinCustomerDetails()) ?>
+        </span>
+    </div>
+<?php endif;?>

@@ -1,0 +1,25 @@
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="quote_item">
+        <column xsi:type="text"
+                name="additional_mirakl_shipping"
+                nullable="true"
+                comment="Additional Mirakl Shipping Data"
+                disabled="true"
+        />
+    </table>
+    <table name="catalog_product_entity" resource="default" engine="innodb" comment="Catalog Product Table">
+        <column xsi:type="smallint" name="mirakl_images_status" unsigned="true" nullable="false" default="3" comment="Mirakl Images Status"/>
+        <column xsi:type="varchar" name="mirakl_mcm_product_id" length="255" nullable="true" comment="MCM Product Id"/>
+        <column xsi:type="varchar" name="mirakl_mcm_variant_group_code" length="255" nullable="true" comment="MCM Variant Group Code"/>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_MIRAKL_IMAGES_STATUS" indexType="btree">
+            <column name="mirakl_images_status"/>
+        </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_MIRAKL_MCM_PRODUCT_ID" indexType="btree">
+            <column name="mirakl_mcm_product_id"/>
+        </index>
+        <index referenceId="CATALOG_PRODUCT_ENTITY_MIRAKL_MCM_VARIANT_GROUP_CODE" indexType="btree">
+            <column name="mirakl_mcm_variant_group_code"/>
+        </index>
+    </table>
+</schema>

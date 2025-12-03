@@ -1,0 +1,94 @@
+<!--@subject Epro Expiring Quote @-->
+<!--@vars {
+"var user_name|raw":"User Name",
+"var quote_id|raw":"323332",
+"var items":"Items",
+"var quote_placed_date":"Quote Placed On",
+"var quote_expiring_date" : Quote Expiring On"
+} @-->
+{{inlinecss file="Fedex_MarketplaceCheckout::css/email-inline.css"}}
+<div class="email-container">
+	<div class="content-section">
+		<div class="email-body">
+			<span>{{trans 'Hi %customer_first_name  %customer_last_name,' customer_first_name=$customer_first_name customer_last_name=$customer_last_name}}</span><br><br>
+			{{trans 'Your order could not be processed at this time due to the following:'}}
+		<br><br>
+		<strong>{{trans 'Purchase Order %purchase_order does not match Quote %quote_id. Please resubmit a corrected order.' purchase_order=$po_number  quote_id=$quote_id }}</strong>
+		<br><br>
+		{{trans 'If you have questions about this quote, please contact a team member at 1.800.GoFedEx or 1.800.463.3339.'}}
+		<br><br>
+		{{trans 'Thank you for choosing FedEx Office. We look forward to working with you again soon!'}}
+		<br><br>
+		</div>
+		<div>
+			<table class='order-summary'>
+                <tr>
+                    <td>
+                        <h1 style="margin-bottom: 0px;"><strong>{{trans 'ORDER SUMMARY'}}</strong></h1>
+						<p class="declined">{{trans 'Action Required' }}</p>
+                        <p style="margin-bottom: 0px;">{{trans 'Quote Number: %quote_id' quote_id=$quote_id }}
+                        </p>
+                        <p style="margin-bottom: 0px;">{{trans 'Click your quote number for more information.'}}</p>
+                    </td>
+                </tr>
+            </table>		
+		</div>
+		<div class="quote-info">
+      		{{var item_html|raw}}
+		</div>
+		<div>
+			<table class='email-date' style="max-width: 612px; margin: auto" width="612">
+                <tr >
+                    <td>
+                        <p>
+                            {{trans 'Quote Placed On: <span class='no-link'>%created_at</span>' created_at=$quote_date |raw}}
+                        </p>
+                        <p>
+                            {{trans 'If you have questions about your order, please call <a style="color: #333;text-decoration: none;" href='tel:%store_phone'>%store_phone</a>.' store_phone='1.800.463.3339' |raw}}
+                        </p>
+                    </td>
+                </tr>
+            </table>
+		</div>
+	</div>
+</div>
+<style>
+	.email-summary {
+		color: #333;
+		font-style: normal;
+		font-weight: 700;
+		line-height: 24px;
+		text-transform: uppercase;
+	}
+	.declined {
+		color: #E3002D;
+		font-size: 18px;
+		font-style: italic;
+		font-weight: 700;
+		line-height: 24px;
+	}
+	.quote-no {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+	}
+	.quote-info {
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;		
+	}
+	.quote-place-date {
+		color: #333;
+		font-family: 'FedEx Sans Regular';
+		font-size: 14px;
+		font-style: normal;
+		font-weight: 400;
+		line-height: 24px;
+		margin-bottom: 48px;
+	}
+</style>

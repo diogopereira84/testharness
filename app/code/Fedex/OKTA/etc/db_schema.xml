@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="fedex_okta_backend_auth" resource="default" engine="innodb" comment="Fedex OKTA Backend Auth Table">
+        <column xsi:type="int" name="id" padding="11" unsigned="false" nullable="false" identity="true" comment="Value ID"/>
+        <column xsi:type="int" name="admin_user_id" padding="10" unsigned="true" nullable="false" identity="false" comment="Admin User ID"/>
+        <column xsi:type="varchar" name="okta_user_id" length="255" nullable="false" comment="OKTA User ID"/>
+        <column xsi:type="text" name="okta_user_data" nullable="true" comment="User data from OKTA"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="FEDEX_OKTA_BACKEND_AUTH_ADMIN_USER_ID_USER_ID" table="fedex_okta_backend_auth" column="admin_user_id" referenceTable="admin_user" referenceColumn="user_id" onDelete="CASCADE"/>
+        <constraint xsi:type="unique" referenceId="FEDEX_OKTA_BACKEND_AUTH_ADMIN_USER_ID_OKTA_USER_ID">
+            <column name="admin_user_id"/>
+            <column name="okta_user_id"/>
+        </constraint>
+        <index referenceId="FEDEX_OKTA_BACKEND_AUTH_ADMIN_USER_ID" indexType="btree">
+            <column name="admin_user_id"/>
+        </index>
+        <index referenceId="FEDEX_OKTA_BACKEND_AUTH_OKTA_USER_ID" indexType="btree">
+            <column name="okta_user_id"/>
+        </index>
+    </table>
+</schema>

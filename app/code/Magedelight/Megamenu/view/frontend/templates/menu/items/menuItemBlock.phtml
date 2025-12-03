@@ -1,0 +1,120 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $this->getData('menu_block');
+$item = $this->getData('menu_item');
+$menuManagement = $this->getData('menu_management');
+$liClass = $menuBlock->getActiveClass($item).' '.$item->getItemClass();
+$catVerticalMenuBg = $item->getCategoryVerticalMenuBg();
+$megaMenuLink = $menuManagement->generateMenuUrl($item) ? : '#';
+$megaMenuName = $menuManagement->generateMenuItemName($item);
+$catDisplay = $verticalMenu = $menuAdd = false;
+$columnCount = 0;
+$verticalMenuClass = $rightContentClass = '';
+$subcats = [];
+
+if ($menuBlock->getCmsBlockConfig($item,'left','enable') ||
+    $menuBlock->getCmsBlockConfig($item,'right','enable')
+) {
+    $columnCount++;
+}
+if ($item->getItemType() === 'category' && (int) $item->getCategoryDisplay() === (int) 1) {
+    $categoryLoad = $menuManagement->getCategoryById($item->getObjectId());
+    $subcats = $menuManagement->getChildrenCategories($categoryLoad);
+    if (!empty($subcats)) {
+        $catDisplay = true;
+        $menuAdd = true;
+        if ((int) $item->getCategoryVerticalMenu() === (int) 1) {
+            $verticalMenu = true;
+            $verticalMenuClass = 'menu-vertical-wrapper';
+            $rightContentClass = 'col-menu-3';
+        }
+    }
+}
+if ($menuBlock->getCmsBlockConfig($item,'left','enable') ||
+    $menuBlock->getCmsBlockConfig($item,'right','enable') ||
+    $menuBlock->getCmsBlockConfig($item,'header','enable') ||
+    $menuBlock->getCmsBlockConfig($item,'bottom','enable')
+) {
+    $catDisplay = true;
+}
+if ($catDisplay) {
+    $liClass .= ' dropdown menu-dropdown-icon category-item nav-'.$item->getItemId();
+    if ($verticalMenu) {
+        $columnCount = 1;
+    } else {
+        $columnCount++;
+    }
+    $menuColumnCount = 1;
+    if ($columnCount === 3) {
+        $menuColumnCount = $columnCount - 1;
+    }
+    if ($columnCount === 2) {
+        $columnCount++;
+    }
+    if ($columnCount === 1) {
+        $menuColumnCount = 4;
+    }
+    ?>
+    <li class="<?= /* @noEscape */ $liClass ?>">
+        <a href="<?= /* @noEscape */ $menuManagement->generateMenuUrl($item) ? : '#' ?>">
+            <span class="megaitemicons"><?= /* @noEscape */ $item->getItemFontIcon() ?></span>
+            <?= /* @noEscape */ __($menuManagement->generateMenuItemName($item)) ?>
+        </a>
+        <ul class="animated <?= /* @noEscape */ $item->getAnimationOption() ?> column<?= /* @noEscape */ $columnCount ?> <?= $verticalMenuClass ?>" style="animation-duration: 0.7s;">
+            <?php
+                if ($menuBlock->getCmsBlockConfig($item,'header','enable')) {
+                    $cmsClass = "megaStaticBlock menu-header";
+                    echo $menuBlock->createCmsBlockHtml(
+                        $menuBlock->getCmsBlockConfig($item,'header','block'),
+                        $menuBlock->getCmsBlockConfig($item,'header','title'),
+                        $cmsClass
+                    );
+                }
+                if ($menuBlock->getCmsBlockConfig($item,'left','enable') && !$verticalMenu) {
+                    $cmsClass = "megaStaticBlock menu-sidebar-left";
+                    echo $menuBlock->createCmsBlockHtml(
+                        $menuBlock->getCmsBlockConfig($item,'left','block'),
+                        $menuBlock->getCmsBlockConfig($item,'left','title'),
+                        $cmsClass
+                    );
+                }
+                $colClass =$menuBlock->getCmsBlockConfig($item,'right','enable') ? 'col-menu-9' : '';
+            ?>
+            <li class="megaStaticBlock menu-content <?= /* @noEscape */ $colClass ?>">
+                <?php if (!empty($subcats)) {
+                    if ($verticalMenu) { ?>
+                        <?= $menuBlock->setVerticalCategoryItem($item,$subcats) ?>
+                    <?php } else { ?>
+                        <?= $menuBlock->setChildCategoryColumn($subcats,$item,$menuColumnCount) ?>
+                        <?php } ?>
+                <?php } ?>
+            </li>
+            <?php
+            if ($menuBlock->getCmsBlockConfig($item,'right','enable')) {
+                $cmsClass = "megaStaticBlock menu-sidebar-right ' . $rightContentClass . '";
+                echo $menuBlock->createCmsBlockHtml(
+                    $menuBlock->getCmsBlockConfig($item,'right','block'),
+                    $menuBlock->getCmsBlockConfig($item,'right','title'),
+                    $cmsClass
+                );
+            }
+            if ($menuBlock->getCmsBlockConfig($item,'bottom','enable')) {
+                $cmsClass = "megaStaticBlock menu-footer";
+                echo $menuBlock->createCmsBlockHtml(
+                    $menuBlock->getCmsBlockConfig($item,'bottom','block'),
+                    $menuBlock->getCmsBlockConfig($item,'bottom','title'),
+                    $cmsClass
+                );
+            }
+            ?>
+        </ul>
+    </li>
+<?php } else { ?>
+<li class="<?= $liClass ?>">
+    <a href="<?= $megaMenuLink ?>"><span class="megaitemicons"><?= $item->getItemFontIcon() ?></span><?= __($megaMenuName) ?></a>
+</li>
+<?php } ?>

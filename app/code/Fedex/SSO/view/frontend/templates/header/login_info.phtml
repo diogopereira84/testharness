@@ -1,0 +1,260 @@
+<?php
+/** @var \Fedex\SSO\Block\RetailLoginInfo $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuoteViewModel */
+$tigerMyAccountUiNavigationConsistency = $block->getTigerMyAccountUiNavigationConsistency();
+$isPersonalAddressBookToggleEnable = $block->isPersonalAddressBookToggleEnable();
+$uploadToQuoteViewModel = $block->getData('upload_to_quote_viewmodel');
+$fclLogin = $block->getData('fcl_login');
+if ($block->isCommercialCustomer()) {
+    ?>
+    <div><div class="fcl-login"></div></div>
+    <?php
+}
+?>
+<?php
+if (!$block->isCommercialCustomer()) {
+    ?>
+    <div class="fcl-signup-login" style="display:none;">
+        <div class="fcl-login">
+            <div class="links-container wlgn-login-container">
+                <div tabindex="0" class="customer-name customer-fcl-login customerdropdown">
+                    <span id="customer-firstname"></span>
+                    <?php if ($block->isFclCustomer()) {
+
+                        $isFclCustomer = ((bool) $block->isFclCustomer());
+                        ?>
+                        <?php if ($fclLogin->isToggleD239988Enabled()): ?>
+
+                            <!-- D-239988 - CSP Bugfix -->
+                            <?php $fclCustomerScript = <<<script
+                                    if (
+                                        typeof window.checkout !== 'undefined' &&
+                                        typeof window.checkout.is_fcl_customer !== 'undefined'
+                                    ) {
+                                        window.checkout.is_fcl_customer = $isFclCustomer;
+                                    }
+                                script;
+                            ?>
+                            <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $fclCustomerScript, false); ?>
+
+                        <?php else: ?>
+                            <script>
+                                if (
+                                    typeof window.checkout !== 'undefined' &&
+                                    typeof window.checkout.is_fcl_customer !== 'undefined'
+                                ) {
+                                    window.checkout.is_fcl_customer = <?= /* @noEscape */ $isFclCustomer ?>;
+                                }
+                            </script>
+                        <?php endif; ?>
+                        <?php
+                    } ?>
+                </div>
+                <div class="customer-dropdown customerdropdown"<?php if ($tigerMyAccountUiNavigationConsistency) { ?> tabindex="0"<?php } ?>>
+                    <img src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/sso/login_icon.png')); ?>"
+                    class="login-icon" alt ="Log in or Sign Up" />
+                </div>
+                <div class="customer-menu">
+                    <ul class="header links<?= $tigerMyAccountUiNavigationConsistency ? ' header-style-uniform' : '' ?>">
+                        <?php if (
+                            $isPersonalAddressBookToggleEnable && $isFclCustomer
+                        ): ?>
+                            <li class="personal-address-book">
+                                <a href="<?=$block->getUrl('personaladdressbook/index/view/')?>" >
+                                    <?=$escaper->escapeHtmlAttr(__("Address Book"))?></a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="my-profile">
+                            <a onclick="profileUpdate(this);"
+                            data-url="<?= $escaper->escapeHtmlAttr($block->getUrl('customer/account')) ?>"
+                                href="javascript:void(0)">
+                            <?= $tigerMyAccountUiNavigationConsistency
+                                    ? $escaper->escapeHtmlAttr(__("Contact & Login"))
+                                    : $escaper->escapeHtmlAttr(__("My Profile"))
+                            ?></a>
+                        </li>
+                        <?php if ($block->isMyProjectAvailable()): ?>
+                        <li>
+                            <a href="<?= $escaper->escapeUrl('/configurator/index/index?viewproject=true') ?>">
+                                <?= $escaper->escapeHtml(__("My Projects")) ?> </a>
+                        </li>
+                        <?php elseif ($block->isAccessToWorkspaceToggleEnable()): ?>
+                            <li>
+                                <a href="<?= $escaper->escapeUrl($block->getWorkspaceUrl()) ?>">
+                                    <?= $escaper->escapeHtmlAttr(__("My Projects")) ?></a>
+                            </li>
+                        <?php endif; ?>
+                        <li class="sso-order-history">
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history/')) ?>">
+                            <?= $escaper->escapeHtml(__("My Orders")) ?></a>
+                        </li>
+                        <?php if ($uploadToQuoteViewModel->isUploadToQuoteEnable()) :?>
+                        <li class="my-quotes">
+                            <a href="<?=$escaper->escapeHtmlAttr($block->getUrl('uploadtoquote/index/quotehistory'))?>" >
+                                <?=$escaper->escapeHtmlAttr(__("My Quotes"))?></a>
+                        </li>
+                        <?php endif; ?>
+                        <?php if ($tigerMyAccountUiNavigationConsistency) : ?>
+                            <li class="accounts-and-credit-cards">
+                                <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/accountsandcreditcards')) ?>">
+                                <?= $escaper->escapeHtml(__("Accounts & Credit Cards")) ?></a>
+                            </li>
+                            <li class="">
+                                <a href="<?= $escaper->escapeUrl($block->getUrl('customer/account/preferences')) ?>">
+                                <?= $escaper->escapeHtml(__("Preferences")) ?></a>
+                            </li>
+                        <?php endif; ?>
+                        <?php if ($block->getCanvaDesignEnabled()) : ?>
+                            <li class="my-design-templates">
+                                <a href="<?= $escaper->escapeUrl($block->getUrl('canva?process=new#')) ?>">
+                                <?= $escaper->escapeHtml(__("My Design Templates")) ?></a>
+                            </li>
+                        <?php endif; ?>
+                        <?php
+                            $redirectUrl = $block->getUrl();
+                            $wlgnLogoutPageUrl = $block->getGeneralConfig('fcl_logout_url');
+                            $queryParameter = $block->getGeneralConfig('fcl_logout_query_param');
+                            $wlgnLogoutUrl = $wlgnLogoutPageUrl . '?' . $queryParameter . '=' . $redirectUrl;
+                            ?>
+                        <li class="log-out wlgn-logout fxo-logout">
+                            <a href="javascript:void(0)"
+                            data-url="<?= $escaper->escapeHtml($wlgnLogoutUrl) ?>">
+                            <?= $escaper->escapeHtmlAttr(__("Log Out")) ?></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fcl-mobile-login" style="display:none;">
+        <div class="fcl-login-mobile-toggle" style='display:none'>
+            <div class="customer-menu">
+                <div class="header links">
+                    <div class="li my-account">
+                        <span class="my-account-hi">
+                            <?= $escaper->escapeHtmlAttr(__("Hi, ")) ?>
+                            <span><?= $escaper->escapeHtmlAttr($block->getFclCustomerName()) ?></span>
+                        </span>
+                    </div>
+                    <div class="li my-profile">
+                        <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('customer/account')) ?>">
+                            <?= $tigerMyAccountUiNavigationConsistency
+                                    ? $escaper->escapeHtmlAttr(__("Contact & Login"))
+                                    : $escaper->escapeHtmlAttr(__("My Profile"))
+                            ?></a>
+                    </div>
+                    <?php if ($block->isMyProjectAvailable()): ?>
+                    <div class="li sso-order-history">
+                        <a href="<?= $escaper->escapeUrl('/configurator/index/index?viewproject=true') ?>">
+                            <?= $escaper->escapeHtml(__("My Projects")) ?></a>
+                    </div>
+                    <?php elseif ($block->isAccessToWorkspaceToggleEnable()): ?>
+                        <div class="li sso-order-history">
+                            <a href="<?= $escaper->escapeUrl($block->getWorkspaceUrl()) ?>">
+                                <?= $escaper->escapeHtmlAttr(__("My Projects")) ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <div class="li sso-order-history">
+                        <a href="<?= $escaper->escapeUrl($block->getUrl('sales/order/history/')) ?>">
+                            <?= $escaper->escapeHtml(__("My Orders")) ?></a>
+                    </div>
+
+                    <?php if ($tigerMyAccountUiNavigationConsistency) : ?>
+
+                        <div class="li my-profile accounts-and-credit-cards">
+                            <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('customer/account/accountsandcreditcards')) ?>">
+                                <?= $escaper->escapeHtmlAttr(__("Accounts & Credit Cards"))?></a>
+                        </div>
+
+                        <div class="li my-profile">
+                            <a href="<?= $escaper->escapeHtmlAttr($block->getUrl('customer/account/preferences')) ?>">
+                                <?= $escaper->escapeHtmlAttr(__("Preferences")) ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <?php
+                    if ($block->getCanvaDesignEnabled()) : ?>
+                        <div class="li my-design-templates">
+                            <a href="<?= $escaper->escapeUrl($block->getUrl('canva?process=new#')) ?>">
+                                <?= $escaper->escapeHtml(__("My Design Templates")) ?></a>
+                        </div>
+                    <?php endif; ?>
+                    <!-- wlgn-logout Class added for logout issue D-123017-->
+                    <div class="li log-out fxo-logout wlgn-logout">
+                        <a href="javascript:void(0)"
+                            data-url="<?= $escaper->escapeHtml($wlgnLogoutUrl) ?>">
+                            <?= $escaper->escapeHtmlAttr(__("Log Out")) ?></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php
+    if ($block->getWebCookieConfig('cookie_lifetime')) {?>
+        <script type="text/x-magento-init">
+        {
+                "*": {
+                        "Fedex_SSO/js/fcllogin": {
+                        }
+                }
+        }
+        </script>
+    <?php } ?>
+    <?php
+    if ($block->getWebCookieConfig('cookie_lifetime')) : ?>
+        <input type="hidden" name="profile_logout_time" id="profile_logout_time"
+        value="<?= $escaper->escapeHtmlAttr($block->getWebCookieConfig('cookie_lifetime')) ?>">
+    <?php endif;
+?>
+<style>
+@media only screen and (max-width: 1023px) {
+    .globalize-login-mobile .page-wrapper {
+        position: relative;
+    }
+    .globalize-login-mobile .fcl-login-mobile-toggle {
+        margin-top: 0;
+        top: 0;
+    }
+}
+</style>
+<?php if ($fclLogin->isToggleD239988Enabled()): ?>
+    <!-- D-239988 - CSP Bugfix -->
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Fedex_SSO/js/login-info": {}
+            }
+        }
+    </script>
+<?php else: ?>
+    <script type="text/javascript">
+        require(['jquery','fedex/storage', 'domReady!'], function ($,fxoStorage) {
+            $(window).on('load resize', function () {
+                if ($(window).width() < 1024) {
+                    $('.globalize-login-mobile .fcl-mobile-login').show();
+                    $('.globalize-login-mobile .fcl-signup-login').hide();
+                } else {
+                    $('.globalize-login-mobile .right-top-header-links .fcl-signup-login').show();
+                    $('.globalize-login-mobile .fcl-mobile-login').hide();
+                }
+            });
+        });
+        require(['jquery', 'Magento_Customer/js/customer-data', '!domReady'], function($, customerData) {
+            function updateFirstName() {
+                let customer = customerData.get('customer').subscribe(function (customer) {
+                    if (customer && customer.firstname) {
+                        $('#customer-firstname').text('Hi ' + customer.firstname);
+                    } else {
+                        $('#customer-firstname').text('Welcome');
+                    }
+                });
+            }
+            updateFirstName();
+        });
+    </script>
+<?php endif; ?>
+<?php
+}
+?>
+
+

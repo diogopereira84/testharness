@@ -1,0 +1,140 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$infoUrl = $this->getInfoWarningIcon();
+$catalogDocumentUserConfigData = $this->getCatalogDocumentUserConfigData();
+?>
+<li class="catalog-and-document-user-content">
+    <div class="ep-reorder enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("REORDER FROM ORDER HISTORY")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-reorder" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon"
+                 alt="Order confirmation email icon" />
+                <span id="info-reorder" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("When enabled, users will be able to reorder products from their Order History")) ?>
+                </span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Reorder Toggle" name="is_reorder_enabled" id="reorder-toggle" <?= $catalogDocumentUserConfigData['is_reorder_enabled'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-upload-create enhanced-profile-toggle-main">
+        <h4 class="toggle-title">
+            <?= $escaper->escapeHtml(__("ALLOW USERS TO UPLOAD, CREATE, ORDER THEIR OWN DOCUMENTS")) ?>
+        </h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-upload-create" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-upload-create" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("Allow users to upload and create their own projects")) ?></span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" name="allow_own_document" aria-label="Upload Create Toggle" id="upload-create-toggle" <?= $catalogDocumentUserConfigData['allow_own_document'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-order-shared-catalog enhanced-profile-toggle-main">
+        <h4 class="toggle-title">
+            <?= $escaper->escapeHtml(__("ALLOW USERS TO ORDER DOCUMENTS FROM THEIR SHARED CATALOG")) ?>
+        </h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-order-shared-catalog" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-order-shared-catalog" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("Allow users to order from a Catalog of preconfigured items")) ?>
+                </span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" name="allow_shared_catalog" aria-label="Shared Catalog Toggle" id="order-shared-catalog-toggle" <?= $catalogDocumentUserConfigData['allow_shared_catalog'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-box-cloud-drive enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("BOX CLOUD DRIVE INTEGRATION OPTION")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-box-cloud-drive" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-box-cloud-drive" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                    <?= $escaper->escapeHtml(__("Allow users to upload files from Box Cloud Drive")) ?>
+                </span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Cloud Drive Toggle" name="box_enabled" id="box-cloud-drive-toggle" <?= $catalogDocumentUserConfigData['box_enabled'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-dropbox-cloud-drive enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("DROPBOX CLOUD DRIVE INTEGRATION OPTION")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-dropbox-cloud-drive" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-dropbox-cloud-drive" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("Allow users to upload files from Dropbox")) ?></span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Dropbox Toggle" name="dropbox_enabled" id="dropbox-cloud-drive-toggle" <?= $catalogDocumentUserConfigData['dropbox_enabled'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-google-cloud-drive enhanced-profile-toggle-main">
+        <h4 class="toggle-title"><?= $escaper->escapeHtml(__("GOOGLE CLOUD DRIVE INTEGRATION OPTION")) ?></h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-google-cloud-drive" src="<?= $infoUrl; ?>"
+                 class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-google-cloud-drive" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("Allow users to upload files from Google Cloud Drive")) ?></span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Google Toggle" name="google_enabled" id="google-cloud-drive-toggle" <?= $catalogDocumentUserConfigData['google_enabled'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+    <div class="ep-microsoft-cloud-drive enhanced-profile-toggle-main">
+        <h4 class="toggle-title">
+            <?= $escaper->escapeHtml(__("MICROSOFT CLOUD DRIVE INTEGRATION OPTION")) ?>
+        </h4>
+        <div class="info-icon">
+            <span class="enhanced-profile-tooltip">
+                <img aria-describedby="info-microsoft-cloud-drive" src="<?= $infoUrl; ?>" class="tooltip-toggle tooltip-icon" alt="Order confirmation email icon" />
+                <span id="info-microsoft-cloud-drive" role="tooltip" class="tooltip-content alternate-tooltip-text">
+                <?= $escaper->escapeHtml(__("Allow users to upload files Microsoft Cloud drive")) ?></span>
+            </span>
+        </div>
+        <div class="enhanced-profile-toggle">
+            <label class="switch">
+                <input type="checkbox" aria-label="Microsoft Toggle" name="microsoft_enabled" id="microsoft-cloud-drive-toggle" <?= $catalogDocumentUserConfigData['microsoft_enabled'] ? 'checked' : ''; ?> />
+                <span class="custom-slider round"></span>
+                <span class="labels" data-on="ON" data-off="OFF"></span>
+            </label>
+        </div>
+    </div>
+</li>

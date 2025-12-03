@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+    xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="fedex_sde" translate="label" sortOrder="10">
+            <label>SDE</label>
+        </tab>
+        <section id="sde" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_sde</tab>
+            <resource>Fedex_SDE::sde_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General Configuration</label>
+                <field id="is_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sde_msg_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SDE facing message title</label>
+                    <comment>Please enter SDE facing message title.</comment>
+                    <validate>required-entry</validate>
+                    <depends>
+                        <field id="sde/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="sde_msg_content" translate="label" type="textarea" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SDE facing message content</label>
+                    <comment>Please enter SDE facing message content. Maximum 150 characters allowed</comment>
+                    <validate>required-entry validate-length maximum-length-150</validate>
+                    <depends>
+                        <field id="sde/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="secure_img" translate="label" type="Magento\Config\Block\System\Config\Form\Field\File" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Upload image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\File</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">sde</upload_dir>
+                    <comment>
+                        <![CDATA[Allowed file types: jpg, jpeg, gif, png]]>
+                    </comment>
+                    <depends>
+                        <field id="sde/general/is_enable">1</field>
+                    </depends>
+                </field>
+                <field id="sde_checkout_signature_message" translate="label" type="textarea" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SDE Signature Message In Checkout</label>
+                    <comment>Please enter direct signature required message to show in the checkout.</comment>
+                    <depends>
+                        <field id="sde/general/is_enable">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="sde_mask" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuration Mask image</label>
+                <field id="is_enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sde_mask_img" translate="label" type="Magento\Config\Block\System\Config\Form\Field\File" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Upload mask image</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\File</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">sde</upload_dir>
+                    <comment>
+                        <![CDATA[Allowed file types: jpg, jpeg, gif, png]]>
+                    </comment>
+                    <depends>
+                        <field id="sde/sde_mask/is_enable">1</field>
+                    </depends>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

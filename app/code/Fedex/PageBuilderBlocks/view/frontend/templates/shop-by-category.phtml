@@ -1,0 +1,37 @@
+<?php
+/**
+ * @category Fedex
+ * @package Fedex_PageBuilderBlocks
+ * @copyright Copyright (c) 2024 FedEx
+ */
+
+declare(strict_types=1);
+
+/** @var \Fedex\PageBuilderBlocks\Block\ShopByCategory $block */
+?>
+
+<div class="shop-by-type-overlay pl-16 pr-16">
+    <h2>
+        <?= $block->getBlockTitle() ?>
+    </h2>
+    <div class="shop-by-type-categories-or-products">
+        <?php if ($block->shouldShowCategories()): ?>
+            <?php foreach ($block->getCategories() as $category): ?>
+            <a class="item d-flex flex-col no-underline" href="<?= $block->getAdaptedCategoryLink($category)?>">
+                <?php $categoryImg = $category->getImageUrl() ?: $block->getViewFileUrl('Magento_Catalog::images/category/placeholder.jpg') ?>
+                <img class="valign-top w-100" src="<?= $categoryImg ?>" alt="<?= $category->getName() ?>">
+                <span class="item-title p-24 cl-gray fedex-light"> <?= $category->getName() ?> </span>
+            </a>
+            <?php endforeach; ?>
+        <?php elseif ($block->shouldShowProducts()): ?>
+            <?php foreach ($block->getProducts() as $product): ?>
+                <a class="item d-flex flex-col no-underline" href="<?= $product->getProductUrl() ?>">
+                    <img class="valign-top w-100" src="<?= $block->getProductImgUrl($product) ?>" alt="<?= $product->getName() ?>">
+                    <span class="item-title p-24 d-block cl-gray fedex-light"><?= $product->getName() ?></span>
+                </a>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p><?= $block->getNoCategoriesOrProductsToDisplay(); ?></p>
+        <?php endif; ?>
+    </div>
+</div>

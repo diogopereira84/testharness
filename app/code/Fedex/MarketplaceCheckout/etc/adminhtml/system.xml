@@ -1,0 +1,170 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="environment_toggle" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="enable_upload_to_quote" translate="label" type="select" sortOrder="770" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - E-415481 Enable 3p products in Upload to quote workflow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_customer_shipping_accounts_third_party" translate="label" type="select" sortOrder="783" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - E-413659 - Enable Customer Shipping Accounts for 3p products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="vendor_shipping_account_number" translate="label" type="select" sortOrder="790" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - B-2027702 - Vendor Specific enablement for Customer Shipping account Options:</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_e467599" translate="label" type="select" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - E-467599 Optimization of ShippingMethodManagementPlugin for Shipping Methods (NFR)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_enable_expected_delivery_date" translate="label" type="select" sortOrder="790" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SGC - B-2082381 - Enable Expected Delivery Date in Order Summary</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_194958" translate="label" type="select" sortOrder="891" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-194958 - Reorders for Navitor products are not flowing to Mirakl</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d214903" translate="label" type="select" sortOrder="892" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-214903 - Groot: Shopping cart page is broken while adding a CBB item to cart in a new session</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d217815" translate="label" type="select" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-217815 - Production: Unable to get Freight Shipping rates from FedEx Freight LTL API</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="magegeeks_d224874" translate="label" type="select" sortOrder="1501" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>MazeGeeks - D-224874 - InitializeQuote API Failure | FUSE L6</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d216694" translate="label" type="select" sortOrder="1501" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-216694 - Unable to send Navitor/Printful order to Mirakl</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d227568" translate="label" type="select" sortOrder="1510" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-227568 - 3P Checkout Shipping - Large CBB order not returning freight options as expected</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d234051" translate="label" type="select" sortOrder="1600" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-234051 - CBB orders with shipments involving multiple packages showing incorrect shipping prices</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="fedex" translate="label">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="marketplace_configuration" translate="label" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Marketplace General Configurations</label>
+                <field id="promo_code_message" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Promo Code Message</label>
+                </field>
+                <field id="promo_code_message_enabled_toggle" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Promo Code Message Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Controls the display of the 3P product promo code message in cart and order summary when an account or promo code is applied to the order. Promo Code Message must also not be null for display when active. When this toggle is set to Yes, the message will appear.</comment>
+                </field>
+                <field id="cart_quantity_tooltip" translate="label comment" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cart Quantity Tooltip</label>
+                </field>
+                <field id="delivery_methods_tooltip" translate="label comment" type="text" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Checkout Delivery Method Tooltip</label>
+                </field>
+                <field id="external_product_id" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>External Product ID</label>
+                    <comment><![CDATA[Product ID to be sent in all API Requests]]></comment>
+                </field>
+                <field id="reorder_error_message" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Re-Order Error Message</label>
+                </field>
+                <field id="vendor_shipping_account_number_disclaimer" translate="label comment" type="text" sortOrder="800" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Shipment Account Enabled Disclaimer Message</label>
+                    <comment><![CDATA[Disclaimer shown for each 3P vendor when vendors opt-out of allowing customers to use the customer's own shipping account during Checkout]]></comment>
+                </field>
+                <field id="review_and_submit_and_order_confirmation_cancellation_message" translate="label comment" type="text" sortOrder="802" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Review and Submit and Order Confirmation Pages Cancellation Message</label>
+                </field>
+            </group>
+            <group id="marketplace_configuration_toast" translate="label" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Marketplace Checkout | Delivery Method Changes - Toast Configuration</label>
+                <field id="title" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Title</label>
+                </field>
+                <field id="shipping_content" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping message</label>
+                </field>
+                <field id="pickup_content" translate="label comment" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>In-store pickup message</label>
+                </field>
+                <field id="shipping_account_message" translate="label comment" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping Account Message</label>
+                </field>
+            </group>
+            <group id="transactional_email" translate="label" sortOrder="1600" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Transactional Emails Configuration</label>
+                <field id="order_ready_for_pickup_enable" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Ready For Pick Up Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_ready_for_pickup" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Ready For Pick Up</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="order_shipment_delivery_enable" translate="label" type="select" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Shipment Delivery Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_shipment_delivery" type="select" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Shipment Delivery</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="order_shipment_multiple_delivery_enable" translate="label" type="select" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Shipment Multiple Delivery Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_shipment_multiple_delivery" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Shipment Multiple Delivery</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="order_confirmed_enable" translate="label" type="select" sortOrder="24" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Confirmed Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_confirmed" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Confirmed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="order_cancelled_enable" translate="label" type="select" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Cancelled Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_cancelled" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Cancelled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="order_delivery_date_updated_enable" translate="label" type="select" sortOrder="29" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Enable Order Delivery Date Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="order_delivery_date_updated" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Order Delivery Date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Email\Template</source_model>
+                </field>
+
+                <field id="phone_number_one" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Customer Service Phone Number #1</label>
+                </field>
+                <field id="phone_number_two" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Customer Service Phone Number #2</label>
+                </field>
+            </group>
+         </section>
+	</system>
+</config>

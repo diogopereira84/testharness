@@ -1,0 +1,78 @@
+# Copyright © Fedex, Inc. All rights reserved.
+# See COPYING.txt for license details.
+type Query {
+  getCartUidFromQuoteId(
+    quote_id: Int @doc(description: "Quote ID to convert into UID.")
+  ): GetCartUidOutput
+    @resolver(class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\GetCartUidFromQuoteId")
+    @doc(description: "Retrieves cart UID from a given quote ID.")
+  
+  loadCartByQuoteId(uid: String!): AddProductsToCartOutput @doc(description:"Load cart data from UID.") 
+  @resolver(class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\LoadCartByQuoteId")
+  @doc(description: "Retrieves cart data from a given quote ID.")
+
+  sendQuoteEmail(
+    uid: String @doc(description: "the unique uid of quote")
+    template: String @doc(description: "email template to send")
+  ): SendQuoteEmailOutput
+    @resolver(class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\SendQuoteEmail")
+    @doc(description: "Sends fuse quote emails")
+
+  retrieveBidLetter(
+    uid: String!,
+    template: String!
+  ): RetreiveBidLetterOutput @doc(description:"Load PDF content from uui and template.") 
+  @resolver(class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\RetreiveBidLetter")
+  @doc(description: "Retrieves email PDS data from a given quote ID and template.")
+}
+type GetCartUidOutput {
+  cart_uid: String! @doc(description: "Masked quote UID for a given quote.")
+}
+
+type SendQuoteEmailOutput {
+  status: String! @doc(description: "Success or failure.")
+  failure_message: String @doc(description: "Failure message.")
+}
+
+type Mutation {
+  initializeNegotiableQuote(
+    uid: String,
+    comment: String @doc(description: "A comment to be associated with the negotiable quote.")
+  ): GetQuoteDetailsOutput
+    @resolver(class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\InitializeNegotiableQuote")
+    @doc(description: "Initializes a negotiable quote with cart and quote details.")
+    
+  updateQuoteDiscount(
+        uid: String!,
+        discountIntent: DiscountIntentInput,
+        comment: String @doc(description: "A comment to be added when updating the quote discount.")
+  ): GetQuoteDetailsOutput
+    @resolver(
+      class: "Fedex\\FuseBiddingQuote\\Model\\Resolver\\UpdateQuoteDiscount"
+    )
+    @doc(description: "Update quote discount in existing quote.")
+}
+
+input DiscountIntentInput {
+    quoteDiscounts: [QuoteDiscountInput]
+    lineDiscounts: [LineDiscountInput]
+}
+
+input QuoteDiscountInput {
+    discountAmount: Float
+    discountPercentage: String
+    reasonCode: String
+}
+
+input LineDiscountInput {
+    discountLevel: String
+    instanceId: String
+    skuCode: String
+    discountAmount: Float
+    discountPercentage: String
+    reasonCode: String
+}
+
+type RetreiveBidLetterOutput {
+  data: String! @doc(description: "Masked quote UID for a given quote.")
+}

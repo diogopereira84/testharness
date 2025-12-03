@@ -1,0 +1,82 @@
+<?php
+$fileIconImage = $block->getViewFileUrl('Magento_Catalog::images/file-icon.png');
+$errorIcon = $block->getViewFileUrl('images/order-history/error-white.png');
+?>
+<div id="modal-content-change-request" class="modal-content-change-request-form-container" style="display:none;">
+    <div class="modal-content-change-request-form-header">
+    </div>
+    <div class="modal-content-change-request-form-sub-title">
+        <div class="custom-model-edit-icon">
+            <img src="<?= $escaper->escapeUrl(
+                $block->getViewFileUrl('Fedex_CatalogMvp::images/edit-banner-icon.png'))?>"
+                    alt="edit-banner-icon-popup-icon">
+        </div>
+        <span class="modal-content-change-request-form-sub-heading">
+        <h3><?= $block->escapeHtml(__('Requesting Change for '));?><span class="product_name"></span><h3>
+    </span>
+    </div>
+    <p class="change-request-description">
+        <?= $block->escapeHtml(__('Requesting a change for any item will send the custom product back to a FedEx Office team member and may result in a new price.
+        This catalog item  will not be available in your catalog while its under review.'));?></p>
+    <div class="print-instruction">
+        <p class="change-request-label"><label for="change-request">PRINT INSTRUCTIONS</label></p>
+        <textarea id="print_instruction" name="print_instruction" placeholder="Please provide instructions as to any updates including replacing a file."
+                    rows="5" cols="10">
+    </textarea>
+        <div id="char_left" class="char_left"><?= $block->escapeHtml(__('400 characters left.'));?></div>
+        <p class="print_error"></p>
+    </div>
+    <div class="file-upload-container" style="display: none;">
+        <span class="file-upload-title"><?= $block->escapeHtml(__('FILE UPLOAD'));?> (Total No. of Files: <span class='filesCount'></span> )</span>
+        <span class="document-icon-src" data-src="<?= $fileIconImage; ?>"></span>
+        <div class="validation-error" style="display: none;">
+            <div class="error-icon">
+                <img src="<?= $errorIcon; ?>" class="cross-error-icon" alt="Cross Error Icon"/>
+            </div>
+            <div class="error-msg-container">
+                <p class="error-text-msg"></p>
+            </div>
+            <span class="cross-icon" tabindex="0">X</span>
+        </div>
+        <div class="validation-error-file-length" style="display: none;">
+            <div class="error-icon">
+                <img src="<?= $errorIcon; ?>" class="cross-error-icon" alt="Cross Error Icon"/>
+            </div>
+            <div class="error-msg-container">
+                <p class="error-text-msg"></p>
+            </div>
+            <span class="cross-icon" tabindex="0">X</span>
+        </div>
+        <div class="validation-error-file-size" style="display: none;">
+            <div class="error-icon">
+                <img src="<?= $errorIcon; ?>" class="cross-error-icon" alt="Cross Error Icon"/>
+            </div>
+            <div class="error-msg-container">
+                <p class="error-text-msg"></p>
+            </div>
+            <span class="cross-icon" tabindex="0">X</span>
+        </div>
+        <div class="validation-error-file-type" style="display: none;">
+            <div class="error-icon">
+                <img src="<?= $errorIcon; ?>" class="cross-error-icon" alt="Cross Error Icon"/>
+            </div>
+            <div class="error-msg-container">
+                <p class="error-text-msg"></p>
+            </div>
+            <span class="cross-icon" tabindex="0">X</span>
+        </div>
+        <ul class="file-upload-ul"></ul>
+    </div>
+    <div class="replace_file" style="text-align: center;">
+        <button class="replace_file_cta">
+            <?= $block->escapeHtml(__('REPLACE FILE'));?>
+        </button>
+        <input type="file" name="replaceFile[]" id="replace_file_upload" multiple style="display: none;"/>
+        <p class="replace_file_text"></p>
+    </div>
+    <div class="actions">
+        <button class="action primary request-change-cancel">CANCEL</button>
+        <button class="action primary request-change" disabled>REQUEST CHANGE</button>
+    </div>
+</div>
+<div class="settings_sku"></div>

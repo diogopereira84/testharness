@@ -1,0 +1,33 @@
+<?php
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+
+declare(strict_types=1);
+
+$emailVerificationErrorMessage = $block->getEmailVerificationErrorMsg() ?? null;
+$header_class = "";
+if (!$emailVerificationErrorMessage) {
+    $header_class = "profile_failure_header";
+}
+?>
+
+<header class="page-header wlgn-enable-page-header remove-role hborder <?php echo $header_class ?>">
+    <div class="header content">
+        <div id="toggle-menu">
+            <span data-action="toggle-nav" class="action nav-toggle"><span>Toggle Nav</span></span>
+        </div>
+        <a class="logo" href="<?= $block->getBaseUrl()?>" title="<?= $block->getLogoAlt()?>" aria-label="store logo">
+            <img src="<?= $block->getLogoSrc()?>" title="<?= $block->getLogoAlt()?>"
+            alt="<?= $block->getLogoAlt()?>" width="170">
+        </a>
+    </div>
+</header>
+<div class="modal-inner-wrap" data-role="focusable-scope">
+    <div id="modal-content-7" class="modal-content" data-role="content">
+        <div id="login-register-popup" class="pod-upload-warning login-top-popup" style="">
+            <div class="modal-body-content">
+                <h1 class="note-heading"><?= $emailVerificationErrorMessage; ?></h1>
+            </div>
+        </div>
+    </div>
+</div>

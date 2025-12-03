@@ -1,0 +1,19 @@
+interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\ProductInterfaceTypeResolverComposite") @doc(description: "The ProductInterface contains attributes that are common to all types of products. Note that descriptions may not be available for custom and EAV attributes.") {
+    is_enable_for_poc: Boolean @doc(description: "Indicates whether the product enabled or disabled for POC.") @resolver(class: "Fedex\\ProductGraphQl\\Model\\Resolver\\Product\\GetIsEnableForPoc")
+    product_engine_id: String @doc(description: "Product engine id.") @resolver(class: "Fedex\\ProductGraphQl\\Model\\Resolver\\Product\\GetProductEngineId")
+    product_preset_id: String @doc(description: "Product preset id.") @resolver(class: "Fedex\\ProductGraphQl\\Model\\Resolver\\Product\\GetProductPresetId")
+    productEngine_attributes: [ProductEngineAttributes] @doc(description: "Get the catalog custom product visible attributes list") @resolver(class: "Fedex\\ProductGraphQl\\Model\\Resolver\\Product\\GetProductEngineProperties")
+}
+type ProductEngineAttributes @doc(description: "Contains details about the attribute, including the code and type.") {
+    attribute_code: String @doc(description: "The unique identifier for an attribute code. This value should be in lowercase letters without spaces.")
+    attribute_label: String @doc(description: "The unique identifier for an attribute label.")
+    attribute_type: String @doc(description: "The data type of the attribute.")
+    input_type: String @doc(description: "The frontend input type of the attribute.")
+    attribute_options: [ProductEngineAttributeOption] @doc(description: "Product engine attribute options list.")
+}
+type ProductEngineAttributeOption @doc(description: "Defines an attribute option.") {
+    choice_id: String @doc(description: "The choice id assigned to the attribute option.")
+    value: String @doc(description: "The attribute option value.")
+    label: String @doc(description: "The label assigned to the attribute option.")
+    default: Boolean @doc(description: "The deafult value should be assigned to the attribute option.")
+}

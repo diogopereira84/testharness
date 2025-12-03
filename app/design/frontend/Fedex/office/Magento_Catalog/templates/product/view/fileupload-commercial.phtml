@@ -1,0 +1,87 @@
+<?php
+$product = $block->getProduct();
+$deliveryHelper = $this->helper('Fedex\Delivery\Helper\Data');
+$siteName = $deliveryHelper->getCompanySite();
+$hasCanvaDesign = $product->getData('has_canva_design');
+$productViewModel = $block->getData('product_availability_view_model');
+$dyesubViewModel = $block->getData('dyesub_view_model');
+
+if ($siteName) {
+    /** @var $viewModel \Fedex\Punchout\ViewModel\TazToken */
+    $viewModel = $block->getViewModel();
+    $tazToken = $viewModel->getTazToken($siteName ? false : true);
+} else {
+    $tazToken = null;
+}
+
+?>
+<?php
+$unavailableMessageCssClass = '';
+if($productViewModel->isE441563ToggleEnabled() && !$productViewModel->checkProductAvailable($product)){
+    $unavailableMessageCssClass = $productViewModel->getUnavailableButtonCssClass();
+    echo $block->getChildHtml('pdp.unavailable.message');
+}
+?>
+<div class="file-upload-section text-center">
+	<div class="file-upload-container text-left">
+        <?php if(!$product->getData('is_customer_canvas')):?>
+	    <button id="upload-a-file-button" type="button" class="btn-primary d-none mb-20 <?= $unavailableMessageCssClass;?>"
+                onclick="openIframe.uploadPrintProduct(event)('<?php echo $product->getSku(); ?>', '<?= $siteName ?>', '<?= $tazToken; ?>')">
+	        UPLOAD A FILE
+	    </button>
+        <?php endif;?>
+        <?php if($dyesubViewModel->isDyeSubEnabled() && $product->getData('is_customer_canvas')):?>
+            <button id="btn-start-design" type="button" class="btn-primary d-none mb-20 <?= $unavailableMessageCssClass;?>" disabled="disabled">
+                START DESIGNING
+            </button>
+        <?php endif;?>
+        <input type="hidden" id="isDyeSubProduct" value="<?= ($dyesubViewModel->isDyeSubEnabled() && $product->getData('is_customer_canvas')) ? '1' : '0' ?>">
+    </div>
+</div>
+<script type="text/javascript">
+    require([
+        'product',
+        "jquery",
+        "Magento_Ui/js/modal/modal",
+        "eventActions",
+        'ko',
+        'fedex/storage',
+        'Magento_Customer/js/customer-data',
+    ], function(product, $, modal, canvasEvent, ko, fxoStorage, customerData) {
+        $(document).ready(function () {
+            let dyeSubParams = false;
+            <?php if($dyesubViewModel->isDyeSubEnabled() && $product->getIsCustomerCanvas()): ?>
+                customerData.get('dyesub_section').subscribe(function (dyeSubSection) {
+                    dyeSubParams = dyeSubSection;
+                    $('#btn-start-design').prop('disabled', !dyeSubParams);
+                });
+                customerData.reload(['dyesub_section'], false)
+            <?php endif; ?>
+            window.contentAssociation.subscribe(function(value) {
+                $('.file-upload-section .btn-primary').removeClass('d-none');
+            });
+            $('#pod-upload-warning').modal({
+                buttons: [],
+                trigger: '[data-trigger=pod-upload-warning]'
+            });
+            if (window.tiger_E_478196_dye_sub_pod_2_updates && document.getElementById('isDyeSubProduct').value === '1') {
+                const skuID = '<?= $product->getSku(); ?>';
+                const siteName = '<?= $siteName ?>';
+                const tazToken = '<?= $tazToken; ?>';
+
+                function setDyeSubParams() {
+                    const contentAssociation = window.contentAssociation();
+                    Object.assign(contentAssociation.vendorTemplate, dyeSubParams);
+                    const isDyeSubFromCatalog = <?= $dyesubViewModel->getParamIsDyeSubFromCatalog() ?? 0; ?>;
+                    openIframe.uploadPrintProduct(event)(skuID, siteName, tazToken, contentAssociation, isDyeSubFromCatalog);
+                }
+
+                $('#btn-start-design').on('click', function(event) {
+                    if (dyeSubParams) {
+                        setDyeSubParams();
+                    }
+                });
+            }
+        });
+    });
+</script>

@@ -1,0 +1,359 @@
+@font-family-light: 'FedEx Sans Light';
+@font-framily-regular: 'Fedex Sans Regular';
+@color-white: #FFFFFF;
+@color-gray: #333333;
+@color-gray-2: #8E8E8E;
+@color-gray-light: #F2F2F2;
+@color-gray-light-2: #E3E3E3;
+@color-gray-light-3: #CED5D9;
+@color-purple: #4D148C;
+
+& when (@media-common =true) {
+  .my-account-nav-consistency.account.page-layout-2columns-left {
+
+    .breadcrumbs {
+      display: none !important;
+    }
+    .page-main {
+      padding: 0 16px !important;
+    }
+
+    .top-container {
+      margin: 0 auto;
+      top: 0 !important;
+
+      .notification-banner {
+        margin-top: 30px;
+        margin-bottom: 30px;
+      }
+    }
+
+    .columns {
+      display: flex !important;
+      flex-direction: column;
+      margin: 0 !important;
+
+      h1.page-title,
+      h2.page-title {
+        font-size: 32px;
+        line-height: 40px;
+        color: @color-gray;
+        font-family: @font-family-light;
+        font-weight: 300;
+        height: unset;
+        top: 0 !important;
+        margin-top: 40px !important;
+        margin-bottom: 0 !important;
+        padding: 0 !important;
+
+        span {
+          font-size: inherit !important;
+          font-family: inherit !important;
+        }
+      }
+
+      .sidebar.sidebar-main {
+        order: 0;
+        width: 100%;
+        max-width: 100%;
+
+        .block-collapsible-nav {
+          position: relative !important;
+          top: 0 !important;
+          margin: 0 !important;
+          margin-top: 30px !important;
+          width: 100% !important;
+          left: 0;
+          padding: 0;
+
+          .content {
+            border: 0;
+            padding: 0;
+            background: @color-white !important;
+            top: 48px;
+          }
+
+          .nav.items {
+            padding: 12px 0;
+            border: 1px solid @color-gray-light-3;
+
+            .nav.item {
+
+              a,
+              strong {
+                color: @color-gray;
+                font-family: @font-framily-regular;
+                font-size: 16px;
+                font-weight: 300;
+                height: 24px;
+                letter-spacing: 0;
+                line-height: 24px;
+                padding: 12px 0 12px 9px;
+              }
+
+              &.current {
+
+                strong,
+                a {
+                  background-color: @color-gray-light;
+                  border-color: transparent;
+                }
+              }
+            }
+          }
+
+          .title {
+            border: 1px solid @color-gray-2;
+            display: block;
+            height: 48px;
+            font-size: 16px;
+            line-height: inherit;
+            color: @color-gray;
+            padding: 12px;
+            font-family: @font-family-light;
+            font-weight: 300;
+            box-sizing: border-box;
+            max-height: 48px;
+
+            &::after {
+              font-family: 'FedEx Icons';
+              color: @color-gray;
+              font-size: 32px;
+              width: unset;
+              height: unset;
+              right: 12px;
+              content: '\e904';
+              top: 0;
+              margin: 0;
+            }
+
+            &.active {
+              border: 1px solid @color-purple;
+
+              &::after {
+                content: '\e907';
+              }
+            }
+
+            strong {
+              font-family: inherit;
+              font-weight: inherit;
+              font-size: inherit;
+              line-height: inherit;
+              color: inherit;
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .page-title-wrapper,
+      .block-dashboard-info-top {
+        order: 1;
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+
+        .my-profile {
+          padding-top: 0;
+
+          h1.page-title {
+            margin: 40px 0 0 !important;
+          }
+        }
+      }
+
+      .column.main {
+        order: 2;
+        margin-top: 40px;
+        width: 100%;
+        padding-left: 0;
+      }
+
+      .sensitive-data {
+        margin-bottom: 0 !important;
+        width: 100%;
+      }
+    }
+  }
+}
+
+.media-width(@extremum, @break) when (@extremum ='max') and (@break =@screen__m) {
+  .my-account-nav-consistency.account.page-layout-2columns-left {
+    &.company-users-index.update_roles_and_permission .selected-number {
+      margin-top: 100px !important;
+    }
+  }
+}
+
+.media-width(@extremum, @break) when (@extremum ='min') and (@break =@screen__l) {
+  .my-account-nav-consistency.account.page-layout-2columns-left {
+
+    .notification-banner {
+      margin-bottom: 0 !important;
+    }
+
+    .columns {
+      display: block !important;
+
+
+      .sensitive-data {
+        margin-bottom: 24px !important;
+      }
+    }
+
+    &.selfreg-store-fcl {
+      .columns {
+        display: block;
+
+        .sidebar.sidebar-main {
+          .nav.items {
+            .nav.item {
+              &:has(a.my-quotes-epro-sidebar) {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .page.messages {
+      margin-bottom: 0;
+    }
+
+    .page-wrapper .columns {
+      padding: 0;
+      padding-top: 32px;
+
+      .block-dashboard-info-top {
+        margin: 0;
+
+        .my-profile {
+          padding-top: 0;
+        }
+      }
+
+      h1.page-title,
+      h2.page-title {
+        font-size: 48px !important;
+        line-height: 40px !important;
+        color: @color-gray;
+        font-family: @font-family-light;
+        font-weight: 300;
+        height: unset;
+        margin-top: 0 !important;
+
+        span {
+          font-size: inherit;
+          font-family: inherit;
+        }
+      }
+
+      .block.block-dashboard-info-top {
+        h1.page-title {
+          margin: 0 !important;
+          padding: 0 !important;
+          height: unset;
+        }
+      }
+
+      .profile-redirect {
+        font-size: 16px;
+        line-height: 24px;
+        margin-top: 8px;
+        height: unset !important;
+      }
+
+      .sidebar.sidebar-main {
+        .block-collapsible-nav {
+          margin-top: 0 !important;
+
+          .content {
+            background-color: @color-gray-light !important;
+            padding: 0;
+          }
+        }
+
+        margin: 0;
+        padding: 0;
+        margin-top: 48px;
+        width: 211px !important;
+
+        .nav.items {
+          display: grid;
+          gap: 16px;
+          padding: 16px 16px 16px 0 !important;
+          font-family: @font-framily-regular;
+          border: 0;
+
+          .nav.item {
+            line-height: 24px;
+            list-style: none;
+            font-family: inherit;
+            margin: 0;
+
+            &.current {
+              padding-top: 0;
+              height: unset;
+
+              strong,
+              a {
+                font-weight: 400 !important;
+                border-color: @color-purple !important;
+                color: @color-gray !important;
+                font-size: 14px !important;
+                font-family: 'FedEx Sans Regular' !important;
+              }
+            }
+
+            a,
+            strong {
+              line-height: inherit;
+              font-size: 14px;
+              padding: 0;
+              padding-left: 16px;
+              height: 100%;
+              color: @color-gray;
+
+              &:hover {
+                background-color: unset;
+              }
+            }
+
+            strong {
+              font-weight: 400;
+              border-color: @color-purple;
+            }
+
+            .delimiter {
+              background-color: @color-gray-light-2;
+              width: 100%;
+              margin: 0 !important;
+              border: 0;
+              height: 1px;
+            }
+
+            &:last-child:has(.delimiter) {
+              display: none;
+            }
+          }
+        }
+      }
+
+      .column.main {
+        width: ~"calc(100% - 211px)" !important;
+        padding-left: 40px !important;
+        margin-top: 48px;
+        float: right;
+
+        .block-dashboard-info {
+          margin: 0;
+        }
+      }
+    }
+
+    .cms-sde-home .page-wrapper .columns {
+      padding-top: 0;
+    }
+  }
+}

@@ -1,0 +1,28 @@
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd" layout="1column">
+    <head>
+        <css src="Fedex_SubmitOrderSidebar::css/order_summary.css"/>
+        <title>Order Success | FedEx Office</title>
+    </head>
+    <body>
+        <referenceContainer name="top.container">
+            <block class="Magento\Framework\View\Element\Template" name="promo_block_container" template="Fedex_SubmitOrderSidebar::promo.phtml" />
+        </referenceContainer>
+        <referenceContainer name="header-wrapper">
+            <block class="Fedex\SubmitOrderSidebar\Block\OrderConfirmation"
+                name="cj.order.script"
+                template="Fedex_SubmitOrderSidebar::cj_order_confirmation.phtml"
+                before="cj.set.cookie" cacheable="false">
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template" name="ordersuccess" template="Fedex_SubmitOrderSidebar::success.phtml">
+                <arguments>
+					<argument name="webanalytics_forsta_view_model" xsi:type="object">Fedex\WebAnalytics\ViewModel\Data</argument>
+                    <argument name="environmentManager_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                    <argument name="orderSuccess_view_model" xsi:type="object">Fedex\SubmitOrderSidebar\ViewModel\OrderSuccess</argument>
+                    <argument name="bundle_view_model" xsi:type="object">Fedex\ProductBundle\ViewModel\BundleProductHandler</argument>
+				</arguments>
+            </block>
+        </referenceContainer>
+    </body>
+</page>

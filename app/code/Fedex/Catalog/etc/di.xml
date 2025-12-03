@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+        <plugin sortOrder="1" name="fedexCatalogToolbar"
+                type="Fedex\Catalog\Plugin\Block\Product\ProductList\ToolbarPlugin"/>
+    </type>
+    <preference for="Magento\Catalog\Block\Product\ProductList\Related"
+                type="Fedex\Catalog\Block\Product\ProductList\Related"/>
+    <preference for="Magento\Catalog\Block\Product\ProductList\Toolbar"
+                type="Fedex\Catalog\Block\Product\ProductList\Toolbar"/>
+    <preference for="Magento\PageBuilder\Component\Form\Element\Wysiwyg"
+                type="Fedex\Catalog\Component\Form\Element\Wysiwyg"/>
+    <type name="Magento\Cms\Model\PageRepository">
+        <plugin type="Fedex\Catalog\Plugin\Model\PageRepositoryPlugin"
+                name="fedexCmsAfterSavePlugin"
+                sortOrder="10"
+        />
+    </type>
+    <type name="Magento\Cms\Model\BlockRepository">
+        <plugin type="Fedex\Catalog\Plugin\Model\BlockRepositoryPlugin"
+                name="fedexBlockAfterSavePlugin"
+                sortOrder="10"
+        />
+    </type>
+    <type name="Magento\Theme\Block\Html\Pager">
+        <plugin sortOrder ="20" name="fedex_catalog_pager_plugin"
+                type="Fedex\Catalog\Plugin\Block\Product\ProductList\CatalogToolbarPagination"/>
+    </type>
+    <type name="Fedex\Catalog\Plugin\Block\Product\ProductList\CatalogToolbarPagination">
+    <arguments>
+        <argument name="catalogMvpHelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+        <argument name="toggleConfig" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+    </arguments>
+    </type>       
+
+    <type name="Magento\Catalog\Block\Product\ProductList\Toolbar">
+		<plugin sortOrder="1" name="fedex_Catalog_Toolbar"
+		type="Fedex\Catalog\Plugin\Block\Product\ProductList\CatalogToolbarPlugin"/>
+	</type>
+
+    <type name="Magento\PageBuilder\Model\Wysiwyg\DefaultConfigProvider">
+        <plugin name="fedex_Catalog_Toolbar_config_provider_plugin" type="Fedex\Catalog\Plugin\ToolbarConfigProviderPlugin" />
+    </type>
+
+    <!-- UNIT COST -->
+    <type name="Magento\Catalog\Block\Product\ProductList\Related">
+        <plugin name="fedexCatalogProductsListRelated" type="Fedex\Catalog\Plugin\Block\Product\ProductList\RelatedPlugin" sortOrder="999"/>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Product">
+        <plugin name="add_product_to_category_plugin" type="Fedex\Catalog\Plugin\Model\ResourceModel\ProductPlugin" />
+    </type>
+    <virtualType name="Magento\Catalog\Pricing\Price\Pool">
+        <arguments>
+            <argument name="prices" xsi:type="array">
+                <item name="unit_cost" xsi:type="string">Fedex\Catalog\Pricing\Price\UnitCost</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\ProductRenderCollectorComposite">
+        <arguments>
+            <argument name="productProviders" xsi:type="array">
+                <item name="unitCost" xsi:type="object">Fedex\Catalog\Ui\DataProvider\Product\Listing\Collector\UnitCost</item>
+            </argument>
+        </arguments>
+    </type>
+    <!-- UNIT COST -->
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="commandexample_somecommand" xsi:type="object">Fedex\Catalog\Console\Command\PendingReviewStatus</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Entity\Attribute\OptionManagement">
+        <plugin name="fedex_catalog_option_management_plugin"
+        type="Fedex\Catalog\Plugin\Model\Entity\Attribute\OptionManagementPlugin"
+        sortOrder="1" />
+    </type>
+    <type name="Magento\ConfigurableProduct\Pricing\Price\LowestPriceOptionsProvider">
+        <plugin sortOrder="1" name="fedex_catalog_lowest_price_options_provider_plugin"
+                type="Fedex\Catalog\Plugin\Pricing\Price\SalableChildProductsProviderPlugin"/>
+    </type>
+    <type name="Magento\Framework\Console\CommandListInterface">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="update_filterable_publish_attribute" xsi:type="object">Fedex\Catalog\Console\Command\UpdateFilterablePublishAttributeCommand</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

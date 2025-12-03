@@ -1,0 +1,8 @@
+<?php
+/** @var $block \Fedex\Recaptcha\Block\EnabledRecaptchaSettings */
+$recaptchaSettings = $block->getRecaptchaSettings();
+$enabledRecaptchaSettings = <<<script
+        window.recaptchaSettings = $recaptchaSettings;
+    script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $enabledRecaptchaSettings, false); ?>

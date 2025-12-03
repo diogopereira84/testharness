@@ -1,0 +1,40 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/**
+ * @var \Magento\Theme\Block\Html\Header\Logo $block
+ */
+?>
+<?php 
+    $helperData = $this->helper('Fedex\Delivery\Helper\Data');
+    $isLoggedIn = $helperData->isCommercialCustomer();
+    
+    //B-1473176
+    $companyLogo = $helperData->getCompanyLogo();
+    $logoSrc = $block->getLogoSrc();
+    if($companyLogo){
+		$logoSrc = $companyLogo;
+	}
+?>
+<?php $storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();?>
+<?php if($isLoggedIn || $block->getRequest()->getFullActionName() == 'sales_order_print'): ?>
+<div id="toggle-menu">
+    <span data-action="toggle-nav" class="action nav-toggle"><span><?= /* @escapeNotVerified */ __('Toggle Nav') ?></span></span>
+</div>
+<a
+    class="logo"
+    href="<?= $block->getUrl('') ?>"
+    title="<?= /* @escapeNotVerified */ $storeName ?>"
+    aria-label="store logo">
+    <!-- B-1473176 -->
+    <img src="<?= /* @escapeNotVerified */ $logoSrc; ?>"
+         title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
+         alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
+    />
+</a>
+<?php endif; ?>

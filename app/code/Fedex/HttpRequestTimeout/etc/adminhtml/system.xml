@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category Fedex
+ * @package  Fedex_HttpRequestTimeout
+ * @copyright   Copyright (c) 2024 FedEx
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Config/etc/system_file.xsd">
+    <system>
+        <section id="fedex_http_request_timeout" translate="label" sortOrder="1003" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Http Request Timeout</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="timeouts" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Settings</label>
+                <field id="enabled" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable feature</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_enabled" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable default timeout when not defined</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="default_timeout" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Default timeout</label>
+                    <comment><![CDATA[Fill an integer value, like 60]]></comment>
+                    <depends>
+                        <field id="default_enabled">1</field>
+                    </depends>
+                </field>
+                <field id="create_entry" translate="label" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Create Entry</label>
+                    <frontend_model>Fedex\HttpRequestTimeout\Block\Adminhtml\Form\Field\CreateEntry</frontend_model>
+                </field>
+                <field id="entries_list" translate="label" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Entries List</label>
+                    <frontend_model>Fedex\HttpRequestTimeout\Block\Adminhtml\Form\Field\EntriesList</frontend_model>
+                    <comment><![CDATA[Sample input: https://api.fedex.com/v1/tokens,60]]></comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

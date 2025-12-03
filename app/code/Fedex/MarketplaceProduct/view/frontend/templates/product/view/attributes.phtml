@@ -1,0 +1,83 @@
+<?php
+
+declare(strict_types=1);
+
+/**@var Fedex\MarketplaceProduct\ViewModel\Product\Attribute $block*/
+/** @var \Fedex\MarketplaceProduct\ViewModel\Product\Attribute $viewModel */
+$viewModel = $block->getData('view_model');
+$product   = $viewModel->getProduct();
+$peUrl     = $block->getProductEngineUrl();
+
+$hasOffers = $viewModel->hasAvailableOffersForProduct();
+$shop      = null;
+$offers    = [];
+
+if ($hasOffers)
+{
+    $offers = $viewModel->getAllOffers();
+}
+$shop = $viewModel->getShopByProduct($product);
+$sellerAltName = '';
+$sellerTooltip = '';
+if ($shop) {
+    $sellerAltName = $shop->getSellerAltName();
+    $sellerTooltip = $shop->getTooltip();
+}
+?>
+
+<div>
+    <div class="preferred-provider">
+        <span class="shop-id">
+            <?= $sellerAltName ?>
+        </span>
+        <div class="tooltip-area information">
+            <img src="<?php echo $this->getViewFileUrl('images/information.png') ?>" alt="Information Icon"/>
+            <div class="tooltip-box">
+                <span class="tooltip-text">
+                    <?= $sellerTooltip ?>
+                </span>
+            </div>
+        </div>
+    </div>
+    <?php
+    $brandName = $product->getAttributeText('brand');
+    if($viewModel->isEssendantToggleEnabled() && $brandName!=''):
+        $category = $viewModel->getDirectChildCategoryWithChildren($product);
+        $url = '#';
+        if ($category) {
+            $categoryUrl = $category->getUrl();
+            $url = $categoryUrl . (parse_url($categoryUrl, PHP_URL_QUERY) ? '&' : '?') . http_build_query(['brand' => $brandName]);
+        }
+        ?>
+     <a href="<?= $url;?>" class="brand underline mb-8 lh-24 d-none visible-m-l-xl"><?= $brandName;?></a>
+    <?php endif;
+    if($viewModel->canMovePageTitleToNewLocation()):
+    ?>
+
+    <span class="page-title d-none visible-m-l-xl fedex-light" data-ui-id="page-title-wrapper" itemprop="name">
+        <?= $product->getName();?>
+    </span>
+    <hr class="mt-16 mb-0" />
+ <?php endif;?>
+    <input type="hidden" name="product_id" id="product-id" value="<?= $block->getPeProductId() ?>">
+    <input type="hidden" name="preset_id" id="preset-id" value="<?= $product->getData('preset_id') ?>">
+    <div id="config-accordion" class="accordion border-top-iron mt-15">
+    </div>
+
+    <div class="product-description">
+        <?php echo htmlspecialchars_decode(str_replace('id="%identifier%"', '', $product->getDescription())) ?>
+    </div>
+</div>
+
+<?= $block->getChildHtml('product.info.config.product_engine.error_messages') ?>
+<?= $block->getChildHtml('product.options') ?>
+<?= $block->getChildHtml('product.info.config.price.box') ?>
+<?php if($viewModel->isConfigurableProduct() && $viewModel->isEssendantToggleEnabled()){
+    $offerData = $viewModel->getOfferDataWithVariantDetails($offers,$product);
+ ?>
+<script>
+    window.offerData = <?= json_encode($offerData);?>
+</script>
+<?php } ?>
+
+

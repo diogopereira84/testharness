@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\PoliticalDisclosure\Api\OrderDisclosureRepositoryInterface"
+                type="Fedex\PoliticalDisclosure\Model\OrderDisclosureRepository"/>
+    <preference for="Fedex\PoliticalDisclosure\Api\Data\PoliticalDisclosureInterface"
+                type="Fedex\PoliticalDisclosure\Model\Data\PoliticalDisclosure"/>
+    <type name="Fedex\Delivery\Model\ConfigProvider">
+        <plugin name="fedex_political_delivery_config_plugin"
+                type="Fedex\PoliticalDisclosure\Plugin\DeliveryConfigProviderPlugin"
+                sortOrder="10"/>
+    </type>
+
+    <preference for="Fedex\PoliticalDisclosure\Api\OrderDisclosureManagementInterface"
+                type="Fedex\PoliticalDisclosure\Model\OrderDisclosureManagement"/>
+
+    <type name="Fedex\Delivery\Controller\Quote\Create">
+        <plugin name="fedex_pd_save_disclosure_from_epro"
+                type="Fedex\PoliticalDisclosure\Plugin\SaveDisclosureFromControllers"
+                sortOrder="10"/>
+    </type>
+    <type name="Fedex\SubmitOrderSidebar\Controller\Quote\SubmitOrderOptimized">
+        <plugin name="fedex_pd_save_disclosure_from_checkout"
+                type="Fedex\PoliticalDisclosure\Plugin\SaveDisclosureFromControllers"
+                sortOrder="10"/>
+    </type>
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="fedex_pd_after_order_save"
+                type="Fedex\PoliticalDisclosure\Plugin\AfterOrderSave"
+                sortOrder="10"/>
+    </type>
+</config>

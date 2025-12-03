@@ -1,0 +1,7 @@
+<?php
+	$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+	$isLoggedIn = $helperData->isCommercialCustomer();
+?>
+<?php if(!$isLoggedIn): ?>
+	<a class="back-link fedex-com" href="https://www.fedex.com" target="_blank"><span><img alt="Left arrow icon - Go back" src="<?php echo $this->getViewFileUrl('Magento_Theme::images/left-arrow.png'); ?>" class="icon-arrow-left"/></span>fedex.com</a>
+<?php endif; ?>

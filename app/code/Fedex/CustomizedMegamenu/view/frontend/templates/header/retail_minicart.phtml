@@ -1,0 +1,269 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?php
+$helper = $this->helper('Fedex\CustomizedMegamenu\Helper\Data');
+$sdeHelper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+$isCommercialStore = $this->helper('Fedex\Commercial\Helper\CommercialHelper')->isGlobalCommercialCustomer();
+
+    $helperDelivery = $this->helper(Fedex\Delivery\Helper\Data::class);
+    $isLoggedIn = $helperDelivery->isCommercialCustomer();
+    $isSdeStore = $sdeHelper->getIsSdeStore();
+
+    /**@var Fedex\SSO\ViewModel\SsoConfiguration $fclLogin*/
+    $fclLogin = $block->getData('fcl_login_mobile');
+
+    /**@var Fedex\EnvironmentManager\ViewModel\ToggleConfig $toggleConfigs*/
+    $toggleConfig = $block->getData('toggle_config_mobile');
+
+    $tabIndexValue = $isSdeStore ? 0 : 1;
+    //B-1156185 Sde Mobile Menu and Navigation
+    if ($isSdeStore || $isCommercialStore) {
+        $imagePath = $this->getViewFileUrl('Magento_Theme::images/MiniCart.png');
+    }
+    else {
+        $imagePath = $this->getViewFileUrl('Magento_Theme::images/whiteCart.svg');
+    }
+?>
+<?php if (!$isLoggedIn || $isSdeStore || $isCommercialStore ): ?>
+<div id="retail_cart" class="retail-minicart">
+    <div data-block="minicart" class="minicart-wrapper">
+    <a class="action showcart"
+            href="<?=$block->escapeUrl($block->getShoppingCartUrl())?>"
+            data-bind="scope: 'minicart_content'"
+            >
+                <?=$block->escapeHtml(__('Cart'))?>
+                (<span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>)
+        </a>
+        <?php if ($block->getIsNeedToDisplaySideBar()): ?>
+            <div class="block block-minicart"
+                data-role="dropdownDialog"
+                data-mage-init='{"dropdownDialog":{
+                    "appendTo":"[data-block=minicart]",
+                    "triggerTarget":".showcart",
+                    "timeout": "2000",
+                    "closeOnMouseLeave": false,
+                    "closeOnEscape": true,
+                    "triggerClass":"active",
+                    "parentClass":"active",
+                    "buttons":[]}}'>
+                <div id="minicart-content-wrapper" data-bind="scope: 'minicart_content'">
+                    <!-- ko template: getTemplate() --><!-- /ko -->
+                </div>
+                <?=$block->getChildHtml('minicart.addons')?>
+            </div>
+        <?php else: ?>
+            <?php $scriptString = <<<script
+                require(['jquery'], function ($) {
+                    $('a.action.showcart').on('click',function() {
+                        $(document.body).trigger('processStart');
+                    });
+                });
+    script;
+?>
+            <?=/* @noEscape */$secureRenderer->renderTag('script', [], $scriptString, false);?>
+        <?php endif?>
+        <?=/* @noEscape */$secureRenderer->renderTag('script', [], 'window.checkout = ' .
+    /* @noEscape */$block->getSerializedConfig(), false);?>
+    </div>
+</div>
+<?=$block->getChildHtml('quickSearch')?>
+<!-- For tab/Mobile view -->
+<div id="retail_cart_mobile" class="retail-minicart">
+    <div data-block="minicart" class="minicart-wrapper">
+        <a class="action showcart mobile-mini-cart-bottom" href="<?=$block->escapeUrl($block->getShoppingCartUrl())?>"
+            data-bind="scope: 'minicart_content'">
+            <div class='mobile-cart-icon pull-left'>
+                <div class='mobile-cart-image pull-left'><img alt="Shopping cart icon - Show cart" src="<?php echo $imagePath; ?>" />
+                </div>
+                <div class='mobile-cart-text pull-left'>
+                    <?=$block->escapeHtml(__('Cart'))?>
+                    (<span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>)
+                </div>
+            </div>
+        </a>
+    </div>
+</div>
+<script>
+require(['jquery','Magento_Ui/js/lib/view/utils/dom-observer'], function ($, $dom) {
+    $(window).on('resize', function(){
+        mobileNav($, $dom);
+            if ($(".action.nav-toggle").hasClass("active")) {
+                $(".action.nav-toggle").trigger('click');
+            }
+        <?php if ($isSdeStore): ?>
+         if ($(window).width() < 768) {
+            $('#retail_cart_mobile').show();
+            $('#retail_cart_mobile').insertAfter("nav");
+            $dom.get('#retail_cart .ui-dialog', function(elem) {
+                $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart_mobile a.showcart");
+                $(document).on('click', '#retail_cart_mobile a.showcart', function (e) {
+                    $(this).next('.ui-dialog').toggle();
+                });
+            });
+         } else {
+            $('#retail_cart_mobile').hide();
+            $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart a.showcart");
+         }
+         <?php endif; ?>
+         var windowWidth = window.innerWidth;
+            if(windowWidth > 1024){
+                $('.mobile-nav-bar').css('display','none');
+            }
+    });
+    
+    $(document).ready(function() {
+        mobileNav($, $dom);
+    });
+
+    $(document).on('click', '.action.nav-toggle', function (e) {
+        let _this = this;
+        mobileNav($, $dom);
+            $(this).toggleClass("active");
+    });
+});
+
+function mobileNav($, $dom){
+
+    if ($(window).width() < 1024) {
+        <?php if (!$isSdeStore && !$isCommercialStore): ?>
+            $('.mobile-nav-bar').show();
+        <?php endif; ?>
+        if ($('.mobile-nav-bar').length < 1) {
+            $('.fxg-logo').hide();
+            $('#retail_cart_mobile').appendTo('#retail_minicart_mobile');
+            $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart_mobile a.showcart");
+            //B-1156185 Sde Mobile Menu and Navigation
+            <?php if ($isSdeStore || $isCommercialStore) { ?>
+                if ($(window).width() < 1024) {
+                    $('#retail_cart_mobile').show();
+                    $('#retail_cart_mobile').insertAfter("nav");
+                    $dom.get('#retail_cart .ui-dialog', function(elem) {
+                        $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart_mobile a.showcart");
+                        $(document).on('click', '#retail_cart_mobile a.showcart', function (e) {
+                           if ($(body).hasClass('catalog-mvp-break-points')) {
+                            e.preventDefault();
+                           }
+                            $(this).next('.ui-dialog').toggle();
+                        });
+                    });
+                } else {
+                    $('#retail_cart_mobile').hide();
+                    $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart a.showcart");
+                }
+            <?php } ?>
+            var fclLoginData = '';
+            let mobileMiniCart = '';
+
+            <?php if ($fclLogin->getGeneralConfig('is_enable')) { ?>
+                fclLoginData = '<span data-action="toggle-profile" class="nav-profile"><img alt ="Log in or Sign Up" src="<?=
+                    $block->escapeHtmlAttr($block->getViewFileUrl("images/sso/login_icon_mobile.png"))
+                ?>" class="login-icon" /></span>';
+            <?php } ?>
+            <?php if (!$isSdeStore && !$isCommercialStore): ?>
+             mobileMiniCart = '<div id="retail_menu_minicart" class="retail-menu-minicart"></div>';
+            <?php endif; ?>
+            
+            $('<div class="mobile-nav-bar pull-left" role="navigation" aria-label="navigation-mobile-nav-bar"><div class="mobile-logo">'+
+            '<div class="fxg-logo pull-left"><a href="/" title="FedEx Home"><img src="<?=
+            $block->escapeHtmlAttr($helper->getStoreUrl())
+            ?>wysiwyg/fxo-logo.png" alt="FedEx Print Online"/></a></div></div>'+
+            '<div id="menu-button pull-right"><span data-action="toggle-nav" class="action nav-toggle"><span><?=
+                $block->escapeHtmlAttr(__('Toggle Nav'))
+            ?></span></span>'+ mobileMiniCart + fclLoginData + '</div></div>').insertBefore('.page-wrapper');
+        }
+        <?php if (!$isSdeStore && !$isCommercialStore): ?>
+            if ($(window).width() < 768) {
+                if($('.mobile-nav-bar').length > 0) {
+                    $('#retail_cart_mobile').appendTo('.mobile-nav-bar #retail_menu_minicart');
+                    $(".ui-dialog").insertAfter(".mobile-nav-bar a.showcart");
+                    $(".ui-dialog").attr('aria-label','minicart');
+                    $('#retail_cart_mobile').show();
+                }
+            } else {
+                $('#retail_cart_mobile').appendTo('#retail_minicart_mobile');
+                // mobile mini cart
+                $(".ui-dialog").insertAfter("a.showcart.mobile-mini-cart-bottom");
+                $(".ui-dialog").attr('aria-label','minicart');
+                $('#retail_cart_mobile').show();
+            }
+        <?php endif; ?>
+    } else {
+        <?php if (!$isSdeStore && !$isCommercialStore): ?>
+            $('.mobile-nav-bar').hide();
+        <?php endif; ?>
+        $('.fxg-logo').show();
+        $(".block-minicart.ui-dialog-content").parent().insertAfter("#retail_cart a.showcart");
+    }
+
+    <?php
+    if ($isSdeStore || $isCommercialStore) :
+    ?>
+        var categoryItemElement = '.cms-sde-home .page-wrapper .nav-sections nav.navigation .category-item.parent';
+        <?php if ($isCommercialStore) : ?>
+            var categoryItemElement = '.commercial-store-home .page-wrapper .nav-sections nav.navigation .category-item.parent';
+        <?php endif;?>
+        let categoryItemSpanElement = categoryItemElement + ' .plus';
+        if ($(window).width() < 1024) {
+            $(categoryItemElement + ' .level-top').each(function (e) {
+                let href = $(this).attr("href");
+                if(href != '#'){
+                    $(this).attr("data-href", href);
+                }
+            });
+            $(categoryItemElement + ' .level-top').attr("href", '#');
+        }else {
+            $(categoryItemElement + ' .level-top').each(function (e) {
+                let href = $(this).attr("data-href");
+                if(href) {
+                    $(this).attr("href", href);
+                }
+            });
+        }
+    <?php endif;?>
+    <?php if($isSdeStore || $isCommercialStore) :
+    ?>
+        if ($(window).width() < 1024) {
+            if($(window).width() > 767)
+            {
+                setTimeout(function() {
+                if(!($commercialStore && $(body).hasClass('catalog-mvp-break-points') && $commercialStore)){
+                    $("#retail_cart_mobile").insertBefore( $( ".logo" ));
+                }
+                }, 6000);
+            }
+        }
+    <?php endif;?>
+}
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "[data-block='minicart']": {
+            "Magento_Ui/js/core/app": {"components":{"minicart_content":{"children":{"subtotal.container":{"children":{"subtotal":{"children":{"subtotal.totals":
+{"config":{"display_cart_subtotal_incl_tax":0,"display_cart_subtotal_excl_tax":1,"template":"Magento_Tax\/checkout\/minicart\/subtotal\/totals"},"children":
+{"subtotal.totals.msrp":{"component":"Magento_Msrp\/js\/view\/checkout\/minicart\/subtotal\/totals","config":
+{"displayArea":"minicart-subtotal-hidden","template":"Magento_Msrp\/checkout\/minicart\/subtotal\/totals"}}},
+"component":"Magento_Tax\/js\/view\/checkout\/minicart\/subtotal\/totals"}},"component":"uiComponent","config":
+{"template":"Magento_Checkout\/minicart\/subtotal"}}},"component":"uiComponent","config":{"displayArea":"subtotalContainer"}},"item.renderer":
+{"component":"Magento_Checkout\/js\/view\/product-engine-minicart-qty","config":{"displayArea":"defaultRenderer","template":"Magento_Checkout\/minicart\/item\/default"},"children":{"item.image":
+{"component":"Magento_Catalog\/js\/view\/image","config":{"template":"Magento_Catalog\/product\/image","displayArea":"itemImage"}},
+"checkout.cart.item.price.sidebar":{"component":"uiComponent","config":
+{"template":"Magento_Checkout\/minicart\/item\/price","displayArea":"priceSidebar"}}}},"extra_info":{"component":"uiComponent","config":
+{"displayArea":"extraInfo"}},"promotion":{"component":"uiComponent","config":{"displayArea":"promotion"}}},"config":{"itemRenderer":
+{"default":"defaultRenderer","simple":"defaultRenderer","virtual":"defaultRenderer"},"template":"Magento_Checkout\/minicart\/content"},"component":
+"Magento_Checkout\/js\/view\/minicart"}},"types":[]}},
+        "*": {
+            "Magento_Ui/js/block-loader": "<?=$block->escapeJs(
+    $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))
+)?>"
+        }
+    }
+</script>
+<?php endif;?>

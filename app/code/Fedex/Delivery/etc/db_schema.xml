@@ -1,0 +1,134 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="quote" resource="checkout" engine="innodb" comment="Sales Flat Quote">
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="true"
+                comment="Entity ID"/>
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
+                default="0" comment="Store ID"/>
+        <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
+                comment="Created At"/>
+        <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"/>
+        <column xsi:type="timestamp" name="converted_at" on_update="false" nullable="true" comment="Converted At"/>
+        <column xsi:type="smallint" name="is_active" unsigned="true" nullable="true" identity="false"
+                default="1" comment="Is Active"/>
+        <column xsi:type="smallint" name="is_virtual" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Is Virtual"/>
+        <column xsi:type="smallint" name="is_multi_shipping" unsigned="true" nullable="true"
+                identity="false" default="0" comment="Is Multi Shipping"/>
+        <column xsi:type="int" name="items_count" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Items Count"/>
+        <column xsi:type="decimal" name="items_qty" scale="4" precision="12" unsigned="false" nullable="true"
+                default="0" comment="Items Qty"/>
+        <column xsi:type="int" name="orig_order_id" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Orig Order ID"/>
+        <column xsi:type="decimal" name="store_to_base_rate" scale="4" precision="12" unsigned="false" nullable="true"
+                default="0" comment="Store To Base Rate"/>
+        <column xsi:type="decimal" name="store_to_quote_rate" scale="4" precision="12" unsigned="false" nullable="true"
+                default="0" comment="Store To Quote Rate"/>
+        <column xsi:type="varchar" name="base_currency_code" nullable="true" length="255" comment="Base Currency Code"/>
+        <column xsi:type="varchar" name="store_currency_code" nullable="true" length="255"
+                comment="Store Currency Code"/>
+        <column xsi:type="varchar" name="quote_currency_code" nullable="true" length="255"
+                comment="Quote Currency Code"/>
+        <column xsi:type="decimal" name="grand_total" scale="4" precision="20" unsigned="false" nullable="true"
+                default="0" comment="Grand Total"/>
+        <column xsi:type="decimal" name="base_grand_total" scale="4" precision="20" unsigned="false" nullable="true"
+                default="0" comment="Base Grand Total"/>
+        <column xsi:type="varchar" name="checkout_method" nullable="true" length="255" comment="Checkout Method"/>
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
+                comment="Customer ID"/>
+        <column xsi:type="int" name="customer_tax_class_id" unsigned="true" nullable="true"
+                identity="false" comment="Customer Tax Class ID"/>
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="true" identity="false"
+                default="0" comment="Customer Group ID"/>
+        <column xsi:type="varchar" name="customer_email" nullable="true" length="255" comment="Customer Email"/>
+        <column xsi:type="varchar" name="customer_prefix" nullable="true" length="40" comment="Customer Prefix"/>
+        <column xsi:type="varchar" name="customer_firstname" nullable="true" length="255" comment="Customer Firstname"/>
+        <column xsi:type="varchar" name="customer_middlename" nullable="true" length="40"
+                comment="Customer Middlename"/>
+        <column xsi:type="varchar" name="customer_lastname" nullable="true" length="255" comment="Customer Lastname"/>
+        <column xsi:type="varchar" name="customer_suffix" nullable="true" length="40" comment="Customer Suffix"/>
+        <column xsi:type="datetime" name="customer_dob" on_update="false" nullable="true" comment="Customer Dob"/>
+        <column xsi:type="text" name="customer_note" nullable="true" comment="Customer Note"/>
+        <column xsi:type="smallint" name="customer_note_notify" unsigned="true" nullable="true"
+                identity="false" default="1" comment="Customer Note Notify"/>
+        <column xsi:type="smallint" name="customer_is_guest" unsigned="true" nullable="true"
+                identity="false" default="0" comment="Customer Is Guest"/>
+        <column xsi:type="varchar" name="remote_ip" nullable="true" length="45" comment="Remote Ip"/>
+        <column xsi:type="varchar" name="applied_rule_ids" nullable="true" length="255" comment="Applied Rule Ids"/>
+        <column xsi:type="varchar" name="reserved_order_id" nullable="true" length="64" comment="Reserved Order ID"/>
+        <column xsi:type="varchar" name="password_hash" nullable="true" length="255" comment="Password Hash"/>
+        <column xsi:type="varchar" name="coupon_code" nullable="true" length="255" comment="Coupon Code"/>
+        <column xsi:type="varchar" name="global_currency_code" nullable="true" length="255"
+                comment="Global Currency Code"/>
+        <column xsi:type="decimal" name="base_to_global_rate" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Base To Global Rate"/>
+        <column xsi:type="decimal" name="base_to_quote_rate" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Base To Quote Rate"/>
+        <column xsi:type="varchar" name="customer_taxvat" nullable="true" length="255" comment="Customer Taxvat"/>
+        <column xsi:type="varchar" name="customer_gender" nullable="true" length="255" comment="Customer Gender"/>
+        <column xsi:type="decimal" name="subtotal" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Subtotal"/>
+        <column xsi:type="decimal" name="base_subtotal" scale="4" precision="20" unsigned="false" nullable="true"
+                comment="Base Subtotal"/>
+        <column xsi:type="decimal" name="subtotal_with_discount" scale="4" precision="20" unsigned="false"
+                nullable="true" comment="Subtotal With Discount"/>
+        <column xsi:type="decimal" name="base_subtotal_with_discount" scale="4" precision="20" unsigned="false"
+                nullable="true" comment="Base Subtotal With Discount"/>
+        <column xsi:type="int" name="is_changed" unsigned="true" nullable="true" identity="false"
+                comment="Is Changed"/>
+        <column xsi:type="smallint" name="trigger_recollect" unsigned="false" nullable="false"
+                identity="false" default="0" comment="Trigger Recollect"/>
+        <column xsi:type="text" name="ext_shipping_info" nullable="true" comment="Ext Shipping Info"/>
+        <column xsi:type="varchar" name="fjmp_quote_id" nullable="true" length="255" comment="Fujitsu Rate Quote Reference Id"/>
+        <column xsi:type="varchar" name="fjmp_cart_id" nullable="true" length="255" comment="Fujitsu Cart Id"/>
+        <column xsi:type="boolean" name="is_alternate_pickup" nullable="true" comment="Is Alternate pickup person opted"/>
+         <column xsi:type="varchar" name="customer_telephone" nullable="true" length="40" comment="Customer phone number"/>
+         <column xsi:type="varchar" name="customer_PhoneNumber_ext" nullable="true" length="40" comment="Customer Phone Number ext"/>
+        <column xsi:type="boolean" name="is_alternate" nullable="true" comment="Is Alternate pickup person opted"/>
+        <column xsi:type="varchar" name="fedex_ship_account_number" nullable="true" length="40" comment="Fedex Shipping Account Number"/>
+        <column xsi:type="varchar" name="fedex_ship_reference_id" nullable="true" length="40" comment="Shipping Reference Number"/>
+        <!--Create column in Quote Table to save Production Location Id-->
+        <column xsi:type="varchar" name="production_location_id" nullable="true" length="40" comment="Production Location Id"/>
+        <!-- For managing Call sequencing at checkout -->
+        <column xsi:type="varchar" name="created_by_location_id" nullable="true" length="255" comment="Created By Location Id"/>
+        <column xsi:type="varchar" name="gtn" nullable="true" length="50" comment="GTN Number"/>
+        <column xsi:type="varchar" name="fxo_shipment_id" nullable="true" length="100" comment="FXO Shipment Id"/>
+        <column xsi:type="varchar" name="estimated_vs_actual" nullable="true" length="50" comment="Estimated Vs Actual"/>
+        <column xsi:type="smallint" name="is_timeout" unsigned="true" nullable="false" identity="false" default="0" comment="Is Timeout"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="QUOTE_STORE_ID_STORE_STORE_ID" table="quote" column="store_id"
+                    referenceTable="store" referenceColumn="store_id" onDelete="CASCADE"/>
+        <index referenceId="QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE" indexType="btree">
+            <column name="customer_id"/>
+            <column name="store_id"/>
+            <column name="is_active"/>
+        </index>
+        <index referenceId="QUOTE_STORE_ID" indexType="btree">
+            <column name="store_id"/>
+        </index>
+    </table>
+
+    <!-- Create column in Sales Order Table to save Production Location Id-->
+     <table name="sales_order" resource="sales" engine="innodb" comment="Sales Flat Order">
+         <column xsi:type="varchar" name="production_location_id" nullable="true" length="40" comment="Production Location Id"/>
+         
+         <!-- B-1084159 | Save pickup address in DB from location Id -->
+         <column xsi:type="text" name="pickup_address" nullable="true" comment="Pickup Address"/>
+    </table>
+    
+    <!-- B-1084159 | Save pickup address in DB from location Id -->
+    <table name="quote_address">
+        <column xsi:type="text" name="pickup_address" nullable="true" comment="Pickup Address"/>
+        <column xsi:type="varchar" name="production_location" nullable="true" length="10" comment="Production Location Id"/>
+    </table>
+</schema>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/consumer.xsd">
+    <consumer name="catalogMvpItemEnableConsumer" queue="catalogMvpItemEnableQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\CatalogMvpItemEnableSubscriber::processMessage"/>
+    <consumer name="catalogMvpItemDisableConsumer" queue="catalogMvpItemDisableQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\CatalogMvpItemDisableSubscriber::processMessage"/>
+  <consumer name="productPriceSyncConsumer" queue="productPriceSync" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\ProductPriceSyncSubscriber::processMessage"/>
+      <consumer name="docRefMetaDataConsumer" queue="docRefMetaDataQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\DocRefSubscriber::processMessageMetaData"/>
+      <consumer name="docRefAddConsumer" queue="docRefAddQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\DocRefSubscriber::processMessageAddRef"/>
+      <consumer name="docRefDeleteConsumer" queue="docRefDeleteQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\DocRefSubscriber::processMessageDeleteRef"/>
+      <consumer name="docRefExtandExpireConsumer" queue="docRefExtandExpireQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\DocRefSubscriber::processMessageExtandExpire"/>
+  <consumer name="bulkDeleteConsumer" queue="bulkDeleteQueue" connection="amqp"
+ handler="Fedex\CatalogMvp\Model\BulkDeleteSubscriber::processMessageBulkDelete"/>
+
+    <consumer
+        name="checkout_cart_product_add_after"
+        queue="checkout_cart_product_add_after"
+        connection="amqp"
+        handler="Fedex\CatalogMvp\Model\Consumer\CheckoutCartProductAddAfterConsumer::process"
+    />
+</config>

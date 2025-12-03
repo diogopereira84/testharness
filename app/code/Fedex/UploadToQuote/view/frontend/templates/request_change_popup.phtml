@@ -1,0 +1,105 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Fedex\UploadToQuote\ViewModel\QuoteDetailsViewModel $quoteDetailsViewModel */
+$changeReuestData = $block->getData('changeRequestData');
+$quoteDetailsViewModel = $changeReuestData[0];
+$itemDetails = [];
+foreach (array_slice($changeReuestData, 1) as $val) {
+    $itemDetails = $val;
+}
+$message = $quoteDetailsViewModel->getRequestChangeMessage();
+$cancelCtaLabel = $quoteDetailsViewModel->getRequestChangeCancelCTALabel();
+$requestChangeCtaLabel = $quoteDetailsViewModel->getRequestChangeCTALabel();
+$productName = $itemDetails[0]['product_name'] ?? "";
+$quoteId = $itemDetails[0]['quote_id'] ?? "";
+$itemId = $itemDetails[0]['item_id'] ?? "";
+$title = 'Request Change for '.$productName;
+$productImgUrl = $itemDetails[0]['product_img'] ?? "";
+$btnCtaLabel = (count($itemDetails) > 1) ? 'Review Request' : $requestChangeCtaLabel;
+?>
+
+<div id="request_change_popup" class="request-change-model-popup-content" style="display:none;">
+    <form name="request-change-form" id="request-change-form">
+        <div class="request-change-icon-container request-change-row">
+            <img class="request-change-icon" alt="Request Change"
+                src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/request-change.png'));?>"/>
+        </div>
+        <h3 class="request-change-title request-change-row" id="product_name"><?= $block->escapeHtml($title) ?></h3>
+        <input type="hidden" name="quote_id" id="quote_id" value="<?= $block->escapeHtmlAttr($quoteId) ?>"/>
+        <input type="hidden" name="quote_item_id" id="quote_item_id" value="<?= $block->escapeHtmlAttr($itemId) ?>"/>
+        <input type="hidden" name="product_detail" id="product_detail"
+            data-productid="<?= $block->escapeHtmlAttr($itemId) ?>"
+            data-productname="<?= $block->escapeHtmlAttr($productName) ?>"
+            data-productimgurl="<?= $block->escapeHtmlAttr($productImgUrl) ?>"
+            data-bind="attr:{onload: productPreviewImg.getPreviewImg(
+            '<?= $block->escapeHtml($productImgUrl); ?>'
+            , $element)}"/>
+        <div class="request-change-message request-change-row">
+            <?= $block->escapeHtml($message) ?>
+        </div>
+        <?php if (count($itemDetails) > 1): ?>
+        <div class="request-change-row">
+            <label for="quoted-product"><?= $block->escapeHtml(__('Quoted Product')) ?></label>
+            <input type="text" name="quoted_product" id="quoted_product" tabindex="-1" title="product name"
+            data-productname="<?= $block->escapeHtmlAttr($productName) ?>" class="quoted-product-textbox cursor-alias"
+            value="" />
+            <img class="request-change-down-arrow" alt="Down Arrow" tabindex="0"
+                src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/decline-down-arrow.png'));?>"/>
+            <ul class="quoted-item-list item-list-hide">
+                <?php foreach ($itemDetails as $value): ?>
+                <li class="quote-item-li"
+                data-productname="<?= $block->escapeHtmlAttr($value['product_name']) ?>"
+                data-productimgurl="<?= $block->escapeHtmlAttr($value['product_img']) ?>"
+                data-bind="attr:{onload: productPreviewImg.getPreviewImg(
+            '<?= $block->escapeHtml($value['product_img']); ?>'
+            , $element)}" tabindex="0"
+                value="<?= $block->escapeHtmlAttr($value['item_id']) ?>"><?=
+                $block->escapeHtml($value['product_name']) ?></li>
+                <span class="change-request-check" style="display:none">
+                    <img class="save-draft-green-check"
+                    alt="<?= $block->escapeHtmlAttr('Green Check') ?>"
+                    src="<?=
+                    $block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/green-check.png'));?>"/>
+                    <?= $block->escapeHtml(__('Change Requested')) ?>
+                </span>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+        <?php endif; ?>
+        <div class="request-change-row">
+            <label for="print-instructions">
+                <?= $block->escapeHtml(__('Print Instructions')) ?>
+            </label>
+            <textarea name="print_instructions" id="print_instructions"
+            class="request-change-textarea" placeholder="Leave a comment" maxlength="400"/></textarea>
+            <div class="character-left-container">
+                <span class="print-instructions-character-count">
+                    <?= $block->escapeHtml(__('400')) ?></span>
+                <?= $block->escapeHtml(__('characters left')) ?>
+                <span class="<?= (count($itemDetails) > 1) ? 'save-draft': ''?>" style="display:none;">
+                    <img class="save-draft-green-check" alt="<?= $block->escapeHtmlAttr('Save Draft') ?>"
+                    src="<?=$block->escapeUrl($block->getViewFileUrl('images/upload-to-quote/green-check.png'));?>"/>
+                    <?= $block->escapeHtml(__('Draft Saved')) ?>
+                </span>
+            </div>
+        </div>
+        <div class="request-change-row request-change-popup-btn-container">
+            <button type="button" class="btn-request-change-cancel">
+                <?= $block->escapeHtml(__($cancelCtaLabel)) ?></button>
+            <button type="button"
+            class="btn-request-change <?= (count($itemDetails) > 1) ? 'btn-multiple-item': 'btn-single-item'?>"
+            disabled="disabled">
+                <?= $block->escapeHtml(__($btnCtaLabel)) ?></button>
+        </div>
+    </form>
+</div>
+<script>
+    require(['uploadToQuoteModelPopup'],
+        function(uploadToQuoteModelPopup){}
+    );
+</script>
+

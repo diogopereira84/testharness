@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Fedex\FuseBiddingQuote\Block\QuoteHistory" name="my-quotes-link" ifconfig="environment_toggle_configuration/environment_toggle/fuse_bidding_quote_retail_commercial" cacheable="false" after="-">
+                <arguments>
+                    <argument name="path" xsi:type="string">uploadtoquote/index/quotehistory</argument>
+                    <argument name="sortOrder" xsi:type="number">201</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

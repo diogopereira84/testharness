@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<preference for="Magedelight\Megamenu\Block\Topmenu" type="Fedex\CustomizedMegamenu\Block\Html\Topmenu" />
+<preference for="Magento\CatalogWidget\Block\Product\ProductsList" type="Fedex\CustomizedMegamenu\Block\Product\ProductsList" />
+<type name="Magento\Framework\View\Result\Page">
+	<plugin name="defaultStore" type="Fedex\CustomizedMegamenu\Plugin\Result\Page"/>
+</type>
+<type name="Magedelight\Megamenu\Block\Topmenu">
+	<plugin name="setMegaMenu" type="Fedex\CustomizedMegamenu\Plugin\Block\TopMenuBlock" sortOrder="2"/>
+</type>
+<type name="Magedelight\Megamenu\Block\Topmenu">
+	<plugin name="setVerticalRightParentItem" type="Fedex\CustomizedMegamenu\Plugin\Block\TopMenu" sortOrder="3"/>
+</type>
+<type name="Magento\Checkout\Block\Cart\Sidebar">
+	<plugin name="fedex_customized_megamenu_plugin_after_get_serialized_config" type="Fedex\CustomizedMegamenu\Plugin\Block\Cart\SerializeConfig" sortOrder="1" disabled="false"/>
+</type>
+    <preference for="Fedex\CustomizedMegamenu\Api\MenuTreeManagementInterface"
+                type="Fedex\CustomizedMegamenu\Model\MenuTreeManagement" />
+</config>

@@ -1,0 +1,63 @@
+<?php /** @var $block \Fedex\CSP\Block\Adminhtml\Form\Field\CreateEntry */ ?>
+<?= $block->getCreateEntryButtonHtml() ?>
+
+<script type="text/x-magento-template" id="fedex-csp-entry-template">
+    <form action="<?= $block->getCreateEntryUrl(); ?>"
+          method="POST"
+          id="fedex-csp-entry-form"
+          class="form-inline"
+          enctype="multipart/form-data">
+        <fieldset class="admin__fieldset">
+            <input hidden="hidden" name="entry_key" id="entry_key" class="admin__control-text">
+            <input hidden="hidden" name="store_id" id="store_id" class="admin__control-text">
+            <div class="admin__field field _required">
+                <label for="entry" class="admin__field-label">
+                    <span><?php /* @noEscape */ echo __("Entry") ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input name="entry"
+                           type="text"
+                           required="required"
+                           id="entry"
+                           class="admin__control-text">
+                </div>
+            </div>
+
+            <div class="admin__field field _required">
+                <label for="policies" class="admin__field-label">
+                    <span><?= __("Policies") ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <select name="policies[]" id="policies" class="select multiselect admin__control-multiselect" multiple="multiple" size="14">
+                        <option value="base-uri">base-uri</option>
+                        <option value="child-src">child-src</option>
+                        <option value="connect-src">connect-src</option>
+                        <option value="default-src">default-src</option>
+                        <option value="font-src">font-src</option>
+                        <option value="form-action">form-action</option>
+                        <option value="frame-ancestors">frame-ancestors</option>
+                        <option value="frame-src">frame-src</option>
+                        <option value="img-src">img-src</option>
+                        <option value="media-src">media-src</option>
+                        <option value="manifest-src">manifest-src</option>
+                        <option value="object-src">object-src</option>
+                        <option value="script-src">script-src</option>
+                        <option value="style-src">style-src</option>
+                    </select>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_CSP/js/entry": {
+                "saveEntryUrl": "<?= $block->escapeJsQuote($block->getCreateEntryUrl()); ?>",
+                "removeEntryUrl": "<?= $block->escapeJsQuote($block->getRemoveEntryUrl()); ?>",
+                "startingEntries": <?= /* @noEscape */ ($block->getEntriesValue()); ?>
+            }
+        }
+    }
+</script>

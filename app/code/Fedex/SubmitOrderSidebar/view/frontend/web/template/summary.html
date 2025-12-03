@@ -1,0 +1,33 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<!-- ko if: isPendingOrderApproval() && !isQuotePriceDashable() -->
+<div class="shipping-sidebar-pending-order-approval-container">
+    <div class="sidebar-pending-order-approval-inner-container">
+        <div class="info-icon-container">
+            <img class="info-icon" alt="Pending approval message" data-bind="attr: {src: pendingOrderIconImgUrl()}"/>
+        </div>
+        <div class="info-msg">
+            <div class="msg-heading" data-bind="text: isPendingOrderApprovalMsgTitle()">
+            </div>
+            <div class="msg-content" data-bind="text: isPendingOrderApprovalMsg()">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /ko -->
+<div role="region" aria-labelledby="summary-title" class="opc-block-summary" data-bind="blockLoader: isLoading">
+    <!-- ko if: isQuotePriceDashable() -->
+    <h4 id="summary-title" data-bind="i18n: 'Quote Summary'" class="title"></h4>
+    <!-- /ko -->
+    <!-- ko ifnot: isQuotePriceDashable() -->
+    <h4 id="summary-title" data-bind="i18n: 'Order Summary'" class="title"></h4>
+    <!-- /ko -->
+    <!-- ko foreach: elems() -->
+    <!-- ko template: getTemplate() --><!-- /ko -->
+    <!-- /ko -->
+</div>

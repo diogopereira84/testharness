@@ -1,0 +1,12 @@
+
+<?php if ($block->getData('megabuttontitle')): ?>
+	<div class="mega-menu-button-container">
+		<a class="mega-menu-button button-shape max-cart-limit-redirect <?php echo $block->getData('megabuttonicon') ? 'img-link' : 'btn-label'; ?>"  href="<?=$block->getData('megabuttonlink')?>">
+		<?php if ($block->getData('megabuttonicon')): ?>
+			<img src="<?=$block->getData('megabuttonicon');?>"
+				alt="<?= /* @noEscape */ $block->getData('megabuttonalttext'); ?>"><span>
+		<?php endif;?>
+		<?php
+echo $block->getData('megabuttontitle'); ?></span></a>
+	</div>
+<?php endif;?>

@@ -1,0 +1,38 @@
+<?php /** @var $block \Fedex\HttpRequestTimeout\Block\Adminhtml\Form\Field\CreateEntry */ ?>
+<?= $block->getCreateEntryButtonHtml() ?>
+
+<script type="text/x-magento-template" id="fedex-http-request-timeout-entry-template">
+    <form action="<?= $block->getCreateEntryUrl(); ?>"
+          method="POST"
+          id="fedex-http-request-timeout-entry-form"
+          class="form-inline"
+          enctype="multipart/form-data">
+        <fieldset class="admin__fieldset">
+            <input hidden="hidden" name="entry_key" id="entry_key" class="admin__control-text">
+            <div class="admin__field field _required">
+                <label for="entry" class="admin__field-label">
+                    <span><?php /* @noEscape */ echo __("Create Entry (Sample with time in seconds: https://api.fedex.com/v1/tokens,60) ") ?></span>
+                </label>
+                <div class="admin__field-control">
+                    <input name="entry"
+                           type="text"
+                           required="required"
+                           id="entry"
+                           class="admin__control-text">
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</script>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_HttpRequestTimeout/js/entry": {
+                "saveEntryUrl": "<?= $block->escapeJsQuote($block->getCreateEntryUrl()); ?>",
+                "removeEntryUrl": "<?= $block->escapeJsQuote($block->getRemoveEntryUrl()); ?>",
+                "startingEntries": <?= /* @noEscape */ ($block->getEntriesValue()); ?>
+    }
+}
+}
+</script>

@@ -1,0 +1,70 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove */
+/** @var \Fedex\ProductBundle\ViewModel\BundleProductHandler $bundleProductHandler */
+$bundleProductHandler = $block->getData('bundleProductHandler');
+$_item = $block->getItem();
+$isBundleChild = $bundleProductHandler?->isBundleChild($_item);
+?>
+<?php if (!$isBundleChild):?>
+<a role="button" href="javascript:void(0)"
+   aria-label="<?= $block->escapeHtml(__('Remove product')) ?>"
+   class="action action-delete action-delete-popup"
+   data-delete='<?= /* @noEscape */ $block->getDeletePostJson() ?>'>
+    <span>
+        <?= $block->escapeHtml(__('Delete')) ?>
+    </span>
+</a>
+<script type="text/javascript">
+    require(['jquery', 'Magento_Ui/js/modal/confirm', 'jquery/ui'], function($, confirm){
+        $(document).ready( function() {
+            $(document).on('click','.action-delete-popup',function(event){
+                event.stopImmediatePropagation();
+                let $element = $(this);
+                let dataPost = $element.attr('data-post');
+                let dataDelete = $element.attr('data-delete');
+                let isDeletePopupModelToggleEnabled = typeof(window.checkout) != 'undefined' &&
+                typeof(window.checkout.explorers_delete_cart_items_confirmation_modal) != 'undefined' &&
+                window.checkout.explorers_delete_cart_items_confirmation_modal != null ?
+                window.checkout.explorers_delete_cart_items_confirmation_modal : false;
+                if (isDeletePopupModelToggleEnabled) {
+                    let delItem = event.currentTarget;
+                    let itemName = $(delItem).parents(':eq(2)').find('.product-item-name').text();
+                    let alertIconImage = typeof(window.checkout.alert_icon_image) != 'undefined'
+                    && window.checkout.alert_icon_image != null ? window.checkout.alert_icon_image : '';
+                    let contentDetails =
+                    '<div class="delete-popup-content"><h3 class="delete-item-name">Delete '+itemName
+                    +'?</h3><p class="delete-item-description">This action cannot be reversed.</p></div>';
+                    if(typeof dataPost == 'undefined') {
+                        confirm({
+                            buttons: [{
+                                text: $.mage.__('CANCEL'),
+                                'class': 'clear-action-secondary clear-action-dismiss',
+                            }, {
+                                text: $.mage.__('DELETE ITEM'),
+                                'class': 'clear-action-primary clear-action-accept',
+                                click: function () {
+                                    $element.attr('data-post', dataDelete);
+                                    $element.trigger('click');
+                                }
+                            }],
+                            modalClass: 'confirm-clear-cart update-delete-popup',
+                            title: '<img src="'+alertIconImage+
+                            '" class="delete-alert-icon-img" aria-label="delete_image" />',
+                            content: contentDetails
+                        });
+                        $('.modal-inner-wrap .action-close').trigger('focus');
+                    }
+                } else if(typeof dataPost == 'undefined') {
+                    $element.attr('data-post', dataDelete);
+                    $element.trigger('click');
+                }
+            });
+        });
+    });
+</script>
+<?php endif; ?>

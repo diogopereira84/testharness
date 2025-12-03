@@ -1,0 +1,70 @@
+<?php
+/** @var \Magento\Framework\View\Element\Template $block */
+$adminValues = $block->getLayout()->createBlock('Fedex\ThirdPartyLegalDisclaimer\Block\AdminValues');
+
+?>
+<div id="third-party-link-warning" class="third-party-link-warning">
+    <div class="modal-body-content">
+        <?php if ($adminValues->getThirdPartyModalAdminDataToggle()) :?>
+        <h3 class="note-title fedex-light lh-40 text-center mt-0 mb-20 weight-300"><?= $adminValues->getThirdPartyModalTitle() ?></h3>
+        <p class="note-description fedex-light"><?= $adminValues->getThirdPartyModalTopDescription() ?></p>
+        <p class="note-description fedex-light"><?= $adminValues->getThirdPartyModalBottomDescription() ?></p>
+        <?php else :?>
+        <h3 class="note-title fedex-light lh-40 text-center mt-0 mb-20 weight-300"><?= $block->escapeHtml(__('You are leaving FedEx.com')) ?></h3>
+        <p class="note-description fedex-light"><?= $block->escapeHtml(__('
+            The website you are about to visit is not hosted by FedEx Office.Although we only partner with and link to reputable companies we are not
+            responsible for content provided by this or other third party sites, including those to which you may be redirected.
+            '));
+            ?>
+        </p>
+        <p class="note-description fedex-light"><?=$block->escapeHtml( __('
+            You are subject to the Privacy Policy and Terms & Conditions of the destination site(s) collecting your information, rather than those of FedEx Office.
+        '))?></p>
+        <?php endif; ?>
+        <div class="text-center">
+            <button type="button" class="btn-primary btn-start lh-24" style="width: 200px;">
+                <?= $block->escapeHtml(__('CONTINUE')) ?>
+            </button>
+        </div>
+        <div class="text-center">
+            <a href="#" class="btn-back link pagebuilder-button-link">
+                <?=$block->escapeHtml( __('GO BACK'))?>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    require([
+        "jquery",
+        "Magento_Ui/js/modal/modal"
+    ],function($, modal) {
+
+        var targetElement = null;
+        const thirdPartyModal = $('#third-party-link-warning');
+        const options = {
+            modalClass: 'leaving-fedex-popup',
+            buttons: [],
+        };
+        thirdPartyModal.modal(options);
+        $('.leaving-fedex-popup').attr('aria-label','Leaving Fedex.com');
+
+        // Initialize modal and set up buttons
+        $('.hero-banner a, [data-content-type="button-item"] .pagebuilder-button-link, [data-content-type="button-item"] .pagebuilder-button-secondary, [data-content-type="image"] a').on("click", function (e) {
+            e.preventDefault();
+            targetElement = $(this);
+            thirdPartyModal.modal(options).modal('openModal');
+        });
+
+        $('#third-party-link-warning .btn-start').on("click", function () {
+            var targetUrl = targetElement.attr("href");
+            window.open(targetUrl,'_blank');
+            thirdPartyModal.modal('closeModal');
+        });
+
+        $('#third-party-link-warning .btn-back').on("click", function (args) {
+            args.preventDefault();
+            thirdPartyModal.modal('closeModal');
+        });
+    });
+</script>

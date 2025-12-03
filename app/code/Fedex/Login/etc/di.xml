@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Framework\App\Request\Http" type="Fedex\Login\App\Request\Http"/>
+    <type name="Fedex\Login\Helper\Login">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Fedex\Login\Plugin\Store">
+        <arguments>
+            <argument name="session" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <type name="Magento\LoginAsCustomerAdminUi\Controller\Adminhtml\Login\Login">
+        <plugin name="impersonator_loginascustomeradminuiplugin" type="Fedex\Login\Plugin\Adminhtml\LoginPlugin" />
+    </type>
+</config>

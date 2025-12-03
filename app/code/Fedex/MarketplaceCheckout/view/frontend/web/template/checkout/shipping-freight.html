@@ -1,0 +1,47 @@
+<form id="shipping-freight-form" class="mt-50">
+    <h2 class="fedex-light fs-24 weight-300 lh-32 cl-stonegray">
+        Is there a raised loading dock at your delivery address?
+    </h2>
+    <hr>
+    <p class="fedex-regular fs-16 lh-24 cl-stonegray text-italic">
+        Your order contains freight shipment(s) that requires a lifted loading dock for delivery. If you
+        <strong class="fedex-bold">do not</strong>
+        have a raised loading dock there is an additional charge for liftgate delivery.
+    </p>
+    <fieldset class="fieldset">
+        <div class="field choice">
+            <label class="custom-radio-btn">
+                <input type="radio"
+                       name="shipping-freight"
+                       class="radio"
+                       tabindex="0"
+                       value="true"
+                       data-testid="input-radio-select-shipping-freight-does"
+                       data-bind="checked: hasLiftGate">
+                <span class="fedex-regular fs-16 lh-24 cl-stonegray" tabindex="0">
+                    My delivery address
+                    <strong class="fedex-bold">does</strong>
+                    have a raised loading dock
+                </span>
+            </label>
+        </div>
+        <div class="field choice">
+            <label class="custom-radio-btn">
+                <input type="radio"
+                       name="shipping-freight"
+                       class="radio"
+                       tabindex="0"
+                       value="false"
+                       data-validate="{'validate-one-required-by-name':true}"
+                       data-testid="input-radio-select-shipping-freight-does-not"
+                       data-bind="checked: hasLiftGate">
+                <span class="fedex-regular fs-16 lh-24 cl-stonegray" tabindex="0">
+                    My delivery address
+                    <strong class="fedex-bold">does not</strong>
+                    have a raised loading dock
+                </span>
+            </label>
+        </div>
+        <span class="error-message" data-bind="visible: selectionMissing">This is a required field.</span>
+    </fieldset>
+</form>

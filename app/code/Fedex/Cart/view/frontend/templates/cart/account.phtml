@@ -1,0 +1,200 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var \Magento\Framework\View\Element\AbstractBlock $block
+ * @var Fedex\Cart\ViewModel\CheckoutConfig $viewModel
+ */
+
+// We should use strlen function because coupon code could be "0", converted to bool will lead to false
+$viewModel = $block->getData('viewModelForAccount');
+$hasAccountNo = $block->getFedexAccountLast4() !== null && strlen($block->getFedexAccountLast4()) > 0;
+$helperData = $this->helper(Fedex\Delivery\Helper\Data::class);
+//B-1256522: Show Fedex Account number field for sde
+$isLoggedIn = $helperData->isEproCustomer();
+$borderColor = 'style="border-color: #E3002D !important"';
+$accountErrorOutlineColor = $viewModel->getAccountWarnings() ? $borderColor : '';
+$appliedFedexAccountNumber = $block->getAppliedFedexAccount();
+
+$isAccountDiscountEnabled = false;
+$isAccountDiscountEnabled = $viewModel->isAccountDiscountEnabled();
+?>
+<?php if ($isAccountDiscountEnabled): ?>
+   <div class="block discount">
+    <?php if (!$hasAccountNo && !$viewModel->getAccountWarnings()): ?>
+    <div class="account-title" data-role="account-title" data-testid="add-fedex-office-account">
+        <strong tabindex="0" class="discount-heading d-flex"
+        role="heading" aria-level="2">
+            <span class ="plus d-inline-block pr-5 fedex-regular">+</span>
+            <span class ="d-inline-block lh-22"><?=$block->escapeHtml(__('ADD FEDEX OFFICE PRINT ACCOUNT FOR DISCOUNT'))?></span>
+        </strong>
+    </div>
+    <?php endif;?>
+        <form id="discount-account-form"
+              action="<?=$block->escapeUrl($block->getUrl('cart/cart/accountPost'))?>"
+              method="post"
+              data-mage-init='{"fedexAccount":{"accountNoSelector": "#fedex_account_no_hidden",
+                                               "removeAccountNoSelector": "#remove_account_no",
+                                               "applyButton": "button.action.apply-account",
+                                               "cancelButton": "button.action.cancel-account",
+                                               "inputAccountNumber": "#fedex_account_no"
+                                           }}' >
+            <div class="discount-block account-no<?=$hasAccountNo ?
+            ' applied' : ''?>"
+            data-mage-init='{"loader": { "icon":
+            "<?=$block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))?>"}}'
+              <?=($hasAccountNo || $viewModel->getAccountWarnings())
+                ? ' style="display:block"'
+                : ' style="display:none"'?>>
+                <input type="hidden" name="remove" id="remove_account_no" value="0" />
+                <div class="apply-after-discount">FEDEX OFFICE PRINT ACCOUNT NUMBER </div>
+                <div class="field <?=$hasAccountNo ? 'apply-field' : 'cancel-field'?>">
+                    <div class="control account">
+                        <?php if ($hasAccountNo): ?>
+                            <div class="applied-fedex-number-text">
+                                FedEx Office Print Account
+                                <span class="ending-in"><?=$block->escapeHtmlAttr($block->getFedexAccountLast4())?></span>
+                            </div>
+                        <?php else: ?>
+                        <input autocomplete="off" type="text"
+                               class="input-text discount-text <?=$hasAccountNo ?
+                                ' apply applied-discount fedex-account' : 'cancel fedex-account'?>"
+                               id="fedex_account_no"
+                               name="fedex_account_no"
+                               placeholder="Ex. 123456789"
+                               value="<?=$block->escapeHtmlAttr($block->getFedexAccountLast4())?>"
+                               aria-label="Input account number"
+                                <?php if ($hasAccountNo): ?>
+                                   disabled="disabled"
+                                <?php endif;?>
+                                <?= $accountErrorOutlineColor ?>
+                        />
+                        <?php endif; ?>
+
+                        <input type="hidden"
+                               class="input-text discount-text <?=$hasAccountNo ?
+                                ' apply applied-discount fedex-account-hidden' : 'cancel fedex-account'?>"
+                               id="fedex_account_no_hidden"
+                               name="fedex_account_no"
+                               placeholder="Ex. 123456789"
+                               value="<?=$block->escapeHtmlAttr($block->getFedexAccountLast4())?>"
+                               aria-label="Input account number"
+                                <?php if ($hasAccountNo): ?>
+                                   disabled="disabled"
+                                <?php endif;?>
+                        />
+                        <div id="account-no-error"><?=$block->escapeHtmlAttr(__('This field is required.'))?></div>
+                        <?php if ($viewModel->getAccountWarnings()): ?>
+                            <div id="coupon-code-error-message">
+                                <span class="error-cross-icon">x</span>
+                                <span class="promo-warning-message">
+                                    <?=$block->escapeHtmlAttr(__($viewModel->getAccountWarnings()));?>
+                                </span>
+                            </div>
+                            <?php $viewModel->unSetAccountWarnings();?>
+                        <?php endif;?>
+                    </div>
+                    <div class="actions-toolbar">
+                        <?php if (!$hasAccountNo): ?>
+                        <div class="primary apply-promo">
+                            <button class="action apply-account primary account-no"
+                            type="button"
+                            aria-label="<?=$block->escapeHtmlAttr(__('Apply Discount'))?>">
+                                <?=$block->escapeHtml(__('Apply'))?>
+                            </button>
+                            <p id="apply-account-loader" class="loadersmall"></p>
+                        </div>
+                        <?php else: ?>
+                            <?php if ($block->canShowFedexAccountRemoveBtn()): ?>
+                                <div class="primary cancel-promo">
+                                    <button type="button" class="action cancel-account primary"
+                                        value="<?= $block->escapeHtml(__('Cancel Coupon')) ?>">
+                                        <span class="remove-button"><?= $block->escapeHtml(__('Remove')) ?></span>
+                                    </button>
+                                        <p id="apply-account-loader" class="loadersmall"></p>
+                                </div>
+                            <?php endif;?>
+                        <?php endif;?>
+                    </div>
+                </div>
+            </div>
+        </form>
+   </div>
+<?php endif;?>
+<style>
+    .promo-account .applied-discount .control input {
+        padding-left: 18px;
+        border: 1px solid #DCE2E6;
+    }
+    .applied .actions-toolbar {
+        right: 11px !important;
+        top: 6px !important;
+    }
+    .cart-summary .block .actions-toolbar > .primary .action.cancel.primary {
+        width: 16px!important;
+        height: 16px;
+    }
+    .cart-summary .block .actions-toolbar > .primary .action.cancel.primary > span {
+        font-size: 11px;
+        position: relative;
+        top: -4px;
+        padding: 4px;
+    }
+    .promo-account .account-no-error {
+        margin: -20px 0px 0px;
+    }
+    @media (min-width: 320px) and  (max-width: 767px) {
+        .promo-account .applied .actions-toolbar {
+            right: -48px !important;
+            top: 3px !important;
+        }
+    }
+</style>
+<script type="text/javascript">
+    require(['jquery','fedex/storage','domReady!'], function ($,fxoStorage) {
+        $(".account-title").on('click',function() {
+            $(this).hide();
+            $(".account-no").css("display","block");
+        });
+        $('.account-title').keypress(function (e) {
+            var key = e.which;
+            if(key == 13) {
+                $(".account-title").trigger('click');
+            }
+        });
+        $('.error-cross-icon').on('click',function() {
+            $('#coupon-code-error-message').hide();
+        });
+        if(window.e383157Toggle){
+            <?php if ($appliedFedexAccountNumber):?>
+            fxoStorage.set('selectedfedexAccount', '<?=$block->escapeHtml($appliedFedexAccountNumber)?>');
+            fxoStorage.set('isFedexAccountFieldVisible', true);
+            <?php else:?>
+            fxoStorage.delete('selectedfedexAccount');
+            fxoStorage.delete('isFedexAccountFieldVisible');
+            <?php endif; ?>
+            <?php if ($appliedFedexAccountNumber):?>
+            fxoStorage.set('fedexAccountApplied', true);
+            <?php else:?>
+            fxoStorage.set('fedexAccountApplied');
+            <?php endif; ?>
+        }else{
+            <?php if ($appliedFedexAccountNumber):?>
+            localStorage.setItem('selectedfedexAccount', '<?=$block->escapeHtml($appliedFedexAccountNumber)?>');
+            localStorage.setItem('isFedexAccountFieldVisible', true);
+            <?php else:?>
+            localStorage.removeItem('selectedfedexAccount');
+            localStorage.removeItem('isFedexAccountFieldVisible');
+            <?php endif; ?>
+            <?php if ($appliedFedexAccountNumber):?>
+            localStorage.setItem('fedexAccountApplied', true);
+            <?php else:?>
+            localStorage.removeItem('fedexAccountApplied');
+            <?php endif; ?>
+        }
+
+    });
+</script>

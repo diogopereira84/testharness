@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category Fedex
+ * @package  Fedex_HttpRequestTimeout
+ * @copyright   Copyright (c) 2024 FedEx
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\HttpRequestTimeout\Api\CurlClientPluginInterface" type="Fedex\HttpRequestTimeout\Plugin\CurlClientPlugin"/>
+    <preference for="Fedex\HttpRequestTimeout\Api\ConfigManagementInterface" type="Fedex\HttpRequestTimeout\Model\ConfigManagement"/>
+    <type name="Magento\Framework\HTTP\ClientInterface">
+        <plugin name="fedex_http_client_interface_timeout_curl_client_plugin_timeout" type="Fedex\HttpRequestTimeout\Plugin\CurlClientPlugin" />
+    </type>
+    <type name="GuzzleHttp\Client">
+        <plugin name="guzzle_client_plugin" type="Fedex\HttpRequestTimeout\Plugin\GuzzleClientPlugin" />
+    </type>
+    <type name="Laminas\Http\Client">
+        <plugin name="laminas_client_plugin" type="Fedex\HttpRequestTimeout\Plugin\LaminasClientPlugin" />
+    </type>
+</config>

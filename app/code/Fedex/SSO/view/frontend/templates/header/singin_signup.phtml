@@ -1,0 +1,113 @@
+<?php
+/** @var \Fedex\SSO\Block\RetailLoginInfo $block */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var $secureRenderer \Magento\Framework\View\Helper\SecureHtmlRenderer */
+if ($block->isCommercialCustomer()) {
+    ?>
+    <div><div class="fcl-login"></div></div>
+    <?php
+}
+?>
+<?php
+if (!$block->isCommercialCustomer()) {
+?>
+    <div class="fcl-signup-desktop-login" style="display:none;">
+        <div class="fcl-login">
+            <div class="links-container wlgn-login-container">
+                <div tabindex="0" class="customer-name customer-fcl-login customerdropdown">
+                    <?= $escaper->escapeHtmlAttr(__("Log in or Sign Up")) ?>
+                </div>
+                <div class="customer-dropdown customerdropdown">
+                    <img src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/sso/login_icon.png')); ?>"
+                        class="login-icon" alt ="Log in or Sign Up" />
+                </div>
+                <div class="customer-menu">
+                    <ul class="header links">
+                        <li class="login_url">
+                            <a data-trigger="login-popup">
+                            <?= $escaper->escapeHtmlAttr(__("Log in or Sign Up")) ?></a>
+                        </li>
+                        <?php if ($block->isMyProjectsEnable()) : ?>
+                        <li class="my-projects">
+                            <a href="<?= $escaper->escapeUrl('/configurator/index/index?viewproject=true') ?>">
+                            <?= $escaper->escapeHtmlAttr(__("My Projects")) ?></a>
+                        </li>
+                        <?php endif; ?>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fcl-signup-mobile-login" style="display:none;">
+        <div class="fcl-login-mobile-toggle" style='display:none'>
+            <div class="customer-menu">
+                <div class="header links">
+                    <div class="li sign-up">
+                        <a id="#loginOrSignup" href="javascript:void(0)" data-trigger="login-popup">
+                            <?= $escaper->escapeHtmlAttr(__("Log in or Sign Up")) ?></a>
+                    </div>
+                    <?php if ($block->isMyProjectsEnable()) : ?>
+                        <div class="li my-projects">
+                            <a href="<?= $escaper->escapeUrl('/configurator/index/index?viewproject=true') ?>">
+                                <?= $escaper->escapeHtml(__("My Projects")) ?></a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php
+    if ($block->getWebCookieConfig('cookie_lifetime')) { ?>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Fedex_SSO/js/fcllogin": {}
+                }
+            }
+        </script>
+    <?php } ?>
+    <?php
+    $customerNameScript = <<<script
+    require(["jquery","domReady!"], function ($) {
+        $(".customer-name").on("keypress", function (e) {
+            var key = e.which;
+            if(key == 13) {
+                $(this).trigger("click");
+            }
+        });
+    });
+    script;
+    ?>
+    <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $customerNameScript, false); ?>
+    <style>
+    @media only screen and (max-width: 1023px) {
+        .globalize-login-mobile .page-wrapper {
+            position: relative;
+        }
+        .globalize-login-mobile .fcl-login-mobile-toggle {
+            margin-top: 0;
+            top: 0;
+        }
+    }
+    </style>
+    <?php
+    $signUpHandlingScript = <<<script
+    require(['jquery', 'mage/url', 'domReady!'], function ($, url) {
+        $(window).on('load resize', function () {
+            if ($(window).width() < 1024) {
+                $('.globalize-login-mobile .fcl-signup-mobile-login').show();
+                $('.globalize-login-mobile .fcl-signup-desktop-login').hide();
+            } else {
+                $('.globalize-login-mobile .right-top-header-links .fcl-signup-desktop-login').show();
+                $('.globalize-login-mobile .fcl-signup-mobile-login').hide();
+            }
+
+            $('.selfreg-landing-index .fcl-signup-desktop-login').hide();
+        });
+    });
+    script;
+    ?>
+    <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $signUpHandlingScript, false); ?>
+<?php
+}
+?>

@@ -1,0 +1,425 @@
+<?xml version="1.0" ?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<form xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+	<argument name="data" xsi:type="array">
+		<item name="js_config" xsi:type="array">
+			<item name="provider" xsi:type="string">psgcustomers_form.psgcustomer_form_data_source</item>
+		</item>
+		<item name="label" xsi:type="string" translate="true">General Information</item>
+		<item name="template" xsi:type="string">templates/form/collapsible</item>
+	</argument>
+	<settings>
+		<buttons>
+			<button name="save" class="Fedex\CIDPSG\Block\Adminhtml\PSGCustomerform\Edit\SaveButton"/>
+			<button name="back" class="Fedex\CIDPSG\Block\Adminhtml\PSGCustomerform\Edit\BackButton"/>
+			<button name="save_and_continue" class="Fedex\CIDPSG\Block\Adminhtml\PSGCustomerform\Edit\SaveAndContinueButton"/>
+		</buttons>
+		<namespace>psgcustomers_form</namespace>
+		<dataScope>data</dataScope>
+		<deps>
+			<dep>psgcustomers_form.psgcustomer_form_data_source</dep>
+		</deps>
+	</settings>
+	<dataSource name="psgcustomer_form_data_source">
+		<argument name="data" xsi:type="array">
+			<item name="js_config" xsi:type="array">
+				<item name="component" xsi:type="string">Magento_Ui/js/form/provider</item>
+			</item>
+		</argument>
+		<settings>
+			<submitUrl path="psgcustomers/index/save"/>
+		</settings>
+		<dataProvider name="psgcustomer_form_data_source" class="Fedex\CIDPSG\Model\Grid\DataProvider">
+			<settings>
+				<requestFieldName>psg</requestFieldName>
+				<primaryFieldName>entity_id</primaryFieldName>
+			</settings>
+		</dataProvider>
+	</dataSource>
+	<fieldset name="general">
+		<settings>
+			<label>General</label>
+		</settings>
+		<field name="client_id" formElement="input" sortOrder="5">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PSGCustomerform</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Client ID</label>
+				<dataScope>client_id</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+					<rule name="validate-hyphen" xsi:type="boolean">true</rule>
+					<rule name="no-whitespace" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="company_participation_id" formElement="input" sortOrder="10">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PSGCustomerform</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Company Participation ID</label>
+				<dataScope>company_participation_id</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">false</rule>
+					<rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="company_name" formElement="input" sortOrder="15">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PSGCustomerform</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Contract Holder's Company Name</label>
+				<dataScope>company_name</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+					<rule name="no-marginal-whitespace" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="company_logo">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="dataType" xsi:type="string">string</item>
+					<item name="label" xsi:type="string" translate="true">Company Logo</item>
+					<item name="visible" xsi:type="boolean">true</item>
+					<item name="allowedExtensions" xsi:type="string">jpg jpeg png</item>
+					<item name="maxFileSize" xsi:type="number">2097152</item>
+					<item name="formElement" xsi:type="string">imageUploader</item>
+					<item name="previewTmpl" xsi:type="string">Magento_Catalog/image-preview</item>
+					<item name="elementTmpl" xsi:type="string">ui/form/element/uploader/uploader</item>
+					<item name="dataScope" xsi:type="string">company_logo</item>
+					<item name="sortOrder" xsi:type="number">40</item>
+					<item name="uploaderConfig" xsi:type="array">
+						<item name="url" xsi:type="url" path="psgcustomers/index/upload">
+							<param name="target_element_id">company_logo</param>
+							<param name="type">image</param>
+						</item>
+					</item>
+					<item name="validation" xsi:type="array">
+						<item name="required-entry" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+		</field>
+		<field name="support_account_type" formElement="select" sortOrder="30">
+			<argument name="data" xsi:type="array">
+				<item name="options" xsi:type="object">Fedex\CIDPSG\Model\Source\AccountTypes</item>
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">PSGCustomerform</item>
+				</item>
+			</argument>
+			<settings>
+				<dataType>text</dataType>
+				<label translate="true">Support Account Type</label>
+				<dataScope>support_account_type</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+		</field>
+		<field name="participation_agreement" sortOrder="40" formElement="wysiwyg" template="ui/form/field">
+			<argument name="data" xsi:type="array">
+				<item name="config" xsi:type="array">
+					<item name="source" xsi:type="string">page</item>
+					<item name="wysiwygConfigData" xsi:type="array">
+						<item name="is_pagebuilder_enabled" xsi:type="boolean">false</item>
+						<item name="toggle_button" xsi:type="boolean">true</item>
+						<item name="height" xsi:type="string">200px</item>
+						<item name="add_variables" xsi:type="boolean">true</item>
+						<item name="add_widgets" xsi:type="boolean">true</item>
+						<item name="add_images" xsi:type="boolean">true</item>
+						<item name="add_directives" xsi:type="boolean">true</item>
+					</item>
+				</item>
+			</argument>
+			<settings>
+				<label translate="true">Participation Agreement</label>
+				<dataScope>participation_agreement</dataScope>
+				<validation>
+					<rule name="required-entry" xsi:type="boolean">true</rule>
+				</validation>
+			</settings>
+			<formElements>
+				<wysiwyg>
+					<settings>
+						<rows>5</rows>
+						<wysiwyg>true</wysiwyg>
+					</settings>
+				</wysiwyg>
+			</formElements>
+		</field>
+	</fieldset>
+	<fieldset name="default_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Default Fields</item>
+				<item name="collapsible" xsi:type="boolean">true</item>
+				<item name="opened" xsi:type="boolean">false</item>
+				<item name="additionalClasses" xsi:type="string">customer-fields-container-collapse</item>
+            </item>
+        </argument>
+        <container name="default_fields">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
+                    <item name="template" xsi:type="string">ui/dynamic-rows/templates/default</item>
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="recordTemplate" xsi:type="string">record</item>
+                    <item name="addButtonLabel" xsi:type="string">Add Record</item>
+                    <item name="deleteProperty" xsi:type="boolean">false</item>
+					<item name="additionalClasses" xsi:type="string">admin__field-wide default-fields-container</item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Dynamic Rows</item>
+                        <item name="component" xsi:type="string" translate="true">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="showFallbackReset" xsi:type="boolean">false</item>
+                    </item>
+                </argument>
+				<field name="field_label" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+						</item>
+					</argument>
+					<settings>
+						<validation>
+							<rule name="required-entry" xsi:type="boolean">true</rule>
+							<rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+						</validation>
+						<dataType>text</dataType>
+						<label>Field Label</label>
+					</settings>
+				</field>
+				<field name="field_description" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+						</item>
+					</argument>
+					<settings>
+						<validation>
+							<rule name="required-entry" xsi:type="boolean">true</rule>
+							<rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+						</validation>
+						<dataType>text</dataType>
+						<label>Field Description</label>
+					</settings>
+				</field>
+				<field name="validation_type" formElement="select">
+					<argument name="data" xsi:type="array">
+						<item name="options" xsi:type="object">Fedex\CIDPSG\Model\Source\ValidationTypes</item>
+						<item name="config" xsi:type="array">
+							<item name="source" xsi:type="string">PSGCustomerform</item>
+							<item name="additionalClasses" xsi:type="string">field-validate-type</item>
+						</item>
+					</argument>
+					<settings>
+						<dataType>text</dataType>
+						<label translate="true">Validation Type</label>
+					</settings>
+				</field>
+				<field name="max_character_length" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+						</item>
+					</argument>
+					<settings>
+						<label>Max Character Length</label>
+					</settings>
+				</field>
+				<field name="is_required" formElement="checkbox">
+					<settings>
+						<dataType>boolean</dataType>
+						<label translate="true">Is Required</label>
+					</settings>
+					<formElements>
+						<checkbox>
+							<settings>
+								<valueMap>
+									<map name="false" xsi:type="string">0</map>
+									<map name="true" xsi:type="string">1</map>
+								</valueMap>
+								<prefer>toggle</prefer>
+							</settings>
+						</checkbox>
+					</formElements>
+				</field>
+                <actionDelete>
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                            <item name="template" xsi:type="string">Fedex_CIDPSG/dynamic-rows/cells/action-delete</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+				<field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">number</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="componentType" xsi:type="string">field</item>
+                            <item name="label" xsi:type="string" translate="true">Position</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+        </container>
+    </fieldset>
+	<fieldset name="custom_fieldset">
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="label" xsi:type="string" translate="true">Custom Fields</item>
+				<item name="collapsible" xsi:type="boolean">true</item>
+				<item name="opened" xsi:type="boolean">false</item>
+				<item name="additionalClasses" xsi:type="string">customer-fields-container-collapse</item>
+            </item>
+        </argument>
+        <container name="custom_fields">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/dynamic-rows/dynamic-rows</item>
+                    <item name="template" xsi:type="string">ui/dynamic-rows/templates/default</item>
+                    <item name="componentType" xsi:type="string">dynamicRows</item>
+                    <item name="recordTemplate" xsi:type="string">record</item>
+                    <item name="addButtonLabel" xsi:type="string">Add Record</item>
+                    <item name="deleteProperty" xsi:type="boolean">false</item>
+					<item name="additionalClasses" xsi:type="string">admin__field-wide custom-fields-container</item>
+                </item>
+            </argument>
+            <container name="record">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="label" xsi:type="string" translate="true">Dynamic Rows</item>
+                        <item name="component" xsi:type="string" translate="true">Magento_Ui/js/dynamic-rows/record</item>
+                        <item name="isTemplate" xsi:type="boolean">true</item>
+                        <item name="is_collection" xsi:type="boolean">true</item>
+                        <item name="showFallbackReset" xsi:type="boolean">false</item>
+                    </item>
+                </argument>
+				<field name="field_label" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+						</item>
+					</argument>
+					<settings>
+						<validation>
+							<rule name="required-entry" xsi:type="boolean">true</rule>
+							<rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+						</validation>
+						<dataType>text</dataType>
+						<label>Field Label</label>
+					</settings>
+				</field>
+				<field name="field_description" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+						</item>
+					</argument>
+					<settings>
+						<validation>
+							<rule name="required-entry" xsi:type="boolean">true</rule>
+							<rule name="validate-no-html-tags" xsi:type="boolean">true</rule>
+						</validation>
+						<dataType>text</dataType>
+						<label>Field Description</label>
+					</settings>
+				</field>
+				<field name="validation_type" formElement="select">
+					<argument name="data" xsi:type="array">
+						<item name="options" xsi:type="object">Fedex\CIDPSG\Model\Source\ValidationTypes</item>
+						<item name="config" xsi:type="array">
+							<item name="source" xsi:type="string">PSGCustomerform</item>
+							<item name="additionalClasses" xsi:type="string">field-validate-type</item>
+						</item>
+					</argument>
+					<settings>
+						<dataType>text</dataType>
+						<label translate="true">Validation Type</label>
+					</settings>
+				</field>
+				<field name="max_character_length" formElement="input">
+					<argument name="data" xsi:type="array">
+						<item name="config" xsi:type="array">
+							<item name="fit" xsi:type="boolean">false</item>
+							<item name="default" xsi:type="string">70</item>
+						</item>
+					</argument>
+					<settings>
+						<label>Max Character Length</label>
+					</settings>
+				</field>
+				<field name="is_required" formElement="checkbox">
+					<settings>
+						<dataType>boolean</dataType>
+						<label translate="true">Is Required</label>
+					</settings>
+					<formElements>
+						<checkbox>
+							<settings>
+								<valueMap>
+									<map name="false" xsi:type="string">0</map>
+									<map name="true" xsi:type="string">1</map>
+								</valueMap>
+								<prefer>toggle</prefer>
+							</settings>
+						</checkbox>
+					</formElements>
+				</field>
+                <actionDelete>
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="componentType" xsi:type="string">actionDelete</item>
+                            <item name="dataType" xsi:type="string">text</item>
+                            <item name="fit" xsi:type="boolean">false</item>
+                            <item name="additionalClasses" xsi:type="string">data-grid-actions-cell</item>
+                            <item name="template" xsi:type="string">Magento_Backend/dynamic-rows/cells/action-delete</item>
+                        </item>
+                    </argument>
+                </actionDelete>
+				<field name="position">
+                    <argument name="data" xsi:type="array">
+                        <item name="config" xsi:type="array">
+                            <item name="dataType" xsi:type="string">number</item>
+                            <item name="formElement" xsi:type="string">input</item>
+                            <item name="componentType" xsi:type="string">field</item>
+                            <item name="label" xsi:type="string" translate="true">Position</item>
+                            <item name="dataScope" xsi:type="string">position</item>
+                            <item name="visible" xsi:type="boolean">false</item>
+                        </item>
+                    </argument>
+                </field>
+            </container>
+        </container>
+    </fieldset>
+</form>

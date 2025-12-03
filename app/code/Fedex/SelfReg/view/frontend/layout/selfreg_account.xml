@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Fedex. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="customer_account_navigation">
+            <block class="Fedex\EnhancedProfile\Block\Account\ManageUserLink"
+                   name="customer-account-company-company-users-link" cacheable="false" after="-">
+                <arguments>
+                    <argument name="path" xsi:type="string">company/users</argument>
+                    <argument name="label" xsi:type="helper" helper="Fedex\SelfReg\Helper\Data::getLabel"></argument>
+                    <argument name="sortOrder" xsi:type="number">90</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+        <referenceBlock name="customer-account-navigation-company-roles-link" remove="true"/>
+    </body>
+</page>

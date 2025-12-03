@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!--
+    /**
+     * Copyright © FedEx, Inc. All rights reserved.
+     * See COPYING.txt for license details.
+     */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Quote\Model\Quote" type="Fedex\Quote\Rewrite\Quote\Model\Quote"/>
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="fedex_core_overridden_quote_merge"
+        type="Fedex\Quote\Plugin\Rewrite\Quote\Model\Quote" sortOrder="10" disabled="false" />
+    </type>
+    <type name="Magento\Framework\DataObject\Copy">
+        <plugin name="fedex_core_overridden_quote_set_customer"
+        type="Fedex\Quote\Plugin\DataObject\Copy" sortOrder="10" disabled="false" />
+    </type>
+</config>

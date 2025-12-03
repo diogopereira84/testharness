@@ -1,0 +1,231 @@
+& when (@media-common = true) {
+    .quick-search {
+        border-top: 1px solid @fx-white-200;
+        .search-field {
+            border-right: 1px solid @fx-grey-600;
+            .search-input {
+                box-shadow: none;
+                font-family: 'FedEx Sans Regular';
+                height: 40px;
+                padding-left: 16px;
+                padding-right: 16px;
+                &::placeholder {
+                    color: @fx-white-100;
+                }
+                &:focus::placeholder {
+                    color: transparent !important;
+                }
+            }
+            .search-suggestions {
+                box-shadow: 0px 2px 6px 0px rgba(51, 51, 51, 0.3);
+                left: 0;
+                right: 0;
+                z-index: 100;
+                .search-header {
+                    background-color: @fx-grey-700;
+                }
+                .popular-terms {
+                    max-height: 410px;
+                    overflow: auto;
+                }
+                .product-list {
+                    max-height: 389px;
+                    overflow: auto;
+                }
+                .product-result {
+                    border-bottom: 1px solid @fx-white-200;
+                    padding: 8px 16px;
+                    .product-image {
+                        width: 48px;
+                    }
+                    &.hidden {
+                        display: none;
+                    }
+                    &.unavailable {
+                        pointer-events: none;
+                        .product-cta {
+                            color: @fx-grey-100;
+                        }
+                    }
+                }
+                a.product-result {
+                    &:hover {
+                        background-color: rgb(245, 245, 245);
+                    }
+                }
+                .view-all {
+                    border-top: 1px solid @fx-white-200;
+                    color: #007AB7;
+                    padding: 12px 16px;
+                }
+            }
+        }
+        .btn-search {
+            width: 55px;
+        }
+    }
+    .nav-sections {
+        .search-controls {
+            background-color: transparent;
+            border-width: 0;
+        }
+        .lens {
+            &:after {
+                color: @fx-white-100;
+                display: block;
+            }
+        }
+    }
+    .commercial-store-home {
+        .quick-search {
+            .search-field {
+                border-color: @fx-white-200;
+                .search-input {
+                    color: @fx-grey-500;
+                    &::placeholder {
+                        color: @fx-grey-500;
+                    }
+                }
+            }
+        }
+        .nav-sections {
+            .lens {
+                &:after {
+                    color: @fx-grey-500;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+    .quick-search {
+        .search-field {
+            .search-suggestions {
+                .popular-terms {
+                    max-height: 342px;
+                }
+                .product-list {
+                    max-height: 485px;
+                }
+                .product-result {
+                    padding: 16px 24px;
+                    .product-price {
+                        min-width: 160px;
+                    }
+                }
+                .view-all {
+                    padding: 24px 16px;
+                }
+            }
+        }
+        .btn-search {
+            font-size: 40px;
+        }
+    }
+}
+
+
+& when (@media-target = 'desktop'), (@media-target = 'all') {
+    @media only screen and (min-width: 1024px) {
+        .quick-search {
+            border: 2px solid #F7F9FA;
+            border-radius: 100px;
+            margin-left: 28px;
+            margin-right: 28px;
+            display: none;
+            .search-field {
+                border-right: 2px solid @fx-white-100;
+                .search-input {
+                    height: 38px;
+                    padding-left: 22px;
+                    padding-right: 22px;
+                }
+                .search-suggestions {
+                    margin-top: 8px;
+                    .search-header {
+                        background-color: @fx-grey-600;
+                        font-size: 14px;
+                        letter-spacing: 1px;
+                    }
+                    .popular-terms {
+                        max-height: 336px;
+                    }
+                    .product-list {
+                        max-height: 504px;
+                    }
+                    .result-list {
+                        padding: 2px;
+                    }
+                    .product-result {
+                        border-bottom-width: 0;
+                        padding: 12px 14px;
+                        min-height: 32px;
+                        .product-image {
+                            margin-right: 25px;
+                            width: 60px;
+                            height: 60px;
+                        }
+                    }
+                    .view-all {
+                        font-size: 19px;
+                        letter-spacing: 1.19px;
+                        text-align: center;
+                    }
+                }
+            }
+            .btn-search {
+                font-size: 38px;
+                width: 113px;
+            }
+        }
+        .menu.horizontal,
+        .commercial-store-home .nav-sections .nav-sections-item-content {
+            display: flex;
+            align-items: center;
+        }
+        .nav-sections {
+            .btn-toggle-search {
+                border-bottom: 2px solid @fx-white-100;
+                display: block;
+                font-size: 48px;
+                line-height: normal;
+            }
+            &.search-open {
+                .md-top-menu-items {
+                    display: none !important;
+                }
+                .btn-toggle-search {
+                    border-width: 0;
+                    font-size: 40px;
+                    &::after {
+                        content: '\e91c';
+                    }
+                }
+                .navigation {
+                    display: none;
+                }
+                .quick-search {
+                    display: flex !important;
+                }
+            }
+        }
+        .commercial-store-home {
+            .quick-search {
+                border: 1px solid @fx-grey-500;
+                display: none;
+                margin: 19px 28px 18px 210px;
+                .search-field {
+                    border-right: 1px solid @fx-grey-500;
+                }
+            }
+            .nav-sections {
+                .btn-toggle-search {
+                    border-color: @fx-grey-500;
+                    z-index: 3;
+                    margin-right: 48px;
+                }
+            }
+        }
+    }
+}

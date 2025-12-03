@@ -1,0 +1,293 @@
+<?php
+
+/** @var $block \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer */
+/** @var $escaper \Magento\Framework\Escaper */
+
+$_item = $block->getItem();
+$_order = $_item->getOrder();
+/** @var Fedex\Orderhistory\ViewModel\OrderHistoryEnhacement $viewModel */
+$viewModel = $block->getData('order_enhancement_view_model');
+$isSdeStore = $viewModel->isSdeStore();
+$eproClass = $viewModel->isModuleEnabled() ? 'epro-view-order' : '';
+
+$isModuleEnabled = $viewModel->isModuleEnabled();
+$isEnhancementEnabeled = $viewModel->isEnhancementEnabeled();
+$product_json = $_item->getProductOptions()['info_buyRequest']['external_prod'][0] ?? [];
+$id = isset($product_json['id']) ? $product_json['id'] : '';
+$version = isset($product_json['version']) ? $product_json['version'] : '';
+$features = $product_json['features'] ?? [];
+$contentAssociations = $product_json['contentAssociations'] ?? [];
+$previewUrl = $product_json['preview_url'] ?? null;
+
+//Millionaires - E-398131 : Adoption of New Document Platform
+$newDocumentApiImageToggle = $viewModel->isNewDocumentImageToggleEnabled();
+
+$featureName = null;
+$featureLabel = null;
+$i = 0;
+$isEproReorderEnabled = $viewModel->isCommercialOrderHistoryReorderEnabled();
+$customHtmlAttributes = null;
+if ($isEproReorderEnabled) {
+    $productId = $_item->getProductId();
+    $product = $viewModel->loadProductObj($productId);
+    $isCustomize = $product ? $viewModel->getProductCustomAttributeValue($product->getId(), 'customizable'):false;
+    $newDocumentImage = $newDocumentApiImageToggle ? $newDocumentApiImageToggle : false;
+    if ($product && $product->getData('pod2_0_editable') && ($isCustomize) || $newDocumentImage){
+        $newDocumentImage = true;
+    }
+    $producImgSrc = $viewModel->getProductImage($previewUrl,$newDocumentImage);
+
+    if (!empty($product)) {
+        $attributeSetId = $product->getAttributeSetId();
+        $attribute_set_name = $viewModel->getProductAttributeSetName($attributeSetId);
+        if ($attribute_set_name == 'FXOPrintProducts' && isset($_item->getProductOptions()['info_buyRequest'])) {
+            $serializedProductData = $viewModel->serializeProductData($_item->getProductOptions()['info_buyRequest']);
+            $serializedProductJsonData = json_encode($serializedProductData['serializedProductData']);
+            $customHtmlAttributes = 'product-instance="' .
+                $escaper->escapeHtmlAttr(__($serializedProductJsonData)) .
+                '" product-preset-id="' . $escaper->escapeHtmlAttr(__($serializedProductData['productPresetId'])) .
+                '" product-engine="1" product-status="1"';
+        } else {
+            $customHtmlAttributes = 'product-instance="false" product-preset-id="false"' .
+                ' product-engine="0" product-status="1"';
+        }
+    } else {
+        $customHtmlAttributes = 'product-instance="false" product-preset-id="false"' .
+            ' product-engine="0" product-status="0"';
+    }
+}
+
+foreach ($features as $feature) {
+    if ($i == 0) {
+        $featureName = $feature['choice']['name'];
+        $featureLabel = $feature['name'];
+        break;
+    }
+    $i++;
+}
+
+$isMarketplaceCommercialToggleEnabled = $viewModel->isMarketplaceCommercialToggleEnabled();
+
+$additionalAttributesData = [];
+if ($isMarketplaceCommercialToggleEnabled){
+    $additionalAttributesData = json_decode((string)$_order->getPayment()->getProductLineDetails());
+    $orderItems = $viewModel->getItemsByOrderId($_order->getId());
+    $orderItem = array_filter($orderItems, function($item) use ($_item){
+        return $item->getId() === $_item->getId();
+    });
+    if (count($orderItem)){
+        $orderItem = array_pop($orderItem);
+    }
+}
+if (empty($previewUrl)) {
+    $thumbnailImgUrl = $viewModel->getItemThumbnailUrl($_item->getProduct());
+}
+?>
+<?php if ($isEproReorderEnabled) { ?>
+<tr class="epro-order-items-rows bundle-child item-info-parent-<?= $_item->getParentItemId() ?>" id="order-item-row-<?= (int) $_item->getId() ?>" <?= /* @noEscape */ $customHtmlAttributes; ?>>
+<input class="reorder-item" type="hidden" data-product-id="<?= /* @noEscape */ $_item->getProductId(); ?>" data-order-id="<?= /* @noEscape */ $_order->getId(); ?>" data-item-id="<?= /* @noEscape */ $_item->getId(); ?>"
+       data-is-mirakl-offer="1" data-3p-customizable="<?= /* @noEscape */ $_item->getProduct()->getData('customizable_product'); ?>"/>
+<?php } else { ?>
+<tr id="order-item-row-<?= (int) $_item->getId() ?>" class="bundle-child item-info-parent-<?= $_item->getParentItemId() ?>">
+    <?php } ?>
+    <?php if ($isEnhancementEnabeled) : ?>
+        <td class="col name" data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>">
+            <div class="product-name-image-info">
+                <div class="item-img">
+                    <!-- B-1242850: Mask product image for sde store -->
+                    <?php if ($isSdeStore) : ?>
+                    <span class="product-image-container">
+                            <img aria-label="Preview product image" class="preview-product-img"
+                                 src="<?=/* @noEscape */ $viewModel->getSdeMaskSecureImagePath() ?>" alt="maskImg" />
+                        <?php else : ?>
+                            <?php if (!empty($previewUrl)) : ?>
+                                <?php if (!empty($producImgSrc)) : ?>
+                                    <img src="<?= $producImgSrc; ?>"
+                                         alt="productImage" caria-label="Preview product image"
+                                         class="custom-preview-product-img" />
+                                <?php else : ?>
+                                    <span class="product-image-container prev-img-loader">
+                                        <img alt="loaderImage"
+                                             src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/loader-2.gif')) ?>"
+                                             class="product-loader" />
+                                            <img aria-label="Preview product image" class="preview-product-img" alt="product_image"
+                                                 data-bind="attr:{onload: productPreviewImg.getPreviewImg('<?=$escaper->escapeHtml($previewUrl);?>', $element)}" />
+                                    </span>
+                                <?php endif; ?>
+                            <?php else : ?>
+                                <!-- B-1234552- Validate all new component follow ADA compliance Order/Quote History -->
+                                <span class="product-item-photo">
+                                    <img aria-label="Product Thumbnail" alt='' src="<?=/* @noEscape */ $thumbnailImgUrl; ?>" class="product-thumbnail" />
+                                </span>
+                            <?php endif; ?>
+                        <?php endif; ?>
+                </div>
+                <strong class="product name product-item-name">
+                    <?php
+                    if (!empty($previewUrl) && isset($product_json['userProductName']) && !$_item->getMiraklOfferId()) {
+                        echo $product_json['userProductName'];
+                    } elseif (!empty($previewUrl) && isset($product_json['fxo_product'])) {
+                        $fxoProduct = json_decode($product_json['fxo_product'] ?? "{}")->fxoProductInstance ?? [];
+                        echo $fxoProduct ? $fxoProduct->name : $_item->getName();
+                    } elseif (!empty($previewUrl) && $_item->getMiraklOfferId() && isset($additionalData['marketplace_name'])) {
+                        echo $additionalData['marketplace_name'];
+                    } else {
+                        echo $escaper->escapeHtml($_item->getName());
+                    }
+                    ?>
+                </strong>
+                <?php if (isset($product_json['features']) ) : ?>
+                    <?php $showDetailClass = "show-detail-" . $_item->getId() ?>
+                    <div class="config-container">
+                        <a href="javascript:void(0)"
+                           class="show-properties-view-order <?= /* @noEscape */ $escaper->escapeHtmlAttr($showDetailClass) ?>"
+                           data-item-id="<?= $escaper->escapeHtmlAttr($_item->getId()) ?>"
+                           id="<?= /* @noEscape */ $escaper->escapeHtmlAttr($showDetailClass) ?>">
+                            <span>Show details</span>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </div>
+        </td>
+    <?php endif; ?>
+    <td data-th="<?= $escaper->escapeHtml(__('PRICE')) ?>" class="col qty">
+        <span class="item-price">
+            <?= $_order->formatPrice($_item->getPrice()); ?>
+        </span>
+    </td>
+    <td class="col qty" data-th="<?= $escaper->escapeHtml(__('Qty')) ?>">
+        <ul class="items-qty">
+            <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
+                <li class="item">
+                    <span class="title"><?= $escaper->escapeHtml(__('Ordered')) ?></span>
+                    <span class="content"><?= (float) $block->getItem()->getQtyOrdered() ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
+                <li class="item">
+                    <span class="title"><?= $escaper->escapeHtml(__('Shipped')) ?></span>
+                    <span class="content"><?= (float) $block->getItem()->getQtyShipped() ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
+                <li class="item">
+                    <span class="title"><?= $escaper->escapeHtml(__('Canceled')) ?></span>
+                    <span class="content"><?= (float) $block->getItem()->getQtyCanceled() ?></span>
+                </li>
+            <?php endif; ?>
+            <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
+                <li class="item">
+                    <span class="title"><?= $escaper->escapeHtml(__('Refunded')) ?></span>
+                    <span class="content"><?= (float) $block->getItem()->getQtyRefunded() ?></span>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </td>
+    <?php if ($isEnhancementEnabeled) : ?>
+        <td class="col discount" data-th="<?= $escaper->escapeHtml(__('Discount')) ?>">
+            <?php if ($_item->getDiscountAmount() != 0) : ?>
+                <?=/* @noEscape */ $_order->formatPrice($_item->getDiscountAmount()) ?>
+            <?php else : ?>
+                -
+            <?php endif; ?>
+        </td>
+    <?php endif; ?>
+    <td class="col subtotal" data-th="<?= $escaper->escapeHtml(__('Subtotal')) ?>">
+        <?=/* @noEscape */ $block->getItemRowTotalHtml() ?>
+    </td>
+    <?php if (!empty($previewUrl) && $isEproReorderEnabled && isset($product_json['features'])) : ?>
+        <td class="show-hide-detail">
+            <span class="show-detail-button" data-item-id="<?= $escaper->escapeHtmlAttr($_item->getId()) ?>" id="show-detail-button-<?=/* @noEscape */ $escaper->escapeHtmlAttr($_item->getId()) ?>">
+                Show details <img src="<?=/* @noEscape */
+                $block->getViewFileUrl('images/order-history/show-down-arrow.png'); ?>" class="show-down-icon" alt="Success Icon" /></span>
+            <div class="show-hide-detail-data" id="show-hide-detail-data-<?= $escaper->escapeHtml($_item->getId()); ?>" style="display:none;">
+                <ul role="listbox" aria-labelledby="show-detail-button-<?=/* @noEscape */ $escaper->escapeHtmlAttr($_item->getId()) ?>">
+                    <?php
+                    if (!empty($product_json['features'])) {
+                        foreach ($product_json['features'] as $configAttribute) {
+                            $configAttribute = is_object($configAttribute) ? (array)$configAttribute : $configAttribute;
+                            if (!empty($configAttribute['name'])) :?>
+                                <?php $configAttribute['choice'] = is_object($configAttribute['choice']) ? (array)$configAttribute['choice'] : (array)$configAttribute['choice']; ?>
+                                <li tabindex='-1' role='option' class='detail-item'>
+                                    <?= $configAttribute['name'] . ": " . $configAttribute['choice']['name']; ?>
+                                </li>
+                            <?php endif;
+                        }
+                    }
+                    ?>
+                </ul>
+            </div>
+            </span>
+        </td>
+    <?php endif; ?>
+</tr>
+
+    <tr class="product-details-wrapper">
+        <td colspan="6" class="product-details-content product-details-<?= $escaper->escapeHtmlAttr($_item->getId()) ?>">
+            <table>
+                <thead>
+                <tr>
+                    <th class="col sku"><?= $escaper->escapeHtml(__("SKU")) ?></th>
+                    <th class="col price"><?= $escaper->escapeHtml(__("BASE PRICE")) ?></th>
+                    <th class="col qty"><?= $escaper->escapeHtml(__("QTY")) ?></th>
+                    <th class="col discount"><?= $escaper->escapeHtml(__("DISCOUNT")) ?></th>
+                    <th class="col total"><?= $escaper->escapeHtml(__("TOTAL")) ?></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                $productData = null;
+                if(isset($additionalAttributesData)){
+                    foreach ($additionalAttributesData as $data) {
+                        if ($_item->getQuoteItemId() == $data->instanceId) {
+                            $productData = $data;
+                            break;
+                        }
+                    }
+                }
+                $sku = $productData->instanceId ?? $_item->getSku();
+                $unitQuantity = $productData->unitQuantity ?? $_item->getQtyOrdered();
+                $basePrice = $productData->productRetailPrice ?? $_item->getBasePrice();
+                $discount = $productData->productDiscountAmount ?? $_item->getDiscountAmount();
+                $total = $productData->productLinePrice ?? $_item->getBaseRowTotal();
+                $productLineDetails = $productData->productLineDetails ?? [];
+                $description = $productLineDetails[0]->description ?? $_item->getName();
+                ?>
+                <tr class="product-information">
+                    <td class="col sku" data-th="SKU"><?= $escaper->escapeHtml($description) ?></td>
+                    <td class="col price" data-th="BASE PRICE"><?= $_order->formatPrice($basePrice) ?></td>
+                    <td class="col qty" data-th="UNIT PRICE"><?= (int) $unitQuantity ?></td>
+                    <td class="col discount" data-th="DISCOUNT"><?= $_order->formatPrice($discount) ?></td>
+                    <td class="col total" data-th="TOTAL"><?= $_order->formatPrice($total) ?></td>
+                </tr>
+                <tr class="product-details">
+                    <td>
+                        <span class="title fedex-bold ls--0-07 fs-12 text-uppercase d-inline-block cl-gray mb-16">ADDITIONAL DETAILS</span>
+                        <ul class="details-list" role="listbox" aria-labelledby="show-detail-<?=/* @noEscape */ $escaper->escapeHtmlAttr($_item->getId()) ?>">
+                            <?php
+                            if (!empty($product_json['features'])) {
+                                foreach ($product_json['features'] as $configAttribute) {
+                                    $configAttribute = is_object($configAttribute) ? (array)$configAttribute : $configAttribute;
+                                    if (!empty($configAttribute['name'])) :?>
+                                        <?php $configAttribute['choice'] = is_object($configAttribute['choice']) ? (array)$configAttribute['choice'] : (array)$configAttribute['choice']; ?>
+                                        <li tabindex='-1' role='option' class='detail-item'>
+                                            <?= $configAttribute['name'] . ": " . $configAttribute['choice']['name']; ?>
+                                        </li>
+                                    <?php endif;
+                                }
+                            }
+                            ?>
+                        </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </td>
+    </tr>
+
+<style>
+    .bundle-child .custom-preview-product-img {
+        width: 80px;
+        height: 80px;
+    }
+</style>

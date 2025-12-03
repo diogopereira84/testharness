@@ -1,0 +1,137 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="carriers" translate="label" type="text" sortOrder="320" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="fedexshipping" translate="label" type="text" sortOrder="0" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Fedex Delivery Options</label>
+                <field id="active" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="title" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Fedex Delivery Options</label>
+                </field>
+                <field id="sort_order" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Sort Order</label>
+                </field>
+                <field id="sallowspecific" translate="label" type="select" sortOrder="90" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                    <label>Ship to Applicable Countries</label>
+                    <frontend_class>shipping-applicable-country</frontend_class>
+                    <source_model>Magento\Shipping\Model\Config\Source\Allspecificcountries</source_model>
+                </field>
+                <field id="specificcountry" translate="label" type="multiselect" sortOrder="91" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Ship to Specific Countries</label>
+                    <source_model>Magento\Directory\Model\Config\Source\Country</source_model>
+                    <can_be_empty>1</can_be_empty>
+                </field>
+                <field id="showmethod" translate="label" type="select" sortOrder="92" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Show Method if Not Applicable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <frontend_class>shipping-skip-hide</frontend_class>
+                </field>
+                <field id="specificerrmsg" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Displayed Error Message</label>
+                </field>
+            </group>
+        </section>
+        <section id="checkout" translate="label" type="text" sortOrder="305" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Checkout</label>
+            <tab>sales</tab>
+            <resource>Magento_Checkout::checkout</resource>
+            <group id="pickup_search_settings" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Checkout Pickup Search Settings</label>
+                <field id="pickup_search_error_message" translate="label" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Pickup Search Error Message</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="checkout_messages" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Checkout Messages</label>
+                <field id="tech_titans_D_179675_ePro_message_dependent"  translate="label" type="text" sortOrder="852" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-179675 Message missing shipping rates</label>
+                </field>
+            </group>
+        </section>
+        <section id="fedex" translate="label">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="marketplace_configuration" translate="label" sortOrder="1500" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="firstlastname_validation_error_message" type="text" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Name Validation Error Message</label>
+                    <comment>Message to be shown as validation for First Name and Last Name fields in Checkout > Shipping and Checkout.</comment>
+                </field>
+                <field id="shipping_account_acknowledgement_message" translate="label"
+                       type="text" sortOrder="801" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Shipping Account Acknowledgement Message</label>
+                </field>
+                <field id="shipping_account_acknowledgement_error_message" translate="label"
+                       type="text" sortOrder="801" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Customer Shipping Account Acknowledgement Error Message</label>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="environment_toggle" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="xmen_shipping_methods_business_configurable" translate="label" type="select" sortOrder="900" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>XMEN - B-1918841 - Making 1p and 3p Shipping methods business configurable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d193772_fix" translate="label" type="select" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - D-193772 - HC eCommerce Pricing Issues</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d194518" translate="label" type="select" sortOrder="1001" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="0">
+                    <label>Tiger Team - D-194518 - Retail- Tax is not calculated for 1p+3p+printful products.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d_193860_fix" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - Admin Fix Account Status Deactive</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d_210584_fix" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-210584 - Save Submission Date of U2Q to Fuse</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d195327" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-195327 - Epro/Selfreg_Warning message is not displaying on selecting HCO pickup location</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_200361" translate="label" type="select" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-200361 - In-Branch Document Flow Broken</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d203990" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-203990 - PROD: Retail/Selfreg order submission is failing when changing shipping to pickup flow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d213977" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-213977 - Groot: Incorrect Shipping Totals for any order type (1p only, 3p only, Mixed cart) - Off by a constant $6.88</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d219322" translate="label" type="select" sortOrder="1501" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-219322 - When there are two shipping options tied for cheapest, the quicker option is not displaying</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_customer_acknowledgement_sharing_shipping_account_number_with_third_party" translate="label" type="select" sortOrder="1510" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - E-499634 Customer Acknowledgement for sharing Shipping Account Numbers with 3p vendors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_e_482379_allow_customer_to_choose_production_location_updates" translate="label" type="select" sortOrder="1520" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>MazeGeeks - E-482379 Allow Customer to Choose Production Location Updates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="shipping" translate="label" type="text" sortOrder="310" showInDefault="1" showInWebsite="1" showInStore="1">
+            <resource>Magento_Shipping::config_shipping</resource>
+            <group id="one_p_shipping_methods" translate="label" type="text" sortOrder="120" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>1p Shipping Methods</label>
+                <field id="allowed_delivery_options" translate="Module" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Allowed Shipping Options</label>
+                    <source_model>Fedex\Delivery\Model\Source\ShippingOptions</source_model>
+                    <comment>Please select the shipping methods to be allowed in checkout</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

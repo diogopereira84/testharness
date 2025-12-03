@@ -1,0 +1,68 @@
+<!-- ko if: isTaxDisplayedInGrandTotal && isDisplayed() && window.checkoutConfig.quoteData.price_dash == 0-->
+<tr class="grand totals incl">
+    <th class="mark" scope="row">
+        <strong class="isnot_review_page" data-bind="i18n: inclTaxLabel"></strong>
+        <strong class="is_review_page" data-bind="text: getReviewPageTitle()"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': inclTaxLabel}" class="amount">
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
+    </td>
+</tr>
+<tr class="grand totals excl">
+    <th class="mark" scope="row">
+        <strong data-bind="i18n: exclTaxLabel"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': exclTaxLabel}" class="amount">
+        <strong><span class="price" data-bind="text: getGrandTotalExclTax()"></span></strong>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: isTaxDisplayedInGrandTotal && isDisplayed() && window.checkoutConfig.quoteData.price_dash == 1-->
+<tr class="grand totals incl">
+    <th class="mark" scope="row">
+        <strong class="isnot_review_page" data-bind="i18n: inclTaxLabel"></strong>
+        <strong class="is_review_page" data-bind="text: getReviewPageTitle()"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': inclTaxLabel}" class="amount">
+        <strong>$--.--</strong>
+    </td>
+</tr>
+<tr class="grand totals excl">
+    <th class="mark" scope="row">
+        <strong data-bind="i18n: exclTaxLabel"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': exclTaxLabel}" class="amount">
+        <strong><span class="price">$--.--</span></strong>
+    </td>
+</tr>
+<!-- /ko -->
+
+<!-- ko if: !isTaxDisplayedInGrandTotal && isDisplayed()-->
+<tr class="grand totals">
+    <th class="mark" scope="row">
+        <strong data-bind="i18n: title"></strong>
+    </th>
+    <td data-bind="attr: {'data-th': title}" class="amount">
+        <strong><span class="price" data-bind="text: getValue()"></span></strong>
+    </td>
+</tr>
+<!-- /ko -->
+<!-- ko if: isBaseGrandTotalDisplayNeeded() && isDisplayed()-->
+<tr class="totals charge">
+    <th class="mark" data-bind="i18n: basicCurrencyMessage" scope="row"></th>
+    <td class="amount">
+        <span class="price" data-bind="text: getBaseValue(), attr: {'data-th': basicCurrencyMessage}"></span>
+    </td>
+</tr>
+<!-- /ko -->
+<tr class="estimated totals estimated-shipping-total hide-estimated-shipping-total">
+    <td class="mark">
+        <strong data-bind="i18n: 'Estimated Shipping Charges'"></strong>
+    </td>
+    <td class="amount">
+        <span class="estimated_shipping_total" data-bind="i18n: 'TBD'"></span>
+    </td>
+</tr>
+<tr class="estimated-shipping-message hide-estimated-shipping-total">
+    <td colspan="2">To be charged to your FedEx Shipping account ending in *<span class="masked-shipping-account-number"></span> and is excluded from the total order cost.</td>
+</tr>

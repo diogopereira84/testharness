@@ -1,0 +1,86 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+namespace Fedex\EnvironmentManager\Test\Unit\Setup\Patch\Data\RemoveToggleKeysXmenTest;
+
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Setup\Patch\DataPatchInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Fedex\EnvironmentManager\Setup\Patch\Data\RemoveToggleKeysXmen;
+
+class RemoveToggleKeysXmenTest extends TestCase
+{
+    /**
+     * @var RemoveXmenToggleKeys
+     */
+    private $patch;
+
+    /**
+     * @var SchemaSetupInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $setup;
+
+    /**
+     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit\Framework\MockObject\MockObject
+     */
+    private $connection;
+
+    protected function setUp(): void
+    {
+        $this->setup = $this->createMock(SchemaSetupInterface::class);
+        $this->connection = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->setup->method('getConnection')->willReturn($this->connection);
+
+        $this->patch = new RemoveToggleKeysXmen($this->setup);
+    }
+
+    /**
+     * Test InstanceOfDataPatchInterface
+     *
+     * @return void
+     */
+    public function testInstanceOfDataPatchInterface()
+    {
+        $this->assertInstanceOf(DataPatchInterface::class, $this->patch);
+    }
+
+    /**
+     * Test getDependencies method
+     *
+     * @return void
+     */
+    public function testGetDependencies()
+    {
+        $this->assertEquals([], $this->patch->getDependencies());
+    }
+
+    /**
+     * Test getAliases method
+     *
+     * @return void
+     */
+    public function testGetAliases()
+    {
+        $this->assertEquals([], $this->patch->getAliases());
+    }
+
+    /**
+     * Test ApplyDeletesRow method
+     *
+     * @return void
+     */
+    public function testApplyDeletesRows()
+    {
+        $this->connection->expects($this->exactly(count(RemoveToggleKeysXmen::CORE_CONFIG_DATA_KEY)))
+            ->method('delete')
+            ->with(
+                $this->equalTo(null),
+                true
+            );
+
+        $this->patch->apply();
+    }
+}

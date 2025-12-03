@@ -1,0 +1,90 @@
+<?php
+/** @var \Fedex\Commercial\ViewModel\CommercialSsoConfiguration $commercialViewModel */
+$commercialViewModel = $block->getData('view_model');
+$isCommercialStore = $commercialViewModel->isGlobalCommercialCustomerRequest();
+?>
+<div class="toast" id="personaladdressbook-toast">
+  <div class="personaladdressbook-toast-msg"  id="personaladdressbook-toast-msg-main" role="dialog" aria-label="welcome-to-our-beta-site">
+      <div class="toast-box-inner ">
+          <span>
+              <img class="sucess-icon" src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Success Icon')) ?>">
+          </span>
+      </div>
+      <div class="success-toast-msg" id="personaladdressbook-toast-msg-main">
+        <p id="personaladdressbook-toast-msg-p"></p>
+      </div>
+      <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+      </span>
+  </div>
+</div>
+<div class="toast" id="personaladdressbook-warning">
+  <div class="personaladdressbook-warning-msg"  id="personaladdressbook-warning-msg-main" role="dialog" aria-label="welcome-to-our-beta-site">
+      <div class="toast-box-inner ">
+          <span>
+              <img class="sucess-icon" src="<?= $escaper->escapeUrl($block->getViewFileUrl('Fedex_Cart::images/warning-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Warning Icon')) ?>">
+          </span>
+      </div>
+      <div class="success-toast-msg" id="personaladdressbook-warning-msg-main">
+        <p id="personaladdressbook-warning-msg-p"></p>
+      </div>
+      <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+      </span>
+  </div>
+</div>
+<?php
+if ($isCommercialStore) :
+?>
+    <div class="toast-msg-container" id="add-cart-success-toast-msg">
+        <div class="add-to-cart-toast-msg" role="dialog" aria-label="welcome-to-our-beta-site">
+            <div class="add-to-cart-toast-box-inner ">
+                <span>
+                    <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="Success Icon">
+                </span>
+            </div>
+            <div class="success-toast-msg">
+                <p class="fedex-regular">1 Item has been added to your cart.</p>
+                <span class="view-cart">
+                    <a class="redirect-on-cart" href="#"> VIEW CART </a>
+                </span>
+            </div>
+            <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+            </span>
+        </div>
+    </div>
+        <div class="toast-msg-container-error" id="add-cart-error-toast-msg">
+            <div class="add-to-cart-toast-msg" role="dialog" aria-label="welcome-to-our-beta-site">
+                <div class="add-to-cart-toast-box-inner ">
+                    <span>
+                        <img src="<?= $escaper->escapeHtml(__($block->getViewFileUrl('images/sso/warning.png')));?>" />
+                    </span>
+                </div>
+                <div class="error-toast-msg">
+                    <p class="fedex-regular">System error. Please Try Again</p>
+                </div>
+                <span class="close-icon"> <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>" alt=" close button Icon">
+                </span>
+            </div>
+        </div>
+<?php endif; ?>
+<?php if ($commercialViewModel->isEnableStopRedirectMvpAddToCart()): ?>
+<div class="toast-msg-container-redirect-stop" id="search-result-page-add-to-cart-toast" style="display: none;">
+    <div class="add-to-cart-toast-msg" role="dialog" aria-label="welcome-to-our-beta-site">
+        <div class="add-to-cart-toast-box-inner ">
+            <span>
+                <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/success-icon.png')) ?>" alt="<?= $block->escapeHtml(__('Success Icon')) ?>">
+            </span>
+        </div>
+        <div class="success-toast-msg">
+            <p class="fedex-regular"></p>
+            <span class="view-cart">
+                <a class="redirect-on-cart fedex-bold"
+                    href="<?= $block->getUrl('checkout/cart')?>"><?= $block->escapeHtml(__('VIEW CART')) ?></a>
+            </span>
+        </div>
+        <span class="close-icon">
+            <img src="<?= $escaper->escapeUrl($block->getViewFileUrl('images/close_button.png')) ?>"
+                alt="<?= $block->escapeHtml(__('close button Icon')) ?>">
+        </span>
+    </div>
+</div>
+<?php endif;?>

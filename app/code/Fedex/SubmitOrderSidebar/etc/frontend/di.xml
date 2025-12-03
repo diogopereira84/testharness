@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="submit_order_sidebar_configprovider" xsi:type="object">Fedex\SubmitOrderSidebar\Model\SubmitOrderSidebarConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\SubmitOrderSidebar\Model\SubmitOrderApi">
+        <plugin name="Fedex_Order_Flow_NewRelic_Custom_Attributes" type="Fedex\SubmitOrderSidebar\Plugin\NewRelicCustomAttributeOrderFlowOptimized" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Sales\Model\Service\OrderService">
+        <plugin name="Fedex_Submit_Order_Email_Update" type="Fedex\SubmitOrderSidebar\Plugin\SubmitOrderEmailUpdate" sortOrder="1" disabled="false"/>
+    </type>
+    
+    <type name="Magento\Quote\Model\Cart\CartTotalRepository">
+    <plugin name="coupon_label_plugin" disabled="true" />
+    </type>
+
+    <type name="Magento\Sales\Model\Service\OrderService">
+        <plugin name="coupon_uses_decrement_plugin" disabled="true" />
+    </type>
+
+    <type name="\Magento\Quote\Model\QuoteManagement">
+        <plugin name="coupon_uses_increment_plugin" disabled="true" />
+    </type>
+
+</config>

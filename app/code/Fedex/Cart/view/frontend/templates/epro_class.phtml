@@ -1,0 +1,40 @@
+<?php
+
+$setclass = $this->helper('\Fedex\Cart\Helper\Data')->setEproClass();
+$sdeHelper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+$isSdeStore = $sdeHelper->getIsSdeStore();
+$isCommercialStore = $this->helper('Fedex\Commercial\Helper\CommercialHelper')->isGlobalCommercialCustomer();
+
+/* B-1148619 Print Quote Receipt */
+$getDuncOfficeUrl = $this->helper('\Fedex\Orderhistory\Helper\Data')->getDuncOfficeUrl() ?
+$this->helper('\Fedex\Orderhistory\Helper\Data')->getDuncOfficeUrl() : '';
+/* D-84173  ePro- pop up modal is showing up even if only shipping/pickup is selected from admin */
+$ispickup = 0;
+$isdelivery = 0;
+$helper = $this->helper('\Fedex\CustomerDetails\Helper\Data');
+
+$helperData = $this->helper('\Fedex\Delivery\Helper\Data');
+if ($helperData->isCommercialCustomer()) {
+    $customer = $helperData->_customerSessionFactory->create();
+    if (!empty($customer) && $customer->getId()) {
+        $company = $helperData->getAssignedCompany($customer);
+        $ispickup = $company->getIsPickup();
+        $isdelivery = $company->getIsDelivery();
+    }
+}
+
+if ($setclass && !$isSdeStore && !$isCommercialStore): ?>
+    <div class="epro-fedex"></div>
+<?php endif;?>
+<!-- /* D-84173  ePro- pop up modal is showing up even if only shipping/pickup is selected from admin */ -->
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Fedex_Cart/js/epro_class": {
+                "isPickup": "<?= $ispickup ?>",
+                "isDelivery": "<?= $isdelivery ?>",
+                "getDuncOfficeUrl": "<?= $getDuncOfficeUrl ?>"
+            }
+        }
+    }
+</script>

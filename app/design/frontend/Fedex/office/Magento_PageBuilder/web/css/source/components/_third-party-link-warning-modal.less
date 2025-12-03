@@ -1,0 +1,63 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+
+& when (@media-common = true) {
+    .third-party-link-warning {
+        .note-title,
+        .note-description {
+            color: @fx-grey-1200;
+        }
+        .note-description {
+            text-align: justify;
+            line-height: 24px;
+            margin: 15px auto 20px;
+        }
+        a {
+            margin: 0;
+            &:hover {
+                color: #00689C;
+                text-decoration: none;
+            }
+        }
+        .btn-primary.btn-start {
+           font-size: 19px;
+        }
+        .btn-back.link {
+            font-size: 19px;
+            font-weight: bold;
+        }
+    }
+}
+
+//
+//  Mobile (styles-m.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .third-party-link-warning {
+        padding: 40px 20px;
+        .note-title {
+            font-size: 26px;
+        }
+        .note-description {
+            font-size: 18px;
+        }
+    }
+}
+
+//
+//  Desktop (style-l.css)
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__m) {
+    .third-party-link-warning {
+        padding: 64px 48px 48px 48px;
+        .note-title {
+            font-size: 32px;
+        }
+        .note-description {
+            font-size: 16px;
+        }
+    }
+}

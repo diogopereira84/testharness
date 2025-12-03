@@ -1,0 +1,166 @@
+//  variables
+@cl-blazeorange: @fx-orange-500;
+@cl-white : @fx-white-100;
+@cl-deepcerulean: #0078b4;
+@cl-rolling-stone: #6F7F87;
+@cl-limed-spruce: @fx-grey-1200;
+@cl-fountain-blue: #5EA0C1;
+
+/* B-1306275 | preferred pickup time */
+.checkout-index-index {
+    .pref-pickup-container {
+        .pref-pickup-btn {
+            border: 2px solid @cl-blazeorange;
+            border-radius: 0px;
+            background-color: @cl-white;
+            color: @cl-blazeorange;
+            font-weight: bold;
+        }
+    }
+    .preferred-pickup-time-popup {
+        .modal-inner-wrap {
+            .modal-header {
+                margin-top: 50px;
+                .modal-title {
+                    font-size: 28px;
+                    margin-bottom: 5px;
+                    line-height: 24px;
+                    text-align: center;
+                    border-bottom: unset;
+                }
+                .action-close {
+                    right: 16px;
+                    top: 17px;
+                    &:before {
+                        font-size: 19px;
+                    }
+                }
+            }
+            .modal-content {
+                .datepicker-wrapper {
+                    width: 45%;
+                    margin: 0 auto;
+                    #prefdatetimepicker {
+                        margin: auto;
+                        width: max-content;
+                        .ui-datepicker {
+                            padding: 0 15px;
+                            width: 30rem;
+                            box-shadow: unset;
+                            .ui-datepicker-title {
+                                font-size: 20px;
+                                font-family: 'FedEx Sans Light';
+                                color: @cl-limed-spruce;
+                            }
+                            .ui-datepicker-prev {
+                                background: url('@{baseDir}Fedex_Delivery::images/left-prev-arrow.png');
+                                background-repeat: no-repeat;
+                                top: 10px;
+                                span {
+                                    visibility: hidden;
+                                }
+                            }
+                            .ui-datepicker-next {
+                                background: url('@{baseDir}Fedex_Delivery::images/right-next-arrow.png');
+                                background-repeat: no-repeat;
+                                top: 10px;
+                                span {
+                                    visibility: hidden;
+                                }
+                            }
+                            .ui-datepicker-calendar {
+                                thead th {
+                                    padding: 0px 9px 0px;
+                                }
+                                tbody td {
+                                    padding: 1px 3px;
+                                }
+                                td  {
+                                    a, span {
+                                        padding: 6px 5px 3px;
+                                        text-align: center;
+                                        font-family: 'FedEx Sans Regular';
+                                    }
+                                    a {
+                                        color: @cl-limed-spruce;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    #preftimeselect {
+                        width: 75%;
+                        #pickuptime-select {
+                            border: 1px solid @cl-rolling-stone;
+                        }
+                    }
+                }
+            }
+            .modal-footer {
+                display: flex;
+                flex-direction: column-reverse;
+                margin: 0 auto;
+                padding: 40px 0 64px;
+                width: 50%;
+                .pickup-time-clear {
+                    background-color: transparent;
+                    color: @cl-deepcerulean;
+                    border-color: transparent;
+                }
+                .pickup-time-apply {
+                    background-color: @cl-blazeorange;
+                    border: unset;
+                    color: @cl-white;
+                    border-radius: unset;
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = (@screen__m - 1)) {
+    .checkout-index-index {
+        .preferred-pickup-time-popup {
+            .modal-inner-wrap {
+                .modal-footer {
+                    flex-direction: row;
+                    justify-content: space-between;
+                    .pickup-time-apply {
+                        margin-bottom: 0;
+                        width: 60%;
+                    }
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .checkout-index-index {
+        .preferred-pickup-time-popup {
+            .modal-inner-wrap {
+                .modal-header {
+                    display: block !important
+                }
+            }
+        }
+    }
+}
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__xs) {
+    .checkout-index-index {
+        .preferred-pickup-time-popup {
+            .modal-inner-wrap {
+                .modal-content {
+                    .pickup-location-details {
+                        width: 85%;
+                        margin: 0 auto;
+                    }
+                    .datepicker-wrapper {
+                        width: 80%;
+                    }
+                }
+                .modal-footer {
+                    width: 80%;
+                }
+            }
+        }
+    }
+}

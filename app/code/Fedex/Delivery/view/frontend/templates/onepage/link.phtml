@@ -1,0 +1,112 @@
+<?php
+/**
+ * Author:Pratibha Verma
+ * Add Place Order Button & Add shipment selection popup
+ */
+?>
+<?php
+    $helper = $this->helper('Fedex\Delivery\Helper\Data');
+    $isDelivery = $helper->getIsDelivery();
+    $getIsPickup = $helper->getIsPickup();
+    $fclCustomerName = null;
+    $sdeHelper = $this->helper('Fedex\SDE\Helper\SdeHelper');
+    $isSdeStore = $sdeHelper->getIsSdeStore();
+    $isLoggedIn = $helper->isCommercialCustomer();
+    /** expired item start */
+    $expiredItemViewModal = $block->getData('expiredItemViewModal');
+    $isExpired = ($expiredItemViewModal->isCustomerLoggedIn() &&
+                $expiredItemViewModal->getExpiredItems()) ? true : false;
+
+?>
+<?php
+if ($isDelivery==0 && $getIsPickup==0 && $isLoggedIn) {?>
+    <button type="button"
+            data-role="proceed-to-checkout"
+            title="<?= $block->escapeHtmlAttr(__('Submit Order')) ?>"
+            class="action primary checkout"
+            id="create_quote"
+            >
+        <span><?= $block->escapeHtml(__('Submit Order')) ?></span>
+    </button>
+<?php } elseif ($block->isPossibleOnepageCheckout()) {?>
+    <button type="button"
+            data-role="proceed-to-checkout"
+            id = "cart-to-checkout"
+            title="<?= $block->escapeHtmlAttr(__('Go To Checkout')) ?>"
+            class="action primary checkout<?= ($block->isDisabled() || $isExpired) ? ' disabled' : '' ?>"
+            <?php if ($block->isDisabled()) {?>
+                disabled="disabled"
+            <?php } ?>>
+        <!-- B-1535945 -->
+        <span>
+            <?php echo $block->escapeHtml(__('Proceed To Checkout')); ?>
+        </span>
+
+    </button>
+<?php }?>
+
+<script>
+    require(['jquery',
+    'Magento_Checkout/js/model/error-processor',
+    'mage/url','Magento_Customer/js/customer-data',
+    'gdlEvent',
+    'fedex/storage'
+    ],function($,errorProcessor,urlBuilder,customerData,gdlEvent,fxoStorage){
+        $(document).ready(function() {
+            if(window.e383157Toggle){
+                fxoStorage.set("TaxAmount", '');
+                fxoStorage.set("EstimatedTotal", '');
+                fxoStorage.set("selectedRadioShipping",'');
+            }else{
+                localStorage.setItem("TaxAmount", '');
+                localStorage.setItem("EstimatedTotal", '');
+                localStorage.setItem("selectedRadioShipping",'');
+            }
+            $('#create_quote').on('click', function(){
+                $.ajax({
+                url: urlBuilder.build('delivery/quote/create'),
+                type: 'POST',
+                dataType: "json",
+                showLoader: true,
+                async: true,
+                complete: function() {
+                }
+            }).done(function(resData){
+                if(resData.url.length>0 && resData.url!=''){
+
+                        let estimatedTotal;
+                        if(window.e383157Toggle){
+                            estimatedTotal = fxoStorage.get("EstimatedTotal");
+                        }else{
+                            estimatedTotal = localStorage.getItem("EstimatedTotal");
+                        }
+                        if(estimatedTotal){
+                            let orderSalePrice = estimatedTotal.replace("$","");
+                            gdlEvent.appendGDLScript(orderSalePrice);
+                        }
+
+                        var sections = ['cart'];
+                        customerData.invalidate(sections);
+                        customerData.invalidate(['customer']);
+                        var cxmlResponse=atob(resData.notification);
+                        if(cxmlResponse.startsWith("<html", 0))
+                        {
+                            cxmlResponse=cxmlResponse.replace('<form', '<form class="cxmlResponseForm"');
+                            document.body.innerHTML =cxmlResponse;
+                            $(".cxmlResponseForm").submit();
+                        }
+                        else {
+                             window.location.href=resData.url;
+                        }
+                        return false;
+                    }else {
+                        errorProcessor.process('Unable to process your request');
+                        return false;
+                    }
+            });
+
+        });
+
+    });
+});
+</script>

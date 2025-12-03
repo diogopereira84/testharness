@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Quote\Model\ShippingMethodManagement">
+        <plugin name="Fedex_MarketplaceCheckout::marketplacecheckout_shippingmethodmanagement"
+                type="Fedex\MarketplaceCheckout\Plugin\Model\Quote\ShippingMethodManagementPlugin"
+                sortOrder="10" />
+        <plugin name="Fedex_MarketplaceCheckout::marketplacecheckout_shippingmethods"
+                type="Fedex\MarketplaceCheckout\Plugin\Model\Quote\ShippingMethodsPlugin"
+                sortOrder="11" />
+        <plugin name="mirakl_frontend"
+                type="Mirakl\FrontendDemo\Plugin\Model\Quote\ShippingMethodManagementPlugin"
+                disabled="true" sortOrder="10" />
+    </type>
+
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <plugin name="Fedex_MarketplaceCheckout::marketplacecheckout_configprovider"
+                type="Fedex\MarketplaceCheckout\Plugin\Checkout\CompositeConfigProvider" />
+    </type>
+    <preference for="Mirakl\Connector\Model\Quote\OfferCollector"
+                type="Fedex\MarketplaceCheckout\Model\Quote\OfferCollector"/>
+
+    <type name="Mirakl\Connector\Model\Quote\Updater">
+        <plugin name="remove-mirakl-shipping-fee-and-price-change-message"
+                type="Fedex\MarketplaceCheckout\Plugin\Model\Quote\UpdaterPlugin" />
+    </type>
+
+    <preference for="Mirakl\Core\Model\ResourceModel\Shop"
+                type="Fedex\MarketplaceCheckout\Model\ResourceModel\Shop"/>
+
+    <type name="Fedex\SubmitOrderSidebar\Model\SubmitOrderApi">
+        <plugin name="Fedex_MarketplaceCheckout::marketplacecheckout_sendreceipt" type="Fedex\MarketplaceCheckout\Plugin\Model\SubmitOrderApi" sortOrder="10"/>
+    </type>
+    <type name="Magento\Sales\Api\OrderRepositoryInterface">
+        <plugin name="mirakl_connector_send_order" disabled="true" />
+    </type>
+    <type name="Magento\Sales\Model\Spi\OrderResourceInterface">
+        <plugin name="mirakl_connector_send_order" disabled="true" />
+        <plugin name="Fedex_MarketplaceCheckout::OrderSavePlugin" type="Fedex\MarketplaceCheckout\Plugin\Model\Order\OrderSavePlugin" sortOrder="10"/>
+    </type>
+    <preference for="Fedex\MarketplaceCheckout\Api\CancelOrderInterface" type="Fedex\MarketplaceCheckout\Model\CancelOrder"/>
+    <preference for="Magento\NegotiableQuote\Model\NegotiableQuoteItemManagement" type="Fedex\MarketplaceCheckout\Model\NegotiableQuote3PItemManagement"/>
+    <type name="Mirakl\Connector\Model\Quote\OfferCollector">
+        <plugin name="fedex_marketplace_checkout_offer_collector_plugin" type="Fedex\MarketplaceCheckout\Plugin\OfferCollectorPlugin" sortOrder="10" disabled="false"/>
+    </type>
+</config>

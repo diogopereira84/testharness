@@ -1,0 +1,27 @@
+<fieldset class="fieldset admin__fieldset " id="base_fieldset">
+<legend></legend>
+        <div class="admin__field field field-import_file  with-addon"
+        data-ui-id="import-container-form-fieldset-element-form-field-import-file">
+                <label class="label admin__field-label" for="import_image"
+                data-ui-id="import-container-form-fieldset-element-file-import-file-label"
+                style="width:40%;"><span>Select Images</span></label>
+                <div class="admin__field-control control">
+                        <div class="admin__field">
+                                <label class="addbefore" for="import_image">
+                                        <input type="button" value="Upload Images"
+                                        style="padding:8px 42px;" id="browse-cms-image-file" />
+                                </label>
+                        </div>
+                </div>
+        </div>
+</fieldset>
+
+<script>
+require(["jquery"], function ($) {
+        $(document).ready(function () {
+                $("#browse-cms-image-file").on("click", function (event) {
+                        $(".action-add-image.plugin").trigger('click');
+                });
+        });
+});
+</script>

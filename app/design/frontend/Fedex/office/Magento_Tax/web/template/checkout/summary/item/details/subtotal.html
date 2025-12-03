@@ -1,0 +1,67 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<div class="subtotal checkout-normal-price">
+    <!-- ko if: isPriceInclTaxDisplayed() && !getRegion('row_incl_tax') -->
+    <span class="price-including-tax"
+          data-bind ="text: getValueInclTax($parents[1]), attr:{'data-label': $t('Incl. Tax')}">
+    </span>
+    <!-- /ko -->
+
+    <!-- ko if: isPriceInclTaxDisplayed() && getRegion('row_incl_tax') -->
+    <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
+            <!-- ko foreach: getRegion('row_incl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+    <!-- /ko -->
+
+    <!-- ko if: isPriceExclTaxDisplayed() && !getRegion('row_excl_tax') -->
+    <span class="price-excluding-tax"
+          data-bind ="text: getValueExclTax($parents[1]), attr:{'data-label': $t('Excl. Tax')}">
+    </span>
+    <!-- /ko -->
+    <!-- ko if: isPriceExclTaxDisplayed() && getRegion('row_excl_tax') -->
+    <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
+            <!-- ko foreach: getRegion('row_excl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</div>
+
+<!-- update item row total B-1105765 -->
+
+<div class="subtotal subtotal-instance" style="display: none;" data-bind="css: getInstanceId($parents[1])">
+    <!-- ko if: isPriceInclTaxDisplayed() && !getRegion('row_incl_tax') -->
+    <span class="price-including-tax"
+          data-bind ="text: getValueInclTax($parents[1]), attr:{'data-label': $t('Incl. Tax')}">
+    </span>
+    <!-- /ko -->
+
+    <!-- ko if: isPriceInclTaxDisplayed() && getRegion('row_incl_tax') -->
+    <span class="price-including-tax" data-bind ="attr:{'data-label': $t('Incl. Tax')}">
+            <!-- ko foreach: getRegion('row_incl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+    <!-- /ko -->
+
+    <!-- ko if: isPriceExclTaxDisplayed() && !getRegion('row_excl_tax') -->
+    <span class="price-excluding-tax"
+          data-bind ="text: getValueExclTax($parents[1]), attr:{'data-label': $t('Excl. Tax')}">
+    </span>
+    <!-- /ko -->
+    <!-- ko if: isPriceExclTaxDisplayed() && getRegion('row_excl_tax') -->
+    <span class="price-excluding-tax" data-bind ="attr:{'data-label': $t('Excl. Tax')}">
+            <!-- ko foreach: getRegion('row_excl_tax') -->
+                <!-- ko template: getTemplate() --><!-- /ko -->
+            <!-- /ko -->
+    </span>
+    <!-- /ko -->
+</div>
+

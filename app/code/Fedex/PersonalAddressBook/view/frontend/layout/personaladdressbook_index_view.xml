@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!--
+    /**
+    * Copyright © FedEx, Inc. All rights reserved.
+    * See COPYING.txt for license details.
+    */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+    <update handle="customer_account"/>
+    <head>
+        <title>Personal Address Book</title>
+    </head>
+    <body>
+        <move element="page.main.title" destination="columns" before="-" />
+        <move element="sidebar.main" destination="customer.left.nav" before="-" />
+        <move element="customer.left.nav" destination="columns" after="page.main.title" />
+        <referenceBlock name="page.top">
+            <block class="Magento\Framework\View\Element\Template" name="account.error_messages" template="Fedex_EnhancedProfile::error_messages.phtml" after="page.builder.promo.banner.widget"/>
+        </referenceBlock>
+        <referenceContainer name="head.additional">
+            <block class="Fedex\Delivery\Block\Script" name="googlemaps.api" template="Fedex_Delivery::script.phtml"/>
+        </referenceContainer>
+        <referenceContainer name="columns">
+            <container name="customer.left.nav" htmlTag="div" htmlClass="sidebar sidebar-main" after="main">
+            </container>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Fedex\PersonalAddressBook\Block\View" name="personal-address-book-link" template="Fedex_PersonalAddressBook::personal_address_book.phtml">
+            </block>
+            <block class="Fedex\PersonalAddressBook\Block\View" name="personal-address-book-data" template="Fedex_PersonalAddressBook::personal_address_book_data.phtml">
+            </block>
+        </referenceContainer>
+    </body>
+</page>

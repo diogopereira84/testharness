@@ -1,0 +1,75 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div class="reorder-success" style='display: none;'>
+    <div class="reorder-success-box-inner">
+        <img src="<?=/* @noEscape */$block->getViewFileUrl('images/order-history/correct-circle-icon.png'); ?>"
+        alt="Success Icon">
+    </div>
+    <div class = "container">
+        <div class="reorder-close-icon" tabindex="0"></div>
+        <div class="reorder-success-msg">
+            <p class="reorder-notification-msg"></p>
+            <a href="<?=/* @noEscape */$block->getUrl('checkout/cart'); ?>" class="reorder-view-cart">
+                <b><?= $block->escapeHtml(__('View Cart')) ?></b>
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="reorder-error" style='display: none;'>
+    <div class="reorder-error-box-inner">
+        <img src="<?=/* @noEscape */$block->getViewFileUrl('images/order-history/error-white.png'); ?>"
+        alt="Error Icon">
+    </div>
+    <div class="reorder-error-msg">
+        <p class="reorder-error-notification-msg"></p>
+    </div>
+    <div tabindex="0" class="reorder-error-close-icon"></div>
+</div>
+
+<div class="reorder-error-order-view" style='display: none;'>
+    <div class="reorder-error-order-view-box-inner">
+        <img src="<?=/* @noEscape */$block->getViewFileUrl('images/order-history/error-white.png'); ?>"
+        alt="Error Icon">
+    </div>
+    <div class="reorder-error-order-view-msg">
+        <p class="reorder-error-message-heading">
+            <span class="unable-to-add-cart"><?= $block->escapeHtml(__('Unable to Add to Cart')) ?></span>
+        </p>
+        <p class="reorder-error-order-view-notification-msg"></p>
+    </div>
+    <div class="reorder-error-order-view-close-icon"></div>
+</div>
+
+<div class="fujitsu-receipt-error-order-view" style='display: none;'>
+    <div class="fujitsu-receipt-error-order-view-box-inner">
+        <img src="<?=/* @noEscape */$block->getViewFileUrl('images/order-history/error-white.png'); ?>"
+        alt="Error Icon">
+    </div>
+    <div class="fujitsu-receipt-error-order-view-msg">
+        <p class="fujitsu-receipt-error-order-view-notification-msg">
+            <?= $block->escapeHtml(__('System Error, Please try again.')) ?>
+        </p>
+    </div>
+    <div class="fujitsu-receipt-error-order-view-close-icon"></div>
+</div>
+
+<script>
+    require([
+        "jquery"
+    ], function($){
+        $(".reorder-close-icon, .reorder-error-close-icon, .fujitsu-receipt-error-order-view-close-icon").on("keypress", function(e) {
+            var _this = this;
+            if (e.which == 13) {
+                $(_this).trigger("click");
+            }
+        });
+        $(".fujitsu-receipt-error-order-view-close-icon").on("click", function() {
+            $('.fujitsu-receipt-error-order-view').hide();
+        });
+    });
+</script>

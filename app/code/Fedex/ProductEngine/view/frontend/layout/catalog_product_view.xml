@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <container name="product.info.main" htmlTag="div" htmlClass="product-info-main mt-95-lg">
+                <block class="Fedex\ProductEngine\Block\Product\Attributes" name="product.info.config" template="Fedex_ProductEngine::product/view/attributes.phtml">
+                    <block class="Magento\Framework\View\Element\Template" name="product.info.config.product_engine.error_messages" template="Fedex_ProductEngine::product/view/error_messages.phtml"/>
+                    <arguments>
+                        <argument name="toggle_view_model" xsi:type="object">Fedex\EnvironmentManager\ViewModel\ToggleConfig</argument>
+                        <argument name="product_availability_view_model"
+                                  xsi:type="object">Fedex\ProductUnavailabilityMessage\ViewModel\CheckProductAvailability</argument>
+                    </arguments>
+                </block>
+            </container>
+        </referenceContainer>
+    </body>
+</page>

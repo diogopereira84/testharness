@@ -1,0 +1,151 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+	<system>
+		<section id="fxo_web_analytics" translate="label" sortOrder="999" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>FXO Web Analytics Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_WebAnalytics::settings</resource>
+			<group id="fxo_web_analytics_scripts" sortOrder="900" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>FXO Web Analytics Settings</label>
+                <group id="forsta" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Forsta</label>
+                    <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                        <label>Enabled</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <comment>Controls both mid-flow and post transaction surveys</comment>
+                        <config_path>fedex/confirmit/enabled</config_path>
+                    </field>
+                </group>
+                <group id="contentsquare" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Content Square</label>
+                    <field id="contentsquare_active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                        <label>Enable</label>
+                        <comment>When enabled, includes the Contentsquare script on all storefront pages in the HEAD tag</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>web/contentsquare/contentsquare_active</config_path>
+                    </field>
+                </group>
+                <group id="app_dynamics" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AppDynamics</label>
+                    <field id="active" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Enable</label>
+                        <comment>When enabled, includes the AppDynamics script on all storefront pages in the HEAD tag</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>web/app_dynamics/active</config_path>
+                    </field>
+                </group>
+                <group id="gdl" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Adobe Analytics - GDL</label>
+                    <field id="gdl_active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                        <label>Enable</label>
+                        <comment>When enabled, includes the GDL script on all storefront pages in the HEAD tag</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>web/gdl/gdl_active</config_path>
+                    </field>
+                </group>
+                <group id="newrelic" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>New Relic</label>
+                    <field id="newrelic_active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                        <label>Enable</label>
+                        <comment>When enabled, includes the NewRelic Browser script on all storefront pages inside HEAD tag</comment>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>web/newrelic/newrelic_active</config_path>
+                    </field>
+                </group>
+                <group id="nuance" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Nuance Virtual Assistant</label>
+                    <field id="nuance_active" type="select" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                        <label>Enable</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                        <config_path>web/nuance/nuance_active</config_path>
+                        <comment>When enabled, includes the Nuance Virtual Assistant script on all storefront pages inside Footer tag</comment>
+                    </field>
+                </group>
+			</group>
+		</section>
+		<section id="web" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+			<group id="fxo_web_analytics_scripts" sortOrder="900" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>FXO Web Analytics Scripts</label>
+                <group id="forsta" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Forsta</label>
+                    <field id="midflow_script" translate="label" type="textarea" sortOrder="80" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="1">
+                        <label>Forsta Script</label>
+                        <config_path>fedex/confirmit/midflow_script</config_path>
+                    </field>
+                </group>
+                <group id="contentsquare" sortOrder="20" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Content Square</label>
+                    <field id="script_code" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Script Code</label>
+                        <comment>Script code that will be included in all storefront pages HEAD tag. Script code for collecting custom errors can be appended here.</comment>
+                        <config_path>web/contentsquare/script_code</config_path>
+                    </field>
+                </group>
+                <group id="app_dynamics" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>AppDynamics</label>
+                    <field id="head_script" translate="label" type="textarea" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Head Script</label>
+                        <comment>Script code that will be included in all storefront pages HEAD tag</comment>
+                        <config_path>web/app_dynamics/head_script</config_path>
+                    </field>
+                </group>
+                <group id="gdl" sortOrder="40" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Adobe Analytics - GDL</label>
+                    <field id="subdomain_prefix" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Domain Prefix</label>
+                        <comment>Domain prefix to generate page id. If not provide, system will find subdomain dynamically and add to pageid </comment>
+                        <config_path>web/gdl/subdomain_prefix</config_path>
+                    </field>
+                    <field id="script_code" translate="label" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Script Code</label>
+                        <comment>Script code that will be included in all storefront pages HEAD tag</comment>
+                        <config_path>web/gdl/script_code</config_path>
+                    </field>
+                    <field id="page_types" translate="label" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Adobe Analytics Page Type</label>
+                        <frontend_model>Fedex\WebAnalytics\Block\Adminhtml\Form\Field\PageTypes</frontend_model>
+                        <backend_model>Magento\Config\Model\Config\Backend\Serialized\ArraySerialized</backend_model>
+                        <config_path>web/gdl/page_types</config_path>
+                    </field>
+                </group>
+                <group id="newrelic" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>New Relic Browser Agent</label>
+                    <field id="script_code" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Script Code</label>
+                        <comment>Script code that will be included in all storefront pages HEAD tag. Script code for collecting custom errors can be appended here.</comment>
+                        <config_path>web/newrelic/script_code</config_path>
+                    </field>
+                </group>
+                <group id="nuance" sortOrder="50" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                    <label>Nuance Virtual Assistant</label>
+                    <field id="script_code" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                        <label>Script Code</label>
+                        <comment>Controls the ability to route to a live agent for answering FAQs and offering consultative advice.</comment>
+                        <config_path>web/nuance/script_code</config_path>
+                    </field>
+                </group>
+			</group>
+		</section>
+        <section id="environment_toggle_configuration">
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="environment_toggle" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1">
+                <field id="hawks_d_195570_toggle" translate="label comment" type="select" sortOrder="2000" showInDefault="1">
+                    <label>Hawks Team - D-195570 - url processor ttl addition</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="hawks_d_195570_toggle_value" translate="label" type="text" sortOrder="20011" showInDefault="1">
+                    <label>Hawks Team - D-195570 - TTL</label>
+                </field>
+                <field id="tiger_d219954" translate="label" type="select" sortOrder="1500" showInDefault="1">
+                    <label>Tiger - D-219954 - Production: AA events 38, 62 , 14 are not being triggered in POD 2.0 Retail/Commercial (SelfReg, ePro)since Groot release</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d239988" translate="label" type="select" sortOrder="1501" showInDefault="1">
+                    <label>Tiger Team - D-239988 - Checkout CSP blocks inline scripts on script-src-elem</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+	</system>
+</config>

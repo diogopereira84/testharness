@@ -1,0 +1,26 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var Magento\Framework\View\Element\Template $block */
+?>
+<?= $block->getChildHtml(); ?>
+<?php
+$helper = $this->helper(Fedex\SubmitOrderSidebar\Helper\Data::class);
+
+$continueShoppingUrl = $block->getBaseUrl();
+if ($helper->getUpdateContinueShoppingCtaToggle()) {
+    $continueShoppingUrl = $helper->getAllPrintProductUrl();
+}
+
+$baseUrlScript = <<<script
+var BASE_URL = "{$block->escapeUrl($block->getBaseUrl())}";
+var CONTINUE_SHOPPING_CART_URL = "{$continueShoppingUrl}";
+var require = {
+    "baseUrl": "{$block->getViewFileUrl('/')}"
+}
+script;
+?>
+<?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $baseUrlScript, false); ?>

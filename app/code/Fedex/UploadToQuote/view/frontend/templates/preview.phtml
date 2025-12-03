@@ -1,0 +1,88 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$fxocmViewModel = $block->getData("fxo_cm_view_model");
+$isIframeSdkEnable = $fxocmViewModel==null ? null: $fxocmViewModel->isIframeSdkEnable();
+$FXOCMBaseUrl = $fxocmViewModel->getBaseUrl();
+$FXOCMClientId = $fxocmViewModel->getClientId();
+$uploadToQuoteData = $fxocmViewModel->getUploadToQuoteConfigValue();
+$fedexAccountNumber = $fxocmViewModel->getFedexAccountNumber();
+$enableUploadToQuote = $fxocmViewModel->getEnableUploadToQuote()? "true": "false";
+$redirectUrl = $block->getUrl('*/*/*', ['_current' => true, '_use_rewrite' => true]);
+
+$newProduct = "";
+$configuratorType = "VISUALIZE";
+$itemData = $block->getItem();
+foreach ($itemData as $item) {
+    $productJson=json_encode($item['productJson']);
+    $sku=$item['sku'];
+}
+$isNewDocumentsApiImageEnable = $fxocmViewModel->isNewDocumentsApiImageEnable() ? "true" : "false";
+if (!$isIframeSdkEnable): ?>
+ <div class="iframe_popup" id="iframe_popup">
+    <div class="container" id="iframe-selector"></div>
+    <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+</div>
+<?php else: ?>
+<div class="iframe_popup" id="iframe_popup">
+    <div class="container-page">
+        <div id ="iframe_container">
+            <div class="loading">
+                <div class="lds-grid">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <h3 class="iframe_text"></h3>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endif;
+?>
+<?php $instanceId = time(); ?>
+
+<script>
+    require([
+        'jquery',
+        'uploadToQuotePreviewPopup'
+    ], function ($, previewPopup) {
+        $(document).ready(function () {
+            // Create a global object to store configurations
+            window.itemConfigs = {};
+
+            <?php foreach ($itemData as $item): ?>
+                var sku = "<?= $block->escapeJs($item['sku']) ?>";
+                var productJson = <?= json_encode($item['productJson']) ?>;
+                var itemId = <?= $item['itemId'] ?>;
+                window.itemConfigs[itemId] = {
+                    "FXOCMBaseUrl": "<?= $block->escapeUrl($FXOCMBaseUrl) ?>",
+                    "FXOCMClientId": "<?= $block->escapeJs($FXOCMClientId) ?>",
+                    "sku": sku,
+                    "configuratorType": "<?= $block->escapeJs($configuratorType) ?>",
+                    "product": productJson,
+                    "uploadToQuoteData": <?= json_encode($uploadToQuoteData) ?>, 
+                    "fedexAccountNumber": "<?= $block->escapeJs($fedexAccountNumber) ?>",
+                    "newProduct": "<?= $block->escapeJs($newProduct) ?>",
+                    "enableUploadToQuote": "<?= $block->escapeJs($enableUploadToQuote) ?>",
+                    "redirectUrl": "<?= $block->escapeUrl($redirectUrl) ?>",
+                    "addToCartCTAText": 'Return to Quote',
+                    "useNewDocumentApi": "<?=$block->escapeUrl($isNewDocumentsApiImageEnable)?>"
+                };
+            <?php endforeach; ?>
+            previewPopup();
+        });
+    });
+</script>
+
+
+
+

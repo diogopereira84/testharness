@@ -1,0 +1,71 @@
+<!--@subject {{trans 'pick up your order'}} @-->
+<style>{{var template_styles|raw}}{{css file="Fedex_MarketplaceCheckout::css/email.css"}}</style>{{inlinecss file="Fedex_MarketplaceCheckout::css/email-inline.css"}}
+<table style='max-width: 612px; margin: auto' width='612'>
+    <tr class='email-intro'>
+        <td colspan='6'>
+            <p class='greeting'>{{trans 'Hi %customer_first_name  %customer_last_name,' customer_first_name=$customer_first_name customer_last_name=$customer_last_name}}</p>
+            <p>
+                {{trans 'Your order has been completed and is ready for you to pick up at the FedEx Office at %store_address. We can't wait to see you!' store_address=$producing_store_address}}
+            </p>
+            <p>
+                {{trans 'If you need to cancel this order, please contact us at '}}
+                {{if producingstore_phonenumber}}
+                    {{trans '<a style="color: #333;" href='tel:%producingstore_phonenumber'>%producingstore_phonenumber</a> as soon as possible.' producingstore_phonenumber=$producingstore_phonenumber |raw}}
+                {{else}}
+                    {{trans ' %phone_number_one' phone_number_one='1.800.GoFedEx' |raw}}
+                    {{trans ' or <a style="color: #333;" href='tel:%phone_number_two'>%phone_number_two</a> as soon as possible.' phone_number_two='1.800.463.3339' |raw}}
+                {{/if}}
+            </p>
+            <p>
+                {{trans 'Please note: All jobs produced will be retained for 30 days after the order ready.'}}
+                {{trans 'by date on the receipt, at which time you will be charged for the completed job if'}}
+                {{trans 'you have not picked up the order. FedEx Office is not responsible for retaining'}}
+                {{trans 'any work not picked up by customer after such 30 day period and is entitled to'}}
+                {{trans 'collect and retain payment for all work performed on the customer's behalf.'}}
+            <p>
+                {{trans 'Thank you for choosing FedEx Office. We look forward to working with you again soon!'}}
+            </p>
+            {{if multiple_shipment}}
+            <p class='multiple-shipments warning' style="display: block;align-items: center;border: 1px solid  #4D148C;
+box-shadow: 0px 2px 4px 0px rgba(51, 51, 51, 0.30);">
+                <img src='{{view url='Fedex_MarketplaceCheckout/images/icons/info-purple.png'}}' height='40' width='40'
+                     alt='{{trans 'Info icon'}}' />
+                <span style="display: inline-block;padding: 16px;color: #333;font-size: 16px;font-style: normal;font-weight: 700; line-height: 24px;">{{trans '*Some of your items have been separated into multiple shipments.'}}</span>
+            </p>
+            {{/if}}
+        </td>
+    </tr>
+    <tr class='email-information'>
+        <td colspan='6'>
+            <table class='order-summary'>
+                <tr >
+                    <td style="padding-bottom: 24px">
+                        <h1>{{trans 'ORDER SUMMARY'}}</h1>
+                        <p>{{trans 'Order Number:' }}
+                            {{trans '<a href='%account_url?gtns=%increment_id'>' increment_id=$gtn  account_url=$this.getUrl($store,'track/',[_nosid:1]) |raw}}
+                                {{trans '%increment_id</a>' increment_id=$gtn |raw}}
+                        </p>
+                        {{if B-2088132-toggle-po-number-email}}
+                            <p style="margin-bottom: 10px;">{{trans 'Purchase Order Number: %po_number' po_number=$po_number}}</p>
+                        {{/if}}
+                        <p>{{trans 'Click your order number for more information.'}}</p>
+                    </td>
+                </tr>
+            </table>
+            {{var item_html|raw}}
+            <table class='email-date' style="max-width: 612px; margin: auto" width="612">
+                <tr >
+                    <td style="padding-top: 16px; border-top: 1px solid #ccc; font-family: FedEx Sans; font-size: 14px; font-weight: 400; line-height: 24px;">
+                        <p>
+                            {{trans 'Order Placed On: <span class='no-link'>%created_at</span>' created_at=$order_date |raw}}
+                        </p>
+                        {{depend footer_messages_html}}
+                            {{var footer_messages_html|raw}}
+                        {{/depend}}
+                    </td>
+                </tr>
+            </table>
+            {{var order_details_html|raw}}
+        </td>
+    </tr>
+</table>

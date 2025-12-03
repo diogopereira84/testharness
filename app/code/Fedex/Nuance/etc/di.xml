@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <virtualType name="nuanceResultPage" type="Magento\Framework\View\Result\Page">
+        <arguments>
+            <argument name="template" xsi:type="string">Fedex_Nuance::nuance.phtml</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="nuanceResultPageFactory" type="Magento\Framework\View\Result\PageFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">nuanceResultPage</argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Fedex\Nuance\Controller\Nuance\Index">
+        <arguments>
+            <argument name="resultPageFactory" xsi:type="object">nuanceResultPageFactory</argument>
+        </arguments>
+    </type>
+</config>

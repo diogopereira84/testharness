@@ -1,0 +1,125 @@
+<?php
+/** @var Fedex\Rate\Block\Product\View\PriceBox $block */
+
+use Magento\Catalog\Model\Product\Type;
+
+$catalogConfig = $block->getCatalogConfig();
+$isPricePerceptionToggleEnabled = $catalogConfig->isPricePerceptionToggleEnabled() ?? false;
+$pricePerceptionDisclaimerText1p = $catalogConfig->getPricePerceptionDisclaimerText1p() ?? '';
+?>
+
+<div class="pricing-skeleton upfront-pricing" aria-label="Price loading" role="progressbar" aria-busy="true" aria-valuetext="Please wait">
+    <div class="d-flex v-center-lg">
+        <div class="w-30">
+            <span class="skeleton-loader w-100"></span>
+        </div>
+        <div class="ml-auto w-40">
+            <div class="mb-10">
+                <span class="skeleton-loader w-100"></span>
+            </div>
+            <div class="mb-10">
+                <span class="skeleton-loader w-100"></span>
+            </div>
+            <div>
+                <span class="skeleton-loader w-100"></span>
+            </div>
+        </div>
+    </div>
+    <div class="mt-45">
+        <div class="mb-10">
+            <span class="skeleton-loader w-75"></span>
+        </div>
+        <div>
+            <span class="skeleton-loader w-100"></span>
+        </div>
+    </div>
+</div>
+
+<script id="price-box-error-template" type="text/x-magento-template">
+    <div id="price-box-error" class="message-block message-error d-flex mt-25 mb-30">
+        <div class="icon d-flex d-no-shrink v-center">
+            <img alt="Error icon" class="img-auto" src="<?php echo $this->getViewFileUrl('images/error-white.svg');?>">
+        </div>
+        <div class="message-text">
+            <?= __("We're sorry, pricing is currently unavailable. Please try again later.") ?>
+        </div>
+        <div class="ml-auto">
+            <button type="button" class="close-message" aria-label="Close error message">
+            </button>
+        </div>
+    </div>
+</script>
+
+<script id="price-box-template" type="text/x-magento-template">
+    <div id="price-box">
+        <div class="d-flex v-center-lg pricing-section upfront-pricing">
+            <div class="fs-12 price-disclaimer-wrp">
+                <div class="price-label fs-18 lh-24 fedex-light">
+                    <?php $productType = $block->getProductType(); ?>
+                    <?php if ($productType === Type::TYPE_BUNDLE): ?>
+                        Bundle cost:
+                    <?php else: ?>
+                        Printing cost:
+                    <?php endif; ?>
+                </div>
+                <div class="new-1p-layout price-info d-none visible-m-l-xl">
+                    *The price listed above is an approximation. <br> Actual cost is subject to change based on additional customization.
+                </div>
+                <?php if($isPricePerceptionToggleEnabled && $pricePerceptionDisclaimerText1p): ?>
+                    <div class="pt-7  d-none visible-m-l-xl">
+                        <div class="d-inline-block price-perception-wysiwyg">
+                            <?= /* @noEscape */ $pricePerceptionDisclaimerText1p ?>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="ml-auto text-right">
+                <div class="final-price cl-primary fedex-bold fs-40 lh-24">
+                    <span><%- price.net_amount %></span>
+                </div>
+
+                <div class="price-details net-price fs-13 lh-13 ls-0 weight-500">
+                    <span class="cl-secondary"><%- price.qty %> for </span>
+                    <% if (price.gross_amount) { %>
+                    <span class="cl-secondary strike-through"><%- price.gross_amount %></span>
+                    <% } %>
+                    <span class="fedex-medium price-amount"><%- price.net_amount %></span>
+                </div>
+
+                <% if (price.unit) { %>
+                <div class="price-details unit-price fs-13 lh-13 ls-0 weight-500">
+                    <span class="cl-secondary">Unit cost: </span>
+                    <% if (price.unit.gross_amount !== price.unit.net_amount) { %>
+                    <span class="cl-secondary strike-through"><%- price.unit.gross_amount %></span>
+                    <% } %>
+                    <span class="fedex-medium price-amount"><%- price.unit.net_amount %></span>
+                </div>
+                <% } %>
+
+                <% if (price.amount_saved) { %>
+                <div class="price-details price-saved cl-primary fedex-medium fs-13 lh-9 ls-0 weight-500">
+                    <img alt="Sale tag icon" class="img-auto valign-middle mr-5" src="<?php echo $this->getViewFileUrl('images/sale.png');?>"/>
+                    <span>You saved</span>
+                    <span><%- price.amount_saved %></span>
+                </div>
+                <% } %>
+            </div>
+        </div>
+        <div class="old-1p-layout cl-secondary fs-14 lh-22 mt-45">
+            <span>*The price listed above is an approximation.</span>
+            <br>
+            <span>Actual cost is subject to change based on additional customization.</span>
+        </div>
+        <div class="new-1p-layout price-info fedex-italic mt-15 hidden-m-l-xl fs-12">
+            *The price listed above is an approximation. <br> Actual cost is subject to change based on additional customization.
+        </div>
+        <?php if($isPricePerceptionToggleEnabled && $pricePerceptionDisclaimerText1p): ?>
+            <div class="pt-7 hidden-m-l-xl fs-12">
+                <div class="d-inline-block price-perception-wysiwyg">
+                   <?= /* @noEscape */ $pricePerceptionDisclaimerText1p ?>
+                </div>
+            </div>
+        <?php endif; ?>
+    </div>
+</script>

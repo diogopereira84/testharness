@@ -1,0 +1,338 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+/** @var Fedex\EnhancedProfile\ViewModel\EnhancedProfile $profileLogin */
+$profileLogin = $block->getData('profile_model');
+$validateFdxLogin = $profileLogin->validateFdxLogin();
+$profileLogin->setProfileSession();
+
+$profileInfo = $profileLogin->getLoggedInProfileInfo();
+$preferredStore = 'null';
+if (isset($profileInfo->output->profile->delivery->preferredStore)) {
+    $preferredStore = $profileInfo->output->profile->delivery->preferredStore;
+}
+if ($block->getData("locationId")) {
+    $locationId = $block->getData("locationId");
+} else {
+    $locationId = $block->escapeHtml($preferredStore);
+}
+$preferredDeliveryAddress = $profileLogin->getPreferredDelivery($locationId, true);
+$jsonInfo = '';
+if (isset($preferredDeliveryAddress['address'])) {
+    $jsonInfo = json_decode($preferredDeliveryAddress['address']);
+}
+$preferredDeliveryMethod = '';
+if (isset($profileInfo->output->profile->delivery->preferredDeliveryMethod)) {
+    $preferredDeliveryMethod = $profileInfo->output->profile->delivery->preferredDeliveryMethod;
+}
+
+$userProfileId = '';
+if (isset($profileInfo->output->profile->userProfileId)) {
+    $userProfileId = $profileInfo->output->profile->userProfileId;
+}
+?>
+<div class="prefererences-right-section">
+  <div class="right-section-content">
+    <h2><?=$block->escapeHtml(__("Preferred Delivery Methods"))?></h2>
+      <span><?=$block->escapeHtml(__("Choose if you would like to pick up your order from a FedEx Office
+      location or ship your items to an address."))?></span><br>
+    <div class="preferred-option-items">
+      <button id="btn-pickup" class="btn-ada" tabindex="-1">
+        <div class="pick-up-container custom-radio-btn" tabindex="0">
+          <input type="radio" id="pickup-option" class="del-option-item peferred-delivery-method"
+          name="Preferred Delivery Option" value="Pick up at store" disabled>
+          <label for="pickup-option"><?=$block->escapeHtml(__("Pick up at store"))?></label>
+        </div>
+      </button>
+      <div class="pick-up-store-cotainer" style="display:none;">
+        <?php
+        $style = 'display: none';
+        if (!isset($jsonInfo->Id)):
+            $style = 'display: block';
+        endif;
+        ?>
+        <div class="preferred-store" style="<?= $block->escapeHtmlAttr($style) ?>">
+          <?=$block->escapeHtml(__("Preferred Store"))?>
+        </div>
+        <div class="box-container defalult-address" id="preferred-location" style="display:none">
+          <?php
+            if (isset($jsonInfo->Id)): ?>
+              <div class="preferred-store-header">
+                <div class="store-title">
+                  <input type="hidden" class="pickup-location-id" name="locationid"
+                  value="<?= $block->escapeHtml($locationId)?>" />
+                  <span class="radio-label-name" id="location-title">
+                    <?= $block->escapeHtmlAttr($jsonInfo->name) ?>
+                    <span></span>
+                  </span>
+                  <span class="distance-map"></span>
+                </div>
+                <div class="pickup-address">
+                  <div>
+                    <span class="fa fa-map-marker icon-grey location-icon">
+                    <img alt="Location Icon" src="<?=
+                    $block->escapeHtmlAttr($block->getViewFileUrl('images/enhanced-profile/location-icon.png'));
+                    ?>"> </span>
+                    <?php if (isset($jsonInfo->address->address1)): ?>
+                      <span class="pickup-location-street">
+                        <?php
+                        $address = $jsonInfo->address->address1.', ';
+
+                        if (isset($jsonInfo->address->address2) && !empty($jsonInfo->address->address2)):
+                            $address .= $jsonInfo->address->address2.', ';
+                        endif;
+                        ?>
+                        <?= $block->escapeHtml($address); ?>
+                      </span>
+                    <?php endif; ?>
+                    <?php if (isset($jsonInfo->address->city)): ?>
+                      <span class="pickup-location-city">
+                          <?= $block->escapeHtml($jsonInfo->address->city); ?></span><span>,</span>
+                    <?php endif; ?>
+                    <?php if (isset($jsonInfo->address->stateOrProvinceCode)): ?>
+                      <span class="pickup-location-state">
+                          <?= $block->escapeHtml($jsonInfo->address->stateOrProvinceCode); ?>
+                        </span>
+                    <?php endif; ?>
+                    <?php if (isset($jsonInfo->address->postalCode)): ?>
+                      <span class="pickup-location-zipcode">
+                          <?= $block->escapeHtml($jsonInfo->address->postalCode); ?>
+                      </span>
+                    <?php endif; ?>
+                  </div>
+                </div>
+                <?php
+                if (isset($jsonInfo->locationType) && $jsonInfo->locationType == 'HOTEL_CONVENTION'):?>
+                    <div class="hotel-convention-container">
+                        <?php
+                        $imgCloasIcone = $block->getViewFileUrl('images/enhanced-profile/hotel.png');
+                        ?>
+                      <img class="hotel-convention-icon" alt="" src="<?= $block->escapeHtmlAttr($imgCloasIcone); ?>">
+                      <span class="hotel-convention-title">
+                        <?= $block->escapeHtml(__("Hotel & Convention Location"))  ?></span>
+                    </div>
+                    <div class="hotel-convention-description">
+                        <?= $block->escapeHtml(__("The location you have selected is within a hotel
+                        or convention center. Higher rates may apply to products and services."))  ?>
+                    </div>
+                <?php endif; ?>
+              </div>
+              <div class="center-details-main">
+                <div class="center-details">
+                  <?php if (isset($jsonInfo->hoursOfOperation[0])): ?>
+                        <?php $clockIcon = $block->getViewFileUrl('images/enhanced-profile/clock-icon.png'); ?>
+                    <div class="hours-of-opp-icon"> <span class="fa fa-clock-o icon-grey clock-icon">
+                      <img alt="Clock Icon" src="<?= $block->escapeHtmlAttr($clockIcon); ?>">
+                    </span>
+                      <div class="hours-of-opp">
+                        <?php
+                          $openingHours = [];
+
+                        if (isset($jsonInfo->hoursOfOperation)) {
+                            $openingHours = $profileLogin->getOpeningHours($jsonInfo->hoursOfOperation);
+                        }
+                        foreach ($openingHours as $openingHour): ?>
+                          <div class="shedule-container">
+                              <?php $day = substr($openingHour['day'], 0, 3)  ?>
+                            <div class="day">
+                                <?= $block->escapeHtml(ucfirst(strtolower($day))); ?>
+                            </div>
+                            <div class="range-main">
+                                <?php if ($openingHour['schedule'] == "Open"): ?>
+                                <div class="range">
+                                    <?= $block->escapeHtml($openingHour['openTime'].'-'.
+                                    $block->escapeHtml($openingHour['closeTime'])); ?>
+                                </div>
+                              <?php else: ?>
+                                <div class="range">
+                                  <?= $block->escapeHtml($openingHour['schedule']); ?>
+                                </div>
+                              <?php endif; ?>
+                            </div>
+                          </div>
+                              <?php
+                        endforeach;
+                        ?>
+                      </div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (isset($jsonInfo->phone)): ?>
+                        <?php
+                          $phone_number = $block->escapeHtml($jsonInfo->phone);
+                          $phone_number = "(" .substr($phone_number, -10, -7) . ") "
+                          . substr($phone_number, -7, -4)
+                          . "-" . substr($phone_number, -4);
+                        ?>
+                      <div class="phone-number-block">
+                          <span class="icon-grey">
+                            <img alt="Phone" src="
+                            <?= $block->escapeHtmlAttr(
+                                $block->getViewFileUrl('images/enhanced-profile/phone.png')
+                            ); ?>"
+                            /> </span>
+                        <span class="phone-number"><?= $block->escapeHtml($phone_number); ?></span>
+                      </div>
+                    <?php endif; ?>
+                </div>
+                <div class="view-detail-btn">
+                  <button class="button edit-prerred-store">
+                    <?= $block->escapeHtml(__("Edit")); ?>
+                  </button>
+                </div>
+              </div>
+            <?php endif; ?>
+        </div>
+        <div class='save-preffered-ship-address'>
+          <input type='button' id='pickup_save_changes' class='preferred-delivery-pickup'
+          value='SAVE CHANGES' data-method='PICKUP'/>
+        </div>
+        <div class="map-chooser" <?php if (!isset($jsonInfo->Id)): echo 'style="display: block"';
+        endif; ?>>
+          <div class="heading-flex">
+              <div class="input-icons pickup-radius-enabled">
+                  <div class="pickup-search-form-container pickup-search-radius-container">
+                    <div class="input-filed-container">
+                      <div class="radius-miles-container forPreference">
+                        <label for="pickup-search-radius" class="search-text">
+                        <?= $block->escapeHtml(__("Search Radius")) ?></label>
+                        <select class="pickup-search-radius" name="pickup-search-radius" id="pickup-search-radius">
+                          <option value="10"><?= $block->escapeHtml(__("10 Miles")) ?></option>
+                          <option value="25"><?= $block->escapeHtml(__("25 Miles")) ?></option>
+                          <option value="50"><?= $block->escapeHtml(__("50 Miles")) ?></option>
+                          <option value="100"><?= $block->escapeHtml(__("100 Miles")) ?></option>
+                        </select>
+                      </div>
+                      <div class="zipcode-container searchByRadiusBox inPreference">
+                        <label for="zipcodePickup" class="search-text">
+                        <?= $block->escapeHtml(__("Search By Zip Code Or City And State")) ?></label>
+                        <input class="input-text zipcodePickup radiusBox inPreference" autocomplete="off" type="text"
+                          name="zipcodePickup" id="zipcoderistricted"
+                          placeholder="Enter zip code or city and state"/>
+                          <div id="geocoder-results" class="google-maps-results"></div>
+                      </div>
+                    </div>
+                    <div role="dialog"  aria-label="Location Message" class="radius-message-container location-message">
+                      <div class="message-icon">
+                        <img src="<?=/* @noEscape */
+                        $block->getViewFileUrl('images/enhanced-profile/information.png'); ?>"
+                        alt="Warning Icon">
+                      </div>
+                      <div class="message-content">
+                        <div class="message-text">
+                        <?= $block->escapeHtml(__("To see more pickup locations, try expanding your search radius")) ?>
+                        </div>
+                      </div>
+                    </div>
+                    <div role="dialog" class="radius-message-container no-location-message" style="display:none;">
+                      <div class="message-icon">
+                        <img src="<?=/* @noEscape */
+                        $block->getViewFileUrl('images/enhanced-profile/information.png'); ?>"
+                        alt="Warning Icon">
+                      </div>
+                      <div class="message-content">
+                        <div class="message-text">There are no locations within your search radius.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <?php
+                    $imgCloasIcone = $block->getViewFileUrl('images/enhanced-profile/close-button.png');
+                    ?>
+                  <button id="btn-remove-zip" class="btn-ada-close" style="display: none;">
+                    <img class="img-close-pop" alt="close icon" src="<?= $block->escapeHtmlAttr($imgCloasIcone); ?>"
+                    >
+                  </button>
+                  <div class="toggle-container">
+                      <div >
+                          <span class="toggle-text"><?= $block->escapeHtml(__("Show Map"))?></span>
+                      </div>
+                      <div>
+                        <label id="btn-showmap" class="toggle-switch" tabindex="0">
+                          <input class="toggle-input" type="checkbox" aria-label="showmap" checked>
+                          <span class="slider round"></span>
+                        </label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class ="error-msg">
+              <span id="errmsg" ></span>
+          </div>
+          <div class="map-canvas" id="googleMap" style="height:292px; display: none;"></div>
+          <div class="pickup-hco-info-msg">
+            <button class="btn-ada">
+              <div class="pickup-hco-img">
+                 <img src="
+                 <?= $block->escapeHtmlAttr($block->getViewFileUrl('images/enhanced-profile/Alert.png')) ?>"
+                 class="pickup-img-hco-info" alt="HCO Info Icon">
+                 </img>
+              </div>
+              <div class="pickup-info-msg-hco">
+                <span class="pickup-hco-info-text">
+                  <?= $block->escapeHtml(__("The location you have selected is within a hotel
+                  or convention center. Higher rates may apply to products and services.")) ?>
+                </span>
+              </div>
+            </button>
+          </div>
+          <div class = "restricted-stores" id="restricted_stores" style="display:none;"></div>
+          <p class="error locatio-err-msg"></p>
+          <div class="btn-set-preffered-store-container" style="display:none;">
+            <?php
+            $disabled = '';
+            if ($preferredDeliveryMethod == 'PICKUP'
+                && !empty($preferredStore)
+              ):
+                $disabled = 'disabled="disabled"';
+            endif;
+            ?>
+            <button type="button" id="pickup_save_change" class="btn-set-preffered-store preferred-pickup-delivery"
+              data-method="PICKUP" <?= $block->escapeHtmlAttr($disabled) ?>>
+              <?= $block->escapeHtml(__("Set Preferred Store")) ?></button>
+          </div>
+        </div>
+      </div>
+      <div class="ship-to-address-container">
+        <div class="ship-address-section">
+          <button id="btn-delivery" class="btn-ada">
+            <div class="preferred-delivery-option custom-radio-btn">
+              <input type="radio" id="preferred-delivery-option"
+              class="del-option-item peferred-delivery-method" name="Preferred Delivery Option"
+              value="Ship to address" disabled>
+              <label for="preferred-delivery-option"><span class="ship-to-address-text">
+                <?=$block->escapeHtml(__("Ship to address")) ?></span>
+              </label>
+            </div>
+          </button>
+          <div id="default_shipping_address" class="default-shipping-address"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="enhanced-profile-popup" style="display: none;">
+      <div id="modal">
+          <div class="modal-body-content">
+              <h2><?= $block->escapeHtml(__('Click refresh to see your changes')) ?></h2>
+          </div>
+      </div>
+</div>
+<script>
+    require(['preferences'], function(references) {
+    });
+    window.mediaPath = "<?= $block->escapeHtml($block->getViewFileUrl('images/enhanced-profile/')) ?>";
+    window.profileurl = "<?= $block->escapeHtml($profileLogin->getFclMyProfileUrl()) ?>";
+    window.preferredDeliveryMethod  = "<?= $block->escapeHtml($preferredDeliveryMethod) ?>";
+    window.preferredStore  = "<?= $block->escapeHtml($preferredStore) ?>";
+    window.userProfileId  = "<?= $block->escapeHtml($userProfileId) ?>";
+    window.isE464167SSOCustomerEnabled = "<?= $block->escapeHtml($profileLogin->isE464167SSOCustomerEnabled()) ?>";
+    window.isSSOGroup = "<?= $block->escapeHtml($profileLogin->isSSOGroup()) ?>";
+    window.isSSOLogin = "<?= $block->escapeHtml($profileLogin->isSSOLogin()) ?>";
+    <?php if (!$validateFdxLogin): ?>
+        window.validateFdxLogin  = "<?= $block->escapeHtml($validateFdxLogin) ?>";
+    <?php endif; ?>
+</script>

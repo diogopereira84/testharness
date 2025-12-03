@@ -1,0 +1,294 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="fedex_configurations" translate="label" sortOrder="10">
+            <label>Fedex Internal Configurations</label>
+        </tab>
+        <section id="fedex" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General API Configuration</label>
+                <field id="configurator_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Configurator URL</label>
+                </field>
+                <field id="rate_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Rate Api URL</label>
+                </field>
+                <field id="order_api_url" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Order Transaction Api URL</label>
+                </field>
+                <field id="delivery_api_url" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Delivery Api URL</label>
+                </field>
+                <field id="location_details_api_url" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Location Details Api URL</label>
+                </field>
+                <field id="google_maps_api_url" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Google Maps ApI URL</label>
+                </field>
+                <field id="product_api_url" translate="label" type="text" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Api URL</label>
+                </field>
+                 <field id="encryption_api_url" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Encryption Api URL</label>
+                </field>
+                <!-- B-1109907: Optimize Configurations -->
+                <field id="rate_post_api_url" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Rate Quote API URL</label>
+                </field>
+                <field id="gtn_post_api_url" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>GTN API URL</label>
+                </field>
+                <field id="transaction_post_api_url" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Transaction API URL</label>
+                </field>
+                <field id="transaction_search_post_api_url" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Transaction Search API URL</label>
+                </field>
+                <field id="get_transaction_api_url" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Get Transaction API URL</label>
+                </field>
+                <field id="transaction_post_api_timeout_value" translate="label" type="text" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Transaction API TimeOut Value (Test Only)</label>
+                    <validate>validate-zero-or-greater validate-number</validate>
+                    <comment>Transaction API Timeout for HTTP Post request within X seconds.</comment>
+                </field>
+                <field id="dunc_office_api_url" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>FedEx Document Office API Url</label>
+                </field>
+                <field id="track_order_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>TRACK ORDER URL</label>
+                </field>
+                <field id="order_detail_xapi_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>ORDER DETAIL XAPI URL</label>
+                </field>
+                <field id="legacy_track_order_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>LEGACY TRACK ORDER URL</label>
+                </field>
+                <field id="fxocm_sdk_url" translate="label" type="text" sortOrder="555" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>FXOCM SDK URL</label>
+                </field>
+                <field id="fxocm_client_id" translate="label" type="obscure" sortOrder="560" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>FXOCM Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="fxocm_doc_vendor_owner_update" translate="label" type="text" sortOrder="561" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Document Services Update Vendor Owner ID</label>
+                    <comment>Example: https://api.test.office.fedex.com/document/fedexoffice/v2/documents</comment>
+                </field>
+            </group>
+            <group id="taz" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Taz API Settings</label>
+                <field id="taz_token_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Token Api URL</label>
+                </field>
+                <field id="service_tokens_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>TAZ Token Api URL (APIG)</label>
+                </field>
+                <field id="taz_email_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Taz Email Api URL</label>
+                </field>
+                <field id="client_id" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="client_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="public_client_id" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Public Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="public_client_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Public Client Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+            </group>
+            <group id="rateQuote" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Rate Quote API URL</label>
+                <field id="rate_post_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>POST API</label>
+                </field>
+            </group>
+            <group id="gateway_token" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Gateway Token API</label>
+                <field id="gateway_token_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Gateway Token Api URL</label>
+                </field>
+                <field id="client_id" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client ID</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                <field id="client_secret" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Secret</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                </field>
+                 <field id="fxocm_base_url" translate="label" type="text" sortOrder="565" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>FXOCM Base Url</label>
+                </field>
+            </group>
+            <group id="authentication" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Internal Magento API Authentication</label>
+                <field id="username" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Username</label>
+                </field>
+                <field id="password" translate="label" type="obscure" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Password</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                    <attribute type="shared">1</attribute>
+                    <comment>Highly recomended to create seperate admin user for APIs</comment>
+                </field>
+            </group>
+            <group id="gtn" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>GTN API URL</label>
+                <field id="gtn_post_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>POST API</label>
+                </field>
+            </group>
+            <group id="transaction" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>TRANSACTION API</label>
+                <field id="transaction_post_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>POST API</label>
+                </field>
+            </group>
+            <group id="duncoffice" translate="label" type="text" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Fedex Document Office API</label>
+                <field id="dunc_office_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Document Office API Url</label>
+                </field>
+            </group>
+            <group id="catalogmvp" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Catalog MVP Document API</label>
+                <field id="document" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Document Api URL</label>
+                </field>
+                 <field id="preview_api_url" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Document Preview API URL</label>
+                </field>
+            </group>
+            <group id="cron_configuration" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Cron configurations</label>
+                <field id="expired_fuse_token_cleanup_cron" type="text" translate="label" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Expired Fuse Token Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every hour</comment>
+                </field>
+                <field id="optimize_quotes_orders_cron" type="text" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Quotes Item Option Update Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every 5 minutes</comment>
+                </field>
+                <field id="optimize_orders_items_cron" type="text" translate="label" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Orders Item Option Update Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every 5 minutes</comment>
+                </field>
+                <field id="upload_quote_expired_cron" type="text" translate="label" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>UploadToQuote Expired Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every day at 11:45 PM PST</comment>
+                </field>
+                <field id="orders_pending_status_cron" type="text" translate="label" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Orders Pending Status Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every day at 4 AM PST</comment>
+                </field>
+                <field id="ready_for_pickup_email_queue_cron" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Ready For Pickup Email Queue Cron</label>
+                    <comment>Enter cron schedule time. Default will be run every day at 00:00 AM PST</comment>
+                </field>
+                <field id="oms_order_new_status_email_cron" translate="label" type="text" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>OMS Order New Status Email Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every hour</comment>
+                </field>
+                <field id="catalog_sync_queue_cron" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Queue Cron</label>
+                    <comment>Enter cron schedule time. Default will be run every day at 00:00 AM PST</comment>
+                </field>
+                <field id="catalog_sync_queue_process_cron" type="text" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Queue Process Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every 5 minutes</comment>
+                </field>
+                <field id="catalog_sync_queue_complete_cron" type="text" translate="label" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Queue Complete Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every 5 minutes</comment>
+                </field>
+                <field id="catalog_sync_remove_data_cron" type="text" translate="label" sortOrder="12" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Remove Data Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every day at 4 AM PST</comment>
+                </field>
+                <field id="catalog_sync_queue_delete_item_cron" type="text" translate="label" sortOrder="13" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Queue Delete Item Cron</label>
+                    <comment>Enter cron schedule time.  Default will be run every day at 00:00 AM PST</comment>
+                </field>
+                <field id="catalog_sync_queue_cleanup_process_cron" type="text" translate="label" sortOrder="14" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Catalog Sync Queue Cleanup Process Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every day at 4 AM PST</comment>
+                </field>
+                <field id="remove_old_orders_cron" type="text" translate="label" sortOrder="15" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Remove Old Orders Cron</label>
+                    <comment>Enter cron schedule time. Default will be run cron every day at 5 AM UTC</comment>
+                </field>
+            </group>
+            <group id="product_error_message_setting" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Unavailable Items Messaging</label>
+                <group id="unavailable_items_generic_message" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Unavailable Items Generic Message</label>
+                    <field id="unavailable_items_generic_message_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Unavailable Items Generic Error Message Title</label>
+                    </field>
+                    <field id="unavailable_items_generic_error_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Unavailable Items Generic Error Message</label>
+                    </field>
+                </group>
+                <group id="unavailable_items_cart_line_generic_message" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Unavailable Items Cart Inline Message</label>
+                    <field id="unavailable_items_cart_line_generic_message_title" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Unavailable Items Cart Inline Message Title</label>
+                    </field>
+                    <field id="unavailable_items_cart_line_generic_error_message" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                        <label>Unavailable Items Cart Inline Message</label>
+                    </field>
+                </group>
+            </group>
+        </section>
+        <section id="header_settings" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Cxml Settings</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_Base::config_info</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Header Settings</label>
+                <field id="header_to_domain" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Header To Domain</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="header_to_identity" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Header To Identity</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="sender_credential" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Sender Credential</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="sender_identity" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Sender Identity</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="sender_secret" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Sender Secret</label>
+                    <validate>required-entry</validate>
+                </field>
+                 <field id="sender_user_agent" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Cxml Sender User Agent</label>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

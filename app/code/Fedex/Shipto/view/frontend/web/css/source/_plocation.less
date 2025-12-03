@@ -1,0 +1,370 @@
+// Color variables (appears count calculates by raw css)
+@color0: #2f4047; // Appears 4 times
+@color01: #4d148c; // Appears 3 times
+@color2: #DCE2E6;
+@color3: #EBF0F2;
+
+// Width variables (appears count calculates by raw css)
+@width3: 24px; // Appears 2 times
+
+// Height variables (appears count calculates by raw css)
+@height3: 24px; // Appears 2 times
+
+.checkout-delivery-locations {
+    padding-top: 130px;
+
+    .step-title {
+        color: @color0;
+        font-family: 'FedEx Sans Light';
+        font-size: 30px;
+        font-weight: 300;
+        letter-spacing: 0;
+        line-height: 40px;
+        margin-bottom: 10px;
+        display: inline-block;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    input[type='radio'] {
+        &:checked {
+            background: radial-gradient(@color01 0%, @color01 40%, transparent 50%, transparent);
+            border-color: @color01 !important;
+        }
+    }
+
+    input[type="radio"] {
+        -webkit-appearance: none !important;
+        border-radius: 50%;
+        border: 1px solid gray !important;
+        height: 25px !important;
+        width: @width3;
+    }
+}
+
+.production_location {
+    color: @color0;
+    font-family: "Fedex Sans Light";
+    font-size: 23px;
+    height: 32px;
+    letter-spacing: 0;
+    line-height: 32px;
+    width: 250px;
+}
+
+.option-item {
+    color: @color0;
+    font-family: "FedEx Sans Regular";
+    font-size: 16px;
+    height: auto;
+    letter-spacing: 0;
+    line-height: 35px;
+    padding-bottom: 13px;
+    width: 556px;
+}
+
+.choose_self_container {
+    margin-top: 0;
+}
+
+.prod-location-item {
+    background-color: #FFFFFF;
+    height: @height3;
+    vertical-align: top;
+    width: @width3;
+}
+
+.rate-vary-note {
+    color: @color0;
+    font-family: "FedEx Sans Light Italic";
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 300;
+    height: @height3;
+    letter-spacing: 0;
+    line-height: @height3;
+    padding-left: 30px;
+    width: 148px;
+}
+
+.address_name_production {
+    font-family: "Fedex Sans Light";
+    padding-left: 30px;
+    color: @color0;
+}
+
+.street_name_production {
+    font-family: "Fedex Sans Light";
+    padding-left: 27px;
+    margin-top: 16px;
+    color: @color0;
+}
+
+.change-p-location {
+    font-family: "Fedex Sans Bold";
+    font-size: 15px;
+    margin-left: 30px;
+    font-weight: bold;
+    letter-spacing: 0.75px;
+    margin-top: 15px;
+}
+
+.recommended-store-label-pickup {
+    box-sizing: border-box;
+    height: 24px;
+    width: 175px;
+    border: 1px solid @color2;
+    border-radius: 100px;
+    background-color: @color3;
+    margin-left: 35px;
+    text-align: center;
+    margin-top: 7px;
+}
+
+.recommended-store-label-pickup-star {
+    margin-top: 3px;
+}
+
+.recommended-store-label-pickup-text {
+    margin-left: 6px;
+}
+
+/* B-1038368 - Display Info msg on slection of HCO location in pickup */
+
+.hco-img {
+    background-color: #FFC400;
+    width: 42px;
+    height: 65px;
+    position: absolute;
+}
+
+.img-hco-info {
+    margin-top: 12px;
+}
+
+.info-msg-hco {
+    margin-left: 59px;
+    margin-top: 14px;
+    margin-bottom: 11px;
+    color: #2F4047;
+    width: 670px;
+}
+
+/* B-1112171 - Display 'Hotel & Convention Location' tag on checkout screen for pickup if center is marked as HCO */
+.hco-store-label-pickup {
+    margin-left: 36px;
+    margin-top: 8px;
+}
+
+.hco-luggage-icon-img {
+    position: absolute;
+    width: 19px;
+}
+
+.hco-store-label-pickup-text {
+    margin-left: 26px;
+}
+
+@media (max-width: 767px) {
+    .is-fcl-global.checkout-index-index {
+        .pickup-location-container {
+            .hco-store-label-pickup {
+                display: inline-flex;
+            }
+
+            .pickup-location-address {
+                display: inline-flex;
+            }
+
+            .pickup-location-street {
+                margin-left: 0;
+            }
+
+            .pickup-location-address-data {
+                margin-left: 8px;
+            }
+
+            .earlist-label {
+                margin-top: 8px;
+            }
+        }
+    }
+}
+
+@media (min-width: 473px) {
+    .checkout-index-index {
+        .pickup-location-container {
+            .hco-store-label-pickup {
+                margin-left: 4.6rem;
+
+                .hco-store-label-pickup-text {
+                    margin-left: 34px;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 472px) {
+    .checkout-index-index {
+        .pickup-location-container {
+            .pickup-address {
+                margin-left: 3.6rem;
+
+                .pickup-location-address {
+                    display: block;
+
+                    .pickup-location-address-data {
+                        margin-left: 0;
+                    }
+                }
+            }
+
+
+            .hco-store-label-pickup {
+                margin-left: 38px;
+            }
+        }
+    }
+}
+
+.prodloc-card {
+    margin-top: 24px;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 524px;
+    height: auto;
+    padding: 24px;
+    border: 1px solid #E3E3E3;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #FFFFFF;
+}
+
+.prodloc-card p {
+    margin: 0;
+}
+
+.prodloc-copy {
+    width: 285px;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.prodloc-title {
+    height: 16px;
+    font-family: "FedEx Sans", Arial, Helvetica, sans-serif;
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+    letter-spacing: 0.75px;
+    text-transform: uppercase;
+    color: #333333;
+}
+
+.prodloc-desc {
+    width: 285px;
+    height: auto;
+    font-family: "FedEx Sans", Arial, Helvetica, sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    letter-spacing: -0.1px;
+    color: #333333;
+}
+
+.prodloc-cta {
+    display: flex;
+    align-items: flex-start;
+}
+
+.prodloc-selected {
+    width: 195px;
+    min-height: 72px;
+    color: #333333;
+    font-family: "FedEx Sans", Arial, Helvetica, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: 0;
+}
+
+.prodloc-selected-line {
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
+
+.prodloc-selected-line>span {
+    display: block;
+}
+
+/* CHANGE LOCATION button */
+.prodloc-btn,
+.prodloc-btn:hover,
+.prodloc-btn:focus,
+.prodloc-btn:active {
+    width: 180px;
+    height: 32px;
+    background: #FFFFFF !important;
+    color: #FF6200 !important;
+    border: 1px solid #FF6200 !important;
+    box-shadow: none !important;
+    text-decoration: none !important;
+    transform: none !important;
+    outline: none !important;
+    filter: none !important;
+    border-radius: 0 !important;
+}
+
+.prodloc-btn {
+    transition: none !important;
+    cursor: pointer;
+}
+
+@media (max-width: 638px){
+  .prodloc-card{
+    margin-top: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+
+    .prodloc-cta,
+    .prodloc-cta #change-p-location {
+        width: 100%;
+        display: block;
+    }
+
+    .prodloc-btn {
+        width: 100% !important;
+        height: 32px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .prodloc-card {
+        max-width: 440px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .prodloc-copy {
+        width: 100%;
+    }
+
+    .prodloc-desc {
+        width: 100%;
+    }
+
+    .prodloc-selected {
+        width: 100%;
+        min-height: 0;
+    }
+}

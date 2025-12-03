@@ -1,0 +1,21 @@
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<figure attr="data.main.attributes" ko-style="Object.assign({}, data.main.style(), !data.desktop_image.attributes().src ? {} : {borderStyle: 'none'})" css="data.main.css">
+    <img if="data.desktop_image.attributes().src"
+         attr="data.desktop_image.attributes"
+         css="data.desktop_image.css"
+         ko-style="data.main.style" alt="" />
+    <div class="placeholder-html-code promo-content promo-desktopcontent" if="data.content.html" attr="data.content.attributes" css="data.main.css" ko-style="data.main.style" html="data.content.html"></div>
+    <div class="placeholder-html-code promo-content promo-mobilecontent" if="data.mobilecontent.html" attr="data.mobilecontent.attributes" css="data.main.css" ko-style="data.main.style" html="data.mobilecontent.html"></div>
+    <div class="placeholder-html-code promo-content promo-mobilecontent" ifnot="data.mobilecontent.html" attr="data.content.attributes" css="data.main.css" ko-style="data.main.style" html="data.content.html"></div>
+    <div class="placeholder-html-code promo-coupon-label" if="data.coupon_label.html" attr="data.coupon_label.attributes" css="data.main.css" ko-style="data.main.style" text="data.coupon_label.html"></div>
+    <span class="placeholder-html-code promo-associated-coupon" if="data.associated_coupon.html" attr="data.associated_coupon.attributes" css="data.main.css" ko-style="data.main.style" text="data.associated_coupon.html" style="display: none;"></span>
+    <a class="placeholder-html-code promo-detail-link" if="data.link.attributes().href" attr="data.link.attributes" ko-style="data.link.style" css="data.link.css">
+        <span if="data.button_text.html" attr="data.button_text.attributes" css="data.main.css" ko-style="data.main.style" text="data.button_text.html"></span>
+    </a>
+</figure>

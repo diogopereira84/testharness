@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Customer\CustomerData\SectionPoolInterface">
+        <arguments>
+            <argument name="sectionSourceMap" xsi:type="array">
+                <item name="session" xsi:type="string">Fedex\Customer\CustomerData\Session</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Checkout\Model\CompositeConfigProvider">
+        <arguments>
+            <argument name="configProviders" xsi:type="array">
+                <item name="customer_checkout_config_provider" xsi:type="object">Fedex\Customer\Model\ConfigProvider</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Fedex\SubmitOrderSidebar\Controller\Quote\SubmitOrderOptimized">
+        <plugin name="Fedex_Submit_Order_Marketing_Opt-In" type="Fedex\Customer\Plugin\MarketingOptIn" sortOrder="1" disabled="false"/>
+    </type>
+    <type name="Fedex\Customer\Model\SalesForce">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+</config>

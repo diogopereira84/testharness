@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+	/**
+	* Copyright © FedEx, Inc. All rights reserved.
+	* See COPYING.txt for license details.
+	*/
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Fedex\SSO\Api\ProfileMockServiceInterface" type="Fedex\SSO\Model\ProfileMockService"/>
+    <preference for="Fedex\SSO\Api\Data\ConfigInterface" type="Fedex\SSO\Model\Config"/>
+    <preference for="Fedex\SSO\Api\ProfileManagementInterface" type="Fedex\SSO\Model\ProfileManagement"/>
+    <type name="Fedex\SSO\Model\Session">
+        <arguments>
+            <argument name="storage" xsi:type="object">Fedex\SSO\Model\Session\Storage</argument>
+        </arguments>
+    </type>
+    <type name="Fedex\SSO\Observer\Frontend\Controller\ActionPredispatch">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <!--  <type name="Magento\Theme\Block\Html\Header">
+         <plugin name="SSO_ReadCookie_Plugin" type="Fedex\SSO\Plugin\ReadCookies" sortOrder="10" disabled="false" />
+     </type> -->
+</config>

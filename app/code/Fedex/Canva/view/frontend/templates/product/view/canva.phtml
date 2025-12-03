@@ -1,0 +1,126 @@
+<?php
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\Canva\ViewModel\Canva $canva  */
+/** @var \Fedex\Canva\ViewModel\podConfiguration $podConfiguration */
+$canva = $block->getCanva();
+$canvaLogoUrl = $canva->getCanvaLogoUrl();
+$podConfiguration = $block->getPod();
+?>
+<?php if ($canva->hasDesign()):?>
+    <div class="old-1p-layout d-flex v-center logo-wrapper">
+        <div class="fs-16 lh-26 ls-0-56 logo-title">
+            <span class="cl-tertiary"><?= $escaper->escapeHtml(__('or')) ?></span>
+            <a href="#" role="button" class="link canva-modal-link"
+               <?php if (!$canva->useModal()): ?>target="_blank" <?php endif; ?>>
+                <?= $escaper->escapeHtml(__('use design templates powered by')) ?>
+            </a>
+        </div>
+        <div>
+            <a href="#" class="canva-modal-link logo-link d-block" <?php if (!$canva->useModal()): ?>target="_blank" <?php endif; ?>>
+                <img class="d-block img-auto" alt="Circle Canva logo" src="<?= $escaper->escapeUrl($canvaLogoUrl) ?>">
+            </a>
+        </div>
+    </div>
+    <?php if ($canva->useModal()): ?>
+        <div id="canva-modal" class="canva-modal">
+            <div class="modal-body-content">
+                <form action="">
+                    <label id="canva-label" class="options-label">
+                        <?= $escaper->escapeHtml(__('Select a size')) ?>
+                    </label>
+                    <div class="btn-group-wrapper">
+                        <div class="slick-select relative mb-25">
+                            <button aria-labelledby="canva-label" aria-haspopup="listbox" aria-expanded="false" type="button" class="slick-title bg-cl-white border-rollingstone fedex-light fs-16 lh-30 p-12 text-left weight-300 w-100">
+                                <span class="slick-selected">
+                                    <?= $escaper->escapeHtml(__('Select an option')) ?>
+                                </span>
+                                <span class="luma-icon down-icon cl-coralblack fs-14 float-right"></span>
+                                <input type="hidden" class="slick-value" value="">
+                            </button>
+                            <ul role="listbox" aria-activedescendant="" tabindex="-1" class="slick-options absolute bg-cl-white border-iron d-none mb-0 pl-0 pointer text-left">
+                                <?php foreach ($canva->getOptionsAvailable() as $option): ?>
+                                    <?php
+                                        $selected = ($option['is_default']) ? 'true' : 'false';
+                                        $label = $option['display_width'] . 'x' . $option['display_height'];
+                                    ?>
+                                    <li role="option" aria-selected="<?= $escaper->escapeHtml($selected) ?>"
+                                        class="slick-option fedex-light fs-16 mb-0 p-12"
+                                        data-value="<?= $escaper->escapeHtml($option['product_mapping_id']) ?>">
+                                            <?= $escaper->escapeHtml(__($label . ' ' . $option['orientation'])) ?>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                        <div>
+                            <button type="button" class="btn-primary btn-start lh-24 start-design">
+                                <?= $escaper->escapeHtml(__('START DESIGNING')) ?>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    <?php endif; ?>
+
+    <script>
+        require([
+            "jquery",
+            "Magento_Ui/js/modal/modal",
+            'mage/url',
+            'Magento_Customer/js/customer-data',
+            "eventActions",
+            'js-cookie/cookie-wrapper',
+            'Fedex_Canva/js/model/canva'
+        ],function($, modal, url, customerData, canvasEvent, cookies, canvaModel) {
+            const canvaSizes = <?= /* @noEscape */ json_encode($canva->getOptionsAvailable()) ?>;
+            const canvaDefaultSize = '<?= /* @noEscape */ $canva->getDefaultSize() ?>';
+            const canvaSizesEnabled = <?= ($canva->hasDesign()) ? 'true' : 'false'?>;
+            const podData = <?= /* @noEscape */ json_encode([
+                'id' => $podConfiguration->getSku(),
+                'accessToken' => $podConfiguration->getTazToken(),
+                'siteName' => $podConfiguration->getSiteName(),
+                'productType' => 'PRINT_PRODUCT',
+            ]); ?>;
+            podData.productPageToGoBack = window.location.href;
+            if(!canvaSizesEnabled || canvaSizes.length <= 0) {
+                return;
+            }
+
+            const canvaModal = $('#canva-modal');
+            const options = {
+                buttons: [],
+                modalClass: 'canva-size-popup'
+            };
+            if (canvaModal.length) {
+                canvaModal.modal(options);
+            }
+
+            const startDesignButton = $('.start-design');
+            startDesignButton.on('click', function (){
+                var canvaSize = $('.canva-modal .slick-value').val();
+                if (canvaSize != '') {
+                    podData.contentAssociation = window.contentAssociation();
+                    canvaModel.resetProcess(canvaModel.process.EDITOR, canvaSize, podData, null, window.location.pathname);
+                    sessionStorage.setItem("back-url", location.href);
+                    window.location = url.build('canva');
+                }
+            });
+
+            $('.canva-modal-link').on('click', function (args){
+                args.preventDefault();
+                if (canvaSizes.length == 1) {
+                    podData.contentAssociation = window.contentAssociation();
+                    canvaModel.resetProcess(canvaModel.process.EDITOR, canvaDefaultSize, podData, null, window.location.pathname);
+                    sessionStorage.setItem("back-url", location.href);
+                    window.location = url.build('canva');
+                } else {
+                    if (canvaModal.length) {
+                        canvaModal.modal(options).modal('openModal');
+                        $('.canva-size-popup').attr('aria-label','Select Canva Size');
+                    }
+                }
+            });
+        });
+    </script>
+<?php endif; ?>

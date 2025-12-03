@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author Fedex
+ * @package Fedex_Import
+ */
+ -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\ImportExport\Controller\Adminhtml\Import\Download">
+        <plugin name="Download_Sapple_File_Plugin" type="Fedex\Import\Plugin\DownloadSampleFilePlugin"
+                sortOrder="1"/>
+    </type>
+    <type name="Magento\ImportExport\Model\Source\Import\Entity">
+        <plugin name="import_entity_option_plugin"
+                type="Fedex\Import\Plugin\EntityTypeArrayPlugin" sortOrder="1"/>
+    </type>
+    <type name="Magento\ImportExport\Model\Source\Export\Entity">
+        <plugin name="category_export_entity_option_plugin"
+                type="Fedex\Import\Plugin\EntityTypeArrayPlugin" sortOrder="1"/>
+    </type>
+</config>

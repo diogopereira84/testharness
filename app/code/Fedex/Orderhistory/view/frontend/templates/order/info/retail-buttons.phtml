@@ -1,0 +1,68 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+$orderHistoryHelper = $this->helper(\Fedex\Orderhistory\Helper\Data::class);
+$viewModel = $block->getData('order_enhancement_view_model');
+$isReorderEnabled = $viewModel->isReorderEnabled();
+$orderId = $block->getRequest()->getParam('order_id');
+$isLegacyItemInOrder = $viewModel->checkLegacyDocumentForReorder($orderId);
+    // Check if any item in the order is legacy
+    $hasLegacyItem = count(array_filter($isLegacyItemInOrder, fn($value) => $value)) > 0;
+    $checkLegacyDocReorderSectionToggle = $viewModel->checkLegacyDocReorderSectionToggle();
+?>
+<?php if($orderId):
+    $order = $viewModel->getOrderById($orderId);
+?>    
+<div class="OrderData">
+    <h1><?= $block->escapeHtml(__('Order number #')) ?><?= $block->escapeHtml($order->getIncrementId()) ?></h1><br>
+     <?php $transactionId = $order->getPayment()->getRetailTransactionId(); 
+  if(!is_null($transactionId)):?>
+    <h2><?= $block->escapeHtml(__('Receipt number #')) ?><?= $block->escapeHtml($transactionId) ?></h2>
+   <?php endif; ?> 
+</div>
+<?php endif; ?>
+
+<div class="actions">
+    <a class="action print" href="#" onclick="window.print()">
+        <span><?= $block->escapeHtml(__('Print Confirmation')) ?></span>
+    </a>
+    <?php if ($isReorderEnabled) { ?>
+        <?php if ($orderHistoryHelper->isRetailOrderHistoryReorderEnabled()) { ?>
+            <span class="action retail-reorder-action disable-link <?= ($hasLegacyItem && $checkLegacyDocReorderSectionToggle) ? 'legacy-document-order' : '' ?>" data-bind="scope: 'reorder_section'">
+                <button type="button" class="reorder-btn-view" id="reorder-btn-view"
+                 data-bind="click: submitReorderView" disabled="disabled">REORDER</button>
+            </span>
+        <?php } else { ?>
+            <a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>"
+            class="action retail-continue-shopping"
+            rel="noopener">
+                <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
+            </a>
+        <?php } ?>
+    <?php } else { ?>
+        <a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>" class="action retail-continue-shopping"
+        rel="noopener">
+            <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
+        </a>
+    <?php } ?>
+    <?= $block->getChildHtml() ?>
+</div>
+
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Ui/js/core/app": {
+                "components": {
+                    "reorder_section": {
+                        "component": "Fedex_Orderhistory/js/view/reorder"
+                    },
+                    "print_reciept": {
+                        "component": "Fedex_Orderhistory/js/view/order-print-reciept"
+                    }
+                }
+            }
+        }
+    }
+</script>

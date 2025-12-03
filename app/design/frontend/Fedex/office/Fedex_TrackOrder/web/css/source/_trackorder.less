@@ -1,0 +1,1324 @@
+//
+//  Common (styles-m.css)
+//  _____________________________________________
+& when (@media-common = true) {
+    .page-wrapper {
+        .page-main {
+            .columns {
+                .tracking-page-title {
+                    .page-title {
+                        .base {
+                            font-size: 20px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.track-order-nav-link {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    margin-right: 3rem;
+}
+
+.orderTypeHeading.marketplace-order-type-heading {
+    margin-top: 24px;
+
+    .makertplace-method-name {
+        sup.reg {
+            top: 1px;
+        }
+    }
+}
+
+.orderTypeHeading {
+    .shipping-method {
+        sup.reg {
+            top: 1px;
+        }
+    }
+}
+
+.track-order-module .expected_order_delivery_date {
+    font-size: 2rem;
+}
+
+.track-order-nav-img {
+    margin-left: 0.5rem;
+
+    img {
+        height: 2.5rem;
+    }
+}
+
+.order_input_field::placeholder {
+    color: @fx-grey-100 !important;
+    font-family: 'FedEx Sans Light';
+}
+
+.progress-step {
+    color: @fx-grey-1200;
+
+    .progress-marker {
+        &:before {
+            box-sizing: border-box;
+        }
+    }
+
+    .progress-text {
+        .progress-title {
+            font-size: 16px;
+            color: @fx-grey-1200;
+            font-weight: 300;
+
+            &.current-progress-title {
+                font-size: 20px;
+                font-weight: 600;
+            }
+        }
+    }
+
+    &.last-progress-step {
+        .progress-text {
+            .progress-title:not(.current-progress-title) {
+                font-size: 16px;
+            }
+        }
+
+        .shipping_status_note {
+            font-size: 14px;
+        }
+    }
+}
+
+.shipping_status_note {
+    a {
+        color: #0078B4;
+    }
+}
+
+.orderItemrow .rowItem3 p {
+    font-weight: 300;
+}
+
+.orderItemrow {
+    .rowItem3 {
+        p {
+            font-weight: 300;
+        }
+
+        p.expected_order_delivery_date {
+            font-weight: 600;
+        }
+    }
+}
+
+.track_another_order {
+    font-size: 24px;
+    color: @fx-grey-1200;
+    font-weight: 300;
+}
+
+.orderId {
+    float: left;
+    font-family: 'FedEx Sans Light';
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    width: 100%;
+    color: @fx-grey-1200;
+}
+
+.track-order-module .remove_button {
+    height: 3.7rem;
+}
+
+.track-order-module {
+    .title.block-collapsible-nav-title strong a {
+        color: @black-color;
+    }
+}
+
+.orderCreatedDate {
+    font-family: 'FedEx Sans Light';
+    font-size: 2rem;
+    float: left;
+    margin-bottom: 1rem;
+    width: 100%;
+}
+
+.orderTypeHeading {
+    background-color: @color-light-grey;
+    float: left;
+    font-family: 'FedEx Sans Light';
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.orderDelayBanner {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid @black-color;
+    display: flex;
+    margin-bottom: 2rem;
+    position: relative;
+}
+
+.delay_Notification_icon {
+    align-items: center;
+    background: @color-hco;
+    display: flex;
+    justify-content: center;
+    width: 15%;
+
+    img {
+        height: 2rem;
+    }
+}
+
+.delay_notification_text {
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+}
+
+.delay_heading {
+    font-weight: 700;
+}
+
+.close_delay_banner {
+    background: transparent;
+    border: none;
+    display: block;
+    font-size: 0;
+    position: absolute;
+    right: 8px;
+    top: 16px;
+    width: 25px;
+    height: 25px;
+    padding: 0;
+    text-align: right;
+
+    &:active,
+    &:focus,
+    &:hover {
+        background: transparent;
+        border: unset;
+    }
+
+    &:before {
+        content: '\e928';
+        font-size: 20px;
+        position: relative;
+        font-family: 'FedEx Icons';
+        font-weight: 300;
+    }
+}
+
+.orderInfoBanner {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+
+    .info_icon {
+        width: 5%;
+
+        img {
+            height: 23px;
+            width: 23px;
+        }
+    }
+}
+
+.date-notification-wrapper {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: relative;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+    h3,p {
+        padding-left: 52px;
+        padding-right: 20px;
+    }
+    h3 {
+        position: relative;
+    }
+    .date-notification-icon {
+        position: absolute;
+        top: 22px;
+        left: 10px;
+    }
+    .close-date-notification {
+        position: absolute;
+        right: 8px;
+        background: transparent;
+        border: 0;
+        cursor: pointer;
+        font-size: 0;
+        height: 25px;
+        width: 25px;
+        padding: 0;
+        z-index: 1;
+        top: 16px;
+        &::before {
+            content: '\e928';
+            font-size: 20px;
+            position: relative;
+            font-family: @fedexLocationIcon;
+            font-weight: 300;
+        }
+        &:active,
+        &:focus,
+        &:hover {
+            background: transparent;
+        }
+    }
+}
+
+#gtnsAnotherOrderHeading {
+    margin-top: 8rem;
+    padding-left: 2rem;
+}
+
+#gtns_track_order_control {
+    padding-left: 2rem;
+}
+
+.order_input_row {
+    padding-bottom: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: row;
+}
+
+.track_order_control {
+    max-width: 747px;
+}
+
+.orderItemDetails {
+    display: flex;
+    flex-direction: column;
+    float: left;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.orderItemDetailsHeading {
+    align-items: center;
+    color: @color-label;
+    display: flex;
+    float: left;
+    font-family: 'FedEx Sans Light';
+    width: 100%;
+
+    .heading1 {
+        width: 35%;
+    }
+
+    .heading2 {
+        width: 25%;
+    }
+
+    .heading3 {
+        width: 30%;
+    }
+
+    .heading4 {
+        width: 10%;
+    }
+}
+
+.orderItemDetailsContent {
+    align-items: center;
+    border-top: 1px solid @fx-white-200;
+    border-bottom: 1px solid @fx-white-200;
+    color: @color-dark-grey;
+    display: flex;
+    float: left;
+    font-family: 'FedEx Sans Light';
+    font-size: 1.6rem;
+    font-weight: 600;
+    height: 6rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    width: 100%;
+
+    .content1 {
+        width: 35%;
+    }
+
+    .content2 {
+        width: 25%;
+        display: flex;
+        align-items: center;
+
+        img {
+            margin-right: 1rem;
+            height: 3rem;
+            width: 3rem;
+        }
+    }
+
+    .content3 {
+        width: 30%;
+    }
+
+    .content4 {
+        width: 10%;
+        .chevron-down {
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: 21px;
+        }
+    }
+}
+
+.orderDetailsSection {
+    float: left;
+    display: flex;
+    margin-top: 0px !important;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.detailedItemDetails {
+    border-bottom: 1px solid;
+    border-top: 1px solid @grey-border;
+    border-bottom: 1px solid @grey-border;
+    height: auto;
+    width: 100%;
+}
+
+.orderItemrow {
+    display: flex;
+    justify-content: center;
+    padding-top: 2rem;
+    width: 100%;
+    padding-bottom: 3rem;
+
+    .rowItem1 {
+        color: @color-dark-grey;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.3rem;
+        font-weight: 600;
+        width: 35%;
+    }
+
+    .rowItem2 {
+        color: @color-dark-grey;
+        display: flex;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.6rem;
+        font-weight: 600;
+        width: 25%;
+
+        img {
+            height: 3rem;
+            margin-right: 1rem;
+            width: 3rem;
+        }
+    }
+
+    .rowItem3 {
+        color: @color-dark-grey;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.6rem;
+        font-weight: 600;
+        width: 30%;
+    }
+
+    .rowItem4 {
+        float: left;
+        width: 10%;
+        .chevron-up {
+            cursor: pointer;
+            display: block;
+            margin-left: auto;
+            margin-right: 21px;
+        }
+    }
+}
+
+.productImage {
+    width: 30%;
+}
+
+.rowItem1Details {
+    display: flex;
+    width: 100%;
+    padding-bottom: 16px;
+    flex-wrap: wrap;
+
+    &.bundle-child{
+        position: relative;
+        padding-left: 48px;
+
+        &::before {
+            content: '';
+            position: absolute;
+            left: 24px;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background-color: @fx-grey-350;
+        }
+    }
+}
+
+.itemImage {
+    float: left;
+    height: 6rem;
+    padding-right: 1rem;
+    width: 6rem
+}
+
+.itemNameQty {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    width: 50%;
+
+    span {
+        color: @color-dark-grey;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.6rem;
+        font-weight: 600;
+    }
+}
+
+div.orderDetailsSection {
+    display: none;
+}
+
+.track-order-module .columns {
+    padding-left: 4rem;
+}
+
+.track-order-module {
+    .block-collapsible-nav ul {
+        margin-bottom: 0;
+        padding: 16px 0 16px 0;
+    }
+
+    .block-collapsible-nav li {
+        border-left: 3px solid @color-selected-border;
+        margin-bottom: 0rem;
+    }
+
+    .block-collapsible-nav li a {
+        color: @item-color;
+        font-family: 'FedEx Sans Regular';
+        font-weight: 400;
+        font-size: 1.2rem;
+        line-height: 22px;
+        padding-left: 16px;
+    }
+}
+
+.track-order-module h1.page-title {
+    padding-top: 4rem;
+    font-family: FedEx Sans;
+    font-size: 48px;
+    font-weight: 300;
+    line-height: 56px;
+    color: #333333;
+}
+
+.order_input {
+    font-size: 15px !important;
+    height: 45px !important;
+    margin-right: 8px;
+    width: 86.3% !important;
+    color: @fx-grey-100 !important;
+}
+
+.order_input_dynamic_row {
+    display: flex;
+    padding-top: 2rem;
+    width: 100%;
+}
+
+#row2 .dynamic_remove_button,
+#row3 .dynamic_remove_button,
+#row4 .dynamic_remove_button {
+    width: 7%;
+}
+
+#row2 .dynamic_order_submit_button,
+#row3 .dynamic_order_submit_button,
+#row4 .dynamic_order_submit_button {
+    margin-left: 1rem;
+}
+
+#row2 .dynamic_order_input,
+#row3 .dynamic_order_input,
+#row4 .dynamic_order_input {
+    width: 79%;
+}
+
+#row2 .dynamic_track_order_input,
+#row3 .dynamic_track_order_input,
+#row4 .dynamic_track_order_input {
+    font-size: 15px !important;
+    height: 45px !important;
+}
+
+.order_submit_button,
+.order_submit_button_dynamic {
+    border: 0 !important;
+    border-radius: unset;
+    background-color: @color-orange;
+    color: @color-white;
+    font-size: 16px !important;
+    height: 45px;
+    line-height: 20px;
+    letter-spacing: 1px;
+    line-height: 24px;
+    display: inline-block;
+}
+
+.track_more_order_button {
+    font-size: 1.6rem;
+}
+
+.order_submit_button_small {
+    display: none;
+}
+
+.delivery_note {
+    font-family: 'FedEx Sans Light';
+    font-size: 1.6rem;
+    margin: 2rem 0;
+}
+
+.orderDetailsResponse {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 6rem;
+}
+
+div.orderDetailsSectionSmall {
+    display: none;
+}
+
+.orderItemDetailsContentSmall {
+    display: none;
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .orderItemDetailsContentSmall,
+    .orderDetailsSectionSmall {
+        float: left;
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 320px) and (max-width: 480px) {
+    .track-order-module .columns {
+        padding-left: 0;
+    }
+
+    .track-order-module h1.page-title {
+        font-size: 45px;
+    }
+    .orderDelayBanner {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        border: 1px solid @item-color;
+        display: flex;
+        margin-bottom: 2rem;
+    }
+
+    .delay_Notification_icon {
+        align-items: center;
+        background: #ffb100;
+        display: flex;
+        justify-content: center;
+        width: 15%;
+
+        img {
+            height: 2rem;
+        }
+    }
+
+    .delay_notification_text {
+        display: flex;
+        flex-direction: column;
+        padding: 1.5rem;
+        width: 80%;
+    }
+
+    .delay_heading {
+        font-weight: 700;
+    }
+
+    .close_delay_banner {
+        background: transparent;
+        border: none;
+        display: flex;
+        font-family: 'FedEx Sans Light';
+        font-size: 0;
+    }
+
+    .orderInfoBanner {
+
+        .info_icon {
+            width: unset;
+        }
+    }
+
+    .track-order-module {
+        .block.block-collapsible-nav {
+            margin-left: 15px;
+            margin-bottom: 0;
+            top: 0;
+            width: ~"calc(100% - 30px)";
+
+            .block-collapsible-nav-title {
+                border: 1px solid @black-color !important;
+                background-color: @color-white;
+                box-sizing: border-box;
+                height: 48px;
+                padding: 12px 16px 12px 12px;
+
+                &::after {
+                    font-size: 16px !important;
+                    height: 32px !important;
+                    line-height: 32px;
+                    margin-top: 0 !important;
+                    right: 8px !important;
+                    top: 8px;
+                    width: 32px !important;
+                }
+
+                strong {
+                    color: @black-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    height: 24px;
+                    line-height: 24px;
+                }
+            }
+
+            .block-collapsible-nav-content.active {
+                background: @color-white;
+                padding: 0;
+                position: absolute;
+                width: 100%;
+                z-index: 999;
+
+                .nav.items {
+                    border: 1px solid @profile-title-border;
+                    box-sizing: border-box;
+                    padding: 12px 0 12px 0;
+                }
+            }
+        }
+    }
+
+    .track-order-module {
+        .block-collapsible-nav li {
+            border-left: none;
+            background: @active-link-background;
+            letter-spacing: 0;
+            line-height: 24px;
+            margin-bottom: 0;
+            padding: 12px 0 12px 0;
+        }
+    }
+
+    .track-order-module {
+        .block-collapsible-nav li a {
+            color: @item-color;
+            font-size: 1.5rem;
+            font-family: 'FedEx Sans Light';
+            padding-left: 10px;
+        }
+    }
+
+    .order_input_dynamic_row {
+        flex-direction: row-reverse;
+    }
+
+    .order_submit_button,
+    .order_submit_button_dynamic {
+        display: none;
+    }
+
+    .order_input {
+        margin-right: 0;
+        width: 100% !important;
+    }
+
+    #row2 .dynamic_order_submit_button,
+    #row3 .dynamic_order_submit_button,
+    #row4 .dynamic_order_submit_button {
+        margin-left: 0;
+    }
+
+    #row2 .dynamic_remove_button,
+    #row3 .dynamic_remove_button,
+    #row4 .dynamic_remove_button {
+        width: 14%;
+    }
+
+    #row2 .dynamic_order_input,
+    #row3 .dynamic_order_input,
+    #row4 .dynamic_order_input {
+        margin-right: 2rem;
+        width: 84% !important;
+    }
+
+    .productImage {
+        width: 70%;
+    }
+
+    .orderTypeHeading {
+        width: 100%;
+    }
+
+    .orderItemDetails {
+        display: none;
+    }
+
+    .orderDetailsSection {
+        display: none;
+    }
+
+    .detailedItemDetails {
+        display: none;
+    }
+
+    .orderItemDetailsContentSmall {
+        border-top: 2px solid @color-grey-border;
+        color: @color-dark-grey;
+        display: flex;
+        flex-direction: column;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.6rem;
+        font-weight: 600;
+    }
+
+    .itemDetailsSmall {
+        align-items: center;
+        border-bottom: 1px solid @color-grey-border;
+        display: flex;
+        flex-direction: row;
+        height: 5rem;
+        justify-content: space-between;
+    }
+
+    .statusDetailsSmall {
+        align-items: center;
+        border-bottom: 1px solid @color-grey-border;
+        display: flex;
+        flex-direction: row;
+        height: 5rem;
+        justify-content: space-between;
+
+        .statusDetailsSmallIcon {
+            display: flex;
+
+            img {
+                height: 2rem;
+                margin-right: 5px;
+                width: 2rem;
+            }
+        }
+    }
+
+    .deliveryDetailsSmall {
+        align-items: center;
+        border-bottom: 2px solid @color-grey-border;
+        display: flex;
+        flex-direction: row;
+        height: 5rem;
+        justify-content: space-between;
+    }
+
+    .showHideIconSmall {
+        align-items: center;
+        display: flex;
+        height: 5rem;
+        justify-content: center;
+    }
+
+    .orderDetailsSectionSmall {
+        border-top: 2px solid @color-grey-border;
+        color: @color-dark-grey;
+        display: flex;
+        flex-direction: column;
+        font-family: 'FedEx Sans Light';
+        font-size: 1.6rem;
+        font-weight: 600;
+    }
+
+    .detailedItemDetailsSmall {
+        border-bottom: 1px solid @color-grey-border;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    .row1ItemDetailsSmall {
+        display: flex;
+        margin-top: 16px;
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .orderStatusSmall {
+        display: flex;
+        margin-top: 1rem;
+
+        img {
+            height: 2rem;
+            margin-right: 1rem;
+        }
+    }
+
+    .itemImageSmall {
+        float: left;
+        height: 6rem;
+        padding-right: 1rem;
+        width: 6rem;
+    }
+
+    .itemNameQtySmall {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .detailedItemStatusSmall {
+        border-bottom: 1px solid @color-grey-border;
+        padding-top: 2rem;
+
+        .heading1 {
+            padding-bottom: 1rem;
+        }
+    }
+
+    .detailedItemDeliverySmall {
+        border-bottom: 2px solid @color-grey-border;
+        padding-bottom: 2rem;
+        padding-top: 2rem;
+
+        .contentSmall {
+            margin-top: 1rem;
+        }
+    }
+
+    .order_submit_button_small {
+        border: 0 !important;
+        border-radius: unset;
+        background-color: @color-orange;
+        color: @color-white;
+        display: block;
+        font-family: 'FedEx Sans Bold';
+        font-size: 16px !important;
+        height: 45px;
+        line-height: 20px;
+        letter-spacing: 1px;
+        line-height: 24px;
+        margin-top: 2rem;
+    }
+
+    #gtnsAnotherOrderHeading {
+        padding-left: 0;
+    }
+
+    #gtns_track_order_control {
+        padding-left: 0;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .track-order-module .columns {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .track-order-module .column.main {
+        width: 100% !important;
+    }
+
+    .track-order-module {
+        .sidebar.sidebar-main {
+            padding-right: 0% !important;
+            width: 100% !important;
+            order : -1;
+        }
+
+        .block.block-collapsible-nav {
+            margin-bottom: 0;
+            top: 0;
+            width: 100%;
+        }
+    }
+
+    .orderTypeHeading {
+        width: 100%;
+    }
+
+    .orderItemDetails {
+        padding-left: 0;
+        width: 100%;
+    }
+
+    .orderDetailsSection {
+        padding-left: 0;
+        width: 100%;
+    }
+
+    #gtnsAnotherOrderHeading {
+        padding-left: 0;
+    }
+
+    #gtns_track_order_control {
+        padding-left: 0;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1200px) {
+    .track-order-module h1.page-title {
+        margin-bottom: 7%;
+    }
+
+    .track-order-module .sidebar.sidebar-main {
+        padding-right: 0% !important;
+        width: 100% !important;
+    }
+
+    .track-order-module .column.main {
+        width: 77.7% !important;
+        float: right;
+    }
+
+    .track-order-module {
+        .block.block-collapsible-nav {
+            margin-left: 0;
+            margin-bottom: 0;
+            margin-top: -27px;
+            top: 0;
+            width: 18%;
+        }
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1023px) {
+    .orderItemrow {
+        padding-bottom: 6rem;
+    }
+
+    .orderDelayBanner {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .orderDelayBanner {
+        box-sizing: border-box;
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 1200px) {
+    .track-order-module .columns {
+        padding-left: 0rem;
+    }
+
+    .track-order-module .columns .column {
+        padding-left: 0rem !important;
+    }
+
+    .delay_Notification_icon {
+        width: 5%;
+    }
+
+    .delay_notification_text {
+        width: 89%;
+    }
+
+    .track-order-module {
+        .block.block-collapsible-nav {
+            .block-collapsible-nav-title {
+                border: 1px solid @black-color !important;
+                background-color: @color-white;
+                box-sizing: border-box;
+                height: 48px;
+                padding: 12px 16px 12px 12px;
+
+                &::after {
+                    font-size: 16px !important;
+                    height: 32px !important;
+                    line-height: 32px;
+                    margin-top: 0 !important;
+                    right: 8px !important;
+                    top: 8px;
+                    width: 32px !important;
+                }
+
+                strong {
+                    color: @black-color;
+                    font-family: 'FedEx Sans Light';
+                    font-size: 14px;
+                    font-weight: 300;
+                    height: 24px;
+                    line-height: 24px;
+                }
+            }
+
+            .block-collapsible-nav-content.active {
+                background: @color-white;
+                padding: 0;
+                position: absolute;
+                width: 100%;
+                z-index: 999;
+
+                .nav.items {
+                    border: 1px solid @profile-title-border;
+                    box-sizing: border-box;
+                    padding: 12px 0 12px 0;
+                }
+            }
+        }
+    }
+
+    .track-order-module {
+        .block-collapsible-nav ul {
+            margin-bottom: 0;
+            padding: 16px 0 16px 0;
+        }
+
+        .block-collapsible-nav li {
+            border-left: 3px solid @color-selected-border;
+            margin-bottom: 0rem;
+        }
+
+        .block-collapsible-nav li a {
+            color: @item-color;
+            font-family: 'FedEx Sans Regular';
+            font-weight: 400;
+            font-size: 1.2rem;
+            line-height: 22px;
+            padding-left: 16px;
+        }
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .track-order-module .column.main {
+        margin-top:-2%;
+    }
+    .delay_Notification_icon {
+        width: 5%;
+    }
+
+    .delay_notification_text {
+        width: 89%;
+    }
+}
+
+.progress-tracker {
+    display: flex;
+    padding: 0;
+    list-style: none;
+    height: 24rem;
+}
+
+.progress-step {
+    flex: 1 1 0%;
+    margin: 0;
+    padding: 0;
+    min-width: 24px;
+    height: 8rem;
+}
+
+.progress-step:last-child {
+    flex-grow: 0;
+}
+
+.progress-step:last-child .progress-marker::after {
+    display: none;
+}
+
+.progress-marker {
+    display: block;
+    position: relative;
+}
+
+.progress-marker::before {
+    content: attr(data-text);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    z-index: 20;
+    width: 27px;
+    height: 26px;
+    padding-bottom: 2px;
+    border-radius: 50%;
+    transition: background-color, border-color;
+    transition-duration: 0.3s;
+}
+
+.progress-marker::after {
+    content: "";
+    display: block;
+    position: absolute;
+    z-index: -10;
+    top: 10px;
+    right: -12px;
+    width: 100%;
+    height: 4px;
+    transition: background-color 0.3s, background-position 0.3s;
+}
+
+.progress-text {
+    display: block;
+    padding: 8px 8px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-title {
+    margin-top: 0;
+}
+
+.progress-step .progress-marker {
+    color: #fff;
+}
+
+.progress-step .progress-marker::before {
+    background-color: #b6b6b6;
+}
+
+.progress-step .progress-marker::after {
+    background-color: #b6b6b6;
+}
+
+.progress-step .progress-text {
+    color: @fx-grey-500;
+}
+
+.progress-tracker--vertical {
+    flex-direction: column;
+}
+
+.progress-tracker--vertical .progress-step {
+    display: flex;
+    flex: 1 1 auto;
+}
+
+.progress-tracker--vertical .progress-marker::after {
+    right: auto;
+    top: 32px;
+    left: 12px;
+    width: 3px;
+    height: 55%;
+}
+
+.last-progress-step {
+    flex-wrap: wrap;
+
+    .shipping_status_note {
+        font-family: 'FedEx Sans Light';
+        font-size: 1.5rem;
+        line-height: 2.5rem;
+    }
+}
+
+/* General Styles for FedEx Tracking Section */
+.fedex-trackshipment-section {
+    max-width: 747px;
+    padding: 24px;
+    background: #FAFAFA;
+    display: flex;
+    align-items: center;
+    margin-top: 7% !important;
+    box-sizing: border-box;
+    gap: 24px;
+}
+
+.fedex-Track-shipment-Block-icon {
+    width: 80px;
+    height: 71.58px;
+}
+
+.fedex-tracking-text h4 {
+    font-size: 20px;
+    font-weight: 300;
+    line-height: 32px;
+    color: #333333;
+    margin-bottom: 4px;
+    text-align: left;
+    margin-top: 0;
+}
+
+.fedex-tracking-text p {
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 24px;
+    color: #333333;
+    text-align: left;
+}
+
+.fedex-tracking-button {
+    padding: 4px;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: 0.75px;
+    color: #0078B4;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: left;
+}
+
+.marketplace-order-tracking {
+    h2 {
+        font-family: 'FedEx Sans Light';
+        font-size: 24px;
+        line-height: 32px;
+        margin: 0 0 16px;
+    }
+}
+@media (min-width: 1200px) {
+    .fedex-tracking-text p {
+        max-width: 596px;
+    }
+}
+
+/* Responsive design for small screens */
+@media (max-width: 430px) {
+    .fedex-trackshipment-section {
+        flex-direction: column;
+        text-align: center;
+        max-width: 100%;
+    }
+
+    .fedex-tracking-text h4 {
+        text-align: center;
+    }
+
+    .fedex-tracking-text p {
+        text-align: left;
+    }
+}
+
+.order_submit_button:disabled,
+.order_submit_button_small:disabled,
+.order_submit_button_dynamic:disabled{
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 24px;
+    letter-spacing: 1.1875px;
+    text-align: left;
+    background: #e3e3e3;
+    border-color: #e3e3e3;
+    color: #000;
+    cursor: initial;
+}

@@ -1,0 +1,269 @@
+{
+    "company": {
+        "column": {
+            "entity_id": true,
+            "status": true,
+            "company_name": true,
+            "legal_name": true,
+            "company_email": true,
+            "vat_tax_id": true,
+            "reseller_id": true,
+            "comment": true,
+            "street": true,
+            "city": true,
+            "country_id": true,
+            "region": true,
+            "region_id": true,
+            "postcode": true,
+            "telephone": true,
+            "customer_group_id": true,
+            "sales_representative_id": true,
+            "super_user_id": true,
+            "reject_reason": true,
+            "rejected_at": true,
+            "is_epro_enabled": true,
+            "domain_name": true,
+            "network_id": true,
+            "company_url": true,
+            "acceptance_option": true,
+            "is_delivery": true,
+            "is_pickup": true,
+            "site_name": true,
+            "allowed_delivery_options": true,
+            "allow_production_location": true,
+            "production_location_option": true,
+            "recipient_address_from_po": true,
+            "is_quote_request": true,
+            "is_expiring_order": true,
+            "is_expired_order": true,
+            "is_order_reject": true,
+            "allow_own_document": true,
+            "allow_shared_catalog": true,
+            "allow_upload_and_print": true,
+            "allow_upload_to_quote": true,
+            "non_standard_catalog_distribution_list": true,
+            "allow_non_standard_catalog": true,
+            "payment_option": true,
+            "fedex_account_number": true,
+            "shipping_account_number": true,
+            "discount_account_number": true,
+            "order_complete_confirm": true,
+            "shipnotf_delivery": true,
+            "order_cancel_customer": true,
+            "enable_upload_section": true,
+            "enable_catalog_section": true,
+            "company_logo": true,
+            "company_url_extention": true,
+            "is_sensitive_data_enabled": true,
+            "storefront_login_method_option": true,
+            "sso_login_url": true,
+            "sso_logout_url": true,
+            "sso_idp": true,
+            "is_catalog_mvp_enabled": true,
+            "is_epro_u2b_enabled": true,
+            "is_epro_u2q_enabled": true,
+            "is_promo_discount_enabled": true,
+            "is_account_discount_enabled": true,
+            "custom_billing_invoiced": true,
+            "custom_billing_credit_card": true,
+            "custom_billing_shipping": true,
+            "fxo_account_number_editable": true,
+            "shipping_account_number_editable": true,
+            "discount_account_number_editable": true,
+            "box_enabled": true,
+            "dropbox_enabled": true,
+            "google_enabled": true,
+            "microsoft_enabled": true,
+            "hc_toggle": true,
+            "self_reg_data": true,
+            "shared_catalog_id": true,
+            "is_success_email_enable": true,
+            "bcc_comma_seperated_email": true,
+            "order_confirmation_email_template": true,
+            "allow_next_step_content": true,
+            "upload_to_quote_next_step_content": true,
+            "sso_group": true,
+            "office_supplies_enabled": true,
+            "shipping_packing_mailing_enabled": true
+        },
+        "index": {
+            "COMPANY_COMPANY_NAME_LEGAL_NAME": true,
+            "COMPANY_COUNTRY_ID": true,
+            "COMPANY_REGION_ID": true,
+            "COMPANY_SSO_IDP": true,
+            "COMPANY_URL_EXTENSION_INDEX_ID": true,
+            "COMPANY_COMPANY_URL_EXTENTION": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_COUNTRY_ID_DIRECTORY_COUNTRY_COUNTRY_ID": true,
+            "COMPANY_REGION_ID_DIRECTORY_COUNTRY_REGION_REGION_ID": true,
+            "COMPANY_CUSTOMER_GROUP_ID_CUSTOMER_GROUP_CUSTOMER_GROUP_ID": true,
+            "COMPANY_SALES_REPRESENTATIVE_ID_ADMIN_USER_USER_ID": true
+        }
+    },
+    "company_team": {
+        "column": {
+            "team_id": true,
+            "name": true,
+            "description": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "company_structure": {
+        "column": {
+            "structure_id": true,
+            "parent_id": true,
+            "entity_id": true,
+            "entity_type": true,
+            "path": true,
+            "position": true,
+            "level": true
+        },
+        "index": {
+            "COMPANY_STRUCTURE_PARENT_ID": true,
+            "COMPANY_STRUCTURE_ENTITY_ID": true,
+            "COMPANY_STRUCTURE_ENTITY_TYPE": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    },
+    "company_advanced_customer_entity": {
+        "column": {
+            "customer_id": true,
+            "company_id": true,
+            "job_title": true,
+            "status": true,
+            "telephone": true
+        },
+        "index": {
+            "COMPANY_ADVANCED_CUSTOMER_ENTITY_STATUS": true
+        },
+        "constraint": {
+            "COMPANY_ADVANCED_CSTR_ENTT_CSTR_ID_CSTR_ENTT_ENTT_ID": true,
+            "COMPANY_ADVANCED_CUSTOMER_ENTITY_CUSTOMER_ID": true
+        }
+    },
+    "company_roles": {
+        "column": {
+            "role_id": true,
+            "sort_order": true,
+            "role_name": true,
+            "company_id": true
+        },
+        "index": {
+            "COMPANY_ROLES_COMPANY_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_ROLES_COMPANY_ID_COMPANY_ENTITY_ID": true
+        }
+    },
+    "company_user_roles": {
+        "column": {
+            "user_role_id": true,
+            "role_id": true,
+            "user_id": true
+        },
+        "index": {
+            "COMPANY_USER_ROLES_ROLE_ID": true,
+            "COMPANY_USER_ROLES_USER_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_USER_ROLES_ROLE_ID_COMPANY_ROLES_ROLE_ID": true,
+            "COMPANY_USER_ROLES_USER_ID_CUSTOMER_ENTITY_ENTITY_ID": true
+        }
+    },
+    "company_permissions": {
+        "column": {
+            "permission_id": true,
+            "role_id": true,
+            "resource_id": true,
+            "permission": true
+        },
+        "index": {
+            "COMPANY_PERMISSIONS_ROLE_ID": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_PERMISSIONS_ROLE_ID_COMPANY_ROLES_ROLE_ID": true
+        }
+    },
+    "company_order_entity": {
+        "column": {
+            "entity_id": true,
+            "order_id": true,
+            "company_id": true,
+            "company_name": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_ORDER_ENTITY_ORDER_ID_SALES_ORDER_ENTITY_ID": true,
+            "COMPANY_ORDER_ENTITY_ENTITY_ID": true,
+            "COMPANY_ORDER_ENTITY_ORDER_ID": true
+        }
+    },
+    "company_auth_rule": {
+        "column": {
+            "role_id": true,
+            "rule_code": true,
+            "company_id": true,
+            "type": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_AUTH_RULE_COMPANY_ID_COMPANY_ENTITY_ID": true
+        }
+    },
+    "company_additional_data": {
+        "column": {
+            "id": true,
+            "company_id": true,
+            "store_id": true,
+            "store_view_id": true,
+            "new_store_id": true,
+            "new_store_view_id": true,
+            "cc_token": true,
+            "cc_data": true,
+            "cc_token_expiry_date_time": true,
+            "company_payment_options": true,
+            "creditcard_options": true,
+            "fedex_account_options": true,
+            "default_payment_method": true,
+            "is_promo_discount_enabled": true,
+            "is_account_discount_enabled": true,
+            "order_notes": true,
+            "is_reorder_enabled": true,
+            "terms_and_conditions": true,
+            "is_banner_enable": true,
+            "banner_title": true,
+            "iconography": true,
+            "description": true,
+            "cta_text": true,
+            "cta_link": true,
+            "link_open_in_new_tab": true,
+            "is_non_editable_cc_payment_method": true,
+            "all_print_products_cms_block_identifier": true,
+            "epro_new_platform_order_creation": true,
+            "homepage_cms_block_identifier": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "COMPANY_ADDITIONAL_DATA_COMPANY_ID_COMPANY_ENTITY_ID": true
+        }
+    },
+    "quote": {
+        "column": {
+            "site_configured_payment_used": true
+        }
+    },
+    "sales_order_payment": {
+        "column": {
+            "site_configured_payment_used": true
+        }
+    }
+}

@@ -1,0 +1,59 @@
+<?php
+/** @noinspection PhpComposerExtensionStubsInspection */
+/** @noinspection PhpUnhandledExceptionInspection */
+/** @var  $item \Magedelight\Megamenu\Model\MenuItems|\Magedelight\Megamenu\Api\Data\MenuItemsInterface */
+/** @var  $menuBlock \Magedelight\Megamenu\Block\Topmenu */
+/** @var  $menuManagement \Magedelight\Megamenu\Model\MegamenuManagement */
+$menuBlock = $this->getData('menu_block');
+$menuItems = $this->getData('menu_items');
+$menuManagement = $this->getData('menu_management');
+$level = (int) $this->getData('level');
+$parent = $this->getData('parent_node');
+$class = 'level0 level-top parent ui-menu-item';
+$linkClass = 'level-top ';
+if ($parent != 'root') :
+?>
+<ul class="level<?= $level ?> submenu">
+<?php $linkClass = ''; endif; ?>
+<?php foreach ($menuItems as $menuItem):
+    $menuItemId = $menuItem->getItemId();
+    $linkurl = $menuItem->getItemLink();
+    $dataclass = $menuItem->getItemClass();
+    if (!$linkurl) {
+        $linkurl = $menuManagement->generateMenuUrl($menuItem);
+    }
+    $hasChildren = $menuManagement->hasChildrenItems($menuItemId);
+    if ($hasChildren) {
+        $class = 'level' . $level . ' parent';
+    } else {
+        $class = 'level' . $level;
+    }
+    if ($menuItem->getItemType() == 'category') {
+        if ($menuItem->getObjectId() == $menuBlock->getCurrentCat()) {
+            $class .= ' active';
+        }
+    } elseif ($menuItem->getItemType() == 'pages') {
+        if ($menuItem->getObjectId() == $menuBlock->getCurentPage()) {
+            $class .= ' active';
+        }
+    }
+?>
+    <li class="<?= $class ?> <?= $linkClass ?> <?= $dataclass ?>">
+    <?php if ($hasChildren) { ?>
+        <a href="<?= $linkurl ?>" class="<?= $linkClass ?> ui-corner-all">
+            <span class="megaitemicons"><?= $menuItem->getItemFontIcon() ?></span>
+            <span><?= __($menuManagement->generateMenuItemName($menuItem)) ?></span>
+        </a>
+        <?php $childMenuItems = $menuManagement->loadMenuItems($menuItemId);?>
+        <?php echo $menuBlock->setPrimaryMenu($childMenuItems, $level + 1); ?>
+    <?php } else { ?>
+        <a href="<?= $linkurl ?>" class="<?= $linkClass ?> ui-corner-all">
+            <span class="megaitemicons"><?= $menuItem->getItemFontIcon() ?></span>
+            <span><?= __($menuManagement->generateMenuItemName($menuItem)) ?></span>
+        </a>
+    <?php } ?>
+    </li>
+<?php endforeach; ?>
+<?php if ($parent != 'root') { ?>
+</ul>
+<?php } ?>

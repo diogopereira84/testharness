@@ -1,0 +1,17 @@
+<?php
+
+/** @var $escaper \Magento\Framework\Escaper */
+/** @var $block \Magento\Framework\View\Element\Template */
+
+$viewModel = $block->getData('3pProductAttribute_viewModel');
+$product = $viewModel->getProduct();
+$isDeliveryOnly = $product->getData('is_delivery_only');
+?>
+<?php if ($product && $isDeliveryOnly): ?>
+    <div class="product-is-delivery-only d-inline-block bg-purple-10 p-8 pr-16 border-r-8 mb-24 w-max-cont">
+        <img class="img-auto valign-text-bottom ml-5 mr-5" src="<?php echo $this->getViewFileUrl('images/delivery-purple.svg');?>" alt="delivery icon">
+        <span class="delivery-only-tag fs-16 fedex-medium">
+            Delivery Only
+        </span>
+    </div>
+<?php endif; ?>

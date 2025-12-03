@@ -1,0 +1,305 @@
+@import '_personal_address_book_navigation.less';
+
+.personaladdressbook-index-view {
+	.error-message {
+	    color: red;
+	    font-size: 12px;
+	    display: none;
+	    margin-top: 5px;
+	    padding-left: 224px;
+	    position: relative;
+	    margin: -20px 0 0 20px;
+	}
+
+	.error-cross {
+	    color: red;
+	    margin-right: 5px;
+	}
+	input.error {
+	    border: 1px solid red !important;
+	}
+
+	.personal_address_book_table {
+		table-layout: fixed;
+		input[type=checkbox] {
+			margin: 0px 5px 0 0;
+		}
+		.custom_row_checkbox {
+			height: 1.6rem;
+		}
+		.custom_header_checkbox {
+			-moz-appearance: auto;
+    		-webkit-appearance: auto;
+		}
+		.kebab-image.category-list {
+			margin-left: 0px;
+        	margin-top: -5px;
+		}
+		.manageusers-dropdown-content {
+			top: 2px;
+        	left: 12%;
+		}
+
+		.data-grid-multicheck-cell {
+			.admin__control-checkbox {
+		        accent-color: #4d148c;
+		        -webkit-appearance: checkbox;
+		        width: 24px;
+		        height: 24px;
+			}
+		}
+		.firstCell {
+			width: 30px;
+		}
+
+        .data-grid-checkbox-cell   {
+        	.data-grid-checkbox-cell-inner {
+        		.admin__control-checkbox {
+        			accent-color: #4d148c;
+			        width: 24px;
+			        height: 24px;
+        		}
+        	}
+    	}
+
+    	span.data-grid-cell-content {
+    		font-weight:800;
+    	}
+
+		.personal_address_action {
+			font-size: 12px;
+			cursor: default;
+		}
+
+		.data-grid-th._sortable {
+			cursor: default;
+			.data-grid-cell-content.sorted {
+				color: #4d148c;
+			}
+			.data-grid-cell-content {
+				cursor: pointer;
+				font-size: 12px;
+			}
+			.data-grid-cell-content.sorted[data-order="asc"]::after {
+				background: none;
+				content: "\f063";
+				font: normal normal normal 12px / 1 FontAwesome;
+				display: inline-block;
+				height: 10px;
+				padding-left: 5px;
+				width: 8px;
+			}
+			.data-grid-cell-content.sorted[data-order="desc"]::after {
+				font: normal normal normal 12px / 1 FontAwesome;
+				background: none;
+				content: "\f062";
+				display: inline-block;
+				height: 10px;
+				padding-left: 5px;
+				width: 8px;
+			}
+			.data-grid-cell-content:not(.sorted):not(.draggable):hover::after {
+				font: normal normal normal 12px / 1 FontAwesome;
+				background: none;
+				content: "\f062";
+				display: inline-block;
+				height: 10px;
+				padding-left: 5px;
+				width: 8px;
+			}
+		}
+	}
+
+	.table-wrapper {
+		overflow-x: inherit;
+		border-bottom: none;
+	}
+
+	#pagination {
+		margin-top: 20px;
+		text-align: center;
+	}
+
+	#pagination a {
+		color: #006bb4;
+		padding: 8px 10px;
+		margin: 0 5px;
+	}
+
+	#pagination a.next , a.prev {
+		text-decoration: none;
+		color: #333;
+		padding: 8px 10px;
+		margin: 0 5px;
+		border: 1px solid #cccccc;
+	}
+
+	#pagination a.active {
+		color: #333;
+	}
+
+	#pagination a:hover {
+		background-color: #ddd;
+	}
+}
+@media only screen and (max-width: 1024px) and (min-width: 600px) {
+    .personaladdressbook-index-view {
+        .personal-address-search-container {
+            .address-search-section .search-label {
+                width: 12%;
+            }
+            .personal-address-search-control {
+                width: 66%;
+            }
+			select#addressSearchOptions {
+					width: 20%;
+			}
+        }
+    }
+}
+
+@media only screen and (max-width: 425px) {
+    .personal-address-search-container {
+        .address-filter-section.flex-container {
+            display: flow-root;
+        }
+    }
+}
+
+@media screen and (min-width:320px) and (max-width:369px) {
+
+    .personaladdressbook-index-view {
+
+    	.modals-wrapper .modal-footer button.clear-action-accept {
+			width:100% !important;
+		}
+
+		.personal_address_book_table {
+			td[data-th="ACTIONS"] {
+				margin-left: unset !important;
+				.manageusers-dropdown {
+		  			right: 14.5%;
+				}
+			}
+
+		    .data-grid-checkbox-cell {
+				height: 24px;
+				padding-top: 15px !important;
+				display: block !important;
+				text-align: left !important;
+			}
+		}
+		.quotes-grid-toolbar {
+			margin-top:15px;
+			.page-title {
+				font-size: inherit !important;
+			}
+		}
+		.address-search-section {
+		  display: block;
+		  select#addressSearchOptions {
+			width: 100%;
+			display: block;
+			margin-top: 0;
+			margin-left: 0;
+		  }
+		  .search-label {
+			width: 100%;
+		  }
+		  .personal-address-search-control {
+			width: 100%;
+			margin-top: 5px;
+		  }
+		  add-new-address-btn.action {
+		        margin-left: 23px;
+		}
+		  input#keyword.personal-address-search-field {
+			width: 81%;
+			float: left;
+			height: 51px !important;
+		  }
+		}
+		.personal-address-search-container {
+			.filter-label {
+				margin-top: 20px;
+				float: left;
+				padding: 10px 2px;
+			}
+			.address-filter-section.flex-container {
+				margin-top: 10px;
+				float: left;
+				display: contents;
+			}
+			.secondary.add-new-address {
+				margin-bottom:10px;
+				float: left;
+				margin-left: 23px;
+			}
+			.address-filter-section a.search-bar-nav {
+				a.search-address-alphabet.search-bar-nav.selected-alphabet {
+					border: 4px solid #4D148C;
+				}
+			}
+		}
+		.selected-delete-container {
+			display: block;
+			float: left;
+			margin: 10px 0;
+		}
+
+		div#addressModal button.btn-address-add {
+			margin-left: 1px;
+			padding: 15px 25px;
+			height: 50px;
+			margin-top: 10px;
+			width: 95%;
+		}
+
+		div#addressModal button.btn-address-cancel {
+			padding: 12px 121px;
+			justify-content: center;
+		}
+
+		div#addressModal label.residence_check {
+			font-size: 12px;
+			margin-left: 1px;
+		}
+
+		div#addressModal .personal-modal-content {
+			padding: 20px;
+			width: 80%;
+			height: auto;
+		}
+
+		div#addressModal .form-row {
+			display: block;
+		}
+
+		div#addressModal .personal-modal-header {
+			margin-left: 38px;
+		}
+	}
+
+}
+@media screen and (min-width:320px) and (max-width:369px) {
+	.personal-address-search-container .address-filter-section a.clear-address-search {
+		padding: 12px 0px;
+		font-size: 15px;
+		display: block;
+		margin-top: 46px;
+	}
+	 .personaladdressbook-index-view .personal-address-search-container .address-filter-section a.search-address-alphabet.search-bar-nav
+	{
+	  padding: 10px 9px;
+	  position: inherit;
+	  margin-top: 0px;
+	  display: inline-block;
+	}
+}
+
+@media screen and (min-width:425px) and (max-width: 768px) {
+	.limiter {
+		position: absolute;
+		right: 0px;
+	}
+}

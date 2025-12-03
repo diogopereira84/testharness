@@ -1,0 +1,91 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$secondLevelCategoryConf = $block->getData('static_link_title_conf');
+$categoryLinkUrl = $block->getData('static_link_url');
+$staticLinkTitle = $block->getData('static_link_title');
+$extrenalLinkConfig = $block->getData('external_link_config');
+$staticUrlText = $block->getData('static_url_text');
+$thirdLevelCond = false;
+$staticLinkOpenConfigs = [];
+$staticLinksUrls = [];
+$staticLinksTexts = [];
+if ($extrenalLinkConfig || $extrenalLinkConfig == "0") {
+    $staticLinkOpenConfigs = explode(",", $extrenalLinkConfig);
+    $staticLinksUrls = explode(",", $block->getData('static_url_link'));
+    $staticLinksTexts = explode(",", $staticUrlText);
+    $staticLinkOpenConfigsArr = $staticLinkOpenConfigs;
+}
+
+if (!empty($staticLinkOpenConfigs)) {
+    $staticLinksSortOrderData = $block->getData('static_url_sort_order');
+    $staticLinksAnalytics = explode(",", $block->getData('static_url_data_analytic') ?? '');
+    $categoryLevel = $block->getData('static_link_level');
+    if ($staticLinksSortOrderData) {
+        $staticLinksSortOrders = explode(",", $staticLinksSortOrderData);
+        uasort($staticLinksSortOrders, fn($a, $b) => $a <=> $b);
+        $staticLinkOpenConfigsArr = $staticLinksSortOrders;
+    }
+}
+if (($extrenalLinkConfig || $extrenalLinkConfig == "0") && $staticUrlText &&
+!empty($staticLinkOpenConfigs) && strlen(implode($staticLinksTexts)) != 0) {
+    $thirdLevelCond = true;
+}
+?>
+<?php if ($secondLevelCategoryConf || $thirdLevelCond): ?>
+<div class="block widget block-new-products-names megamenu-custom">
+    <?php if ($secondLevelCategoryConf && $staticLinkTitle): ?>
+    <div class="block-title" tabindex="<?= $categoryLinkUrl ? '' : 0 ?>">
+        <strong>
+            <?php
+            if ($categoryLinkUrl):
+                $secondLevelTargetConfig = $block->getData('open_link_new_tab') ? '_blank' : '' ;
+                $secondLevelDataAnalytic = $block->getData('static_link_data_analytic');
+                ?>
+                <a href="<?= $block->escapeUrl($categoryLinkUrl)?>"
+                    title="<?= $block->escapeHtmlAttr($staticLinkTitle) ?>"
+                    target="<?= $block->escapeHtmlAttr($secondLevelTargetConfig) ?>"
+                    data-analytics="<?= $block->escapeHtmlAttr($secondLevelDataAnalytic) ?>"
+                    class="product-item-link"
+                    <?= /* @noEscape */$secureRenderer->renderEventListener('onclick', 'megamenuGDLScript(this);') ?>>
+                    <?= $block->escapeHtml($staticLinkTitle) ?>
+                </a>
+            <?php else: ?>
+                <?= $block->escapeHtml($staticLinkTitle) ?>
+            <?php endif; ?>
+        </strong>
+        <span class="plus"></span>
+    </div>
+    <?php endif; ?>
+    <?php if ($thirdLevelCond): ?>
+    <div class="block-content">
+        <ol class="product-items product-items-names">
+            <?php
+            foreach ($staticLinkOpenConfigsArr as $key => $staticLinkOpenConfig):
+                if ($staticLinksTexts[$key] && $staticLinksUrls[$key]) {
+                    $targetConfig = $staticLinkOpenConfigs[$key] ? '_blank' : '' ;
+                    $thirdLevelDataAnalytic = $staticLinksAnalytics[$key] ?? '';
+                    ?>
+                <li class="product-item">
+                    <strong class="product-item-name static-link">
+                        <a href="<?= $block->escapeUrl($staticLinksUrls[$key]) ?>"
+                        title="<?= $block->escapeHtmlAttr($staticLinksTexts[$key]) ?>"
+                        target="<?= $block->escapeHtmlAttr($targetConfig) ?>"
+                        data-analytics="<?= $block->escapeHtmlAttr($thirdLevelDataAnalytic) ?>"
+                        sort-order="<?= $block->escapeHtmlAttr($staticLinksSortOrders[$key] ?? '') ?>"
+                        class="product-item-link"
+                        <?= /* @noEscape */$secureRenderer->renderEventListener('onclick', 'megamenuGDLScript(this);') ?>>
+                        <?= $block->escapeHtml($staticLinksTexts[$key]) ?>
+                        </a>
+                    </strong>
+                </li>
+                <?php }
+                endforeach; ?>
+        </ol>
+    </div>
+        <?php endif; ?>
+</div>
+<?php endif; ?>

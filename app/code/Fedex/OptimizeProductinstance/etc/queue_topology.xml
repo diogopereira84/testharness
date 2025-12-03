@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:noNamespaceSchemaLocation="urn:magento:framework-message-queue:etc/topology.xsd">
+    <exchange name="magento.cleanQuoteItemInstance" type="topic" connection="amqp">
+        <binding id="magento.cleanQuoteItemInstance.cleanQuoteItemInstanceQueue" topic="cleanQuoteItemInstance" destinationType="queue"
+    destination="cleanQuoteItemInstanceQueue"/>
+    </exchange>
+    <exchange name="magento.cleanUpdateQuoteItemInstance" type="topic" connection="amqp">
+        <binding id="magento.cleanUpdateQuoteItemInstance.cleanUpdateQuoteItemInstanceQueue" topic="cleanUpdateQuoteItemInstance" destinationType="queue"
+    destination="cleanUpdateQuoteItemInstanceQueue"/>
+    </exchange>
+    <exchange name="magento.updateOrderItemInstance" type="topic" connection="amqp">
+        <binding id="magento.updateOrderItemInstance.updateOrderItemInstanceQueue" topic="updateOrderItemInstance" destinationType="queue"
+    destination="updateOrderItemInstanceQueue"/>
+    </exchange>
+</config>

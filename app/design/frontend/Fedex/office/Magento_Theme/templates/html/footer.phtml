@@ -1,0 +1,46 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+    $isCommercialStore = $this->helper('Fedex\Commercial\Helper\CommercialHelper')->isGlobalCommercialCustomer();
+    $helperData = $this->helper('Fedex\Delivery\Helper\Data');
+    $isLoggedIn = $helperData->isCommercialCustomer();
+    $apiToken = $helperData->getApiToken();
+    $authToken = "";
+    if(isset($apiToken['token'])) {
+        $authToken = $apiToken['token'];
+    }
+?>
+<footer class="footer-container" role="contentinfo">
+    <div class="footer">
+    <?php if(!$isLoggedIn): ?>
+    <?php echo $this->getLayout()
+    ->createBlock('Magento\Cms\Block\Block')
+    ->setBlockId('retail_footer')
+    ->toHtml(); ?>
+    <?php endif; ?>
+    <?php if($isCommercialStore): ?>
+    <?php echo $this->getLayout()
+    ->createBlock('Magento\Cms\Block\Block')
+    ->setBlockId('commercial_footer')
+    ->toHtml(); ?>
+    <?php endif; ?>
+    </div>
+</footer>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Theme/js/html/footer": {
+                "mediaJsImgpath": "<?= $helperData->getMediaUrl() ?>",
+                "viewJsImgpath": "<?= $block->getViewFileUrl('') ?>",
+                "alertImgPath": "<?= $block->getViewFileUrl('images/Alert.svg') ?>",
+                "configuratorUrl": "<?= $helperData->getConfiguratorUrl() ?>",
+                "siteName": "<?= $helperData->getCompanySite() ?>",
+                "authToken": "<?= $authToken ?>"
+            }
+        }
+    }
+</script>

@@ -1,0 +1,47 @@
+<?php
+
+use Fedex\EnvironmentManager\Block\System\Config\CsvExportButton;
+
+/**
+ * @var $block CsvExportButton
+ */
+?>
+<script>
+    require([
+        'jquery',
+        'domReady!',
+    ], function ($) {
+        $('#export_toggle_report_csv').click(function () {
+            let csvRowsData = [];
+            let csvContent = "data:text/csv;charset=utf-8,";
+            $("tr[id*='row_environment_toggle']").each(function (i) {
+                if ($(this).is(':visible')) {
+                    let label = $(this).find('label').first().text();
+                    label = '"' + label.replace(/\n+/g, '').trim() + '"';
+                    let value = $(this).find('select').first().find('option:selected').first().text();
+                    let key = $(this).find('select').attr('name') ?? '';
+                    if(key.length > 0){
+                        key = /groups\[environment_toggle]\[fields]\[(.*)]\[value]/.exec(key)[1];
+                    }
+                    csvRowsData.push([label,key,value]);
+                }
+            });
+            csvRowsData.shift();
+            let csvRowsAndHeaders = [['Toggle','Key','Status']].concat(csvRowsData);
+            csvContent = csvContent + csvRowsAndHeaders.map(e => e.join(",")).join("\n");
+            let encodedUri = encodeURI(csvContent)
+            let downloadElementName = 'feature_toggles_export';
+            let timestamp = Date.now();
+            let environment = window.location.host.split('.')[0];
+            $('<a>', {
+                id: downloadElementName,
+                href: encodedUri,
+                download: environment+'_'+downloadElementName+'_'+timestamp+'.csv'
+            }).appendTo('body');
+            let downloadObject = $('#' + downloadElementName);
+            downloadObject[0].click();
+            downloadObject.remove();
+        });
+    });
+</script>
+<?= $block->getButtonHtml(); ?>

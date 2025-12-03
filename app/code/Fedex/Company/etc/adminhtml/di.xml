@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\Company\Model\Company\DataProvider" type="Fedex\Company\Model\Company\DataProvider" />
+    <preference for="Magento\Company\Controller\Adminhtml\Index\Save" type="Fedex\Company\Controller\Adminhtml\Index\Save" />
+    <type name="Magento\Company\Controller\Adminhtml\Index\Edit">
+        <plugin name="validate_credit_card_token_expiry_datetime" type="Fedex\Company\Plugin\Adminhtml\Controller\Index\Edit" sortOrder="2" />
+    </type>
+    <type name="Fedex\Company\Controller\Adminhtml\Index\Save">
+        <plugin name="Fedex_Company_Plugin_Fedex_Company_Controller_Adminhtml_Index_Save" type="Fedex\Company\Plugin\Adminhtml\Controller\Index\Save" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Company\Model\Company\Structure">
+        <plugin name="Fedex_Company_Plugin_Model_Company_Structure" type="Fedex\Company\Plugin\Model\Company\StructurePlugin" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Fedex\Company\Model\Company\DataProvider">
+        <plugin name="fedex_core_overridden_data_provider" type="Fedex\Company\Plugin\Model\Company\DataProvider" sortOrder="10" disabled="false"/>
+    </type>
+    <type name="Magento\Company\Model\Email\Sender">
+        <plugin name="disable_assign_super_user_notification_email" type="Fedex\Company\Plugin\Model\Email\Sender" sortOrder="1"/>
+    </type>
+</config>

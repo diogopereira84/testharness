@@ -1,0 +1,87 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+$expiryitemerrormsg= $block->getData('expiry.msg.view.model');
+$unavailableModel = $block->getData('product_availability_view_model');
+$quoteDetailsViewModel = $block->getData('quote.details.view.model');
+$uploadToQuoteSummaryExpiredTitle  = $quoteDetailsViewModel?->getUploadToQuoteSummaryExpiredTitle();
+$uploadToQuoteSummaryExpiredMessage  = $quoteDetailsViewModel?->getUploadToQuoteSummaryExpiredMessage();
+
+?>
+<div data-bind="scope: 'check-products-availability-scope'">
+<?php if ($expiryitemerrormsg->isCustomerLoggedIn()): ?>
+    <?php if (!empty($expiryitemerrormsg->getExpiredItems()) && !$unavailableModel->checkCartHaveUnavailbleProduct()): ?>
+        <div class="expireditem-error-box" style="display: none;" data-bind="visible: !hasDisabledProducts()">
+            <div class="expireditems-error-box-inner">
+                <?php $errorIcon = 'images/expired-items/cross-cricle.png';?>
+                    <span>
+                        <img src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($errorIcon)); ?>"
+                        alt="error icon" />
+                    </span>
+            </div>
+            <div class="expireditem-error-msg">
+                <p class="expireditem-title">
+                    <?= $escaper->escapeHtml(__($uploadToQuoteSummaryExpiredTitle)) ?>
+                </p>
+                <p class="error-msg">
+                    <?= $escaper->escapeHtml(__($uploadToQuoteSummaryExpiredMessage)) ?>
+                </p>
+            </div>
+            <div class="img-close-icon">
+                <?php $crossIcon = 'images/expired-items/cross-icon.png';?>
+                <span>
+                    <img  src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($crossIcon)); ?>"
+                    alt="close icon" tabindex="0" />
+                </span>
+            </div>
+        </div>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Fedex_ExpiredItems/js/cart_expiry_messages": {}
+                }
+            }
+        </script>
+    <?php endif;?>
+<?php endif;?>
+    <div class="expireditem-error-box" style="display: none;" data-bind="visible: hasDisabledProducts()">
+        <div class="expireditems-error-box-inner">
+            <?php $errorIcon = 'images/expired-items/cross-cricle.png';?>
+                <span>
+                    <img src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($errorIcon)); ?>"
+                    alt="error icon" />
+                </span>
+        </div>
+        <div class="expireditem-error-msg">
+            <p class="expireditem-title">
+                <?= $escaper->escapeHtml(__($uploadToQuoteSummaryExpiredTitle)) ?>
+            </p>
+            <p class="error-msg">
+                <?= $escaper->escapeHtml(__($uploadToQuoteSummaryExpiredMessage)) ?>
+            </p>
+        </div>
+        <div class="img-close-icon">
+            <?php $crossIcon = 'images/expired-items/cross-icon.png';?>
+            <span>
+                <img  src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($crossIcon)); ?>"
+                alt="close icon" tabindex="0" />
+            </span>
+        </div>
+    </div>
+</div>
+<script type="text/x-magento-init">
+    {
+    "*": {
+        "Magento_Ui/js/core/app": {
+            "components": {
+                "check-products-availability-scope": {
+                    "component": "Fedex_Cart/js/check-products-availability"
+                }
+            }
+        }
+    }
+}
+</script>

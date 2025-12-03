@@ -1,0 +1,1240 @@
+/**
+* Copyright © FedEx, Inc. All rights reserved.
+* See COPYING.txt for license details.
+*/
+
+//  variables
+@temporary-text-color : @fx-red-100;
+@border-bottom : #ced5d9;
+@button-color : #0078b4;
+@color-white : @fx-white-100;
+@customer-menu-border : #bbb;
+@header-background : #f4f4f4;
+@welcome-user-text : @fx-grey-1100;
+@customer-menu-hover-color: #0078b4;
+@customer-menu-text-color : @fx-grey-1200;
+@my-orders-top-border : @fx-grey-900;
+@on-hover-menu-color :#6f7f87;
+@product-box-color :#f0f8ff;
+@product-box-background-color :#2f4f4f;
+@sensitive-data-workflow-msg :@fx-purple-500;
+@sensitive-data-workflow-background :#f7f9fa;
+@selected-category-color :#007AB7;
+@product-border-color :#D8D8D8;
+@minicart-item-color : @fx-grey-1200;
+@disabled-button-color : @fx-grey-900;
+@retry-button-color : @fx-orange-500;
+@retry-button-text-color :@fx-white-100;
+@error-msg-text-color : #000000;
+@error-title-oops : @fx-grey-1200;
+@error-border-color :@fx-grey-900;
+@popup-background-color : rgba(51,51,51,.65);
+
+.cms-epro-home {
+    @media(min-width: 1201px) {
+        .home-container-new.home-container-new-epro {
+            margin-top: 36PX;
+        }
+    }
+
+    .page-wrapper .copyright {
+        display: none;
+    }
+
+    .breadcrumbs {
+        margin-top: 42px;
+    }
+
+    #maincontent.page-main {
+        margin-top: 10px;
+    }
+
+    .page-wrapper {
+        .page-header .header-top .header-nav-pannel {
+            display: block;
+            max-height: 50px;
+        }
+
+        .nav-sections {
+            background: @color-white;
+
+            nav.navigation {
+                background: @color-white;
+                font-weight: 400;
+                width: 68%;
+                padding-left: 55px;
+
+                ul#ui-id-3 {
+                    align-items: center;
+                    display: flex;
+                    height: 72px;
+                    margin-left: 65px;
+                    width: max-content;
+                }
+
+                ul {
+
+                    li.level0.active,
+                    .has-active {
+                        >a {
+                            background-color: @on-hover-menu-color ;
+                            border-style: none;
+                            color: @color-white;
+                        }
+                    }
+
+                    >li.level0 {
+                        a {
+                            color: @welcome-user-text;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 15px;
+                            padding-bottom: 11px;
+                            padding-right: 9.5px;
+                            padding-top: 19px;
+
+                            >span.ui-menu-icon {
+                                float: right;
+                                padding-left: 8.5px;
+                                position: relative;
+                                right: 0;
+                            }
+                        }
+
+                        &:hover {
+                            >a {
+                                background: @on-hover-menu-color;
+                                color: @color-white !important;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .category-tree .selected-category a {
+        color: @selected-category-color !important;
+    }
+
+    .cart-totals tr.discount {
+        display: none;
+    }
+
+    .columns .column.main {
+        padding-bottom: 0 !important;
+    }
+
+    button.cf-fbt-ivt {
+        display: none;
+    }
+
+    .products.wrapper~.toolbar .sorter {
+        display: none;
+    }
+
+    .wlgn-enable-page-header {
+        background-color: @header-background;
+        border-bottom: 1px solid @my-orders-top-border;
+        height: 50px;
+
+        .panel.wrapper {
+            display: none;
+        }
+
+
+        .header.content {
+            border-bottom: solid 1px @my-orders-top-border;
+            clear: both;
+            display: block;
+            height: 72px;
+            max-width: 100%;
+            padding: 0;
+            min-height: 79px;
+
+            .logo {
+                margin: 0;
+
+                img {
+                    margin: 3px 0 3px 51px;
+                    height: 65px;
+                }
+            }
+
+            .minicart-wrapper {
+                display: none;
+            }
+        }
+
+        .header-nav-pannel {
+            padding: 0;
+        }
+
+        .right-top-header-links {
+            margin-right: 10px;
+
+            .minicart-wrapper {
+                .action.showcart:before {
+                    display: none !important;
+                }
+            }
+
+            .epro-right-header-links {
+                .epro-login-msg {
+                    display: flex;
+
+                    .epro-welcome {
+                        margin-bottom: 18px;
+                        margin-right: 4.5px;
+                        margin-top: 19px;
+
+                        span {
+                            color: @welcome-user-text;
+                            font-family: 'FedEx Sans Regular';
+                            font-size: 12px;
+                            height: 15px;
+                            letter-spacing: 0;
+                            line-height: 15px;
+                            text-align: right;
+                            width: 87px;
+                        }
+                    }
+
+                    .epro-customer-dropdown {
+                        height: 32px;
+                        margin-bottom: 9.71px;
+                        margin-top: 8.29px;
+                        width: 32px;
+                        cursor: pointer;
+
+                        .customerdropdown {
+                            clear: both;
+                            display: block;
+                        }
+                    }
+
+                    .epro-customer-menu {
+                        background: @color-white;
+                        border: 1px solid @customer-menu-border;
+                        box-shadow: 0 3px 4px 0 rgba(0, 0, 0, 0.25);
+                        box-sizing: border-box;
+                        position: absolute;
+                        right: auto;
+                        top: 49px;
+                        z-index: 101 !important;
+
+                        .header.links {
+                            height: 116px;
+                            list-style: none !important;
+                            padding: 17px 23px 17px 25px;
+                            width: 200px;
+
+                            li {
+                                a:hover {
+                                    color: @customer-menu-text-color !important;
+                                    text-decoration: underline !important;
+                                }
+                            }
+
+                            .epro-order-history {
+                                a {
+                                    color: @customer-menu-hover-color;
+                                    display: block;
+                                    font-family: 'FedEx Sans Medium';
+                                    font-size: 13px;
+                                    letter-spacing: 0;
+                                    line-height: 24px;
+                                    margin: 0;
+                                    padding-top: 7px;
+                                    width: 100% !important;
+                                }
+                            }
+
+                            .epro-order-history.hrborder {
+                                a {
+                                    border-top: 1px solid @fx-grey-900;
+                                }
+
+                            }
+                        }
+                    }
+
+                    img.epro-login-icon {
+                        height: 21.33px;
+                        padding: 5.33px;
+                        width: 21.33px;
+                    }
+                }
+            }
+        }
+    }
+
+    /* end product list */
+    /* minicart styles */
+    .minicart-wrapper {
+        .block-minicart {
+            padding: 0;
+            padding-bottom: 15px;
+            margin-top: 12px;
+
+            .action.close {
+                display: none;
+            }
+
+            .items-total {
+                margin: 12px 0 0 31px;
+            }
+
+            .subtotal {
+                margin: 12px 31px 0 0;
+                float: right;
+            }
+
+            .actions {
+                >.primary {
+                    clear: left;
+                    padding-top: 16px;
+                    margin-left: 31px;
+                    margin-right: 31px;
+                    display: inline-block;
+                    width: calc(~'100% - 62px');
+
+                    button.checkout-mini {
+                        letter-spacing: 1.19px;
+                        font-size: 19px;
+                    }
+                }
+
+                a.action.viewcart {
+                    color: @customer-menu-hover-color;
+                    font-size: 14px;
+                    text-decoration: underline;
+
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            .minicart-items-wrapper {
+                margin: 0;
+                border-left: 0;
+                border-right: 0;
+                max-height: 270px;
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding: 0;
+                min-height: 140px;
+                box-sizing: border-box;
+            }
+
+            .minicart-items {
+                .product-item {
+                    >.product {
+                        padding-left: 8px;
+                        padding-right: 18px;
+                    }
+
+                    .product-item-photo {
+                        .product-image-container {
+                            border: 0;
+                        }
+                    }
+
+                    .product-item-details {
+                        .product-item-name {
+                            margin-top: 13px;
+                            font-size: 14px;
+                            color: @minicart-item-color;
+                        }
+
+                        .product-item-pricing {
+                            .price-container {
+                                .price {
+                                    font-weight: 400;
+                                    font-size: 14px;
+                                    color: @minicart-item-color;
+                                }
+                            }
+                        }
+
+                        .details-qty {
+                            input.item-qty.cart-item-qty {
+                                border: 1px solid @on-hover-menu-color;
+                                height: 40px;
+                                width: 72px;
+                                font-size: 16px;
+                                color: @minicart-item-color;
+                            }
+
+                            label.label {
+                                font-size: 14px;
+                                color: @minicart-item-color;
+                                font-weight: 400;
+                                margin-right: 2px;
+                            }
+                        }
+                    }
+
+                    .product-item-photo {
+                        width: 80px;
+                        height: 80px;
+                        text-align: center;
+                        vertical-align: middle;
+                        padding-top: 16px;
+                        box-sizing: border-box;
+                    }
+                }
+            }
+
+        }
+    }
+
+    /*end minicart style*/
+    .opc-block-summary {
+        .table-totals {
+            .estimated {
+                strong {
+                    font-family: 'Fedex Sans Medium';
+                    font-weight: 500;
+                    font-size: 16px;
+                }
+            }
+
+            .grand {
+                strong {
+                    font-size: 16px;
+                }
+
+                .amount {
+                    strong {
+                        font-size: 16px;
+                        font-family: 'Fedex Sans Regular';
+                    }
+                }
+            }
+
+            .estimated_shipping_total {
+                font-size: 16px;
+            }
+        }
+    }
+
+    .form.minisearch {
+        .mobile-search-field {
+            height: 55px !important;
+        }
+    }
+
+}
+
+.cms-epro-home.checkout-index-index {
+
+    .wlgn-enable-page-header .header.content {
+        border: none;
+    }
+
+    .wlgn-enable-page-header {
+        background-color: @fx-white-100;
+        border-bottom: none;
+    }
+
+    .opc-progress-bar {
+        margin: 63px 0px 20px;
+    }
+
+    .wlgn-enable-page-header .header.content .logo img {
+        margin: 3px 0 3px 5px;
+        height: 65px;
+    }
+}
+
+.cms-epro-home.customer-account-index {
+    .header.links {
+        .epro-order-history.epro-customer-account {
+            a {
+                color: @customer-menu-text-color !important;
+            }
+        }
+
+    }
+}
+
+.cms-epro-home.sales-order-history {
+    .header.links {
+        .epro-order-history.epro-sales-history {
+            a {
+                color: @customer-menu-text-color !important;
+            }
+        }
+
+    }
+}
+
+.cms-epro-home.negotiable_quote-quote-index {
+    .header.links {
+        .epro-order-history.epro-quote {
+            a {
+                color: @customer-menu-text-color !important;
+            }
+        }
+
+    }
+}
+
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .cms-epro-home {
+        .page-wrapper .sections.nav-sections {
+            margin-bottom: 0;
+        }
+
+        .nav-sections {
+            .navigation #ui-id-2 {
+                max-height: 77px !important;
+            }
+
+            nav.navigation {
+                overflow: hidden;
+                width: 100%;
+
+                ul {
+                    li.level0.nav-1.category-item.first.parent.ui-menu-item {
+                        overflow: hidden;
+                    }
+
+                    li.level0 {
+                        .submenu.ui-menu.ui-widget.ui-widget-content.ui-corner-all {
+                            position: fixed !important;
+                        }
+                    }
+                }
+            }
+        }
+
+        .sections.nav-sections {
+            position: initial;
+
+            .block.block-search-mobile {
+                display: none;
+            }
+        }
+
+        .wlgn-enable-page-header .header.content .logo img {
+            margin: 3px 0 3px 51px;
+            height: 65px;
+        }
+
+        .panel.header-top {
+            flex-flow: row;
+            display: flex;
+            justify-content: flex-end;
+
+            .block.block-search {
+                margin-right: 20px;
+            }
+        }
+
+        .right-top-header-links {
+            .minicart-wrapper {
+                a.action.showcart {
+                    padding-right: 9px !important;
+                    margin-left: 19px !important;
+                }
+            }
+        }
+
+        .mobile-nav-bar.pull-left {
+            display: none;
+        }
+
+        .page-wrapper {
+            .header.content {
+                height: 72px;
+
+                .nav-toggle {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (min-width: 320px) and (max-width: 767.5px) {
+    .cms-epro-home {
+        .sensitive-data {
+            height: 108px;
+            margin-left: 0;
+
+            .logo-img {
+                margin-left: 20px;
+                margin-right: 20px;
+            }
+
+            .content-block {
+                .text-block {
+                    font-size: 12px !important;
+                    line-height: 14px !important;
+                }
+            }
+        }
+
+        .logo-img img {
+            height: 44px;
+            max-width: inherit;
+            width: 33px;
+        }
+
+        .mobile-nav-bar.pull-left {
+            display: none;
+        }
+
+        .page-wrapper {
+            .wlgn-enable-page-header {
+                background-color: @color-white;
+                border-bottom: 0;
+            }
+
+            .header.content {
+                border-bottom: solid 1px @border-bottom;
+                height: 64px;
+                min-height: unset;
+
+                .nav-toggle:before {
+                    color: @fx-grey-500 !important;
+                    font-size: 25px;
+                    margin-right: 10px;
+                }
+
+                .logo img {
+                    margin: 17px 0 17px 12px !important;
+                    max-width: fit-content;
+                }
+            }
+        }
+
+        .nav-sections {
+            nav.navigation {
+                width: 100%;
+
+                ul {
+
+                    li.level0.active,
+                    .has-active {
+                        >a {
+                            background-color: @fx-white-100 !important;
+                            border-style: none;
+                            color: @customer-menu-text-color !important;
+                        }
+                    }
+
+                    >li.level0 {
+                        .level-top {
+                            color: @customer-menu-text-color;
+                            font-weight: 100;
+                            text-transform: capitalize;
+                            padding-left: 26px;
+                        }
+                    }
+                }
+            }
+
+            .nav-sections-item-content {
+                margin-top: 0;
+
+                .block.block-search-mobile {
+                    .form.minisearch {
+                        .field.search {
+                            .control {
+                                .input-text.mobile-search-field {
+                                    background: @color-white;
+                                    font-family: 'FedEx Sans Regular';
+                                    line-height: 24px;
+                                    padding-left: 20px;
+                                }
+
+                                .input-text.mobile-search-field::placeholder {
+                                    color: #6F7F87;
+                                    font-size: 15px !important;
+                                }
+                            }
+                        }
+
+                        .actions button {
+                            background: @color-white;
+                            border-left: solid 2px @border-bottom !important;
+                            border-radius: 0;
+                            font-weight: 200;
+                            opacity: 1 !important;
+                            padding: 0;
+                        }
+
+                        .actions button::before {
+                            color: #6F7F87;
+                        }
+                    }
+                }
+
+                .minicart-wrapper {
+                    .action.showcart {
+                        .mobile-cart-icon {
+                            padding-top: 9px;
+
+                            img {
+                                height: 21px;
+                            }
+
+                            .mobile-cart-text {
+                                color: @fx-grey-1100;
+                                font-size: 12px;
+
+                                .counter-number {
+                                    text-shadow: none;
+                                }
+                            }
+                        }
+                    }
+
+                    .action.showcart:before {
+                        display: none;
+                    }
+
+                }
+            }
+        }
+    }
+}
+
+//  Desktop Screen
+@media only screen and (min-width:1440px) {
+    .pagebuilder-column.epro-block-content {
+        height: 247px;
+        margin-bottom: 383px;
+        margin-left: 507px;
+        margin-right: 507px;
+        margin-top: 54px;
+        width: 426px !important;
+    }
+
+    .epro-text-div {
+        align-items: center;
+
+        h2.epro-temporary-text {
+            margin-bottom: 0;
+            margin-left: 409.5px;
+            margin-right: 409.5px;
+            margin-top: 110px;
+        }
+    }
+}
+
+/* Product list page CSS  */
+
+@media only screen and (min-width:1024px) {
+    .cms-epro-home {
+        .panel.header-top {
+            display: flex !important;
+            flex-flow: row !important;
+            justify-content: flex-end !important;
+        }
+
+        .header-nav-pannel {
+            order: 1 !important;
+        }
+
+        .block.block-search {
+            order: 2 !important;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1040px) {
+    .cms-epro-home {
+        .mobile-nav-bar.pull-left {
+            display: none;
+        }
+    }
+}
+
+@media only screen and (min-width:768px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .nav-sections {
+                nav.navigation {
+                    ul {
+
+                        li.level0.active,
+                        .has-active {
+                            >a {
+                                color: @color-white !important;
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .right-top-header-links {
+            .minicart-wrapper {
+                a.showcart {
+                    &::after {
+                        top: -3px;
+                    }
+                }
+            }
+        }
+
+        .page-footer {
+            background: @color-white;
+            display:none;
+        }
+    }
+}
+
+@media only screen and (max-width:767.5px) {
+    .cms-epro-home {
+        .page-wrapper {
+            left: 0px !important;
+
+            .nav-sections {
+                nav.navigation {
+                    width: 100% !important;
+                    padding-left: 0px !important;
+
+                    .parent {
+                        position: relative;
+                        padding-left: 0px !important;
+
+                        .level-top {
+                            &::after {
+                                top: 19px;
+                                right: -12px;
+                                color: @customer-menu-text-color;
+                                padding-right: 0;
+                                margin-right: 30px;
+                            }
+
+                            span {
+                                margin-left: 0 !important;
+                            }
+                        }
+                    }
+
+                    ul {
+                        li {
+                            a {
+                                span {
+                                    color: @customer-menu-text-color;
+                                    font-weight: 400;
+                                    margin-left: 0 !important;
+                                }
+
+                                padding-left: 20px !important;
+                            }
+
+                            &:hover {
+                                >a {
+                                    background: @color-white !important;
+                                    color: @color-white !important;
+                                }
+                            }
+                        }
+                    }
+
+                    .submenu {
+                        padding-left: 15px
+                    }
+
+                }
+            }
+        }
+
+        .footer.content {
+            border-top: none;
+        }
+    }
+}
+
+@media only screen and (max-width:1023px) {
+    .cms-epro-home {
+        .page-wrapper {
+            .breadcrumbs {
+                margin-top: 4% !important;
+            }
+        }
+    }
+}
+
+.commercial-epro-store.cms-index-index {
+    .desktop-view {
+        .order-count-loader {
+            .product-loader {
+                width: 100px;
+                object-fit: none;
+            }
+        }
+    }
+}
+.selfreg-login-fail,
+.selfreg-landing-index, .oauth-fail-index {    
+    #retry-login{
+        background-color: @retry-button-color;
+        color: @retry-button-text-color;
+        height: 56px;
+        font-family: 'Fedex Sans Bold';
+        font-weight: 700;
+        font-size:19px;
+        letter-spacing:1.19px;
+        text-transform: uppercase;
+    }
+    .error-h3-msg{
+        font-weight: 300;
+        text-align: center;
+        font-family: 'Fedex Sans Light';
+        color: @fx-grey-500;
+    }
+    .error-message-api-fail{
+        Height : 112px;
+        text-align: center;
+        font-size:24px;
+        font-weight: 300;  
+    }
+    .error-oops-msg{
+        font-weight: 300;
+        text-align: center;
+        font-family: 'FedEx Sans Light';
+        color: @fx-grey-500;
+    }
+    .columns .column.main{
+        padding-bottom: 0px !important;
+    }
+    .icon-txt-content{
+        Height:224px;
+    }
+    .warrning-con-img{
+        text-align: center;
+    }
+    .warrning-con-img img{
+        width: 58.67px;
+        height: 51.33px;
+    }   
+    .api-error-msg{
+        font-weight: 300;
+        text-align: center;
+        font-family: 'FedEx Sans Light';
+        color: @error-msg-text-color;
+    }
+    .popup {       
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        overflow: auto;
+        background-color: @popup-background-color;
+        display: none;
+    }
+    .popup-content {
+        background-color: @retry-button-text-color;
+        margin: 10% auto;
+        font-weight: bolder;
+        top: 296px;
+        left: 392px;
+    }
+    .popup-content button {
+        display: block;
+        margin: 0 auto;
+    }
+    .show {
+        display: block;
+    }
+    h1 {
+        color: green;
+    }
+    .megamenu-primary-menu.oauth-fail-index .page-wrapper .page-header.hborder{
+        margin-top:20px;
+        border-bottom:1px solid @error-border-color;
+    }
+    
+    .page-wrapper .footer-container .footer > [data-content-type='row'] > [data-element='inner'] {
+    padding: 0px !important;
+    }   
+     
+}
+
+@media only screen and (min-width: 1440px) {
+    .oauth-fail-index.profile-error-modal{
+        #myPopup {
+            display: none;
+        }
+        .profile_error_message_container {
+            display: flex;
+            width: 100%;
+            min-height: 889px;
+            flex-shrink: 0;
+            background: rgba(51, 51, 51, 0.65);
+        }
+        .profile_error_message_container_content{
+            margin:233px auto;
+            float:none;
+            display:block;
+            width: 656px;
+            gap: 40px;
+            background: @fx-white-100;
+            height:auto;
+            min-height:432px;
+        }
+        .profile_error_message_container_content_sub_content{
+            margin: 64px 48px 48px 48px;
+        }
+        .profile_error_warrning_icon_img{
+            display: flex;
+            width: 88px;
+            height: 88px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin:0 auto;
+            float:none;
+        }
+        .profile_error_oops {
+            margin-top: 24px;
+        }
+        .profile_error_oops h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_msg {
+            margin-top: 16px;
+        }
+        .profile_error_msg h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_retry_btn{
+            margin-top: 40px;
+        }
+        .profile_error_retry_btn button{
+            display: flex;
+            padding: 16px 24px;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            flex: 1 0 0;
+            height:56px;
+            width:560px;
+            margin: 0px auto;
+            float: none;
+            background:@fx-orange-500;
+            color:@fx-white-100;
+            text-transform: uppercase;
+            font-family: 'FedEx Sans Bold';
+            font-size: 19px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 24px; /* 126.316% */
+            letter-spacing: 1.188px;
+            text-transform: uppercase;
+            border-radius:0;
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .oauth-fail-index.profile-error-modal{
+        #myPopup {
+            display: flex;
+        }
+        .profile_error_message_container {
+            display: none;
+        }
+    }
+}
+@media only screen and (max-width:1439px) and (min-width: 1200px){
+    .oauth-fail-index.profile-error-modal{
+        #myPopup {
+            display: none;
+        }
+        .profile_error_message_container {
+            display: flex;
+            width: 100%;
+            min-height: 889px;
+            flex-shrink: 0;
+            background: rgba(51, 51, 51, 0.65);
+        }
+        .profile_error_message_container_content{
+            margin:233px auto;
+            float:none;
+            display:block;
+            width: 656px;
+            gap: 40px;
+            background: @fx-white-100;
+            height:auto;
+            min-height:432px;
+        }
+        .profile_error_message_container_content_sub_content{
+            margin: 64px 48px 48px 48px;
+        }
+        .profile_error_warrning_icon_img{
+            display: flex;
+            width: 88px;
+            height: 88px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin:0 auto;
+            float:none;
+        }
+        .profile_error_oops {
+            margin-top: 24px;
+        }
+        .profile_error_oops h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_msg {
+            margin-top: 16px;
+        }
+        .profile_error_msg h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_retry_btn{
+            margin-top: 40px;
+        }
+        .profile_error_retry_btn button{
+            display: flex;
+            padding: 16px 24px;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            flex: 1 0 0;
+            height:56px;
+            width:560px;
+            margin: 0px auto;
+            float: none;
+            background:@fx-orange-500;
+            color:@fx-white-100;
+            text-transform: uppercase;
+            font-family: 'FedEx Sans Bold';
+            font-size: 19px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 24px;
+            letter-spacing: 1.188px;
+            text-transform: uppercase;
+        }
+    }
+}
+@media only screen and (max-width: 1199px) and (min-width: 768px) {
+    .oauth-fail-index.profile-error-modal {
+        #myPopup {
+            display: none;
+        }
+        .profile_error_message_container {
+            display: flex;
+            width: 100%;
+            min-height: 889px;
+            flex-shrink: 0;
+            background: rgba(51, 51, 51, 0.65);
+        }
+        .profile_error_message_container_content{
+            margin:244px auto;
+            float:none;
+            display:block;
+            width: 656px;
+            gap: 40px;
+            background: @fx-white-100;
+            height:auto;
+            min-height:432px;
+        }
+        .profile_error_message_container_content_sub_content{
+            margin: 64px 48px 48px 48px;
+        }
+        .profile_error_warrning_icon_img{
+            display: flex;
+            width: 88px;
+            height: 88px;
+            justify-content: center;
+            align-items: center;
+            flex-shrink: 0;
+            margin:0 auto;
+            float:none;
+        }
+        .profile_error_oops {
+            margin-top: 24px;
+        }
+        .profile_error_oops h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_msg {
+            margin-top: 16px;
+        }
+        .profile_error_msg h3{
+            color: @fx-grey-500;
+            text-align: center;
+            font-feature-settings: 'clig' off, 'liga' off;
+            font-family: 'FedEx Sans Light';
+            font-size: 24px;
+            font-style: normal;
+            font-weight: 300;
+            line-height: 32px;
+        }
+        .profile_error_retry_btn{
+            margin-top: 40px;
+        }
+        .profile_error_retry_btn button{
+            display: flex;
+            padding: 16px 24px;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            flex: 1 0 0;
+            height:56px;
+            width:560px;
+            margin: 0px auto;
+            float: none;
+            background:@fx-orange-500;
+            color:@fx-white-100;
+            text-transform: uppercase;
+            font-family: 'FedEx Sans Bold';
+            font-size: 19px;
+            font-style: normal;
+            font-weight: 700;
+            line-height: 24px; /* 126.316% */
+            letter-spacing: 1.188px;
+            text-transform: uppercase;
+            border-radius:0;
+        }
+    }
+}

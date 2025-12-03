@@ -1,0 +1,159 @@
+<?php
+$trackOrderViewModel = $block->getData('track_order_home_view_model');
+$trackOrderViewModel = $trackOrderViewModel ?? $block->getTrackOrderHomeViewModel();
+$deleteRowButtonIconUrl = $block->getViewFileUrl('Fedex_TrackOrder::images/remove-button.png');
+$legacyTrackOrderUrl = $trackOrderViewModel->getLegacyTrackOrderUrl();
+$gtnsOrderIds = $block->getRequest()->getParam('gtns');
+?>
+<?php if (isset($_GET['gtns']) && $gtnsOrderIds != '') {
+    $gtnsOrderArray = explode(',', $gtnsOrderIds);
+    $segregatedOrders = $trackOrderViewModel->getSegregatedOrderIds($gtnsOrderArray);
+?>
+    <h2><?= $trackOrderViewModel->getLabelText(); ?></h2>
+    <?php
+    // XAPI and FUSE Orders 
+    if ($segregatedOrders['apiOrders']) {
+        foreach ($segregatedOrders['apiOrders'] as $apiOrderId) {
+            $apiOrderData = $trackOrderViewModel->getOrderlistApi($apiOrderId);
+            if ($apiOrderData) {
+                if ($apiOrderData['isValid']) {
+                    // Assigning order status to a custom variable to reuse the value in the below helper function
+                    $orderStatus = $apiOrderData['order_details']['order_status'] = $apiOrderData['order_details']['status'];
+                    $orderStatusDetail = $block->getOrderStatusDetail($apiOrderData, 'order_details');
+                    $orderStatusImageUrl = $this->getViewFileUrl('Fedex_TrackOrder::images/' . $orderStatusDetail . '-icon.png');
+                    include($block->getTemplateFile('Fedex_TrackOrder::api_order_details_page.phtml'));
+                }
+            } 
+        }
+    } ?> 
+    
+    <?php
+    // Magento Orders
+    if ($segregatedOrders['magOrders']) {
+        $orderData = $block->getOrderlist($segregatedOrders['magOrders']);
+        if (isset($orderData)) {
+            foreach ($orderData as $key => $value) {
+                if ($orderData[$key]['isValid']) { ?>
+                    <?php if($trackOrderViewModel->toggleCodeImprovementLogic()): ?>
+                        <?= $block->getTrackorderDetailsPage($gtnsOrderIds, $orderData, $key); ?>
+                    <?php else: ?>
+                        <?php
+                        $orderStatus = $trackOrderViewModel->getOrderStatusHeading($orderData, $key);
+                        $orderStatusDetail = $trackOrderViewModel->getOrderStatusDetail($orderData, $key);
+                        $orderMktStatusDetail = $trackOrderViewModel->getMktOrderStatusDetail($orderData, $key);
+                        $isOrderDelayed = $trackOrderViewModel->isOrderDelayed($orderData, $key);
+                        $isMktOrderDelayed = $trackOrderViewModel->isMktOrderDelayed($orderData, $key);
+                        $orderStatusImageUrl = $block->getViewFileUrl(
+                            'Fedex_TrackOrder::images/' . $orderStatusDetail . '-icon.png'
+                        );
+                        ?>
+                        <?php include($block->getTemplateFile('Fedex_TrackOrder::order_details_page.phtml')) ?>
+                    <?php endif;
+                }
+            }
+        }
+    } ?>
+    <div class="row" data-remove-button-image-url="<?= /* @noEscape */
+    $deleteRowButtonIconUrl; ?>"
+            data-legacy-track-order-url="<?= /* @noEscape */
+            $legacyTrackOrderUrl; ?>">
+        <h3 id="gtnsAnotherOrderHeading">Track Another Order</h3>
+        <div id="order_json_data"></div>
+        <div class="track_order_control" id="gtns_track_order_control">
+            <form action="" method="post" id="track_order_form">
+                <div id="order_input_row" class="order_input_row">
+                    <input class="order_input order_input_field" type="text" name="track_order_input[]"
+                            id="track_order_input" placeholder="Search by order number" required pattern="\d+" maxlength="16">
+                    <button class="order_submit_button form_submit_button" id="order_submit_button" type="submit" disabled>
+                        TRACK
+                    </button>
+                </div>
+            </form>
+            <a href="javascript:void(0)" class="track_more_order_button" name="track_more_orders"
+                id="track_more_orders">
+                + Track multiple orders
+            </a>
+            <button class="order_submit_button_small form_submit_button" id="order_submit_button_small"
+                    type="submit" disabled>
+                TRACK
+            </button>
+        </div>
+    </div>
+<?php }
+else { ?>
+    <div class="row marketplace-order-tracking"
+         data-remove-button-image-url="<?= /* @noEscape */
+            $deleteRowButtonIconUrl; ?>"
+         data-legacy-track-order-url="<?= /* @noEscape */
+            $legacyTrackOrderUrl; ?>">
+        <h2><?= $trackOrderViewModel->getLabelText(); ?></h2>
+        <div id="order_json_data"></div>
+        <div class="track_order_control" id="track_order_control">
+            <form action="" method="post" id="track_order_form">
+                <div id="order_input_row" class="order_input_row">
+                    <input class="order_input order_input_field" type="text" name="track_order_input[]"
+                           id="track_order_input" placeholder="Search by order number" required pattern="\d+" maxlength="16">
+                    <button class="order_submit_button form_submit_button" id="order_submit_button" type="submit" disabled>
+                        TRACK
+                    </button>
+                </div>
+            </form>
+            <a href="javascript:void(0)" class="track_more_order_button" name="track_more_orders"
+               id="track_more_orders">
+                + Track more orders</a>
+            <button class="order_submit_button_small form_submit_button" id="order_submit_button_small" type="submit" disabled>
+                TRACK
+            </button>
+        </div>
+    </div>
+<!-- FedEx Tracking Section -->
+<div class="fedex-trackshipment-section">
+        <img src="<?= $block->getViewFileUrl('Fedex_TrackOrder::images/trackshipment.png') ?>" alt="Track Shipment" class="fedex-Track-shipment-Block-icon">
+        <div class="fedex-tracking-text">
+        <h4 class="weight-300 mb-8 fedex-light"><?= $trackOrderViewModel->getTrackOrderHeader(); ?></h4>
+        <p class="weight-300 mb-8 fedex-light"><?= $trackOrderViewModel->getTrackOrderDescription(); ?></p>
+        <a href="<?= $trackOrderViewModel->getTrackShipmentUrl(); ?>" target="_blank" class="fedex-tracking-button">TRACK SHIPMENT</a>
+        </div>
+</div>
+<?php } ?>
+<script type="text/javascript">
+require(['jquery'], function ($) {
+    $(document).ready(function () {
+        function toggleButtonState() {
+            $('.order_input_field').each(function () {
+                var $this = $(this);
+                $this.val($this.val().replace(/[^0-9]/g, ''));
+                if ($this.val().trim() !== '') {
+                    $this.next('.form_submit_button').prop('disabled', false);
+                } else {
+                    $this.next('.form_submit_button').prop('disabled', true);
+                }
+            });
+        }
+
+        $('.order_input_field').on('input', function() {
+            toggleButtonState();
+        });
+
+        toggleButtonState();
+    });
+});
+
+function closeDelayBanner(button) {
+    var banner = button.parentNode;
+    banner.style.display = 'none';
+}
+
+function ShowProducthide(productDetailsSectionId, itemSectionsId, imgid) {
+    var productDetailsBlock = document.getElementById(productDetailsSectionId);
+    var itemDetailsBlock = document.getElementById(itemSectionsId);
+
+    if (productDetailsBlock.style.display == "none" || productDetailsBlock.style.display == '') {
+        productDetailsBlock.style.display = "flex";
+        itemDetailsBlock.style.display = "none";
+    } else {
+        productDetailsBlock.style.display = "none";
+        itemDetailsBlock.style.display = "flex";
+    }
+}
+</script>

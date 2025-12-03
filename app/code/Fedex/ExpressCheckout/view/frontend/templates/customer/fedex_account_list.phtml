@@ -1,0 +1,63 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ *
+ * @var $block \Fedex\ExpressCheckout\Block\CustomerDetails
+ * @var $accountHandler \Fedex\EnhancedProfile\ViewModel\AccountHandler
+ */
+$profileInfo = $block->getCustomerProfileSession();
+$accountHandler = $block->getAccountHandlerViewModel();
+$personalAccountsList = $accountHandler->getActivePersonalAccountList('payment');
+$companyAccountsList = $accountHandler->getActiveCompanyAccountList('payment');
+$appliedAccount = $accountHandler->decideAccountToSelect(
+    $companyAccountsList,
+    $personalAccountsList
+);
+?>
+<div class="fedex-account-list-inner-container">
+    <label class="account-number-label" for="fedex_account_list"><?= $block->escapeHtml('ACCOUNT NUMBER'); ?></label>
+    <div class="selected-fedex-account" tabindex="0">
+        <span class="fedex-account-show"></span>
+        <div class="down-arrow-icon">
+            <?php $listIcon = 'images/express-checkout/fedex-account-list-icon.png';?>
+            <img src="<?= $block->escapeHtmlAttr($block->getViewFileUrl($listIcon)); ?>" alt="" />
+        </div>
+    </div>
+    <div class="custom-fedex-account-list-container" style="display: none;">
+        <ul>
+            <?php if(isset($companyAccountsList) && count($companyAccountsList) > 0): ?>
+                <li class="fedex-account-title"><span>FedEx Office Account (<?= $accountHandler->getCompanyName() ?>)</span></li>
+                <?php foreach ($companyAccountsList as $accountNumber => $accountData):?>
+                    <li
+                        class="fedex-account-value"
+                        data-value="<?= $block->escapeHtml($accountNumber) ?>"
+                        data-selected="<?= $block->escapeHtml($appliedAccount == $accountNumber ? 1 : 0); ?>"
+                        tabindex="0"
+                        data-accountvalid="<?= $block->escapeHtml($accountData['valid']) ?>"
+                    >
+                        <?= $block->escapeHtml($accountData['label']); ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <?php if(isset($personalAccountsList) && count($personalAccountsList) > 0): ?>
+                <li class="fedex-account-title"><span>FedEx Office Account (Personal)</span></li>
+                <?php foreach ($personalAccountsList as $accountNumber => $accountData):?>
+                    <li
+                        class="fedex-account-value"
+                        data-value="<?= $block->escapeHtml($accountNumber) ?>"
+                        data-selected="<?= $block->escapeHtml($appliedAccount == $accountNumber ? 1 : 0); ?>"
+                        tabindex="0"
+                        data-accountvalid="<?= $block->escapeHtml($accountData['valid']) ?>"
+                    >
+                        <?= $block->escapeHtml($accountData['label']); ?>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+            <li class="fedex-account-value" data-value="other" tabindex="0">
+                <?= $block->escapeHtml('Manually enter a FedEx Office Print Account Number'); ?>
+            </li>
+        </ul>
+    </div>
+    <span class="fedex-account-list-error"></span>
+</div>

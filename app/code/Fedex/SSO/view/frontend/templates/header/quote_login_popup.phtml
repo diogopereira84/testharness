@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Element\Template $block */
+/** @var \Fedex\UploadToQuote\ViewModel\UploadToQuoteViewModel $uploadToQuote */
+$fclLogin = $block->getData('fcl_login');
+$uploadToQuote = $block->getData('upload_to_quote');
+?>
+<div id="quote-login-popup" style="display: none;">
+    <div class="modal-body-content">
+         <div class="text-center">
+            <img src="<?= $escaper->escapeHtmlAttr($block->getViewFileUrl('images/warning.svg')) ?>"/>
+         </div>
+         <h2 class="modal-title"><?= $escaper->escapeHtml($uploadToQuote->getLoginModalHeading()) ?></h2>
+         <p class="description"><?= $escaper->escapeHtml($uploadToQuote->getLoginModalCopy()) ?></p>
+    </div>
+    <form class="modal-footer" id="quote-login-form" method="post" action="<?= $escaper->escapeUrl($block->getUrl('uploadtoquote/index/login')) ?>">
+        <?= $block->getBlockHtml('formkey') ?>
+        <input type="hidden" name="action_type" id="quote-login-action" value="login"/>
+        <button type="submit" class="primary-btn d-flex h-center v-center" name="action_type" value="register">Create a User ID</button>
+        <button type="submit" class="secondary-btn d-flex h-center v-center" name="action_type" value="login">Log In</button>
+    </form>
+</div>
+
+<script type="text/x-magento-init">
+{
+    "#quote-login-popup": {
+        "Fedex_SSO/js/quote-login-popup": {}
+    }
+}
+</script>

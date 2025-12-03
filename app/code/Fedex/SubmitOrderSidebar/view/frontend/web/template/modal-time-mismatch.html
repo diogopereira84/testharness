@@ -1,0 +1,31 @@
+<div data-bind="if: isPromiseTimeWarningToggleEnabled()">
+    <div id="time-change-modal-pickup" class="time-change-warning-modal-pickup" style="display:none;">
+        <div class="warning-icon-container">
+            <img data-bind="attr: { src: pendingOrderIconImgUrl()}" alt="Warning">
+        </div>
+        <h3 class="pickup-title">Your order pickup time has changed</h3>
+        <p class="pickup-message">
+            Your new pickup time is <strong><span class="updated-time">Tomorrow, November 4 by 10:00am.</span></strong> If this works 
+            for you, accept the new time. If not, you can view pickup time options to make a new selection.
+        </p>
+        <div class="modal-footer-buttons">
+            <button class="view-options" type="button" data-bind="click: viewOptions">VIEW OPTIONS</button>
+            <button class="accept-time" type="button" data-bind="click: acceptNewTime">ACCEPT NEW TIME</button>
+        </div>
+    </div>
+
+    <div id="time-change-modal-shipping" class="time-change-warning-modal-shipping" style="display:none;">
+        <div class="warning-icon-container">
+            <img data-bind="attr: { src: pendingOrderIconImgUrl()}" alt="Warning">
+        </div>
+        <h3 class="shipping-title">Your expected delivery time has changed</h3>
+        <p class="shipping-message">
+            Your new delivery time is <strong><span class="updated-time">Tomorrow, November 4 by 10:00am.</span></strong> If this works 
+            for you, accept the new time. If not, you can view shipping options to make a new selection.
+        </p>
+        <div class="modal-footer-buttons">
+            <button class="view-options" type="button" data-bind="click: viewOptions">VIEW OPTIONS</button>
+            <button class="accept-time" type="button" data-bind="click: acceptNewTime">ACCEPT NEW TIME</button>
+        </div>
+    </div>
+</div>

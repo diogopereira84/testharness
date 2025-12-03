@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex">
+            <group id="general" translate="label" type="text"  showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="shipping_address_api_url" translate="label" type="text" sortOrder="650" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Shipping Address API Url</label>
+                </field>
+                <field id="shipping_address_api_generic_error_bypass" translate="label" type="select" sortOrder="651" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Shipping Address API Generic Error Bypass</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>The GENERIC.ERROR response from the API endpoint will be ignored and the customer will be able proceed in checkout.</comment>
+                </field>
+                <field id="shipping_address_api_error_code" translate="label" type="text" sortOrder="652" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Shipping Address API Error Code</label>
+                </field>
+            </group>
+        </section>
+        <section id="environment_toggle_configuration" >
+            <group id="environment_toggle" >
+                <field id="hawks_d_206910_fix_infinite_loop" translate="label" type="select" sortOrder="2100" showInDefault="1">
+                    <label>Hawks - D-206910 - Fix infinite loop</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

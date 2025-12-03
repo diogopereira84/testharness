@@ -1,0 +1,258 @@
+<?php
+
+/** @var $block \Fedex\Catalog\Block\Product\View\AboutUs */
+$productFaqs = trim($block->getChildHtml('product_about_faq'));
+$productShipping = trim($block->getChildHtml('product_about_shipping'));
+$productIdeas = $block->getProductIdeas();
+$productOptions = $block->getChildHtml('product_about_options');
+
+?>
+<div class="product info detailed d-flex flex-col m-auto">
+    <h2 class="about-this-product-title product-info-tabs-toggle-enabled text-center fedex-light mt-70">About this
+        product</h2>
+
+    <!-- Desktop tab buttons !-->
+    <div class="product data items detail-tabs tab-buttons-desktop d-flex h-center" role="tablist">
+        <button
+            class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline active"
+            role="tab"
+            data-role="collapsible"
+            data-testid="product-info-tab"
+            data-toggle="trigger"
+            href="#tab-info"
+            aria-controls="tab-info"
+        >
+            <span>
+                <?= $block->escapeHtml(__('Product Info')); ?>
+            </span>
+        </button>
+
+        <?php if ($productFaqs) : ?>
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline"
+                role="tab"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-mage-init='{"faqjs": {}}'
+                data-testid="faq-tab"
+                href="#tab-faq"
+                aria-controls="tab-faq"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('FAQ')); ?>
+                </span>
+            </button>
+        <?php endif; ?>
+        <?php if ($productShipping) : ?>
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline"
+                role="tab"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-testid="shipping-tab"
+                href="#tab-shipping"
+                aria-controls="tab-shipping"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Shipping')); ?>
+                </span>
+            </button>
+        <?php endif; ?>
+
+        <?php if (!empty($productIdeas) && ($productIdeas['content-left'] != ''
+                || $productIdeas['content-right'] != '' || $productIdeas['content-right-mobile'] != '')): ?>
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline"
+                role="tab"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-testid="ideas-tab"
+                href="#tab-ideas"
+                aria-controls="tab-ideas"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Ideas')); ?>
+                </span>
+            </button>
+        <?php endif; ?>
+
+        <div class="tab-specifications-wrapper" style="display: none;">
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline"
+                role="tab"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-testid="specifications-tab"
+                href="#tab-specifications"
+                aria-controls="tab-specifications"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Specifications')); ?>
+                </span>
+            </button>
+        </div>
+
+        <?php /* Checks if string is HTML */ ?>
+        <?php if ($productOptions != strip_tags($productOptions)) : ?>
+            <button
+                class="tab item title detail-tabs-head product-options lh-40 bg-cl-white no-underline"
+                role="tab"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-mage-init='{"optionsjs": {}}'
+                data-testid="product-options-tab"
+                href="#tab-options"
+                aria-controls="tab-options"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Product Options')); ?>
+                </span>
+            </button>
+        <?php endif; ?>
+    </div>
+
+    <!-- Tabs content | Mobile accordion !-->
+    <div class="product data items detail-tabs tabs-content product-info-tabs-toggle-enabled"
+         id="product-info-tabs"
+    >
+        <button
+            class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline hidden-l-xl"
+            data-role="collapsible"
+            data-testid="product-info-tab"
+            data-toggle="trigger"
+            href="#tab-info"
+            aria-controls="tab-info"
+        >
+            <span>
+                <?= $block->escapeHtml(__('Product Info')); ?>
+            </span>
+        </button>
+        <div
+            id="tab-info"
+            class="about-this-product item content active"
+            data-role="content" role="tabpanel"
+            aria-labelledby="tab-info-tab"
+        >
+            <?= str_replace('id="%identifier%"', '', $block->getChildHtml('product_about_info')) ?>
+        </div>
+        <?php if ($productFaqs) : ?>
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline hidden-l-xl"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-mage-init='{"faqjs": {}}'
+                data-testid="faq-tab"
+                href="#tab-faq"
+                aria-controls="tab-faq"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('FAQ')); ?>
+                </span>
+            </button>
+            <div id="tab-faq" class="about-this-product item content" data-role="content">
+                <?= str_replace('id="%identifier%"', '', $productFaqs) ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="tab-specifications-wrapper" style="display: none;">
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline hidden-l-xl"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-testid="specifications-tab"
+                href="#tab-specifications"
+                aria-controls="tab-specifications"
+            >
+                    <span>
+                        <?= $block->escapeHtml(__('Specifications')); ?>
+                    </span>
+            </button>
+            <div id="tab-specifications"
+                 class="about-this-product item content d-flex flex-col"
+                 data-role="content">
+            </div>
+        </div>
+
+        <?php if ($productShipping) : ?>
+            <button
+                class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline hidden-l-xl"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-testid="shipping-tab"
+                href="#tab-shipping"
+                aria-controls="tab-shipping"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Shipping')); ?>
+                </span>
+            </button>
+            <div id="tab-shipping" class="about-this-product item content" data-role="content">
+                <?= str_replace('id="%identifier%"', '', $productShipping) ?>
+            </div>
+        <?php endif; ?>
+
+
+        <?php if (!empty($productIdeas)) :
+            $contentLeft = $productIdeas['content-left'];
+            $contentRight = $productIdeas['content-right'];
+            $contentRightMobile = $productIdeas['content-right-mobile'];
+            if (!empty($contentLeft) || !empty($contentRight) || !empty($contentRightMobile)):?>
+                <button
+                    class="tab item title detail-tabs-head lh-40 bg-cl-white no-underline hidden-l-xl"
+                    data-role="collapsible"
+                    data-toggle="trigger"
+                    data-testid="ideas-tab"
+                    href="#tab-ideas"
+                    aria-controls="tab-ideas"
+                >
+                    <span>
+                        <?= $block->escapeHtml(__('Ideas')); ?>
+                    </span>
+                </button>
+                <div id="tab-ideas" class="about-this-product item content" data-role="content">
+                    <div class="info-ideas-content-wrapper w-50">
+                        <?php if (!empty($contentLeft)): ?>
+                            <div class="ideas-content fedex-light fs-18 lh-32 pb-20">
+                                <?= str_replace('id="%identifier%"', '', $contentLeft) ?>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    <?php if (!empty($contentRight)): ?>
+                        <div class="ideas-img d-flex w-50 pt-15">
+                            <img class="ideas-desktop-img" src="<?= $contentRight ?>" alt="Product Ideas Tab"/>
+                            <?php if ($contentRightMobile): ?>
+                                <img
+                                    class="ideas-mobile-img hidden-l-xl"
+                                    src="<?= $contentRightMobile ?>"
+                                    alt="Product Ideas Tab"
+                                />
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+
+        <?php /* Checks if string is HTML */ ?>
+        <?php if ($productOptions != strip_tags($productOptions)) : ?>
+            <button
+                class="tab item title detail-tabs-head product-options lh-40 bg-cl-white no-underline hidden-l-xl"
+                data-role="collapsible"
+                data-toggle="trigger"
+                data-mage-init='{"optionsjs": {}}'
+                data-testid="product-options-tab"
+                href="#tab-options"
+                aria-controls="tab-options"
+            >
+                <span>
+                    <?= $block->escapeHtml(__('Product Options')); ?>
+                </span>
+            </button>
+            <div id="tab-options" class="about-this-product item content" data-role="content">
+                <?= str_replace('id="%identifier%"', '', $productOptions) ?>
+            </div>
+        <?php endif; ?>
+    </div>
+</div>
+
+

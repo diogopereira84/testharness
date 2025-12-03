@@ -1,0 +1,83 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// @codingStandardsIgnoreFile
+$_order = $block->getOrder();
+$viewModel = $block->getData('order_enhancement_view_model');
+$orderId = $block->getRequest()->getParam('order_id');
+$isReview = false;
+if ($viewModel->isOrderApprovalB2bEnabled()
+&& ($viewModel->checkIsReviewActionSet() || $_order->getStatus() == 'declined')):
+    $isReview = true;
+endif;
+if (!$isReview):
+    $isEnhancementEnabeled = $viewModel->isEnhancementEnabeled();
+    $isReorderEnabled = $viewModel->isReorderEnabled();
+    $isLegacyItemInOrder = $viewModel->checkLegacyDocumentForReorder($_order->getId());
+    // Check if any item in the order is legacy
+    $hasLegacyItem = count(array_filter($isLegacyItemInOrder, fn($value) => $value)) > 0;
+    $checkLegacyDocReorderSectionToggle = $viewModel->checkLegacyDocReorderSectionToggle();
+
+    // Start Code B-1859537 : Commercial admin user allow to access view order page from shared order page
+    $customerIdFromOrder = $_order->getCustomerId();
+    $currentCustomerId = $viewModel->getCurrentCustomerIdFromSession();
+    $isLastPageSharedOrderListing = $viewModel->isLastPageUrlSharedOrderListing();
+    if ($customerIdFromOrder !== $currentCustomerId || $isLastPageSharedOrderListing) {
+        $isReorderEnabled = false;
+    }
+    // End Code B-1859537 : Commercial admin user allow to access view order page from shared order page
+    ?>
+    <?php if($orderId):
+    $order = $viewModel->getOrderById($orderId);
+    ?>    
+        <div class="OrderData">
+            <h1><?= $block->escapeHtml(__('Order number #')) ?><?= $block->escapeHtml($order->getIncrementId()) ?></h1><br>
+             <?php $transactionId = $order->getPayment()->getRetailTransactionId(); 
+          if(!is_null($transactionId)):?>
+            <h2><?= $block->escapeHtml(__('Receipt number #')) ?><?= $block->escapeHtml($transactionId) ?></h2>
+           <?php endif; ?> 
+        </div>
+    <?php endif; ?>
+    <?php if($isEnhancementEnabeled): ?>
+        <div class="confirm-email"><span><?= $block->escapeHtml(__('Confirmation email has been delivered to ')) ?>
+        </span><strong><?php echo $_order->getCustomerEmail(); ?></strong></div>
+    <?php endif; ?>
+    <div class="actions">
+        <a href="<?= $block->escapeUrl($block->getPrintUrl($_order))?>" class="action print" target="_blank" rel="noopener">
+            <?php if($isEnhancementEnabeled):?>
+                <span><?= $block->escapeHtml(__('PRINT CONFIRMATION')) ?></span>
+            <?php endif; ?>
+        </a>
+        <?php if ($isReorderEnabled || ($hasLegacyItem && $checkLegacyDocReorderSectionToggle)) { 
+            ?>
+            
+            <span class="epro-reorder-action disable-link <?= ($hasLegacyItem && $checkLegacyDocReorderSectionToggle) ? 'legacy-document-order' : '' ?>" data-bind="scope: 'reorder_section'">
+                <button type="button" class="reorder-btn-view" id="reorder-btn-view"
+                data-bind="click: submitReorderView" disabled="disabled">REORDER</button>
+            </span>
+        <?php } ?>
+        <?= $block->getChildHtml() ?>
+    </div>
+    <input type="hidden" id="baseUrl" value="<?= $block->getBaseUrl(); ?>" />
+
+    <script type="text/x-magento-init">
+        {
+            "*": {
+                "Magento_Ui/js/core/app": {
+                    "components": {
+                        "reorder_section": {
+                            "component": "Fedex_Orderhistory/js/view/epro-reorder"
+                        },
+                        "print_reciept": {
+                            "component": "Fedex_Orderhistory/js/view/order-print-reciept"
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<?php endif; ?>

@@ -1,0 +1,44 @@
+<?php
+/** @var \Magento\Catalog\Block\Product\View $block */
+$product = $block->getProduct();
+$orderForm = $product->getData('order_form') && $product->getData('order_form_target')
+    ? "window.open('".$product->getData('order_form')."','_blank')"
+    : "window.location = '".$product->getData('order_form')."'";
+$findLocation = $product->getData('find_location') && $product->getData('find_location_target')
+    ? "window.open('".$product->getData('find_location')."','_blank')"
+    : "window.location = '".$product->getData('find_location')."'";
+$findLocationClass = $product->getData('order_form')
+    ? "new-1p-layout canva-modal-link btn-primary-outline w-100"
+    : "btn-primary mb-20";
+?>
+<div id="price-box">
+    <div class="d-flex v-center-lg pricing-section upfront-pricing">
+        <div>
+            <div class="price-label fs-18 lh-24">Starting at:</div>
+            <div class="new-1p-layout price-info fedex-italic d-none visible-m-l-xl">
+                The price listed above is an approximation. Actual cost is subject to change based on additional customization.
+            </div>
+        </div>
+
+        <div class="ml-auto text-right">
+            <div class="final-price cl-primary fedex-bold fs-40 lh-24">
+                <span><?= $block->getProductPrice($product); ?></span>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="file-upload-section text-center">
+    <?php if($product->getData('order_form')): ?>
+        <div class="file-upload-container text-left">
+            <button id="upload-a-file-button" type="button" class="btn-primary mb-20" onclick="<?= $orderForm ?>">
+                GET ORDER FORM
+            </button>
+        </div>
+    <?php endif; ?>
+    <?php if($product->getData('find_location')): ?>
+        <button type="button" class="<?= $findLocationClass ?>"
+                onclick="<?= $findLocation ?>">
+            FIND A LOCATION
+        </button>
+    <?php endif; ?>
+</div>

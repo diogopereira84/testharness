@@ -1,0 +1,142 @@
+{
+    "name": "magento/project-enterprise-edition",
+    "description": "eCommerce Platform for Growth (Enterprise Edition)",
+    "type": "project",
+    "version": "2.4.7",
+    "license": "OSL-3.0",
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "magento/magento-composer-installer": true,
+            "cweagans/composer-patches": true,
+            "laminas/laminas-dependency-plugin": true,
+            "magento/composer-dependency-version-audit-plugin": true,
+            "magento/composer-root-update-plugin": true,
+            "magento/inventory-composer-installer": true,
+            "dealerdirect/phpcodesniffer-composer-installer": false,
+            "php-http/discovery": true
+        }
+    },
+    "repositories": {
+        "mirakl_sdk": {
+            "type": "composer",
+            "url": "https://sdk-front-satis.mirakl.net"
+        },
+        "mirakl_magento2": {
+            "type": "composer",
+            "url": "https://satis.mirakl.net"
+        },
+        "repo": {
+            "type": "composer",
+            "url": "https://repo.magento.com"
+        }
+    },
+    "require": {
+        "composer/composer": "2.8",
+        "cweagans/composer-patches": "^1.7",
+        "dompdf/dompdf": "^3.0",
+        "ethanyehuda/magento2-cronjobmanager": "^2.2",
+        "laminas/laminas-diactoros": "3.3.1",
+        "laminas/laminas-escaper": "2.13.0",
+        "magento/catalog-service": "^3.0.1",
+        "magento/composer-root-update-plugin": "~2.0",
+        "magento/extension-b2b": "^1.4",
+        "magento/framework": "103.0.7-p6",
+        "magento/live-search": "4.4.0",
+        "magento/magento-cloud-metapackage": "2.4.7",
+        "magento/module-b2b": "100.4.1-p1",
+        "magento/module-page-builder-product-recommendations": "2.0.4",
+        "magento/product-enterprise-edition": "2.4.7-p6",
+        "magento/product-recommendations": "^6.0.2",
+        "magento/quality-patches": "^1.1",
+        "mageworx/module-seosuiteultimate": "2.39.0",
+        "mirakl/connector-magento2-plugin": "1.26.0",
+        "mirakl/sdk-php-front": "1.21.0",
+        "phpseclib/phpseclib": "3.0.36.0"
+    },
+    "suggest": {
+        "ext-pcntl": "Need for run processes in parallel mode"
+    },
+    "conflict": {
+        "gene/bluefoot": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Magento\\Setup\\": "setup/src/Magento/Setup/",
+            "Magento\\": "app/code/Magento/",
+            "Zend\\Mvc\\Controller\\": "setup/src/Zend/Mvc/Controller/"
+        },
+        "psr-0": {
+            "": [
+                "app/code/",
+                "generated/code/"
+            ]
+        },
+        "files": [
+            "app/etc/NonComposerComponentRegistration.php"
+        ],
+        "exclude-from-classmap": [
+            "**/dev/**",
+            "**/update/**",
+            "**/Test/**"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Magento\\Sniffs\\": "dev/tests/static/framework/Magento/Sniffs/",
+            "Magento\\Tools\\": "dev/tools/Magento/Tools/",
+            "Magento\\Tools\\Sanity\\": "dev/build/publication/sanity/Magento/Tools/Sanity/",
+            "Magento\\TestFramework\\Inspection\\": "dev/tests/static/framework/Magento/TestFramework/Inspection/",
+            "Magento\\TestFramework\\Utility\\": "dev/tests/static/framework/Magento/TestFramework/Utility/"
+        }
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "extra": {
+        "component_paths": {
+            "trentrichardson/jquery-timepicker-addon": "lib/web/jquery/jquery-ui-timepicker-addon.js",
+            "components/jquery": [
+                "lib/web/jquery.js",
+                "lib/web/jquery/jquery.min.js",
+                "lib/web/jquery/jquery-migrate.js"
+            ],
+            "blueimp/jquery-file-upload": "lib/web/jquery/fileUploader",
+            "components/jqueryui": [
+                "lib/web/jquery/jquery-ui.js"
+            ],
+            "twbs/bootstrap": [
+                "lib/web/jquery/jquery.tabs.js"
+            ],
+            "tinymce/tinymce": "lib/web/tiny_mce_4"
+        },
+        "magento-force": true,
+        "magento-deploystrategy": "copy",
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "magento/module-price-permissions": {
+                "skip composer execution for missing block name": "m2-hotfixes/composer/magento/Magento_PricePermissions/CategoryViewPage.patch"
+            },
+            "magento/module-catalog-import-export": {
+                "D-171915: INC026418606 - POD 2.0 Commercial - Catalog Migration Tool fails to complete processing - docs are not added to site": "m2-hotfixes/composer/magento/Magento_CatalogImportExport/CategoryNameNull.patch"
+            },
+            "mageworx/module-open-ai": {
+                "B-2243578 - Composer patch to fix Mageworx SEO db_schema.xml": "m2-hotfixes/composer/mageworx/MageWorx_OpenAI/DbSchema.patch"
+            }
+        }
+    },
+    "require-dev": {
+        "allure-framework/allure-phpunit": "~1.4.0",
+        "cjpublicis/universal-tag-module": "1.0.3",
+        "magento/magento-coding-standard": "*",
+        "squizlabs/php_codesniffer": "3.*"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "([ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../phpcompatibility/php-compatibility)"
+        ],
+        "post-update-cmd": [
+             "([ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/phpcs --config-set installed_paths ../../magento/magento-coding-standard/,../../phpcompatibility/php-compatibility)"
+        ]
+    }
+}

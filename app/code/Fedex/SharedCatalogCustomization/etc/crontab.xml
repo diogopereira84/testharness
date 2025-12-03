@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Cron:etc/crontab.xsd">
+  <group id="fedex_catalog_sync_crongroup">
+    <!--- Job to automatically execute the scheduler each night at 12:00 AM and put in sync queue -->
+    <job name="catalog_sync_queue_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncQueue" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_queue_cron</config_path>
+    </job>
+    <!-- Job to execute one record from pending sync queue after every 5 minutes and create queues for processing -->
+    <job name="catalog_sync_queue_process_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncQueueProcessCron" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_queue_process_cron</config_path>
+    </job>
+    <!-- Job to check completed queues and mark final status completed and send email -->
+    <job name="catalog_sync_queue_complete_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncQueueComplete" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_queue_complete_cron</config_path>
+    </job>
+    <!-- Job to remove old records from DB of older than 30 days. Executes once at 4:00 AM -->
+    <job name="catalog_sync_remove_data_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncRemoveData" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_remove_data_cron</config_path>
+    </job>
+    <!-- Job to check unassigned product to category and also not should be active product with any quote that case cron will delete product -->
+    <job name="catalog_sync_queue_delete_item_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncDeleteItemCron" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_queue_delete_item_cron</config_path>
+    </job>
+    <!-- Job to execute one record from pending sync queue in catalog_sync_queue_cleanup_process table after every 5 minutes and create queues for deleted -->
+    <job name="catalog_sync_queue_cleanup_process_cron" instance="Fedex\SharedCatalogCustomization\Cron\CatalogSyncQueueCleanupProcessCron" method="execute">
+        <config_path>fedex/cron_configuration/catalog_sync_queue_cleanup_process_cron</config_path>
+    </job>
+  </group>
+</config> 

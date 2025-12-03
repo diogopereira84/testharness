@@ -1,0 +1,50 @@
+<?php
+/**
+ * @category Fedex
+ * @package Fedex _ModuleName
+ * @copyright (c) 2021.
+ * @author Iago Lima <ilima@mcfadyen.com>
+ */
+declare(strict_types=1);
+
+/** @var $block \Fedex\ProductEngine\Block\Product\LoadProductEngine */
+
+if($block->isValidProduct()) :
+    $peUrl = $block->getProductEngineUrl();
+?>
+    <div>
+        <input type="hidden" name="product_id" id="product-id" value="<?= $block->getPeProductId($block->getProduct()) ?>">
+    </div>
+
+    <script>
+        require([
+            'jquery',
+            'peProductController',
+            'prototype',
+            'accordion',
+        ], function ($, productController) {
+            let productControllerObj, ph;
+            ph = {
+                productId: $('#product-id').val(),
+                controlId: null,
+                version: null,
+                choiceIds: [],
+                presetId: null,
+                defaultContent: true,
+                validateProductConfig: true,
+                contentHints: null
+            }
+            productControllerObj = new productController.ProductController('<?= $peUrl ?>');
+            productControllerObj.selectProductByHint(ph, () => {
+                console.info(productControllerObj.serializeSelectedProduct());
+                window.serializedProductInstance = productControllerObj.serializeSelectedProduct();
+            });
+        });
+    </script>
+<?php else: ?>
+    <script>
+        window.serializedProductInstance = {
+            success: false
+        };
+    </script>
+<?php endif; ?>

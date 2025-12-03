@@ -1,0 +1,888 @@
+<?php
+
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+// B-1149167 : RT-ECVS-SDE-SDK changes for File upload
+/** @var $viewModel ProductList */
+$viewModel = $block->getData('product_list_view_model');
+$viewModelMvphelper= $block->getData('view_model_mvphelper');
+$dyesubViewModel= $block->getData('dyesubViewModel');
+$eProClass = $viewModel->getWrapperClass();
+$isCommercialCustomer = $viewModel->isCommercialCustomer();
+$catalogHelper = $viewModel->getCatalogDocumentUserSettingsHelper();
+$helper = $viewModel->getDeliveryDataHelper();
+/** @var $catalogMvpHelper \Fedex\CatalogMvp\Helper\CatalogMvp */
+$catalogMvpHelper = $viewModel->getCatalogMvpHelper();
+$catalogMvpToggle = $catalogMvpHelper->isMvpSharedCatalogEnable();
+$catalogUpdateMessages = $catalogMvpHelper->isCataloUpdateMessagesEnabled();
+$subCategoryMvp = $catalogMvpHelper->getB2BcategoryCollection();
+$getCategoryRepository = $catalogMvpHelper->getCategoryRepository();
+$addEditFolderAccess = $viewModelMvphelper->getAddEditFolderAccess();
+$getCurrentCategoryId = $catalogMvpHelper->getCurrentCategoryId();
+$getCurrentSubCategoryId = $catalogMvpHelper->getCurrentSubCategoryId();
+$getCurrentSubCategoryName = $catalogMvpHelper->getCurrentSubCategoryName();
+$getCurrentCategoryPath = $catalogMvpHelper->getCurrentCategoryPath();
+$downloadAjaxurl = $block->getUrl('catalogmvp/catalog/download');
+$nonStandardCatalogToggle = $viewModelMvphelper->isNonStandardCatalogToggleEnabled();
+$customerAdmin = $catalogMvpHelper->isSharedCatalogPermissionEnabled();
+$isCatalogExpiryToggle = $viewModelMvphelper->isCatalogExpiryNotificationToggle();
+$isCustomDocEnabled = $catalogMvpHelper->customDocumentToggle();
+$isToggleD213910Enabled = $catalogMvpHelper->isToggleD213910Enabled();
+$eproUnableToAddInBranchProductToCartToggle = $viewModelMvphelper->eproUnableToAddInBranchProductToCartToggle();
+$tooltipHeading = 'THIS CATALOG ITEM CONTAINS ADDITIONAL PRINT INSTRUCTIONS.';
+$tooltipContent = 'Catalog item(s) with additional print instructions must be reviewed by a FedEx
+ Office Team Member before they can be published to the shared catalog. You will receive an email
+ once the project has been reviewed and configured.';
+$addToCartRedirectStop = $catalogMvpHelper->isEnableStopRedirectMvpAddToCart();
+
+$catalogEllipsisEnable = 0;
+$char100Enable =0 ;
+if($block->getMode() == 'grid'){
+    $catalogEllipsisEnable = $viewModel->isCatalogEllipsisControlEnabled();
+    $char100Enable = $viewModel->getCharLimitToggle();
+}
+$minChar = $viewModel->getCatalogEllipsisControlTotalCharacters();
+$minChar = !empty($minChar)?$minChar:56;
+$ellipsisStartChar = $viewModel->getCatalogEllipsisControlStartCharacters();
+$ellipsisStartChar = !empty($ellipsisStartChar)?$ellipsisStartChar:36;
+$ellipsisEndChar = $viewModel->getCatalogEllipsisControlEndCharacters();
+$ellipsisEndChar = !empty($ellipsisEndChar)?$ellipsisEndChar:20;
+$isEditFolderAccessEnabled = $catalogMvpHelper->isEditFolderAccessEnabled();
+if ($isEditFolderAccessEnabled) {
+    $companyUserGroups = $catalogMvpHelper->getUserGroupsforCompany();
+}
+$isD206810ToggleEnabled = $viewModel->isD206810ToggleEnabled();
+$shouldHideEdit= false;
+/**
+ * Product list template
+ *
+ * @var $block \Magento\Catalog\Block\Product\ListProduct
+ * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
+?>
+<?php
+$_productCollection = $block->getLoadedProductCollection();
+
+/** @var \Magento\Catalog\Helper\Output $_helper */
+$_helper = $block->getData('outputHelper');
+if ($isToggleD213910Enabled) {
+    $subcategories = $catalogMvpHelper->getSubCategories($customerAdmin);
+} else {
+    $subcategories = $catalogMvpHelper->getSubCategories(1);
+}
+
+$fixedQtyHandlerToggle = $viewModelMvphelper->getFixedQtyHandlerToggle() ?? 0;
+
+// B-1569586 start
+if ($isCommercialCustomer) { ?>
+    <div class='commercial-toolbar-top'>
+        <?= $block->getToolbarHtml() ?>
+    </div>
+    <?= $block->getAdditionalHtml() ?>
+<?php }
+if ( !$_productCollection->count() && !$viewModelMvphelper->getChildCategoryCount()) {?>
+    <div class="breadcrum-container-no-count"><?= $this->getLayout()->getBlock('breadcrumbs')->toHtml() ?></div>
+    <div class="message info empty mvp-catalog-product-an-category">
+        <div><?= $escaper->escapeHtml(__('We can\'t find products and folder matching the selection.')) ?></div>
+    </div>
+    <input type="hidden" class="category-product-count-is-zero" value="1">
+    <div class="products wrapper list products-list <?php echo $eProClass; ?>">
+        <ol id="product-items-zero" class="products list items product-items customer-admin">
+            <li class="item product product-item heading">
+                <!-- B-1569586 start -->
+                <?php if ($catalogMvpToggle) { ?>
+                    <input class="check-box-check-all  list-checkbox" type="checkbox" onClick="selects(this)" aria-label="checkbox-check-all"/>
+                    <div class="Check-box-title"><?= $escaper->escapeHtml(__('CHECK ALL')) ?></div>
+                <?php } ?>
+                <!-- B-1569586 end -->
+                <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                <!-- B-1569586 start -->
+                <?php if ($catalogMvpToggle) { ?>
+                    <div class="modified-info-title"><?= $escaper->escapeHtml(__('MODIFIED')) ?></div>
+                <?php }else { ?>
+                    <div class="modified-info-title"><?= $escaper->escapeHtml(__('LAST MODIFIED')) ?></div>
+                <?php } ?>
+                <!-- B-1569586 end -->
+                <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                <?php if ($customerAdmin) { ?>
+                <div class="published-title"><?= $escaper->escapeHtml(__('PUBLISHED')) ?></div>
+                <?php } ?>
+                <?php if ($customerAdmin) { ?>
+                <div class="action-title"><?= $escaper->escapeHtml(__('ACTIONS')) ?></div>
+                <?php } else { ?>
+                    <div class="action-title"><?= $escaper->escapeHtml(__('PREVIEW')) ?></div>
+                <?php } ?>
+            </li>
+        </ol>
+    </div>
+<?php } else {
+    if ($catalogMvpToggle) { ?>
+        <?= $block->getChildHtml('catalog.list.select.number'); ?>
+    <?php } ?>
+    <!--B-1569586 end -->
+
+
+    <?php
+    if ($block->getMode() == 'grid') {
+        $viewMode = 'grid';
+        $imageDisplayArea = 'category_page_grid_custom';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::SHORT_VIEW;
+    } else {
+        $viewMode = 'list';
+        $imageDisplayArea = 'category_page_list';
+        $showDescription = false;
+        $templateType = \Magento\Catalog\Block\Product\ReviewRendererInterface::FULL_VIEW;
+    }
+    /**
+     * Position for actions regarding image size changing in vde if needed
+     */
+    $pos = $block->getPositioned();
+    ?>
+    <div class="loading-mask" style="display: none;" data-role="loader">
+        <div class="loader"><img alt="Loading..."
+                                 src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+            <p>Please wait...</p></div></div>
+    <?php if ($catalogMvpToggle) { ?>
+        <div class="loading-mask-mvp"  data-role="loader">
+            <div class="loader-mvp"><img alt="Loading..."
+                                         src="<?= /* @escapeNotVerified */ $block->getViewFileUrl('images/loader-2.gif') ?>">
+                <p>Please wait...</p>
+            </div>
+        </div>
+    <?php } ?>
+    <div class="products wrapper <?php echo $eProClass; ?>
+        <?= /* @noEscape */ $viewMode ?> products-<?= /* @noEscape */ $viewMode ?>">
+
+        <ol class="products list items product-items customer-admin">
+            <?php if($isCommercialCustomer): ?>
+                <li class="item product product-item heading">
+                    <!-- B-1569586 start -->
+                    <?php if ($catalogMvpToggle) { ?>
+                        <input class="check-box-check-all  list-checkbox" type="checkbox" onClick="selects(this)" aria-label="checkbox-check-all"/>
+                        <div class="Check-box-title"><?= $escaper->escapeHtml(__('CHECK ALL')) ?></div>
+                    <?php } ?>
+                    <!-- B-1569586 end -->
+                    <div class="name-title"><?= $escaper->escapeHtml(__('NAME')) ?></div>
+                    <!-- B-1569586 start -->
+                    <?php if ($catalogMvpToggle) { ?>
+                        <div class="modified-info-title"><?= $escaper->escapeHtml(__('MODIFIED')) ?></div>
+                    <?php }else { ?>
+                        <div class="modified-info-title"><?= $escaper->escapeHtml(__('LAST MODIFIED')) ?></div>
+                    <?php } ?>
+                    <!-- B-1569586 end -->
+                    <div class="price-info-title"><?= $escaper->escapeHtml(__('PRICE')) ?></div>
+                    <?php if ($customerAdmin) { ?>
+                    <div class="published-title"><?= $escaper->escapeHtml(__('PUBLISHED')) ?></div>
+                    <?php } ?>
+                    <?php if ($customerAdmin) { ?>
+                    <div class="action-title"><?= $escaper->escapeHtml(__('ACTIONS')) ?></div>
+                    <?php } else { ?>
+                        <div class="action-title"><?= $escaper->escapeHtml(__('PREVIEW')) ?></div>
+                    <?php } ?>
+
+                </li>
+            <?php endif; ?>
+            <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
+            <!-- B-1569586 -->
+            <?php if ($subcategories && $this->getRequest()->getParam('p') < '2') {
+                foreach ($subcategories as $subcategorie) {
+                    $isFolderPermissionAllowed = $catalogMvpHelper->isFolderPermissionAllowed($subcategorie->getId());
+                    if (!$customerAdmin && !$isFolderPermissionAllowed) {
+                        continue;
+                    }
+                    if ($isEditFolderAccessEnabled) {
+                        $isFolderRestricted = $catalogMvpHelper->getCategoryPermission($subcategorie->getId(), $companyUserGroups);
+                        if ($isFolderRestricted && !$customerAdmin && $catalogMvpHelper->isFolderRestrictedToUser($subcategorie->getId(), $companyUserGroups)) {
+                            continue;
+                        }
+                    }
+                    ?>
+                    <li class="item product product-item sub-category droppable"
+                        id="sub-cat-<?= /* @noEscape */ $subcategorie->getId() ?>">
+                        <div class="product-item-info">
+                            <!-- Added check for drag frop for list view -->
+                            <?php if ($customerAdmin) { ?>
+                            <?php if ($viewMode == 'list') { ?>
+                                <div class="drag-drop catalog-folder-move">
+                                    <div class="drag-drop-img"></div>
+                                </div>
+
+                            <?php } ?>
+                            <input class="category-item-checkbox list-checkbox" type="checkbox"
+                                   id="<?= /* @noEscape */ $subcategorie->getName() ?>"
+                                   name="<?= /* @noEscape */ $subcategorie->getName() ?>" value="<?= $subcategorie->getId()?>"
+                                   aria-label="checkbox-<?= $subcategorie->getId()?>"
+                            />
+                            <?php } ?>
+                            <?php if ($viewMode == 'grid' && $customerAdmin) { ?>
+                                <div class="kebab" data-th="ACTIONS">
+                                    <div class="kebab-image category-grid"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label action_kebab_folder_delete">
+                                                <a href="javascript:void(0);"
+                                                   data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Move cat-move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label action_kebab_folder_rename">
+                                                <a href="javascript:void(0);" data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if ($addEditFolderAccess): ?>
+                                            <div class="menu-item-label action_kebab_folder_access">
+                                            <a href="javascript:void(0);" class="edit-folder-access-action" data-folder-id="<?= $subcategorie->getId() ?>">
+                                            <?= $escaper->escapeHtml(__("Edit Folder Access")) ?>
+                                            </a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                               aria-label="sub category links" class="sub-cate-list-mobile">
+                            <span class="product-image-container">
+                                <span class="product-image-wrapper" style="padding-bottom: 100%;">
+                                <div class="sub-categorty-img">
+                                    <?php if ($isEditFolderAccessEnabled && $isFolderRestricted && $customerAdmin): ?>
+                                        <img class="folder-permission-icon"
+                                        src="<?= $block->getViewFileUrl('images/FolderLocked.svg'); ?>" alt="folder-permission-icon">
+                                    <?php endif; ?>
+                                </div>
+                                </span>
+                            </span>
+                            </a>
+                            <div class = "product-name-list">
+                                <span class="product-item-name-heading" style="display:none"><?= $block->escapeHtml(__('NAME')) ?></span>
+                                <span class = "sub-category name product-item-name"
+                                      id="product-folder-<?= $subcategorie->getId() ?>">
+                                    <a href = "<?= $catalogMvpHelper->getCategoryUrl($subcategorie) ?>"
+                                       aria-label="sub category links" alt="<?= /* @noEscape */ $subcategorie->getName() ?>" data-th="NAME">
+                                        <?= /* @noEscape */ $subcategorie->getName() ?>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="modified-info">
+                                <?php
+                                $sec = strtotime($subcategorie->getUpdatedAt());
+                                $modifiedDate = date("m/d/Y", $sec);
+                                ?>
+                                <span data-th="MODIFIED"><?= /* @noEscape */ $modifiedDate ?></span>
+                            </div>
+                            <!-- publish code code start -->
+                            <?php if ($viewMode == 'list' && $customerAdmin) { ?>
+                                <div class="product details product-item-details empty"></div>
+
+                                <div class="published" data-th="PUBLISHED">
+                                    <label class="switch">
+                                        <?php if ($subcategorie->getIsPublish()) { ?>
+                                            <input class="<?= /* @noEscape */ $subcategorie->getIsPublish() ?>"
+                                                   id="cat-<?= /* @noEscape */ $subcategorie->getId() ?>"
+                                                   type="checkbox" checked
+                                                   aria-label="publish-<?= $subcategorie->getId()?>">
+                                        <?php } else { ?>
+                                            <input class="<?= /* @noEscape */ $subcategorie->getIsPublish() ?>"
+                                                   id="cat-<?= /* @noEscape */ $subcategorie->getId() ?>"
+                                                   type="checkbox" aria-label="publish-<?= $subcategorie->getId()?>">
+                                        <?php } ?>
+                                        <span class="custom-slider round"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="kebab" data-th="ACTIONS">
+                                    <div class="kebab-image category-list"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label action_kebab_folder_delete">
+                                                <a href="javascript:void(0);"
+                                                   data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Move cat-move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label action_kebab_folder_rename">
+                                                <a href="javascript:void(0);" data-folder-id="<?= $subcategorie->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if ($addEditFolderAccess): ?>
+                                            <div class="menu-item-label action_kebab_folder_access">
+                                            <a href="javascript:void(0);" class="edit-folder-access-action" data-folder-id="<?= $subcategorie->getId() ?>">
+                                            <?= $escaper->escapeHtml(__("Edit Folder Access")) ?>
+                                            </a>
+                                            </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                            <!-- code end -->
+                        </div>
+                    </li>
+                <?php }
+            }
+            ?>
+            <?php foreach ($_productCollection as $_product):?>
+                <?php
+                $attributeSetId = $_product->getAttributeSetId();
+                $attribute_set_name = $helper->getProductAttributeName($attributeSetId);
+                $custmizable = (bool)$_product->getData('customizable');
+                $isPendingReview = $_product->getIsPendingReview() == 1 ? (bool)$_product->getIsPendingReview() : false;
+
+                if($attribute_set_name == 'PrintOnDemand'
+                    && $_product->getData('external_prod') !== null) {
+                    $externalProdData=$_product->getData('external_prod');
+                    $externalProdData=json_decode($externalProdData,true);
+
+                    $catalogProductId=(isset($externalProdData['catalogReference']['catalogProductId'])) ?
+                        $externalProdData['catalogReference']['catalogProductId'] : "";
+                }
+                $customizableClass = $custmizable ? 'customizable' : '';
+                $isPendingReviewClass = $isPendingReview ? ' isPendingReview' : '';
+                ?>
+
+                <li class="item product product-item category-product<?php echo $isPendingReviewClass; ?>" id="product-list-<?= /* @noEscape */ $_product->getId() ?>">
+                    <div class="product-item-info"
+                         id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                         data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                        <!-- B-1569586 -->
+                        <?php
+                        if ($viewMode == 'list' && $customerAdmin) {
+                            ?>
+                            <div class="drag-drop catalog-item-move" id="<?= /* @noEscape */ $_product->getSku() ?>">
+                                <div class="drag-drop-img"></div>
+                            </div>
+                        <?php } ?>
+
+                        <input class="product-item-checkbox list-checkbox <?php echo $customizableClass; echo $isPendingReviewClass; ?>" type="checkbox"
+                               id="product-item-checkbox_<?= /* @noEscape */ $_product->getId() ?>"
+                               name="<?= /* @noEscape */ $_product->getId() ?>"
+                               value="product-name<?= /* @noEscape */ $_product->getId() ?>"
+                               data-item-sku="<?= /* @noEscape */ $_product->getSku() ?>"
+                               aria-label="checkbox-<?= $_product->getId()?>"
+                        />
+
+                        <?php if ($viewMode == 'grid' && $customerAdmin) {
+                            if (
+                                $nonStandardCatalogToggle &&
+                                $_product->getData('is_pending_review') != 1
+                            ) {?>
+                                <div class="kebab" data-th="ACTIONS">
+                                    <div class="kebab-image product-grid"></div>
+                                </div>
+                            <?php } elseif (
+                                !$nonStandardCatalogToggle
+                            ) {?>
+                                <div class="kebab" data-th="ACTIONS">
+                                    <div class="kebab-image product-grid"></div>
+                                </div>
+                            <?php } ?>
+                            <div class="kebab-options">
+                                <div class="dropdown-menu-list">
+                                    <div class="menu-item">
+                                        <div class="menu-item-label">
+                                            <?php if($isCustomDocEnabled && $custmizable): ?>
+                                                <a class="action-customize-product" data-item-id="<?= $_product->getId() ?>" data-item-sku="<?= $_product->getSku() ?> " href="javascript:void(0);"><?= $escaper->escapeHtml(__("Customize")) ?></a>
+                                            <?php else: ?>
+                                                <a class="action-kebab-add-to-cart" data-item-id="<?= $_product->getId() ?>" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Add to Cart")) ?></a>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?php
+                                        $extProd = $_product->getExternalProd();
+                                        $prodata = !empty($extProd) ? json_decode($extProd, true) : [];
+                                        if ($nonStandardCatalogToggle && isset($prodata['externalSkus']) && !empty($prodata['externalSkus'])) {
+                                            $userWorkspaceData = '';
+                                                if (isset($prodata['userWorkspace']) && !empty($prodata['userWorkspace'])) {
+                                                    $userWorkspaceData = json_encode($prodata['userWorkspace']['files']);
+                                                }
+                                        ?>
+                                            <div class="menu-item-label changerequest" id="change-request-product">
+                                                <a prodid="<?= $_product->getSku() ?>" userWorkSpace='<?= $userWorkspaceData; ?>' prodname="<?= $_product->getName() ?>" class="change-request-product" href="javascript:void(0)"><?= $escaper->escapeHtml(__("Request Change")) ?>
+                                                </a>
+                                            </div>
+                                        <?php } else {
+                                            $isCustomerCanvas = $_product->getData('is_customer_canvas');
+                                            $shouldHideEdit = false;
+                                            if ($dyesubViewModel && $dyesubViewModel->isDyeSubEnabled() && $isCustomerCanvas) {
+                                                if ($dyesubViewModel->isExpiredCatalogProduct($_product)) {
+                                                    $shouldHideEdit = $dyesubViewModel->isExpiredCatalogProduct($_product);
+                                                }
+                                            }
+                                            if(!$shouldHideEdit){
+                                            ?>
+                                            <div class="menu-item-label">
+                                                <a class="edit-product" href="<?= $block->getUrl('catalogmvp/configurator/index/')."sku/".$_product->getSku()?>"><?= $escaper->escapeHtml(__("Edit")) ?>
+                                                </a>
+                                            </div>
+                                        <?php } }?>
+                                        <?php if($isCatalogExpiryToggle && $viewModelMvphelper->isSharedCatalogPermissionEnabled()) :?>
+                                            <div class="menu-item-label renew action_kebab_right_item_renew" id="renew">
+                                                <a prodid="<?= $_product->getId() ?>" prodname="<?= $_product->getName() ?>" class="action_kebab_right_item_renew" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Renew")) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif;?>
+                                        <div class="menu-item-label Delete">
+                                            <a href="#"><?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                        </div>
+                                        <div class="menu-item-label Download menu-item-label-download">
+                                            <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>"><?= $escaper->escapeHtml(__("Download File(s)")) ?></a>
+                                        </div>
+                                        <?php if(!$isD206810ToggleEnabled): ?>
+                                            <div class="menu-item-label Duplicate">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Duplicate")) ?></a>
+                                            </div>
+                                        <?php endif; ?>
+                                        <div class="menu-item-label Move">
+                                            <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                        </div>
+
+                                        <?php if ($eproUnableToAddInBranchProductToCartToggle) {
+                                            if (isset($prodata['contentAssociations']) &&
+                                                !empty($prodata['contentAssociations'])) { ?>
+                                                    <div class="menu-item-label Preview">
+                                                        <a href="javascript:void(0);" aria-label="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                    </div>
+                                            <?php }
+                                        } else { ?>
+                                            <div class="menu-item-label Preview">
+                                                <a href="javascript:void(0);" aria-label="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                            </div>
+                                        <?php }
+                                        ?>
+
+                                        <div class="menu-item-label action_kebab_item_rename">
+                                            <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                        </div>
+                                        <?php if ($nonStandardCatalogToggle) :?>
+                                            <div class="menu-item-label settings change-settings-product" id="change-settings-product">
+                                                <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-settings-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Settings")) ?>
+                                                </a>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        <?php
+                        $productImage = $block->getImage($_product, $imageDisplayArea);
+                        if ($pos != null) {
+                            $position = 'left:' . $productImage->getWidth() . 'px;'
+                                . 'top:' . $productImage->getHeight() . 'px;';
+                        }
+                        ?>
+                        <?php // Product Image ?>
+                        <!-- Atul | D-64087 | Removed item link for Epro -->
+                        <?php if($isCommercialCustomer) :?>
+                            <a href="javascript:void(0);"
+                            aria-label="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">
+                                <?= $productImage->toHtml() ?>
+                            </a>
+                        <?php elseif($isCommercialCustomer): ?>
+                            <?= $productImage->toHtml() ?>
+                        <?php else: ?>
+                            <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                               class="product photo product-item-photo"
+                               tabindex="-1">
+                                <?= $productImage->toHtml() ?>
+                            </a>
+                        <?php endif; ?>
+                        <?php
+                        $proName = $_helper->productAttribute($_product, $_product->getName(), 'name');
+                        $length = 50;
+                        if($isCommercialCustomer && strlen($proName) > $length) {
+                            $proName = wordwrap($proName, $length);
+                            $proNameArray = explode("\n", $proName, 2);
+                            $proName = $proNameArray[0] . ' ...';
+                        }
+                        ?>
+                        <!-- Atul | D-64087 | Removed item link for Epro -->
+                        <?php if($isCustomDocEnabled && $custmizable): ?>
+                            <div class="wrench-icon"style="width: 19.5px;height: 24.75px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="25" viewBox="0 0 20 25" fill="none">
+                                    <rect x="0.25" y="0.25" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M1 1V19.75H14.5V1H1Z" fill="#F2F2F2"/>
+                                    <rect x="2.5" y="2.5" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M3.25 3.25V22H16.75V3.25H3.25Z" fill="#F2F2F2"/>
+                                    <rect x="4.75" y="4.75" width="15" height="20.25" fill="#333333"/>
+                                    <path d="M5.5 5.5V24.25H19V5.5H5.5Z" fill="#F2F2F2"/>
+                                    <path fill-rule="evenodd" clip-rule="evenodd" d="M15.6674 12.6053L17.1686 11.1092C17.3744 10.9041 17.7203 10.9588 17.8527 11.2174C18.5629 12.605 18.3085 14.3119 17.1896 15.431C16.1475 16.4728 14.5981 16.7641 13.269 16.2248L8.65688 20.8362C8.10578 21.3878 7.21322 21.3878 6.66271 20.8368C6.11087 20.2866 6.11327 19.3924 6.6649 18.8417L11.2824 14.2296C10.7454 12.9036 11.0436 11.3538 12.0878 10.31C13.2063 9.19238 14.9292 8.93701 16.3172 9.64665C16.5742 9.77806 16.6304 10.1208 16.4289 10.3274L14.9642 11.8292V12.6053H15.6674ZM17.3067 12.1816L16.147 13.3374C16.0667 13.4175 15.9579 13.4624 15.8445 13.4624H14.5357C14.299 13.4624 14.1071 13.2706 14.1071 13.0339V11.6548C14.1071 11.543 14.1508 11.4356 14.2289 11.3556L15.3606 10.1952C14.4268 9.9547 13.4002 10.2103 12.6937 10.9162C11.8369 11.7727 11.6375 13.0733 12.1772 14.1273C12.262 14.2929 12.2302 14.4943 12.0986 14.6258L7.27055 19.4482C7.05356 19.6648 7.05262 20.0152 7.26848 20.2304C7.48479 20.4469 7.83422 20.4469 8.05069 20.2303L12.8732 15.4084C13.0047 15.277 13.2059 15.2453 13.3714 15.33C14.4305 15.8717 15.7302 15.678 16.5835 14.825C17.2883 14.1201 17.5437 13.1088 17.3067 12.1816Z" fill="#333333"/>
+                                </svg>
+                            </div>
+                        <?php endif; ?>
+                        <div class="product-name-list">
+                            <span class="product-item-name-heading" style="display:none"><?= $block->escapeHtml(__('NAME')) ?></span>
+                            <?php if($isCommercialCustomer): ?>
+                                <strong class="product name product-item-name dbclick-item-rename product-item-link-nolinks"
+                                        id="product-item-<?= $_product->getId() ?>" data-item-id="<?= $_product->getId() ?>">
+                                    <a class="product-item-link" alt="<?= /* @noEscape */ $proName ?>" data-th="NAME">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                                </strong>
+                            <?php else: ?>
+                                <strong class="product name product-item-name dbclick-item-rename"
+                                        id="product-item-<?= $_product->getId() ?>" data-item-id="<?= $_product->getId() ?>">
+                                    <a class="product-item-link"
+                                       href="<?= $escaper->escapeUrl($_product->getProductUrl()); ?>" data-th="NAME">
+                                        <?=/* @noEscape */ $proName; ?>
+                                    </a>
+                                </strong>
+                            <?php endif; ?>
+                        </div>
+                        <div class="modified-info">
+                            <!-- B-1569586 -->
+                            <span data-th="MODIFIED"> <?= date('m/d/Y', strtotime($_product->getUpdatedAt())); ?></span>
+                        </div>
+                        <?php if (
+                            $nonStandardCatalogToggle && $customerAdmin &&
+                            !empty($_product->getData('is_pending_review')) &&
+                            (strtolower($_product->getData('is_pending_review')) == "yes" ||
+                                $_product->getData('is_pending_review') == 1)
+                        ) { ?>
+                            <div class="product details product-item-details empty pending-review">
+                            </div>
+                            <div class="catalog-pending-review-status">
+                            <span class="review-message">
+                                <?= $escaper->escapeHtml(__('Pending Review')) ?>
+                            </span>
+                                <span class="tooltip">
+                                <img class="info-icon" alt="gallery" src="<?= $block->getViewFileUrl('images/pending_info.png');?>">
+                                <span class="tooltiptext">
+                                    <span class="tooltip-heading"><?= $block->escapeHtml(__($tooltipHeading)) ?></span>
+                                    </br>
+                                    <span class="tooltip-content"><?= $block->escapeHtml(__($tooltipContent)) ?></span>
+                                </span>
+                            </span>
+                            </div>
+                            <?php if(!$customerAdmin) {  ?>
+                                    <button class="action details cancel-btn-delete product-item-details-mobile-normal"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                                   >Details</button>
+                             <?php }else { ?>
+                                <button class="action details cancel-btn-delete product-item-details-mobile"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                                   >Details</button>
+                            <?php } ?>
+                        <?php } else {?>
+                            <div class="product details product-item-details" data-th="PRICE">
+                                <!-- get product price -->
+                                <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+                                <div class="product-item-inner">
+                                    <div class="product actions product-item-actions">
+                                        <?= strpos((string)$pos, $viewMode . '-primary') ?
+                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                $position,
+                                                'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                            ) : '' ?>
+                                        <div data-role="add-to-links" class="actions-secondary">
+                                            <?php if ($addToBlock = $block->getChildBlock('addto')):?>
+                                                <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
+                                            <?php endif; ?>
+                                        </div>
+                                        <?= strpos((string)$pos, $viewMode . '-secondary') ?
+                                            /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                                $position,
+                                                'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                            ) : '' ?>
+                                    </div>
+                                </div>
+                            </div>
+                            <?php if($viewMode == 'grid' && $customerAdmin) {  ?>
+                                <button class="action details cancel-btn-delete product-item-details-mobile"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                               >Details</button>
+                            <?php } ?>
+                            <?php if($viewMode == 'grid' && !$customerAdmin) {  ?>
+                                <button class="action details cancel-btn-delete product-item-details-mobile-normal"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                               >Details</button>
+                            <?php } ?>
+                            <!-- publish code start -->
+                            <?php if ($viewMode == 'list' && $customerAdmin) { ?>
+                                <div class="published" data-th="PUBLISHED">
+                                    <label class="switch">
+                                        <?php if ($_product->getPublished()) { ?>
+                                            <input type="checkbox" id="product-<?= /* @noEscape */ $_product->getId() ?>" checked
+                                                   aria-label="product-publish-<?= $_product->getId()?>"
+                                            >
+                                        <?php } else { ?>
+                                            <input type="checkbox" id="product-<?= /* @noEscape */ $_product->getId() ?>"
+                                                   aria-label="product-publish-<?= $_product->getId()?>"
+                                            >
+                                        <?php } ?>
+                                        <span class="custom-slider round"></span>
+                                        <span class="labels" data-on="ON" data-off="OFF"></span>
+                                    </label>
+                                </div>
+                                <div class="kebab" data-th="ACTIONS">
+                                    <div class="kebab-image product-list"></div>
+                                </div>
+                                <div class="kebab-options">
+                                    <div class="dropdown-menu-list">
+                                        <div class="menu-item">
+                                            <div class="menu-item-label">
+                                                <?php if($isCustomDocEnabled && $custmizable): ?>
+                                                    <a class="action-customize-product" data-item-id="<?= $_product->getId() ?>" data-item-sku="<?= $_product->getSku() ?> " href="javascript:void(0);"><?= $escaper->escapeHtml(__("Customize")) ?></a>
+                                                <?php else: ?>
+                                                    <a class="action-kebab-add-to-cart" data-item-id="<?= $_product->getId() ?>" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Add to Cart")) ?></a>
+                                                <?php endif; ?>
+                                            </div>
+                                            <?php
+                                            $extProd = $_product->getExternalProd();
+                                            $prodata = !empty($extProd) ? json_decode($extProd, true) : [];
+                                            if ($nonStandardCatalogToggle && isset($prodata['externalSkus']) && !empty($prodata['externalSkus'])) {
+                                                $userWorkspaceData = '';
+                                                if (isset($prodata['userWorkspace']) && !empty($prodata['userWorkspace'])) {
+                                                    $userWorkspaceData = json_encode($prodata['userWorkspace']['files']);
+                                                }
+                                                ?>
+                                                <div class="menu-item-label changerequest" id="change-request-product">
+                                                    <a prodid="<?= $_product->getSku() ?>" userWorkSpace='<?= $userWorkspaceData; ?>' prodname="<?= $_product->getName() ?>" class="change-request-product" href="javascript:void(0)"><?= $escaper->escapeHtml(__("Request Change")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php } else {
+                                                $isCustomerCanvas = $_product->getData('is_customer_canvas');
+                                                $shouldHideEdit = false;
+                                                if ($dyesubViewModel && $dyesubViewModel->isDyeSubEnabled() && $isCustomerCanvas) {
+                                                    if ($dyesubViewModel->isExpiredCatalogProduct($_product)) {
+                                                        $shouldHideEdit = $dyesubViewModel->isExpiredCatalogProduct($_product);
+                                                    }
+                                                }
+                                                if(!$shouldHideEdit){
+                                                ?>
+                                                <div class="menu-item-label">
+                                                    <a class="edit-product" href="<?= $block->getUrl('catalogmvp/configurator/index/')."sku/".$_product->getSku()?>"><?= $escaper->escapeHtml(__("Edit")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php } }?>
+                                            <div class="menu-item-label Delete">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Delete")) ?></a>
+                                            </div>
+                                            <div class="menu-item-label Download menu-item-label-download">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>"><?= $escaper->escapeHtml(__("Download File(s)")) ?></a>
+                                            </div>
+                                            <?php if(!$isD206810ToggleEnabled): ?>
+                                                <div class="menu-item-label Duplicate">
+                                                    <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                        <?= $escaper->escapeHtml(__("Duplicate")) ?></a>
+                                                </div>
+                                            <?php endif; ?>
+                                            <div class="menu-item-label Move">
+                                                <a href="#"><?= $escaper->escapeHtml(__("Move")) ?></a>
+                                            </div>
+                                            <?php
+                                                if ($eproUnableToAddInBranchProductToCartToggle) {
+                                                    if (isset($prodata['contentAssociations']) &&
+                                                        !empty($prodata['contentAssociations'])) { ?>
+                                                            <div class="menu-item-label Preview">
+                                                                <a href="javascript:void(0);" aria-label="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                            </div>
+                                                        <?php }
+                                                } else { ?>
+                                                    <div class="menu-item-label Preview">
+                                                        <a href="javascript:void(0);" aria-label="Preview" class="preview-image-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>"><?= $escaper->escapeHtml(__("Preview")) ?></a>
+                                                    </div>
+                                                <?php }
+                                            ?>
+                                            <div class="menu-item-label action_kebab_item_rename">
+                                                <a href="javascript:void(0);" data-item-id="<?= $_product->getId() ?>">
+                                                    <?= $escaper->escapeHtml(__("Rename")) ?></a>
+                                            </div>
+                                            <?php if($isCatalogExpiryToggle && $viewModelMvphelper->isSharedCatalogPermissionEnabled()) :?>
+                                                <div class="menu-item-label renew action_kebab_right_item_renew" id="renew">
+                                                    <a prodid="<?= $_product->getId() ?>" prodname="<?= $_product->getName() ?>" class="action_kebab_right_item_renew" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Renew")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php endif;?>
+                                            <?php if ($nonStandardCatalogToggle) :?>
+                                                <div class="menu-item-label settings change-settings-product" id="change-settings-product">
+                                                    <a prodid="<?= $_product->getSku() ?>" prodname="<?= $_product->getName() ?>" class="change-settings-product" href="javascript:void(0);"><?= $escaper->escapeHtml(__("Settings")) ?>
+                                                    </a>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                               <button class="action details cancel-btn-delete product-item-details-mobile"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                               >Details</button>
+                            <?php } ?>
+                            <?php
+                            if ($eproUnableToAddInBranchProductToCartToggle) {
+                                // D-193118: check added for contentAssociations if empty then, dont show preview link
+                                if ( isset($externalProdData['contentAssociations']) &&
+                                !empty($externalProdData['contentAssociations']) &&
+                                $viewMode == 'list' &&
+                                !$customerAdmin
+                                ) { ?>
+                                    <a href="javascript:void(0);" title="Preview" aria-label="Preview" class="preview-image-container preview-image-link-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>">Preview</a>
+                                <?php }
+                            } else {
+                                if($viewMode == 'list' && !$customerAdmin) {
+                                ?>
+                                    <a href="javascript:void(0);" title="Preview" aria-label="Preview" class="preview-image-container preview-image-link-container" datashowpreview="<?= $_product->getData('pod2_0_editable')?>" datasku="<?= $_product->getSku()?>" data-th="PREVIEW">Preview</a>
+                                <?php }
+                            } ?>
+
+                        <?php } ?>
+                        <!-- code end -->
+                        <?php if($viewMode == 'list' && !$customerAdmin) {  ?>
+                            <button class="action details cancel-btn-delete product-item-details-mobile-normal"  id="right-panel-mobile_<?= /* @noEscape */ $_product->getId() ?>"
+                            >Details</button>
+                        <?php } ?>
+                    </div>
+                    <?= strpos((string)$pos, $viewMode . '-actions') ?
+                        /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                            $position,
+                            'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                        ) : '' ?>
+                </li>
+            <?php endforeach; ?>
+        </ol>
+    </div>
+    <!-- B-1569586 -->
+    <?php if ($catalogMvpToggle) { ?>
+
+        <?= $block->getChildHtml('catalog.list.right.panel'); ?>
+        <!-- B-1646916-Delete-Modal-popup -->
+        <?= $block->getChildHtml('custom.modal.delete.popup') ?>
+
+        <!-- B-1651686-Create move to modal to move the folder and catalog item -->
+        <?= $block->getChildHtml('custom.modal.move.operation') ?>
+        <!--------- Change Request Action added --------------->
+        <?= $block->getChildHtml('change.request.modal') ?>
+        <!--------- Change Request Action added End --------------->
+
+        <!---------Renew Action start ----------------------------->
+        <?= $block->getChildHtml('content.renew.modal'); ?>
+        <!---------Renew Action end ----------------------------->
+
+        <!---------------Catalog Renew Success Message------------------------->
+        <?= $block->getChildHtml('renew.success.modal') ?>
+        <?php if ($isCommercialCustomer) { ?>
+            <div class="commercial-toolbar-bottom">
+                <?= $block->getToolbarHtml() ?>
+            </div>
+        <?php }
+    }
+    ?>
+
+        <script type="text/javascript">
+
+        window.b2034092Toggle = '<?= $catalogUpdateMessages; ?>' === '1';
+
+        function selects(checkBox) {
+            get = document.getElementsByClassName('product-item-checkbox');
+            for(var i=0; i<get.length; i++) {
+                get[i].checked = checkBox.checked;
+            }
+
+            categoryCheck = document.getElementsByClassName('category-item-checkbox');
+            for(var i=0; i<categoryCheck.length; i++) {
+                categoryCheck[i].checked = checkBox.checked;
+            }
+        }
+
+        require(['jquery','fedex/storage'], function($,fxoStorage){
+            $(document).on("toast_message_fired",function(event,message) {
+                if(window.e383157Toggle){
+                    fxoStorage.set("mvp_toast_message",message);
+                }else{
+                    localStorage.setItem("mvp_toast_message",message);
+                }
+            })
+        });
+    </script>
+    <?php if($customerAdmin) { ?>
+    <!--------------- Customer Admin Javascript ------------------------->
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "customerAdminJs": {
+                "moveProductUrl": "<?php echo $this->getUrl('catalogmvp/index/moveProduct')?>",
+                "catalogEllipsisEnable": "<?= $catalogEllipsisEnable?>",
+                "char100Enable": "<?= $char100Enable ?>",
+                "getCurrentSubCategoryId": "<?php echo $getCurrentSubCategoryId; ?>",
+                "getCurrentSubCategoryName": "<?php echo $getCurrentSubCategoryName; ?>",
+                "isCatalogExpiryNotificationToggle": "<?= $viewModelMvphelper->isCatalogExpiryNotificationToggle() ?>",
+                "isD217161Enabled": "<?= $viewModelMvphelper->isD217161Enabled() ?>",
+                "bulkMoveProductUrl": "<?php echo $this->getUrl('catalogmvp/index/bulkMoveProduct')?>",
+                "moveFolderUrl": "<?php echo $this->getUrl('catalogmvp/index/moveFolder')?>",
+                "searchcategorybynameUrl": "<?= $this->getUrl('catalogmvp/index/searchcategorybyname')?>",
+                "getCurrentCategoryId": "<?= $getCurrentCategoryId ?>",
+                "isCustomDocEnabledJson": <?php echo json_encode(boolval($isCustomDocEnabled)); ?>,
+                "rightpanelUrl": "<?= $this->getUrl('catalogmvp/index/rightpanel')?>",
+                "isCustomDocEnabled": "<?= $isCustomDocEnabled ?>",
+                "isCatalogUpdatesJson": <?php echo json_encode(boolval(true)); ?>,
+                "nonStandardToggle": "<?= $viewModelMvphelper->isNonStandardCatalogToggleEnabled() ?>",
+                "nonStandardReplaceFileConfig": <?= json_encode($viewModelMvphelper->getNscReplaceFileConfig()); ?>,
+                "nonStandardReplaceFileToggle": "<?= $viewModelMvphelper->getNscReplaceFileToggleEnabled() ?>",
+                "settingsText": "<?= $escaper->escapeHtml(__("Settings")) ?>",
+                "requestChangeText": "<?= $escaper->escapeHtml(__("Request Change")) ?>",
+                "fixedQtyHandlerToggle": "<?= /* @escapeNotVerified */ $fixedQtyHandlerToggle?: 0 ?>",
+                "addtocartUrl": "<?php echo $this->getUrl('catalogmvp/index/addtocart')?>",
+                "cartUrl": "<?php echo $this->getUrl('checkout/cart')?>",
+                "updatecategoryUrl": "<?php echo $this->getUrl('catalogmvp/index/updatecategory')?>",
+                "updateproductUrl": "<?php echo $this->getUrl('catalogmvp/index/updateproduct')?>",
+                "deleteproductUrl": "<?php echo $this->getUrl('catalogmvp/index/deleteproduct')?>",
+                "cuurentUrl": "<?php echo $this->getCurrentUrl()?>",
+                "addtocartsingleUrl": "<?php echo $this->getUrl('catalogmvp/index/addtocartsingle')?>",
+                "configutorUrl": "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>",
+                "bulkdeleteUrl": "<?php echo $this->getUrl('catalogmvp/index/bulkdelete')?>",
+                "deletecategoryUrl": "<?php echo $this->getUrl('catalogmvp/index/deletecategory')?>",
+                "duplicateproductUrl": "<?php echo $this->getUrl('catalogmvp/index/duplicateproduct')?>",
+                "viewMode": "<?= $viewMode ?>",
+                "UpdateCatalogExpiryDateUrl": "<?php echo $this->getUrl('catalogmvp/index/UpdateCatalogExpiryDate')?>",
+                "changeSettingsUrl": "<?php echo $this->getUrl('catalogmvp/index/ChangeSettings')?>",
+                "changeRequestUrl": "<?php echo $this->getUrl('catalogmvp/index/ChangeRequest')?>",
+                "getCurrentCategoryPath": <?php echo json_encode($getCurrentCategoryPath); ?>,
+                "minChar": <?= $minChar ?>,
+                "ellipsisStartChar": <?= $ellipsisStartChar ?>,
+                "ellipsisEndChar": <?= $ellipsisEndChar ?>,
+                "addToCartRedirectStop": <?= $addToCartRedirectStop ?>
+            }
+        }
+    }
+    </script>
+    <?php } else { ?>
+    <!--------------- Customer User Javascript ------------------------->
+    <script type="text/x-magento-init">
+    {
+        "*": {
+            "customerUserJs": {
+                "catalogEllipsisEnable": "<?= $catalogEllipsisEnable?>",
+                "char100Enable": "<?= $char100Enable ?>",
+                "isCustomDocEnabledJson": <?php echo json_encode(boolval($isCustomDocEnabled)); ?>,
+                "rightpanelUrl": "<?= $this->getUrl('catalogmvp/index/rightpanel')?>",
+                "isCustomDocEnabled": "<?= $isCustomDocEnabled ?>",
+                "addtocartUrl": "<?php echo $this->getUrl('catalogmvp/index/addtocart')?>",
+                "cartUrl": "<?php echo $this->getUrl('checkout/cart')?>",
+                "addtocartsingleUrl": "<?php echo $this->getUrl('catalogmvp/index/addtocartsingle')?>",
+                "configutorUrl": "<?php echo $this->getUrl('catalogmvp/configurator/index') ?>",
+                "minChar": <?= $minChar ?>,
+                "ellipsisStartChar": <?= $ellipsisStartChar ?>,
+                "ellipsisEndChar": <?= $ellipsisEndChar ?>,
+                "addToCartRedirectStop": <?= $addToCartRedirectStop ?>
+            }
+        }
+    }
+    </script>
+    <?php } ?>
+<?php } ?>
+<!--------------- Download Document Ajax call Javascript ------------------------->
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "download": {
+                "downloadAjaxUrl": "<?php echo $downloadAjaxurl; ?>"
+            }
+        }
+    }
+</script>

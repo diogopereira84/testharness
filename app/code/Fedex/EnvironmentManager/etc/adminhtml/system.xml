@@ -1,0 +1,1422 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="environment_toggle_configuration" translate="label" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Features Toggle Configuration</label>
+            <tab>fedex_configurations</tab>
+            <resource>Fedex_EnvironmentManager::environmentmanager_config</resource>
+            <group id="environment_toggle_report" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Features Toggle Report</label>
+                <field id="export_report" translate="label" type="button" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Generate and Export CSV Report</label>
+                    <frontend_model>Fedex\EnvironmentManager\Block\System\Config\CsvExportButton</frontend_model>
+                </field>
+            </group>
+            <group id="environment_toggle" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Features Toggle Configuration</label>
+                <field id="enable_epro_email" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-1840377 Enable Update Epro Email Templates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="update_contact_info" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-1916490 Update 1p only email contact info</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="add_edit_folder_access" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-B-2128680 Add Edit Folder Access </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sales_rep_ctc_bcc_quote_confirmation" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-B-2282725 Sales Rep/CTC BCC on U2Q Quote Confirmation emails</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_custom_qty" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Enable Custom Qty on PDP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1109907 : Optimize Configurations -->
+                <field id="is_optimize_configuration" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Optimize Api Configurations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1299552 - Cleanup Toggle Feature - po_number_failure_fix -->
+                <field id="merge_shared_catalog_files" translate="label" type="select" sortOrder="142" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Maze-Geeks - Enable Merged Shared Catalog Files</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d187301_fix" translate="label" type="select" sortOrder="142" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Maze-Geeks - D-187301 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!--B-1922765 RT-ECVS Create toggle for Change Customer User Roles/Permissions-->
+                <field id="change_customer_roles_and_permissions" translate="label" type="select" sortOrder="87" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label> MazeGeeks - E-404291 Changing Customer Roles and Permissions</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1299551 toggle clean up start end -->
+                <field id="armada_call_rate_api_shipping_validation" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Call Rate API for Shipping Account Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_restricted_and_recommended_production" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers E-394577 - Restricted And Recommended production locations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explores_remove_adobe_commerce_override" translate="label" type="select" sortOrder="958" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>E-443568 - Explorers Remove Adobe Commerce Core Override</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d188299_production_location_fix" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-188299 - Site Locked Down To A Single Center Is Sending Orders To A Different Center</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_retail_unique_class" translate="label" type="select" sortOrder="330" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Enable Unique Class For Retail</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- B-1182751 - JS Errors - Product Detail Page - Array.from-->
+                <field id="explorers_optimize_quotes_and_orders_within_14_months" translate="label" type="select" sortOrder="450" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Optimize Quotes and Orders within 14 months</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- Tiger Team - B-1343810 - Third Party Modal Copy Change-->
+                <!-- Stargate Command Team - B-1392314 - Pass Tax Exempt Modal Data from Admin to Frontend -->
+                <field id="sgc_b1392314_pass_tax_exempt_modal_data" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - B-1392314 - Pass Tax Exempt Modal Data from Admin to Frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_b1411774_pass_third_party_legal_disclaimer_data" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - B-1411774 - Pass Third Party Legal Disclaimer Modal Data from Admin to Frontend</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_user_group_and_folder_level_permissions" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - E-408135 - User Group and Folder Level Permission</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="sgc_E467881_upload_to_quote_submit_date" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - E-467881 - Upload to quote submit date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_D240012_upload_to_quote_expire_status" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - D-240012 - Upload to quote Expire Status</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_b1324662_migrate_canvaid_to_retail_profile" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - B-1324662 Migrate Canva IDs from POD2.0 database to Retail Profile</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_delete_cart_items_confirmation_modal" translate="label" type="select" sortOrder="410" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>E-390655 - Explorers - Delete Cart Items Confirmation Modal</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="innovation_hub_qraphql_components" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Enable GraphQL for retrieving the header, footer, and megamenu </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_b1528031_track_order_pod" translate="label" type="select" sortOrder="400" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Stargate Command Team - B-1528031 - Order Tracking</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_catalog_migration" translate="label" type="select" sortOrder="572" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-378289 Catalog Migration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_non_standard_catalog" translate="label" type="select" sortOrder="572" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-390932 Non-Standard Catalog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="hawks_published_flag_indexing" translate="label" type="select" sortOrder="1023" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>HAWKS - D-235849 Published-Flag Indexing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_non_standard_catalog_emails_without_price" translate="label" type="select" sortOrder="573" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-390932 Non-Standard Catalog Emails Without Price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_company_setting_non_standard_catalog" translate="label" type="select" sortOrder="574" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-445046 Non-Standard Catalog For Company Setting</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_change_product_association_rate_quote_request" translate="label" type="select" sortOrder="652" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>InStore - Change Product Association Rate Quote Request</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_enable_disable_fedex_account_cc_commercial" translate="label" type="select" sortOrder="579" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-390888 FedEx Accounts for CC Commercial Sites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="fxo_cm_toggle" translate="label" type="select" sortOrder="656" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - POD 2.0 FXOCM Toggle</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="fxo_cm_integration" translate="label" type="select" sortOrder="656" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - POD 2.0 FXOCM Integration Mode</label>
+                    <source_model>Fedex\FXOCMConfigurator\Model\Adminhtml\System\Config\Source\IntegrationType</source_model>
+                </field>
+                <field id="E352723_use_clientId_header" translate="label" type="select" sortOrder="595" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>E352723 Use ClientId Header</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d195836_fix_high_load_time_for_hero_banner" translate="label" type="select" sortOrder="750" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TigerTeam, D-195836 - Fix for High Load Time for Hero Banner</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="batch_upload_toggle" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - E-381140 Batch Upload Toggle</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="new_documents_api_image_preview_toggle" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - E-398131 : Adoption of New Document Platform</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="new_fujitsu_receipt_approach" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-1980983 : New Fujitsu Receipt Approach</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="character_limit_toggle" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - E-345638 Extension of Project name, Product Name and Catalog folder name limit to 100 chars</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="fxo_cm_epr_custom_doc" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2018121 Millionaires: Enable FXOCM in ePro for custom-doc</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d172420_ext_number_type_change" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires -D-172420 phone number-extension type change</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="d191716_commercial_cart_page_line_items" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires -D-191716: Commercial cart page line items</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d193132_ePro_legacy_line_items" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires -D-193132: EPro legacy cart page line items</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b2184326_epro_migrated_custom_doc" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2184326 - epro Custom doc for migrated Document</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="E443304_stop_redirect_mvp_addtocart" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - E-443304 - Stop redirect to cart page after Add to Cart Catalog for Commercial</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="fxo_cm_fixed_qty_handle_for_catalog_mvp" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2084242: Handling Items with Fixed Quantities For Catalog MVP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="commercial_user_group_order_approvers" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - E-414626: Commercial - User Group Order Approvers</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b2154431_update_continue_shopping_cta" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2154431: Update Continue Shopping CTA</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b_2088132_toggle_po_number_email" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2088132: PO Number Display in email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_188392_selfreg_migrated_customdoc_preview_image_cart_page" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - D-188392: Selfreg_Preview is not displaying for migrated custom doc in cart page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b_2205515_migrate_workspace_data_to_new_doc_api" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - B-2205515: Migrate Dunc workspace data to new doc api</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="techtitans_b2353482_remove_legacy_document" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2353482 | NFR - Remove legacy document from workspace</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_193118_epro_unable_to_add_inbranch_doc_to_cart" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - D-193118: EPRO_Unable to add in branch document into cart from catalog preview page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_190493_show_home_delivery_for_comercial_delivery_options" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Millionaires - D-190493: Show Home Delivery for Commercial delivery
+                     options</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="colo_migration_header_length_issue_fixed" translate="label" type="select" sortOrder="716" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Hawks - B-1846806 - Colo Migration Header Length Issue Fixed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_document_level_touting" translate="label" type="select" sortOrder="719"
+                       showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-366082 Document Level Routing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="B1837352_verify_gateway_call" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>B1837352 Verify Gateway Call</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerteam_e383157Toggle" translate="label" type="select" sortOrder="718" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-383157 - CY23-PI05 - NFR - Cleanup checkout and local storage</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_B_2177449_order_tracking_improvement_toggle" translate="label" type="select" sortOrder="721" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2177449 Order Tracking Code Improvement</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_enable_disable_catalog_creation_ctc_admin_update" translate="label" type="select" sortOrder="579" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-397415 Catalog CTC Admin Updates - Catalog Creation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="disable_accept_encoding_l1_l3" translate="label" type="select" sortOrder="579" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Disable Accept Encoding L1 L3</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_remove_companyadmin_fields" translate="label" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC- B-1889697 REMOVE COMPANY ADMIN FIELDS</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_inactive_error_message" translate="label" type="select" showInDefault="200" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-B-2008404 INACTIVE ERROR MESSAGE</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_xapi_enhancement" translate="label" type="select" showInDefault="2" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC- B-2006650 XAPI ENHANCEMENT FROM MAGENTO</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_new_model_popup_order_submission" translate="label" type="select" showInDefault="250" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-B-2176641 NEW MODAL POPUP ORDER SUBMISSION</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_company_settings_fields_updates" translate="label" type="select" showInDefault="250" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-B-2194723 COMPANY SETTINGS FIELD UPDATES</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_promise_time_pickup_options" translate="label" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-E-372456 PROMISE TIME PICKUP OPTIONS</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_priority_print_limited_time_tag" translate="label" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Priority Print Pickup Limited Time Only Tag</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_improving_visibility_to_change_password" translate="label" type="select" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-E-449727 Improving Visibility to Change Password</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_promise_time_warning_modal" translate="label" type="select" showInDefault="10" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-E-372456 PROMISE TIME WARNING MODAL</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_change_admin_button" translate="label" type="select" sortOrder="581" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - B-1889709 Change Admin Button</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_174773_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-174773 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_179523_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-179523 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_191654_folder_permission_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-191654 Folder Level Permission Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_194433_profileapi_fix" translate="label" type="select" sortOrder="583" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-194433 Profile API fix for Epro admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_197790_commercial_landing_page_fix" translate="label" type="select" sortOrder="583" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-197790 Commercial Landing Page URL Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_instanceid_d_199138_fix" translate="label" type="select" sortOrder="584" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-199138 InstanceId Fix for RateQuote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_call_print_ready_custom_doc_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - B-2179201 Call Print Ready API Custom Doc Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_call_print_ready_catalog_migration" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - B-2184239 Call Print Ready API With Catalog Migration</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_D192133_fix" translate="label" type="select" sortOrder="584" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-192133 Order Email Timezone Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_D169823_fix" translate="label" type="select" sortOrder="560" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers D-169823 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_D189985_fix" translate="label" type="select" sortOrder="560" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>X-MEN D-189985 U2Q Admin Quote Waring Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_company_settings_customer_admin" translate="label" type="select" sortOrder="560" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers E-427430 Company Settings - Customer Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_order_email_alternate_pick_up_person" translate="label" type="select" sortOrder="570" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers E-423266 - Order email to alternate pick up person</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_onsite_stores_recommended_locations" translate="label" type="select" sortOrder="560" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers B-2120177 Onsite Stores Recommended Locations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_customer_reporting_enhancements" translate="label" type="select" sortOrder="561" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Customer Reporting Enhancements</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D171411_error_on_change_company_email" translate="label" type="select" sortOrder="786" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-171411 - Fix error on change admin company email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="Hawks_B1999377_code_optimization" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Hawks B1999377 Code Optimization</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitan_performance_improment" translate="label" type="select" sortOrder="850" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - Performance Improvement toggle for commercial store</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerteam_e411396Toggle" translate="label" type="select" sortOrder="770"
+                       showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-411396 POD 2.0 Checkout Code Refactoring (NFR)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="print_product_prod_issue_fixed" translate="label" type="select" sortOrder="792"
+                       showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-173762 U2Q_Unable to access Print Products fix </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="catalog_expiry_notifications" translate="label" type="select" sortOrder="420" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers E-408187 - Catalog Expiry Notifications Toggle</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_jump_link_tab" translate="label" type="select" sortOrder="770"
+                       showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>XMEN - D-170634 - Jump links</label>
+                    <comment>Jump links for the tabs on Homepage Most Popular section not working</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_B2041921_detected_on_fxo_ecommerce_platform" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2041921 - Vulnerability detected on fxo-ecommerce-platform</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_remove_cache_code" translate="label" type="select" sortOrder="802" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - Remove Unwanted Cache Clean Code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_173846_category_edit_issue" translate="label" type="select" sortOrder="811" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-173846 - Category under "Catalog and Document User Settings"  is not updating.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_174502_catalog_defaul_sorting" translate="label" type="select" sortOrder="811" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-174502 - Catalog Default Sorting</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_174940_documents_cannot_be_added_to_the_cart" translate="label" type="select" sortOrder="560" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-174940 ePro POD  Magento customizable catalog documents can not be added to the cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_enhanced_commercial_sort_by" translate="label" type="select" sortOrder="785" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2072741 Commercial Print Products default sort should be alphabetical by Product Name</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_179675_ePro_getting_system_error_when_single_delivery" translate="label" type="select" sortOrder="851" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-179675 ePro_Getting system error</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_177875_correct_price_product" translate="label" type="select" sortOrder="851" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-177875 Correct price on edit product</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_order_search_toggle" translate="label" type="select" sortOrder="904" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>InStore - B-2159589 - Order Search Toggle</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="instore_nfw" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>InStore - B-2100937 - No File Workflow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_D178017_fix" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-178017 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_D192068_fix" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-192068 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_fix_rateQuoteCall" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Fix for RateQuoteCall Trigger in Epro on Checkout (D-178293)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_177591_fix_allow_file_upload_issue" translate="label" type="select" sortOrder="851" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-177591 Fix File Upload Configurator Issue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_site_level_quoting_stores" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-427665 Site Level Quoting Stores (Upload to Quote)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_specials_chars_remove" translate="label" type="select" sortOrder="860" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - Special Chars Remove From PO Number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_180202_cannot_submit_order_with_single_method_selected" translate="label" type="select" sortOrder="860" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-180202 - Cannot submit order when we have just a single method selected</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_177877" translate="label" type="select" sortOrder="860" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-177877 Folder icons are missing in list or tile view for shared catalog navigation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_cart_items_logging" translate="label" type="select" sortOrder="906" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Cart Items Logging</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerteam_d178760_product_id_missing_property" translate="label" type="select" sortOrder="581" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger team - D-178760- VoC - U2Q - PRODUCT.ID.MISSING.PROPERTY</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_D179263_fix" translate="label" type="select" sortOrder="907" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-179263 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerTeam_D180031_fix" translate="label" type="select" sortOrder="907" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TigerTeam - D-180031 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_B2041064_NFR_delete_operation" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>XMEN - B-2041064 NFR Delete operations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D179665_fix" translate="label" type="select" sortOrder="950" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - D-179665 Fix the Subfolder Not Showing Issue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_D180349_fix" translate="label" type="select" sortOrder="951" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-180349 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D180778_fix" translate="label" type="select" sortOrder="952" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - D-180778 Fix the Customer Exporting Issue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D190199_fix" translate="label" type="select" sortOrder="953" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - D-190199 Fix: After editing the catalog item, updated price details are not reflecting on Shared catalog page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_B2096706_shared_catalog_price_sync" translate="label" type="select" sortOrder="952" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - B-2096706 Shared Catalog Price Sync</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_190723_fix" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers-d-190723-Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="nfr_catelog_performance_improvement_phase_one" translate="label" type="select" sortOrder="997" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitan - NFR catalog performance improvement phase one</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="nfr_catalog_performance_improvement_phase_two" translate="label" type="select" sortOrder="998" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - NFR catalog performance improvement phase two</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="nfr_catelog_performance_improvement_phase_three" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitan - NFR catalog performance improvement phase three</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_B_2193925_product_updated_at" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - B-2193925 Catalog sorting by updated date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="D_182472_pagination_bar_is_not_working_properly" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitan - D-182472 Pagination bar is not working properly and when switched to grid view, still list view is visible.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="fuse_bidding_quote_retail_commercial" translate="label" type="select" sortOrder="800" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>X-MEN - FUSE Bidding - Converting Quote via POD 2.0 Retail_Commercial</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+               </field>
+                <field id="shared_catalog_mapping_issue_fix" translate="label" type="select" sortOrder="1001" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitan - Shared Catalog Mapping Issue fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="maze_geeks_catalog_mvp_breakpoints_and_ada" translate="label" type="select" sortOrder="144" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Maze-Geeks-E-365685-Catalog MVP Breakpoints and ADA</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_toas_mapping_redesign" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers-E-443889-Toas mapping redesign</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+		        <field id="tech_titans_d_182865_remove_new_project_cta" translate="label" type="select" sortOrder="999" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-182865 Remove Configurator New Project CTA</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d185410_fix" translate="label" type="select" sortOrder="906" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-185410 Import catalog Multiple categories Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d186292_fix" translate="label" type="select" sortOrder="906" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-186292 Create Catalog Production Timeout Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="e_451182_order_approver_ctc_admin" translate="label" type="select" sortOrder="717" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-451182: Order Approver CTC Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                 <field id="mazegeeks_d176976" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D176976 Modified Date Sync</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_e_427646_shipping_methods_display" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-427646 Shipping Methods Display</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_186617_unable_to_delete_1p3p_product" translate="label" type="select" sortOrder="909" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-186617 - Logged-in-User-Guest User-Unable to delete 1P/3P Product from the Minicart for 2nd time</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_d185985" translate="label" type="select" sortOrder="909" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-185985 - Intermittent error message shown on checkout pages</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_epro_upload_to_quote" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers- E-436360 - ePro - Upload to Quote</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_handle_printReadyFlag" translate="label" type="select" sortOrder="909" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers- Handle PrintReady Flag</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_174909" translate="label" type="select" sortOrder="851" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-174909 Pagination Hide Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_187090" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-187090 Calender not Working Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_b_2107362" translate="label" type="select" sortOrder="333" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - B-2107362 Tab Name Updates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_d187746" translate="label" type="select" sortOrder="1112" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-187746 - Browser local storage displays incorrect delivery info for Printful in mixed cart orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_167762" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-167762 Catalog Items Showing in Print Products Page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_184741" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans -D-184741 error on edit link my account</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_D177346_fix" translate="label" type="select" sortOrder="1120" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>X-MEN D-177346 - Alternate Pickup Person fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>D-177346 - Alternate Pickup Person being retained as Contact Person when Delivery Method is switched</comment>
+                </field>
+                <field id="tiger_E424573_optimizing_product_cards" translate="label" type="select" sortOrder="1125" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-4245730 - Optimizing Product Cards setup across Retail and Commercial Sites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_188214" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-188214 Customer Admin Catalog Management Permission User Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_auto_cart_transmission_to_erp" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Auto Cart Transmission to ERP For Epro</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!-- D-184291 ePro-Updated email id not received Quote confirmation -->
+                <field id="explorers_d_184291_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-184291 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="maegeeks_d172040_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - Document Lifetime Change to 30 Days</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="maegeeks_pobox_toggle" translate="label" type="select" sortOrder="1200" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - E-455718 - PO Box Address Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="xmen_D190450_fix" translate="label" type="select" sortOrder="1150" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Xmen D-190450 B2B Order DLT Not Recalculating Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="test_transaction_timeout_toggle" translate="label" type="select" sortOrder="1150" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Order Transaction Timeout Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable this toggle to test transaction timeout sceanrio for order approval. Make sure to keep it off after testing.</comment>
+                </field>
+                <field id="tech_titans_d_182861" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-182861 - Customer admin user only 10 folders display when moving docs Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_b_2219831" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2219831 - Rate quote code optimization phase - 3</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d_190859_issue_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-190859 - Getting maintenance page in admin after changing company admin email manually and save Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_191188_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-191188 - Cart Summary Count Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_190199_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-190199 - Product Edit Price Update Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_193256_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-193256 - Alternate Contact Person (order-initiator) is being overwritten by recipient contact in POD, contact is not passed to FUSE, and customer does not receive order confirmation email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_197503_fix" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>In Epro - With alternate pickup person details flow , Receipt mail is sending to Alternate pickup person</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_e_441563" translate="label" type="select" sortOrder="1050" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-441563 Temporarily Unavailable Message for 1P/3P Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_b2185176_remove_adobe_commerce_overrides" translate="label" type="select"
+                       sortOrder="1051" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2185176 - Remove Adobe Commerce Core Overrides</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_191726_fix" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-191726 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_e448209_new_marketing_content" translate="label" type="select" sortOrder="905" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - E-448209 New Marketing content block for tabbed content</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_ctc_admin_impersonator" translate="label" type="select" sortOrder="908" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - E-450128 CTC Admin Impersonator</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+		        <field id="tech_titans_d_194022" translate="label" type="select" sortOrder="1101" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-194022 Fix ContentAssociations empty Issue For In-Branch Document Shipping Option Load</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_shipping_address_errorCode" translate="label" type="select" sortOrder="191" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers E-313451 Shipping Address Error Code</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_d194471_fix_order_emails_subtotal_to_match_front_end" translate="label" type="select"
+                       sortOrder="1052" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-194471 - Order summary shown on Order success page differs with
+                        Order Confirmation/Shipping/Cancellation mail order summary
+                    </label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_sso_login_fix" translate="label" type="select" sortOrder="192" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers B-2237812 SSO Login Email Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_bugfix_spinner" translate="label" type="select" sortOrder="909" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - Home spinner bugfix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d194278_admin_product_refresh" translate="label" type="select" sortOrder="909" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-194278 Admin Product Refresh</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_user_preference_import_fields" translate="label" type="select" sortOrder="918" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - User Preference Import Fields</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_fix_billing_field_from_acc_api" translate="label" type="select" sortOrder="918" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Mazegeeks - Fix Billing Field Add Account from Profile API</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d195445_fix" translate="label" type="select" sortOrder="950" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers D-195445 Delivery Options Production Locations randomly Change Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_194434" translate="label" type="select" sortOrder="951" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-194434 - Review Order Gray Button Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="tech_titans_d_198167" translate="label" type="select" sortOrder="951" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-198167 - Fedex Account Number Mask</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="techtitans_d_193751" translate="label" type="select" sortOrder="919" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-193751 - SSO Login fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d196142_fix" translate="label" type="select" sortOrder="952" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D- 196142 Commercial Customer redirected to retail</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d196314_fix" translate="label" type="select" sortOrder="954" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-196314 User verification email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d200560_fix" translate="label" type="select" sortOrder="954" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-200560 Catalog Expiry List Email</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d196313_fix" translate="label" type="select" sortOrder="955" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-196313 DLT in delivery options API and Rate quote API for migrated catalogs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d196499_fix" translate="label" type="select" sortOrder="956" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-196499 Fix Comma Separator not allow in Catalog Price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigers_e456656_account_validation_in_magento_admin" translate="label" type="select"
+                       sortOrder="1051" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-456656 - Account Validation in Magento Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_193926_fix" translate="label" type="select" sortOrder="582" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-193926 Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="explorers_d196641_fix" translate="label" type="select" sortOrder="957" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-196641 getNegotiableQuoteStatus calling delivery options on admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="mazegeeks_user_email_verification_redirect" translate="label" type="select" sortOrder="958" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - User Email Verification Redirect</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="explorer_nsc_replace_file" translate="label" type="select" sortOrder="958" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorer - E-450150 Non Standard Catalog Replace File</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_save_catalogmvp_product_operation_redis" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - B-2282143 Save Catalog Mvp Product Operaion Redis</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d196997_fix" translate="label" type="select" sortOrder="965" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-196997 Epro Shipping Price Issue Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorer_B2285990_ePro_Integrationtype" translate="label" type="select" sortOrder="961" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorer - B-2285990 ePro Iframe Integration</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorer_D196640_add_to_cart_is_calling_delivery_options" translate="label" type="select" sortOrder="961" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorer - D-196640 Add to cart is calling delivery options</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_improving_update_item_qty_cart" translate="label" type="select" sortOrder="965" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - E-451614 Improving Update Item Qty Cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_d_196604" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-196604 - Site Settings tab fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_address_classification_fix" translate="label" type="select" sortOrder="961" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Address Classification Fix</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_d_198297" translate="label" type="select" sortOrder="960" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-198297 - Compress the LocalStorage Data</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_198368_fix" translate="label" type="select" sortOrder="962" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-198368 INC028431511 POD 2.0 Commercial - Customer Admin Added Catalog Pricing Inconsistent Fix</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_warning_msg_fix" translate="label" type="select" sortOrder="961" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - Warning Msg Fix</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_198644_fix" translate="label" type="select" sortOrder="970" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-198644 Fix</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="price_perception_toggle_E455387" translate="label" type="select" sortOrder="892" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-455387 Price Perception (PDP Update)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_allow_file_upload_catalog_flow" translate="label" type="select" sortOrder="967" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Exploers - B-2293456 Allow File upload in catalog flow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+    		    <field id="explorer_ctcadmin_remove_fxosessionid" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorer - CTC Admin Remove FXOSESSIONID Configurator</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_193257_fix" translate="label" type="select" sortOrder="961" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-193257 - Special Characters Validation on checkout page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techTitans_customDocExpiry_fix" translate="label" type="select" sortOrder="986" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - Custom Doc Expiry Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techTitans_B_2279275_topmenu" translate="label" type="select" sortOrder="986" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - B-2279275 - TopMenu speed up</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+
+                <field id="tech_titans_b_2294849" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2294849 Punchout Extrinsic Considering only external id</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_E_455768_magento_quote_details_enhancements" translate="label" type="select" sortOrder="1000" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks-E-455768-Magento Quote Detail Enhancements</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+		        <field id="mazegeeks_D197476_fix" translate="label" type="select" sortOrder="962" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-197476 - Unpublished Product of Folders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_b_2179775" translate="label" type="select" sortOrder="959" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2179775 Freedom Pay Message Improvement</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="D201300_tech_titan_save_domain_in_lower_case" translate="label" type="select" sortOrder="1201" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-201300 Case sensitive domain registration fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titan_past_expiration_doc_date_fix" translate="label" type="select" sortOrder="1202" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-202288 creates a past-expiration date after saving doc fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_b_2256325" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - E-451184 User Permission - CTC Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_b_2205903_fix" translate="label" type="select" sortOrder="1203" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - B-2205903 - NSC - Manual SKU Default</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d_204604_fxo_account_number_fix" translate="label" type="select" sortOrder="1204" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-204604 - Cart Page FXO Account Number Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_203420" translate="label" type="select" sortOrder="1202" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-203420 - Review Order CTA not clickable even though all fields are completed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_210735_order_due_dates_failing" translate="label" type="select" sortOrder="1203" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-210735 - Order Due Dates Failing</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titan_d_202382" translate="label" type="select" sortOrder="1202" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-202382 Fix Mini-cart item price</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="explorers_d_205387_fix" translate="label" type="select" sortOrder="1204" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Explorers - D-205387 - EPRO- Items ordered details are missing in order summary page.</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_205366_subtotal_fix" translate="label" type="select" sortOrder="1205" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-205366 - Subtotal Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d207891_toggle" translate="label" type="select" sortOrder="1205" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-207891 - DeliveryOptions Call Contains Masked FedEx Account Number After Initial Failure</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_208009_promo_code_fix" translate="label" type="select" sortOrder="1205" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-208009 - Promo code dropping off the order after order submission</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerteam_d165226_email_issues" translate="label" type="select" sortOrder="1205" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-165226 - POD 2.0 eCom Email Issues</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_205447_wrong_location_fix" translate="label" type="select" sortOrder="1206" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-205447 - Order Sent to the Wrong Location Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_D209388_ePro_order_fix" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks D-209388 Epro: Unable to approve orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="b_2123653_oauth_fix_redirection_to_malicious_site" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2123653 Fix: Redirection to malicious site</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_B2353508_legacy_document_items_not_reorderable" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2353482 | NFR - Suppress the API calls(Legacy Document) and mark the items as not re-orderable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_209098" translate="label" type="select" sortOrder="1206" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-209098 - Saving a new site level credit card strips the NDC from the site</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_B2353493_legacy_documents_not_reorderable_nightly_job" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2353493 | NFR - Remove reorderable documents(legacy document) API call from the nightly job</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                  <field id="tigerteam_d204823_toggle_undefined_url" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-204823 - Cannot read properties of undefined (reading 'url')</label>
+                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D209736_migrated_document_expire_date_null_fix" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                        <label>Tech Titans - D-209736 Migrated Document Expiration Date Setting Null Fix</label>
+                        <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_B2353473_remove_legacy_doc_api_call_on_cart" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2353473 | NFR - Remove extend life API call for legacy documents in the cart area</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_b_2398767" translate="label" type="select" sortOrder="1206" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2398767 - By Pass Live Search API Cache</label>
+                   <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_add_new_relic_details_to_rate_quote_logs" translate="label" type="select" sortOrder="1206" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2342117 Add New Relic details to RateQuote logs</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_211480" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-211480 - Shipping orders routing to Ship Hub instead of Restricted Locations</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d_212530" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - D-212530 Catalog folders disappearing from customer sites in shared catalog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d_231833" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - D-231833 Renaming folders results in broken URL links</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_d_203785_address_line_validation" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-203785 | Checkout Address Line 1 Validation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tigerteam_E469373_fedex_shipping_account_number_validation_api_call" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-469373 FedEx Shipping Account Number validation in POD 2.0 Checkout page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_delivery_dates_fields_for_fuse" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - B-2423263 - Delivery Date Fields for Local Delivery and Shipment in FUSE</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d213097_blurry_images_from_recently_added_products" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-213097 - Blurry images from recently added products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_213919_marketplace_seller_downtime_message_fix" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-213919 - Marketplace Seller Downtime Message Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d213762" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - D-213762 Product Catalog Item Title Styling</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_213795" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-213795 INC029976106 - Order Routed To Non-Restricted Store - HIGH</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d_214669" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-214669 - Adobe LiveSearch Thumbnail Cut-off Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_e455559_ordercleanup_process" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC-E-455559 Order Cleanup Process in POD 2.0 Configurable Retention</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_B_2429967" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2429967 - Epro: Display preconfigured non-editable shipping account number</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_D_215205_shipping_method_and_expected_delivery_fix" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-215205 - Shipping Method and Expected Delivery Fix In Order Success Page For Mixed Cart</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_D_216406_duplicate_shared_catalog_id" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - D-216406 - Integrity Constraint Violation on Indexing Due to Duplicate Shared Catalog Attribute Values</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_216028" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-216028 - Estimation Total is mismatch between Order confirmation, Order History_TC 582, 583</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_216504" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-216504 -  Shipment confirmation mails for CBB orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_217190" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-217190 - Selfreg/Epro : Unable to customize the custom document</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d_217161" translate="label" type="select" sortOrder="420" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>SGC - D-217161 - Unable to click kebab menu toggle</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_217181" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-217181 - Selfreg/Epro : NSC document disappear when user click request change option from kabab menu</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_217896" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label> Tiger Team - D-217896 Review and Optimize /selfreg/ajax/topmenu Endpoint Causing 500 Errors and Redis Spikes</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_211698" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-211698 - Unsupported operand type (string + int)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_217178" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-217178 - INC029324929 - POD 2.0 Commercial - Catalog document modified date is inaccurate</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_b_2421984_remove_preview_calls_from_catalog_flow" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2421984 - Remove preview calls from catalog flow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_E_478196_dye_sub_pod_2_updates" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger - E-478196 Dye Sub POD 2.0 Updates</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d219824_enable_shipping_total_fix" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team -D-219824  Shipping total in Cart doesnt match receipt Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_208734" translate="label" type="select" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-208734 Commercial - Catalog - items per page setting</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+              <field id="tiger_team_d_217182" translate="label" type="select" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-217182 - Print On Demand Products show and hide when Allow Users to Upload, Create, Order their Own Documents</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+              <field id="tech_titans_e_484727" translate="label" type="select" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="0">
+                    <label>Tech Titans - E-484727- Commercial Catalog Product- settings</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+              <field id="tech_titans_d_233959" translate="label" type="select" sortOrder="1220" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-233959 - Order History Details Blank Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+              </field>
+                <field id="tiger_d_219344_order_info_alternate_address_fix" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-219344 - Order Info Alternate Address Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_220270" translate="label" type="select" sortOrder="1211" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-220270 - List View Not working After Switching from Grid View</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d_220707_fix" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-220707 - Shipping Total mismatch</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d221338" translate="label" type="select" sortOrder="1215" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-221338 - Payment option getting disabled after filling alternate contact details for shipping order</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d221721" translate="label" type="select" sortOrder="892" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - D-221721 - Business Review Rd 2: All Print Products page elements are showing up on Office Supplies products listing page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_214912" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-214912 - INC028831607 - POD2.0 | Billing reference fields are limited 20 characters, should be 30 characters for all billing reference fields</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d223040" translate="label" type="select" sortOrder="1225" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SGC - D-223040 Sync Restricted Folders view in Shared Catalog</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="is_bid_quote" translate="label" type="select" sortOrder="1216" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Maze-Geeks - D-223412 - Bid Quote Discount Intent</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_B_2504475" translate="label" type="select" sortOrder="1215" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2504475 - Print Products CTA causing Scheduled Maintenance error across different sites</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_tk_4392056" translate="label" type="select" sortOrder="893" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - TK-4392056 - Enable Variant Query in PLP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d217174" translate="label" type="select" sortOrder="1251" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-217174 - Delivery options fail to display Ground US Issue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Commercial Flow it is failing to load Ground US Delivery options</comment>
+               </field>
+                <field id="tiger_tk4397896" translate="label" type="select" sortOrder="892" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger - TK-4397896 / TK-4397885 - OrderSearchRequest GraphQl Defects</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_tk_4410123_duplicated_shipment_webhook_blocker" translate="label" type="select" sortOrder="1114" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - TK-4410123 Enable Webhook Duplicate Blocker</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d225568_3p_cbb_packaging_data" translate="label" type="select" sortOrder="1114" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-225568 3P Marketplace - CompanyBox not receiving Packaging data as expected in some production orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_d_226109_essendant_image_mirakl_sync" translate="label" type="select" sortOrder="1114" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-226109 Essendant: Image roles on Shipping Boxes getting reassigned haphazardly on subsequent product imports for Essendant</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_216029" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-216029 "To be charged to your FedEx Shipping account ending" message bugfix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!--  D-226511 : Add Email Toggle -->
+                <field id="mazegeeks_email_timezone_issue" translate="label" type="select" sortOrder="-1" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Maze Geeks - D-226511 - Email Timezone Issue</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!--  D-226511 : Add Email Toggle-->
+                <field id="MazeGeeks_D_183093_fix_for_JCB_CreditCard" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-183093 fix to add JCB credit cards to FCL profile</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <!--  D-238087 : Publish with date Toggle-->
+                <field id="TechTitans_D_238087_fix_for_Publish_Toggle_Start_Date" translate="label" type="select" sortOrder="1308" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>TechTitans - D-238087 fix for Publish Toggle Start Date</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_b2321195" translate="label" type="select" sortOrder="1500" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2321195 Refactor getToggleConfigValue to fetch values once</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_225000" translate="label" type="select" sortOrder="1501" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-225000 - Checkout Login Modal</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_227679" translate="label" type="select" sortOrder="1502" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-227679 - Fix U2Q disabled submit cta when using impersonation</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_B_2568623" translate="label" type="select" sortOrder="1500" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2568623 Migrate Custom Error Logging to PSR-3 Format</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_B_2599706" translate="label" type="select" sortOrder="1503" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Maze Geeks - B-2599706 Enable Order producing Address for ePro Orders</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_203652" translate="label" type="select" sortOrder="1216" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-203652 Create Canva CTA Adobe Analytics Fix</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_228743_out_of_stock_fix" translate="label" type="select" sortOrder="1502" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-228743 - Individual skus of configurable products not showing out of stock when offer inventory is zero</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_d_217639" translate="label" type="select" sortOrder="894" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-217639 - Unable to update the preferred pickup location in FCL profile</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_B_2576271" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - B-2576271 Code cleanup for 3P Marketplace - CompanyBox Packaging data</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D_192487" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-192487 Billing Address not retaining the original address when Shipping address is changed</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_E_469378_u2q_pickup" translate="label" type="select" sortOrder="1501" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - E-469378 Retail - Upload to Quote (MVP) - Pickup Refactoring</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="magegeeks_B_2564807_nbc" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - B-2564807-Support New Statuses: NBC Support and NBC Priced</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="magegeeks_D_233151" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-233151-FUSE min price filter</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_TK_4517938" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - TK-4517938 | New User Group Predictive Search</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="magegeeks_E_464167_ExposeEnhancedProfileTabsforSSOCustomers" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - E-464167 | Expose Enhanced Profile Tabs for SSO Customers</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_B_2559087" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - B-2559087 | Catalog Success Toast Message Configurable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="d_231886_recaptcha_errors" translate="label" type="select" sortOrder="1504" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>D-231886 Recaptcha errors</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_E478196" translate="label" type="select" sortOrder="1207" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label> Tiger Team - E-478196 Dye Sub POD 2.0 Updates - Disable Edit Flow</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_team_D_232505" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-232505 - Additional message shown on PDP for Simple 3p products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_230789_bookmarking_site_fix" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech Titans - D-230789 bookmarking commercial site - SCHEDULED MAINTENANCE page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d235112" translate="label" type="select" sortOrder="3004" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-235112 - Retail/SelfReg: Additional Print Instructions showing up for 1P products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d232503" translate="label" type="select" sortOrder="3000" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-232503 - Production Defect: Items pre-existing in cart are allowed to proceed to checkout when the inventory is out of stock</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d233890" translate="label" type="select" sortOrder="3001" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-233890 - Production Defect: 3p Print Products showing in the Add to Catalog flow for Commercial Customers</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_E_475721" translate="label" type="select" sortOrder="3001" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tech Titans - E-475721 Updates to the Create a Catalog item flow in CTC Admin </label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="sgc_d236651" translate="label" type="select" sortOrder="3001" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>SGC - D-236651 - Pick Up times discrepencies during checkout</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d236292" translate="label" type="select" sortOrder="3002" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-236292 - 3P products with zero inventory offers have Add to Cart CTA enabled on PLP</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_feature_b2645989" translate="label" type="select" sortOrder="3001" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - B-2645989 - Upload to Quote Graphql Coupon Code Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d201080" translate="label" type="select" sortOrder="3001" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - D-201080 - Production Issue Retail: Thumbnail preview not visible for 3P (Navitor) Products</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_D235696" translate="label" type="select" sortOrder="3002" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mazegeeks - D-235696 - No email is triggered when a bid status is changed to revision requested</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_b2244879" translate="label" type="select" sortOrder="3003" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - B-2244879 Store Number in Customer Generated POD reporting</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_D238399" translate="label" type="select" sortOrder="3003" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mazegeeks - D-238399 - Bidding-The Applied discount is removed while deleting one of the project on Review and send page</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_subtotal_TK4668950" translate="label" type="select" sortOrder="3002" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - TK-4668950 - Staging 2 Cycle 2 UAT:  Order Details for an order converted from an approved quote is showing incorrect Order Summary entries</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tk_4669320_review_order_blank_page" translate="label" type="select" sortOrder="3003" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - TK-4669320 - Review Orders Blank Page in My Account</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_230786" translate="label" type="select" sortOrder="3003" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tech Titans - D-230786 - Block Company Admin Change Email Notification</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_D237618" translate="label" type="select" sortOrder="3003" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mazegeeks - D-237618 - Production Defect: Approved U2Q quotes retained in cart even when order is submitted for approval (ePro/Retail)</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_238830" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tech Titans - D-238830 Invisible Billing Reference Fields Not Displaying On Invoice Correctly</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_241275" translate="label" type="select" sortOrder="1210" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tech Titans - D-241275 POD2.0 Commercial - Even when approver groups are created and users assigned, ALL approvers receive every approval request</label>
+                  <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d234006_adminquoteissueforfusebidding" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-234006 - AdminQuoteIssueForFuseBidding</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_d240007_default_sku_logic_for_configurable_products" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tiger Team - D-240007 - Default SKU on some configurable products show Add to Cart CTA enabled even if its out of stock</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tech_titans_D_238086" translate="label" type="select" sortOrder="1209" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tech Titans - D-238086 Profile-saved Account Number selection during Checkout is NOT persisting to order submission</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d239974_store_phone_number_and_email_address_missing" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-239974 - Store Phone Number and email address missing for Retail/Commercial U2Q emails</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_dyesub_doc_owner_update_b2733283" translate="label" type="select" sortOrder="3002" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Tiger Team - B-2733283 - Dye Sub POD 2.0 - Update Document Services vendorOwnerId on Merge User Design</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="mazegeeks_d242332_update_for_quote_confirmation_link" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>MazeGeeks - D-242332 - Production defect (split from D-226789) - Quote id link leading to 404 on Incognito mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="techtitans_D_241651_b2b_categories_alphabetical_sort" translate="label" type="select" sortOrder="1208" showInDefault="1" showInWebsite="0" showInStore="0" canRestore="0">
+                    <label>Tech-Titans | D-241651 B2B Categories alphabetical sort</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="tiger_b_2740163" translate="label" type="select" sortOrder="3002" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Tiger Team - B-2740163 Add Alternate Contact Fields to updateOrderDelivery</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="fedex">
+            <group id="my_account_menu_options" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1" translate="label">
+                <label>My Account Menu Options</label>
+                <field id="my_design_templates" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>My Design Templates</label>
+                    <comment>This toggle controls the display of My Design Templates under the My Account menu for a Store.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="web" translate="label" sortOrder="130" showInDefault="10" showInWebsite="0" showInStore="1">
+            <group id="store_discount_configuration" translate="label" type="text" sortOrder="1000" showInDefault="0"
+                   showInWebsite="0" showInStore="1">
+                <label>Promo/FXO Account Toggle Configuration</label>
+                <field id="store_level_promo_display" type="select" translate="label" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Add Promo</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Add Promo</comment>
+                </field>
+                <field id="store_level_account_display" type="select" translate="label" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Add FedEx Office Account for Discount</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Add FedEx Office Account for Discount</comment>
+                </field>
+            </group>
+            <group id="store_commercial_toggle_configuration" translate="label" type="text" sortOrder="1001" showInDefault="0"
+                   showInWebsite="0" showInStore="1">
+                <label>"Terms and Conditions" and "Reorder" Toggle Configuration</label>
+                <field id="store_level_reorder_display" type="select" translate="label" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Reorder</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Reorder</comment>
+                </field>
+                <field id="store_level_tc_display" type="select" translate="label" sortOrder="2" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Terms and Conditions</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable/Disable Terms and Conditions</comment>
+                </field>
+            </group>
+            <group id="shared_cc_Tooltip" translate="label" type="text" sortOrder="1001" showInDefault="0" showInWebsite="0" showInStore="1">
+                <label>Non-Editable Payment Tooltip Message</label>
+                <field id="Message_cc" type="editor" translate="label" sortOrder="1" showInDefault="0" showInWebsite="0" showInStore="1" canRestore="0">
+                    <label>Message</label>
+                    <comment>Self-Reg Non-Editable payment checkbox tooltip message</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

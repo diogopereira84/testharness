@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Cms\Controller\Noroute\Index">
+        <plugin name="cache_noroute_page_plugin"
+                type="Fedex\CacheErrorPages\Plugin\CacheNoRoutePagePlugin"/>
+    </type>
+
+    <type name="Magento\Framework\View\Result\Page">
+        <plugin name="cache_page_plugin"
+                type="Fedex\CacheErrorPages\Plugin\CacheResultPagePlugin"/>
+    </type>
+</config>

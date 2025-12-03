@@ -1,0 +1,29 @@
+<?php
+/** @var \Fedex\WebAnalytics\ViewModel\GeneralWebAnalytics $webAnalytics */
+$webAnalytics = $block->getData('webanalytics_viewmodel');
+?>
+<?php if($webAnalytics && $webAnalytics->isToggleD219954Enabled()): ?>
+    <?php $adobeAnalytics = $webAnalytics->isGDLEnabledForCurrentSession(); ?>
+
+    <?php if($webAnalytics->isToggleD239988Enabled()): ?>
+
+        <!-- D-239988 - CSP Bugfix -->
+        <?php $adobeAnalyticsGDL = <<<script
+                require(['jquery', 'fedex/storage', 'domReady!'], function ($, fxoStorage) {
+                var adobeAnalyticsGDL = "$adobeAnalytics";
+                fxoStorage.set('adobeAnalyticsGDL', adobeAnalyticsGDL);
+            });
+            script;
+        ?>
+        <?= $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $adobeAnalyticsGDL, false); ?>
+
+    <?php else: ?>
+        <script type="text/javascript">
+            require(['jquery', 'fedex/storage', 'domReady!'], function ($, fxoStorage) {
+                var adobeAnalyticsGDL = '<?= $adobeAnalytics ? 1 : 0; ?>';
+                fxoStorage.set('adobeAnalyticsGDL', adobeAnalyticsGDL);
+            });
+        </script>
+    <?php endif; ?>
+
+<?php endif; ?>

@@ -1,0 +1,53 @@
+<tr class="tax-exempt">
+    <th class="mark" scope="row">
+        <a href="#" role="button" aria-label="Open tax exempt pop up" class="link pointer" data-bind="text: title"
+            data-trigger="trigger-taxexempt" data-testid="order-summary-button-tax-exempt"></a>
+        <div data-bind="mageInit: {
+                            'Magento_Ui/js/modal/modal':{
+                                'type': 'popup',
+                                'title': '',
+                                'trigger': '[data-trigger=trigger-taxexempt]',
+                                'responsive': true,
+                                'buttons': []
+                            }
+                        }">
+            <div class="content fedex-light text-center tax-modal">
+                <!-- ko if: isTaxExemptModalAdminData() -->
+                <div class="tax-title fs-32 lh-30 ls--0-4 mt-90 mb-26" data-bind="html: getTaxModalTitle()"></div>
+                <div class="tax-info">
+                    <p class="tax-subtitle fs-16 lh-25 ls--0-1 mb-25 mx-auto" data-bind="html: getTaxModalBody()"></p>
+                    <p class="tax-footer lh-21 ls--0-09 mt-50 mb-80 mx-auto" data-bind="html: getTaxModalFooter()"></p>
+                </div>
+                <!-- /ko -->
+                <!-- ko ifnot: isTaxExemptModalAdminData() -->
+                <div class="pb-48 pl-48 pr-48">
+                    <div class="tax-title fs-32 lh-30 ls--0-4 mb-26">
+                        Tax exemption
+                    </div>
+                    <div class="tax-info">
+                        <p class="tax-subtitle fs-16 lh-25 ls--0-1 mb-25 mx-auto">
+                            FedEx Office manages tax exempt status by way of a FedEx Office account.
+                            To apply your tax exempt status to your online transaction, make sure to
+                            enter your FedEx Office account number during the checkout process.
+                        </p>
+                        <a class="btn-faq mb-26 no-underline"
+                            href="https://getrewards.fedex.com/us/en/office/printpreferred.html" target="_blank">
+                            CREATE ACCOUNT
+                        </a>
+                        <br />
+                        <a class="cl-steel-blue fedex-bold fs-19 lh-19 ls-1"
+                            href="https://www.fedex.com/en-us/printing/customersupport/print-online.html" target="_blank">
+                            READ FAQS
+                        </a>
+                        <p class="tax-footer lh-21 ls--0-09 mt-24 mx-auto">
+                            If you have a FedEx Office account and sales tax is being charged when it should not be charged,
+                            contact
+                            <a class="link" href="mailto: ams.taxattributes@fedex.com">ams.taxattributes@fedex.com</a>
+                        </p>
+                    </div>
+                </div>
+                <!-- /ko -->
+            </div>
+        </div>
+    </th>
+</tr>

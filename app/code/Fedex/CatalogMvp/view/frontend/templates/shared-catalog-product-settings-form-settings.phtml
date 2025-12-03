@@ -1,0 +1,1116 @@
+<?php
+
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$fxoCMIntegrationType = $block->getData('mvphelper_mvp_setting_popup')->getIntegrationType();
+$characterLimit = $block->getData('mvphelper_mvp_setting_popup')->getCharLimitToggle();
+$viewModel= $block->getData('mvphelper_mvp_setting_popup');
+if ($block->getData('mvphelper_mvp_setting_popup')->isSharedCatalogPermissionEnabled()) {
+?>
+    <?php
+    $isCustomizable = $productName = $productDesc = $startDate = $endDate = $productTags = $fxomenuId = $productId =null;
+    $countLength = 0;
+    $noEndDate = true;
+    $defaultNoEndDateSet =  true;
+
+    $sku = $block->getData('setting_sku');
+    $expernalProd = "{}";
+    $customizeField = "{}";
+    if ($sku) {
+        $productData = $block->getData('mvphelper_mvp_setting_popup')->getProductData($sku);
+        if ($productData) {
+            $expernalProd = json_decode( (string) $productData->getData('external_prod'), true);
+            $expernalProd = json_encode($expernalProd);
+            $customizeField = json_decode((string) $productData->getData('customization_fields'), true);
+            $customizeField = json_encode($customizeField);
+            $productName = $productData->getName();
+            $productPrice = $productData->getPrice();
+            $productId = $productData->getId();
+            $isCustomizable = $productData->getCustomizable();
+            $fxomenuId = $block->getData('mvphelper_mvp_setting_popup')->getFxoMenuId($productId);
+            $productDesc = $productData->getCatalogDescription();
+            $productStartDate = $productData->getData('start_date_pod');
+            if($productStartDate){
+                $proStartDate = new DateTime($productStartDate);
+                $startDate = $proStartDate->format('Y/m/d H:i:s') ;
+            }
+            $productEndDate = $productData->getData('end_date_pod');
+            if($productEndDate){
+		    $defaultNoEndDateSet = false;
+                $proEndDate = new DateTime($productEndDate);
+                $endDate = $proEndDate->format('Y/m/d H:i:s') ;
+            }
+            $productTag =  $productData->getRelatedKeywords();
+            if ($productTag) {
+                $countLength = strlen($productTag);
+                $productTags = explode(",", $productTag);
+            }
+            if(!$productEndDate){
+                $noEndDate = false;
+            }
+        }
+    }
+
+    $mvpViewModel = $block->getData('mvphelper_mvp_setting_popup');
+    $isCustomDocEnabled = $mvpViewModel->isCatalogMvpCustomDocEnable();
+    $isCloudDriveBoxEnabled = $mvpViewModel->isCloudDriveBoxEnabled();
+    $isCloudDriveDropboxEnabled = $mvpViewModel->isCloudDriveDropboxEnabled();
+    $isCloudDriveGoogleEnabled = $mvpViewModel->isCloudDriveGoogleEnabled();
+    $isCloudDriveMicrosoftEnabled = $mvpViewModel->isCloudDriveMicrosoftEnabled();
+    $companyFedExAccountNumber = $mvpViewModel->getCompanyFedExAccountNumber();
+
+    ?>
+    <script>
+        require([
+            'jquery',
+            'fedex/storage'
+        ], function ($, fxoStorage) {
+            if ("<?= $fxoCMIntegrationType?>" == "URL_REDIRECT") {
+                if (window.e383157Toggle) {
+                    if ("<?= $productId ?>") {
+                        fxoStorage.set("productID", <?= $escaper->escapeUrl($productId); ?>);
+                    }
+                } else {
+                    if ("<?= $productId ?>") {
+                        window.localStorage.setItem("productID", <?= $escaper->escapeUrl($productId); ?>);
+                    }
+                }
+            }
+        }
+    </script>
+    <div id="setting-formp-popup" class="shared-catalog-setting-form-container" style="display:none;">
+     <?php if($mvpViewModel->getCatalogBreakpointToggle()):?>
+        <div id="close-button-mobile" style="display: none;">
+          <span id="close-button" class="cancel-setting">
+             <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32" fill="none">
+               <path fill-rule="evenodd" clip-rule="evenodd" d="M8.19526 8.19526C7.93491 8.45561 7.93491 8.87772 8.19526 9.13807L15.0572 16L8.19526 22.8619C7.93491 23.1223 7.93491 23.5444 8.19526 23.8047C8.45561 24.0651 8.87772 24.0651 9.13807 23.8047L16 16.9428L22.8619 23.8047C23.1223 24.0651 23.5444 24.0651 23.8047 23.8047C24.0651 23.5444 24.0651 23.1223 23.8047 22.8619L16.9428 16L23.8047 9.13807C24.0651 8.87772 24.0651 8.45561 23.8047 8.19526C23.5444 7.93491 23.1223 7.93491 22.8619 8.19526L16 15.0572L9.13807 8.19526C8.87772 7.93491 8.45561 7.93491 8.19526 8.19526Z" fill="#333333"/>
+            </svg>
+          </span>
+        </div>
+      <?php endif; ?>
+        <div class="shared-catalog-form-header">
+            <span class="shared-catalog-form-header-title">
+                <?= $block->escapeHtml(__('Settings')); ?>
+            </span>
+        </div>
+        <div class="shared-catalog-form-sub-title">
+            <span class="shared-catalog-form-sub-heading">
+                <?= $block->escapeHtml(
+                    __(
+                        'Provide the information you would like to publish to the shared catalog.'
+                    )
+                );
+                ?>
+            </span>
+        </div>
+        <form id="my-form" action="" method="post">
+            <input type="hidden" id="shared-catalog-setting-externalproduct" name="external_product" class="input-text" value='<?= $expernalProd ?>'/>
+            <?php if($isCustomDocEnabled): ?>
+                   <?php if($viewModel->isD217190Enabled() && $sku && $customizeField && $isCustomizable): ?>
+                        <input type="hidden" id="customization_fields" name="customization_field" class="input-text" value="<?= htmlspecialchars($customizeField, ENT_QUOTES, 'UTF-8')  ?>" />
+                    <?php elseif(!$viewModel->isD217190Enabled() && $sku && $customizeField && $isCustomizable): ?>
+                        <input type="hidden" id="customization_fields" name="customization_field" class="input-text" value="<?= $customizeField ?>" />
+                    <?php else: ?>
+                    <input type="hidden" id="customization_fields" name="customization_field" class="input-text" />
+                <?php endif; ?>
+
+            <?php endif; ?>
+            <input type="hidden" id="shared-catalog-setting-price" name="product_price" class="input-text" value='<?= $productPrice ?>'/>
+            <input type="hidden" id="shared-product_category_ids" name="product_category_ids" class="input-text" />
+            <input type="hidden" id="product-id" name="product_id" class="input-text" value="<?= $escaper->escapeUrl($productId); ?>" />
+            <input type="hidden" id="catalogmvp_fxo_menu_id" name="fxo_menu_id" class="input-text" value="<?= $escaper->escapeUrl($fxomenuId); ?>" />
+
+            <div class="field shared-catalog-setting-name">
+                <label for="name" class="label">Name</label>
+                <div class="control">
+                <?php
+                    if ($characterLimit) { ?>
+                        <input type="text" id="shared-catalog-setting-name" value="<?= $escaper->escapeUrl($productName); ?>" name="name" class="input-text mvp-input-field mvp-input-field-validation" placeholder="Please Enter Product Name" required maxlength="100" />
+                    <?php } else { ?>
+                        <input type="text" id="shared-catalog-setting-name" value="<?= $escaper->escapeUrl($productName); ?>" name="name" class="input-text mvp-input-field mvp-input-field-validation" placeholder="Please Enter Product Name" required />
+                    <?php }?>
+                </div>
+
+            </div>
+            <div class="start-end-date-container">
+                <div class="field shared-catalog-setting-start-date">
+                    <label for="start-date" class="label">Start Date</label>
+                    <div class="control">
+                        <input type="text" id="start-date" name="start-date" value="<?= $escaper->escapeUrl($startDate); ?>" class="input-text mvp-input-field mvp-input-field-validation" required Placeholder="MM/DD/YYYY 00:00 AM" />
+                        <div id="datetimePickerPopup" class="datetime-picker-popup">
+                            <div class="modal-content">
+                                <div id="datepicker"></div>
+                                <span class="selectTime">Select time:</span>
+                                <select id="timeSelect"></select>
+                                <div id="datetimeButtons">
+                                    <span id="mvp-cancelButton">Cancel</span>
+                                    <span id="mvp-applyButton">Apply</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field shared-catalog-setting-start-date">
+                    <label for="end-date" class="label">End Date</label>
+                    <div class="control">
+                        <input type="text" value="<?= $escaper->escapeUrl($endDate); ?>" id="shared-catalog-setting-start-date" name="end-date" class="input-text mvp-input-field mvp-input-field-validation" required Placeholder="MM/DD/YYYY 00:00 AM" />
+                        <!-- DateTime picker popup -->
+                        <div id="endDateTimePickerPopup" class="enddate-datetime-picker-popup">
+                            <div class="modal-content">
+                                <!-- Date picker -->
+                                <div id="endDatePicker"></div>
+                                <span class="endDateSelectTime">Select time:</span>
+                                <!-- Time picker -->
+                                <select id="endDateTimeSelect"></select>
+                                <span class="endDateerrormsg"><?= $escaper->escapeHtml(__('End date/time cannot be before Start date/time')); ?></span>
+                                <!-- Buttons -->
+                                <div id="endDateTimeButtons">
+                                    <span id="mvp-endCancelButton">Cancel</span>
+                                    <span id="mvp-endApplyButton">Apply</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control">
+                        <input type="radio" id="no-end-date" name="no-end-date" class="input-text" <?= empty($noEndDate) ? 'checked' : '' ?>
+                        aria-label="no-end-date"
+                        />
+                        <label for="no-end-date mvp-input-field mvp-input-field-validation" class="label">No End Date</label>
+                    </div>
+                </div>
+            </div>
+            <div class="field shared-catalog-setting-description">
+                <label for="description" class="label">Description (Optional)</label>
+                <div class="control">
+                    <textarea id="shared-catalog-setting-description" name="description" class="input-text-area mvp-input-field char-length-validation" Placeholder="Text input" maxlength="500" rows="4" cols="50"><?= $escaper->escapeUrl($productDesc); ?></textarea>
+                    <span class="char-length">500 characters left</span>
+                </div>
+            </div>
+            <div class="field shared-catalog-setting-tag">
+                <label for="name" class="label">Tags (Optional)</label>
+                <div class="control">
+                    <div class="tags-wrapper" id="catalogSettingTagWrapper">
+                        <?php
+                        if (is_array($productTags)) {
+                            foreach ($productTags as $productTag) { ?>
+                                <div class="chips">
+                                    <div class="tag-button">
+                                        <div class="tag-label"><?= $escaper->escapeUrl($productTag); ?></div>
+                                    </div>
+                                </div>
+                        <?php }
+                        }
+                        ?>
+                        <?php if($productTags): ?>
+                        <input type="text" id="shared-catalog-setting-tag" name="tag" class="input-text mvp-input-field"/>
+                        <?php else: ?>
+                            <input type="text" id="shared-catalog-setting-tag" name="tag" class="input-text mvp-input-field" Placeholder="Text input" />
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions non_customize_action">
+                <button class="action primary primary-outline cancel-setting">Cancel</button>
+                <button class="action primary complete-setting" disabled="disabled" id="complete-setting">Complete</button>
+
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+        tagsInput = document.querySelector('#shared-catalog-setting-tag');
+        tagsInputWidth = 0;
+        tagsWrapper = document.querySelector('#catalogSettingTagWrapper');
+        tagsWrapperWidth = 0;
+        chipsWidth = 0;
+
+        hashtagArray = [];
+
+        tagsInput.addEventListener('keyup', () => {
+            var tags = tagsInput.value.replace(/^\s+|\s+$/gm,'');
+            tags = tags.replace(',','');
+            if (event.which == 13 && tagsInput.value !== '' && tags.length > 0) {
+                document.getElementById('shared-catalog-setting-tag').setAttribute('placeholder', '');
+                var text = document.createTextNode(tags);
+                hashtagArray.push(text);
+                var chips = document.createElement('div');
+                var tagButton = document.createElement('div');
+                var tagLabel = document.createElement('div');
+                chips.classList.add('chips');
+                tagButton.classList.add('tag-button');
+                tagLabel.classList.add('tag-label');
+                tagsWrapper.insertBefore(chips, tagsInput);
+                chips.appendChild(tagButton);
+                tagButton.appendChild(tagLabel);
+                tagLabel.appendChild(text);
+                oldTagLength =  <?php echo $countLength * 20; ?>;
+                chipsWidth = chipsWidth + (chips.offsetWidth + 12) + oldTagLength;
+                tagsInput.value = '';
+
+                let deleteTags = document.querySelectorAll('.chips');
+                try {
+                    for (let i = 0; i < deleteTags.length; i++) {
+                        deleteTags[i].addEventListener('click', () => {
+                            tagsWrapper.removeChild(deleteTags[i]);
+                        });
+                    }
+                } catch (err) {
+
+                }
+            }
+        });
+
+        require([
+            'jquery',
+            'Magento_Ui/js/modal/modal',
+            'moment',
+            'mage/url',
+            'fedex/storage'
+        ], function($, modal, moment, url, fxoStorage) {
+
+            // Calender code start
+
+            $(document).ready(function () {
+                if($('#product-id').val()){
+                    $('.complete-setting').addClass('active');
+                    $('.complete-setting').prop('disabled', false);
+                }
+                function startTimeOptions(){
+                    var startOptionsDate = new Date();
+                    var startOptionsHours = startOptionsDate.getHours();
+
+                    startOptionsDate.getDate();
+
+                    var isAM = startOptionsHours <= 12?true:false;
+
+                    var AMH = [];
+                    var PMH = [];
+
+                    //if slected date = current date
+                    for (var h = 0; h < 12; h++) {
+                        if(h >= startOptionsHours){
+                        AMH[h] = (h === 0 ? 12 : h) + ':00 AM';
+                        }
+                    }
+
+                    for (var h = 0; h < 12; h++) {
+                        if(h >= (startOptionsHours-12)){
+                        PMH[h] = (h === 0 ? 12 : h) + ':00 PM';
+                        }
+                    }
+
+                    var amOption = '';
+                    Object.entries(AMH).forEach(([key, value]) => {
+                        amOption += '<option value="'+value+'">'+value+'</option>';
+                    });
+                    Object.entries(PMH).forEach(([key, value]) => {
+                        amOption += '<option value="'+value+'">'+value+'</option>';
+                    });
+                    return amOption;
+                }
+
+                function generateTimeOptions() {
+                    var options = '';
+
+                    for (var hour = 0; hour < 12; hour++) {
+                        for (var minute = 0; minute < 60; minute+=60) {
+                            var displayHour = hour === 0 ? 12 : hour;
+                            var displayMinute = minute < 10 ? '0' + minute : minute;
+                            var amOption = '<option value="' + displayHour + ':' + displayMinute + ' AM">' + displayHour + ':' + displayMinute + ' AM</option>';
+                            options += amOption;
+                        }
+                    }
+
+                    for (var hour = 12; hour <= 23; hour++) {
+                        for (var minute = 0; minute < 60; minute+=60) {
+                        var displayHour = hour === 12 ? 12 : hour - 12;
+                        var displayMinute = minute < 10 ? '0' + minute : minute;
+                        var pmOption = '<option value="' + displayHour + ':' + displayMinute + ' PM">' + displayHour + ':' + displayMinute + ' PM</option>';
+                        options += pmOption;
+                        }
+                    }
+
+                    return options;
+                }
+
+                function doubledigit(n){
+                    return n > 9 ? "" + n: "0" + n;
+                }
+
+                function currentTime(){
+                    var today = new Date();
+                    var hours = today.getHours();
+                    var currentSelectedTime;
+
+                    var ampm = hours >= 12 ? 'PM' : 'AM';
+                    hours = hours % 12;
+                    hours = hours ? hours : 12;
+                    currentSelectedTime = hours + ':00 ' + ampm;
+                    return currentSelectedTime;
+                }
+
+                function currentDate(){
+                    var todayStart = new Date(),
+                    dayStart  = todayStart.getDate(),
+                    monthStart = todayStart.getMonth() + 1,
+                    yearStart =  todayStart.getFullYear();
+                    return doubledigit(monthStart) + '/'
+                    + doubledigit(dayStart) +'/'
+                    + yearStart;
+                }
+
+                var selectedDate;
+                var selectedTime;
+                var selectedOnlyTime;
+                var endselectedDate;
+                var endselectedTime;
+                var endselectedOnlyTime;
+
+                $('#start-date').on('click', function (e) {
+                    // Prevent click events from propagating to the parent modals
+                    e.stopPropagation();
+                    var startDate = '';
+                    var startTime = '';
+                    var mixDateTime = '';
+                    if($('#start-date').val()){
+                        startDate = $('#start-date').val().trim().split(' ')[0];
+                        startTime = $('#start-date').val().trim()
+                            .split(' ')[1] +' '+ $('#start-date').val().trim().split(' ')[2];
+                    }
+
+                    // Show the datetime picker popup
+                    $('#datetimePickerPopup').css('display', 'block');
+                    $('#datepicker').datepicker('show');
+                    if(startDate){
+                        $('#datepicker').datepicker("setDate",startDate);
+                    }
+
+                    if (typeof selectedTime === "undefined") {
+                        selectedTime  = currentTime();
+                    }
+                    $('#timeSelect').val(selectedTime);
+                    if(startTime){
+                    let startTimeDis = startTime.replace(/^0+/, '');
+                        $('#timeSelect').val(startTimeDis).change();
+                    }
+
+                });
+
+                $('#datetimePickerPopup').on('click', function (e) {
+                    // Prevent click events from propagating to the parent modals
+                    e.stopPropagation();
+                });
+
+                $('#mvp-cancelButton').on('click', function (e) {
+                    // Close the datetime picker popup without applying changes
+                    $('#datetimePickerPopup').css('display', 'none');
+                    e.stopPropagation();
+                });
+
+                $('body.catalog-mvp-customer-admin').on('click', function (e) {
+                    // Close the datetime picker popup without applying changes
+                    $('#datetimePickerPopup').css('display', 'none');
+                    $('#endDateTimePickerPopup').css('display', 'none');
+                });
+
+                $('#mvp-applyButton').on('click', function (e) {
+                    let fieldDate = $('#start-date').val();
+                    selectedDate = moment(selectedDate).format('MM/DD/YYYY');
+
+                    if(!selectedDate){
+                        selectedDate = currentDate();
+                    }
+
+                    if (!selectedTime) {
+                        $('#start-date').val(selectedDate + ' ');
+                        e.stopPropagation();
+                    }
+
+                    // Apply the selected date and time to the input field
+                    if (selectedDate && selectedTime) {
+                        $('#start-date').val(selectedDate + ' ' + selectedTime);
+                        e.stopPropagation();
+                        if(selectedDate < endselectedDate){
+                        $('.complete-setting').addClass('active');
+                        $('.complete-setting').prop('disabled', false);
+                        } else {
+                            if(endselectedTime) {
+                            let selectedTime = $('#timeSelect').val();
+                            endselectedOnlyTime = parseInt(endselectedTime.split(" ").shift());
+                            selectedOnlyTime = parseInt(selectedTime.split(" ").shift());
+
+                            endselectedOnlyTime = endselectedOnlyTime == 12 ? 0: endselectedOnlyTime;
+                            selectedOnlyTime = selectedOnlyTime == 12 ? 0 : selectedOnlyTime;
+
+                            if(selectedTime.split(" ").pop() == "AM"){
+                                if(selectedOnlyTime < endselectedOnlyTime){
+                                    $('.complete-setting').addClass('active');
+                                    $('.complete-setting').prop('disabled', false);
+                                }else{
+                                    $('.complete-setting').removeClass('active');
+                                    $('.complete-setting').prop('disabled', true);
+                                }
+                            }
+
+                            if(selectedTime.split(" ").pop() == "PM"){
+                                if(selectedOnlyTime < endselectedOnlyTime){
+                                    $('.complete-setting').addClass('active');
+                                    $('.complete-setting').prop('disabled', false);
+
+                                }else{
+                                    $('.complete-setting').removeClass('active');
+                                    $('.complete-setting').prop('disabled', true);
+                                }
+                            }
+                            }
+
+                        }
+                        if($('#no-end-date').is(':checked')){
+                            $('.complete-setting').addClass('active');
+                            $('.complete-setting').prop('disabled', false);
+                        }
+                    }
+
+                    // Close the datetime picker popup after applying changes
+                    $('#datetimePickerPopup').css('display', 'none');
+                });
+
+                $('#datepicker').datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    minDate: 0,
+                    onSelect: function (dateText) {
+                        selectedDate = dateText;
+                        $("#endDatePicker").datepicker("option","minDate", selectedDate);
+                        if( currentDate() != selectedDate) {
+                            $('#timeSelect').html(generateTimeOptions());
+                        } else {
+                            $('#timeSelect').html(startTimeOptions());
+                        }
+
+                    }
+                });
+
+                $('#timeSelect').html(startTimeOptions());
+                $('#timeSelect').on('change', function () {
+                    selectedTime = $(this).val();
+                });
+
+                $('#shared-catalog-setting-start-date').on('click', function (e) {
+                    if(!$('#no-end-date').is(':checked')){
+                        // Prevent click events from propagating to the parent modals
+                        e.stopPropagation();
+                        var endDate = '';
+                        var endTime ='';
+                        if($('#shared-catalog-setting-start-date').val()){
+                            var endDateArr = $('#shared-catalog-setting-start-date').val().trim().split(' ');
+                            endDate = endDateArr[0];
+                            endTime = endDateArr[1] +' '+ endDateArr[2];
+                        }
+                        // Show the datetime picker popup
+                        $('#endDateTimePickerPopup').css('display', 'block');
+                        $('#endDatePicker').datepicker('show');
+                        if(endDate){
+                            $('#endDatePicker').datepicker("setDate",endDate);
+                        }
+
+                        if (typeof endselectedTime === "undefined") {
+                            endselectedTime  = currentTime();
+                        }
+                        $('#endDateTimeSelect').val(endselectedTime);
+                        if(endTime){
+                            let endTimeDis = endTime.replace(/^0+/, '');
+                            $('#endDateTimeSelect').val(endTimeDis).change();
+                        }
+
+                    }
+                });
+
+                $('#endDateTimePickerPopup').on('click', function (e) {
+                    // Prevent click events from propagating to the parent modals
+                    e.stopPropagation();
+                });
+
+                $('#mvp-endCancelButton').on('click', function (e) {
+                    // Close the datetime picker popup without applying changes
+                    $('#endDateTimePickerPopup').css('display', 'none');
+                    e.stopPropagation();
+                });
+
+                $('#mvp-endApplyButton').on('click', function (e) {
+                    if(!endselectedDate){
+                        endselectedDate = currentDate();
+                    }
+
+                    if (!endselectedTime) {
+                        $('#shared-catalog-setting-start-date').val(endselectedDate + ' ');
+                        e.stopPropagation();
+                    }
+                    if($('#start-date').val()) {
+                        var startDates = $('#start-date').val();
+                        var starttimestamp = new Date(startDates);
+                        var starttimestamps = starttimestamp.getTime();
+                        var endDates = endselectedDate + ' ' + endselectedTime;
+                        var endtimestamp = new Date(endDates);
+                        var endtimestamps = endtimestamp.getTime();
+                        if(endtimestamps <= starttimestamps){
+                            $(".endDateerrormsg").show();
+                        } else {
+                            $(".endDateerrormsg").hide();
+                            // Apply the selected date and time to the input field
+                            if (endselectedDate && endselectedTime) {
+                            $('#shared-catalog-setting-start-date').val(endselectedDate + ' ' + endselectedTime);
+                            $('#endDateTimePickerPopup').css('display', 'none');
+                            e.stopPropagation();
+                            e.stopPropagation();
+                            let fieldDate = $('#start-date').val();
+                            let selectedDate = moment(fieldDate).format('MM/DD/YYYY');
+                            if(endselectedDate > selectedDate){
+                                $('.complete-setting').addClass('active');
+                                $('.complete-setting').prop('disabled', false);
+                            } else {
+                                let selectedTime = $('#timeSelect').val();
+                                endselectedOnlyTime = selectedTime ? parseInt(endselectedTime.split(" ").shift()) : '';
+                                selectedOnlyTime = selectedTime ? parseInt(selectedTime.split(" ").shift()) : '';
+
+                                endselectedOnlyTime = endselectedOnlyTime == 12 ? 0: endselectedOnlyTime;
+                                selectedOnlyTime = selectedOnlyTime == 12 ? 0 : selectedOnlyTime;
+
+                                if(selectedTime.split(" ").pop() == "AM"){
+                                    if(endselectedOnlyTime > selectedOnlyTime){
+                                        $('.complete-setting').addClass('active');
+                                        $('.complete-setting').prop('disabled', false);
+                                    }else{
+                                        $('.complete-setting').removeClass('active');
+                                        $('.complete-setting').prop('disabled', true);
+                                    }
+                                }
+
+                                if(selectedTime.split(" ").pop() == "PM"){
+                                    if(endselectedOnlyTime > selectedOnlyTime){
+                                        $('.complete-setting').addClass('active');
+                                        $('.complete-setting').prop('disabled', false);
+
+                                    }else{
+                                        $('.complete-setting').removeClass('active');
+                                        $('.complete-setting').prop('disabled', true);
+                                    }
+                                }
+
+                            }
+                        }
+
+                        // Close the datetime picker popup after applying changes
+                        $('#endDateTimePickerPopup').css('display', 'none');
+                        }
+                    } else {
+                        $(".endDateerrormsg").hide();
+                        // Apply the selected date and time to the input field
+                        if (endselectedDate && endselectedTime) {
+                            $('#shared-catalog-setting-start-date').val(endselectedDate + ' ' + endselectedTime);
+                            e.stopPropagation();
+                            e.stopPropagation();
+                            let fieldDate = $('#start-date').val();
+                            let selectedDate = moment(fieldDate).format('MM/DD/YYYY');
+                            if(endselectedDate > selectedDate) {
+                                $('.complete-setting').addClass('active');
+                                $('.complete-setting').prop('disabled', false);
+                            } else {
+                                let selectedTime = $('#timeSelect').val();
+                                endselectedOnlyTime = selectedTime ? parseInt(endselectedTime.split(" ").shift()) : '';
+                                selectedOnlyTime = selectedTime ? parseInt(selectedTime.split(" ").shift()) : '';
+
+                                endselectedOnlyTime = endselectedOnlyTime == 12 ? 0: endselectedOnlyTime;
+                                selectedOnlyTime = selectedOnlyTime == 12 ? 0 : selectedOnlyTime;
+
+                                if(selectedTime.split(" ").pop() == "AM") {
+                                    if(endselectedOnlyTime > selectedOnlyTime) {
+                                        $('.complete-setting').addClass('active');
+                                        $('.complete-setting').prop('disabled', false);
+                                    } else {
+                                        $('.complete-setting').removeClass('active');
+                                        $('.complete-setting').prop('disabled', true);
+                                    }
+                                }
+
+                                if(selectedTime.split(" ").pop() == "PM"){
+                                    if(endselectedOnlyTime > selectedOnlyTime){
+                                        $('.complete-setting').addClass('active');
+                                        $('.complete-setting').prop('disabled', false);
+                                    } else {
+                                        $('.complete-setting').removeClass('active');
+                                        $('.complete-setting').prop('disabled', true);
+                                    }
+                                }
+
+                            }
+                        }
+                        // Close the datetime picker popup after applying changes
+                        $('#endDateTimePickerPopup').css('display', 'none');
+                    }
+                });
+
+                $('#endDatePicker').datepicker({
+                    dateFormat: 'mm/dd/yy',
+                    minDate: 0,
+                    onSelect: function (dateText) {
+                        endselectedDate = dateText;
+                        $("#datepicker").datepicker("option","maxDate", endselectedDate);
+                        if( currentDate() != endselectedDate){
+                            $('#endDateTimeSelect').html(generateTimeOptions());
+                        }else{
+                            $('#endDateTimeSelect').html(startTimeOptions());
+                        }
+                    }
+                });
+                let fieldDate = $('#start-date').val();
+                if(fieldDate) {
+                    let selectedDate = moment(fieldDate).format('MM/DD/YYYY');
+                    if( currentDate() == selectedDate){
+                        $('#endDateTimeSelect').html(startTimeOptions());
+                    }else{
+                        $('#endDateTimeSelect').html(generateTimeOptions());
+                    }
+                }else{
+                    $('#endDateTimeSelect').html(startTimeOptions());
+                }
+
+                $('#endDateTimeSelect').on('change', function () {
+                    endselectedTime = $(this).val();
+                });
+
+                $("#shared-catalog-setting-start-date").click(function() {
+                    var nnoStartAnEndDate = $('#no-end-date').is(':checked');
+
+                    if(nnoStartAnEndDate){
+                        $("#no-end-date").prop('checked', false);
+                        $('#shared-catalog-setting-start-date')
+                            .attr('placeholder','MM/DD/YYYY 00:00 AM').prop('disabled', false);
+                    }
+
+                });
+
+                $("#no-end-date").on("input", function() {
+                    if($(this).val() == "on"){
+                        $('#shared-catalog-setting-start-date').attr('placeholder','--').val('');
+
+                        var inputNameVal = $('#shared-catalog-setting-name').val().length;
+                        var inputStartDateVal = $('#start-date').val().length;
+                        if (inputNameVal != 0
+                        && inputStartDateVal != 0){
+                            $('.complete-setting').addClass('active');
+                            $('.complete-setting').prop('disabled', false);
+                        }else {
+                            $('.complete-setting').removeClass('active');
+                            $('.complete-setting').prop('disabled', true);
+                        }
+                    }
+                });
+
+                $(".mvp-input-field").on("input", function() {
+                    $(window).keydown(function(event){
+                    if(event.keyCode == 13) {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+                var inputNameVal = $('#shared-catalog-setting-name').val().length;
+                var inputStartDateVal = $('#start-date').val().length;
+                var inputNoEndDateVal = $('#no-end-date').is(':checked');
+
+                if(!inputNoEndDateVal) {
+                    var inputEndDateVal = $('#shared-catalog-setting-start-date').val().length;
+
+                    if (inputNameVal != 0
+                        && inputStartDateVal != 0
+                        && inputEndDateVal != 0){
+                            $('.complete-setting').addClass('active');
+                                $('.complete-setting').prop('disabled', false);
+                        }else {
+                            $('.complete-setting').removeClass('active');
+                            $('.complete-setting').prop('disabled', true);
+                        }
+                } else {
+                        if (inputNameVal != 0
+                        && inputStartDateVal != 0){
+                            $('.complete-setting').addClass('active');
+                            $('.complete-setting').prop('disabled', false);
+                        }else {
+                            $('.complete-setting').removeClass('active');
+                            $('.complete-setting').prop('disabled', true);
+                        }
+                    }
+
+                });
+
+            $(".mvp-input-field").on("input", function() {
+                var max_length = 500;
+                var character_entered = $('.char-length-validation').val().length;
+                var character_remaining = max_length - character_entered;
+                var character_remaining_text = character_remaining +' characters left';
+                $('.char-length').html(character_remaining_text);
+            });
+        });
+
+        // Calender code end
+
+            if ("<?= $fxoCMIntegrationType?>" == "URL_REDIRECT") {
+                let productID = '';
+                if (window.e383157Toggle) {
+                    productID = fxoStorage.get("productID");
+                }else {
+                    productID = window.localStorage.getItem("productID");
+                }
+                if (productID) {
+                    $('#product-id').val(productID);
+                }
+            }
+
+            $('.chips').click(function() {
+                $(this).remove();
+            });
+            $('#shared-catalog-setting-tag').click(function() {
+                var chips = jQuery('.tags-wrapper').children();
+                if(chips.length < 1)
+                {
+                    $('#shared-catalog-setting-tag').attr('placeholder','Text input');
+                }
+            });
+            let externalProdStr = <?= $expernalProd ?>;
+
+            if (window.e383157Toggle) {
+                fxoStorage.set("adminconfig", null);
+            } else {
+                localStorage.setItem("adminconfig", null);
+            }
+            let isConfigurator;
+            if(window.e383157Toggle){
+                isConfigurator = fxoStorage.get("configurator_json");
+            }else{
+                isConfigurator = localStorage.getItem("configurator_json") != "" && localStorage.getItem("configurator_json") != null;
+            }
+            if (isConfigurator) {
+                let configuratorJson,podData;
+                if(window.e383157Toggle){
+                    configuratorJson = fxoStorage.get("configurator_json");
+                    podData = fxoStorage.get("pod-data");
+                }else{
+                    configuratorJson = window.localStorage.getItem("configurator_json");
+                    podData = window.localStorage.getItem("pod-data");
+                    podData = JSON.parse(podData);
+                }
+
+                if (podData.isEdit == undefined) {
+                    podData.isEdit = true;
+                }
+
+                if(window.e383157Toggle){
+                    fxoStorage.set('adminconfig',configuratorJson);
+                    fxoStorage.set('pod-data',podData);
+                }else{
+                    localStorage.setItem('adminconfig',configuratorJson);
+                    localStorage.setItem('pod-data',JSON.stringify(podData));
+                }
+
+            } else if (typeof externalProdStr != 'undefined' &&
+            externalProdStr !=null &&Object.keys(externalProdStr).length > 0) {
+                if(window.e383157Toggle){
+                    fxoStorage.set('pod-data',null);
+                }else{
+                    localStorage.setItem('pod-data',null);
+                }
+                let instanceId = externalProdStr.instanceId;
+                if (!instanceId) {
+                    instanceId = Math.floor(100000000000 + Math.random() * 900000000000);
+                }
+                let fxomenuId = '<?= $fxomenuId?>';
+                let newObjConfigurator = {
+                    "fxoMenuId":fxomenuId,
+                    "fxoProductInstance": {
+                        "id" : externalProdStr.instanceId,
+                        "productConfig": {
+                            "product": externalProdStr
+                        },
+                        "isEditable": true
+                    }
+                };
+                let podData = {
+                    id: '<?= $sku ?>',
+                    instanceId: instanceId,
+                    fromAdmin: true,
+                    fedexAccount: "<?= $companyFedExAccountNumber ?>",
+                    isEdit: true,
+                    fromCustomerAdmin: true,
+                    isCatalogMvpCloudDriveToggle: "1",
+                    isCloudDriveIntegrationBox: "<?= $isCloudDriveBoxEnabled ?>",
+                    isCloudDriveIntegrationDropbox: "<?= $isCloudDriveDropboxEnabled ?>",
+                    isCloudDriveIntegrationGoogle: "<?= $isCloudDriveGoogleEnabled ?>",
+                    isCloudDriveIntegrationMicrosoft: "<?= $isCloudDriveMicrosoftEnabled ?>"
+                };
+
+                if(window.e383157Toggle){
+                    fxoStorage.set('adminconfig',newObjConfigurator);
+                    fxoStorage.set('pod-data',podData);
+                }else{
+                    localStorage.setItem('adminconfig',newObjConfigurator);
+                    localStorage.setItem('pod-data',JSON.stringify(podData));
+                }
+            }
+            $(document).ready(function() {
+
+                let noEndDateSetup = '<?php echo $defaultNoEndDateSet ?>';
+                if (noEndDateSetup == "1") {
+                    $("#no-end-date").prop("checked", true);
+                    $('#shared-catalog-setting-start-date').attr('placeholder', '--').val('');
+                    $('.complete-setting').addClass('active');
+                    $('.complete-setting').prop('disabled', false);
+                }
+                var saveProductInProgress = false;
+                $('body').click(function(event) {
+                    if (!$(event.target).closest('#setting-formp-popup').length && !$(event.target).is(".tag-label") && !$(event.target).is(".chips") && !$(event.target).is('#setting-formp-popup') && $('#setting-formp-popup').is(":visible")) {
+                        $('#setting-formp-popup').modal('closeModal');
+                        location.reload();
+                    }
+                });
+                $('.cancel-setting').click(function() {
+                    $('#setting-formp-popup').modal('closeModal');
+                    location.reload();
+                });
+
+                $(".complete-setting").on("click", function(event) {
+                    if (saveProductInProgress || ($('body').hasClass('catalog_mvp_custom_docs') && $(this).hasClass('setupcustomize'))) {
+                        return false;
+                    }
+
+                    $(window).keydown(function(event) {
+                        if (event.keyCode == 13) {
+                            event.preventDefault();
+                            return false;
+                        }
+
+                    });
+                    event.preventDefault();
+                    var productName = $('#shared-catalog-setting-name').val();
+                    var productStartDate = $('#start-date').val();
+                    var productEndDate = $('#shared-catalog-setting-start-date').val();
+                    var noStartAnEndDate = $('#no-end-date').is(':checked');
+                    var productDescription = $('#shared-catalog-setting-description').val();
+                    var fxoMenuId = $('#catalogmvp_fxo_menu_id').val();
+                    var chips = jQuery('.tags-wrapper').children();
+                    var tags = [];
+
+                    for(let i = 0; i < chips.length; i++) {
+                        if(chips[i].classList.contains('chips'))
+                        {
+                            tags.push(chips[i].getElementsByClassName("tag-label")[0].innerHTML);
+                        }
+                    }
+
+                    var currenttagval = $('#shared-catalog-setting-tag').val();
+                    if (currenttagval && currenttagval.trim().length > 0) {
+                        tags.push(currenttagval);
+                    }
+                    var productTag = tags.join(",");
+                    var externalProd = $('#shared-catalog-setting-externalproduct').val();
+                    var productPrice = $('#shared-catalog-setting-price').val();
+                    var productId = $('#product-id').val();
+                    var customizationfields = $("#customization_fields").val();
+                    var productCategory;
+                    if(window.e383157Toggle){
+                        productCategory = fxoStorage.get("categoryIds");
+                    }else{
+                        productCategory = localStorage.getItem("categoryIds");
+                    }
+                    let customerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    var url = "<?php echo $this->getUrl('catalogmvp/index/saveproduct') ?>";
+                    var customizable = "false";
+                    let customizeToggleSwitchSubmit = $("#customizable-toggle");
+                    if(customizeToggleSwitchSubmit !== undefined && customizeToggleSwitchSubmit.length > 0 && customizeToggleSwitchSubmit.checked) {
+                        customizable = "true";
+                    }
+                    saveProductInProgress = true;
+                    $.ajax({
+                        type: "post",
+                        url: url,
+                        showLoader: true,
+                        data: {
+                            productName: productName,
+                            productStartDate: productStartDate,
+                            productEndDate: productEndDate,
+                            noStartAnEndDate: noStartAnEndDate,
+                            productDescription: productDescription,
+                            productTag: productTag,
+                            externalProd: externalProd,
+                            productPrice: productPrice,
+                            productCategory: productCategory,
+                            productId: productId,
+                            customerTimeZone: customerTimeZone,
+                            fxoMenuId: fxoMenuId,
+                            customizationfields: customizationfields,
+                            customizable: customizable
+                        },
+                        success: function(response) {
+                            saveProductInProgress = false;
+                            if (window.e383157Toggle) {
+                                fxoStorage.delete('configuratorType');
+                                fxoStorage.delete('instanceId');
+                                fxoStorage.delete('newProductVariable');
+                                fxoStorage.delete('viewProjectVariable');
+                                fxoStorage.delete("productID");
+                            } else {
+                                window.localStorage.removeItem("configuratorType");
+                                window.localStorage.removeItem("instanceId");
+                                window.localStorage.removeItem("newProductVariable");
+                                window.localStorage.removeItem("viewProjectVariable");
+                                window.localStorage.removeItem("productID");
+                            }
+                            if (response.success ) {
+                               let cancelUrl;
+                               if(window.e383157Toggle){
+                                    cancelUrl = fxoStorage.get("cancelurl");
+                               }else{
+                                    cancelUrl = localStorage.getItem("cancelurl");
+                                }
+                               var redirectTo = response.categoryUrl ? response.categoryUrl : cancelUrl;
+                                if ("<?= $fxoCMIntegrationType?>" == "IFRAME") {
+                                    $('#setting-formp-popup').modal('closeModal');
+                                }
+                                if(window.e383157Toggle){
+                                    fxoStorage.set("categoryIds",'');
+                                    fxoStorage.set("cancelurl", "");
+                                    fxoStorage.set("mvp_toast_message",response.msg);
+                                    fxoStorage.set("configurator_json", "");
+                                    fxoStorage.set("configurator_customizedata", "");
+                                }else{
+                                    localStorage.setItem("categoryIds",'');
+                                    localStorage.setItem("cancelurl", "");
+                                    localStorage.setItem("mvp_toast_message",response.msg);
+                                    localStorage.setItem("configurator_json", "");
+                                    localStorage.setItem("configurator_customizedata", "");
+                                }
+                                window.location.assign(redirectTo);
+                            }else{
+                                var redirectTo = response.categoryUrl ? response.categoryUrl : localStorage.getItem("cancelurl");
+                                if ("<?= $fxoCMIntegrationType?>" == "IFRAME") {
+                                    $('#setting-formp-popup').modal('closeModal');
+                                }
+                                if(window.e383157Toggle){
+                                    fxoStorage.set("categoryIds",'');
+                                    fxoStorage.set("cancelurl", "");
+                                    fxoStorage.set("configurator_json", "");
+                                    fxoStorage.set("configurator_customizedata", "");
+                                }else{
+                                    localStorage.setItem("categoryIds",'');
+                                    localStorage.setItem("cancelurl", "");
+                                    localStorage.setItem("configurator_json", "");
+                                    localStorage.setItem("configurator_customizedata", "");
+                                }
+                                window.location.assign(redirectTo);
+                            }
+                        }
+                    });
+                });
+                function clearStorageValue(){
+                    if (window.e383157Toggle) {
+                        fxoStorage.delete('configuratorType');
+                        fxoStorage.delete('instanceId');
+                        fxoStorage.delete('newProductVariable');
+                        fxoStorage.delete('viewProjectVariable');
+                        fxoStorage.delete("productID");
+                    } else {
+                        window.localStorage.removeItem("configuratorType");
+                        window.localStorage.removeItem("instanceId");
+                        window.localStorage.removeItem("newProductVariable");
+                        window.localStorage.removeItem("viewProjectVariable");
+                        window.localStorage.removeItem("productID");
+                    }
+                }
+            });
+            <?php if($productDesc): ?>
+                $(document).ready(function(){
+                    let description = <?= empty($productDesc) ? false : strlen($productDesc); ?>;
+                    if(description){
+                        var max_length = 500;
+                        var character_entered = description;
+                        var character_remaining = max_length - character_entered;
+                        var character_remaining_text = character_remaining +' characters left';
+                        $('.char-length').html(character_remaining_text);
+                    }
+                });
+            <?php endif; ?>
+            $(document).ready(function(){
+                let customerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                let productStartDate = $('#start-date').val();
+                if(productStartDate) {
+                    let productEndDate = $('#shared-catalog-setting-start-date').val();
+                    let timezoneurl = "<?php echo $this->getUrl('catalogmvp/index/getCustomerTime')?>";
+                    if(productStartDate) {
+                        $.ajax({
+                            type: "post",
+                            url: timezoneurl,
+                            data: {
+                                custimezone:customerTimeZone,
+                                productStartDate: productStartDate,
+                                productEndDate:productEndDate
+                            },
+                            success: function(response) {
+                                if (response.success == 'true') {
+                                    $('#start-date').val(response.startpsttime);
+                                    $('#start-date').trigger('change');
+                                    let customerTimeOnly = moment(response.startpsttime).format('h:00 A');
+                                    $('#timeSelect').val(customerTimeOnly).change();
+                                    if (response.endpstTime) {
+                                        $('#shared-catalog-setting-start-date').val(response.endpstTime);
+                                        $('#shared-catalog-setting-start-date').trigger('change');
+                                        let endDate = moment(response.endpstTime).format('MM/DD/YYYY');
+                                        $('#endDatePicker').datepicker("setDate",endDate);
+                                        let endCustomerTimeOnly = moment(response.endpstTime).format('h:00 A');
+                                        $('#endDateTimeSelect').val(endCustomerTimeOnly).change();
+                                    }
+                                }
+
+                            }
+                        });
+                    }
+                } else {
+                    let customerTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+                    let options = {
+                                timeZone: customerTimeZone
+                            };
+                    let nowDate = new Date().toLocaleString("en",options);
+                    let customerTimeandDate = moment(nowDate).format('MM/DD/YYYY h:00 A');
+                    let customerTimeOnly = moment(nowDate).format('h:00 A');
+                    $('#start-date').val(customerTimeandDate);
+                    $('#start-date').trigger('change');
+                }
+            });
+        });
+        var tooltip = ' <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><rect opacity="0.01" width="32" height="32" fill="white"/><path fill-rule="evenodd" clip-rule="evenodd" d="M16.0002 26.6663C10.1091 26.6663 5.3335 21.8907 5.3335 15.9997C5.3335 10.1086 10.1091 5.33301 16.0002 5.33301C21.8912 5.33301 26.6668 10.1086 26.6668 15.9997C26.6668 21.8907 21.8912 26.6663 16.0002 26.6663ZM16.0002 25.333C21.1548 25.333 25.3335 21.1543 25.3335 15.9997C25.3335 10.845 21.1548 6.66634 16.0002 6.66634C10.8455 6.66634 6.66683 10.845 6.66683 15.9997C6.66683 21.1543 10.8455 25.333 16.0002 25.333ZM18.3335 20.6663H16.3346L16.3335 20.6663L16.3324 20.6663H14.3335C13.9653 20.6663 13.6668 20.3679 13.6668 19.9997C13.6668 19.6315 13.9653 19.333 14.3335 19.333H15.6668V14.9997H15.0002C14.632 14.9997 14.3335 14.7012 14.3335 14.333C14.3335 13.9648 14.632 13.6663 15.0002 13.6663H16.3335C16.7017 13.6663 17.0002 13.9648 17.0002 14.333V19.333H18.3335C18.7017 19.333 19.0002 19.6315 19.0002 19.9997C19.0002 20.3679 18.7017 20.6663 18.3335 20.6663ZM15.0002 10.9997C15.0002 10.4497 15.4462 9.99967 16.0002 9.99967C16.5502 9.99967 17.0002 10.4497 17.0002 10.9997C17.0002 11.5537 16.5502 11.9997 16.0002 11.9997C15.4462 11.9997 15.0002 11.5537 15.0002 10.9997Z" fill="#4D148C"/></svg>';
+        document.getElementById('tooltip').innerHTML=tooltip;
+ 		document.addEventListener("DOMContentLoaded", function() {
+                var tooltip = document.querySelector('.customize-tool-tip');
+                var tooltipContent = document.querySelector('.customize.tooltip-content');
+
+                tooltip.addEventListener('mouseenter', function() {
+                    tooltipContent.style.display = 'block';
+                });
+
+                tooltip.addEventListener('mouseleave', function() {
+                    tooltipContent.style.display = 'none';
+                });
+
+                document.addEventListener('click', function(event) {
+                    if (!event.target.closest('.customize-tool-tip') && !event.target.closest('.customize.tooltip-content')) {
+                        tooltipContent.style.display = 'none';
+                    }
+                });
+            });
+    </script>
+<?php
+}
+?>

@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="page.main.title">
+            <action method="setPageTitle">
+                <argument translate="true" name="title" xsi:type="string">Catalog Items</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="page.top">
+            <block class="Fedex\CatalogMvp\Block\Adminhtml\Catalog\Product\ModelPopup"
+            name="catalog.mvp.product.modal"
+            template="Magento_Catalog::product/MvpProduct/MvpProductPopup.phtml" before="-">
+                <arguments>
+                    <argument name="mvphelper_mvp_item_popup" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+            name="catalog.product.list.ajax.loader"
+            template="Magento_Catalog::product/ajax-shared-catalog-loader.phtml">
+            </block>
+        </referenceContainer>
+        <referenceContainer name="content">
+            <block class="Magento\Framework\View\Element\Template"
+            name="catalog.product.list.folder.item.cta"
+            template="Magento_Catalog::product/new-foloder-new-item-cta.phtml" before="-">
+                <arguments>
+                    <argument name="mvphelper_mvp_item-folder_cta" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template"
+            name="catalog.product.list.ajax"
+            template="Magento_Catalog::product/ajax-shared-catalog.phtml" before="category.products.list">
+            </block>
+            <block class="Fedex\SelfReg\Block\UserGroupsList"
+            name="edit.folder.access.model"
+            template="Magento_Catalog::product/view/edit-folder-access-model.phtml">
+            </block>
+        </referenceContainer>
+        <referenceBlock name="category.products.list">
+            <arguments>
+                <argument name="view_model" xsi:type="object">Fedex\Punchout\ViewModel\TazToken</argument>
+                <argument name="view_model_mvphelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+            </arguments>
+            <block class="Magento\Framework\View\Element\Template" name="catalog.list.select.number" template="Magento_Catalog::product/select-number.phtml" >
+                <arguments>
+                    <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+                    <argument name="view_model_mvphelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="catalog.list.right.panel" template="Magento_Catalog::product/right-panel.phtml" >
+                <arguments>
+                    <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+                    <argument name="view_model_mvphelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="custom.modal.move.operation" template="Magento_Catalog::product/move-operation-modal.phtml" >
+                <arguments>
+                    <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="custom.modal.delete.popup" template="Magento_Catalog::product/delete-popup-modal.phtml" >
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="change.request.modal" template="Magento_Catalog::product/change-request-modal.phtml" >
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="content.renew.modal" template="Magento_Catalog::product/content-renew-modal.phtml" >
+            </block>
+            <block class="Magento\Framework\View\Element\Template" name="renew.success.modal" template="Magento_Catalog::product/renew-success-modal.phtml" >
+            </block>
+        </referenceBlock>
+        <block class="Magento\Catalog\Block\Product\ProductList\Toolbar" name="product_list_toolbar" template="Magento_Catalog::product/list/toolbar.phtml">
+            <arguments>
+                <argument name="view_model_mvphelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+            </arguments>
+        </block>
+        <block class="Magento\Catalog\Block\Product\ListProduct" template="Magento_Catalog::product/list-epro.phtml" name="catalog.list.epro">
+            <block class="Magento\Catalog\Block\Product\ListProduct" name="catalog.list.epro.cta" template="Magento_Catalog::product/customer-admin.phtml" >
+                <arguments>
+                    <!-- B-1149167 : RT-ECVS-SDE-SDK changes for File upload -->
+                    <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+                    <!--B-1813830 RT-ECVS-Add an action item for download files in action Kabob in shared catalog table and in flyout - Customer Admin-->
+                     <argument name="view_model_mvphelper" xsi:type="object">Fedex\CatalogMvp\ViewModel\MvpHelper</argument>
+                </arguments>
+            </block>
+            <block class="Magento\Catalog\Block\Product\ListProduct" name="catalog.list.epro.print.product" template="Magento_Catalog::product/print-product.phtml" >
+                <arguments>
+                    <!-- B-1149167 : RT-ECVS-SDE-SDK changes for File upload -->
+                    <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+                </arguments>
+            </block>
+            <arguments>
+                <!-- B-1149167 : RT-ECVS-SDE-SDK changes for File upload -->
+                <argument name="product_list_view_model" xsi:type="object">Fedex\Catalog\ViewModel\ProductList</argument>
+            </arguments>
+        </block>
+    </body>
+</page>

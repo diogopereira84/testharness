@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\SharedCatalog\Ui\Component\Listing\Column\Actions" type="Fedex\SharedCatalogCustomization\Ui\Component\Listing\Column\Actions"/>
+    <preference for="Fedex\SharedCatalogCustomization\Api\MessageInterface" type="Fedex\SharedCatalogCustomization\Model\Message" />
+    <preference for="Fedex\SharedCatalogCustomization\Api\SubscriberInterface" type="Fedex\SharedCatalogCustomization\Model\Subscriber" />
+    <preference for="Fedex\SharedCatalogCustomization\Api\Data\SharedCatalogSyncQueueConfigurationInterface" type="Fedex\SharedCatalogCustomization\Model\SharedCatalogSyncQueueConfiguration" />
+    <preference for="Fedex\SharedCatalogCustomization\Api\SharedCatalogSyncQueueConfigurationRepositoryInterface" type="Fedex\SharedCatalogCustomization\Model\SharedCatalogSyncQueueConfigurationRepository" />
+
+    <preference for="Magento\SharedCatalog\Model\SharedCatalogValidator" type="Fedex\SharedCatalogCustomization\Model\CustomSharedCatalogValidator" />
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="fedex_sharedcatalogcustomization_listing_data_source" xsi:type="string">catalogsyncqueue</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="catalogsyncqueue" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">catalog_sync_queue</argument>
+            <argument name="resourceModel" xsi:type="string">Fedex\SharedCatalogCustomization\Model\ResourceModel\CatalogSyncQueue</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Catalog\Model\Product\Copier">
+        <plugin name="AssignSharedCatalogOnDuplicateProductPlugin" disabled="true" />
+        <plugin name="AssignSharedCatalogOnDuplicateProductPluginFedexSharedCatalogCustomization" type="Fedex\SharedCatalogCustomization\Plugin\Catalog\Model\Product\AssignSharedCatalogOnDuplicateProductPlugin"/>
+    </type>
+    <type name="Magento\SharedCatalog\Model\CustomerGroupManagement">
+        <plugin sortOrder="10" name="cache_shared_catalog_group_ids"
+                type="Fedex\SharedCatalogCustomization\Plugin\Model\CustomerGroupManagementPlugin"/>
+    </type>
+</config>
+

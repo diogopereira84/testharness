@@ -1,0 +1,160 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<div class="block-title">
+    <h2><?= $block->escapeHtml(__('Questionnaire (Optional)')) ?></h2>
+    <p><?= $block->escapeHtml(__('Please answer the following to help us understand your needs.')) ?></p>
+</div>
+<div class="account-request-border-box">
+    <div id="questionnaire_container" class="form-section-container">
+        <div id="questionnaire_col1" class="left-col-content">
+            <p class="spend-para"><?= $block->escapeHtml(__(
+                'How much do you spend per month on retail office supplies and business services such as copying,
+                    printing, binding/lamination and signs/banners?'
+            )) ?>
+            </p>
+            <div class="input-container icon-wrap">
+                <span class="icon-code-dollor input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/dollor.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox
+                v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                type="text"
+                name="office_spent_amount"
+                id="office_spent_amount"
+                placeholder="100"
+                maxlength="15"
+                data-testid="E-349679-B-1648248-TK-2820794-cid-acc-request-btn-questionnaire-office-spent-amount"
+                data-validate="{'validate-length':true}"
+                >
+            </div>
+            <div class="input-container icon-wrap">
+                <label class="input-label" for="spent_percent_with_fedex">
+                    <?= $block->escapeHtml(__('% Spent with FedEx Office?')) ?>
+                </label>
+                <span class="icon-code-label input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/percentage.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                type="text"
+                name="spent_percent_with_fedex"
+                    id="spent_percent_with_fedex"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-spent-with-fo"
+                    placeholder="100"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+            <p class="express-para"><?= $block->escapeHtml(
+                __('How many express (overnight or 2 day delivery) packages do you ship per month?')
+            ) ?>
+            </p>
+            <div class="input-container icon-wrap">
+                <span class="icon-code input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/hash.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                    type="text"
+                    name="express_ship_amount"
+                    id="express_ship_amount" placeholder="100"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-express-packages-per-month"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+            <div class="input-container icon-wrap">
+                <label class="input-label" for="express_ship_percent_with_fedex">
+                    <?= $block->escapeHtml(__('% Shipped with FedEx?')) ?>
+                </label>
+                <span class="icon-code-label input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/percentage.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                type="text" name="express_ship_percent_with_fedex"
+                    id="express_ship_percent_with_fedex" placeholder="100"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-express-shipped-with-fedex"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+        </div>
+        <div id="questionnaire_col2" class="right-col-content">
+            <p class="ground-para"><?= $block->escapeHtml(__(
+                'How many ground (typically 2 to 5 day delivery) packages do you ship per month?'
+            )) ?>
+            </p>
+            <div class="input-container icon-wrap">
+                <span class="icon-code input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/hash.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                    type="text" name="ground_ship_amount"
+                    id="ground_ship_amount"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-ground-packages-per-month"
+                    placeholder="100"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+            <div class="input-container icon-wrap">
+                <label class="input-label" for="ground_ship_perrcent_with_fedex">
+                    <?= $block->escapeHtml(__('% Shipped with FedEx?')) ?>
+                </label>
+                <span class="icon-code-label input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/percentage.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                    type="text" name="ground_ship_perrcent_with_fedex"
+                    id="ground_ship_perrcent_with_fedex"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-ground-shipped-with-fedex"
+                    placeholder="100"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+            <p class="international-para"><?= $block->escapeHtml(
+                __('How many international packages do you ship per month?')
+            ) ?>
+            </p>
+            <div class="input-container icon-wrap">
+                <span class="icon-code input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/hash.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                    type="text" name="inter_ship_amount"
+                    id="inter_ship_amount" placeholder="100"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-inter-packages-ship-per-month"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+            <div class="input-container icon-wrap">
+                <label class="input-label" for="inter_ship_percent_with_fedex">
+                    <?= $block->escapeHtml(__('% Shipped with FedEx?')) ?>
+                </label>
+                <span class="icon-code-label input-icon">
+                    <img src="<?=$escaper->escapeUrl($block->getViewFileUrl('images/cid-psg/percentage.png'))?>" alt="">
+                </span>
+                <input class="input-textbox icon-code-inputbox v-validate set-maximum-characters-limit-fifteen
+                allows-numbers-only"
+                    type="text"
+                    name="inter_ship_percent_with_fedex"
+                    id="inter_ship_percent_with_fedex" placeholder="100"
+                    data-testid="E-349679-B-1755654-TK-2969058-foa-questionnaire-inter-shipped-with-fedex"
+                    maxlength="15"
+                    data-validate="{'validate-length':true}"
+                    >
+            </div>
+        </div>
+    </div>
+</div>

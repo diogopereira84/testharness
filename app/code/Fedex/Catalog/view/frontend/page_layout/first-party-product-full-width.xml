@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <update handle="product-full-width"/>
+    <referenceContainer name="page.wrapper">
+        <block class="Fedex\Catalog\Block\Product\View\AboutUs"
+               name="product.about" as="product_about"
+               template="Magento_Catalog::product/view/about-this-product.phtml">
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Info"
+                   name="product.about.info" as="product_about_info"
+                   template="Magento_Catalog::product/view/about-us/info.phtml"/>
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Faq"
+                   name="product.about.faq" as="product_about_faq"
+                   template="Magento_Catalog::product/view/about-us/faqs.phtml"/>
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Shipping"
+                   name="product.about.shipping" as="product_about_shipping"
+                   template="Magento_Catalog::product/view/about-us/shipping.phtml"/>
+            <block class="Fedex\Catalog\Block\Product\View\AboutUs\Options"
+                   name="product.about.options" as="product_about_options"
+                   template="Magento_Catalog::product/view/about-us/options.phtml"/>
+        </block>
+
+        <container name="related.products.area" htmlTag="div" htmlClass="related-products-area products-carousel">
+            <block class="Magento\Catalog\Block\Product\ProductList\Related" name="catalog.product.related.third.party" template="Fedex_MarketplaceProduct::product/list/items.phtml">
+                <arguments>
+                    <argument name="type" xsi:type="string">related</argument>
+                    <argument name="view_model" xsi:type="object">Magento\Catalog\ViewModel\Product\Listing\PreparePostData</argument>
+                </arguments>
+            </block>
+        </container>
+        <container name="recent.products.area" htmlTag="div" htmlClass="recent-products-area products-carousel" after="related-products-area">
+            <block class="Magento\Catalog\Block\Widget\RecentlyViewed" name="recently_viewed" template="Fedex_MarketplaceProduct::product/widget/viewed/grid.phtml">
+                <arguments>
+                    <argument name="uiComponent" xsi:type="string">widget_recently_viewed</argument>
+                    <argument name="page_size" xsi:type="number">4</argument>
+                    <!-- 'Product attributes to show' configuration -->
+                    <argument name="show_attributes" xsi:type="string">name,image,price</argument>
+                </arguments>
+            </block>
+        </container>
+    </referenceContainer>
+    <referenceContainer name="content">
+        <referenceBlock name="page.main.title" remove="true" />
+        <referenceBlock name="marketing_description" remove="true"/>
+        <referenceBlock name="product.info.shipping.alert" remove="true"/>
+        <referenceBlock name="product.info.shipping" remove="true"/>
+        <container name="product.info.media">
+            <block class="Magento\Catalog\Block\Product\View" name="product.shipping.attribute"
+                   template="Magento_Catalog::product/view/shipping-attribute.phtml"
+                   after="product.mob.overview"/>
+        </container>
+        <block class="Magento\Theme\Block\Html\Title" name="page.main.title-first-party"
+               template="Magento_Theme::html/title.phtml" before="content-wrapper"/>
+    </referenceContainer>
+</layout>

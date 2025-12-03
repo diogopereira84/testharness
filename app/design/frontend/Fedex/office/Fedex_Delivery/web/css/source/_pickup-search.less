@@ -1,0 +1,593 @@
+// variables
+@border-color: #6F7F87;
+@fedex-sans-bold: 'FedEx Sans Bold';
+@fedex-robot: 'Roboto';
+@search-border-color: @fx-orange-500;
+@luma-icons: 'luma-icons';
+@white-color: @fx-white-100;
+@option-bg-color: #CED5D9;
+@show-more_text-color: #0078B4;
+@disabled-text-color: @fx-grey-100;
+@disabled-bg-color: @fx-grey-700;
+.disabled-box-bg() {
+    background: @disabled-bg-color;
+    color: @disabled-text-color;
+}
+body {
+    .pac-container.pac-logo {
+        box-shadow: none;
+        border: 1px solid @option-bg-color;
+    }
+}
+.in-branch-location {
+    border: 1px solid @fx-yellow-100;
+    background: @fx-white-100;
+    width: 648px;
+    left: 0;
+    right: 0;
+    top: 127px;
+    position: fixed;
+    margin: 0px auto;
+    z-index: 1;
+    box-sizing: border-box;
+    height: auto;
+    .icon-container {
+        background-color: @fx-yellow-100;
+        img {
+            width: 32px;
+        }
+    }
+    .img-close-pop {
+        align-self: flex-start;
+    }
+}
+.pickup-search-radius-container {
+    .disabled-box {
+        .search-text {
+            color: @disabled-text-color;
+        }
+        &.input-filed-container {
+            input.zipcodePickup {
+                &:disabled {
+                    opacity: 1;
+                    .disabled-box-bg();
+                }
+            }
+            .search-button-container {
+                #search-pickup.search-pickup {
+                    opacity: 1;
+                    .disabled-box-bg();
+                    border-color: @disabled-bg-color;
+                }
+            }
+        }
+    }
+    .radius-miles-container {
+        padding-right: 16px;
+        width: 22%;
+        select.pickup-search-radius {
+            height: 48px;
+            border-color: @border-color;
+            margin-top: 15px;
+        }
+        .pickup-search-radius-dropdown {
+            margin-top: 4px;
+            position: relative;
+            .pickup-search-selector {
+                border: 1px solid @border-color;
+                cursor: pointer;
+                padding: 13px 30px;
+                  &.disabled-dropdown {
+                    .disabled-box-bg();
+                    pointer-events: none;
+                    cursor: not-allowed;
+                    border: 1px solid @border-color;
+                }
+                .selected-miles {
+                    margin-left: -20px;
+                    &:after {
+                        content: '\e622';
+                        font-family: @luma-icons;
+                        position: absolute;
+                        right: 19px;
+                        z-index: -1;
+                    }
+                }
+            }
+            .pickup-search-radius-options {
+                border: 1px solid @option-bg-color;
+                border-top-width: 0;
+                box-shadow: -1px 3px 7px @option-bg-color;
+                background: @white-color;
+                position: absolute;
+                width: 99%;
+                z-index: 999;
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    li {
+                        &:first-child {
+                            margin-top: 10px;
+                        }
+                        cursor: pointer;
+                        padding: 5px 10px;
+                        &:hover {
+                            background: @option-bg-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .search-text {
+        &:after {
+            display: none;
+        }
+    }
+    .zipcode-container {
+        margin-right: 0;
+        margin-right: 16px;
+        .zipcodePickup.radiusBox {
+            border-color: @border-color;
+            margin-top: 4px;
+        }
+    }
+    label {
+        text-transform: uppercase;
+    }
+    .search-button-container {
+        #search-pickup.search-pickup {
+            border-color: @search-border-color;
+            font-family: @fedex-sans-bold;
+            margin-top: 2.3rem;
+        }
+    }
+}
+.pickup-location-item-container.radius-pickup-location-item-container {
+    height: 40rem;
+    .pickup-location-container {
+
+        &:first-child {
+            border-top-width: 1px;
+        }
+        .pickup-location-address {
+            span.fa.fa-map-marker {
+                &:before {
+                    visibility: hidden;
+                }
+                img {
+                    left: -7px;
+                    position: relative;
+                    top: 1px;
+                    width: 10px;
+                }
+            }
+        }
+
+        .pickup-options-container {
+            margin-left: 4.5rem;
+            padding-top: 1rem;
+
+            .pickup-time-title {
+                font-size: 16px;
+                font-weight: 700;
+                line-height: 24px;
+                font-family: "FedEx Sans regular";
+            }
+
+            .pickup-options-list {
+                padding-top: 1rem;
+                list-style-type: none;
+
+                .pickup-option-type-button {
+                    vertical-align: bottom;
+                    width: 24px;
+                    height: 24px;
+                    border-radius: 50%;
+                    border-style: solid;
+                    border-width: 0.1rem;
+                    outline: none;
+                    box-shadow: none;
+                
+                    &:checked {
+                        appearance: none;
+                        -webkit-appearance: none;
+                        background: radial-gradient(@fedex-blue 0%, @fedex-blue 40%, transparent 32%, transparent) !important;
+                        border-color:#4D148C
+                    }
+                }
+
+                .pickup-option-type-button-label {
+                    font-size: 14px;
+                    line-height: 24px;
+                    font-weight: 600;
+                    font-family: "FedEx Sans Regular";
+                }
+
+                .pick-up-time-description {
+                    margin-left: 3rem;
+                    span {
+                        font-style: italic;
+                        font-family: 'FedEx Sans Regular';
+                        font-size: 14px;
+                        line-height: 24px;
+                    }
+
+                    .pickup-later-change-time {
+                        text-decoration: underline;
+                        cursor: pointer;
+                    }
+                }
+
+                .pickup-limited-time-section {
+                    margin-left: 3rem;
+                    display: flex;
+
+                    .priority-pickup-cost {
+                        font-style: italic;
+                        font-family: 'FedEx Sans Regular';
+                        font-size: 14px;
+                    }
+
+                    .limited-time-tag {
+                        color: #4D148C;
+                        margin-left: 5px;
+                        font-family: 'FedEx Sans Regular';
+                        font-weight: 700;
+                        line-height: 24px;
+                        margin-bottom: 0;
+
+                        .limited-time-image {
+                            margin-right: 5px;
+                            height: 16px;
+                            width: 16px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .hide-location {
+        display: none;
+        &+div.show-more-locations {
+            display: block;
+        }
+    }
+}
+.show-more-locations {
+    border: 1px solid @option-bg-color;
+    border-bottom-width: 0;
+    border-radius: 0;
+    border-top-width: 0;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: none;
+    float: right;
+    margin-bottom: 0;
+    padding: 8px 0;
+    text-align: center;
+    width: 100%;
+    button {
+        background: none;
+        border: 0;
+        color: @show-more_text-color;
+        font-family: @fedex-robot;
+        font-size: 16px;
+        text-transform: uppercase;
+        &:hover {
+            background: none;
+            border: 0;
+            color: @show-more_text-color;
+        }
+    }
+}
+.shipping-title-checkout {
+    .modal-container.location-message {
+        display: flex;
+        .message-content {
+            margin-left: 10px;
+        }
+    }
+    .modal-container.no-location-message {
+        display: flex;
+        .message-content {
+            margin-left: 10px;
+            margin-top: 7px;
+        }
+    }
+}
+
+@media screen and (min-width: 1200px) {
+    .shipping-title-checkout {
+        .in-branch.message-block {
+            max-width: 600px;
+        }
+        .modal-container.location-message {
+            margin-top: 5px;
+        }
+        .modal-container.no-location-message {
+            margin-top: 5px;
+        }
+    }
+    .pickup-search-radius-container .input-filed-container .zipcode-container {
+        input.zipcodePickup.radiusBox
+        {
+            width: 100%;
+        }
+    }
+    .checkout-index-index .pickup-search-radius-container .input-filed-container .zipcode-container {
+        width: 35%;
+        input.zipcodePickup.radiusBox
+        {
+            width: 100%;
+        }
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+    .pickup-search-radius-container {
+        .input-filed-container {
+            .zipcode-container {
+                width: 40%;
+                input.zipcodePickup.radiusBox {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1200px) {
+    .pickup-search-radius-container {
+        .input-filed-container {
+            .radius-miles-container {
+                width: 22%;
+            }
+            .zipcode-container {
+                width: 45%;
+                input.zipcodePickup.radiusBox {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1200px) {
+    .pickup-search-radius-container {
+        .input-filed-container {
+            display: flex;
+            flex-direction: row;
+            position: relative;
+            .radius-miles-container {
+                select.pickup-search-radius {
+                    width: 100%;
+                }
+            }
+            .search-button-container {
+                #search-pickup.search-pickup {
+                    margin-top: 2.3rem;
+                    width: 14rem;
+                }
+            }
+        }
+    }
+}
+@media screen and (max-width: 767px) {
+    .pickup-search-radius-container {
+        .input-filed-container {
+            .radius-miles-container {
+                width: 100%;
+                padding-right: 0;
+            }
+            .zipcode-container {
+                width: 100%!important;
+                margin-top: 24px;
+                .zipcodePickup.radiusBox {
+                    width: 100%;
+                }
+            }
+            .search-button-container {
+                #search-pickup.search-pickup {
+                    margin-top: 16px;
+                    width: 100%;
+                }
+            }
+        }
+    }
+    .shipping-title-checkout {
+        .modal-container.location-message,
+        .modal-container.no-location-message{
+            margin-top: 16px;
+            align-items: center;
+
+            .message-content {
+                width: 95%;
+            }
+        }
+    }
+    body.checkout-index-index.mkt-checkout-enabled  {
+        #checkoutSteps {
+            .pickup-search-form-container.pickup-search-radius-container .input-filed-container {
+                .search-button-container button.search-pickup {
+                    width: 100%;
+                }
+            }
+            .pickup-location-list-container .place-pickup-order {
+                padding: 16px 36px;
+                width: 100%;
+            }
+        }
+        .opc-block-summary {
+            padding: 24px;
+        }
+    }
+}
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (min-width: (@screen__m)) {
+        .pickup-location-item-container.radius-pickup-location-item-container {
+            .pickup-location-container {
+                .earlist-label.visible-xs {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (min-width: (@screen__m)) and (max-width: (@screen__l - 1)) {
+        .mkt-checkout-enabled .checkout-container .root-container .pickup-location-list-container {
+            .map-canvas,
+            .pickup-location-item-container {
+                margin-right: 0;
+            }
+        }
+        .pickup-location-item-container.radius-pickup-location-item-container {
+            .pickup-location-container {
+                .hide-details-button{
+                    margin-left: 0;
+                    margin-top: 0;
+                }
+
+                .show-details-button,
+                .hide-details-button{
+                    margin: 0;
+                }
+            }
+        }
+    }
+}
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (max-width: (@screen__m - 1)) {
+        .pickup-location-item-container.radius-pickup-location-item-container {
+            .pickup-location-container {
+
+                .earlist-label:not(.visible-xs){
+                    display: none;
+                }
+
+                .show-details-container {
+                    margin-top: 16px;
+                    margin-left: 0;
+                }
+
+                .show-details-button,
+                .hide-details-button{
+                    margin: 0 0 24px;
+                }
+            }
+        }
+    }
+}
+& when (@media-target = 'mobile'), (@media-target = 'all') {
+    @media only screen and (max-width: (@screen__l - 1)) {
+        .pickup-location-item-container.radius-pickup-location-item-container {
+            .pickup-location-container {
+                .box-container {
+                    padding: 24px;
+                }
+
+                .distance {
+                    margin: 4px 0 0;
+                }
+
+                .pick-up-button {
+                    display: flex;
+                    justify-content: space-between;
+                }
+
+                .radio-label {
+                    padding: 0;
+                }
+
+                .center-details {
+                    width: 100%;
+                    order: 1;
+                    margin-left: 0;
+                    margin-top: 24px;
+                }
+
+                .location-name {
+                    color: @fx-grey-500;
+                    font-family: "FedEx Sans Light";
+                    font-size: 18px;
+                    font-style: normal;
+                    font-weight: 300;
+                    line-height: 24px;
+                }
+
+                .earlist-label {
+                    color: #E45528;
+                    font-family: "FedEx Sans Bold";
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 24px; /* 171.429% */
+                }
+
+                .hide-detail-button,
+                .show-detail-button {
+                    color: #0078B4;
+                    font-family: "FedEx Sans Bold";
+                    font-size: 14px;
+                    font-style: normal;
+                    font-weight: 700;
+                    line-height: 24px;
+                    letter-spacing: 0.75px;
+                    text-transform: uppercase;
+                    margin: 0;
+                    padding: 0;
+                }
+            }
+        }
+    }
+}
+& when (@media-common = true) {
+    .pickup-options-container {
+        margin-left: 4.5rem;
+        padding-top: 1rem;
+
+        .pickup-options-list {
+            padding-top: 1rem;
+            list-style-type: none;
+
+            .pickup-option-button,
+            .pickup-later-option-button {
+                vertical-align: bottom;
+                width: 24px;
+                height: 24px;
+            }
+
+            .pick-up-time-description {
+                margin-left: 3rem;
+            }
+
+            .disabled-state {
+                color: @disabled-text-color;
+            }
+
+            .priority-print-pickup-limited-time-section {
+                margin-left: 3rem;
+
+                .limited-time-image {
+                    height: 16px;
+                    width: 16px;
+                }
+
+                .limited-time-tag {
+                    color: @fx-purple-300;
+                }
+            }
+        }
+    }
+    .new-pickup-selector {
+        .hide-details-button {
+            display: block;
+        }
+        .show-more-btn:hover {
+            color: @show-more_text-color;
+            border: 0;
+            background: none;
+        }
+    }
+}

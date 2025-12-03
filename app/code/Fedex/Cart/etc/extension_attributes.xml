@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @category     Fedex
+ * @package      Fedex_Cart
+ * @copyright    Copyright (c) 2022 Fedex
+ * @author       Eduardo Diogo Dias <edias@mcfadyen.com>
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Api/etc/extension_attributes.xsd">
+    <extension_attributes for="Magento\Quote\Api\Data\CartItemInterface">
+        <attribute code="integration_item_data" type="\Fedex\Cart\Api\Data\CartIntegrationItemInterface">
+            <join reference_table="quote_integration_item" reference_field="item_id" join_on_field="item_id">
+                <field>item_data</field>
+            </join>
+        </attribute>
+    </extension_attributes>
+</config>

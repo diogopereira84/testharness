@@ -1,0 +1,88 @@
+<?php
+/**
+ * Copyright © FedEx, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+?>
+<?php
+$helper = $this->helper('Fedex\CatalogMvp\Helper\CatalogMvp');
+$isCatalogBreakPointsEnabled = $helper->getCatalogBreakpointToggle();
+$isSharedCatalogPage = $helper->isSharedCatalogPage();
+
+if ($isSharedCatalogPage) {
+    $currentCategory = $helper->getCurrentCategory();
+    $currentCategoryId = $currentCategory->getId();
+    $params = $helper->getCatalogRequestParams();
+?>
+<div class="ajax-shared-catalog"></div>
+
+
+<script type="text/javascript">
+    require(['jquery'], function($){
+        var topmenuurl = "<?= $this->getUrl('selfreg/ajax/productlistajax',['_query' => $params])?>";
+        $(document).ready(function() {
+            $('.loading-mask-ajax-list-loader').show();
+            $.ajax({
+                url: topmenuurl,
+                cache: false,
+                type: 'get',
+                showLoader: true,
+                success: function (data){
+                    if (data != ''){
+                        $('.ajax-shared-catalog').html("");
+                        let htmlObject = $('.ajax-shared-catalog').html(data);
+                        htmlObject.trigger('contentUpdated');
+                        $('.ajax-shared-catalog').addClass("ajaxUpdated");
+                    }
+                    setTimeout(function(){
+                        $('.loading-mask-mvp').hide();
+                    },7000);
+		    $('.loading-mask-ajax-list-loader').hide();
+                    if ($('.category-product-count-is-zero').val()) {
+                        $(".product-items.customer-admin").css('display', 'none');
+                        $(".product-items.customer-view").css('display', 'none');
+                        $(".breadcrumbs mvp-breadcrumb-label").css('display', 'block');
+                        $(".breadcrum-container-no-count .breadcrumbs").removeClass("mvp-breadcrumb-label");
+                        $('.shared-catalog-cta-container').css('margin-top','50px');
+                    }
+
+                    if ($('#product-items-zero').length) {
+                        if(!$('body').hasClass('customer-admin')){
+                            $('body').addClass('customer-admin');
+                        }
+                    }
+                }
+            });
+        });
+    });
+</script>
+<?php if($isCatalogBreakPointsEnabled) { ?>
+    <script type="text/javascript">
+        require(['jquery'], function($){
+            var ajaxbodyclassUrl = "<?= $this->getUrl('selfreg/ajax/addBodyClass')?>";
+            $(document).ready(function() {
+                $.ajax({
+                    url: ajaxbodyclassUrl,
+                    cache: false,
+                    type: 'get',
+                    showLoader: true,
+                    success: function (data){
+                        if(data.isAdmin == true)
+                        {
+                            $("body").addClass("customer-admin");
+                            $("body").removeClass("catalog-mvp-customer-merged-user");
+                            $(".shared-catalog-cta-container").show();
+                        }else {
+                            $("body").addClass("catalog-mvp-customer-merged-user");
+                            $("body").removeClass("customer-admin");
+                            $(".shared-catalog-cta-container").hide();
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+<?php
+    }
+}
+?>

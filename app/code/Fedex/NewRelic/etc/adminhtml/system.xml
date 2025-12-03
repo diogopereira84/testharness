@@ -1,0 +1,49 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="fedex" sortOrder="1010" showInWebsite="1" showInStore="1" showInDefault="1"
+                 translate="label">
+            <group id="new_relic_deployment_marker" sortOrder="10" showInWebsite="1" showInStore="1" showInDefault="1"
+                   translate="label">
+                <label>New Relic Deployment Marker</label>
+                <field id="enabled" type="select" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1" canRestore="1">
+                    <label>Enabled</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Enable automated deployment markers</comment>
+                </field>
+                <field id="application_identifier" type="text" sortOrder="20" showInWebsite="1" showInStore="1"
+                       showInDefault="1"
+                       translate="label">
+                    <label>Application Identifier</label>
+                    <comment>New Relic Account Identifier for Environment</comment>
+                </field>
+                <field id="api_key" type="text" sortOrder="30" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>API Key</label>
+                    <comment>API User Key setup for the deployment markers.</comment>
+                </field>
+                <field id="next_changelog" type="text" sortOrder="40" showInWebsite="1" showInStore="1"
+                       showInDefault="1"
+                       translate="label">
+                    <label>Next Changelog</label>
+                    <comment>Enter the pull request name. This will get reset after the next deployment.</comment>
+                </field>
+                <field id="next_description" type="textarea" sortOrder="50" showInWebsite="1" showInStore="1"
+                       showInDefault="1" translate="label">
+                    <label>Next Description</label>
+                    <comment>Enter the release meeting subject line. This will get reset after the next deployment.
+                    </comment>
+                </field>
+                <field id="next_user" type="text" sortOrder="60" showInWebsite="1" showInStore="1" showInDefault="1"
+                       translate="label">
+                    <label>Next User</label>
+                    <comment>Enter your username value. A default value will be used if a value is not
+                        provided. This entry will get reset after the next deployment.
+                    </comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
